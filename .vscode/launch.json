@@ -1,0 +1,71 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Client",
+      "presentation": {
+        "group": "Mod Development - Create_NuclearIndustry",
+        "order": 0
+      },
+      "projectName": "Create_NuclearIndustry",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\clientRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dcreate_nuclear_industry%%E:\\MyMC\\NewMod\\Create_NuclearIndustry\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Data",
+      "presentation": {
+        "group": "Mod Development - Create_NuclearIndustry",
+        "order": 1
+      },
+      "projectName": "Create_NuclearIndustry",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\dataRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\dataRunVmArgs.txt",
+        "-Dfml.modFolders\u003dcreate_nuclear_industry%%E:\\MyMC\\NewMod\\Create_NuclearIndustry\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Server",
+      "presentation": {
+        "group": "Mod Development - Create_NuclearIndustry",
+        "order": 2
+      },
+      "projectName": "Create_NuclearIndustry",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\serverRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dcreate_nuclear_industry%%E:\\MyMC\\NewMod\\Create_NuclearIndustry\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    }
+  ]
+}

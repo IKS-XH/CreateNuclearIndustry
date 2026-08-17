@@ -1,0 +1,13 @@
+{
+  "java.jdt.ls.java.home": "C:\\Program Files\\jdk-21.0.12.8-hotspot",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-21",
+      "path": "C:\\Program Files\\jdk-21.0.12.8-hotspot",
+      "default": true
+    }
+  ],
+  "java.import.gradle.wrapper.enabled": true,
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "files.encoding": "utf8"
+}

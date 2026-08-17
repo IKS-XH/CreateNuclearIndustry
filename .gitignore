@@ -1,0 +1,9 @@
+.gradle/
+build/
+run/
+out/
+.idea/
+*.iml
+.worktrees/
+.gradle-user-home/
+.wrapper-bootstrap/

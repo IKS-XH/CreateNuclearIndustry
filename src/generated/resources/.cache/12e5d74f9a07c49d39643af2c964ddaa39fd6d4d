@@ -1,0 +1,24 @@
+// 1.21.1	2026-08-15T23:44:29.4176148	Create Nuclear Industry item tags
+0c369989c02ce71b3d9df3ca3db63cc827403240 data/create_nuclear_industry/tags/item/uranium_concentrates.json
+a9d40e19b7c52e1a2af73e55c1f69e69edfdfc40 data/create_nuclear_industry/tags/item/uranium_tailings.json
+17bdf37b53060f8d678dc2824cf5361416b2f133 data/c/tags/item/dusts/lead.json
+4fd567ed96786d1ef266dcb17d623110b392b64a data/c/tags/item/dusts/tin.json
+b1cd9510294ddaa63416dcb189109e9d95439437 data/c/tags/item/ingots/lead.json
+9e3fa31b5e9c53e32f768756eb6e392076e5214e data/c/tags/item/ingots/tin.json
+ca7ca9f8a400906f8778a541a6b4afe1865f7835 data/c/tags/item/nuggets/lead.json
+d170d4a8855fd8c9bf3a847ea3e65b568749a191 data/c/tags/item/nuggets/tin.json
+74be5725a227b90cd6c670725f8a7d6821072484 data/c/tags/item/ores/lead.json
+ebe99aacc69271835a3353940462cba6a866b9dd data/c/tags/item/ores/tin.json
+b51a7802c1465d387de1280785fdc7baa80fac9b data/c/tags/item/ores/uranium.json
+98490415b6d98af0a888172a0fd0f940265abbeb data/c/tags/item/plates/lead.json
+adb8638d1d0da37cf368967297d0de9db5e1b773 data/c/tags/item/plates/tin.json
+fea19a39c97988f06a61cf2b76f63896a119ceea data/c/tags/item/raw_materials/lead.json
+f41e09e9f7d7f7d52369e74758e27d02bf699ec8 data/c/tags/item/raw_materials/tin.json
+c216a1ab7b2060aeabce65b41ae35d4a5a7ad947 data/c/tags/item/raw_materials/uranium.json
+74faaa42dcd785588ecf82ec604c877c6a10da8e data/c/tags/item/rods/lead.json
+92fb44ce08a660d8a5ac622fdc077d3835be45c0 data/c/tags/item/storage_blocks/lead.json
+b45f8aa7fd4bac235c877e876fc43f7f5d0a1f11 data/c/tags/item/storage_blocks/raw_lead.json
+ccf32eea1c891a7f2935672d70d1bf64b569d2d0 data/c/tags/item/storage_blocks/raw_tin.json
+df8e0546c383d51f5a39968e7b02efbbe3184d20 data/c/tags/item/storage_blocks/raw_uranium.json
+c372651bc89229322c37bf95575344b05ed6659a data/c/tags/item/storage_blocks/tin.json
+3f6711791c8eb993f38c22bb85ea2aff5a3e6b2e data/c/tags/item/wires/tin.json

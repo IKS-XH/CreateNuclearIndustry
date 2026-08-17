@@ -1,0 +1,34 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="create_nuclear_industry"
+version="0.1.0"
+displayName="Create: Nuclear Industry"
+authors="IKSXH"
+description='''
+Create 风格的核工业附属模组。
+当前样例版本提供实验反应堆外壳与独立创造模式标签页。
+'''
+
+[[dependencies.create_nuclear_industry]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.219,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.create_nuclear_industry]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.create_nuclear_industry]]
+modId="create"
+type="required"
+versionRange="[6.0.10,6.1.0)"
+ordering="AFTER"
+side="BOTH"

@@ -1,0 +1,11 @@
+// 1.21.1	2026-08-16T07:48:26.8113983	Create Nuclear Industry block tags
+74be5725a227b90cd6c670725f8a7d6821072484 data/c/tags/block/ores/lead.json
+ebe99aacc69271835a3353940462cba6a866b9dd data/c/tags/block/ores/tin.json
+b51a7802c1465d387de1280785fdc7baa80fac9b data/c/tags/block/ores/uranium.json
+92fb44ce08a660d8a5ac622fdc077d3835be45c0 data/c/tags/block/storage_blocks/lead.json
+b45f8aa7fd4bac235c877e876fc43f7f5d0a1f11 data/c/tags/block/storage_blocks/raw_lead.json
+ccf32eea1c891a7f2935672d70d1bf64b569d2d0 data/c/tags/block/storage_blocks/raw_tin.json
+df8e0546c383d51f5a39968e7b02efbbe3184d20 data/c/tags/block/storage_blocks/raw_uranium.json
+c372651bc89229322c37bf95575344b05ed6659a data/c/tags/block/storage_blocks/tin.json
+f33dabdeb50aecd010279a29684d52655e964131 data/minecraft/tags/block/mineable/pickaxe.json
+a3bc3da218d2b451d621867c224a83eab52f810f data/minecraft/tags/block/needs_iron_tool.json
