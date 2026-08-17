@@ -20,8 +20,21 @@ public final class ModCreativeTabs {
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.create_nuclear_industry.main"))
                     .icon(() -> new ItemStack(ModBlocks.EXPERIMENTAL_REACTOR_CASING_ITEM.get()))
-                    .displayItems((parameters, output) ->
-                            output.accept(ModBlocks.EXPERIMENTAL_REACTOR_CASING_ITEM.get()))
+                    .displayItems((parameters, output) -> {
+                        output.accept(ModBlocks.EXPERIMENTAL_REACTOR_CASING_ITEM.get());
+                        output.accept(P1Blocks.REACTOR_CASING_ITEM.get());
+                        output.accept(P1Blocks.REACTOR_WINDOW_ITEM.get());
+                        output.accept(P1Blocks.REACTOR_INSTRUMENT_PORT_ITEM.get());
+                        output.accept(P1Blocks.REACTOR_COLD_PORT_ITEM.get());
+                        output.accept(P1Blocks.REACTOR_HOT_PORT_ITEM.get());
+                        output.accept(P1Blocks.REACTOR_REFUELING_PORT_ITEM.get());
+                        output.accept(P1Blocks.REACTOR_FUEL_ROD_ITEM.get());
+                        output.accept(P1Blocks.CONTROL_ROD_DRIVE_ITEM.get());
+                        output.accept(ModItems.FRESH_FUEL_ASSEMBLY.get());
+                        output.accept(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
+                        output.accept(ModItems.CONTROL_ROD.get());
+                        output.accept(ModItems.STEEL_PLATE.get());
+                    })
                     .build()
     );
 

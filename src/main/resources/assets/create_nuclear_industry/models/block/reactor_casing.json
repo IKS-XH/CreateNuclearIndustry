@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "create_nuclear_industry:block/reactor_casing_bottom",
+    "side": "create_nuclear_industry:block/reactor_casing_side",
+    "top": "create_nuclear_industry:block/reactor_casing_top"
+  }
+}

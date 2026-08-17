@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/cooled_spent_fuel_assembly"
+  }
+}

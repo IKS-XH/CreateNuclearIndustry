@@ -2,11 +2,17 @@ package com.iksxh.create_nuclear_industry;
 
 import com.iksxh.create_nuclear_industry.content.ModBlocks;
 import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
+import com.iksxh.create_nuclear_industry.content.ModFluids;
+import com.iksxh.create_nuclear_industry.content.ModItems;
+import com.iksxh.create_nuclear_industry.content.P1Blocks;
+import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
+import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeBlockEntities;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeContent;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeFluids;
 import com.iksxh.create_nuclear_industry.p0probe.events.P0ProbeEvents;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -16,8 +22,13 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 public final class CreateNuclearIndustry {
     public static final String MOD_ID = "create_nuclear_industry";
 
-    public CreateNuclearIndustry(IEventBus modEventBus) {
+    public CreateNuclearIndustry(IEventBus modEventBus, ModContainer modContainer) {
+        P1ServerConfig.register(modContainer);
+        ModFluids.register(modEventBus);
+        ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        P1Blocks.register(modEventBus);
+        P1BlockEntities.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
         P0ProbeContent.register(modEventBus);
         P0ProbeFluids.register(modEventBus);

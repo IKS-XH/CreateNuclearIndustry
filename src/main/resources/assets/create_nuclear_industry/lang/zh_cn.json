@@ -9,5 +9,19 @@
   "block.create_nuclear_industry.p0_probe_hot_port": "P0 热端口",
   "item.create_nuclear_industry.p0_probe_repair_item": "P0 维修验证物品",
   "fluid_type.create_nuclear_industry.p0_probe_cold": "P0 冷却剂",
-  "fluid_type.create_nuclear_industry.p0_probe_hot": "P0 热冷却剂"
+  "fluid_type.create_nuclear_industry.p0_probe_hot": "P0 热冷却剂",
+  "block.create_nuclear_industry.reactor_casing": "反应堆外壳",
+  "block.create_nuclear_industry.reactor_window": "反应堆观察窗",
+  "block.create_nuclear_industry.reactor_instrument_port": "反应堆仪表端口",
+  "block.create_nuclear_industry.reactor_cold_port": "反应堆冷端口",
+  "block.create_nuclear_industry.reactor_hot_port": "反应堆热端口",
+  "block.create_nuclear_industry.reactor_refueling_port": "反应堆换料端口",
+  "block.create_nuclear_industry.reactor_fuel_rod": "反应堆燃料棒",
+  "block.create_nuclear_industry.control_rod_drive": "控制棒驱动器",
+  "item.create_nuclear_industry.fresh_fuel_assembly": "浓缩铀燃料组件",
+  "item.create_nuclear_industry.cooled_spent_fuel_assembly": "枯竭铀燃料组件",
+  "item.create_nuclear_industry.control_rod": "控制棒组件",
+  "item.create_nuclear_industry.steel_plate": "合金钢板",
+  "fluid_type.create_nuclear_industry.compound_coolant": "复合冷却剂",
+  "fluid_type.create_nuclear_industry.hot_compound_coolant": "热复合冷却剂"
 }

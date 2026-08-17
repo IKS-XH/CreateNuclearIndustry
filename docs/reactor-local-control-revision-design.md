@@ -92,7 +92,7 @@ fuelCapacity(f) = fuelCapacityPerBlock × internalHeight
 - 当本 tick 现场计算出的传播热量覆盖至少 `20%` 的有效燃料列时，创建并保存 `meltdownCountdown`；控制棒列不计入比例，不依赖传播历史标记。传播计算不得因遍历顺序、区块卸载或存档重载改变。
 - 融毁倒计时的进度只允许增加。SCRAM 和有效冷却可以暂停当前倒计时，但不能回退进度、恢复归零完整度或让仍受损的列被视为安全；只有所有燃料列和控制棒列完整度都恢复到 `1.0` 时，才重置融毁状态和进度，危险条件再次成立时从原进度继续。
 - 控制棒列完整度归零后控制棒卡死，保留卡死前实际插入深度，继续降低相邻燃料列反应速率，不接受滑块、SCRAM 或管理员调节，也不传播损伤。
-- 损伤不扣除燃料组件耐久，换料端口不能补满完整度或清除热量传播。受损燃料列使用 `alloy_steel_plate` 直接右键其 `reactor_refueling_port` 修复，且目标列必须停止放热；每块钢板修复 `0.25 / internalHeight` 的列完整度。控制棒列使用同一钢板右键其 `control_rod_drive` 修复。完全停机要求裂变、燃耗停止且余热进入安全区；之后可以拆除并重新成型，永久清空整个结构的内部 NBT。运行、融毁倒计时或暂停融毁倒计时期间拆除任何结构组件立即执行融毁动作。
+- 损伤不扣除燃料组件耐久，换料端口不能补满完整度或清除热量传播。受损燃料列使用 `steel_plate`（显示名“合金钢板”）直接右键其 `reactor_refueling_port` 修复，且目标列必须停止放热；每块钢板修复 `0.25 / internalHeight` 的列完整度。控制棒列使用同一钢板右键其 `control_rod_drive` 修复。完全停机要求裂变、燃耗停止且余热进入安全区；之后可以拆除并重新成型，永久清空整个结构的内部 NBT。运行、融毁倒计时或暂停融毁倒计时期间拆除任何结构组件立即执行融毁动作。
 
 ## 6. 服务端配置项
 
@@ -112,7 +112,7 @@ fuelCapacity(f) = fuelCapacityPerBlock × internalHeight
 - `coolantTotalFlowCap`，反应堆总换热流量上限，防止堆叠端口无限提高冷却；
 - `fuelColumnDamageHeatThreshold` 和 `fuelColumnDamageRate`，燃料列有效热负荷损伤阈值与速率；损伤对发热/燃耗的倍率固定为 `2 - fuelColumnIntegrity`，不再配置两套不同反馈曲线；
 - `fuelColumnDamageTransferRate`、`controlRodColumnFailureThreshold`、`meltdownTriggerFraction`（首发默认 `0.20`）和 `meltdownCountdownTicks`，失效列传播速率、控制棒卡死边界、融毁触达比例和倒计时长度；
-- `fuelColumnRepairItem = alloy_steel_plate`，仅指定维修物品身份；每次维修固定消耗 1 块并恢复 `0.25 / internalHeight`，维修量和消耗量不作为可调配置。
+- `fuelColumnRepairItem = steel_plate`，仅指定维修物品身份；显示名为“合金钢板”，每次维修固定消耗 1 块并恢复 `0.25 / internalHeight`，维修量和消耗量不作为可调配置。不得注册 `alloy_steel_plate` 别名。
 
 P1 数值原型先使用以下可配置默认值；这些值用于验证玩法闭环，不代表最终平衡：
 

@@ -119,7 +119,7 @@ Output only the single PNG.
 | `item/dosimeter.png` | 16×16 透明物品 | 手持辐射计，黄铜/钢外壳、琥珀色小屏，但屏幕不能出现可读文字 |
 | `item/lead_shielding_cask.png` | 16×16 透明物品 | 铅屏蔽桶，灰铅色圆桶、厚盖、黄色危险色带，不出现文字 |
 
-当前内容清单的注册 ID 是 `steel_plate`，显示名为合金钢板；不要擅自生成新的 `alloy_steel_plate.png`。如果项目经理后续冻结注册 ID 为 `alloy_steel_plate`，只复制或重命名同一纹理，不重新设计外观。
+正式注册 ID 已冻结为 `steel_plate`，显示名为“合金钢板”，现有纹理文件保持 `item/steel_plate.png`。不要生成 `alloy_steel_plate.png`，也不要把它作为第二物品或兼容别名。
 
 ### 5.2 P1 基础材料首批 17 张纹理
 

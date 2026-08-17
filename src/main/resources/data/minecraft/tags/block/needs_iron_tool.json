@@ -1,6 +1,14 @@
 {
   "replace": false,
   "values": [
-    "create_nuclear_industry:experimental_reactor_casing"
+    "create_nuclear_industry:experimental_reactor_casing",
+    "create_nuclear_industry:reactor_casing",
+    "create_nuclear_industry:reactor_window",
+    "create_nuclear_industry:reactor_instrument_port",
+    "create_nuclear_industry:reactor_cold_port",
+    "create_nuclear_industry:reactor_hot_port",
+    "create_nuclear_industry:reactor_refueling_port",
+    "create_nuclear_industry:reactor_fuel_rod",
+    "create_nuclear_industry:control_rod_drive"
   ]
 }
