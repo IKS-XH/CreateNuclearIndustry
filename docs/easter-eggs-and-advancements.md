@@ -91,7 +91,7 @@
 
 - 彩蛋不得抢占当前 P1 核心或后续首发扩展关键路径；只能在对应稳定事件已经存在、且能复用结构缓存和状态事件后排期。
 - agent/开发者交付彩蛋时必须提供“关闭配置不影响主线”的负向测试，以及不增加资源/能量的验证证据；项目经理据此决定是否进入 P4 勾选项。
-- 需求讨论、文档更新、任务拆分和 Git 交接统一遵循 [项目经理执行计划](./superpowers/plans/2026-08-17-project-manager-execution-plan.md)。
+- 需求讨论、文档更新、任务拆分和 Git 交接统一遵循 [P1 Agent/开发者交接计划](./superpowers/plans/2026-08-18-agent-developer-execution-plan.md)。
 
 ## 6. Ponder 与彩蛋的边界
 

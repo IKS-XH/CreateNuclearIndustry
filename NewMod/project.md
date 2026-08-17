@@ -1,4 +1,4 @@
-# 模组开发计划：机械动力：工业核电（Create: Nuclear Industry）
+# 模组开发计划：机械动力：核工业（Create: Nuclear Industry）
 
 **文档版本：** v1.8－首发彩蛋玩法修订稿
 **首发建议：** Minecraft 1.21.1 + neoForge；在开发开始前冻结具体 Create/API 版本

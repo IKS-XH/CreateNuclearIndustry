@@ -1,4 +1,13 @@
 {
-  "itemGroup.create_nuclear_industry.main": "机械动力：工业核电",
-  "block.create_nuclear_industry.experimental_reactor_casing": "实验反应堆外壳"
+  "itemGroup.create_nuclear_industry.main": "机械动力：核工业",
+  "block.create_nuclear_industry.experimental_reactor_casing": "实验反应堆外壳",
+  "block.create_nuclear_industry.p0_probe_block": "P0 验证方块",
+  "block.create_nuclear_industry.p0_probe_slider_block": "P0 滑块验证方块",
+  "block.create_nuclear_industry.p0_probe_goggle_block": "P0 护目镜验证方块",
+  "block.create_nuclear_industry.p0_probe_arm_target": "P0 机械臂目标",
+  "block.create_nuclear_industry.p0_probe_cold_port": "P0 冷端口",
+  "block.create_nuclear_industry.p0_probe_hot_port": "P0 热端口",
+  "item.create_nuclear_industry.p0_probe_repair_item": "P0 维修验证物品",
+  "fluid_type.create_nuclear_industry.p0_probe_cold": "P0 冷却剂",
+  "fluid_type.create_nuclear_industry.p0_probe_hot": "P0 热冷却剂"
 }

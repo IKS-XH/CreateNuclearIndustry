@@ -1,4 +1,13 @@
 {
   "itemGroup.create_nuclear_industry.main": "Create: Nuclear Industry",
-  "block.create_nuclear_industry.experimental_reactor_casing": "Experimental Reactor Casing"
+  "block.create_nuclear_industry.experimental_reactor_casing": "Experimental Reactor Casing",
+  "block.create_nuclear_industry.p0_probe_block": "P0 Probe Block",
+  "block.create_nuclear_industry.p0_probe_slider_block": "P0 Probe Slider Block",
+  "block.create_nuclear_industry.p0_probe_goggle_block": "P0 Probe Goggle Block",
+  "block.create_nuclear_industry.p0_probe_arm_target": "P0 Probe Arm Target",
+  "block.create_nuclear_industry.p0_probe_cold_port": "P0 Probe Cold Port",
+  "block.create_nuclear_industry.p0_probe_hot_port": "P0 Probe Hot Port",
+  "item.create_nuclear_industry.p0_probe_repair_item": "P0 Probe Repair Item",
+  "fluid_type.create_nuclear_industry.p0_probe_cold": "P0 Probe Cold Fluid",
+  "fluid_type.create_nuclear_industry.p0_probe_hot": "P0 Probe Hot Fluid"
 }

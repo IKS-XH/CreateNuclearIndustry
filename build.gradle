@@ -26,9 +26,25 @@ neoForge {
             client()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
+        clientA {
+            client()
+            programArguments.addAll '--username', 'P0ProbeA'
+            gameDirectory = project.file('run/client_a')
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        clientB {
+            client()
+            programArguments.addAll '--username', 'P0ProbeB'
+            gameDirectory = project.file('run/client_b')
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
         server {
             server()
             programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        gameTestServer {
+            type = 'gameTestServer'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         data {
@@ -47,6 +63,12 @@ neoForge {
             sourceSet(sourceSets.main)
         }
     }
+}
+
+// ModDevGradle's RunGameTask is a JavaExec task; forward the terminal input so
+// the development server console can accept commands such as `op` and `stop`.
+tasks.named('runServer', JavaExec) {
+    standardInput = System.in
 }
 
 dependencies {

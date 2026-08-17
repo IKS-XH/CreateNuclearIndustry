@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "RCR",
+    "IRI"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_ingot" },
+    "R": { "item": "minecraft:redstone" },
+    "C": { "item": "minecraft:copper_ingot" }
+  },
+  "result": {
+    "id": "create_nuclear_industry:p0_probe_slider_block",
+    "count": 1
+  }
+}
