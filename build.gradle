@@ -63,6 +63,11 @@ neoForge {
             sourceSet(sourceSets.main)
         }
     }
+
+    unitTest {
+        enable()
+        testedMod = mods.create_nuclear_industry
+    }
 }
 
 // ModDevGradle's RunGameTask is a JavaExec task; forward the terminal input so
@@ -91,6 +96,9 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.named('test', Test) {
     useJUnitPlatform()
+    doFirst {
+        workingDir = project.projectDir
+    }
 }
 
 tasks.named('wrapper', Wrapper).configure {

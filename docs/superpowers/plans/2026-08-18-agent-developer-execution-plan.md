@@ -139,10 +139,19 @@ GameTest/人工验收结果：
 | `P1-DATA-04` | 已完成 | 正式方块实体类型已在专用 GameTest 服务端加载并完成 NBT 往返。 |
 | `P1-DATA-05` | 已完成 | 服务器配置通过注入的 `ModContainer.registerConfig` 注册；强制重跑单测通过。 |
 | `P1-DATA-06` | 已完成 | 资源、语言、标签和掉落契约已补齐；未新增 P1 生存配方，冷/热冷却剂不含普通配方转换。 |
+| `P1-SIM-02` | 已完成 | 执行者已交付燃料列发热、燃耗、控制棒抑制、超频和完整度反馈的定向 JUnit；全量 `test` 通过。 |
+| `P1-SIM-03` | 已完成 | 执行者已交付逐列有效热负荷、冷却覆盖与完整度损伤的定向 JUnit；全量 `test` 通过。 |
+| `P1-SIM-04` | 已完成 | 执行者已交付四向余热传播、冷却阻断和控制棒列终止传播的定向 JUnit；全量 `test` 通过。 |
+| `P1-SIM-05` | 已完成 | 执行者已交付控制棒列卡死、深度保持和维修后恢复的定向 JUnit；全量 `test` 通过。 |
+| `P1-SIM-06` | 已完成 | 执行者已交付融毁倒计时的建立、暂停、单调进度和全列修复重置的定向 JUnit；全量 `test` 通过。 |
+| `P1-SIM-07` | 已完成 | 项目经理独立重跑确认：`ReactorSnapshotNbtCodecTest` 4/4 通过；全量 77 项 JUnit 为 0 失败、0 错误。 |
+| `P1-SIM-08` | 已完成 | 项目经理独立重跑确认：模拟全链路确定性回归已加入；全量 81 项 JUnit 为 0 失败、0 错误，7 个 required GameTest 全部通过。 |
 
 **本次独立复验：** `2026-08-18` 运行 `./gradlew.bat test --rerun-tasks` 成功；运行 `./gradlew.bat runGameTestServer --rerun-tasks` 成功，7 个 required GameTest 全部通过。用户已完成客户端中物品/方块可见和方块可放置的人工验收。
 
-**下一可派发任务：** `P1-SIM-01`。它只建立纯服务端逐列状态模型和 JUnit 测试，不接入反应堆多方块扫描或游戏 tick。
+**SIM-07 验收记录：** `CompoundTag` NBT 编解码和测试已通过官方 ModDevGradle `unitTest { enable(); testedMod = mods.create_nuclear_industry }` 获得 Minecraft 类路径。为兼容 ModDevGradle 将测试工作目录设为 `build/minecraft-junit` 的运行时行为，既有 `test` 任务在 `doFirst` 中将工作目录设回 `project.projectDir`；未增加依赖、运行配置、测试服务器、其他 source set，也未修改资源契约测试路径。项目经理于 `2026-08-18` 独立执行 `./gradlew.bat test --rerun-tasks`：NBT 编解码 4/4 通过，全量 77 项 JUnit 为 0 失败、0 错误。
+
+**下一可派发任务：** `P1-COOL-01` 与 `P1-STRUCT-01`。两者可由不同执行者并行完成：前者只扩展纯逻辑冷却剂账本，后者只定义固定 `5×5×5` 的结构坐标/模板合同；不得接入正式多方块 tick 或修改彼此文件。
 
 ### P1-BOOT-01：完成 P1 接单基线
 
@@ -267,7 +276,7 @@ GameTest/人工验收结果：
 
 **前置：** P1-SIM-01 至 P1-SIM-06。
 **唯一目标：** 为正式反应堆状态提供稳定的 NBT 保存、加载和版本字段。
-**允许修改：** 快照/编解码类、NBT 单元测试。
+**允许修改：** 快照/编解码类、NBT 单元测试；以及已获项目经理批准的 `build.gradle` 中：(1) 现有 `neoForge {}` 块的 `unitTest` 小节，只能启用单元测试并将 `testedMod` 指向既有 `${mod_id}` 模组；(2) 既有 `tasks.named('test', Test)` 块，只能在测试进程启动前将工作目录设为 `project.projectDir`，以维持资源契约测试的项目根相对路径。
 **必须满足：** 字段完整往返、顺序无关、缺失字段使用安全默认值、未知字段可忽略；不把列完整度复制到燃料组件 ItemStack。
 **验收：** JUnit 覆盖满堆、受损堆、融毁暂停、卡死控制棒和旧/缺失字段。
 **交付：** NBT 字段表、版本策略和往返测试结果。

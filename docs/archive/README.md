@@ -15,6 +15,7 @@
 
 - `../superpowers/plans/2026-08-18-agent-developer-execution-plan.md`
 - `../superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md`
+- `../superpowers/plans/2026-08-18-reactor-html-simulator-plan.md`
 
 ## 已归档计划
 
