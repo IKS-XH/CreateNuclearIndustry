@@ -109,7 +109,6 @@ fuelCapacity(f) = fuelCapacityPerBlock × internalHeight
 - `totalHeatMultiplierCap`，默认 `20.0`。
 - `coolantAbsorptionHuPerMb`，每单位冷却剂可带走的热量；
 - `coolantMaxFlowPerPort`，单个冷端/热端的基础流量上限；
-- `coolantTotalFlowCap`，反应堆总换热流量上限，防止堆叠端口无限提高冷却；
 - `fuelColumnDamageHeatThreshold` 和 `fuelColumnDamageRate`，燃料列有效热负荷损伤阈值与速率；损伤对发热/燃耗的倍率固定为 `2 - fuelColumnIntegrity`，不再配置两套不同反馈曲线；
 - `fuelColumnDamageTransferRate`、`controlRodColumnFailureThreshold`、`meltdownTriggerFraction`（首发默认 `0.20`）和 `meltdownCountdownTicks`，失效列传播速率、控制棒卡死边界、融毁触达比例和倒计时长度；
 - `fuelColumnRepairItem = steel_plate`，仅指定维修物品身份；显示名为“合金钢板”，每次维修固定消耗 1 块并恢复 `0.25 / internalHeight`，维修量和消耗量不作为可调配置。不得注册 `alloy_steel_plate` 别名。
@@ -120,17 +119,20 @@ P1 数值原型先使用以下可配置默认值；这些值用于验证玩法�
 | :--- | :--- | :--- |
 | `baseHeatPerFuel` | `1.0 HU/t` | 每个有效燃料棒方块的额定基础发热 |
 | `burnHoursPerBlock` | `3 h` | 满功率、无超频、有效高度 1 的燃料寿命；与 `baseBurnPerFuel` 二选一 |
-| `coolantAbsorptionHuPerMb` | `1.0 HU/mB` | 每单位冷却剂可带走的热量 |
-| `coolantMaxFlowPerPort` | `100 mB/t` | 每个冷端或热端的流量上限 |
-| `coolantTotalFlowCap` | `200 mB/t` | 单座 P1 反应堆总流量上限，允许两个满流量端口作为基准 |
+| `coolantAbsorptionHuPerMb` | `0.5 HU/mB` | 每单位冷却剂可带走的热量 |
+| `coolantMaxFlowPerPort` | `128 mB/t` | 每个冷端或热端的独立流量上限 |
 | `fuelColumnDamageHeatThreshold` | `0.25 HU/t` | 超过该净残余热量才开始降低完整度 |
-| `fuelColumnDamageRate` | `0.00125 / (tick·HU/t)` | 按阈值以上的净残余热量线性扣除完整度 |
+| `fuelColumnDamageRate` | `0.0000005 / (tick·HU/t)` | 按阈值以上的净残余热量线性扣除完整度 |
 | `fuelColumnDamageTransferRate` | `0.25` | 相邻失效燃料列当前残余热量的传播比例；燃料列与控制棒列相同 |
 | `controlRodColumnFailureThreshold` | `0.0` | 控制棒列完整度归零时卡死 |
 | `meltdownTriggerFraction` | `0.20` | 当前传播热量覆盖的有效燃料列比例 |
 | `meltdownCountdownTicks` | `900 ticks` | 45 秒融毁倒计时 |
 
+反应堆不提供 `coolantTotalFlowCap` 或任何等价的全堆冷却剂流量配置。N 个互不重复的合法冷端和 M 个互不重复的合法热端分别提供 `N × coolantMaxFlowPerPort` 与 `M × coolantMaxFlowPerPort` 的理论上限；实际转换仍受两侧实际管网流量、可用发热、内部库存和热端背压共同限制。端口堆叠只增加可用吞吐量，不增加发热、燃耗或冷却剂库存，同一端口/连接不得重复计数。
+
 损伤倍率固定为 `2 - fuelColumnIntegrity`，不提供独立配置；合金钢板维修固定为每次消耗 1 块、恢复 `0.25 / internalHeight`，也不提供数值配置。其余反馈增益、超频热/燃耗硬上限和全堆产热倍率上限彼此独立。游戏实现仍以服务端配置为权威，原型测试后再调整默认值。
+
+默认平衡回归锚点采用固定 `5×5×5` 结构、内部高度 3、中心空列和周围 8 个完整燃料列。每列有两个四向燃料邻居时，默认超频反馈稳定值约为 `4.161445`，全堆总发热约为 `99.87469 HU/t`，按 `0.5 HU/mB` 需要约 `199.74938 mB/t`：一组 `128 mB/t` 冷/热端口不能安全自持，两组端口合计 `256 mB/t` 可以覆盖需求；第三组端口的理论吞吐量必须能继续增加到 `384 mB/t`，不得被隐藏的 `200` 或 `256 mB/t` 全堆上限截断。
 
 ## 7. 信息显示
 

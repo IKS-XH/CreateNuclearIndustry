@@ -148,12 +148,13 @@ GameTest/人工验收结果：
 | `P1-SIM-07` | 已完成 | 项目经理独立重跑确认：`ReactorSnapshotNbtCodecTest` 4/4 通过；全量 77 项 JUnit 为 0 失败、0 错误。 |
 | `P1-SIM-08` | 已完成 | 项目经理独立重跑确认：模拟全链路确定性回归已加入；全量 81 项 JUnit 为 0 失败、0 错误，7 个 required GameTest 全部通过。 |
 | `P1-SIM-09` | 已完成 | 项目经理独立复验：失效且未耗尽列以 2.0 倍继续裂变、燃耗和传播；耗尽列停止失效传播。`./gradlew.bat test --rerun-tasks` 共 84 项 JUnit、0 失败、0 错误、0 跳过。旧 P0 原型中同名的“归零停热”测试仅为历史原型，不得作为 P1 正式语义依据。 |
+| `P1-BALANCE-01` | 待执行 | 已冻结新默认值和无全堆流量上限规则；等待执行者更新服务器配置、活动数值合同和回归测试。 |
 
 **本次独立复验：** `2026-08-18` 运行 `./gradlew.bat test --rerun-tasks` 成功；运行 `./gradlew.bat runGameTestServer --rerun-tasks` 成功，7 个 required GameTest 全部通过。用户已完成客户端中物品/方块可见和方块可放置的人工验收。
 
 **SIM-07 验收记录：** `CompoundTag` NBT 编解码和测试已通过官方 ModDevGradle `unitTest { enable(); testedMod = mods.create_nuclear_industry }` 获得 Minecraft 类路径。为兼容 ModDevGradle 将测试工作目录设为 `build/minecraft-junit` 的运行时行为，既有 `test` 任务在 `doFirst` 中将工作目录设回 `project.projectDir`；未增加依赖、运行配置、测试服务器、其他 source set，也未修改资源契约测试路径。项目经理于 `2026-08-18` 独立执行 `./gradlew.bat test --rerun-tasks`：NBT 编解码 4/4 通过，全量 77 项 JUnit 为 0 失败、0 错误。
 
-**下一可派发任务：** `P1-SIM-09`、`P1-COOL-01` 与 `P1-STRUCT-01`。三者可由不同执行者并行完成：`P1-SIM-09` 只改纯反应堆模拟逻辑和 JUnit，`P1-COOL-01` 只扩展纯逻辑冷却剂账本，`P1-STRUCT-01` 只定义固定 `5×5×5` 的结构坐标/模板合同；不得接入正式多方块 tick 或修改其他任务文件。`P1-COOL-03`、`P1-LOOP-01` 和后续功能接入必须等待 `P1-SIM-09` 验收；离线工具同步另按 `docs/superpowers/plans/2026-08-19-integrity-zero-simulator-alignment-plan.md` 执行其 `P1-SIMWEB-08`。
+**下一可派发任务：** `P1-BALANCE-01` 与 `P1-STRUCT-01`，二者可由不同执行者并行。`P1-BALANCE-01` 只更新服务器配置、活动数值合同、遗留 P0 原型兼容和相关 JUnit；`P1-STRUCT-01` 只定义固定 `5×5×5` 的结构坐标/模板合同。`P1-COOL-01`、`P1-COOL-02`、`P1-COOL-03` 必须等待 `P1-BALANCE-01` 验收，不得继续使用旧的 `100/200 mB/t` 合同。离线工具同步另按 `docs/superpowers/plans/2026-08-19-integrity-zero-simulator-alignment-plan.md` 执行 `P1-SIMWEB-08`，且同样等待 `P1-BALANCE-01`。
 
 ### P1-BOOT-01：完成 P1 接单基线
 
@@ -206,7 +207,7 @@ GameTest/人工验收结果：
 **前置：** P1-DATA-01。
 **唯一目标：** 将可调数值注册到服务器配置，维修消耗和维修恢复量除外。
 **允许修改：** 配置类、配置注册、配置单元测试和必要语言说明。
-**默认值：** 基础发热 `1.0 HU/t`；单燃料块燃烧时间 `3 h`；冷却剂吸热 `1.0 HU/mB`；单端口 `100 mB/t`；总流量 `200 mB/t`；损伤起算热负荷 `0.25 HU/t`；完整度损伤速率 `0.00125 / (tick·HU/t)`；传播系数 `0.25`；融毁触发覆盖比例 `20%`；倒计时 `900 ticks`。
+**当前默认值：** 基础发热 `1.0 HU/t`；单燃料块燃烧时间 `3 h`；冷却剂吸热 `0.5 HU/mB`；单端口 `128 mB/t`；不提供全堆流量上限；损伤起算热负荷 `0.25 HU/t`；完整度损伤速率 `0.0000005 / (tick·HU/t)`；传播系数 `0.25`；融毁触发覆盖比例 `20%`；倒计时 `900 ticks`。本任务最初交付的旧数值已被 `P1-BALANCE-01` 取代，在该任务完成前不得把本任务状态误判为“当前数值已同步”。
 **验收：** 修改配置后服务端重载/重启能读取新值；维修数值不出现在可配置项中。
 **交付：** 配置键、默认值、范围和非法值处理表。
 
@@ -300,22 +301,33 @@ GameTest/人工验收结果：
 **验收：** 定向 JUnit 至少覆盖：(1) 完整度 0、仍有燃料时的 2.0 倍发热与燃耗；(2) 完整度 0、仍有燃料时的四向传播和融毁触发；(3) 组件耗尽后发热、燃耗、失效传播均为零；(4) 完整插棒不产生裂变热；(5) 同 tick 快照结算不依赖列遍历顺序。全量 `./gradlew.bat test` 必须通过。
 **交付：** `build/reports/p1/P1-SIM-09.md`，包含改动文件清单、测试名称/结果、旧规则替换说明和未覆盖风险。
 
+### P1-BALANCE-01：同步冷却吞吐与损伤平衡合同
+
+**前置：** P1-DATA-05、P1-SIM-09。
+**唯一目标：** 将已冻结的新默认值和“无全堆冷却剂流量上限”规则同步到游戏内服务器配置、仍参与编译/测试的活动数值合同与遗留 P0 原型，不接入正式方块、多方块 tick 或流体能力。
+**允许修改：** `P1ServerConfig`、`ReactorSimulationParameters`、仍参与当前构建的 P0 数值原型类，以及与这些合同直接对应的 JUnit/配置契约测试和 `build/reports/p1/P1-BALANCE-01.md`。不得修改核心文档、HTML 模拟器、注册、资源、方块实体、正式流体能力、Gradle 或 Git 历史。
+**强制默认值：** `baseHeatPerFuel = 1.0 HU/t`、`burnHoursPerBlock = 3 h`、`coolantAbsorptionHuPerMb = 0.5 HU/mB`、`coolantMaxFlowPerPort = 128 mB/t`、`fuelColumnDamageHeatThreshold = 0.25 HU/t`、`fuelColumnDamageRate = 0.0000005 / (tick·HU/t)`、`fuelColumnDamageTransferRate = 0.25`、`meltdownTriggerFraction = 0.20`、`meltdownCountdownTicks = 900`。`controlResponseExponent = 1.0`、超频热/燃耗硬上限 `10.0`、反馈增益 `0.15`、反馈指数 `0.5`、全堆产热倍率上限 `20.0` 保持不变；这里删除的是冷却剂全堆流量上限，不是 `totalHeatMultiplierCap`。
+**删除合同：** 删除 `totalFlowCapMbPerTick`、`coolantTotalFlowCap` 及任何等价配置、字段、构造参数、Builder 字段和运行时截断。旧服务器配置或旧场景中的同名键不得作为别名恢复，也不得对新计算产生效果；允许底层配置库忽略遗留未知键。多端口的总理论吞吐量只能由互不重复的合法端口逐个汇总。
+**回归锚点：** 固定 `5×5×5`、内部高度 3、中心空列、周围 8 个完整燃料列时，默认超频稳定值约 `4.161445`、总发热约 `99.87469 HU/t`、理论冷却需求约 `199.74938 mB/t`。一组冷热端口的 `128 mB/t` 必须不足，两组的 `256 mB/t` 必须能覆盖；三组端口在两侧管网、发热和库存允许时必须具有 `384 mB/t` 的理论能力，不能被隐藏的 `200` 或 `256 mB/t` 上限截断。按新损伤速率和单组 `128 mB/t` 连续运行时，当前确定性原型的首个燃料列归零参考值为约 `803 ticks`，允许实现细节导致少量浮点误差但不得回退到十几 tick 即失效。
+**验收：** 定向 JUnit 至少覆盖新默认值、配置中不存在全堆流量键、三端口理论流量、冷热端不对称取较小侧、重复端口/连接去重、上述 8 燃料环场景，以及旧全堆上限不再生效；`./gradlew.bat test --rerun-tasks` 和 `git diff --check` 通过。
+**交付：** `build/reports/p1/P1-BALANCE-01.md`，列出删除字段、配置兼容影响、精确测试名称/结果、基准场景数值和未覆盖风险。完成后停止，禁止 Git 写操作，等待项目经理验收。
+
 ### P1-COOL-01：实现端口冷却剂账本
 
-**前置：** P1-DATA-02、P1-DATA-05、P1-SIM-01。
+**前置：** P1-DATA-02、P1-BALANCE-01、P1-SIM-01。
 **唯一目标：** 实现单端口输入、热端输出和库存变更的守恒账本。
 **必须满足：** 实际转化量取可用发热、输入量、输出容量和吸热量换算的最小值；不得复制、吞掉流体或在输入/输出堵塞时无条件消耗燃料。
 **允许修改：** 纯逻辑冷却剂类、JUnit 测试。
 **验收：** 输入不足、输出堵塞、发热不足和吸热换算边界全部通过。
 **交付：** 账本守恒公式和测试结果。
 
-### P1-COOL-02：实现多端口汇总和流量上限
+### P1-COOL-02：实现无全堆上限的多端口汇总
 
 **前置：** P1-COOL-01。
-**唯一目标：** 将多个冷端/热端汇总，同时实施单端口和全堆流量上限。
-**默认上限：** 单端口 `100 mB/t`，全堆 `200 mB/t`；端口数量不能直接增加发热或燃耗。
+**唯一目标：** 将多个互不重复的冷端/热端逐端口汇总，只实施单端口流量上限，不设置全堆冷却剂流量上限。
+**默认上限：** 每个冷端/热端独立为 `128 mB/t`；N 个合法冷端与 M 个合法热端分别提供 `N × 128` 和 `M × 128 mB/t` 的理论能力。端口数量不能直接增加发热、燃耗或内部库存。
 **允许修改：** 纯逻辑冷却剂类、JUnit 测试。
-**验收：** 一个端口、两个端口、超过总上限、重复连接和不对称端口测试通过。
+**验收：** 一个端口 `128`、两个端口 `256`、三个端口 `384 mB/t`、重复连接去重和冷热端数量/实际流量不对称时取较小侧的测试通过；实现中不得出现 `coolantTotalFlowCap` 或等价隐藏截断。
 **交付：** 多端口输入输出表。
 
 ### P1-COOL-03：接入冷却剂状态转换
@@ -391,7 +403,7 @@ GameTest/人工验收结果：
 
 **前置：** P1-LOOP-01。
 **唯一目标：** 将冷端、热端和换料端口绑定到结构映射中的唯一列或全堆账本。
-**必须满足：** 端口不创建独立模拟；多个端口共享总流量上限；顶部换料端口只观察/操作其绑定列。
+**必须满足：** 端口不创建独立模拟；多个端口共享同一守恒账本但只受各自上限约束，不设置全堆流量上限；顶部换料端口只观察/操作其绑定列。
 **允许修改：** 端口方块实体、绑定缓存、GameTest。
 **验收：** 端口错位、端口重复、端口拆除和结构重扫测试通过。
 **交付：** 端口绑定表和失败行为。
@@ -557,47 +569,37 @@ GameTest/人工验收结果：
 
 ```text
 P0-API-01 + P0-NUM-01（已完成）
-        ↓
-P1-BOOT-01
-        ↓
-P1-DATA-01
-   ┌────┼──────────┬──────────────┐
-   ↓    ↓          ↓              ↓
-DATA-02 DATA-03  DATA-05       STRUCT-01
-   ↓    ↓          ↓              ↓
-DATA-06 DATA-04 ─ SIM-01 ───── STRUCT-02
-                    ↓             ↓
-                 SIM-02       STRUCT-03
-                    ↓             ↓
-                 SIM-03 ───── CONTROL-01
-                    ↓             ↓
-                 SIM-04 ───── CONTROL-02
-                    ↓             ↓
-                 SIM-05 ───── CONTROL-03
-                    ↓             ↓
-                 SIM-06 ───── LOOP-01
-                    ↓             ↓
-                 SIM-07 ───── LOOP-02
-                    ↓             ↓
-                 SIM-08       REFUEL-01
-                    ↓             ↓
-                 SIM-09 ─── LOOP-01
-                    ↓             ↓
-                 COOL-01 ─── REFUEL-02
-                    ↓             ↓
-                 COOL-02 ─── REFUEL-03
-                    ↓             ↓
-                 COOL-03 ─── REPAIR-01 ─── REPAIR-02
-                                  ↓              ↓
-                              GOGGLE-01 ─── GOGGLE-02
-                                  ↓              ↓
-                              MAINT-01 ─── MAINT-02 ─── MAINT-03 ─── MAINT-04
-                                                                         ↓
-PONDER-01 ─── PONDER-02 ─── PONDER-03 ─── PONDER-04                  VERIFY-01
-                                                                         ↓
-                                                                    VERIFY-02
-                                                                         ↓
-                                                                    VERIFY-03
+  → BOOT-01 → DATA-01
+
+DATA-01 → DATA-02
+DATA-01 → DATA-03 → DATA-04
+DATA-02 + DATA-03 → DATA-06
+DATA-01 → DATA-05
+
+DATA-04 + DATA-05 → SIM-01 → SIM-02 → SIM-03 → SIM-04 → SIM-05 → SIM-06 → SIM-07 → SIM-08 → SIM-09
+DATA-05 + SIM-09 → BALANCE-01
+DATA-02 + SIM-01 + BALANCE-01 → COOL-01 → COOL-02 → COOL-03
+
+DATA-03 → STRUCT-01
+DATA-04 + STRUCT-01 + SIM-07 → STRUCT-02 → STRUCT-03
+STRUCT-02 → CONTROL-01
+CONTROL-01 + STRUCT-03 → CONTROL-02
+SIM-05 + CONTROL-02 → CONTROL-03
+
+SIM-09 + COOL-03 + STRUCT-03 + CONTROL-03 → LOOP-01 → LOOP-02 → REFUEL-01 → REFUEL-02 → REFUEL-03
+REFUEL-02 + SIM-03 → REPAIR-01 → REPAIR-02
+LOOP-01 + LOOP-02 + REFUEL-01 → GOGGLE-01 → GOGGLE-02
+LOOP-01 + STRUCT-03 → MAINT-01 → MAINT-04
+LOOP-01 + SIM-06 → MAINT-02 → MAINT-03
+
+DATA-06 + STRUCT-01 → PONDER-01
+PONDER-01 + STRUCT-03 + CONTROL-02 → PONDER-02
+REPAIR-02 + MAINT-04 + GOGGLE-02 → PONDER-03
+PONDER-02 + PONDER-03 → PONDER-04
+
+LOOP-02 + REFUEL-03 + GOGGLE-01 + MAINT-04 → VERIFY-01
+VERIFY-01 + PONDER-04 → VERIFY-02
+VERIFY-01 + VERIFY-02 → VERIFY-03
 ```
 
 实际派发时使用完整任务 ID，例如 `P1-SIM-04`，不要只写“做损伤传播”。并行执行只允许发生在依赖已经完成且不会修改同一组文件时；项目经理负责拆分冲突范围。
