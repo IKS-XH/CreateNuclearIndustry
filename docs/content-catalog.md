@@ -289,7 +289,7 @@ Ponder 是所有可玩内容的第一入口，不是开发者调试工具。每�
 | `P3` | `pressure_pipe_tier_3` | 陶瓷内衬管的极限温压用途、损坏风险和禁止低级管替代的提示 |
 | `P1` | `reactor_cold_port` | 复合冷却剂冷端输入、流向和反应堆结构必需性；允许多个端口汇总，每端口默认上限 `128 mB/t`，不设全堆流量上限 |
 | `P1` | `reactor_hot_port` | 热复合冷却剂输出、冷却剂转化和热端不能徒手桶取；允许多个端口汇总，每端口默认上限 `128 mB/t`，不设全堆流量上限 |
-| `P1` | `reactor_instrument_port` | 唯一状态所有者、工程师护目镜信息、红石高电平保持 SCRAM/低电平恢复停堆前位置、不得重复安装 |
+| `P1` | `reactor_instrument_port` | 唯一状态所有者、工程师护目镜信息、红石高电平保持 SCRAM/低电平恢复停堆前位置、无控制棒列时拒绝 SCRAM、不得重复安装 |
 | `P2` | `reactor_control_port` | 随烈焰人管理员提供可选自动控制桥接、无状态所有权、不能替代仪表端口 SCRAM |
 | `P1` | `reactor_refueling_port` | 只能位于燃料列顶面、停堆/耗尽许可、人工或动力机械臂换料和护目镜列级信息 |
 | `P2` | `high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port` | 锅炉给水/超临界蒸汽方向；两者分别有入口，不能混接 |
