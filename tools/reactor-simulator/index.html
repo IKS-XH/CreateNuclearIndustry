@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="反应堆列级热量、燃耗、冷却、损伤与融毁数值实验台">
+    <title>反应堆数值模拟器</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">CREATE: NUCLEAR INDUSTRY · LOCAL NUMERICAL LAB</p>
+        <h1>反应堆数值模拟器</h1>
+        <p class="lede">比较列级布局、尺寸、控制棒、端口和损伤参数。它是离线实验台，不是 Minecraft 游戏实现。</p>
+      </div>
+      <div class="header-badge" aria-label="模拟器边界">
+        <span class="badge-dot"></span>
+        <span>服务器权威边界：只读实验</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <div id="app-status" class="status-banner" role="status" aria-live="polite"></div>
+
+      <section class="setup-grid" aria-label="场景设置">
+        <article class="panel scene-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">01 · SCENE</p>
+              <h2>几何与初始状态</h2>
+            </div>
+            <span class="panel-chip">应用后重建</span>
+          </div>
+          <div class="form-grid compact-grid">
+            <label>长 <span class="unit">方块</span><input id="length-input" type="number" min="3" max="31" step="1" value="5"></label>
+            <label>宽 <span class="unit">方块</span><input id="width-input" type="number" min="3" max="31" step="1" value="5"></label>
+            <label>高 <span class="unit">方块</span><input id="height-input" type="number" min="3" max="31" step="1" value="5"></label>
+          </div>
+          <p id="dimension-hint" class="field-hint">有效横截面 3 × 3 · 有效高度 3 · 有效列数 9</p>
+          <div class="form-grid">
+            <label class="checkbox-label"><input id="initial-running" type="checkbox"> 初始允许运行</label>
+            <label class="checkbox-label"><input id="initial-scram" type="checkbox"> 初始 SCRAM</label>
+          </div>
+          <div class="button-row">
+            <button id="apply-reset" class="button primary" type="button">应用并重置</button>
+            <button id="reset-defaults" class="button secondary" type="button">恢复工具默认</button>
+          </div>
+          <p class="microcopy">修改尺寸、布局或参数后，必须点击“应用并重置”才会进入求解器。运行中修改会先暂停。</p>
+        </article>
+
+        <article class="panel layout-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">02 · CORE MAP</p>
+              <h2>堆芯横截面</h2>
+            </div>
+            <span id="layout-counts" class="panel-chip"></span>
+          </div>
+          <div class="preset-row" aria-label="布局预设">
+            <button class="button tiny" data-preset="mixed" type="button">混合示例</button>
+            <button class="button tiny" data-preset="full_fuel" type="button">全燃料</button>
+            <button class="button tiny" data-preset="checker_rods" type="button">棋盘控制棒</button>
+            <button class="button tiny" data-preset="center_cross" type="button">中心十字</button>
+            <button id="clear-layout" class="button tiny danger-outline" type="button">清空</button>
+          </div>
+          <div class="palette" role="toolbar" aria-label="涂刷列类型">
+            <label class="palette-option fuel-option"><input type="radio" name="brush" value="fuel" checked><span class="swatch fuel-swatch"></span>燃料列</label>
+            <label class="palette-option rod-option"><input type="radio" name="brush" value="control_rod"><span class="swatch rod-swatch"></span>控制棒列</label>
+            <label class="palette-option empty-option"><input type="radio" name="brush" value="empty"><span class="swatch empty-swatch"></span>空列</label>
+          </div>
+          <div id="core-grid" class="core-grid" role="grid" aria-label="可编辑堆芯布局"></div>
+          <p id="layout-errors" class="field-error" role="alert"></p>
+          <div class="rod-editor-wrap">
+            <h3>逐根控制棒目标插入深度</h3>
+            <div id="rod-editor" class="rod-editor"></div>
+          </div>
+          <p class="microcopy">拖动或点击网格涂刷。只计算北、南、东、西邻接；空列会完全切断反馈、控制和余热传播。</p>
+        </article>
+
+        <article class="panel parameters-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">03 · PARAMETERS</p>
+              <h2>数值配置</h2>
+            </div>
+            <span class="panel-chip">P1 原型 + 实验项</span>
+          </div>
+          <div id="parameter-fields" class="parameter-fields"></div>
+          <p class="microcopy">基础燃耗由 burnHoursPerBlock 反推：每个有效高度份在满功率、无超频时默认约 3 小时耗尽。网页参数不会写回 P1ServerConfig。</p>
+        </article>
+      </section>
+
+      <section class="panel time-panel" aria-label="时间控制">
+        <div class="time-controls">
+          <div>
+            <p class="section-kicker">04 · TIME CONTROL</p>
+            <h2>逐 tick 实验控制</h2>
+          </div>
+          <label>步长 <span class="unit">tick</span><select id="tick-step"><option value="1">1</option><option value="20" selected>20</option><option value="100">100</option></select></label>
+          <label>运行 ticks <span class="unit">tick</span><input id="run-ticks" type="number" min="1" max="1000000" step="1" value="1000"></label>
+          <div class="button-row time-buttons">
+            <button id="run-button" class="button primary" type="button">运行</button>
+            <button id="pause-button" class="button secondary" type="button">暂停</button>
+            <button id="step-button" class="button secondary" type="button">单步</button>
+            <button id="reset-simulation" class="button secondary" type="button">重置模拟</button>
+          </div>
+        </div>
+        <div class="scram-strip">
+          <label class="scram-toggle"><input id="scram-toggle" type="checkbox"><span>SCRAM</span></label>
+          <span>高电平期间仍会保留余热；有效冷却可暂停融毁倒计时，但不能回退。</span>
+        </div>
+      </section>
+
+      <section class="results-grid" aria-label="模拟结果">
+        <article class="panel overview-panel">
+          <div class="panel-heading"><div><p class="section-kicker">05 · OVERVIEW</p><h2>实时总览</h2></div><span id="status-pill" class="status-pill">暂停</span></div>
+          <div id="overview-grid" class="metric-grid"></div>
+          <div id="bottleneck-list" class="bottleneck-list"></div>
+        </article>
+
+        <article class="panel warning-panel">
+          <div class="panel-heading"><div><p class="section-kicker">06 · WARNINGS</p><h2>原因与警告</h2></div><span class="panel-chip">可解释</span></div>
+          <ul id="warnings" class="warning-list"><li class="muted">暂无警告</li></ul>
+        </article>
+
+        <article class="panel grid-panel">
+          <div class="panel-heading">
+            <div><p class="section-kicker">07 · COLUMN GRID</p><h2>列级状态</h2></div>
+            <label class="layer-select">图层<select id="grid-layer"><option value="heat">当前 HU/t</option><option value="integrity">完整度</option><option value="fuel">燃料剩余</option><option value="netHeat">净热负荷</option><option value="residual">余热</option><option value="rodDepth">控制棒深度</option><option value="propagation">传播触达</option></select></label>
+          </div>
+          <div id="result-grid" class="result-grid" role="grid" aria-label="堆芯列状态"></div>
+          <p class="microcopy">文字标签和图例与颜色同时表达状态；点击任一格查看列详情。传播仅显示当前 tick 现场触达，不保存独立传播标记。</p>
+        </article>
+
+        <article class="panel detail-panel">
+          <div class="panel-heading"><div><p class="section-kicker">08 · INSPECTOR</p><h2>列详情</h2></div><span id="selected-cell" class="panel-chip">未选择</span></div>
+          <div id="column-details" class="detail-content"><p class="muted">点击堆芯网格中的列。</p></div>
+        </article>
+
+        <article class="panel trend-panel">
+          <div class="panel-heading"><div><p class="section-kicker">09 · TREND</p><h2>时间序列</h2></div><span id="trend-count" class="panel-chip"></span></div>
+          <div class="chart-wrap"><canvas id="trend-chart" width="900" height="280" aria-label="总发热、冷却、最高净热负荷和最低完整度趋势图"></canvas></div>
+          <div class="chart-legend"><span><i class="line heat-line"></i>总发热 HU/t</span><span><i class="line cool-line"></i>冷却转化 mB/t</span><span><i class="line net-line"></i>最高净热 HU/t</span><span><i class="line integrity-line"></i>最低完整度 ×100</span></div>
+          <div class="trend-table-wrap"><table id="trend-table"><caption class="visually-hidden">时间序列数据（最近 20 个采样）</caption><thead><tr><th>tick</th><th>发热 HU/t</th><th>冷却 mB/t</th><th>最高净热 HU/t</th><th>最低完整度</th><th>倒计时 tick</th></tr></thead><tbody></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="panel io-panel" aria-label="导入导出">
+        <div class="panel-heading"><div><p class="section-kicker">10 · REPRODUCE</p><h2>场景导入与导出</h2></div><span class="panel-chip">schema v1</span></div>
+        <div class="io-actions">
+          <button id="export-json" class="button primary" type="button">导出当前场景 JSON</button>
+          <button id="export-csv" class="button secondary" type="button">导出 tick / 列 CSV</button>
+          <label class="file-button button secondary">导入 JSON<input id="import-json" type="file" accept="application/json,.json"></label>
+        </div>
+        <p id="io-message" class="field-hint" role="status">导入未知字段会被忽略，缺失字段使用文档化默认值；无效场景不会改变当前场景。</p>
+        <details class="formula-details"><summary>查看计算规则与抽象边界</summary><div id="formula-text"></div></details>
+      </section>
+    </main>
+
+    <footer class="app-footer">工具版本 <span id="tool-version"></span> · 计算规则 <span id="rule-version"></span> · 本地离线页面，无网络请求</footer>
+    <script type="module" src="./src/ui.js"></script>
+  </body>
+</html>

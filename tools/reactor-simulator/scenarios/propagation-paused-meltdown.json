@@ -1,0 +1,33 @@
+{
+  "schema": "create-nuclear-industry/reactor-simulator",
+  "schemaVersion": 1,
+  "toolVersion": "1.1.0",
+  "ruleVersion": "P1.2-simulator-2",
+  "geometry": { "length": 5, "width": 5, "height": 5 },
+  "config": { "actualColdIn": 0, "actualHotOut": 0 },
+  "layout": { "matrix": [["empty","fuel","empty"],["fuel","fuel","fuel"],["empty","control_rod","fuel"]] },
+  "controlRodDepths": [[null,null,null],[null,null,null],[null,1,null]],
+  "initialState": { "running": true, "scram": false },
+  "runTicks": 20,
+  "initialSnapshot": {
+    "tick": 0,
+    "coolantTotalCapacityMb": 12000,
+    "coldCoolantMb": 0,
+    "hotCoolantMb": 0,
+    "meltdownProgress": 0,
+    "meltdownTriggered": false,
+    "meltdownMelted": false,
+    "columns": [
+      { "key": "0,0", "x": 0, "z": 0, "type": "empty", "cachedHeat": 0 },
+      { "key": "1,0", "x": 1, "z": 0, "type": "fuel", "fuelCapacity": 3, "fuelRemaining": 3, "integrity": 1, "cachedHeat": 0 },
+      { "key": "2,0", "x": 2, "z": 0, "type": "empty", "cachedHeat": 0 },
+      { "key": "0,1", "x": 0, "z": 1, "type": "fuel", "fuelCapacity": 3, "fuelRemaining": 3, "integrity": 1, "cachedHeat": 0 },
+      { "key": "1,1", "x": 1, "z": 1, "type": "fuel", "fuelCapacity": 3, "fuelRemaining": 3, "integrity": 0, "cachedHeat": 4 },
+      { "key": "2,1", "x": 2, "z": 1, "type": "fuel", "fuelCapacity": 3, "fuelRemaining": 3, "integrity": 1, "cachedHeat": 0 },
+      { "key": "0,2", "x": 0, "z": 2, "type": "empty", "cachedHeat": 0 },
+      { "key": "1,2", "x": 1, "z": 2, "type": "control_rod", "controlRodIntegrity": 1, "depth": 1, "jammed": false, "jammedDepth": 1, "cachedHeat": 0 },
+      { "key": "2,2", "x": 2, "z": 2, "type": "fuel", "fuelCapacity": 3, "fuelRemaining": 3, "integrity": 1, "cachedHeat": 0 }
+    ],
+    "simulationFailed": null
+  }
+}
