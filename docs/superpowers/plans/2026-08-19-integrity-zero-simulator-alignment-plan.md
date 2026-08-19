@@ -3,6 +3,7 @@
 **计划状态：** 已批准执行；`P1-SIM-09` 与 `P1-BALANCE-01` 均已通过项目经理验收。
 **创建日期：** 2026-08-19。
 **权威依据：** `docs/project.md`、`docs/implementation-roadmap.md`、`docs/reactor-local-control-revision-design.md`、`P1-SIM-09` 和 `P1-BALANCE-01`。若与旧模拟器实现、旧场景或旧导出结果冲突，以这些权威规则为准。
+**前置验收证据：** `P1-BALANCE-01` 已由提交 `d7933ea` 落地；服务器配置与活动 Java 数值合同已删除全堆冷却剂流量字段，`./gradlew.bat test --rerun-tasks` 共 89 项通过。模拟器不得继续等待该前置，也不得修改核心文档来重新解释数值。
 
 ## 1. 目标与前置
 
