@@ -25,7 +25,7 @@ public final class ReactorFissionCalculator {
         for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : snapshot.fuelColumns().entrySet()) {
             CoreColumnPosition position = entry.getKey();
             FuelColumnState fuel = entry.getValue();
-            if (!fuel.isEffectiveFuel()) {
+            if (!fuel.hasUsableFuel()) {
                 continue;
             }
             double meanDepth = position.cardinalNeighbours().stream()
@@ -40,7 +40,7 @@ public final class ReactorFissionCalculator {
             controlled.put(position, controlledIntensity);
             overclocked.put(position, position.cardinalNeighbours().stream()
                     .map(snapshot.fuelColumns()::get)
-                    .anyMatch(neighbour -> neighbour != null && neighbour.isEffectiveFuel()));
+                    .anyMatch(neighbour -> neighbour != null && neighbour.hasUsableFuel()));
         }
 
         Map<CoreColumnPosition, Double> heatIntensity = new TreeMap<>();
@@ -95,7 +95,7 @@ public final class ReactorFissionCalculator {
             if (fuel.hasUsableFuel()) {
                 installedFuelColumns++;
             }
-            if (!fuel.isEffectiveFuel()) {
+            if (!fuel.hasUsableFuel()) {
                 rawResults.put(position, FuelColumnFissionResult.inactive());
                 continue;
             }

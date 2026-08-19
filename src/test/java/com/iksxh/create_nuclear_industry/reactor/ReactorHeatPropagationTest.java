@@ -101,6 +101,32 @@ class ReactorHeatPropagationTest {
         assertEquals(0.0D, result.snapshot().fuelColumns().get(EAST).cachedHeatHu(), 1.0E-12D);
     }
 
+    @Test
+    void exhaustedFuelWithCachedHeatOnlyKeepsOrdinaryResidualHeat() {
+        ReactorSnapshot snapshot = new ReactorSnapshot(
+                Map.of(
+                        SOURCE, new FuelColumnState(
+                                FuelAssemblyState.installed(216_000, 216_000),
+                                0.0D,
+                                4.0D
+                        ),
+                        NORTH, fuel(1.0D, 0.0D)
+                ),
+                Map.of(),
+                0L,
+                0L,
+                0L,
+                false
+        );
+
+        HeatPropagationResult result = ReactorHeatPropagation.propagate(snapshot, Map.of(), PARAMETERS);
+
+        assertEquals(0.0D, result.totalTransferredHeatHu(), 1.0E-12D);
+        assertTrue(result.receivedHeatHu().isEmpty());
+        assertEquals(4.0D, result.snapshot().fuelColumns().get(SOURCE).cachedHeatHu(), 1.0E-12D);
+        assertEquals(0.0D, result.snapshot().fuelColumns().get(NORTH).cachedHeatHu(), 1.0E-12D);
+    }
+
     private static FuelColumnState fuel(double integrity, double cachedHeat) {
         return new FuelColumnState(
                 FuelAssemblyState.installed(216_000, 0),

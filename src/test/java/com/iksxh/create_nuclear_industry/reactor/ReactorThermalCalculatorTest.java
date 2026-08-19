@@ -89,6 +89,42 @@ class ReactorThermalCalculatorTest {
     }
 
     @Test
+    void zeroIntegrityWithRemainingFuelStillSettlesHeatWithoutNegativeIntegrity() {
+        ReactorSnapshot snapshot = snapshot(fuel(0.0D, 0.0D));
+        ReactorFissionResult fission = ReactorFissionCalculator.calculate(snapshot, PARAMETERS, false);
+
+        FuelColumnThermalResult result = settle(snapshot, 0.0D).columns().get(CENTER);
+
+        assertEquals(6.0D, result.generatedHeatHu(), 1.0E-12D);
+        assertEquals(6.0D, result.netHeatLoadHu(), 1.0E-12D);
+        assertEquals(0.0D, result.nextState().integrity(), 1.0E-12D);
+        assertEquals(6.0D, result.nextState().cachedHeatHu(), 1.0E-12D);
+    }
+
+    @Test
+    void exhaustedFuelCachedHeatUsesOrdinaryCoolingLedger() {
+        ReactorSnapshot snapshot = snapshot(new FuelColumnState(
+                FuelAssemblyState.installed(216_000, 216_000),
+                0.0D,
+                4.0D
+        ));
+        ReactorFissionResult fission = ReactorFissionCalculator.calculate(snapshot, PARAMETERS, false);
+
+        FuelColumnThermalResult result = ReactorThermalCalculator.settleFissionHeat(
+                snapshot,
+                fission,
+                Map.of(CENTER, 1.0D),
+                PARAMETERS
+        ).columns().get(CENTER);
+
+        assertEquals(0.0D, result.generatedHeatHu(), 1.0E-12D);
+        assertEquals(1.0D, result.removedHeatHu(), 1.0E-12D);
+        assertEquals(3.0D, result.netHeatLoadHu(), 1.0E-12D);
+        assertEquals(0.0D, result.integrityDamage(), 1.0E-12D);
+        assertEquals(3.0D, result.nextState().cachedHeatHu(), 1.0E-12D);
+    }
+
+    @Test
     void coolingRequestsAreCappedAndCannotTargetUnknownColumns() {
         ReactorSnapshot snapshot = snapshot(fuel(1.0D, 0.0D));
         ReactorFissionResult fission = ReactorFissionCalculator.calculate(snapshot, PARAMETERS, false);

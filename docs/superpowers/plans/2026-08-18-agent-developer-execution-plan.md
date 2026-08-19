@@ -147,7 +147,7 @@ GameTest/人工验收结果：
 | `P1-SIM-06` | 已完成 | 执行者已交付融毁倒计时的建立、暂停、单调进度和全列修复重置的定向 JUnit；全量 `test` 通过。 |
 | `P1-SIM-07` | 已完成 | 项目经理独立重跑确认：`ReactorSnapshotNbtCodecTest` 4/4 通过；全量 77 项 JUnit 为 0 失败、0 错误。 |
 | `P1-SIM-08` | 已完成 | 项目经理独立重跑确认：模拟全链路确定性回归已加入；全量 81 项 JUnit 为 0 失败、0 错误，7 个 required GameTest 全部通过。 |
-| `P1-SIM-09` | 待执行 | 变更控制：完整度归零不再使燃料列被动停热、停燃耗或停止失效传播；须更新纯模拟层和回归测试。 |
+| `P1-SIM-09` | 已完成 | 项目经理独立复验：失效且未耗尽列以 2.0 倍继续裂变、燃耗和传播；耗尽列停止失效传播。`./gradlew.bat test --rerun-tasks` 共 84 项 JUnit、0 失败、0 错误、0 跳过。旧 P0 原型中同名的“归零停热”测试仅为历史原型，不得作为 P1 正式语义依据。 |
 
 **本次独立复验：** `2026-08-18` 运行 `./gradlew.bat test --rerun-tasks` 成功；运行 `./gradlew.bat runGameTestServer --rerun-tasks` 成功，7 个 required GameTest 全部通过。用户已完成客户端中物品/方块可见和方块可放置的人工验收。
 

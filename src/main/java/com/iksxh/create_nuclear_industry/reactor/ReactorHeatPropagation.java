@@ -38,7 +38,7 @@ public final class ReactorHeatPropagation {
         for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : previous.fuelColumns().entrySet()) {
             CoreColumnPosition sourcePosition = entry.getKey();
             FuelColumnState source = entry.getValue();
-            if (source.integrity() > 0.0D || source.cachedHeatHu() <= 0.0D) {
+            if (!source.hasUsableFuel() || source.integrity() > 0.0D || source.cachedHeatHu() <= 0.0D) {
                 continue;
             }
             double sourceCooling = Math.min(

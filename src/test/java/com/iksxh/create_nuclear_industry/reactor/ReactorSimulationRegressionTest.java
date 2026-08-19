@@ -39,16 +39,24 @@ class ReactorSimulationRegressionTest {
         FuelColumnFissionResult fission = result.fission().columns().get(TARGET);
         assertEquals(0.65D, fission.controlledIntensity(), 1.0E-12D,
                 "the jammed rod's frozen actual depth still suppresses isolated fuel");
-        assertEquals(1.95D, fission.generatedHeatHu(), 1.0E-12D);
-        assertEquals(0.0D, result.fission().columns().get(SOURCE).generatedHeatHu(), 1.0E-12D,
-                "failed fuel does not produce new fission heat");
-        assertEquals(1.95D, result.thermal().columns().get(TARGET).generatedHeatHu(), 1.0E-12D);
+        assertTrue(fission.generatedHeatHu() > 1.95D,
+                "the failed neighbouring fuel column participates in bounded overclock feedback");
+        assertTrue(result.fission().columns().get(SOURCE).generatedHeatHu() > 0.0D,
+                "failed fuel with remaining assembly continues producing fission heat");
+        assertTrue(result.fission().columns().get(SOURCE).plannedFuelBurnUnits() > 0.0D,
+                "failed fuel with remaining assembly continues consuming fuel");
+        assertEquals(fission.generatedHeatHu(), result.thermal().columns().get(TARGET).generatedHeatHu(),
+                1.0E-12D);
         assertTrue(result.thermal().columns().get(TARGET).integrityDamage() > 0.0D);
 
-        assertEquals(1.0D, result.propagation().totalTransferredHeatHu(), 1.0E-12D);
-        assertEquals(0.5D, result.propagation().receivedHeatHu().get(TARGET), 1.0E-12D);
-        assertEquals(0.5D, result.propagation().receivedHeatHu().get(SOURCE_CONTROL), 1.0E-12D);
-        assertEquals(3.0D, result.propagation().snapshot().fuelColumns().get(SOURCE).cachedHeatHu(),
+        double sourceHeatBeforePropagation = result.thermal().snapshot().fuelColumns().get(SOURCE).cachedHeatHu();
+        double expectedTransferredHeat = sourceHeatBeforePropagation * PARAMETERS.damageTransferRate();
+        assertEquals(expectedTransferredHeat, result.propagation().totalTransferredHeatHu(), 1.0E-12D);
+        assertEquals(expectedTransferredHeat / 2.0D, result.propagation().receivedHeatHu().get(TARGET), 1.0E-12D);
+        assertEquals(expectedTransferredHeat / 2.0D,
+                result.propagation().receivedHeatHu().get(SOURCE_CONTROL), 1.0E-12D);
+        assertEquals(sourceHeatBeforePropagation - expectedTransferredHeat,
+                result.propagation().snapshot().fuelColumns().get(SOURCE).cachedHeatHu(),
                 1.0E-12D);
         assertTrue(result.propagation().coveredEffectiveFuelColumns().contains(TARGET));
         assertEquals(1.0D, result.meltdown().propagationCoverageFraction(), 1.0E-12D);

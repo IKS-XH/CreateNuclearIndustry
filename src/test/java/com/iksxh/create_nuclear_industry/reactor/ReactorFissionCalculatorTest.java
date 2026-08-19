@@ -64,7 +64,7 @@ class ReactorFissionCalculatorTest {
     }
 
     @Test
-    void partialIntegrityAppliesSameMultiplierToHeatAndBurnAndZeroStopsBoth() {
+    void zeroIntegrityWithRemainingFuelKeepsTwoTimesHeatAndBurnMultiplier() {
         CoreColumnPosition full = new CoreColumnPosition(0, 0);
         CoreColumnPosition damaged = new CoreColumnPosition(2, 0);
         CoreColumnPosition failed = new CoreColumnPosition(1, 2);
@@ -86,8 +86,14 @@ class ReactorFissionCalculatorTest {
                 result.columns().get(damaged).plannedFuelBurnUnits()
                         / result.columns().get(full).plannedFuelBurnUnits(),
                 1.0E-12D);
-        assertEquals(0.0D, result.columns().get(failed).generatedHeatHu(), 1.0E-12D);
-        assertEquals(0.0D, result.columns().get(failed).plannedFuelBurnUnits(), 1.0E-12D);
+        assertEquals(2.0D, result.columns().get(failed).damageMultiplier(), 1.0E-12D);
+        assertEquals(2.0D,
+                result.columns().get(failed).generatedHeatHu() / result.columns().get(full).generatedHeatHu(),
+                1.0E-12D);
+        assertEquals(2.0D,
+                result.columns().get(failed).plannedFuelBurnUnits()
+                        / result.columns().get(full).plannedFuelBurnUnits(),
+                1.0E-12D);
     }
 
     @Test
