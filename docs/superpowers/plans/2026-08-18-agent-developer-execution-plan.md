@@ -148,13 +148,13 @@ GameTest/人工验收结果：
 | `P1-SIM-07` | 已完成 | 项目经理独立重跑确认：`ReactorSnapshotNbtCodecTest` 4/4 通过；全量 77 项 JUnit 为 0 失败、0 错误。 |
 | `P1-SIM-08` | 已完成 | 项目经理独立重跑确认：模拟全链路确定性回归已加入；全量 81 项 JUnit 为 0 失败、0 错误，7 个 required GameTest 全部通过。 |
 | `P1-SIM-09` | 已完成 | 项目经理独立复验：失效且未耗尽列以 2.0 倍继续裂变、燃耗和传播；耗尽列停止失效传播。`./gradlew.bat test --rerun-tasks` 共 84 项 JUnit、0 失败、0 错误、0 跳过。旧 P0 原型中同名的“归零停热”测试仅为历史原型，不得作为 P1 正式语义依据。 |
-| `P1-BALANCE-01` | 待执行 | 已冻结新默认值和无全堆流量上限规则；等待执行者更新服务器配置、活动数值合同和回归测试。 |
+| `P1-BALANCE-01` | 已完成 | 项目经理独立复验：Java 侧已删除全堆流量字段与运行时截断，默认值同步为 `0.5 HU/mB`、`128 mB/t`、`0.0000005 / (tick·HU/t)`；`./gradlew.bat test --rerun-tasks` 共 89 项 JUnit、0 失败、0 错误、0 跳过，`git diff --check` 通过。 |
 
 **本次独立复验：** `2026-08-18` 运行 `./gradlew.bat test --rerun-tasks` 成功；运行 `./gradlew.bat runGameTestServer --rerun-tasks` 成功，7 个 required GameTest 全部通过。用户已完成客户端中物品/方块可见和方块可放置的人工验收。
 
 **SIM-07 验收记录：** `CompoundTag` NBT 编解码和测试已通过官方 ModDevGradle `unitTest { enable(); testedMod = mods.create_nuclear_industry }` 获得 Minecraft 类路径。为兼容 ModDevGradle 将测试工作目录设为 `build/minecraft-junit` 的运行时行为，既有 `test` 任务在 `doFirst` 中将工作目录设回 `project.projectDir`；未增加依赖、运行配置、测试服务器、其他 source set，也未修改资源契约测试路径。项目经理于 `2026-08-18` 独立执行 `./gradlew.bat test --rerun-tasks`：NBT 编解码 4/4 通过，全量 77 项 JUnit 为 0 失败、0 错误。
 
-**下一可派发任务：** `P1-BALANCE-01` 与 `P1-STRUCT-01`，二者可由不同执行者并行。`P1-BALANCE-01` 只更新服务器配置、活动数值合同、遗留 P0 原型兼容和相关 JUnit；`P1-STRUCT-01` 只定义固定 `5×5×5` 的结构坐标/模板合同。`P1-COOL-01`、`P1-COOL-02`、`P1-COOL-03` 必须等待 `P1-BALANCE-01` 验收，不得继续使用旧的 `100/200 mB/t` 合同。离线工具同步另按 `docs/superpowers/plans/2026-08-19-integrity-zero-simulator-alignment-plan.md` 执行 `P1-SIMWEB-08`，且同样等待 `P1-BALANCE-01`。
+**下一可派发任务：** 优先执行离线工具 `P1-SIMWEB-08`，把模拟器同步到已验收的 `P1-SIM-09` 与 `P1-BALANCE-01`；同时可并行执行 `P1-STRUCT-01`，也可在写集不冲突时开始 `P1-COOL-01`。所有后续任务必须使用 `0.5 HU/mB`、每端口 `128 mB/t`、损伤速率 `0.0000005 / (tick·HU/t)` 和“无全堆冷却剂流量上限”合同，不得恢复旧 `100/200 mB/t` 规则。
 
 ### P1-BOOT-01：完成 P1 接单基线
 

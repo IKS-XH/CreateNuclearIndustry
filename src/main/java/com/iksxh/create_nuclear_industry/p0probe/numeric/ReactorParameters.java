@@ -9,7 +9,6 @@ public record ReactorParameters(
         double burnHoursPerBlock,
         double coolantAbsorptionHuPerMb,
         double coolantMaxFlowPerPort,
-        double coolantTotalFlowCap,
         double fuelColumnDamageHeatThreshold,
         double fuelColumnDamageRate,
         double fuelColumnDamageTransferRate,
@@ -29,7 +28,6 @@ public record ReactorParameters(
         requireFinitePositive("burnHoursPerBlock", burnHoursPerBlock);
         requireFinitePositive("coolantAbsorptionHuPerMb", coolantAbsorptionHuPerMb);
         requireFiniteNonNegative("coolantMaxFlowPerPort", coolantMaxFlowPerPort);
-        requireFiniteNonNegative("coolantTotalFlowCap", coolantTotalFlowCap);
         requireFiniteNonNegative("fuelColumnDamageHeatThreshold", fuelColumnDamageHeatThreshold);
         requireFiniteNonNegative("fuelColumnDamageRate", fuelColumnDamageRate);
         requireFiniteNonNegative("fuelColumnDamageTransferRate", fuelColumnDamageTransferRate);
@@ -53,11 +51,10 @@ public record ReactorParameters(
         return new ReactorParameters(
                 1.0,
                 3.0,
-                1.0,
-                100.0,
-                200.0,
+                0.5,
+                128.0,
                 0.25,
-                0.00125,
+                0.0000005,
                 0.25,
                 0.0,
                 0.20,
@@ -98,7 +95,6 @@ public record ReactorParameters(
         private double burnHoursPerBlock;
         private double coolantAbsorptionHuPerMb;
         private double coolantMaxFlowPerPort;
-        private double coolantTotalFlowCap;
         private double fuelColumnDamageHeatThreshold;
         private double fuelColumnDamageRate;
         private double fuelColumnDamageTransferRate;
@@ -118,7 +114,6 @@ public record ReactorParameters(
             burnHoursPerBlock = source.burnHoursPerBlock;
             coolantAbsorptionHuPerMb = source.coolantAbsorptionHuPerMb;
             coolantMaxFlowPerPort = source.coolantMaxFlowPerPort;
-            coolantTotalFlowCap = source.coolantTotalFlowCap;
             fuelColumnDamageHeatThreshold = source.fuelColumnDamageHeatThreshold;
             fuelColumnDamageRate = source.fuelColumnDamageRate;
             fuelColumnDamageTransferRate = source.fuelColumnDamageTransferRate;
@@ -143,7 +138,7 @@ public record ReactorParameters(
 
         public ReactorParameters build() {
             return new ReactorParameters(baseHeatPerFuel, burnHoursPerBlock, coolantAbsorptionHuPerMb,
-                    coolantMaxFlowPerPort, coolantTotalFlowCap, fuelColumnDamageHeatThreshold,
+                    coolantMaxFlowPerPort, fuelColumnDamageHeatThreshold,
                     fuelColumnDamageRate, fuelColumnDamageTransferRate, controlRodColumnFailureThreshold,
                     meltdownTriggerFraction, meltdownCountdownTicks, controlResponseExponent,
                     overclockHeatMultiplier, overclockBurnMultiplier, overclockFeedbackGain,

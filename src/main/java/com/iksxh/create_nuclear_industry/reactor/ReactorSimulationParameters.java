@@ -41,7 +41,7 @@ public record ReactorSimulationParameters(
                 1.0D,
                 3.0D,
                 0.25D,
-                0.00125D,
+                0.0000005D,
                 0.25D,
                 0.0D,
                 0.20D,

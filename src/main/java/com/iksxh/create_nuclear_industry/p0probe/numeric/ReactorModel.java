@@ -146,7 +146,7 @@ public final class ReactorModel {
 
         PortSummary ports = summarizePorts(input.coolantPorts(), parameters);
         double maxConverted = Math.min(Math.min(ports.coldAvailableMb, ports.hotOutputCapacityMb),
-                Math.min(Math.min(ports.coldFlowCapMb, ports.hotFlowCapMb), parameters.coolantTotalFlowCap()));
+                Math.min(ports.coldFlowCapMb, ports.hotFlowCapMb));
         maxConverted = Math.min(maxConverted, availableHeat / parameters.coolantAbsorptionHuPerMb());
         maxConverted = finiteNonNegative(maxConverted);
         double maxRemovalHeat = maxConverted * parameters.coolantAbsorptionHuPerMb();

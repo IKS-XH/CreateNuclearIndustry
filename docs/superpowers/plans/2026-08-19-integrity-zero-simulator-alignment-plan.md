@@ -1,6 +1,6 @@
 # P1-SIMWEB-08：失效规则与冷却平衡同步计划
 
-**计划状态：** 待执行。
+**计划状态：** 已批准执行；`P1-SIM-09` 与 `P1-BALANCE-01` 均已通过项目经理验收。
 **创建日期：** 2026-08-19。
 **权威依据：** `docs/project.md`、`docs/implementation-roadmap.md`、`docs/reactor-local-control-revision-design.md`、`P1-SIM-09` 和 `P1-BALANCE-01`。若与旧模拟器实现、旧场景或旧导出结果冲突，以这些权威规则为准。
 

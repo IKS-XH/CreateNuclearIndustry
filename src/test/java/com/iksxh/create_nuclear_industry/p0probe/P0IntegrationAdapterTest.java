@@ -22,8 +22,8 @@ class P0IntegrationAdapterTest {
         ReactorSnapshot initial = new ReactorSnapshot(
                 Map.of(key, ColumnState.fuel(key, 1, 1, 0)), 0, false, 0);
         ReactorTickInput input = new ReactorTickInput(List.of(
-                CoolantPort.cold("cold", 1), CoolantPort.cold("cold", 1),
-                CoolantPort.hot("hot", 1), CoolantPort.hot("hot", 1)), Map.of(), 1, false);
+                CoolantPort.cold("cold", 2), CoolantPort.cold("cold", 2),
+                CoolantPort.hot("hot", 2), CoolantPort.hot("hot", 2)), Map.of(), 1, false);
         P0IntegrationAdapter adapter = new P0IntegrationAdapter();
         ReactorTickResult first = adapter.serverTick(initial, ReactorParameters.defaults(), input);
         assertEquals(1, adapter.tickCalls());

@@ -27,7 +27,6 @@ public final class P1ServerConfig {
         public final ModConfigSpec.DoubleValue fuelBurnTimeHours;
         public final ModConfigSpec.DoubleValue coolantAbsorptionHuPerMb;
         public final ModConfigSpec.IntValue perPortFlowMbPerTick;
-        public final ModConfigSpec.IntValue totalFlowCapMbPerTick;
         public final ModConfigSpec.DoubleValue damageHeatThresholdHuPerTick;
         public final ModConfigSpec.DoubleValue damageRatePerTickHuLoad;
         public final ModConfigSpec.DoubleValue damageTransferRate;
@@ -44,19 +43,16 @@ public final class P1ServerConfig {
                     .defineInRange("fuelBurnTimeHours", 3.0D, 0.001D, 1_000_000.0D);
             coolantAbsorptionHuPerMb = builder
                     .comment("Heat absorbed by one millibucket of compound coolant.")
-                    .defineInRange("coolantAbsorptionHuPerMb", 1.0D, 0.0D, 1_000_000.0D);
+                    .defineInRange("coolantAbsorptionHuPerMb", 0.5D, 0.0D, 1_000_000.0D);
             perPortFlowMbPerTick = builder
                     .comment("Maximum coolant flow through one port per tick.")
-                    .defineInRange("perPortFlowMbPerTick", 100, 0, 1_000_000);
-            totalFlowCapMbPerTick = builder
-                    .comment("Maximum aggregate coolant flow through one reactor per tick.")
-                    .defineInRange("totalFlowCapMbPerTick", 200, 0, 1_000_000);
+                    .defineInRange("perPortFlowMbPerTick", 128, 0, 1_000_000);
             damageHeatThresholdHuPerTick = builder
                     .comment("Effective heat load threshold before integrity damage begins.")
                     .defineInRange("damageHeatThresholdHuPerTick", 0.25D, 0.0D, 1_000_000.0D);
             damageRatePerTickHuLoad = builder
                     .comment("Integrity damage per tick per HU/t of effective heat above threshold.")
-                    .defineInRange("damageRatePerTickHuLoad", 0.00125D, 0.0D, 1_000_000.0D);
+                    .defineInRange("damageRatePerTickHuLoad", 0.0000005D, 0.0D, 1_000_000.0D);
             damageTransferRate = builder
                     .comment("Four-way heat damage transfer coefficient.")
                     .defineInRange("damageTransferRate", 0.25D, 0.0D, 1.0D);

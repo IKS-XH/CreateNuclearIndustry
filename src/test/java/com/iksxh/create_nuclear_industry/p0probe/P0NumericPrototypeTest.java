@@ -44,7 +44,6 @@ class P0NumericPrototypeTest {
                         + "baseBurnPerFuel," + DEFAULTS.baseBurnPerFuel() + "\n"
                         + "coolantAbsorptionHuPerMb," + DEFAULTS.coolantAbsorptionHuPerMb() + "\n"
                         + "coolantMaxFlowPerPort," + DEFAULTS.coolantMaxFlowPerPort() + "\n"
-                        + "coolantTotalFlowCap," + DEFAULTS.coolantTotalFlowCap() + "\n"
                         + "fuelColumnDamageHeatThreshold," + DEFAULTS.fuelColumnDamageHeatThreshold() + "\n"
                         + "fuelColumnDamageRate," + DEFAULTS.fuelColumnDamageRate() + "\n"
                         + "fuelColumnDamageTransferRate," + DEFAULTS.fuelColumnDamageTransferRate() + "\n"
@@ -88,7 +87,7 @@ class P0NumericPrototypeTest {
     @Test
     void n02_singleFullPowerColumnHitsThreeHourAnchor() {
         ReactorSnapshot state = snapshot(ColumnState.fuel(new ColumnKey(0, 0), 1, 1, 0));
-        ReactorTickInput cooling = ports(1);
+        ReactorTickInput cooling = ports(2);
         int ticks = 0;
         while (state.columns().get(new ColumnKey(0, 0)).fuelRemaining() > 0 && ticks < 216005) {
             ReactorTickResult result = ReactorModel.tick(state, DEFAULTS, cooling);
@@ -187,22 +186,99 @@ class P0NumericPrototypeTest {
     }
 
     @Test
-    void n07CoolingUsesPerPortAndTotalCapsAndDoesNotHideResidualHeat() {
+    void n07CoolingUsesPerPortCapacityWithoutAggregateCapAndDeduplicatesPorts() {
         ReactorParameters parameters = DEFAULTS.toBuilder().baseHeatPerFuel(500).build();
         ReactorSnapshot state = snapshot(ColumnState.fuel(new ColumnKey(0, 0), 1, 1, 0));
         for (double flow : new double[]{0, 50, 100, 200, 500}) {
             ReactorTickResult result = ReactorModel.tick(state, parameters, ports(flow));
-            double expected = Math.min(flow, 200);
+            double expected = flow;
             assertEquals(expected, result.convertedCoolant(), 1e-9);
-            assertEquals(expected, result.removedHeat(), 1e-9);
-            assertTrue(result.columns().get(new ColumnKey(0, 0)).netHeatLoad() >= 500 - expected - 1e-9);
+            assertEquals(expected * parameters.coolantAbsorptionHuPerMb(), result.removedHeat(), 1e-9);
+            assertTrue(result.columns().get(new ColumnKey(0, 0)).netHeatLoad()
+                    >= 500 - expected * parameters.coolantAbsorptionHuPerMb() - 1e-9);
         }
+        ReactorTickResult onePort = ReactorModel.tick(state, parameters, new ReactorTickInput(
+                List.of(CoolantPort.cold("cold-single", 500), CoolantPort.hot("hot-single", 500)),
+                Map.of(), 1, false));
+        assertEquals(128, onePort.convertedCoolant(), 1e-9, "one legal port is capped at 128 mB/t");
+
+        ReactorTickResult threeColdTwoHot = ReactorModel.tick(state, parameters, new ReactorTickInput(
+                List.of(CoolantPort.cold("cold-0", 128), CoolantPort.cold("cold-1", 128),
+                        CoolantPort.cold("cold-2", 128), CoolantPort.hot("hot-0", 128),
+                        CoolantPort.hot("hot-1", 128)), Map.of(), 1, false));
+        assertEquals(256, threeColdTwoHot.convertedCoolant(), 1e-9,
+                "the smaller cold/hot side controls asymmetric throughput");
+
+        ReactorTickResult threePorts = ReactorModel.tick(state, parameters, new ReactorTickInput(
+                List.of(CoolantPort.cold("cold-a", 128), CoolantPort.cold("cold-b", 128),
+                        CoolantPort.cold("cold-c", 128), CoolantPort.hot("hot-a", 128),
+                        CoolantPort.hot("hot-b", 128), CoolantPort.hot("hot-c", 128)), Map.of(), 1, false));
+        assertEquals(384, threePorts.convertedCoolant(), 1e-9,
+                "three distinct legal ports must not hit an old 200/256 aggregate cap");
+
         ReactorTickResult duplicate = ReactorModel.tick(state, parameters, new ReactorTickInput(
-                List.of(CoolantPort.cold("cold", 100), CoolantPort.cold("cold", 100),
-                        CoolantPort.hot("hot", 100), CoolantPort.hot("hot", 100)), Map.of(), 1, false));
-        assertEquals(100, duplicate.convertedCoolant(), 1e-9);
+                List.of(CoolantPort.cold("cold", 128), CoolantPort.cold("cold", 128),
+                        CoolantPort.hot("hot", 128), CoolantPort.hot("hot", 128)), Map.of(), 1, false));
+        assertEquals(128, duplicate.convertedCoolant(), 1e-9);
         assertEquals(2, duplicate.duplicatePortCount());
         pass("N-07");
+    }
+
+    @Test
+    void p1BalanceEightFuelRingMatchesFrozenHeatAndCoolantAnchor() {
+        Map<ColumnKey, ColumnState> columns = new LinkedHashMap<>();
+        for (int x = 0; x < 3; x++) {
+            for (int z = 0; z < 3; z++) {
+                if (x != 1 || z != 1) {
+                    ColumnKey key = new ColumnKey(x, z);
+                    columns.put(key, ColumnState.fuel(key, 1, 1, 0));
+                }
+            }
+        }
+        ReactorTickInput cooling = new ReactorTickInput(
+                List.of(CoolantPort.cold("cold-a", 128), CoolantPort.cold("cold-b", 128),
+                        CoolantPort.cold("cold-c", 128), CoolantPort.hot("hot-a", 128),
+                        CoolantPort.hot("hot-b", 128), CoolantPort.hot("hot-c", 128)),
+                Map.of(), 3, false);
+
+        ReactorTickResult result = ReactorModel.tick(snapshot(columns), DEFAULTS, cooling);
+        assertEquals(4.161445, result.generatedHeat() / 3.0 / 8.0, 1e-6);
+        assertEquals(99.87469, result.generatedHeat(), 1e-5);
+        assertEquals(199.74938, result.convertedCoolant(), 1e-5);
+
+        ReactorTickResult oneGroup = ReactorModel.tick(snapshot(columns), DEFAULTS,
+                new ReactorTickInput(List.of(CoolantPort.cold("cold", 128), CoolantPort.hot("hot", 128)),
+                        Map.of(), 3, false));
+        assertEquals(128, oneGroup.convertedCoolant(), 1e-9);
+        ReactorTickResult twoGroups = ReactorModel.tick(snapshot(columns), DEFAULTS,
+                new ReactorTickInput(List.of(CoolantPort.cold("cold-a", 128), CoolantPort.cold("cold-b", 128),
+                        CoolantPort.hot("hot-a", 128), CoolantPort.hot("hot-b", 128)), Map.of(), 3, false));
+        assertEquals(199.74938, twoGroups.convertedCoolant(), 1e-5);
+        pass("P1-BALANCE-01-ANCHOR");
+    }
+
+    @Test
+    void p1BalanceSingle128GroupReachesFirstIntegrityZeroNear803Ticks() {
+        Map<ColumnKey, ColumnState> columns = new LinkedHashMap<>();
+        for (int x = 0; x < 3; x++) {
+            for (int z = 0; z < 3; z++) {
+                if (x != 1 || z != 1) {
+                    ColumnKey key = new ColumnKey(x, z);
+                    columns.put(key, ColumnState.fuel(key, 1, 1, 0));
+                }
+            }
+        }
+        ReactorTickInput cooling = new ReactorTickInput(
+                List.of(CoolantPort.cold("cold", 128), CoolantPort.hot("hot", 128)), Map.of(), 3, false);
+        ReactorSnapshot state = snapshot(columns);
+        int ticks = 0;
+        while (state.columns().get(new ColumnKey(0, 0)).fuelColumnIntegrity() > 0 && ticks < 2_000) {
+            state = ReactorModel.tick(state, DEFAULTS, cooling).next();
+            ticks++;
+        }
+        assertTrue(ticks >= 790 && ticks <= 810, "first zero-integrity tick=" + ticks);
+        assertEquals(0, state.columns().get(new ColumnKey(0, 0)).fuelColumnIntegrity(), 1e-12);
+        pass("P1-BALANCE-01-DAMAGE-ANCHOR");
     }
 
     @Test
@@ -373,10 +449,10 @@ class P0NumericPrototypeTest {
     }
 
     private static ReactorTickInput ports(double flow, double internalHeight) {
-        int count = (int) Math.ceil(flow / 100.0);
+        int count = (int) Math.ceil(flow / 128.0);
         List<CoolantPort> ports = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            double amount = Math.min(100, flow - i * 100);
+            double amount = Math.min(128, flow - i * 128);
             ports.add(CoolantPort.cold("cold-" + i, Math.max(0, amount)));
             ports.add(CoolantPort.hot("hot-" + i, Math.max(0, amount)));
         }
@@ -384,7 +460,7 @@ class P0NumericPrototypeTest {
     }
 
     private static List<CoolantPort> firstInputPorts() {
-        return List.of(CoolantPort.cold("cold", 100), CoolantPort.hot("hot", 100));
+        return List.of(CoolantPort.cold("cold", 128), CoolantPort.hot("hot", 128));
     }
 
     private static void pass(String name) {
