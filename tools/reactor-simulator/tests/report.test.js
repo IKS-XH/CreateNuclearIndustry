@@ -29,6 +29,20 @@ test("scene JSON round-trips snapshots and ignores unknown fields", () => {
   assert.equal(parsed.scene.futureUnknownField, undefined);
 });
 
+test("legacy aggregate coolant flow field is ignored on import and omitted on export", () => {
+  const layout = createPreset(DEFAULT_GEOMETRY, "empty");
+  const scene = buildScene({
+    geometry: DEFAULT_GEOMETRY,
+    layout,
+    controlRodDepths: createDepthMatrix(DEFAULT_GEOMETRY, layout),
+    config: { ...DEFAULT_CONFIG, coolantTotalFlowCap: 200 },
+  });
+  assert.equal(Object.hasOwn(scene.config, "coolantTotalFlowCap"), false);
+  const imported = parseSceneText(JSON.stringify({ ...scene, config: { ...scene.config, coolantTotalFlowCap: 999 } }));
+  assert.equal(imported.ok, true);
+  assert.equal(Object.hasOwn(imported.scene.config, "coolantTotalFlowCap"), false);
+});
+
 test("invalid scene does not pass schema/version validation", () => {
   assert.equal(parseSceneText(JSON.stringify({ schema: "other", schemaVersion: 1 })).ok, false);
   assert.equal(parseSceneText(JSON.stringify({ schemaVersion: 999 })).ok, false);
@@ -40,9 +54,11 @@ test("CSV contains unit-bearing tick overview rows and final per-column rows", (
   layout[1][1] = "fuel";
   const snapshot = createInitialSnapshot(DEFAULT_GEOMETRY, layout, createDepthMatrix(DEFAULT_GEOMETRY, layout), DEFAULT_CONFIG);
   const csv = buildCsv([
-    { summary: { tick: 1, gameSeconds: .05, generatedHeat: 3, convertedCoolant: 3, maxNetHeatLoad: 0, minIntegrity: 1, ruleConverged: true }, columns: {} },
+    { summary: { tick: 1, gameSeconds: .05, generatedHeat: 3, fuelConsumed: 1e-7, convertedCoolant: 3, maxNetHeatLoad: 0, minIntegrity: 1, ruleConverged: true }, columns: {} },
   ], snapshot, { tick: 1 }, RULE_VERSION);
   assert.match(csv, /total_heat_HU_per_t/);
   assert.match(csv, /tick,1,0\.05/);
+  assert.match(csv, /0\.0000001/);
+  assert.doesNotMatch(csv, /1e-7/i);
   assert.ok(csv.includes(`column,0,0,,,,,,,,,,,,,,${RULE_VERSION},true`));
 });

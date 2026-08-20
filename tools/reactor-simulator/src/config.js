@@ -1,7 +1,7 @@
-export const TOOL_VERSION = "1.1.0";
+export const TOOL_VERSION = "1.2.0";
 export const SCHEMA_ID = "create-nuclear-industry/reactor-simulator";
 export const SCHEMA_VERSION = 1;
-export const RULE_VERSION = "P1.2-simulator-2";
+export const RULE_VERSION = "P1.2-simulator-4";
 export const TICKS_PER_SECOND = 20;
 
 export const LIMITS = Object.freeze({
@@ -29,13 +29,12 @@ export const DEFAULT_CONFIG = Object.freeze({
   totalHeatMultiplierCap: 20.0,
   coldPortCount: 2,
   hotPortCount: 2,
-  coolantMaxFlowPerPort: 100.0,
-  coolantTotalFlowCap: 200.0,
-  coolantAbsorptionHuPerMb: 1.0,
-  actualColdIn: 200.0,
-  actualHotOut: 200.0,
+  coolantMaxFlowPerPort: 128.0,
+  coolantAbsorptionHuPerMb: 0.5,
+  actualColdIn: 10000000.0,
+  actualHotOut: 10000000.0,
   fuelColumnDamageHeatThreshold: 0.25,
-  fuelColumnDamageRate: 0.00125,
+  fuelColumnDamageRate: 0.0000005,
   fuelColumnDamageTransferRate: 0.25,
   controlRodColumnFailureThreshold: 0.0,
   meltdownTriggerFraction: 0.20,
@@ -145,6 +144,7 @@ export const CONFIG_FIELDS = Object.freeze([
     max: 100,
     step: 1,
     integer: true,
+    sceneInputId: "cold-port-count-input",
     frozen: false,
   },
   {
@@ -156,6 +156,7 @@ export const CONFIG_FIELDS = Object.freeze([
     max: 100,
     step: 1,
     integer: true,
+    sceneInputId: "hot-port-count-input",
     frozen: false,
   },
   {
@@ -165,16 +166,6 @@ export const CONFIG_FIELDS = Object.freeze([
     unit: "mB/t",
     min: 0,
     max: 1e6,
-    step: 1,
-    frozen: true,
-  },
-  {
-    group: "冷却剂端口",
-    key: "coolantTotalFlowCap",
-    label: "全堆总流量上限",
-    unit: "mB/t",
-    min: 0,
-    max: 1e7,
     step: 1,
     frozen: true,
   },
@@ -225,7 +216,7 @@ export const CONFIG_FIELDS = Object.freeze([
     unit: "1/(tick·HU/t)",
     min: 0,
     max: 1e4,
-    step: 0.00001,
+    step: 0.0000001,
     frozen: true,
   },
   {
@@ -288,7 +279,11 @@ export function baseBurnPerFuel(config) {
 }
 
 export function cloneConfig(config = DEFAULT_CONFIG) {
-  return { ...DEFAULT_CONFIG, ...config };
+  const value = { ...DEFAULT_CONFIG };
+  for (const field of CONFIG_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(config, field.key)) value[field.key] = config[field.key];
+  }
+  return value;
 }
 
 export function validateConfig(raw = {}) {
@@ -321,6 +316,13 @@ export function fieldDefinition(key) {
 export function formatNumber(number, digits = 3) {
   if (!Number.isFinite(number)) return "—";
   const absolute = Math.abs(number);
-  if (absolute !== 0 && (absolute >= 1e6 || absolute < 1e-4)) return number.toExponential(3);
+  const decimalDigits = absolute !== 0 && (absolute >= 1e6 || absolute < 1e-4)
+    ? Math.max(digits, 15)
+    : digits;
+  return number.toLocaleString("zh-CN", { maximumFractionDigits: decimalDigits });
+}
+
+export function formatDecimal(number, digits = 12) {
+  if (!Number.isFinite(number)) return "—";
   return number.toLocaleString("zh-CN", { maximumFractionDigits: digits });
 }

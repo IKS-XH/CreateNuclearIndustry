@@ -7,6 +7,7 @@ import {
   TOOL_VERSION,
   cloneConfig,
   formatNumber,
+  formatDecimal,
   baseBurnPerFuel,
   validateConfig,
 } from "./config.js";
@@ -29,6 +30,7 @@ import {
   getColumn,
   repairColumn,
   runTicks,
+  setScramRequest,
   setControlDepth,
   snapshotToPlain,
   statusLabel,
@@ -79,6 +81,22 @@ function markDirty(message = "有未应用的场景修改") {
   setStatus(`${message}；请暂停后点击“应用并重置”。`);
 }
 
+function applyLiveControlRodDepth(x, z, depth) {
+  const key = `${x},${z}`;
+  const sameCommittedLayout = state.pendingLayout?.[z]?.[x] === "control_rod"
+    && state.layout?.[z]?.[x] === "control_rod";
+  if (state.dirty || !sameCommittedLayout || !getColumn(state.snapshot, key)) return false;
+  state.snapshot = setControlDepth(state.snapshot, key, depth);
+  state.initialSnapshot = setControlDepth(state.initialSnapshot, key, depth);
+  state.depths[z][x] = depth;
+  state.pendingDepths[z][x] = depth;
+  state.lastResult = null;
+  setStatus(state.runtime.running
+    ? `控制棒 [${key}] 深度已实时更新，模拟继续运行。`
+    : `控制棒 [${key}] 深度已更新，可以直接运行模拟。`, "success");
+  return true;
+}
+
 function pauseTimer() {
   if (state.timer != null) {
     clearInterval(state.timer);
@@ -124,6 +142,7 @@ function renderParameterFields() {
     heading.textContent = group;
     section.append(heading);
     for (const field of fields) {
+      if (field.sceneInputId) continue;
       const row = document.createElement("label");
       row.className = "parameter-row";
       row.title = field.frozen
@@ -163,8 +182,18 @@ function updateBurnRateNote() {
 
 function readConfigFromForm() {
   const config = {};
-  for (const field of CONFIG_FIELDS) config[field.key] = Number($(`#param-${field.key}`).value);
+  for (const field of CONFIG_FIELDS) {
+    const input = field.sceneInputId ? $(`#${field.sceneInputId}`) : $(`#param-${field.key}`);
+    config[field.key] = Number(input.value);
+  }
   return config;
+}
+
+function setConfigFormValues(config) {
+  for (const field of CONFIG_FIELDS) {
+    const input = field.sceneInputId ? $(`#${field.sceneInputId}`) : $(`#param-${field.key}`);
+    if (input) input.value = config[field.key];
+  }
 }
 
 function renderLayoutGrid(target = "pending") {
@@ -189,7 +218,6 @@ function renderLayoutGrid(target = "pending") {
         event.preventDefault();
         state.painting = true;
         paintPendingCell(x, z);
-        cell.setPointerCapture?.(event.pointerId);
       });
       cell.addEventListener("pointerenter", () => { if (state.painting) paintPendingCell(x, z); });
     } else {
@@ -248,13 +276,33 @@ function paintPendingCell(x, z) {
     pauseTimer();
     setStatus("布局编辑已暂停运行；点击“应用并重置”后才会进入新场景。");
   }
+  const previousType = state.pendingLayout[z][x];
   const type = state.brush;
   state.pendingLayout[z][x] = type;
   if (type === "control_rod" && state.pendingDepths[z][x] == null) state.pendingDepths[z][x] = 1;
   if (type !== "control_rod") state.pendingDepths[z][x] = null;
-  renderLayoutGrid("pending");
-  renderRodEditor();
+  refreshPendingCell(x, z);
+  if (previousType !== type) renderRodEditor();
   markDirty("布局已修改");
+}
+
+function refreshPendingCell(x, z) {
+  const grid = $("#core-grid");
+  const cell = [...grid.children].find((candidate) =>
+    candidate.dataset.x === String(x) && candidate.dataset.z === String(z));
+  if (!cell) return;
+  const type = state.pendingLayout[z][x];
+  cell.className = `core-cell ${type}`;
+  cell.innerHTML = `<span class="cell-icon">${type === "fuel" ? "F" : type === "control_rod" ? "C" : "·"}</span><span class="coord">${x},${z}</span>`;
+  cell.setAttribute("aria-label", `${x},${z}：${COLUMN_LABELS[type]}`);
+  const counts = countColumns(state.pendingLayout);
+  $("#layout-counts").textContent = `F ${counts.fuel} · C ${counts.control_rod} · 空 ${counts.empty}`;
+}
+
+function stopPainting(message = "已停止刷涂。") {
+  const wasPainting = state.painting;
+  state.painting = false;
+  if (wasPainting && message) setStatus(message, "success");
 }
 
 function renderRodEditor() {
@@ -272,19 +320,18 @@ function renderRodEditor() {
     input.max = "1";
     input.step = "0.01";
     input.value = String(state.pendingDepths[z][x] ?? 1);
+    input.disabled = state.runtime.scramActive === true;
     input.setAttribute("aria-label", `控制棒 ${key} 目标插入深度`);
     const output = document.createElement("output");
     output.textContent = `${(Number(input.value) * 100).toFixed(0)}%`;
     input.addEventListener("input", () => {
-      if (state.runtime.running) {
-        pauseTimer();
-        setStatus("控制棒编辑已暂停运行；应用后重置以避免混用快照。");
-      }
-      state.pendingDepths[z][x] = Number(input.value);
+      const depth = Number(input.value);
+      state.pendingDepths[z][x] = depth;
       output.textContent = `${(Number(input.value) * 100).toFixed(0)}%`;
-      const keyColumn = `${x},${z}`;
-      if (state.layout.some((row) => row.some((cell) => cell === "control_rod")) && getColumn(state.snapshot, keyColumn)) {
-        state.snapshot = setControlDepth(state.snapshot, keyColumn, Number(input.value));
+      if (applyLiveControlRodDepth(x, z, depth)) {
+        renderOverview();
+        renderResultGridAndDetail();
+        return;
       }
       markDirty("控制棒深度已修改");
       renderResultGridAndDetail();
@@ -341,6 +388,24 @@ function renderWarnings() {
   list.innerHTML = warnings.length ? warnings.map((warning) => `<li>${warning}</li>`).join("") : `<li class="muted">暂无警告</li>`;
 }
 
+function renderScramControl() {
+  const checkbox = $("#scram-toggle");
+  const message = $("#scram-message");
+  const rodCount = state.layout.flat().filter((type) => type === "control_rod").length;
+  const available = rodCount > 0;
+  checkbox.disabled = !available;
+  checkbox.checked = state.runtime.scramActive === true;
+  if (!available) {
+    message.textContent = "SCRAM 不可用：当前布局没有控制棒列（SCRAM_UNAVAILABLE_NO_CONTROL_RODS）";
+  } else if (state.runtime.scramActive) {
+    message.textContent = state.lastResult?.summary?.scramIncomplete
+      ? "SCRAM_INCOMPLETE：仍存在裂变产热；可移动控制棒已锁定在 100%"
+      : "SCRAM 已建立；可移动控制棒已锁定在 100%";
+  } else {
+    message.textContent = "SCRAM 可用；启用时保存并恢复可移动控制棒目标深度";
+  }
+}
+
 function selectColumn(key) {
   state.selectedKey = key;
   renderResultGridAndDetail();
@@ -387,9 +452,9 @@ function renderColumnDetails() {
     <div><dt>当前发热</dt><dd>${formatNumber(result?.generatedHeat ?? 0)} HU/t</dd></div>
     <div><dt>控制强度</dt><dd>${formatNumber(result?.controlledIntensity ?? 0, 5)}×</dd></div>
     <div><dt>超频热/燃耗倍率</dt><dd>${formatNumber(result?.heatIntensity ?? 0, 5)}× / ${formatNumber(result?.burnIntensity ?? 0, 5)}×</dd></div>
-    <div><dt>损伤倍率</dt><dd>${formatNumber(integrity <= 1e-12 ? 0 : 2 - integrity, 5)}×</dd></div>
+    <div><dt>损伤倍率</dt><dd>${formatNumber(2 - integrity, 5)}×</dd></div>
     <div><dt>等价燃料剩余</dt><dd>${formatNumber(column.fuelRemaining, 6)} / ${formatNumber(column.fuelCapacity, 6)}</dd></div>
-    <div><dt>消耗率</dt><dd>${formatNumber(burnRate, 9)} 份/tick</dd></div>
+    <div><dt>消耗率</dt><dd>${formatDecimal(burnRate, 12)} 份/tick</dd></div>
     <div><dt>预计耗尽</dt><dd>${Number.isFinite(ticksToEmpty) ? `${formatNumber(ticksToEmpty, 1)} tick / ${formatNumber(ticksToEmpty / 20 / 60, 2)} min` : "不消耗"}</dd></div>
     <div><dt>冷却带走 / 净热</dt><dd>${formatNumber(result?.removedHeat ?? 0)} / ${formatNumber(result?.netHeatLoad ?? column.cachedHeat)} HU/t</dd></div>
     <div><dt>完整度 / 损坏度</dt><dd>${(integrity * 100).toFixed(2)}% / ${((1 - integrity) * 100).toFixed(2)}%</dd></div>
@@ -463,10 +528,11 @@ function drawTrendChart(entries) {
 function renderFormulaText() {
   $("#formula-text").innerHTML = `<ul>
     <li>外尺寸为 length × width × height；有效区为 (length−2) × (width−2) × (height−2)，每个横截面格是一根垂直列。</li>
-    <li>孤立燃料：controlledIntensity = (1 − 相邻控制棒平均有效插入深度)<sup>controlResponseExponent</sup>。</li>
-    <li>燃料四向直接相邻时使用从 1.0 开始的同步单调有界反馈，最多 ${256} 轮，变化 ≤ ${1e-9} 收敛；控制棒不进入该簇反馈。</li>
-    <li>列发热与燃耗乘以 2 − 完整度；损伤只来自超过安全阈值的净热负荷。完整度归零或燃料耗尽后自下一 tick 停止新裂变。</li>
-    <li>反应堆冷却剂总容量 = (空列数量 + 控制棒列数量) × 有效高度 × 1000 mB；内存冷却剂 + 热冷却剂始终不超过该上限。换热转换移动冷却剂状态，外部输入/输出可在内存中暂存。</li>
+    <li>燃料控制门控：controlledIntensity = (1 − 相邻控制棒平均有效插入深度)<sup>controlResponseExponent</sup>；该门控同时作用于孤立燃料和相邻燃料反馈簇。</li>
+    <li>燃料四向直接相邻时使用从 1.0 开始的同步单调有界反馈，最多 ${256} 轮，变化 ≤ 0.000000001 收敛；控制棒不进入燃料间反馈信号，但深度会门控该簇最终发热与燃耗。</li>
+    <li>列发热与燃耗乘以 2 − 完整度；完整度归零仍继续裂变、燃耗和传播，燃料耗尽才停止该列的新裂变。损伤只来自超过安全阈值的净热负荷。</li>
+    <li>反应堆冷却剂总容量 = (空列数量 + 控制棒列数量) × 有效高度 × 1000 mB；内存冷却剂 + 热冷却剂始终不超过该上限。换热转换只受冷/热端口、实际流量、库存、可用热量与吸收率约束，不存在隐藏全堆流量上限。</li>
+    <li>SCRAM 只有在至少存在一个控制棒列时才建立；启用时可移动控制棒插入到底并锁定，解除后恢复启用前目标深度。卡死棒保持原位，仍有裂变产热时报告 SCRAM_INCOMPLETE。</li>
     <li>燃料组件以每列有效高度份等价容量抽象；不会模拟 Create 流体 capability、管网、区块、NBT 或实际物品事务。</li>
   </ul>`;
 }
@@ -478,6 +544,7 @@ function renderAll() {
   renderRodEditor();
   renderOverview();
   renderWarnings();
+  renderScramControl();
   renderResultGridAndDetail();
   renderTrend();
   renderFormulaText();
@@ -504,10 +571,13 @@ function commitPendingScene() {
     running: $("#initial-running").checked,
     scram: $("#initial-scram").checked,
   };
-  state.initialSnapshot = createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
+  const initialSnapshot = createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
+  const prepared = setScramRequest(initialSnapshot, { ...state.initialState, running: false }, state.initialState.scram);
+  state.initialState.scram = prepared.runtime.scramActive;
+  state.initialSnapshot = prepared.snapshot;
   state.snapshot = cloneSnapshot(state.initialSnapshot);
-  state.runtime = { ...state.initialState, running: false };
-  $("#scram-toggle").checked = state.runtime.scram;
+  state.runtime = prepared.runtime;
+  $("#initial-scram").checked = state.initialState.scram;
   state.lastResult = null;
   state.history = [];
   state.selectedKey = null;
@@ -515,7 +585,7 @@ function commitPendingScene() {
   $("#length-input").value = state.geometry.length;
   $("#width-input").value = state.geometry.width;
   $("#height-input").value = state.geometry.height;
-  setStatus("场景已应用并重置。可以运行、单步或切换 SCRAM。", "success");
+  setStatus(prepared.runtime.scramReason ?? "场景已应用并重置。可以运行、单步或切换 SCRAM。", prepared.runtime.scramReason ? "warning" : "success");
   renderAll();
   return true;
 }
@@ -529,7 +599,7 @@ function resetToDefaults() {
   state.pendingLayout = state.layout.map((row) => [...row]);
   state.pendingDepths = state.depths.map((row) => [...row]);
   state.config = cloneConfig(DEFAULT_CONFIG);
-  for (const field of CONFIG_FIELDS) $(`#param-${field.key}`).value = state.config[field.key];
+  setConfigFormValues(state.config);
   $("#length-input").value = state.geometry.length;
   $("#width-input").value = state.geometry.width;
   $("#height-input").value = state.geometry.height;
@@ -541,8 +611,15 @@ function resetToDefaults() {
 function resetSimulation() {
   pauseTimer();
   state.snapshot = cloneSnapshot(state.initialSnapshot);
-  state.runtime = { ...state.initialState, running: false };
-  $("#scram-toggle").checked = state.runtime.scram;
+  const savedDepths = Object.fromEntries(state.depths.flatMap((row, z) => row.map((depth, x) =>
+    state.layout[z][x] === "control_rod" ? [`${x},${z}`, depth] : null).filter(Boolean)));
+  const initialRuntime = {
+    ...state.initialState,
+    running: false,
+    scramActive: state.initialState.scram,
+    scramSavedDepths: state.initialState.scram ? savedDepths : null,
+  };
+  state.runtime = setScramRequest(state.snapshot, initialRuntime, state.initialState.scram).runtime;
   state.lastResult = null;
   state.history = [];
   state.selectedKey = null;
@@ -690,10 +767,13 @@ async function importScene(file) {
   state.layout = scene.layout.matrix.map((row) => [...row]);
   state.depths = normalizeDepths(scene.controlRodDepths, state.layout);
   state.config = scene.config;
-  state.initialState = scene.initialState;
-  state.initialSnapshot = importedInitial ?? createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
+  state.initialState = { ...scene.initialState };
+  const importedBase = importedInitial ?? createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
+  const importedPrepared = setScramRequest(importedBase, { ...state.initialState, running: false }, state.initialState.scram);
+  state.initialState.scram = importedPrepared.runtime.scramActive;
+  state.initialSnapshot = importedPrepared.snapshot;
   state.snapshot = importedFinal ?? cloneSnapshot(state.initialSnapshot);
-  state.runtime = { ...scene.initialState, running: false };
+  state.runtime = setScramRequest(state.snapshot, { ...state.initialState, running: false }, state.initialState.scram).runtime;
   state.lastResult = null;
   state.history = Array.isArray(scene.history) ? scene.history : [];
   state.pendingGeometry = { ...state.geometry };
@@ -705,7 +785,7 @@ async function importScene(file) {
   $("#height-input").value = state.geometry.height;
   $("#initial-running").checked = state.initialState.running;
   $("#initial-scram").checked = state.initialState.scram;
-  for (const field of CONFIG_FIELDS) $(`#param-${field.key}`).value = state.config[field.key];
+  setConfigFormValues(state.config);
   $("#io-message").textContent = `已导入 tick ${state.snapshot.tick}；规则版本 ${scene.ruleVersion}。当前状态保持暂停，避免文件自动启动。`;
   renderAll();
 }
@@ -742,6 +822,10 @@ function wireEvents() {
     updateBurnRateNote();
     markDirty("参数已修改");
   }));
+  ["cold-port-count-input", "hot-port-count-input"].forEach((id) => $(`#${id}`).addEventListener("input", () => {
+    if (state.runtime.running) pauseTimer();
+    markDirty("冷/热端口数量已修改");
+  }));
   $("#initial-running").addEventListener("change", () => markDirty("初始运行状态已修改"));
   $("#initial-scram").addEventListener("change", () => markDirty("初始 SCRAM 状态已修改"));
   $("#tick-step").addEventListener("change", () => {});
@@ -751,15 +835,25 @@ function wireEvents() {
   $("#step-button").addEventListener("click", singleStep);
   $("#reset-simulation").addEventListener("click", resetSimulation);
   $("#scram-toggle").addEventListener("change", () => {
-    state.runtime.scram = $("#scram-toggle").checked;
-    setStatus(state.runtime.scram ? "SCRAM 已启用；运行裂变被切断，余热仍会结算。" : "SCRAM 已解除；控制棒恢复当前快照中的目标深度。", "success");
+    const requested = $("#scram-toggle").checked;
+    const prepared = setScramRequest(state.snapshot, state.runtime, requested);
+    state.snapshot = prepared.snapshot;
+    state.runtime = prepared.runtime;
+    setStatus(prepared.runtime.scramReason
+      ?? (prepared.runtime.scramActive ? "SCRAM 已建立；可移动控制棒已插入到底。" : "SCRAM 已解除；可移动控制棒恢复保存的目标深度。"),
+    prepared.runtime.scramReason ? "warning" : "success");
     renderAll();
+  });
+  $("#stop-painting").addEventListener("click", () => stopPainting("已停止刷涂。"));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") stopPainting();
   });
   $("#grid-layer").addEventListener("change", renderResultGridAndDetail);
   $("#export-json").addEventListener("click", exportCurrentJson);
   $("#export-csv").addEventListener("click", exportCurrentCsv);
   $("#import-json").addEventListener("change", (event) => importScene(event.target.files[0]));
-  window.addEventListener("pointerup", () => { state.painting = false; });
+  window.addEventListener("pointerup", () => stopPainting(null));
+  window.addEventListener("pointercancel", () => stopPainting(null));
 }
 
 function initialize() {
@@ -769,6 +863,7 @@ function initialize() {
   state.initialSnapshot = createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
   state.snapshot = cloneSnapshot(state.initialSnapshot);
   renderParameterFields();
+  state.runtime = setScramRequest(state.snapshot, state.runtime, false).runtime;
   $("#scram-toggle").checked = false;
   wireEvents();
   updateDimensionHint(state.geometry);

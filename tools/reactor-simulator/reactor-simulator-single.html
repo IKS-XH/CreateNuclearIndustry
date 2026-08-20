@@ -1,0 +1,2605 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="反应堆列级热量、燃耗、冷却、损伤与融毁数值实验台">
+    <title>反应堆数值模拟器 · 单文件离线版</title>
+    <style>
+:root {
+  color-scheme: dark;
+  --bg: #101416;
+  --panel: #182024;
+  --panel-raised: #1e292e;
+  --line: #314047;
+  --line-soft: #253238;
+  --text: #e7eee9;
+  --muted: #9caca5;
+  --cyan: #75e0d1;
+  --cyan-dim: #245d5a;
+  --amber: #f3bd65;
+  --orange: #ed7e50;
+  --red: #f36b6b;
+  --blue: #83aef2;
+  --green: #78d69a;
+  --shadow: 0 16px 40px rgba(0, 0, 0, .22);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; color: var(--text); background: radial-gradient(circle at 80% -10%, #263b3e 0, transparent 34rem), var(--bg); min-height: 100vh; }
+button, input, select { font: inherit; }
+button, .file-button { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, .file-button:focus-within { outline: 3px solid var(--cyan); outline-offset: 2px; }
+
+.app-header { max-width: 1500px; margin: 0 auto; padding: 52px 32px 28px; display: flex; justify-content: space-between; gap: 32px; align-items: flex-end; }
+.eyebrow, .section-kicker { margin: 0 0 8px; color: var(--cyan); font-size: 11px; letter-spacing: .16em; font-weight: 750; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin-bottom: 10px; font-size: clamp(34px, 5vw, 64px); line-height: .98; letter-spacing: -.055em; font-weight: 800; }
+h2 { margin-bottom: 0; font-size: 18px; letter-spacing: -.02em; }
+h3 { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.lede { color: var(--muted); max-width: 720px; margin-bottom: 0; line-height: 1.6; }
+.header-badge, .panel-chip { color: var(--muted); border: 1px solid var(--line); background: rgba(19, 27, 30, .8); border-radius: 999px; padding: 7px 10px; font-size: 11px; white-space: nowrap; }
+.header-badge { display: flex; align-items: center; gap: 8px; }
+.badge-dot { width: 8px; height: 8px; display: inline-block; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 14px var(--cyan); }
+.app-shell { max-width: 1500px; margin: 0 auto; padding: 0 32px 48px; }
+.status-banner { min-height: 28px; margin-bottom: 14px; color: var(--amber); font-size: 13px; }
+.status-banner:empty { min-height: 0; }
+.setup-grid { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(420px, 1.35fr) minmax(370px, 1fr); gap: 16px; align-items: start; }
+.panel { border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(145deg, rgba(30, 41, 46, .97), rgba(18, 25, 28, .97)); box-shadow: var(--shadow); padding: 22px; min-width: 0; }
+.panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
+.button-row, .preset-row, .io-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+.button { border: 1px solid var(--line); color: var(--text); background: #233036; border-radius: 10px; padding: 9px 13px; font-weight: 700; transition: background .15s ease, border-color .15s ease, transform .15s ease; }
+.button:hover { transform: translateY(-1px); background: #2b3b42; border-color: #53727a; }
+.button.primary { background: var(--cyan); color: #10201f; border-color: var(--cyan); }
+.button.primary:hover { background: #9ef1e5; }
+.button.secondary { background: transparent; }
+.button.tiny { font-size: 11px; padding: 7px 9px; }
+.danger-outline { color: var(--red); border-color: rgba(243, 107, 107, .45); }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; margin-bottom: 15px; }
+.compact-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+label { display: block; color: var(--muted); font-size: 12px; line-height: 1.35; }
+label .unit { float: right; color: #70817b; font-size: 10px; }
+input[type="number"], input[type="text"], select { display: block; width: 100%; margin-top: 6px; color: var(--text); border: 1px solid var(--line); border-radius: 8px; background: #11191c; padding: 9px 10px; min-height: 37px; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--cyan); }
+.checkbox-label { display: flex; gap: 8px; align-items: center; color: var(--text); }
+.checkbox-label input { margin: 0; }
+.field-hint, .microcopy { color: var(--muted); font-size: 11px; line-height: 1.55; }
+.field-hint { margin: 7px 0 16px; }
+.microcopy { margin: 14px 0 0; }
+.field-error { color: var(--red); min-height: 17px; font-size: 11px; margin: 9px 0 0; }
+.palette { display: flex; flex-wrap: wrap; gap: 8px; margin: 13px 0; }
+.palette-option { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; color: var(--text); font-size: 11px; }
+.palette-option:has(input:checked) { border-color: var(--cyan); background: rgba(117, 224, 209, .11); }
+.palette-option input { margin: 0; }
+.swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.fuel-swatch { background: var(--amber); }
+.rod-swatch { background: var(--blue); }
+.empty-swatch { background: repeating-linear-gradient(135deg, #59676b 0 2px, transparent 2px 4px); border: 1px solid #59676b; }
+.core-grid, .result-grid { display: grid; gap: 5px; width: min(100%, 520px); margin: 0 auto; }
+.core-cell, .result-cell { position: relative; min-width: 0; aspect-ratio: 1; border-radius: 9px; border: 1px solid var(--line); padding: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 10px; line-height: 1.15; color: #11201f; user-select: none; touch-action: none; }
+.core-cell { cursor: crosshair; }
+.core-cell.fuel { background: var(--amber); }
+.core-cell.control_rod { background: var(--blue); }
+.core-cell.empty { color: var(--muted); background: #1c2629; border-style: dashed; }
+.core-cell .coord { font-size: 9px; opacity: .75; }
+.core-cell .cell-icon { font-size: 18px; font-weight: 800; }
+.core-cell.empty .cell-icon { color: #617176; }
+.rod-editor-wrap { border-top: 1px solid var(--line-soft); margin-top: 17px; padding-top: 15px; }
+.rod-editor { display: grid; gap: 7px; max-height: 165px; overflow: auto; padding-right: 3px; }
+.rod-row { display: grid; grid-template-columns: 64px 1fr 44px; gap: 8px; align-items: center; color: var(--muted); font-size: 11px; }
+.rod-row input[type="range"] { width: 100%; accent-color: var(--blue); }
+.rod-row output { color: var(--text); text-align: right; }
+.parameters-panel { max-height: 720px; overflow: auto; }
+.parameter-fields { display: grid; gap: 16px; }
+.parameter-group { border-top: 1px solid var(--line-soft); padding-top: 13px; }
+.parameter-group:first-child { border-top: 0; padding-top: 0; }
+.parameter-group h3 { display: flex; justify-content: space-between; align-items: center; }
+.parameter-group h3::after { content: "实验输入"; color: #697973; font-size: 10px; font-weight: 500; }
+.parameter-group.frozen h3::after { content: "P1 原型默认"; color: var(--cyan); }
+.parameter-row { display: grid; grid-template-columns: 1fr 112px; gap: 10px; align-items: end; margin-bottom: 9px; }
+.parameter-row .param-name { color: var(--text); font-size: 11px; }
+.parameter-row .param-name small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+.parameter-row input { margin-top: 0; padding: 7px 8px; min-height: 33px; }
+.time-panel { margin-top: 16px; padding: 17px 22px; }
+.time-controls { display: grid; grid-template-columns: 1fr 125px 145px auto; gap: 15px; align-items: end; }
+.time-controls > div:first-child { align-self: center; }
+.time-buttons { justify-content: flex-end; }
+.scram-strip { margin-top: 15px; border-top: 1px solid var(--line-soft); padding-top: 13px; color: var(--muted); font-size: 12px; display: flex; align-items: center; gap: 15px; }
+.scram-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid rgba(243, 107, 107, .45); border-radius: 9px; color: var(--red); font-weight: 800; letter-spacing: .06em; }
+.scram-toggle input { margin: 0; }
+.results-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(300px, .7fr); gap: 16px; margin-top: 16px; }
+.overview-panel, .warning-panel { min-height: 250px; }
+.grid-panel { grid-column: 1; }
+.detail-panel { grid-column: 2; grid-row: 2; }
+.trend-panel { grid-column: 1 / -1; }
+.status-pill { border: 1px solid var(--cyan); color: var(--cyan); border-radius: 999px; padding: 7px 10px; font-size: 11px; font-weight: 800; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.metric { padding: 11px; border: 1px solid var(--line-soft); border-radius: 10px; background: rgba(11, 16, 18, .35); }
+.metric-label { color: var(--muted); font-size: 10px; display: block; margin-bottom: 5px; }
+.metric-value { color: var(--text); font-size: 17px; font-weight: 780; letter-spacing: -.03em; }
+.metric-value small { color: var(--muted); font-size: 10px; font-weight: 500; }
+.bottleneck-list { margin-top: 13px; color: var(--amber); font-size: 11px; line-height: 1.6; }
+.warning-list { padding-left: 18px; margin: 0; color: var(--amber); font-size: 12px; line-height: 1.65; }
+.warning-list li + li { margin-top: 7px; }
+.muted { color: var(--muted); }
+.layer-select { display: flex; gap: 8px; align-items: center; color: var(--muted); }
+.layer-select select { display: inline-block; width: auto; margin: 0; min-height: 33px; padding: 6px 9px; }
+.result-grid { width: min(100%, 650px); }
+.result-cell { color: var(--text); overflow: hidden; transition: transform .12s ease, border-color .12s ease; }
+.result-cell:hover, .result-cell.selected { transform: translateY(-2px); border-color: var(--cyan); z-index: 1; }
+.result-cell.fuel { background: color-mix(in srgb, var(--amber) var(--heat, 45%), #1c282c); }
+.result-cell.control_rod { background: color-mix(in srgb, var(--blue) var(--rod, 45%), #1c282c); }
+.result-cell.empty { background: #1b2528; border-style: dashed; }
+.result-cell .cell-title { font-weight: 800; font-size: 10px; }
+.result-cell .cell-value { font-size: 10px; color: #e7eee9; }
+.result-cell .cell-state { font-size: 9px; color: #b6c6bf; }
+.detail-content { min-height: 180px; font-size: 12px; }
+.detail-content h3 { color: var(--text); margin-bottom: 11px; }
+.detail-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0; }
+.detail-list div { padding: 8px; border: 1px solid var(--line-soft); border-radius: 8px; }
+.detail-list dt { color: var(--muted); font-size: 10px; }
+.detail-list dd { margin: 3px 0 0; color: var(--text); font-size: 12px; font-weight: 700; }
+.neighbor-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+.neighbor-chip { border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; color: var(--muted); font-size: 10px; }
+.chart-wrap { overflow-x: auto; border: 1px solid var(--line-soft); border-radius: 10px; background: #11191c; }
+#trend-chart { display: block; width: 100%; min-width: 650px; height: 280px; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 11px 0; color: var(--muted); font-size: 10px; }
+.line { display: inline-block; width: 18px; height: 3px; margin-right: 5px; vertical-align: middle; border-radius: 2px; }
+.heat-line { background: var(--amber); }.cool-line { background: var(--cyan); }.net-line { background: var(--orange); }.integrity-line { background: var(--green); }
+.trend-table-wrap { overflow-x: auto; max-height: 220px; }
+table { width: 100%; border-collapse: collapse; font-size: 10px; color: var(--muted); }
+th, td { border-bottom: 1px solid var(--line-soft); padding: 7px 8px; text-align: right; white-space: nowrap; }
+th { color: var(--text); font-weight: 700; position: sticky; top: 0; background: var(--panel); }
+.io-panel { margin-top: 16px; }
+.file-button { display: inline-flex; align-items: center; position: relative; overflow: hidden; }
+.file-button input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.formula-details { margin-top: 18px; border-top: 1px solid var(--line-soft); padding-top: 13px; color: var(--muted); font-size: 11px; line-height: 1.7; }
+.formula-details summary { cursor: pointer; color: var(--text); font-weight: 700; }
+.formula-details ul { padding-left: 20px; }
+.app-footer { max-width: 1500px; margin: 0 auto; padding: 0 32px 35px; color: #62716d; font-size: 11px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+@media (max-width: 1150px) {
+  .setup-grid { grid-template-columns: 1fr 1fr; }
+  .parameters-panel { grid-column: 1 / -1; max-height: none; }
+  .parameter-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 25px; }
+  .parameter-group { border-top: 0; padding-top: 0; }
+}
+@media (max-width: 780px) {
+  .app-header { padding: 32px 16px 22px; display: block; }
+  .header-badge { display: inline-flex; margin-top: 18px; }
+  .app-shell { padding: 0 16px 32px; }
+  .setup-grid, .results-grid { display: block; }
+  .panel { margin-bottom: 16px; padding: 17px; border-radius: 14px; }
+  .parameter-fields { display: grid; grid-template-columns: 1fr; }
+  .time-controls { grid-template-columns: 1fr 1fr; }
+  .time-controls > div:first-child { grid-column: 1 / -1; }
+  .time-buttons { grid-column: 1 / -1; justify-content: flex-start; }
+  .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-panel, .detail-panel, .trend-panel { margin-top: 0; }
+  .app-footer { padding: 0 16px 25px; }
+}
+
+
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">CREATE: NUCLEAR INDUSTRY · LOCAL NUMERICAL LAB</p>
+        <h1>反应堆数值模拟器</h1>
+        <p class="lede">比较列级布局、尺寸、控制棒、端口和损伤参数。它是离线实验台，不是 Minecraft 游戏实现。</p>
+      </div>
+      <div class="header-badge" aria-label="模拟器边界">
+        <span class="badge-dot"></span>
+        <span>服务器权威边界：只读实验</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <div id="app-status" class="status-banner" role="status" aria-live="polite"></div>
+
+      <section class="setup-grid" aria-label="场景设置">
+        <article class="panel scene-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">01 · SCENE</p>
+              <h2>几何与初始状态</h2>
+            </div>
+            <span class="panel-chip">应用后重建</span>
+          </div>
+          <div class="form-grid compact-grid">
+            <label>长 <span class="unit">方块</span><input id="length-input" type="number" min="3" max="31" step="1" value="5"></label>
+            <label>宽 <span class="unit">方块</span><input id="width-input" type="number" min="3" max="31" step="1" value="5"></label>
+            <label>高 <span class="unit">方块</span><input id="height-input" type="number" min="3" max="31" step="1" value="5"></label>
+          </div>
+          <div class="form-grid">
+            <label>冷端口数量 <span class="unit">个</span><input id="cold-port-count-input" type="number" min="0" max="100" step="1" value="2"></label>
+            <label>热端口数量 <span class="unit">个</span><input id="hot-port-count-input" type="number" min="0" max="100" step="1" value="2"></label>
+          </div>
+          <p class="field-hint">端口理论能力 = 数量 × 单端口上限；本 tick 实际输入/接收仍可在参数区单独限制。</p>
+          <p id="dimension-hint" class="field-hint">有效横截面 3 × 3 · 有效高度 3 · 有效列数 9</p>
+          <div class="form-grid">
+            <label class="checkbox-label"><input id="initial-running" type="checkbox"> 初始允许运行</label>
+            <label class="checkbox-label"><input id="initial-scram" type="checkbox"> 初始 SCRAM</label>
+          </div>
+          <div class="button-row">
+            <button id="apply-reset" class="button primary" type="button">应用并重置</button>
+            <button id="reset-defaults" class="button secondary" type="button">恢复工具默认</button>
+          </div>
+          <p class="microcopy">修改尺寸、布局或参数后，必须点击“应用并重置”才会进入求解器；已应用布局中的控制棒深度可实时调整。运行中修改布局或参数会先暂停。</p>
+        </article>
+
+        <article class="panel layout-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">02 · CORE MAP</p>
+              <h2>堆芯横截面</h2>
+            </div>
+            <span id="layout-counts" class="panel-chip"></span>
+          </div>
+          <div class="preset-row" aria-label="布局预设">
+            <button class="button tiny" data-preset="mixed" type="button">混合示例</button>
+            <button class="button tiny" data-preset="full_fuel" type="button">全燃料</button>
+            <button class="button tiny" data-preset="checker_rods" type="button">棋盘控制棒</button>
+            <button class="button tiny" data-preset="center_cross" type="button">中心十字</button>
+            <button id="clear-layout" class="button tiny danger-outline" type="button">清空</button>
+          </div>
+          <div class="palette" role="toolbar" aria-label="涂刷列类型">
+            <label class="palette-option fuel-option"><input type="radio" name="brush" value="fuel" checked><span class="swatch fuel-swatch"></span>燃料列</label>
+            <label class="palette-option rod-option"><input type="radio" name="brush" value="control_rod"><span class="swatch rod-swatch"></span>控制棒列</label>
+            <label class="palette-option empty-option"><input type="radio" name="brush" value="empty"><span class="swatch empty-swatch"></span>空列</label>
+            <button id="stop-painting" class="button tiny secondary" type="button">停止刷涂（Esc）</button>
+          </div>
+          <div id="core-grid" class="core-grid" role="grid" aria-label="可编辑堆芯布局"></div>
+          <p id="layout-errors" class="field-error" role="alert"></p>
+          <div class="rod-editor-wrap">
+            <h3>逐根控制棒目标插入深度</h3>
+            <div id="rod-editor" class="rod-editor"></div>
+          </div>
+          <p class="microcopy">拖动或点击网格涂刷。只计算北、南、东、西邻接；空列会完全切断反馈、控制和余热传播。</p>
+        </article>
+
+        <article class="panel parameters-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">03 · PARAMETERS</p>
+              <h2>数值配置</h2>
+            </div>
+            <span class="panel-chip">P1 原型 + 实验项</span>
+          </div>
+          <div id="parameter-fields" class="parameter-fields"></div>
+          <p class="microcopy">基础燃耗由 burnHoursPerBlock 反推：每个有效高度份在满功率、无超频时默认约 3 小时耗尽。网页参数不会写回 P1ServerConfig。</p>
+        </article>
+      </section>
+
+      <section class="panel time-panel" aria-label="时间控制">
+        <div class="time-controls">
+          <div>
+            <p class="section-kicker">04 · TIME CONTROL</p>
+            <h2>逐 tick 实验控制</h2>
+          </div>
+          <label>步长 <span class="unit">tick</span><select id="tick-step"><option value="1">1</option><option value="20" selected>20</option><option value="100">100</option></select></label>
+          <label>运行 ticks <span class="unit">tick</span><input id="run-ticks" type="number" min="1" max="1000000" step="1" value="1000"></label>
+          <div class="button-row time-buttons">
+            <button id="run-button" class="button primary" type="button">运行</button>
+            <button id="pause-button" class="button secondary" type="button">暂停</button>
+            <button id="step-button" class="button secondary" type="button">单步</button>
+            <button id="reset-simulation" class="button secondary" type="button">重置模拟</button>
+          </div>
+        </div>
+        <div class="scram-strip">
+          <label class="scram-toggle"><input id="scram-toggle" type="checkbox"><span>SCRAM</span></label>
+          <span id="scram-message" role="status">SCRAM 可用性检查中。</span>
+          <span>高电平期间仍会保留余热；有效冷却可暂停融毁倒计时，但不能回退。</span>
+        </div>
+      </section>
+
+      <section class="results-grid" aria-label="模拟结果">
+        <article class="panel overview-panel">
+          <div class="panel-heading"><div><p class="section-kicker">05 · OVERVIEW</p><h2>实时总览</h2></div><span id="status-pill" class="status-pill">暂停</span></div>
+          <div id="overview-grid" class="metric-grid"></div>
+          <div id="bottleneck-list" class="bottleneck-list"></div>
+        </article>
+
+        <article class="panel warning-panel">
+          <div class="panel-heading"><div><p class="section-kicker">06 · WARNINGS</p><h2>原因与警告</h2></div><span class="panel-chip">可解释</span></div>
+          <ul id="warnings" class="warning-list"><li class="muted">暂无警告</li></ul>
+        </article>
+
+        <article class="panel grid-panel">
+          <div class="panel-heading">
+            <div><p class="section-kicker">07 · COLUMN GRID</p><h2>列级状态</h2></div>
+            <label class="layer-select">图层<select id="grid-layer"><option value="heat">当前 HU/t</option><option value="integrity">完整度</option><option value="fuel">燃料剩余</option><option value="netHeat">净热负荷</option><option value="residual">余热</option><option value="rodDepth">控制棒深度</option><option value="propagation">传播触达</option></select></label>
+          </div>
+          <div id="result-grid" class="result-grid" role="grid" aria-label="堆芯列状态"></div>
+          <p class="microcopy">文字标签和图例与颜色同时表达状态；点击任一格查看列详情。传播仅显示当前 tick 现场触达，不保存独立传播标记。</p>
+        </article>
+
+        <article class="panel detail-panel">
+          <div class="panel-heading"><div><p class="section-kicker">08 · INSPECTOR</p><h2>列详情</h2></div><span id="selected-cell" class="panel-chip">未选择</span></div>
+          <div id="column-details" class="detail-content"><p class="muted">点击堆芯网格中的列。</p></div>
+        </article>
+
+        <article class="panel trend-panel">
+          <div class="panel-heading"><div><p class="section-kicker">09 · TREND</p><h2>时间序列</h2></div><span id="trend-count" class="panel-chip"></span></div>
+          <div class="chart-wrap"><canvas id="trend-chart" width="900" height="280" aria-label="总发热、冷却、最高净热负荷和最低完整度趋势图"></canvas></div>
+          <div class="chart-legend"><span><i class="line heat-line"></i>总发热 HU/t</span><span><i class="line cool-line"></i>冷却转化 mB/t</span><span><i class="line net-line"></i>最高净热 HU/t</span><span><i class="line integrity-line"></i>最低完整度 ×100</span></div>
+          <div class="trend-table-wrap"><table id="trend-table"><caption class="visually-hidden">时间序列数据（最近 20 个采样）</caption><thead><tr><th>tick</th><th>发热 HU/t</th><th>冷却 mB/t</th><th>最高净热 HU/t</th><th>最低完整度</th><th>倒计时 tick</th></tr></thead><tbody></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="panel io-panel" aria-label="导入导出">
+        <div class="panel-heading"><div><p class="section-kicker">10 · REPRODUCE</p><h2>场景导入与导出</h2></div><span class="panel-chip">schema v1</span></div>
+        <div class="io-actions">
+          <button id="export-json" class="button primary" type="button">导出当前场景 JSON</button>
+          <button id="export-csv" class="button secondary" type="button">导出 tick / 列 CSV</button>
+          <label class="file-button button secondary">导入 JSON<input id="import-json" type="file" accept="application/json,.json"></label>
+        </div>
+        <p id="io-message" class="field-hint" role="status">导入未知字段会被忽略，缺失字段使用文档化默认值；无效场景不会改变当前场景。</p>
+        <details class="formula-details"><summary>查看计算规则与抽象边界</summary><div id="formula-text"></div></details>
+      </section>
+    </main>
+
+    <footer class="app-footer">工具版本 <span id="tool-version"></span> · 计算规则 <span id="rule-version"></span> · 本地离线页面，无网络请求</footer>
+    <script>
+const TOOL_VERSION = "1.2.0";
+const SCHEMA_ID = "create-nuclear-industry/reactor-simulator";
+const SCHEMA_VERSION = 1;
+const RULE_VERSION = "P1.2-simulator-4";
+const TICKS_PER_SECOND = 20;
+
+const LIMITS = Object.freeze({
+  minDimension: 3,
+  maxDimension: 31,
+  maxFuelColumns: 841,
+  maxInternalHeight: 29,
+  maxFeedbackIterations: 256,
+  feedbackEpsilon: 1e-9,
+});
+
+const DEFAULT_GEOMETRY = Object.freeze({ length: 5, width: 5, height: 5 });
+
+// These are the P1 prototype values from reactor-local-control-revision-design.md.
+// Values not frozen by that document are explicitly marked as tool experiment defaults.
+const DEFAULT_CONFIG = Object.freeze({
+  controlResponseExponent: 1.0,
+  baseHeatPerFuel: 1.0,
+  burnHoursPerBlock: 3.0,
+  fuelCapacityPerBlock: 1.0,
+  overclockHeatMultiplier: 10.0,
+  overclockBurnMultiplier: 10.0,
+  overclockFeedbackGain: 0.15,
+  overclockFeedbackExponent: 0.5,
+  totalHeatMultiplierCap: 20.0,
+  coldPortCount: 2,
+  hotPortCount: 2,
+  coolantMaxFlowPerPort: 128.0,
+  coolantAbsorptionHuPerMb: 0.5,
+  actualColdIn: 10000000.0,
+  actualHotOut: 10000000.0,
+  fuelColumnDamageHeatThreshold: 0.25,
+  fuelColumnDamageRate: 0.0000005,
+  fuelColumnDamageTransferRate: 0.25,
+  controlRodColumnFailureThreshold: 0.0,
+  meltdownTriggerFraction: 0.20,
+  meltdownCountdownTicks: 900,
+  safeResidualHeatThreshold: 0.25,
+  tickStep: 20,
+  runTicks: 1000,
+});
+
+const CONFIG_FIELDS = Object.freeze([
+  {
+    group: "控制棒",
+    key: "controlResponseExponent",
+    label: "控制响应指数",
+    unit: "无量纲",
+    min: 0.01,
+    max: 20,
+    step: 0.01,
+    frozen: false,
+  },
+  {
+    group: "发热与燃耗",
+    key: "baseHeatPerFuel",
+    label: "baseHeatPerFuel",
+    unit: "HU/t",
+    min: 0,
+    max: 1e6,
+    step: 0.1,
+    frozen: true,
+  },
+  {
+    group: "发热与燃耗",
+    key: "burnHoursPerBlock",
+    label: "burnHoursPerBlock",
+    unit: "h",
+    min: 0.001,
+    max: 1e6,
+    step: 0.1,
+    frozen: true,
+  },
+  {
+    group: "发热与燃耗",
+    key: "fuelCapacityPerBlock",
+    label: "fuelCapacityPerBlock",
+    unit: "列等价份",
+    min: 0.000001,
+    max: 1e6,
+    step: 0.1,
+    frozen: false,
+  },
+  {
+    group: "发热与燃耗",
+    key: "overclockHeatMultiplier",
+    label: "overclockHeatMultiplier",
+    unit: "×",
+    min: 0,
+    max: 1e4,
+    step: 0.1,
+    frozen: false,
+  },
+  {
+    group: "发热与燃耗",
+    key: "overclockBurnMultiplier",
+    label: "overclockBurnMultiplier",
+    unit: "×",
+    min: 0,
+    max: 1e4,
+    step: 0.1,
+    frozen: false,
+  },
+  {
+    group: "发热与燃耗",
+    key: "overclockFeedbackGain",
+    label: "overclockFeedbackGain",
+    unit: "无量纲",
+    min: 0,
+    max: 1e4,
+    step: 0.01,
+    frozen: false,
+  },
+  {
+    group: "发热与燃耗",
+    key: "overclockFeedbackExponent",
+    label: "overclockFeedbackExponent",
+    unit: "无量纲",
+    min: 0.01,
+    max: 20,
+    step: 0.01,
+    frozen: false,
+  },
+  {
+    group: "发热与燃耗",
+    key: "totalHeatMultiplierCap",
+    label: "totalHeatMultiplierCap",
+    unit: "×",
+    min: 0.01,
+    max: 1e4,
+    step: 0.1,
+    frozen: false,
+  },
+  {
+    group: "冷却剂端口",
+    key: "coldPortCount",
+    label: "冷端口数量",
+    unit: "个",
+    min: 0,
+    max: 100,
+    step: 1,
+    integer: true,
+    sceneInputId: "cold-port-count-input",
+    frozen: false,
+  },
+  {
+    group: "冷却剂端口",
+    key: "hotPortCount",
+    label: "热端口数量",
+    unit: "个",
+    min: 0,
+    max: 100,
+    step: 1,
+    integer: true,
+    sceneInputId: "hot-port-count-input",
+    frozen: false,
+  },
+  {
+    group: "冷却剂端口",
+    key: "coolantMaxFlowPerPort",
+    label: "单端口流量上限",
+    unit: "mB/t",
+    min: 0,
+    max: 1e6,
+    step: 1,
+    frozen: true,
+  },
+  {
+    group: "冷却剂端口",
+    key: "coolantAbsorptionHuPerMb",
+    label: "coolantAbsorptionHuPerMb",
+    unit: "HU/mB",
+    min: 0.000001,
+    max: 1e6,
+    step: 0.1,
+    frozen: true,
+  },
+  {
+    group: "冷却剂端口",
+    key: "actualColdIn",
+    label: "本 tick 冷端实际输入",
+    unit: "mB/t",
+    min: 0,
+    max: 1e7,
+    step: 1,
+    frozen: false,
+  },
+  {
+    group: "冷却剂端口",
+    key: "actualHotOut",
+    label: "本 tick 热端实际接收",
+    unit: "mB/t",
+    min: 0,
+    max: 1e7,
+    step: 1,
+    frozen: false,
+  },
+  {
+    group: "损伤与融毁",
+    key: "fuelColumnDamageHeatThreshold",
+    label: "燃料列损伤热阈值",
+    unit: "HU/t",
+    min: 0,
+    max: 1e7,
+    step: 0.01,
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
+    key: "fuelColumnDamageRate",
+    label: "燃料列损伤速率",
+    unit: "1/(tick·HU/t)",
+    min: 0,
+    max: 1e4,
+    step: 0.0000001,
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
+    key: "fuelColumnDamageTransferRate",
+    label: "失效列传播率",
+    unit: "比例",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
+    key: "controlRodColumnFailureThreshold",
+    label: "控制棒卡死阈值",
+    unit: "完整度",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
+    key: "meltdownTriggerFraction",
+    label: "融毁触达比例",
+    unit: "比例",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
+    key: "meltdownCountdownTicks",
+    label: "融毁倒计时",
+    unit: "ticks",
+    min: 1,
+    max: 1e7,
+    step: 1,
+    integer: true,
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
+    key: "safeResidualHeatThreshold",
+    label: "余热安全阈值",
+    unit: "HU/t",
+    min: 0,
+    max: 1e7,
+    step: 0.01,
+    frozen: false,
+  },
+]);
+
+const fieldByKey = new Map(CONFIG_FIELDS.map((field) => [field.key, field]));
+
+function baseBurnPerFuel(config) {
+  return config.fuelCapacityPerBlock / (config.burnHoursPerBlock * 3600 * TICKS_PER_SECOND);
+}
+
+function cloneConfig(config = DEFAULT_CONFIG) {
+  const value = { ...DEFAULT_CONFIG };
+  for (const field of CONFIG_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(config, field.key)) value[field.key] = config[field.key];
+  }
+  return value;
+}
+
+function validateConfig(raw = {}) {
+  const value = cloneConfig(raw);
+  const errors = [];
+  for (const field of CONFIG_FIELDS) {
+    const number = Number(value[field.key]);
+    if (!Number.isFinite(number)) {
+      errors.push(`${field.label} 必须是有限数字`);
+      continue;
+    }
+    if (number < field.min || number > field.max) {
+      errors.push(`${field.label} 必须在 ${field.min}～${field.max} ${field.unit} 范围内`);
+    }
+    if (field.integer && !Number.isInteger(number)) {
+      errors.push(`${field.label} 必须是整数`);
+    }
+    value[field.key] = field.integer ? Math.trunc(number) : number;
+  }
+  if (value.meltdownTriggerFraction < 0 || value.meltdownTriggerFraction > 1) {
+    errors.push("meltdownTriggerFraction 必须在 0～1 之间");
+  }
+  return { ok: errors.length === 0, value, errors };
+}
+
+function fieldDefinition(key) {
+  return fieldByKey.get(key);
+}
+
+function formatNumber(number, digits = 3) {
+  if (!Number.isFinite(number)) return "—";
+  const absolute = Math.abs(number);
+  const decimalDigits = absolute !== 0 && (absolute >= 1e6 || absolute < 1e-4)
+    ? Math.max(digits, 15)
+    : digits;
+  return number.toLocaleString("zh-CN", { maximumFractionDigits: decimalDigits });
+}
+
+function formatDecimal(number, digits = 12) {
+  if (!Number.isFinite(number)) return "—";
+  return number.toLocaleString("zh-CN", { maximumFractionDigits: digits });
+}
+
+
+
+const COLUMN_TYPES = Object.freeze(["fuel", "control_rod", "empty"]);
+const COLUMN_LABELS = Object.freeze({
+  fuel: "燃料列",
+  control_rod: "控制棒列",
+  empty: "空列",
+});
+
+const COOLANT_CAPACITY_PER_NON_FUEL_HEIGHT_MB = 1000;
+
+function internalDimensions(geometry = DEFAULT_GEOMETRY) {
+  return {
+    columns: geometry.length - 2,
+    rows: geometry.width - 2,
+    height: geometry.height - 2,
+  };
+}
+
+function createMatrix(geometry = DEFAULT_GEOMETRY, fill = "empty") {
+  const { columns, rows } = internalDimensions(geometry);
+  return Array.from({ length: rows }, () => Array.from({ length: columns }, () => fill));
+}
+
+function createPreset(geometry = DEFAULT_GEOMETRY, preset = "mixed") {
+  const matrix = createMatrix(geometry, "fuel");
+  const { columns, rows } = internalDimensions(geometry);
+  if (preset === "empty") return matrix.map((row) => row.map(() => "empty"));
+  if (preset === "full_fuel") return matrix;
+
+  if (preset === "checker_rods") {
+    return matrix.map((row, z) => row.map((_, x) => ((x + z) % 2 === 0 ? "control_rod" : "fuel")));
+  }
+
+  if (preset === "center_cross") {
+    const centerX = Math.floor(columns / 2);
+    const centerZ = Math.floor(rows / 2);
+    return matrix.map((row, z) => row.map((_, x) =>
+      (x === centerX || z === centerZ) ? "control_rod" : "fuel"));
+  }
+
+  // The initial scene is intentionally mixed: it demonstrates fuel, control,
+  // and empty columns without claiming to be a P1 game structure contract.
+  const centerX = Math.floor(columns / 2);
+  const centerZ = Math.floor(rows / 2);
+  return matrix.map((row, z) => row.map((_, x) => {
+    if (x === centerX && z === centerZ) return "control_rod";
+    if ((x === 0 || x === columns - 1) && (z === 0 || z === rows - 1)) return "empty";
+    return "fuel";
+  }));
+}
+
+function createDepthMatrix(geometry = DEFAULT_GEOMETRY, layout = createPreset(geometry)) {
+  const { columns, rows } = internalDimensions(geometry);
+  return Array.from({ length: rows }, (_, z) => Array.from({ length: columns }, (_, x) =>
+    layout[z]?.[x] === "control_rod" ? 1 : null));
+}
+
+function cloneMatrix(matrix) {
+  return matrix.map((row) => [...row]);
+}
+
+function validateGeometry(raw = {}) {
+  const geometry = {
+    length: Number(raw.length),
+    width: Number(raw.width),
+    height: Number(raw.height),
+  };
+  const errors = [];
+  for (const key of ["length", "width", "height"]) {
+    if (!Number.isInteger(geometry[key])) errors.push(`${key} 必须是整数`);
+    if (geometry[key] < LIMITS.minDimension || geometry[key] > LIMITS.maxDimension) {
+      errors.push(`${key} 必须在 ${LIMITS.minDimension}～${LIMITS.maxDimension} 之间`);
+    }
+  }
+  if (geometry.length >= LIMITS.minDimension && geometry.width >= LIMITS.minDimension) {
+    const { columns, rows } = internalDimensions(geometry);
+    if (columns * rows > LIMITS.maxFuelColumns) {
+      errors.push(`有效列数 ${columns * rows} 超过 UI 上限 ${LIMITS.maxFuelColumns}`);
+    }
+  }
+  if (geometry.height >= LIMITS.minDimension && geometry.height - 2 > LIMITS.maxInternalHeight) {
+    errors.push(`有效高度超过 ${LIMITS.maxInternalHeight}`);
+  }
+  return { ok: errors.length === 0, geometry, errors };
+}
+
+function validateLayout(matrix, geometry) {
+  const errors = [];
+  const { columns, rows } = internalDimensions(geometry);
+  if (!Array.isArray(matrix) || matrix.length !== rows) {
+    errors.push(`布局矩阵必须有 ${rows} 行（z 方向）`);
+    return { ok: false, errors };
+  }
+  for (let z = 0; z < rows; z += 1) {
+    if (!Array.isArray(matrix[z]) || matrix[z].length !== columns) {
+      errors.push(`布局矩阵第 ${z} 行必须有 ${columns} 列（x 方向）`);
+      continue;
+    }
+    for (let x = 0; x < columns; x += 1) {
+      if (!COLUMN_TYPES.includes(matrix[z][x])) {
+        errors.push(`布局 [${x},${z}] 的列类型无效：${String(matrix[z][x])}`);
+      }
+    }
+  }
+  const fuelColumns = matrix.flat().filter((type) => type === "fuel").length;
+  if (fuelColumns > LIMITS.maxFuelColumns) errors.push("燃料列数超过性能上限");
+  return { ok: errors.length === 0, errors, fuelColumns };
+}
+
+function validateDepthMatrix(depths, layout, geometry) {
+  const { columns, rows } = internalDimensions(geometry);
+  const errors = [];
+  if (!Array.isArray(depths) || depths.length !== rows) {
+    errors.push(`控制棒深度矩阵必须有 ${rows} 行`);
+    return { ok: false, errors };
+  }
+  for (let z = 0; z < rows; z += 1) {
+    if (!Array.isArray(depths[z]) || depths[z].length !== columns) {
+      errors.push(`控制棒深度矩阵第 ${z} 行必须有 ${columns} 列`);
+      continue;
+    }
+    for (let x = 0; x < columns; x += 1) {
+      const depth = depths[z][x];
+      if (layout[z]?.[x] === "control_rod") {
+        if (!Number.isFinite(Number(depth)) || Number(depth) < 0 || Number(depth) > 1) {
+          errors.push(`控制棒 [${x},${z}] 深度必须在 0～1 之间`);
+        }
+      }
+    }
+  }
+  return { ok: errors.length === 0, errors };
+}
+
+function cellKey(x, z) {
+  return `${x},${z}`;
+}
+
+function parseCellKey(key) {
+  const [x, z] = String(key).split(",").map(Number);
+  return { x, z };
+}
+
+function getNeighbors(matrix, x, z) {
+  const directions = [
+    { dx: 0, dz: -1, direction: "北" },
+    { dx: 0, dz: 1, direction: "南" },
+    { dx: -1, dz: 0, direction: "西" },
+    { dx: 1, dz: 0, direction: "东" },
+  ];
+  return directions
+    .map(({ dx, dz, direction }) => ({
+      x: x + dx,
+      z: z + dz,
+      direction,
+      type: matrix[z + dz]?.[x + dx] ?? null,
+    }))
+    .filter((neighbor) => neighbor.type !== null);
+}
+
+function listCells(matrix) {
+  const cells = [];
+  for (let z = 0; z < matrix.length; z += 1) {
+    for (let x = 0; x < matrix[z].length; x += 1) {
+      cells.push({ x, z, type: matrix[z][x], key: cellKey(x, z) });
+    }
+  }
+  return cells;
+}
+
+function countColumns(matrix) {
+  return matrix.flat().reduce((counts, type) => {
+    counts[type] = (counts[type] ?? 0) + 1;
+    return counts;
+  }, { fuel: 0, control_rod: 0, empty: 0 });
+}
+
+function coolantTotalCapacityMb(geometry, matrix) {
+  const counts = countColumns(matrix);
+  const { height } = internalDimensions(geometry);
+  return (counts.empty + counts.control_rod) * height * COOLANT_CAPACITY_PER_NON_FUEL_HEIGHT_MB;
+}
+
+function normalizeDepths(depths, layout) {
+  return layout.map((row, z) => row.map((type, x) =>
+    type === "control_rod" ? Math.max(0, Math.min(1, Number(depths?.[z]?.[x] ?? 1))) : null));
+}
+
+
+
+const EPSILON = 1e-12;
+
+function clamp01(value) {
+  return Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
+}
+
+function finiteNonNegative(value) {
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function formatCapacity(value) {
+  return Number(value ?? 0).toFixed(3);
+}
+
+function sortedColumns(snapshot) {
+  return [...snapshot.columns].sort((a, b) => a.z - b.z || a.x - b.x);
+}
+
+function cloneColumn(column) {
+  return { ...column };
+}
+
+function cloneSnapshot(snapshot) {
+  return {
+    ...snapshot,
+    columns: snapshot.columns.map(cloneColumn),
+  };
+}
+
+function createInitialSnapshot(geometry, layout, depths, config) {
+  const { height } = internalDimensions(geometry);
+  const fuelCapacity = config.fuelCapacityPerBlock * height;
+  const coolantCapacity = coolantTotalCapacityMb(geometry, layout);
+  const columns = listCells(layout).map(({ x, z, type, key }) => {
+    if (type === "fuel") {
+      return {
+        key, x, z, type,
+        fuelCapacity,
+        fuelRemaining: fuelCapacity,
+        integrity: 1,
+        cachedHeat: 0,
+      };
+    }
+    if (type === "control_rod") {
+      const depth = clamp01(Number(depths?.[z]?.[x] ?? 1));
+      return {
+        key, x, z, type,
+        controlRodIntegrity: 1,
+        depth,
+        jammed: false,
+        jammedDepth: depth,
+        cachedHeat: 0,
+      };
+    }
+    return { key, x, z, type, cachedHeat: 0 };
+  });
+  return {
+    tick: 0,
+    meltdownProgress: 0,
+    meltdownTriggered: false,
+    meltdownMelted: false,
+    coolantTotalCapacityMb: coolantCapacity,
+    coldCoolantMb: coolantCapacity,
+    hotCoolantMb: 0,
+    columns,
+    simulationFailed: null,
+  };
+}
+
+function applyControlDepths(snapshot, depths) {
+  return {
+    ...snapshot,
+    columns: snapshot.columns.map((column) => {
+      if (column.type !== "control_rod" || column.jammed) return cloneColumn(column);
+      return { ...column, depth: clamp01(Number(depths?.[column.z]?.[column.x] ?? column.depth)) };
+    }),
+  };
+}
+
+function setControlDepth(snapshot, key, depth) {
+  return {
+    ...snapshot,
+    columns: snapshot.columns.map((column) =>
+      column.key === key && column.type === "control_rod" && !column.jammed
+        ? { ...column, depth: clamp01(Number(depth)) }
+        : cloneColumn(column)),
+  };
+}
+
+function getColumn(snapshot, key) {
+  return snapshot.columns.find((column) => column.key === key) ?? null;
+}
+
+function isEffectiveFuel(column) {
+  return column?.type === "fuel" && column.fuelRemaining > EPSILON;
+}
+
+function prepareScram(snapshot, runtime = {}) {
+  const previous = cloneSnapshot(snapshot);
+  const controlRods = previous.columns.filter((column) => column.type === "control_rod");
+  const scramAvailable = controlRods.length > 0;
+  const requested = Boolean(runtime.scramRequested ?? runtime.scram);
+  if (requested && !scramAvailable) {
+    return {
+      snapshot: previous,
+      runtime: {
+        ...runtime,
+        scram: false,
+        scramRequested: false,
+        scramActive: false,
+        scramAvailable: false,
+        scramSavedDepths: null,
+        scramReason: "SCRAM_UNAVAILABLE_NO_CONTROL_RODS",
+      },
+    };
+  }
+  const scramActive = requested && scramAvailable;
+  let scramSavedDepths = runtime.scramSavedDepths ?? null;
+  if (scramActive && !runtime.scramActive) {
+    scramSavedDepths = Object.fromEntries(controlRods
+      .filter((column) => !column.jammed)
+      .map((column) => [column.key, column.depth]));
+  }
+  if (scramActive) {
+    previous.columns = previous.columns.map((column) =>
+      column.type === "control_rod" && !column.jammed ? { ...column, depth: 1 } : column);
+  } else if (runtime.scramActive && scramSavedDepths) {
+    previous.columns = previous.columns.map((column) =>
+      column.type === "control_rod" && !column.jammed && Number.isFinite(scramSavedDepths[column.key])
+        ? { ...column, depth: clamp01(scramSavedDepths[column.key]) }
+        : column);
+    scramSavedDepths = null;
+  }
+  return {
+    snapshot: previous,
+    runtime: {
+      ...runtime,
+      scram: scramActive,
+      scramRequested: scramActive,
+      scramActive,
+      scramAvailable,
+      scramSavedDepths: scramActive ? scramSavedDepths : null,
+      scramReason: null,
+    },
+  };
+}
+
+function setScramRequest(snapshot, runtime = {}, requested) {
+  return prepareScram(snapshot, { ...runtime, scramRequested: Boolean(requested) });
+}
+
+function effectiveControlDepth(column) {
+  if (!column || column.type !== "control_rod") return 0;
+  return clamp01(column.jammed || column.controlRodIntegrity <= 0
+    ? column.jammedDepth
+    : column.depth);
+}
+
+function snapshotMap(snapshot) {
+  return new Map(snapshot.columns.map((column) => [column.key, column]));
+}
+
+function neighborColumns(layout, snapshot, column) {
+  const map = snapshotMap(snapshot);
+  return getNeighbors(layout, column.x, column.z)
+    .map((neighbor) => map.get(cellKey(neighbor.x, neighbor.z)))
+    .filter(Boolean);
+}
+
+function allocateWeighted(weights, caps, budget) {
+  const allocation = new Map();
+  const remainingWeights = new Map();
+  const remainingCaps = new Map();
+  for (const [key, weight] of weights.entries()) {
+    const safeWeight = finiteNonNegative(weight);
+    const safeCap = finiteNonNegative(caps.get(key) ?? 0);
+    if (safeWeight > 0 && safeCap > 0) {
+      remainingWeights.set(key, safeWeight);
+      remainingCaps.set(key, safeCap);
+      allocation.set(key, 0);
+    }
+  }
+  let remainingBudget = finiteNonNegative(budget);
+  while (remainingBudget > EPSILON && remainingWeights.size > 0) {
+    const totalWeight = [...remainingWeights.values()].reduce((sum, value) => sum + value, 0);
+    if (totalWeight <= EPSILON) break;
+    const capped = [];
+    for (const key of [...remainingWeights.keys()]) {
+      const proposed = remainingBudget * remainingWeights.get(key) / totalWeight;
+      const cap = remainingCaps.get(key);
+      if (proposed >= cap - EPSILON) {
+        allocation.set(key, allocation.get(key) + cap);
+        remainingBudget -= cap;
+        capped.push(key);
+      }
+    }
+    if (capped.length > 0) {
+      for (const key of capped) {
+        remainingWeights.delete(key);
+        remainingCaps.delete(key);
+      }
+      continue;
+    }
+    for (const key of remainingWeights.keys()) {
+      allocation.set(key, allocation.get(key)
+        + Math.min(remainingCaps.get(key), remainingBudget * remainingWeights.get(key) / totalWeight));
+    }
+    break;
+  }
+  return allocation;
+}
+
+function allocateCooling(generatedHeat, thermal, budget) {
+  const allocation = allocateWeighted(generatedHeat, thermal, budget);
+  const used = [...allocation.values()].reduce((sum, value) => sum + value, 0);
+  const cachedWeights = new Map();
+  const cachedCaps = new Map();
+  for (const [key, total] of thermal.entries()) {
+    const cached = Math.max(0, total - (generatedHeat.get(key) ?? 0));
+    const remainingCap = Math.max(0, total - (allocation.get(key) ?? 0));
+    if (cached > EPSILON && remainingCap > EPSILON) {
+      cachedWeights.set(key, cached);
+      cachedCaps.set(key, remainingCap);
+    }
+  }
+  const cachedAllocation = allocateWeighted(cachedWeights, cachedCaps, Math.max(0, budget - used));
+  for (const [key, value] of cachedAllocation.entries()) allocation.set(key, (allocation.get(key) ?? 0) + value);
+  return allocation;
+}
+
+function portLedger(config, availableHeat, snapshot, geometry, layout) {
+  const coldPortFlowCap = config.coldPortCount * config.coolantMaxFlowPerPort;
+  const hotPortFlowCap = config.hotPortCount * config.coolantMaxFlowPerPort;
+  const totalCapacity = coolantTotalCapacityMb(geometry, layout);
+  const previousCold = Math.max(0, Math.min(totalCapacity, Number(snapshot.coldCoolantMb ?? totalCapacity)));
+  const previousHot = Math.max(0, Math.min(totalCapacity - previousCold, Number(snapshot.hotCoolantMb ?? 0)));
+  const inputFlowCap = Math.min(config.actualColdIn, coldPortFlowCap);
+  const outputFlowCap = Math.min(config.actualHotOut, hotPortFlowCap);
+  const hotOutputBeforeConversion = Math.min(previousHot, outputFlowCap);
+  const freeCapacityAfterOutput = Math.max(0, totalCapacity - previousCold - previousHot + hotOutputBeforeConversion);
+  const coldInAccepted = Math.min(inputFlowCap, freeCapacityAfterOutput);
+  const coldPool = previousCold + coldInAccepted;
+  const heatLimitedMb = availableHeat / config.coolantAbsorptionHuPerMb;
+  const conversionFlowCap = Math.min(coldPortFlowCap, hotPortFlowCap);
+  const maxConverted = Math.max(0, Math.min(
+    coldPool,
+    conversionFlowCap,
+    heatLimitedMb,
+  ));
+  const hotOutputRemaining = Math.max(0, outputFlowCap - hotOutputBeforeConversion);
+  const hotOutputForConversion = Math.min(hotOutputRemaining, maxConverted);
+  const plannedHotOut = hotOutputBeforeConversion + hotOutputForConversion;
+  const plannedColdAfter = coldPool - maxConverted;
+  const plannedHotAfter = previousHot - plannedHotOut + maxConverted;
+  const candidates = [
+    { key: "coldPool", label: "反应堆内冷却剂库存", value: coldPool },
+    { key: "coldPortFlowCap", label: "冷端口数量/单端口上限", value: coldPortFlowCap },
+    { key: "hotPortFlowCap", label: "热端口数量/单端口上限", value: hotPortFlowCap },
+    { key: "heatLimitedMb", label: "可用热量", value: heatLimitedMb },
+  ];
+  const bottlenecks = availableHeat <= EPSILON
+    ? ["无发热或余热"]
+    : candidates.filter((candidate) => Math.abs(candidate.value - maxConverted) <= 1e-9)
+      .map((candidate) => candidate.label);
+  return {
+    totalCapacity,
+    previousCold,
+    previousHot,
+    inputFlowCap,
+    coldInAccepted,
+    coldPool,
+    outputFlowCap,
+    hotOutputBeforeConversion,
+    hotOutputRemaining,
+    maxConverted,
+    plannedHotOut,
+    plannedColdAfter,
+    plannedHotAfter,
+    coldPortFlowCap,
+    hotPortFlowCap,
+    heatLimitedMb,
+    bottlenecks,
+    candidates,
+  };
+}
+
+function makeColumnResult(column, details) {
+  return {
+    ...column,
+    ...details,
+    neighbors: details.neighbors ?? [],
+  };
+}
+
+function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
+  const prepared = prepareScram(snapshot, runtime);
+  const previous = prepared.snapshot;
+  const currentRuntime = prepared.runtime;
+  const columns = sortedColumns(previous);
+  const byKey = new Map(columns.map((column) => [column.key, column]));
+  const { height } = internalDimensions(geometry);
+  const active = currentRuntime.running !== false && !previous.meltdownMelted;
+  const effectiveFuel = new Map(columns.map((column) => [column.key, isEffectiveFuel(column)]));
+  const controlledIntensity = new Map();
+  const overclocked = new Map();
+  const controlMeanDepth = new Map();
+
+  for (const column of columns) {
+    if (!effectiveFuel.get(column.key)) continue;
+    const controls = neighborColumns(layout, previous, column)
+      .filter((neighbor) => neighbor.type === "control_rod");
+    const meanDepth = controls.length === 0
+      ? 0
+      : controls.reduce((sum, control) => sum + effectiveControlDepth(control), 0) / controls.length;
+    controlMeanDepth.set(column.key, meanDepth);
+    controlledIntensity.set(column.key, active
+      ? Math.pow(clamp01(1 - meanDepth), config.controlResponseExponent)
+      : 0);
+    const hasFuelNeighbour = neighborColumns(layout, previous, column)
+      .some((neighbor) => effectiveFuel.get(neighbor.key) === true);
+    overclocked.set(column.key, hasFuelNeighbour);
+  }
+
+  const heatIntensity = new Map();
+  const burnIntensity = new Map();
+  for (const column of columns) {
+    if (!effectiveFuel.get(column.key)) continue;
+    const initial = controlledIntensity.get(column.key);
+    heatIntensity.set(column.key, initial);
+    burnIntensity.set(column.key, initial);
+  }
+
+  let converged = true;
+  let iterations = 0;
+  if ([...overclocked.values()].some(Boolean)) {
+    converged = false;
+    for (iterations = 1; iterations <= LIMITS.maxFeedbackIterations; iterations += 1) {
+      const nextHeat = new Map(heatIntensity);
+      const nextBurn = new Map(burnIntensity);
+      for (const column of columns) {
+        if (!effectiveFuel.get(column.key)) continue;
+        if (!overclocked.get(column.key) || !active) {
+          nextHeat.set(column.key, controlledIntensity.get(column.key));
+          nextBurn.set(column.key, controlledIntensity.get(column.key));
+          continue;
+        }
+        const signal = neighborColumns(layout, previous, column)
+          .filter((neighbor) => neighbor.type === "fuel" && effectiveFuel.get(neighbor.key))
+          .reduce((sum, neighbor) => sum + (heatIntensity.get(neighbor.key) ?? 1), 0);
+        const activation = clamp01(1 - Math.exp(-config.overclockFeedbackGain
+          * Math.pow(Math.max(0, signal), config.overclockFeedbackExponent)));
+        const controlFactor = controlledIntensity.get(column.key) ?? 0;
+        nextHeat.set(column.key, controlFactor * (1 + (config.overclockHeatMultiplier - 1) * activation));
+        nextBurn.set(column.key, controlFactor * (1 + (config.overclockBurnMultiplier - 1) * activation));
+      }
+      const largestDelta = [...heatIntensity.keys()].reduce((largest, key) => Math.max(
+        largest,
+        Math.abs((nextHeat.get(key) ?? 0) - (heatIntensity.get(key) ?? 0)),
+        Math.abs((nextBurn.get(key) ?? 0) - (burnIntensity.get(key) ?? 0)),
+      ), 0);
+      heatIntensity.clear();
+      burnIntensity.clear();
+      for (const [key, value] of nextHeat.entries()) heatIntensity.set(key, value);
+      for (const [key, value] of nextBurn.entries()) burnIntensity.set(key, value);
+      if (largestDelta <= LIMITS.feedbackEpsilon) {
+        converged = true;
+        break;
+      }
+    }
+  }
+
+  if (!converged) {
+    const failed = { ...previous, simulationFailed: `超频反馈未在 ${LIMITS.maxFeedbackIterations} 轮内收敛` };
+    return {
+      nextSnapshot: failed,
+      converged: false,
+      iterations,
+      runtime: { ...currentRuntime, running: false },
+      summary: summarizeSnapshot(failed, null, config, geometry),
+      columns: {},
+      warnings: [failed.simulationFailed],
+    };
+  }
+
+  const rawHeat = new Map();
+  const generatedHeat = new Map();
+  const plannedBurn = new Map();
+  let rawTotalHeat = 0;
+  let installedFuelColumns = 0;
+  const baseBurn = baseBurnPerFuel(config);
+  for (const column of columns) {
+    if (column.type === "fuel" && column.fuelRemaining > EPSILON) installedFuelColumns += 1;
+    if (!effectiveFuel.get(column.key)) {
+      rawHeat.set(column.key, 0);
+      plannedBurn.set(column.key, 0);
+      continue;
+    }
+    const damageMultiplier = 2 - clamp01(column.integrity);
+    const raw = finiteNonNegative(config.baseHeatPerFuel * height
+      * (heatIntensity.get(column.key) ?? 0) * damageMultiplier);
+    rawHeat.set(column.key, raw);
+    plannedBurn.set(column.key, finiteNonNegative(baseBurn * height
+      * (burnIntensity.get(column.key) ?? 0) * damageMultiplier));
+    rawTotalHeat += raw;
+  }
+  const heatCap = config.baseHeatPerFuel * height * installedFuelColumns * config.totalHeatMultiplierCap;
+  const heatScale = rawTotalHeat <= EPSILON ? 0 : Math.min(1, heatCap / rawTotalHeat);
+  let totalGeneratedHeat = 0;
+  for (const column of columns) {
+    const generated = finiteNonNegative((rawHeat.get(column.key) ?? 0) * heatScale);
+    generatedHeat.set(column.key, generated);
+    totalGeneratedHeat += generated;
+  }
+
+  const currentThermal = new Map(columns.map((column) => [
+    column.key,
+    column.type === "empty" ? 0 : finiteNonNegative((generatedHeat.get(column.key) ?? 0) + column.cachedHeat),
+  ]));
+  const availableHeat = [...currentThermal.values()].reduce((sum, value) => sum + value, 0);
+  const ports = portLedger(config, availableHeat, previous, geometry, layout);
+  const maxRemovalHeat = ports.maxConverted * config.coolantAbsorptionHuPerMb;
+  const currentRemoval = allocateCooling(generatedHeat, currentThermal, maxRemovalHeat);
+  const currentRemovedHeat = [...currentRemoval.values()].reduce((sum, value) => sum + value, 0);
+
+  const propagationHeat = new Map();
+  const sourceTransfer = new Map();
+  for (const source of columns) {
+    if (source.type !== "fuel" || !effectiveFuel.get(source.key) || source.integrity > EPSILON) continue;
+    const residual = Math.max(0, (generatedHeat.get(source.key) ?? 0) + source.cachedHeat);
+    const targets = neighborColumns(layout, previous, source).filter((target) =>
+      target.type === "control_rod" || effectiveFuel.get(target.key) === true);
+    if (targets.length === 0) continue;
+    const transfer = residual * config.fuelColumnDamageTransferRate;
+    sourceTransfer.set(source.key, transfer);
+    const perTarget = transfer / targets.length;
+    for (const target of targets) {
+      propagationHeat.set(target.key, (propagationHeat.get(target.key) ?? 0) + perTarget);
+    }
+  }
+  const remainingCoolingBudget = Math.max(0, maxRemovalHeat - currentRemovedHeat);
+  const propagationRemoval = allocateWeighted(propagationHeat, propagationHeat, remainingCoolingBudget);
+  const propagationRemovedHeat = [...propagationRemoval.values()].reduce((sum, value) => sum + value, 0);
+  const removedHeat = currentRemovedHeat + propagationRemovedHeat;
+  const convertedCoolant = removedHeat / config.coolantAbsorptionHuPerMb;
+  const hotOutputForConversion = Math.min(ports.hotOutputRemaining, convertedCoolant);
+  const hotOutActual = ports.hotOutputBeforeConversion + hotOutputForConversion;
+  const coldAfter = Math.max(0, Math.min(ports.totalCapacity, ports.coldPool - convertedCoolant));
+  const hotAfter = Math.max(0, Math.min(ports.totalCapacity - coldAfter,
+    ports.previousHot - hotOutActual + convertedCoolant));
+  const coolantLedgerError = Math.max(
+    Math.abs((ports.previousCold + ports.coldInAccepted - coldAfter) - convertedCoolant),
+    Math.abs((hotAfter + hotOutActual - ports.previousHot) - convertedCoolant),
+  );
+
+  const nextColumns = [];
+  const resultColumns = {};
+  const coveredFuel = new Set();
+  for (const column of columns) {
+    const received = propagationHeat.get(column.key) ?? 0;
+    const receivedRemoval = propagationRemoval.get(column.key) ?? 0;
+    if (column.type === "fuel" && received > receivedRemoval && effectiveFuel.get(column.key)) {
+      coveredFuel.add(column.key);
+    }
+    const currentRemoved = currentRemoval.get(column.key) ?? 0;
+    const heat = generatedHeat.get(column.key) ?? 0;
+    const totalUnremoved = column.type === "empty" ? 0 : Math.max(0,
+      heat + column.cachedHeat + received - currentRemoved - receivedRemoval);
+    let damage = 0;
+    let next;
+    if (column.type === "fuel") {
+      if (effectiveFuel.get(column.key) && totalUnremoved > config.fuelColumnDamageHeatThreshold) {
+        damage = (totalUnremoved - config.fuelColumnDamageHeatThreshold) * config.fuelColumnDamageRate;
+      }
+      const nextIntegrity = clamp01(column.integrity - damage);
+      const consumed = Math.min(column.fuelRemaining, plannedBurn.get(column.key) ?? 0);
+      let nextCache = totalUnremoved;
+      if (column.integrity <= EPSILON && (sourceTransfer.get(column.key) ?? 0) > 0) {
+        nextCache = Math.max(0, nextCache - sourceTransfer.get(column.key));
+      }
+      next = {
+        ...column,
+        integrity: nextIntegrity,
+        fuelRemaining: Math.max(0, column.fuelRemaining - consumed),
+        cachedHeat: nextCache,
+      };
+    } else if (column.type === "control_rod") {
+      if (column.controlRodIntegrity > EPSILON && totalUnremoved > config.fuelColumnDamageHeatThreshold) {
+        damage = (totalUnremoved - config.fuelColumnDamageHeatThreshold) * config.fuelColumnDamageRate;
+      }
+      const nextIntegrity = clamp01(column.controlRodIntegrity - damage);
+      const wasJammed = column.jammed || column.controlRodIntegrity <= config.controlRodColumnFailureThreshold;
+      const actualDepth = effectiveControlDepth(column);
+      const jammed = wasJammed || nextIntegrity <= config.controlRodColumnFailureThreshold;
+      next = {
+        ...column,
+        controlRodIntegrity: nextIntegrity,
+        depth: jammed ? actualDepth : clamp01(column.depth),
+        jammed,
+        jammedDepth: jammed ? (column.jammed ? column.jammedDepth : actualDepth) : column.jammedDepth,
+        cachedHeat: totalUnremoved,
+      };
+    } else {
+      next = { ...column, cachedHeat: 0 };
+    }
+    nextColumns.push(next);
+    resultColumns[column.key] = makeColumnResult(column, {
+      generatedHeat: heat,
+      rawHeat: rawHeat.get(column.key) ?? 0,
+      heatIntensity: heatIntensity.get(column.key) ?? 0,
+      burnIntensity: burnIntensity.get(column.key) ?? 0,
+      controlledIntensity: controlledIntensity.get(column.key) ?? 0,
+      controlMeanDepth: controlMeanDepth.get(column.key) ?? null,
+      overclocked: overclocked.get(column.key) ?? false,
+      plannedBurn: plannedBurn.get(column.key) ?? 0,
+      fuelConsumed: column.type === "fuel"
+        ? Math.min(column.fuelRemaining, plannedBurn.get(column.key) ?? 0)
+        : 0,
+      removedHeat: currentRemoved + receivedRemoval,
+      currentRemovedHeat: currentRemoved,
+      propagationHeatReceived: received,
+      propagationHeatRemoved: receivedRemoval,
+      netHeatLoad: totalUnremoved,
+      damage,
+      nextIntegrity: next.integrity ?? next.controlRodIntegrity ?? 1,
+      nextFuelRemaining: next.fuelRemaining ?? null,
+      nextCachedHeat: next.cachedHeat,
+      nextJammed: next.jammed ?? false,
+      neighbors: getNeighbors(layout, column.x, column.z),
+    });
+  }
+
+  const effectiveCount = [...effectiveFuel.values()].filter(Boolean).length;
+  const coverage = effectiveCount === 0 ? 0 : coveredFuel.size / effectiveCount;
+  const meltdownDanger = coveredFuel.size > 0 && coverage >= config.meltdownTriggerFraction;
+  let meltdownTriggered = previous.meltdownTriggered || meltdownDanger;
+  let meltdownProgress = previous.meltdownProgress;
+  const coolingEffective = removedHeat > EPSILON;
+  const pauseCountdown = currentRuntime.scramActive === true && coolingEffective;
+  if (meltdownDanger && !pauseCountdown) {
+    meltdownProgress = Math.min(config.meltdownCountdownTicks, meltdownProgress + 1);
+  }
+  const allRepaired = nextColumns.every((column) => column.type === "empty"
+    || (column.type === "fuel" ? column.integrity >= 1 - EPSILON : column.controlRodIntegrity >= 1 - EPSILON));
+  if (previous.meltdownTriggered && allRepaired) {
+    meltdownProgress = 0;
+    meltdownTriggered = false;
+  }
+  const nextSnapshot = {
+    tick: previous.tick + 1,
+    meltdownProgress,
+    meltdownTriggered,
+    meltdownMelted: meltdownProgress >= config.meltdownCountdownTicks,
+    coolantTotalCapacityMb: ports.totalCapacity,
+    coldCoolantMb: coldAfter,
+    hotCoolantMb: hotAfter,
+    columns: nextColumns,
+    simulationFailed: null,
+  };
+  const summary = summarizeSnapshot(nextSnapshot, resultColumns, config, geometry);
+  summary.rawHeat = rawTotalHeat;
+  summary.generatedHeat = totalGeneratedHeat;
+  summary.heatCap = heatCap;
+  summary.heatScale = heatScale;
+  summary.plannedBurn = Object.values(resultColumns).reduce((sum, result) => sum + result.plannedBurn, 0);
+  summary.fuelConsumed = Object.values(resultColumns).reduce((sum, result) => sum + result.fuelConsumed, 0);
+  summary.convertedCoolant = convertedCoolant;
+  summary.removedHeat = removedHeat;
+  summary.coolantDemand = ports.heatLimitedMb;
+  summary.coldIn = ports.coldInAccepted;
+  summary.hotOut = hotOutActual;
+  summary.coldInAccepted = ports.coldInAccepted;
+  summary.hotOutActual = hotOutActual;
+  summary.coolantTotalCapacityMb = ports.totalCapacity;
+  summary.coldCoolantMb = coldAfter;
+  summary.hotCoolantMb = hotAfter;
+  summary.totalCoolantMb = coldAfter + hotAfter;
+  summary.coolantCapacityHeadroomMb = Math.max(0, ports.totalCapacity - coldAfter - hotAfter);
+  summary.coolantLedgerError = coolantLedgerError;
+  summary.availableHeat = availableHeat;
+  summary.propagationCoverage = coverage;
+  summary.meltdownDanger = meltdownDanger;
+  summary.countdownPaused = meltdownDanger && pauseCountdown;
+  summary.scramAvailable = currentRuntime.scramAvailable === true;
+  summary.scramRequested = currentRuntime.scramRequested === true;
+  summary.scramActive = currentRuntime.scramActive === true;
+  summary.scramReason = currentRuntime.scramReason ?? null;
+  summary.scramIncomplete = summary.scramActive && totalGeneratedHeat > EPSILON;
+  summary.ruleConverged = true;
+  summary.iterations = iterations;
+  summary.ports = { ...ports, coldInAccepted: ports.coldInAccepted, hotOutActual };
+  summary.bottlenecks = ports.bottlenecks;
+  summary.runtime = {
+    ...currentRuntime,
+    running: currentRuntime.running !== false && !nextSnapshot.meltdownMelted,
+    coolingEffective,
+  };
+
+  return {
+    nextSnapshot,
+    converged: true,
+    iterations,
+    runtime: summary.runtime,
+    summary,
+    columns: resultColumns,
+    warnings: buildWarnings(summary, resultColumns, config),
+  };
+}
+
+function summarizeSnapshot(snapshot, resultColumns, config, geometry) {
+  const columns = snapshot.columns;
+  const fuel = columns.filter((column) => column.type === "fuel");
+  const rods = columns.filter((column) => column.type === "control_rod");
+  const integrityValues = columns.filter((column) => column.type !== "empty").map((column) =>
+    column.type === "fuel" ? column.integrity : column.controlRodIntegrity);
+  const resultValues = resultColumns ? Object.values(resultColumns) : [];
+  const coolantCapacity = Math.max(0, Number(snapshot.coolantTotalCapacityMb ?? 0));
+  const coldCoolant = Math.max(0, Math.min(coolantCapacity, Number(snapshot.coldCoolantMb ?? coolantCapacity)));
+  const hotCoolant = Math.max(0, Math.min(coolantCapacity - coldCoolant, Number(snapshot.hotCoolantMb ?? 0)));
+  return {
+    tick: snapshot.tick,
+    gameSeconds: snapshot.tick / 20,
+    fuelColumns: fuel.length,
+    controlRodColumns: rods.length,
+    emptyColumns: columns.filter((column) => column.type === "empty").length,
+    totalResidualHeat: columns.reduce((sum, column) => sum + (column.cachedHeat ?? 0), 0),
+    maxNetHeatLoad: resultValues.reduce((max, result) => Math.max(max, result.netHeatLoad ?? 0), 0),
+    minIntegrity: integrityValues.length ? Math.min(...integrityValues) : 1,
+    damagedColumns: integrityValues.filter((value) => value < 1 - EPSILON).length,
+    jammedColumns: rods.filter((column) => column.jammed).length,
+    exhaustedFuelColumns: fuel.filter((column) => column.fuelRemaining <= EPSILON).length,
+    meltdownProgress: snapshot.meltdownProgress,
+    meltdownCountdownTicks: config.meltdownCountdownTicks,
+    meltdownTriggered: snapshot.meltdownTriggered,
+    meltdownMelted: snapshot.meltdownMelted,
+    effectiveHeight: internalDimensions(geometry).height,
+    coolantTotalCapacityMb: coolantCapacity,
+    coldCoolantMb: coldCoolant,
+    hotCoolantMb: hotCoolant,
+    totalCoolantMb: coldCoolant + hotCoolant,
+    coolantCapacityHeadroomMb: Math.max(0, coolantCapacity - coldCoolant - hotCoolant),
+    coolantLedgerError: 0,
+    ruleConverged: true,
+    iterations: 0,
+  };
+}
+
+function buildWarnings(summary, resultColumns, config) {
+  const warnings = [];
+  if (summary.scramReason === "SCRAM_UNAVAILABLE_NO_CONTROL_RODS") {
+    warnings.push("SCRAM_UNAVAILABLE_NO_CONTROL_RODS：当前布局没有控制棒列，SCRAM 请求已原子拒绝");
+  }
+  if (summary.scramIncomplete) {
+    warnings.push("SCRAM_INCOMPLETE：SCRAM 已建立，但仍存在裂变产热；卡死控制棒或燃料超频簇未被停堆请求切断");
+  }
+  const overclocked = Object.values(resultColumns).filter((column) => column.overclocked);
+  if (overclocked.length > 0) {
+    warnings.push(`超频簇：${overclocked.map((column) => `[${column.x},${column.z}]`).join("、")}；控制棒深度作为该簇功率门控`);
+  }
+  if (summary.ports && summary.generatedHeat > 0) {
+    for (const bottleneck of summary.bottlenecks ?? []) {
+      if (bottleneck !== "无发热或余热") warnings.push(`冷却瓶颈：${bottleneck}`);
+    }
+  }
+  if (summary.availableHeat > EPSILON && (summary.convertedCoolant ?? 0) + EPSILON < (summary.coolantDemand ?? 0)) {
+    warnings.push(`冷却能力不足：可用热量需求 ${summary.coolantDemand.toFixed(3)} mB/t，实际仅转换 ${(summary.convertedCoolant ?? 0).toFixed(3)} mB/t`);
+  }
+  if ((summary.coolantTotalCapacityMb ?? 0) <= EPSILON && summary.availableHeat > EPSILON) {
+    warnings.push("反应堆冷却剂总容量为 0 mB：当前布局没有空列或控制棒列可提供内部冷却剂空间");
+  } else if ((summary.coolantCapacityHeadroomMb ?? 0) <= EPSILON && (summary.ports?.inputFlowCap ?? 0) > (summary.coldInAccepted ?? 0) + EPSILON) {
+    warnings.push(`反应堆冷却剂总容量已满：${formatCapacity(summary.coolantTotalCapacityMb)} mB（冷 ${formatCapacity(summary.coldCoolantMb)} + 热 ${formatCapacity(summary.hotCoolantMb)}）`);
+  }
+  const damaged = Object.values(resultColumns).filter((column) => column.damage > EPSILON);
+  if (damaged.length > 0) {
+    warnings.push(`列完整度下降：${damaged.map((column) => `[${column.x},${column.z}]`).join("、")}`);
+  } else if ((summary.damagedColumns ?? 0) > 0) {
+    warnings.push(`列完整度已下降：当前有 ${summary.damagedColumns} 根列低于 100%`);
+  }
+  const jammed = Object.values(resultColumns).filter((column) => column.nextJammed && column.type === "control_rod");
+  if (jammed.length > 0) {
+    warnings.push(`控制棒卡死：${jammed.map((column) => `[${column.x},${column.z}]`).join("、")}；深度保持卡死前实际值`);
+  } else if ((summary.jammedColumns ?? 0) > 0) {
+    warnings.push(`控制棒已卡死：当前有 ${summary.jammedColumns} 根控制棒保持卡死深度`);
+  }
+  if (summary.meltdownDanger) warnings.push(`达到融毁触达阈值：传播覆盖 ${(summary.propagationCoverage * 100).toFixed(1)}% 有效燃料列`);
+  if (summary.countdownPaused) warnings.push("融毁倒计时暂停：SCRAM 且本 tick 有有效冷却；进度不会回退");
+  if (summary.meltdownMelted) warnings.push("已融毁：倒计时达到上限，运行停止");
+  return [...new Set(warnings)];
+}
+
+function statusLabel(snapshot, runtime, config) {
+  if (snapshot.simulationFailed) return "规则失败";
+  if (snapshot.meltdownMelted) return "已融毁";
+  if (snapshot.meltdownTriggered && snapshot.meltdownProgress >= config.meltdownCountdownTicks) return "已融毁";
+  if (snapshot.meltdownTriggered && (runtime?.scramActive || runtime?.coolingEffective)) return "暂停倒计时";
+  if (snapshot.meltdownTriggered) return "融毁倒计时";
+  if (runtime?.scramActive) return "SCRAM";
+  if (runtime?.running) return "运行";
+  return "暂停";
+}
+
+function repairColumn(snapshot, key, geometry) {
+  const internalHeight = internalDimensions(geometry).height;
+  return {
+    ...snapshot,
+    columns: snapshot.columns.map((column) => {
+      if (column.key !== key || column.type === "empty") return cloneColumn(column);
+      if (column.type === "fuel") {
+        return { ...column, integrity: clamp01(column.integrity + 0.25 / internalHeight) };
+      }
+      if (column.jammed) return cloneColumn(column);
+      return { ...column, controlRodIntegrity: clamp01(column.controlRodIntegrity + 0.25 / internalHeight) };
+    }),
+  };
+}
+
+function snapshotToPlain(snapshot) {
+  return JSON.parse(JSON.stringify(snapshot));
+}
+
+function runTicks(snapshot, geometry, layout, config, runtime, count) {
+  let current = snapshot;
+  let currentRuntime = { ...runtime };
+  const results = [];
+  for (let index = 0; index < count; index += 1) {
+    const result = stepSnapshot(current, geometry, layout, config, currentRuntime);
+    results.push(result);
+    current = result.nextSnapshot;
+    currentRuntime = { ...currentRuntime, ...result.runtime };
+    if (!result.converged || current.meltdownMelted) {
+      currentRuntime.running = false;
+      break;
+    }
+  }
+  return { snapshot: current, runtime: currentRuntime, results };
+}
+
+
+
+const INITIAL_STATE_DEFAULT = Object.freeze({ running: false, scram: false });
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function buildScene({
+  geometry,
+  layout,
+  controlRodDepths,
+  config,
+  initialState = INITIAL_STATE_DEFAULT,
+  initialSnapshot,
+  finalSnapshot,
+  history = [],
+  summary = null,
+}) {
+  return {
+    schema: SCHEMA_ID,
+    schemaVersion: SCHEMA_VERSION,
+    toolVersion: TOOL_VERSION,
+    ruleVersion: RULE_VERSION,
+    geometry: clone(geometry),
+    config: cloneConfig(config),
+    layout: { matrix: clone(layout) },
+    controlRodDepths: clone(controlRodDepths),
+    initialState: {
+      running: Boolean(initialState.running),
+      scram: Boolean(initialState.scram),
+    },
+    runTicks: finalSnapshot?.tick ?? 0,
+    initialSnapshot: initialSnapshot ? snapshotToPlain(initialSnapshot) : null,
+    finalSnapshot: finalSnapshot ? snapshotToPlain(finalSnapshot) : null,
+    summary: summary ? clone(summary) : null,
+    history: clone(history),
+  };
+}
+
+function parseSceneText(text, fallback = {}) {
+  let raw;
+  try {
+    raw = JSON.parse(text);
+  } catch (error) {
+    return { ok: false, errors: [`JSON 解析失败：${error.message}`] };
+  }
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return { ok: false, errors: ["场景必须是 JSON 对象"] };
+  }
+  if (raw.schema && raw.schema !== SCHEMA_ID) {
+    return { ok: false, errors: [`不支持的场景 schema：${raw.schema}`] };
+  }
+  if (raw.schemaVersion != null && Number(raw.schemaVersion) !== SCHEMA_VERSION) {
+    return { ok: false, errors: [`不支持的场景版本：${raw.schemaVersion}`] };
+  }
+
+  const geometryResult = validateGeometry({ ...DEFAULT_GEOMETRY, ...(raw.geometry ?? {}) });
+  if (!geometryResult.ok) return { ok: false, errors: geometryResult.errors };
+  const geometry = geometryResult.geometry;
+  const configResult = validateConfig({ ...DEFAULT_CONFIG, ...(raw.config ?? {}) });
+  if (!configResult.ok) return { ok: false, errors: configResult.errors };
+  const config = configResult.value;
+  const matrix = raw.layout?.matrix ?? raw.layout ?? fallback.layout ?? createPreset(geometry, "mixed");
+  const layoutResult = validateLayout(matrix, geometry);
+  if (!layoutResult.ok) return { ok: false, errors: layoutResult.errors };
+  const layout = clone(matrix);
+  const defaultDepths = createDepthMatrix(geometry, layout);
+  const depths = normalizeDepths(raw.controlRodDepths ?? defaultDepths, layout);
+  const depthResult = validateDepthMatrix(depths, layout, geometry);
+  if (!depthResult.ok) return { ok: false, errors: depthResult.errors };
+  const initialState = {
+    ...INITIAL_STATE_DEFAULT,
+    ...(raw.initialState ?? {}),
+  };
+  const initialSnapshot = raw.initialSnapshot ?? null;
+  const finalSnapshot = raw.finalSnapshot ?? null;
+  return {
+    ok: true,
+    scene: {
+      schema: SCHEMA_ID,
+      schemaVersion: SCHEMA_VERSION,
+      toolVersion: raw.toolVersion ?? TOOL_VERSION,
+      ruleVersion: raw.ruleVersion ?? RULE_VERSION,
+      geometry,
+      config,
+      layout: { matrix: layout },
+      controlRodDepths: depths,
+      initialState: { running: Boolean(initialState.running), scram: Boolean(initialState.scram) },
+      runTicks: Number.isInteger(Number(raw.runTicks)) ? Math.max(0, Number(raw.runTicks)) : 0,
+      initialSnapshot,
+      finalSnapshot,
+      summary: raw.summary ?? null,
+      history: Array.isArray(raw.history) ? raw.history : [],
+    },
+  };
+}
+
+function csvCell(value) {
+  if (value == null) return "";
+  const text = typeof value === "number"
+    ? value.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 20 })
+    : String(value);
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function csvRow(values) {
+  return values.map(csvCell).join(",");
+}
+
+function buildCsv(history, finalSnapshot, finalSummary, ruleVersion = RULE_VERSION) {
+  const lines = [];
+  lines.push(csvRow([
+    "row_type", "tick", "time_s", "total_heat_HU_per_t", "total_burn_equiv_per_t",
+    "coolant_demand_mB_per_t", "cold_in_mB_per_t", "hot_out_mB_per_t", "total_residual_heat_HU",
+    "max_net_heat_HU_per_t", "minimum_integrity_ratio", "damaged_columns", "jammed_columns",
+    "exhausted_fuel_columns", "meltdown_progress_ticks", "meltdown_status", "rule_version",
+    "rule_converged", "column_key", "x", "z", "column_type", "generated_heat_HU_per_t",
+    "removed_heat_HU_per_t", "net_heat_HU_per_t", "integrity_ratio", "fuel_remaining_equiv",
+    "cached_heat_HU", "control_depth_ratio", "control_rod_integrity_ratio", "jammed",
+    "coolant_total_capacity_mB", "cold_inventory_mB", "hot_inventory_mB", "total_coolant_mB",
+    "coolant_headroom_mB", "coolant_ledger_error_mB",
+  ]));
+  for (const entry of history) {
+    const summary = entry.summary ?? entry;
+    lines.push(csvRow([
+      "tick", summary.tick, summary.gameSeconds, summary.generatedHeat ?? summary.totalHeat ?? 0,
+      summary.fuelConsumed ?? summary.totalBurn ?? 0, summary.coolantDemand ?? 0,
+      summary.coldIn ?? 0, summary.hotOut ?? 0, summary.totalResidualHeat ?? 0,
+      summary.maxNetHeatLoad ?? 0, summary.minIntegrity ?? 1, summary.damagedColumns ?? 0,
+      summary.jammedColumns ?? 0, summary.exhaustedFuelColumns ?? 0, summary.meltdownProgress ?? 0,
+      summary.meltdownMelted ? "melted" : summary.meltdownTriggered ? "countdown" : "normal",
+      ruleVersion, summary.ruleConverged !== false,
+      summary.coolantTotalCapacityMb ?? "", summary.coldCoolantMb ?? "", summary.hotCoolantMb ?? "",
+      summary.totalCoolantMb ?? "", summary.coolantCapacityHeadroomMb ?? "", summary.coolantLedgerError ?? "",
+    ]));
+  }
+  for (const column of [...(finalSnapshot?.columns ?? [])].sort((a, b) => a.z - b.z || a.x - b.x)) {
+    const result = history.at(-1)?.columns?.[column.key] ?? {};
+    lines.push(csvRow([
+      "column", finalSnapshot?.tick ?? 0, (finalSnapshot?.tick ?? 0) / 20, "", "", "", "", "", "", "", "", "", "", "", "", "",
+      ruleVersion, history.at(-1)?.summary?.ruleConverged !== false, column.key, column.x, column.z,
+      column.type, result.generatedHeat ?? 0, result.removedHeat ?? 0, result.netHeatLoad ?? column.cachedHeat ?? 0,
+      column.type === "fuel" ? column.integrity : column.type === "control_rod" ? column.controlRodIntegrity : "",
+      column.type === "fuel" ? column.fuelRemaining : "", column.cachedHeat ?? 0,
+      column.type === "control_rod" ? column.depth : "", column.type === "control_rod" ? column.controlRodIntegrity : "",
+      column.type === "control_rod" ? column.jammed : "",
+      finalSummary?.coolantTotalCapacityMb ?? "", finalSummary?.coldCoolantMb ?? "", finalSummary?.hotCoolantMb ?? "",
+      finalSummary?.totalCoolantMb ?? "", finalSummary?.coolantCapacityHeadroomMb ?? "", finalSummary?.coolantLedgerError ?? "",
+    ]));
+  }
+  return `${lines.join("\n")}\n`;
+}
+
+function sceneJson(scene) {
+  return JSON.stringify(scene, null, 2);
+}
+
+function downloadText(filename, text, mime = "text/plain;charset=utf-8") {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+
+
+const $ = (selector) => document.querySelector(selector);
+const $all = (selector) => [...document.querySelectorAll(selector)];
+
+const state = {
+  geometry: { ...DEFAULT_GEOMETRY },
+  layout: createPreset(DEFAULT_GEOMETRY, "mixed"),
+  depths: null,
+  pendingGeometry: { ...DEFAULT_GEOMETRY },
+  pendingLayout: null,
+  pendingDepths: null,
+  config: cloneConfig(DEFAULT_CONFIG),
+  initialState: { running: false, scram: false },
+  initialSnapshot: null,
+  snapshot: null,
+  runtime: { running: false, scram: false },
+  lastResult: null,
+  history: [],
+  selectedKey: null,
+  brush: "fuel",
+  painting: false,
+  dirty: false,
+  timer: null,
+  runTargetTick: null,
+};
+
+function setStatus(message = "", tone = "warning") {
+  const node = $("#app-status");
+  node.textContent = message;
+  node.dataset.tone = tone;
+}
+
+function markDirty(message = "有未应用的场景修改") {
+  state.dirty = true;
+  setStatus(`${message}；请暂停后点击“应用并重置”。`);
+}
+
+function applyLiveControlRodDepth(x, z, depth) {
+  const key = `${x},${z}`;
+  const sameCommittedLayout = state.pendingLayout?.[z]?.[x] === "control_rod"
+    && state.layout?.[z]?.[x] === "control_rod";
+  if (state.dirty || !sameCommittedLayout || !getColumn(state.snapshot, key)) return false;
+  state.snapshot = setControlDepth(state.snapshot, key, depth);
+  state.initialSnapshot = setControlDepth(state.initialSnapshot, key, depth);
+  state.depths[z][x] = depth;
+  state.pendingDepths[z][x] = depth;
+  state.lastResult = null;
+  setStatus(state.runtime.running
+    ? `控制棒 [${key}] 深度已实时更新，模拟继续运行。`
+    : `控制棒 [${key}] 深度已更新，可以直接运行模拟。`, "success");
+  return true;
+}
+
+function pauseTimer() {
+  if (state.timer != null) {
+    clearInterval(state.timer);
+    state.timer = null;
+  }
+  state.runtime.running = false;
+}
+
+function pendingGeometryFromForm() {
+  return {
+    length: Number($("#length-input").value),
+    width: Number($("#width-input").value),
+    height: Number($("#height-input").value),
+  };
+}
+
+function updateDimensionHint(geometry) {
+  const result = validateGeometry(geometry);
+  const hint = $("#dimension-hint");
+  if (!result.ok) {
+    hint.textContent = result.errors.join("；");
+    hint.classList.add("field-error");
+    return false;
+  }
+  const dimensions = internalDimensions(result.geometry);
+  hint.textContent = `有效横截面 ${dimensions.columns} × ${dimensions.rows} · 有效高度 ${dimensions.height} · 有效列数 ${dimensions.columns * dimensions.rows}`;
+  hint.classList.remove("field-error");
+  return true;
+}
+
+function renderParameterFields() {
+  const root = $("#parameter-fields");
+  root.replaceChildren();
+  const groups = new Map();
+  for (const field of CONFIG_FIELDS) {
+    if (!groups.has(field.group)) groups.set(field.group, []);
+    groups.get(field.group).push(field);
+  }
+  for (const [group, fields] of groups.entries()) {
+    const section = document.createElement("section");
+    section.className = `parameter-group${fields.some((field) => field.frozen) ? " frozen" : ""}`;
+    const heading = document.createElement("h3");
+    heading.textContent = group;
+    section.append(heading);
+    for (const field of fields) {
+      if (field.sceneInputId) continue;
+      const row = document.createElement("label");
+      row.className = "parameter-row";
+      row.title = field.frozen
+        ? "设计文档 P1 原型默认；仍可用于网页实验，不会写回游戏配置。"
+        : "工具实验默认值；不代表游戏服务器最终平衡。";
+      const name = document.createElement("span");
+      name.className = "param-name";
+      name.innerHTML = `${field.label}<small>${field.unit}${field.frozen ? " · P1 原型" : " · 工具实验默认"}</small>`;
+      const input = document.createElement("input");
+      input.type = "number";
+      input.id = `param-${field.key}`;
+      input.dataset.configKey = field.key;
+      input.min = String(field.min);
+      input.max = String(field.max);
+      input.step = String(field.step);
+      input.value = String(state.config[field.key]);
+      input.setAttribute("aria-label", `${field.label}，单位 ${field.unit}`);
+      row.append(name, input);
+      section.append(row);
+    }
+    root.append(section);
+  }
+  const burnNote = document.createElement("p");
+  burnNote.id = "burn-rate-note";
+  burnNote.className = "field-hint";
+  root.append(burnNote);
+  updateBurnRateNote();
+}
+
+function updateBurnRateNote() {
+  const values = readConfigFromForm();
+  const result = validateConfig(values);
+  const burn = result.ok ? baseBurnPerFuel(result.value) : baseBurnPerFuel(state.config);
+  const note = $("#burn-rate-note");
+  if (note) note.textContent = `baseBurnPerFuel = ${formatNumber(burn, 9)} 列等价份/tick（由 burnHoursPerBlock 反推）`;
+}
+
+function readConfigFromForm() {
+  const config = {};
+  for (const field of CONFIG_FIELDS) {
+    const input = field.sceneInputId ? $(`#${field.sceneInputId}`) : $(`#param-${field.key}`);
+    config[field.key] = Number(input.value);
+  }
+  return config;
+}
+
+function setConfigFormValues(config) {
+  for (const field of CONFIG_FIELDS) {
+    const input = field.sceneInputId ? $(`#${field.sceneInputId}`) : $(`#param-${field.key}`);
+    if (input) input.value = config[field.key];
+  }
+}
+
+function renderLayoutGrid(target = "pending") {
+  const layout = target === "pending" ? state.pendingLayout : state.layout;
+  const grid = target === "pending" ? $("#core-grid") : $("#result-grid");
+  if (!grid || !layout) return;
+  const columns = layout[0]?.length ?? 1;
+  grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+  grid.replaceChildren();
+  layout.forEach((row, z) => row.forEach((type, x) => {
+    const cell = document.createElement(target === "pending" ? "button" : "button");
+    cell.type = "button";
+    cell.className = `${target === "pending" ? "core-cell" : "result-cell"} ${type}`;
+    cell.dataset.x = String(x);
+    cell.dataset.z = String(z);
+    cell.dataset.key = `${x},${z}`;
+    cell.setAttribute("role", "gridcell");
+    cell.setAttribute("aria-label", `${x},${z}：${COLUMN_LABELS[type]}`);
+    if (target === "pending") {
+      cell.innerHTML = `<span class="cell-icon">${type === "fuel" ? "F" : type === "control_rod" ? "C" : "·"}</span><span class="coord">${x},${z}</span>`;
+      cell.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        state.painting = true;
+        paintPendingCell(x, z);
+      });
+      cell.addEventListener("pointerenter", () => { if (state.painting) paintPendingCell(x, z); });
+    } else {
+      renderResultCell(cell, x, z, type);
+      cell.addEventListener("click", () => selectColumn(`${x},${z}`));
+    }
+    grid.append(cell);
+  }));
+  if (target === "pending") {
+    const counts = countColumns(layout);
+    $("#layout-counts").textContent = `F ${counts.fuel} · C ${counts.control_rod} · 空 ${counts.empty}`;
+  }
+}
+
+function renderResultCell(cell, x, z, type) {
+  const column = getColumn(state.snapshot, `${x},${z}`);
+  const result = state.lastResult?.columns?.[`${x},${z}`] ?? null;
+  const layer = $("#grid-layer").value;
+  const selected = state.selectedKey === `${x},${z}`;
+  if (selected) cell.classList.add("selected");
+  if (!column) return;
+  let value = "—";
+  let stateText = COLUMN_LABELS[type];
+  if (type === "empty") {
+    value = "阻断";
+    stateText = "不发热 · 不传播";
+  } else if (layer === "heat") {
+    value = `${formatNumber(result?.generatedHeat ?? 0)} HU/t`;
+    cell.style.setProperty("--heat", `${Math.min(100, (result?.generatedHeat ?? 0) / Math.max(1, state.lastResult?.summary?.generatedHeat ?? 1) * 100)}%`);
+  } else if (layer === "integrity") {
+    const integrity = type === "fuel" ? column.integrity : column.controlRodIntegrity;
+    value = `${(integrity * 100).toFixed(1)}%`;
+    stateText = integrity < 1 ? "损伤" : "完整";
+  } else if (layer === "fuel") {
+    value = type === "fuel" ? `${(column.fuelRemaining / column.fuelCapacity * 100).toFixed(1)}%` : "—";
+    stateText = type === "fuel" && column.fuelRemaining <= 1e-12 ? "耗尽" : COLUMN_LABELS[type];
+  } else if (layer === "netHeat") {
+    value = `${formatNumber(result?.netHeatLoad ?? column.cachedHeat)} HU/t`;
+    stateText = (result?.damage ?? 0) > 0 ? "超安全阈值" : "安全区";
+  } else if (layer === "residual") {
+    value = `${formatNumber(column.cachedHeat)} HU`;
+    stateText = column.cachedHeat > 0 ? "有余热" : "无余热";
+  } else if (layer === "rodDepth") {
+    value = type === "control_rod" ? `${(column.depth * 100).toFixed(1)}%` : "—";
+    stateText = type === "control_rod" && column.jammed ? "卡死" : COLUMN_LABELS[type];
+  } else if (layer === "propagation") {
+    value = `${formatNumber(result?.propagationHeatReceived ?? 0)} HU`;
+    stateText = result?.propagationHeatReceived > 0 ? "本 tick 触达" : "未触达";
+  }
+  cell.innerHTML = `<span class="cell-title">${x},${z}</span><span class="cell-value">${value}</span><span class="cell-state">${stateText}</span>`;
+  cell.setAttribute("aria-label", `${x},${z}，${COLUMN_LABELS[type]}，${value}，${stateText}`);
+}
+
+function paintPendingCell(x, z) {
+  if (state.runtime.running) {
+    pauseTimer();
+    setStatus("布局编辑已暂停运行；点击“应用并重置”后才会进入新场景。");
+  }
+  const previousType = state.pendingLayout[z][x];
+  const type = state.brush;
+  state.pendingLayout[z][x] = type;
+  if (type === "control_rod" && state.pendingDepths[z][x] == null) state.pendingDepths[z][x] = 1;
+  if (type !== "control_rod") state.pendingDepths[z][x] = null;
+  refreshPendingCell(x, z);
+  if (previousType !== type) renderRodEditor();
+  markDirty("布局已修改");
+}
+
+function refreshPendingCell(x, z) {
+  const grid = $("#core-grid");
+  const cell = [...grid.children].find((candidate) =>
+    candidate.dataset.x === String(x) && candidate.dataset.z === String(z));
+  if (!cell) return;
+  const type = state.pendingLayout[z][x];
+  cell.className = `core-cell ${type}`;
+  cell.innerHTML = `<span class="cell-icon">${type === "fuel" ? "F" : type === "control_rod" ? "C" : "·"}</span><span class="coord">${x},${z}</span>`;
+  cell.setAttribute("aria-label", `${x},${z}：${COLUMN_LABELS[type]}`);
+  const counts = countColumns(state.pendingLayout);
+  $("#layout-counts").textContent = `F ${counts.fuel} · C ${counts.control_rod} · 空 ${counts.empty}`;
+}
+
+function stopPainting(message = "已停止刷涂。") {
+  const wasPainting = state.painting;
+  state.painting = false;
+  if (wasPainting && message) setStatus(message, "success");
+}
+
+function renderRodEditor() {
+  const root = $("#rod-editor");
+  root.replaceChildren();
+  state.pendingLayout.forEach((row, z) => row.forEach((type, x) => {
+    if (type !== "control_rod") return;
+    const key = `${x},${z}`;
+    const wrapper = document.createElement("label");
+    wrapper.className = "rod-row";
+    wrapper.innerHTML = `<span>棒 [${key}]</span>`;
+    const input = document.createElement("input");
+    input.type = "range";
+    input.min = "0";
+    input.max = "1";
+    input.step = "0.01";
+    input.value = String(state.pendingDepths[z][x] ?? 1);
+    input.disabled = state.runtime.scramActive === true;
+    input.setAttribute("aria-label", `控制棒 ${key} 目标插入深度`);
+    const output = document.createElement("output");
+    output.textContent = `${(Number(input.value) * 100).toFixed(0)}%`;
+    input.addEventListener("input", () => {
+      const depth = Number(input.value);
+      state.pendingDepths[z][x] = depth;
+      output.textContent = `${(Number(input.value) * 100).toFixed(0)}%`;
+      if (applyLiveControlRodDepth(x, z, depth)) {
+        renderOverview();
+        renderResultGridAndDetail();
+        return;
+      }
+      markDirty("控制棒深度已修改");
+      renderResultGridAndDetail();
+    });
+    wrapper.append(input, output);
+    root.append(wrapper);
+  }));
+  if (!root.children.length) root.innerHTML = `<p class="muted">当前没有控制棒列；无控制棒是合法实验场景。</p>`;
+}
+
+function currentSummary() {
+  return state.lastResult?.summary ?? summarizeSnapshot(state.snapshot, null, state.config, state.geometry);
+}
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "—";
+  const whole = Math.max(0, Math.floor(seconds));
+  const hours = Math.floor(whole / 3600);
+  const minutes = Math.floor((whole % 3600) / 60);
+  const rest = whole % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(rest).padStart(2, "0")}`;
+}
+
+function renderOverview() {
+  const summary = currentSummary();
+  let status = statusLabel(state.snapshot, state.runtime, state.config);
+  if (state.lastResult?.summary?.countdownPaused) status = "暂停倒计时";
+  $("#status-pill").textContent = status;
+  $("#status-pill").dataset.status = status;
+  const metrics = [
+    ["有效尺寸", `${internalDimensions(state.geometry).columns} × ${internalDimensions(state.geometry).rows} × ${internalDimensions(state.geometry).height}`, "列 × 列 × 高"],
+    ["燃料 / 控制棒 / 空列", `${summary.fuelColumns} / ${summary.controlRodColumns} / ${summary.emptyColumns}`, "列"],
+    ["当前 tick / 游戏时间", `${summary.tick} / ${formatTime(summary.gameSeconds)}`, "tick / h:m:s"],
+    ["总发热", `${formatNumber(summary.generatedHeat ?? 0)} `, "HU/t"],
+    ["总燃耗", `${formatNumber(summary.fuelConsumed ?? summary.plannedBurn ?? 0, 9)} `, "列等价份/t"],
+    ["总余热", `${formatNumber(summary.totalResidualHeat ?? 0)} `, "HU"],
+    ["冷却需求 / 换热转换", `${formatNumber(summary.coolantDemand ?? 0)} / ${formatNumber(summary.convertedCoolant ?? 0)}`, "mB/t"],
+    ["冷端输入 / 热端输出", `${formatNumber(summary.coldInAccepted ?? summary.coldIn ?? 0)} / ${formatNumber(summary.hotOutActual ?? summary.hotOut ?? 0)}`, "mB/t"],
+    ["内存冷 / 热冷却剂", `${formatNumber(summary.coldCoolantMb ?? 0)} / ${formatNumber(summary.hotCoolantMb ?? 0)}`, "mB"],
+    ["总容量 / 剩余空间", `${formatNumber(summary.coolantTotalCapacityMb ?? 0)} / ${formatNumber(summary.coolantCapacityHeadroomMb ?? 0)}`, "mB"],
+    ["最高净热负荷", `${formatNumber(summary.maxNetHeatLoad ?? 0)} `, "HU/t"],
+    ["最低完整度", `${((summary.minIntegrity ?? 1) * 100).toFixed(2)}%`, "比例"],
+    ["损坏 / 卡死 / 耗尽", `${summary.damagedColumns ?? 0} / ${summary.jammedColumns ?? 0} / ${summary.exhaustedFuelColumns ?? 0}`, "列"],
+    ["融毁倒计时", `${summary.meltdownProgress ?? 0} / ${state.config.meltdownCountdownTicks}`, "tick"],
+  ];
+  $("#overview-grid").innerHTML = metrics.map(([label, value, unit]) => `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${value}<small>${unit}</small></span></div>`).join("");
+  const bottlenecks = summary.bottlenecks?.length ? summary.bottlenecks : ["尚未产生冷却账本"];
+  $("#bottleneck-list").innerHTML = `<strong>当前端口 / 总流量瓶颈：</strong> ${bottlenecks.join("、")} · <strong>内存上限：</strong> ${formatNumber(summary.coolantTotalCapacityMb ?? 0)} mB`;
+}
+
+function renderWarnings() {
+  const list = $("#warnings");
+  const warnings = state.lastResult?.warnings ?? [];
+  list.innerHTML = warnings.length ? warnings.map((warning) => `<li>${warning}</li>`).join("") : `<li class="muted">暂无警告</li>`;
+}
+
+function renderScramControl() {
+  const checkbox = $("#scram-toggle");
+  const message = $("#scram-message");
+  const rodCount = state.layout.flat().filter((type) => type === "control_rod").length;
+  const available = rodCount > 0;
+  checkbox.disabled = !available;
+  checkbox.checked = state.runtime.scramActive === true;
+  if (!available) {
+    message.textContent = "SCRAM 不可用：当前布局没有控制棒列（SCRAM_UNAVAILABLE_NO_CONTROL_RODS）";
+  } else if (state.runtime.scramActive) {
+    message.textContent = state.lastResult?.summary?.scramIncomplete
+      ? "SCRAM_INCOMPLETE：仍存在裂变产热；可移动控制棒已锁定在 100%"
+      : "SCRAM 已建立；可移动控制棒已锁定在 100%";
+  } else {
+    message.textContent = "SCRAM 可用；启用时保存并恢复可移动控制棒目标深度";
+  }
+}
+
+function selectColumn(key) {
+  state.selectedKey = key;
+  renderResultGridAndDetail();
+}
+
+function renderResultGridAndDetail() {
+  renderLayoutGrid("result");
+  renderColumnDetails();
+}
+
+function renderColumnDetails() {
+  const key = state.selectedKey;
+  const column = key ? getColumn(state.snapshot, key) : null;
+  const result = key ? state.lastResult?.columns?.[key] : null;
+  $("#selected-cell").textContent = key ? `列 [${key}]` : "未选择";
+  const root = $("#column-details");
+  if (!column) {
+    root.innerHTML = `<p class="muted">点击堆芯网格中的列。</p>`;
+    return;
+  }
+  const neighbors = result?.neighbors ?? [];
+  const neighborHtml = neighbors.length
+    ? neighbors.map((neighbor) => `<span class="neighbor-chip">${neighbor.direction} [${neighbor.x},${neighbor.z}] · ${COLUMN_LABELS[neighbor.type]}</span>`).join("")
+    : `<span class="muted">无四向邻居</span>`;
+  if (column.type === "empty") {
+    root.innerHTML = `<h3>[${key}] 空列</h3><p class="muted">不持有燃料、控制棒、完整度或余热；不发热、不冷却、不参与损伤，并完全切断四向反馈、控制和余热传播。</p><div class="neighbor-list">${neighborHtml}</div>`;
+    return;
+  }
+  if (column.type === "control_rod") {
+    root.innerHTML = `<h3>[${key}] 控制棒列</h3><dl class="detail-list">
+      <div><dt>目标/实际插入深度</dt><dd>${(column.depth * 100).toFixed(1)}%${column.jammed ? "（卡死）" : ""}</dd></div>
+      <div><dt>控制棒完整度</dt><dd>${(column.controlRodIntegrity * 100).toFixed(2)}%</dd></div>
+      <div><dt>卡死前深度</dt><dd>${(column.jammedDepth * 100).toFixed(1)}%</dd></div>
+      <div><dt>接收传播热量</dt><dd>${formatNumber(result?.propagationHeatReceived ?? 0)} HU</dd></div>
+      <div><dt>当前余热缓存</dt><dd>${formatNumber(column.cachedHeat)} HU</dd></div>
+      <div><dt>卡死原因</dt><dd>${column.jammed ? `完整度 ≤ ${state.config.controlRodColumnFailureThreshold}` : "未卡死"}</dd></div>
+    </dl><div class="neighbor-list">${neighborHtml}</div>`;
+    return;
+  }
+  const burnRate = result?.plannedBurn ?? 0;
+  const ticksToEmpty = burnRate > 0 ? column.fuelRemaining / burnRate : Infinity;
+  const integrity = column.integrity;
+  root.innerHTML = `<h3>[${key}] 燃料列</h3><dl class="detail-list">
+    <div><dt>当前发热</dt><dd>${formatNumber(result?.generatedHeat ?? 0)} HU/t</dd></div>
+    <div><dt>控制强度</dt><dd>${formatNumber(result?.controlledIntensity ?? 0, 5)}×</dd></div>
+    <div><dt>超频热/燃耗倍率</dt><dd>${formatNumber(result?.heatIntensity ?? 0, 5)}× / ${formatNumber(result?.burnIntensity ?? 0, 5)}×</dd></div>
+    <div><dt>损伤倍率</dt><dd>${formatNumber(2 - integrity, 5)}×</dd></div>
+    <div><dt>等价燃料剩余</dt><dd>${formatNumber(column.fuelRemaining, 6)} / ${formatNumber(column.fuelCapacity, 6)}</dd></div>
+    <div><dt>消耗率</dt><dd>${formatDecimal(burnRate, 12)} 份/tick</dd></div>
+    <div><dt>预计耗尽</dt><dd>${Number.isFinite(ticksToEmpty) ? `${formatNumber(ticksToEmpty, 1)} tick / ${formatNumber(ticksToEmpty / 20 / 60, 2)} min` : "不消耗"}</dd></div>
+    <div><dt>冷却带走 / 净热</dt><dd>${formatNumber(result?.removedHeat ?? 0)} / ${formatNumber(result?.netHeatLoad ?? column.cachedHeat)} HU/t</dd></div>
+    <div><dt>完整度 / 损坏度</dt><dd>${(integrity * 100).toFixed(2)}% / ${((1 - integrity) * 100).toFixed(2)}%</dd></div>
+    <div><dt>余热缓存</dt><dd>${formatNumber(column.cachedHeat)} HU</dd></div>
+  </dl><div class="neighbor-list">${neighborHtml}</div>`;
+}
+
+function renderTrend() {
+  const entries = state.history;
+  $("#trend-count").textContent = `${entries.length} 个 tick 采样`;
+  const tbody = $("#trend-table tbody");
+  tbody.innerHTML = entries.slice(-20).reverse().map((entry) => {
+    const summary = entry.summary;
+    return `<tr><td>${summary.tick}</td><td>${formatNumber(summary.generatedHeat ?? 0)}</td><td>${formatNumber(summary.convertedCoolant ?? 0)}</td><td>${formatNumber(summary.maxNetHeatLoad ?? 0)}</td><td>${((summary.minIntegrity ?? 1) * 100).toFixed(2)}%</td><td>${summary.meltdownProgress ?? 0}</td></tr>`;
+  }).join("");
+  drawTrendChart(entries);
+}
+
+function drawTrendChart(entries) {
+  const canvas = $("#trend-chart");
+  const context = canvas.getContext("2d");
+  const width = canvas.width;
+  const height = canvas.height;
+  context.clearRect(0, 0, width, height);
+  context.fillStyle = "#11191c";
+  context.fillRect(0, 0, width, height);
+  const left = 50, right = 20, top = 20, bottom = 30;
+  const plotWidth = width - left - right;
+  const plotHeight = height - top - bottom;
+  context.strokeStyle = "#2a393e";
+  context.lineWidth = 1;
+  context.font = "11px system-ui";
+  context.fillStyle = "#71817b";
+  for (let i = 0; i <= 4; i += 1) {
+    const y = top + plotHeight * i / 4;
+    context.beginPath(); context.moveTo(left, y); context.lineTo(width - right, y); context.stroke();
+    context.fillText(`${100 - i * 25}%`, 10, y + 4);
+  }
+  if (!entries.length) {
+    context.fillStyle = "#9caca5";
+    context.fillText("运行或单步后显示完整 tick 序列", left + 20, height / 2);
+    return;
+  }
+  const maxPower = Math.max(1, ...entries.flatMap((entry) => [entry.summary.generatedHeat ?? 0, entry.summary.convertedCoolant ?? 0, entry.summary.maxNetHeatLoad ?? 0]));
+  const point = (index, value, max = maxPower) => ({
+    x: left + (entries.length === 1 ? 0 : plotWidth * index / (entries.length - 1)),
+    y: top + plotHeight * (1 - Math.max(0, Math.min(1, value / max))),
+  });
+  const series = [
+    { key: "generatedHeat", color: "#f3bd65", max: maxPower },
+    { key: "convertedCoolant", color: "#75e0d1", max: maxPower },
+    { key: "maxNetHeatLoad", color: "#ed7e50", max: maxPower },
+    { key: "minIntegrity", color: "#78d69a", max: 1 },
+  ];
+  for (const item of series) {
+    context.strokeStyle = item.color;
+    context.lineWidth = item.key === "minIntegrity" ? 2 : 2.5;
+    context.beginPath();
+    entries.forEach((entry, index) => {
+      const value = item.key === "minIntegrity" ? entry.summary.minIntegrity ?? 1 : entry.summary[item.key] ?? 0;
+      const p = point(index, value, item.max);
+      if (index === 0) context.moveTo(p.x, p.y); else context.lineTo(p.x, p.y);
+    });
+    context.stroke();
+  }
+  context.fillStyle = "#71817b";
+  context.fillText(`tick ${entries[0].summary.tick}`, left, height - 9);
+  context.fillText(`tick ${entries.at(-1).summary.tick}`, width - 95, height - 9);
+}
+
+function renderFormulaText() {
+  $("#formula-text").innerHTML = `<ul>
+    <li>外尺寸为 length × width × height；有效区为 (length−2) × (width−2) × (height−2)，每个横截面格是一根垂直列。</li>
+    <li>燃料控制门控：controlledIntensity = (1 − 相邻控制棒平均有效插入深度)<sup>controlResponseExponent</sup>；该门控同时作用于孤立燃料和相邻燃料反馈簇。</li>
+    <li>燃料四向直接相邻时使用从 1.0 开始的同步单调有界反馈，最多 ${256} 轮，变化 ≤ 0.000000001 收敛；控制棒不进入燃料间反馈信号，但深度会门控该簇最终发热与燃耗。</li>
+    <li>列发热与燃耗乘以 2 − 完整度；完整度归零仍继续裂变、燃耗和传播，燃料耗尽才停止该列的新裂变。损伤只来自超过安全阈值的净热负荷。</li>
+    <li>反应堆冷却剂总容量 = (空列数量 + 控制棒列数量) × 有效高度 × 1000 mB；内存冷却剂 + 热冷却剂始终不超过该上限。换热转换只受冷/热端口、实际流量、库存、可用热量与吸收率约束，不存在隐藏全堆流量上限。</li>
+    <li>SCRAM 只有在至少存在一个控制棒列时才建立；启用时可移动控制棒插入到底并锁定，解除后恢复启用前目标深度。卡死棒保持原位，仍有裂变产热时报告 SCRAM_INCOMPLETE。</li>
+    <li>燃料组件以每列有效高度份等价容量抽象；不会模拟 Create 流体 capability、管网、区块、NBT 或实际物品事务。</li>
+  </ul>`;
+}
+
+function renderAll() {
+  $("#tool-version").textContent = TOOL_VERSION;
+  $("#rule-version").textContent = RULE_VERSION;
+  renderLayoutGrid("pending");
+  renderRodEditor();
+  renderOverview();
+  renderWarnings();
+  renderScramControl();
+  renderResultGridAndDetail();
+  renderTrend();
+  renderFormulaText();
+  updateBurnRateNote();
+}
+
+function commitPendingScene() {
+  pauseTimer();
+  const geometryResult = validateGeometry(pendingGeometryFromForm());
+  const configResult = validateConfig(readConfigFromForm());
+  const layoutResult = validateLayout(state.pendingLayout, geometryResult.geometry);
+  const depthResult = validateDepthMatrix(state.pendingDepths, state.pendingLayout, geometryResult.geometry);
+  const errors = [...geometryResult.errors, ...configResult.errors, ...layoutResult.errors, ...depthResult.errors];
+  $("#layout-errors").textContent = errors.join("；");
+  if (errors.length) {
+    setStatus(`无法应用场景：${errors[0]}`);
+    return false;
+  }
+  state.geometry = geometryResult.geometry;
+  state.layout = state.pendingLayout.map((row) => [...row]);
+  state.depths = normalizeDepths(state.pendingDepths, state.layout);
+  state.config = configResult.value;
+  state.initialState = {
+    running: $("#initial-running").checked,
+    scram: $("#initial-scram").checked,
+  };
+  const initialSnapshot = createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
+  const prepared = setScramRequest(initialSnapshot, { ...state.initialState, running: false }, state.initialState.scram);
+  state.initialState.scram = prepared.runtime.scramActive;
+  state.initialSnapshot = prepared.snapshot;
+  state.snapshot = cloneSnapshot(state.initialSnapshot);
+  state.runtime = prepared.runtime;
+  $("#initial-scram").checked = state.initialState.scram;
+  state.lastResult = null;
+  state.history = [];
+  state.selectedKey = null;
+  state.dirty = false;
+  $("#length-input").value = state.geometry.length;
+  $("#width-input").value = state.geometry.width;
+  $("#height-input").value = state.geometry.height;
+  setStatus(prepared.runtime.scramReason ?? "场景已应用并重置。可以运行、单步或切换 SCRAM。", prepared.runtime.scramReason ? "warning" : "success");
+  renderAll();
+  return true;
+}
+
+function resetToDefaults() {
+  pauseTimer();
+  state.geometry = { ...DEFAULT_GEOMETRY };
+  state.layout = createPreset(state.geometry, "mixed");
+  state.depths = createDepthMatrix(state.geometry, state.layout);
+  state.pendingGeometry = { ...state.geometry };
+  state.pendingLayout = state.layout.map((row) => [...row]);
+  state.pendingDepths = state.depths.map((row) => [...row]);
+  state.config = cloneConfig(DEFAULT_CONFIG);
+  setConfigFormValues(state.config);
+  $("#length-input").value = state.geometry.length;
+  $("#width-input").value = state.geometry.width;
+  $("#height-input").value = state.geometry.height;
+  $("#initial-running").checked = false;
+  $("#initial-scram").checked = false;
+  commitPendingScene();
+}
+
+function resetSimulation() {
+  pauseTimer();
+  state.snapshot = cloneSnapshot(state.initialSnapshot);
+  const savedDepths = Object.fromEntries(state.depths.flatMap((row, z) => row.map((depth, x) =>
+    state.layout[z][x] === "control_rod" ? [`${x},${z}`, depth] : null).filter(Boolean)));
+  const initialRuntime = {
+    ...state.initialState,
+    running: false,
+    scramActive: state.initialState.scram,
+    scramSavedDepths: state.initialState.scram ? savedDepths : null,
+  };
+  state.runtime = setScramRequest(state.snapshot, initialRuntime, state.initialState.scram).runtime;
+  state.lastResult = null;
+  state.history = [];
+  state.selectedKey = null;
+  setStatus("模拟状态已重置，配置与布局未改变。", "success");
+  renderAll();
+}
+
+function advanceBy(count, forceRunning = false) {
+  if (state.dirty) {
+    setStatus("存在未应用修改；请先暂停并点击“应用并重置”。");
+    return false;
+  }
+  const runState = { ...state.runtime, running: forceRunning || state.runtime.running };
+  for (let index = 0; index < count; index += 1) {
+    const result = stepSnapshot(state.snapshot, state.geometry, state.layout, state.config, runState);
+    state.lastResult = result;
+    state.snapshot = result.nextSnapshot;
+    state.history.push({ summary: result.summary, columns: result.columns });
+    runState.running = result.runtime.running;
+    if (!result.converged || state.snapshot.meltdownMelted) {
+      runState.running = false;
+      break;
+    }
+  }
+  state.runtime = { ...state.runtime, ...runState };
+  renderOverview();
+  renderWarnings();
+  renderResultGridAndDetail();
+  renderTrend();
+  return state.runtime.running;
+}
+
+function startRunning() {
+  if (state.dirty) {
+    setStatus("有未应用修改；请先暂停并点击“应用并重置”。");
+    return;
+  }
+  if (state.snapshot.meltdownMelted) {
+    setStatus("当前场景已融毁；只能导出、导入或重置后继续。");
+    return;
+  }
+  state.runtime.running = true;
+  state.runTargetTick = state.snapshot.tick + Math.max(1, Number($("#run-ticks").value) || 1);
+  if (state.timer == null) {
+    state.timer = setInterval(() => {
+      const remaining = state.runTargetTick - state.snapshot.tick;
+      const step = Math.min(Number($("#tick-step").value), remaining);
+      if (step <= 0 || !advanceBy(step, true)) {
+        pauseTimer();
+        renderAll();
+      }
+      if (state.snapshot.tick >= state.runTargetTick) {
+        pauseTimer();
+        setStatus(`完成 ${state.runTargetTick} tick 运行。`, "success");
+        renderAll();
+      }
+    }, 30);
+  }
+  setStatus(`运行中：目标 tick ${state.runTargetTick}。`, "success");
+  renderAll();
+}
+
+function singleStep() {
+  pauseTimer();
+  if (state.dirty) {
+    setStatus("有未应用修改；请先点击“应用并重置”。");
+    return;
+  }
+  const count = Number($("#tick-step").value);
+  advanceBy(count, true);
+  state.runtime.running = false;
+  setStatus(`已单步 ${count} tick。`, "success");
+  renderAll();
+}
+
+function exportCurrentJson() {
+  const scene = buildScene({
+    geometry: state.geometry,
+    layout: state.layout,
+    controlRodDepths: state.snapshot.columns.reduce((matrix, column) => {
+      if (column.type === "control_rod") matrix[column.z][column.x] = column.depth;
+      return matrix;
+    }, createDepthMatrix(state.geometry, state.layout)),
+    config: state.config,
+    initialState: state.initialState,
+    initialSnapshot: state.initialSnapshot,
+    finalSnapshot: state.snapshot,
+    history: state.history,
+    summary: currentSummary(),
+  });
+  downloadText(`reactor-scene-t${state.snapshot.tick}.json`, sceneJson(scene), "application/json;charset=utf-8");
+  $("#io-message").textContent = `已导出 tick ${state.snapshot.tick} 场景；包含规则版本 ${RULE_VERSION} 与 ${state.history.length} 条 tick 采样。`;
+}
+
+function exportCurrentCsv() {
+  const csv = buildCsv(state.history, state.snapshot, currentSummary(), RULE_VERSION);
+  downloadText(`reactor-history-t${state.snapshot.tick}.csv`, csv, "text/csv;charset=utf-8");
+  $("#io-message").textContent = `已导出 ${state.history.length} 行 tick 总览和 ${state.snapshot.columns.length} 行最终列快照。`;
+}
+
+function hydrateImportedSnapshot(raw, geometry, layout, config) {
+  if (!raw || !Array.isArray(raw.columns)) return null;
+  const fresh = createInitialSnapshot(geometry, layout, createDepthMatrix(geometry, layout), config);
+  if (raw.columns.length !== fresh.columns.length) return null;
+  const freshByKey = new Map(fresh.columns.map((column) => [column.key, column]));
+  const imported = [];
+  for (const item of raw.columns) {
+    const base = freshByKey.get(item.key);
+    if (!base || item.type !== base.type) return null;
+    if (item.type === "fuel") {
+      if (![item.fuelRemaining, item.integrity, item.cachedHeat].every(Number.isFinite)) return null;
+      imported.push({ ...base, fuelRemaining: Math.max(0, Math.min(base.fuelCapacity, Number(item.fuelRemaining))), integrity: Math.max(0, Math.min(1, Number(item.integrity))), cachedHeat: Math.max(0, Number(item.cachedHeat)) });
+    } else if (item.type === "control_rod") {
+      if (![item.controlRodIntegrity, item.depth, item.jammedDepth, item.cachedHeat].every(Number.isFinite)) return null;
+      imported.push({ ...base, controlRodIntegrity: Math.max(0, Math.min(1, Number(item.controlRodIntegrity))), depth: Math.max(0, Math.min(1, Number(item.depth))), jammed: Boolean(item.jammed), jammedDepth: Math.max(0, Math.min(1, Number(item.jammedDepth))), cachedHeat: Math.max(0, Number(item.cachedHeat)) });
+    } else imported.push(base);
+  }
+  const coolantTotalCapacityMb = fresh.coolantTotalCapacityMb;
+  const coldCoolantMb = Math.max(0, Math.min(coolantTotalCapacityMb, Number(raw.coldCoolantMb ?? fresh.coldCoolantMb)));
+  const hotCoolantMb = Math.max(0, Math.min(coolantTotalCapacityMb - coldCoolantMb, Number(raw.hotCoolantMb ?? fresh.hotCoolantMb)));
+  return { tick: Math.max(0, Number(raw.tick) || 0), meltdownProgress: Math.max(0, Number(raw.meltdownProgress) || 0), meltdownTriggered: Boolean(raw.meltdownTriggered), meltdownMelted: Boolean(raw.meltdownMelted), coolantTotalCapacityMb, coldCoolantMb, hotCoolantMb, columns: imported.sort((a, b) => a.z - b.z || a.x - b.x), simulationFailed: raw.simulationFailed ? String(raw.simulationFailed) : null };
+}
+
+async function importScene(file) {
+  if (!file) return;
+  const text = await file.text();
+  const parsed = parseSceneText(text);
+  if (!parsed.ok) {
+    $("#io-message").textContent = `导入失败：${parsed.errors.join("；")}。当前场景未改变。`;
+    return;
+  }
+  const scene = parsed.scene;
+  const importedInitial = hydrateImportedSnapshot(scene.initialSnapshot, scene.geometry, scene.layout.matrix, scene.config);
+  const importedFinal = hydrateImportedSnapshot(scene.finalSnapshot, scene.geometry, scene.layout.matrix, scene.config);
+  if (scene.initialSnapshot && !importedInitial) {
+    $("#io-message").textContent = "导入失败：initialSnapshot 结构不匹配；当前场景未改变。";
+    return;
+  }
+  if (scene.finalSnapshot && !importedFinal) {
+    $("#io-message").textContent = "导入失败：finalSnapshot 结构不匹配；当前场景未改变。";
+    return;
+  }
+  pauseTimer();
+  state.geometry = scene.geometry;
+  state.layout = scene.layout.matrix.map((row) => [...row]);
+  state.depths = normalizeDepths(scene.controlRodDepths, state.layout);
+  state.config = scene.config;
+  state.initialState = { ...scene.initialState };
+  const importedBase = importedInitial ?? createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
+  const importedPrepared = setScramRequest(importedBase, { ...state.initialState, running: false }, state.initialState.scram);
+  state.initialState.scram = importedPrepared.runtime.scramActive;
+  state.initialSnapshot = importedPrepared.snapshot;
+  state.snapshot = importedFinal ?? cloneSnapshot(state.initialSnapshot);
+  state.runtime = setScramRequest(state.snapshot, { ...state.initialState, running: false }, state.initialState.scram).runtime;
+  state.lastResult = null;
+  state.history = Array.isArray(scene.history) ? scene.history : [];
+  state.pendingGeometry = { ...state.geometry };
+  state.pendingLayout = state.layout.map((row) => [...row]);
+  state.pendingDepths = state.depths.map((row) => [...row]);
+  state.dirty = false;
+  $("#length-input").value = state.geometry.length;
+  $("#width-input").value = state.geometry.width;
+  $("#height-input").value = state.geometry.height;
+  $("#initial-running").checked = state.initialState.running;
+  $("#initial-scram").checked = state.initialState.scram;
+  setConfigFormValues(state.config);
+  $("#io-message").textContent = `已导入 tick ${state.snapshot.tick}；规则版本 ${scene.ruleVersion}。当前状态保持暂停，避免文件自动启动。`;
+  renderAll();
+}
+
+function wireEvents() {
+  $("#apply-reset").addEventListener("click", commitPendingScene);
+  $("#reset-defaults").addEventListener("click", resetToDefaults);
+  $("#clear-layout").addEventListener("click", () => {
+    if (state.runtime.running) pauseTimer();
+    state.pendingLayout = createMatrix(state.pendingGeometry, "empty");
+    state.pendingDepths = createDepthMatrix(state.pendingGeometry, state.pendingLayout);
+    markDirty("布局已清空");
+    renderLayoutGrid("pending"); renderRodEditor();
+  });
+  $all("[data-preset]").forEach((button) => button.addEventListener("click", () => {
+    state.pendingLayout = createPreset(state.pendingGeometry, button.dataset.preset);
+    state.pendingDepths = createDepthMatrix(state.pendingGeometry, state.pendingLayout);
+    markDirty(`已选择${button.textContent}布局`);
+    renderLayoutGrid("pending"); renderRodEditor();
+  }));
+  $all('input[name="brush"]').forEach((input) => input.addEventListener("change", () => { state.brush = input.value; }));
+  ["length-input", "width-input", "height-input"].forEach((id) => $("#" + id).addEventListener("input", () => {
+    const geometry = pendingGeometryFromForm();
+    if (state.runtime.running) pauseTimer();
+    if (!updateDimensionHint(geometry)) return;
+    state.pendingGeometry = geometry;
+    state.pendingLayout = createPreset(geometry, "mixed");
+    state.pendingDepths = createDepthMatrix(geometry, state.pendingLayout);
+    markDirty("尺寸已修改");
+    renderLayoutGrid("pending"); renderRodEditor();
+  }));
+  $all("#parameter-fields input").forEach((input) => input.addEventListener("input", () => {
+    if (state.runtime.running) pauseTimer();
+    updateBurnRateNote();
+    markDirty("参数已修改");
+  }));
+  ["cold-port-count-input", "hot-port-count-input"].forEach((id) => $(`#${id}`).addEventListener("input", () => {
+    if (state.runtime.running) pauseTimer();
+    markDirty("冷/热端口数量已修改");
+  }));
+  $("#initial-running").addEventListener("change", () => markDirty("初始运行状态已修改"));
+  $("#initial-scram").addEventListener("change", () => markDirty("初始 SCRAM 状态已修改"));
+  $("#tick-step").addEventListener("change", () => {});
+  $("#run-ticks").addEventListener("input", () => {});
+  $("#run-button").addEventListener("click", startRunning);
+  $("#pause-button").addEventListener("click", () => { pauseTimer(); setStatus("已暂停；当前快照已保留。", "success"); renderAll(); });
+  $("#step-button").addEventListener("click", singleStep);
+  $("#reset-simulation").addEventListener("click", resetSimulation);
+  $("#scram-toggle").addEventListener("change", () => {
+    const requested = $("#scram-toggle").checked;
+    const prepared = setScramRequest(state.snapshot, state.runtime, requested);
+    state.snapshot = prepared.snapshot;
+    state.runtime = prepared.runtime;
+    setStatus(prepared.runtime.scramReason
+      ?? (prepared.runtime.scramActive ? "SCRAM 已建立；可移动控制棒已插入到底。" : "SCRAM 已解除；可移动控制棒恢复保存的目标深度。"),
+    prepared.runtime.scramReason ? "warning" : "success");
+    renderAll();
+  });
+  $("#stop-painting").addEventListener("click", () => stopPainting("已停止刷涂。"));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") stopPainting();
+  });
+  $("#grid-layer").addEventListener("change", renderResultGridAndDetail);
+  $("#export-json").addEventListener("click", exportCurrentJson);
+  $("#export-csv").addEventListener("click", exportCurrentCsv);
+  $("#import-json").addEventListener("change", (event) => importScene(event.target.files[0]));
+  window.addEventListener("pointerup", () => stopPainting(null));
+  window.addEventListener("pointercancel", () => stopPainting(null));
+}
+
+function initialize() {
+  state.depths = createDepthMatrix(state.geometry, state.layout);
+  state.pendingLayout = state.layout.map((row) => [...row]);
+  state.pendingDepths = state.depths.map((row) => [...row]);
+  state.initialSnapshot = createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
+  state.snapshot = cloneSnapshot(state.initialSnapshot);
+  renderParameterFields();
+  state.runtime = setScramRequest(state.snapshot, state.runtime, false).runtime;
+  $("#scram-toggle").checked = false;
+  wireEvents();
+  updateDimensionHint(state.geometry);
+  renderAll();
+}
+
+initialize();
+
+
+    </script>
+  </body>
+</html>

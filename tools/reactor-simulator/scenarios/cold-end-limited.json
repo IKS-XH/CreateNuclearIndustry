@@ -1,8 +1,8 @@
 {
   "schema": "create-nuclear-industry/reactor-simulator",
   "schemaVersion": 1,
-  "toolVersion": "1.1.0",
-  "ruleVersion": "P1.2-simulator-2",
+  "toolVersion": "1.2.0",
+  "ruleVersion": "P1.2-simulator-4",
   "geometry": { "length": 5, "width": 5, "height": 5 },
   "config": { "actualColdIn": 0, "actualHotOut": 200 },
   "layout": { "matrix": [["fuel","fuel","fuel"],["fuel","fuel","fuel"],["fuel","fuel","fuel"]] },

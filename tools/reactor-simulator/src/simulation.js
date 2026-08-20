@@ -95,7 +95,61 @@ export function getColumn(snapshot, key) {
 }
 
 export function isEffectiveFuel(column) {
-  return column?.type === "fuel" && column.fuelRemaining > EPSILON && column.integrity > EPSILON;
+  return column?.type === "fuel" && column.fuelRemaining > EPSILON;
+}
+
+function prepareScram(snapshot, runtime = {}) {
+  const previous = cloneSnapshot(snapshot);
+  const controlRods = previous.columns.filter((column) => column.type === "control_rod");
+  const scramAvailable = controlRods.length > 0;
+  const requested = Boolean(runtime.scramRequested ?? runtime.scram);
+  if (requested && !scramAvailable) {
+    return {
+      snapshot: previous,
+      runtime: {
+        ...runtime,
+        scram: false,
+        scramRequested: false,
+        scramActive: false,
+        scramAvailable: false,
+        scramSavedDepths: null,
+        scramReason: "SCRAM_UNAVAILABLE_NO_CONTROL_RODS",
+      },
+    };
+  }
+  const scramActive = requested && scramAvailable;
+  let scramSavedDepths = runtime.scramSavedDepths ?? null;
+  if (scramActive && !runtime.scramActive) {
+    scramSavedDepths = Object.fromEntries(controlRods
+      .filter((column) => !column.jammed)
+      .map((column) => [column.key, column.depth]));
+  }
+  if (scramActive) {
+    previous.columns = previous.columns.map((column) =>
+      column.type === "control_rod" && !column.jammed ? { ...column, depth: 1 } : column);
+  } else if (runtime.scramActive && scramSavedDepths) {
+    previous.columns = previous.columns.map((column) =>
+      column.type === "control_rod" && !column.jammed && Number.isFinite(scramSavedDepths[column.key])
+        ? { ...column, depth: clamp01(scramSavedDepths[column.key]) }
+        : column);
+    scramSavedDepths = null;
+  }
+  return {
+    snapshot: previous,
+    runtime: {
+      ...runtime,
+      scram: scramActive,
+      scramRequested: scramActive,
+      scramActive,
+      scramAvailable,
+      scramSavedDepths: scramActive ? scramSavedDepths : null,
+      scramReason: null,
+    },
+  };
+}
+
+export function setScramRequest(snapshot, runtime = {}, requested) {
+  return prepareScram(snapshot, { ...runtime, scramRequested: Boolean(requested) });
 }
 
 function effectiveControlDepth(column) {
@@ -178,21 +232,19 @@ function allocateCooling(generatedHeat, thermal, budget) {
 }
 
 function portLedger(config, availableHeat, snapshot, geometry, layout) {
-  const coldPortFlowCap = Math.min(config.coldPortCount * config.coolantMaxFlowPerPort,
-    config.coolantTotalFlowCap);
-  const hotPortFlowCap = Math.min(config.hotPortCount * config.coolantMaxFlowPerPort,
-    config.coolantTotalFlowCap);
+  const coldPortFlowCap = config.coldPortCount * config.coolantMaxFlowPerPort;
+  const hotPortFlowCap = config.hotPortCount * config.coolantMaxFlowPerPort;
   const totalCapacity = coolantTotalCapacityMb(geometry, layout);
   const previousCold = Math.max(0, Math.min(totalCapacity, Number(snapshot.coldCoolantMb ?? totalCapacity)));
   const previousHot = Math.max(0, Math.min(totalCapacity - previousCold, Number(snapshot.hotCoolantMb ?? 0)));
-  const inputFlowCap = Math.min(config.actualColdIn, coldPortFlowCap, config.coolantTotalFlowCap);
-  const outputFlowCap = Math.min(config.actualHotOut, hotPortFlowCap, config.coolantTotalFlowCap);
+  const inputFlowCap = Math.min(config.actualColdIn, coldPortFlowCap);
+  const outputFlowCap = Math.min(config.actualHotOut, hotPortFlowCap);
   const hotOutputBeforeConversion = Math.min(previousHot, outputFlowCap);
   const freeCapacityAfterOutput = Math.max(0, totalCapacity - previousCold - previousHot + hotOutputBeforeConversion);
   const coldInAccepted = Math.min(inputFlowCap, freeCapacityAfterOutput);
   const coldPool = previousCold + coldInAccepted;
   const heatLimitedMb = availableHeat / config.coolantAbsorptionHuPerMb;
-  const conversionFlowCap = Math.min(coldPortFlowCap, hotPortFlowCap, config.coolantTotalFlowCap);
+  const conversionFlowCap = Math.min(coldPortFlowCap, hotPortFlowCap);
   const maxConverted = Math.max(0, Math.min(
     coldPool,
     conversionFlowCap,
@@ -207,7 +259,6 @@ function portLedger(config, availableHeat, snapshot, geometry, layout) {
     { key: "coldPool", label: "反应堆内冷却剂库存", value: coldPool },
     { key: "coldPortFlowCap", label: "冷端口数量/单端口上限", value: coldPortFlowCap },
     { key: "hotPortFlowCap", label: "热端口数量/单端口上限", value: hotPortFlowCap },
-    { key: "coolantTotalFlowCap", label: "全堆总流量上限", value: config.coolantTotalFlowCap },
     { key: "heatLimitedMb", label: "可用热量", value: heatLimitedMb },
   ];
   const bottlenecks = availableHeat <= EPSILON
@@ -245,11 +296,13 @@ function makeColumnResult(column, details) {
 }
 
 export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
-  const previous = cloneSnapshot(snapshot);
+  const prepared = prepareScram(snapshot, runtime);
+  const previous = prepared.snapshot;
+  const currentRuntime = prepared.runtime;
   const columns = sortedColumns(previous);
   const byKey = new Map(columns.map((column) => [column.key, column]));
   const { height } = internalDimensions(geometry);
-  const active = runtime.running !== false && !runtime.scram && !previous.meltdownMelted;
+  const active = currentRuntime.running !== false && !previous.meltdownMelted;
   const effectiveFuel = new Map(columns.map((column) => [column.key, isEffectiveFuel(column)]));
   const controlledIntensity = new Map();
   const overclocked = new Map();
@@ -275,9 +328,9 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
   const burnIntensity = new Map();
   for (const column of columns) {
     if (!effectiveFuel.get(column.key)) continue;
-    const initial = overclocked.get(column.key) && active ? 1 : controlledIntensity.get(column.key);
+    const initial = controlledIntensity.get(column.key);
     heatIntensity.set(column.key, initial);
-    burnIntensity.set(column.key, overclocked.get(column.key) && active ? 1 : controlledIntensity.get(column.key));
+    burnIntensity.set(column.key, initial);
   }
 
   let converged = true;
@@ -299,8 +352,9 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
           .reduce((sum, neighbor) => sum + (heatIntensity.get(neighbor.key) ?? 1), 0);
         const activation = clamp01(1 - Math.exp(-config.overclockFeedbackGain
           * Math.pow(Math.max(0, signal), config.overclockFeedbackExponent)));
-        nextHeat.set(column.key, 1 + (config.overclockHeatMultiplier - 1) * activation);
-        nextBurn.set(column.key, 1 + (config.overclockBurnMultiplier - 1) * activation);
+        const controlFactor = controlledIntensity.get(column.key) ?? 0;
+        nextHeat.set(column.key, controlFactor * (1 + (config.overclockHeatMultiplier - 1) * activation));
+        nextBurn.set(column.key, controlFactor * (1 + (config.overclockBurnMultiplier - 1) * activation));
       }
       const largestDelta = [...heatIntensity.keys()].reduce((largest, key) => Math.max(
         largest,
@@ -324,7 +378,7 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
       nextSnapshot: failed,
       converged: false,
       iterations,
-      runtime: { ...runtime, running: false },
+      runtime: { ...currentRuntime, running: false },
       summary: summarizeSnapshot(failed, null, config, geometry),
       columns: {},
       warnings: [failed.simulationFailed],
@@ -374,8 +428,8 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
   const propagationHeat = new Map();
   const sourceTransfer = new Map();
   for (const source of columns) {
-    if (source.type !== "fuel" || source.integrity > EPSILON || source.cachedHeat <= EPSILON) continue;
-    const residual = Math.max(0, source.cachedHeat - (currentRemoval.get(source.key) ?? 0));
+    if (source.type !== "fuel" || !effectiveFuel.get(source.key) || source.integrity > EPSILON) continue;
+    const residual = Math.max(0, (generatedHeat.get(source.key) ?? 0) + source.cachedHeat);
     const targets = neighborColumns(layout, previous, source).filter((target) =>
       target.type === "control_rod" || effectiveFuel.get(target.key) === true);
     if (targets.length === 0) continue;
@@ -484,7 +538,7 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
   let meltdownTriggered = previous.meltdownTriggered || meltdownDanger;
   let meltdownProgress = previous.meltdownProgress;
   const coolingEffective = removedHeat > EPSILON;
-  const pauseCountdown = runtime.scram === true && coolingEffective;
+  const pauseCountdown = currentRuntime.scramActive === true && coolingEffective;
   if (meltdownDanger && !pauseCountdown) {
     meltdownProgress = Math.min(config.meltdownCountdownTicks, meltdownProgress + 1);
   }
@@ -529,11 +583,20 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
   summary.propagationCoverage = coverage;
   summary.meltdownDanger = meltdownDanger;
   summary.countdownPaused = meltdownDanger && pauseCountdown;
+  summary.scramAvailable = currentRuntime.scramAvailable === true;
+  summary.scramRequested = currentRuntime.scramRequested === true;
+  summary.scramActive = currentRuntime.scramActive === true;
+  summary.scramReason = currentRuntime.scramReason ?? null;
+  summary.scramIncomplete = summary.scramActive && totalGeneratedHeat > EPSILON;
   summary.ruleConverged = true;
   summary.iterations = iterations;
   summary.ports = { ...ports, coldInAccepted: ports.coldInAccepted, hotOutActual };
   summary.bottlenecks = ports.bottlenecks;
-  summary.runtime = { ...runtime, running: runtime.running !== false && !nextSnapshot.meltdownMelted };
+  summary.runtime = {
+    ...currentRuntime,
+    running: currentRuntime.running !== false && !nextSnapshot.meltdownMelted,
+    coolingEffective,
+  };
 
   return {
     nextSnapshot,
@@ -586,9 +649,15 @@ export function summarizeSnapshot(snapshot, resultColumns, config, geometry) {
 
 export function buildWarnings(summary, resultColumns, config) {
   const warnings = [];
+  if (summary.scramReason === "SCRAM_UNAVAILABLE_NO_CONTROL_RODS") {
+    warnings.push("SCRAM_UNAVAILABLE_NO_CONTROL_RODS：当前布局没有控制棒列，SCRAM 请求已原子拒绝");
+  }
+  if (summary.scramIncomplete) {
+    warnings.push("SCRAM_INCOMPLETE：SCRAM 已建立，但仍存在裂变产热；卡死控制棒或燃料超频簇未被停堆请求切断");
+  }
   const overclocked = Object.values(resultColumns).filter((column) => column.overclocked);
   if (overclocked.length > 0) {
-    warnings.push(`超频簇：${overclocked.map((column) => `[${column.x},${column.z}]`).join("、")}；控制棒深度不参与该簇反馈`);
+    warnings.push(`超频簇：${overclocked.map((column) => `[${column.x},${column.z}]`).join("、")}；控制棒深度作为该簇功率门控`);
   }
   if (summary.ports && summary.generatedHeat > 0) {
     for (const bottleneck of summary.bottlenecks ?? []) {
@@ -625,9 +694,9 @@ export function statusLabel(snapshot, runtime, config) {
   if (snapshot.simulationFailed) return "规则失败";
   if (snapshot.meltdownMelted) return "已融毁";
   if (snapshot.meltdownTriggered && snapshot.meltdownProgress >= config.meltdownCountdownTicks) return "已融毁";
-  if (snapshot.meltdownTriggered && (runtime?.scram || runtime?.coolingEffective)) return "暂停倒计时";
+  if (snapshot.meltdownTriggered && (runtime?.scramActive || runtime?.coolingEffective)) return "暂停倒计时";
   if (snapshot.meltdownTriggered) return "融毁倒计时";
-  if (runtime?.scram) return "SCRAM";
+  if (runtime?.scramActive) return "SCRAM";
   if (runtime?.running) return "运行";
   return "暂停";
 }

@@ -37,6 +37,11 @@
             <label>宽 <span class="unit">方块</span><input id="width-input" type="number" min="3" max="31" step="1" value="5"></label>
             <label>高 <span class="unit">方块</span><input id="height-input" type="number" min="3" max="31" step="1" value="5"></label>
           </div>
+          <div class="form-grid">
+            <label>冷端口数量 <span class="unit">个</span><input id="cold-port-count-input" type="number" min="0" max="100" step="1" value="2"></label>
+            <label>热端口数量 <span class="unit">个</span><input id="hot-port-count-input" type="number" min="0" max="100" step="1" value="2"></label>
+          </div>
+          <p class="field-hint">端口理论能力 = 数量 × 单端口上限；本 tick 实际输入/接收仍可在参数区单独限制。</p>
           <p id="dimension-hint" class="field-hint">有效横截面 3 × 3 · 有效高度 3 · 有效列数 9</p>
           <div class="form-grid">
             <label class="checkbox-label"><input id="initial-running" type="checkbox"> 初始允许运行</label>
@@ -46,7 +51,7 @@
             <button id="apply-reset" class="button primary" type="button">应用并重置</button>
             <button id="reset-defaults" class="button secondary" type="button">恢复工具默认</button>
           </div>
-          <p class="microcopy">修改尺寸、布局或参数后，必须点击“应用并重置”才会进入求解器。运行中修改会先暂停。</p>
+          <p class="microcopy">修改尺寸、布局或参数后，必须点击“应用并重置”才会进入求解器；已应用布局中的控制棒深度可实时调整。运行中修改布局或参数会先暂停。</p>
         </article>
 
         <article class="panel layout-panel">
@@ -68,6 +73,7 @@
             <label class="palette-option fuel-option"><input type="radio" name="brush" value="fuel" checked><span class="swatch fuel-swatch"></span>燃料列</label>
             <label class="palette-option rod-option"><input type="radio" name="brush" value="control_rod"><span class="swatch rod-swatch"></span>控制棒列</label>
             <label class="palette-option empty-option"><input type="radio" name="brush" value="empty"><span class="swatch empty-swatch"></span>空列</label>
+            <button id="stop-painting" class="button tiny secondary" type="button">停止刷涂（Esc）</button>
           </div>
           <div id="core-grid" class="core-grid" role="grid" aria-label="可编辑堆芯布局"></div>
           <p id="layout-errors" class="field-error" role="alert"></p>
@@ -108,6 +114,7 @@
         </div>
         <div class="scram-strip">
           <label class="scram-toggle"><input id="scram-toggle" type="checkbox"><span>SCRAM</span></label>
+          <span id="scram-message" role="status">SCRAM 可用性检查中。</span>
           <span>高电平期间仍会保留余热；有效冷却可暂停融毁倒计时，但不能回退。</span>
         </div>
       </section>

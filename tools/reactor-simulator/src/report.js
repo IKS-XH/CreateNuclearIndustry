@@ -41,7 +41,7 @@ export function buildScene({
     toolVersion: TOOL_VERSION,
     ruleVersion: RULE_VERSION,
     geometry: clone(geometry),
-    config: clone(config),
+    config: cloneConfig(config),
     layout: { matrix: clone(layout) },
     controlRodDepths: clone(controlRodDepths),
     initialState: {
@@ -116,7 +116,9 @@ export function parseSceneText(text, fallback = {}) {
 
 function csvCell(value) {
   if (value == null) return "";
-  const text = typeof value === "number" ? String(value) : String(value);
+  const text = typeof value === "number"
+    ? value.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 20 })
+    : String(value);
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
