@@ -11,6 +11,7 @@ import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeBlockEntities;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeContent;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeFluids;
 import com.iksxh.create_nuclear_industry.p0probe.events.P0ProbeEvents;
+import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -35,6 +36,7 @@ public final class CreateNuclearIndustry {
         P0ProbeBlockEntities.register(modEventBus);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
+        NeoForge.EVENT_BUS.register(ReactorStructureLifecycle.class);
     }
 
     private static void registerP0Capabilities(RegisterCapabilitiesEvent event) {

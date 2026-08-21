@@ -390,5 +390,9 @@ public final class ReactorStructureDefinition {
         private static ScanResult invalid(String reason) {
             return new ScanResult(false, reason, Map.of(), Map.of());
         }
+
+        public static ScanResult notScanned() {
+            return invalid("structure has not been scanned");
+        }
     }
 }
