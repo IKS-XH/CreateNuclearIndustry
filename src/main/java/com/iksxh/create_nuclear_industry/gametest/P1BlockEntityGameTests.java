@@ -1,9 +1,15 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.blockentity.ControlRodDriveBlockEntity;
+import com.iksxh.create_nuclear_industry.blockentity.P1MinimalBlockEntity;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
+import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
+import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
+import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
+import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
+import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.gametest.framework.GameTest;
@@ -11,6 +17,8 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+
+import java.util.Map;
 
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
@@ -47,11 +55,61 @@ public final class P1BlockEntityGameTests {
             roundTrip(helper, hotEntity);
             roundTrip(helper, refuelingEntity);
             roundTrip(helper, driveEntity);
+
+            ReactorSnapshot expected = fixtureSnapshot();
+            instrumentEntity.setSnapshot(expected);
+            require(helper, instrumentEntity.snapshot().equals(expected),
+                    "instrument port did not expose its server snapshot");
+
+            CompoundTag saved = instrumentEntity.saveForServerTest(helper.getLevel().registryAccess());
+            require(helper, saved.contains("ReactorSnapshot"),
+                    "instrument port did not persist the reactor snapshot");
+            require(helper, saved.getCompound("ReactorSnapshot").getInt("FormatVersion") == 1,
+                    "instrument port persisted an unexpected snapshot format");
+
+            ReactorInstrumentPortBlockEntity reloaded = new ReactorInstrumentPortBlockEntity(
+                    helper.absolutePos(instrument),
+                    P1Blocks.REACTOR_INSTRUMENT_PORT.get().defaultBlockState());
+            reloaded.loadForServerTest(saved, helper.getLevel().registryAccess());
+            require(helper, reloaded.snapshot().equals(expected),
+                    "instrument port snapshot did not survive a server reload round-trip");
+
+            CompoundTag updateTag = instrumentEntity.getUpdateTag(helper.getLevel().registryAccess());
+            instrumentEntity.setSnapshot(ReactorSnapshot.empty());
+            instrumentEntity.handleUpdateTag(updateTag, helper.getLevel().registryAccess());
+            require(helper, instrumentEntity.snapshot().equals(expected),
+                    "instrument port snapshot did not restore from its update tag");
+
+            require(helper, coldEntity.readAuthoritativeSnapshot(instrumentEntity) == instrumentEntity.snapshot(),
+                    "cold port did not read the instrument owner");
+            require(helper, hotEntity.readAuthoritativeSnapshot(instrumentEntity) == instrumentEntity.snapshot(),
+                    "hot port did not read the instrument owner");
+            require(helper, refuelingEntity.readAuthoritativeSnapshot(instrumentEntity) == instrumentEntity.snapshot(),
+                    "refueling port did not read the instrument owner");
+            require(helper, driveEntity.readAuthoritativeSnapshot(instrumentEntity) == instrumentEntity.snapshot(),
+                    "control rod drive did not read the instrument owner");
             helper.succeed();
         });
     }
 
-    private static void roundTrip(GameTestHelper helper, com.iksxh.create_nuclear_industry.blockentity.P1MinimalBlockEntity entity) {
+    private static ReactorSnapshot fixtureSnapshot() {
+        return new ReactorSnapshot(
+                Map.of(
+                        new CoreColumnPosition(0, 0),
+                        new FuelColumnState(FuelAssemblyState.installed(216_000, 12_345), 0.72D, 18.5D)
+                ),
+                Map.of(
+                        new CoreColumnPosition(1, 1),
+                        new ControlRodColumnState(0.91D, 0.63D, 0.48D, false, 4.25D)
+                ),
+                4_096L,
+                512L,
+                27L,
+                true
+        );
+    }
+
+    private static void roundTrip(GameTestHelper helper, P1MinimalBlockEntity entity) {
         CompoundTag saved = entity.saveForServerTest(helper.getLevel().registryAccess());
         require(helper, saved.getInt("P1DataVersion") == 1,
                 "P1 block entity did not write its persistence version");

@@ -35,13 +35,19 @@ class P1BlockEntityRegistrationContractTest {
         String port = readSource("com/iksxh/create_nuclear_industry/blockentity/ReactorPortBlockEntity.java");
         String drive = readSource("com/iksxh/create_nuclear_industry/blockentity/ControlRodDriveBlockEntity.java");
 
-        assertTrue(instrument.contains("Sole future owner"));
+        assertTrue(instrument.contains("Sole authoritative owner"));
+        assertTrue(instrument.contains("private ReactorSnapshot snapshot"));
+        assertTrue(instrument.contains("ReactorSnapshotNbtCodec"));
+        assertTrue(instrument.contains("getUpdatePacket"));
+        assertTrue(port.contains("readAuthoritativeSnapshot"));
+        assertTrue(drive.contains("readAuthoritativeSnapshot"));
         for (String source : new String[]{port, drive}) {
             assertFalse(source.contains("Fuel"));
             assertFalse(source.contains("Integrity"));
             assertFalse(source.contains("Temperature"));
             assertFalse(source.contains("Coolant"));
             assertFalse(source.contains("Simulation"));
+            assertFalse(source.contains("private ReactorSnapshot"));
         }
     }
 
