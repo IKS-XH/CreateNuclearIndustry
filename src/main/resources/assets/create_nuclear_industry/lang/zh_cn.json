@@ -23,5 +23,13 @@
   "item.create_nuclear_industry.control_rod": "控制棒组件",
   "item.create_nuclear_industry.steel_plate": "合金钢板",
   "fluid_type.create_nuclear_industry.compound_coolant": "复合冷却剂",
-  "fluid_type.create_nuclear_industry.hot_compound_coolant": "热复合冷却剂"
+  "fluid_type.create_nuclear_industry.hot_compound_coolant": "热复合冷却剂",
+  "message.create_nuclear_industry.reactor_structure.valid": "实验反应堆已成型：燃料列 %s，控制棒列 %s，空列 %s，冷端 %s，热端 %s",
+  "message.create_nuclear_industry.reactor_structure.structure_blocks": "实验反应堆未成型：结构方块或外壳错误",
+  "message.create_nuclear_industry.reactor_structure.instrument_port": "实验反应堆未成型：仪表端口数量或位置错误",
+  "message.create_nuclear_industry.reactor_structure.missing_cold_port": "实验反应堆未成型：至少需要一个冷端口",
+  "message.create_nuclear_industry.reactor_structure.missing_hot_port": "实验反应堆未成型：至少需要一个热端口",
+  "message.create_nuclear_industry.reactor_structure.column_layout": "实验反应堆未成型：燃料列、控制棒列或空列的内部/顶盖不匹配",
+  "message.create_nuclear_industry.reactor_structure.no_fuel": "实验反应堆未成型：至少需要一个燃料列",
+  "message.create_nuclear_industry.reactor_structure.generic_failure": "实验反应堆未成型：无法确定结构候选，请检查仪表端口附近结构"
 }

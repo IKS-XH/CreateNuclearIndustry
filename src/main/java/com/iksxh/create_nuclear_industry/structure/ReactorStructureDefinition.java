@@ -162,31 +162,49 @@ public final class ReactorStructureDefinition {
      */
     public static ScanResult scan(Map<LocalPosition, String> blocks) {
         if (blocks == null) {
-            return ScanResult.invalid("block snapshot is required");
+            return ScanResult.invalid(DiagnosticCode.GENERIC_FAILURE, "block snapshot is required");
         }
 
         TreeSet<LocalPosition> missing = new TreeSet<>(ALL_POSITIONS);
         missing.removeAll(blocks.keySet());
         if (!missing.isEmpty()) {
-            return ScanResult.invalid("missing structure coordinate " + missing.first());
+            return ScanResult.invalid(DiagnosticCode.STRUCTURE_BLOCKS,
+                    "missing structure coordinate " + missing.first());
         }
 
         TreeSet<LocalPosition> extra = new TreeSet<>(blocks.keySet());
         extra.removeAll(ALL_POSITIONS);
         if (!extra.isEmpty()) {
-            return ScanResult.invalid("extra structure coordinate " + extra.first());
+            return ScanResult.invalid(DiagnosticCode.STRUCTURE_BLOCKS,
+                    "extra structure coordinate " + extra.first());
         }
 
         for (Map.Entry<LocalPosition, String> entry : blocks.entrySet()) {
             if (entry.getValue() == null || entry.getValue().isBlank()) {
-                return ScanResult.invalid("blank block ID at " + entry.getKey());
+                return ScanResult.invalid(DiagnosticCode.STRUCTURE_BLOCKS,
+                        "blank block ID at " + entry.getKey());
+            }
+        }
+
+        for (Map.Entry<LocalPosition, String> entry : blocks.entrySet()) {
+            if (!SIDE_PORT_SLOTS.contains(entry.getKey()) && isPortId(entry.getValue())) {
+                String expected = id(P1ContentIds.REACTOR_CASING_ID);
+                DiagnosticCode code = entry.getValue().equals(id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID))
+                        ? DiagnosticCode.INSTRUMENT_PORT
+                        : DiagnosticCode.STRUCTURE_BLOCKS;
+                return ScanResult.invalid(code, "expected " + expected + " at " + entry.getKey()
+                        + ", found " + entry.getValue());
             }
         }
 
         for (Map.Entry<LocalPosition, String> entry : FIXED_BLOCKS.entrySet()) {
             String actual = blocks.get(entry.getKey());
             if (!entry.getValue().equals(actual)) {
-                return ScanResult.invalid("expected " + entry.getValue() + " at " + entry.getKey()
+                DiagnosticCode code = isPortId(actual)
+                        && actual.equals(id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID))
+                        ? DiagnosticCode.INSTRUMENT_PORT
+                        : DiagnosticCode.STRUCTURE_BLOCKS;
+                return ScanResult.invalid(code, "expected " + entry.getValue() + " at " + entry.getKey()
                         + ", found " + actual);
             }
         }
@@ -205,17 +223,21 @@ public final class ReactorStructureDefinition {
                 ports.get(PortType.HOT_COOLANT).add(position);
             } else if (!actual.equals(id(P1ContentIds.REACTOR_CASING_ID))
                     && !actual.equals(id(P1ContentIds.REACTOR_WINDOW_ID))) {
-                return ScanResult.invalid("invalid side slot block " + actual + " at " + position);
+                return ScanResult.invalid(DiagnosticCode.STRUCTURE_BLOCKS,
+                        "invalid side slot block " + actual + " at " + position);
             }
         }
         if (ports.get(PortType.INSTRUMENT).size() != 1) {
-            return ScanResult.invalid("reactor requires exactly one instrument port");
+            return ScanResult.invalid(DiagnosticCode.INSTRUMENT_PORT,
+                    "reactor requires exactly one instrument port");
         }
         if (ports.get(PortType.COLD_COOLANT).isEmpty()) {
-            return ScanResult.invalid("reactor requires at least one cold coolant port");
+            return ScanResult.invalid(DiagnosticCode.MISSING_COLD_PORT,
+                    "reactor requires at least one cold coolant port");
         }
         if (ports.get(PortType.HOT_COOLANT).isEmpty()) {
-            return ScanResult.invalid("reactor requires at least one hot coolant port");
+            return ScanResult.invalid(DiagnosticCode.MISSING_HOT_PORT,
+                    "reactor requires at least one hot coolant port");
         }
 
         TreeMap<CoreColumnPosition, ColumnMapping> columns = new TreeMap<>();
@@ -243,7 +265,8 @@ public final class ReactorStructureDefinition {
                         bodyId = AIR_ID;
                     }
                     default -> {
-                        return ScanResult.invalid("invalid core cap " + capId + " at " + cap);
+                        return ScanResult.invalid(DiagnosticCode.COLUMN_LAYOUT,
+                                "invalid core cap " + capId + " at " + cap);
                     }
                 }
 
@@ -252,8 +275,9 @@ public final class ReactorStructureDefinition {
                     LocalPosition body = new LocalPosition(localX, y, localZ);
                     bodyPositions.add(body);
                     if (!bodyId.equals(blocks.get(body))) {
-                        return ScanResult.invalid("invalid " + type + " body at " + body
-                                + ", expected " + bodyId + ", found " + blocks.get(body));
+                        return ScanResult.invalid(DiagnosticCode.COLUMN_LAYOUT,
+                                "invalid " + type + " body at " + body
+                                        + ", expected " + bodyId + ", found " + blocks.get(body));
                     }
                 }
                 if (type == ColumnType.FUEL) {
@@ -264,9 +288,16 @@ public final class ReactorStructureDefinition {
         }
 
         if (fuelCount == 0) {
-            return ScanResult.invalid("reactor must contain at least one fuel column");
+            return ScanResult.invalid(DiagnosticCode.NO_FUEL,
+                    "reactor must contain at least one fuel column");
         }
         return ScanResult.valid(columns, ports);
+    }
+
+    private static boolean isPortId(String id) {
+        return id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID).equals(id)
+                || id(P1ContentIds.REACTOR_COLD_PORT_ID).equals(id)
+                || id(P1ContentIds.REACTOR_HOT_PORT_ID).equals(id);
     }
 
     private static String id(String path) {
@@ -327,6 +358,27 @@ public final class ReactorStructureDefinition {
         HOT_COOLANT
     }
 
+    public enum DiagnosticCode {
+        VALID("valid"),
+        STRUCTURE_BLOCKS("structure_blocks"),
+        INSTRUMENT_PORT("instrument_port"),
+        MISSING_COLD_PORT("missing_cold_port"),
+        MISSING_HOT_PORT("missing_hot_port"),
+        COLUMN_LAYOUT("column_layout"),
+        NO_FUEL("no_fuel"),
+        GENERIC_FAILURE("generic_failure");
+
+        private final String translationSuffix;
+
+        DiagnosticCode(String translationSuffix) {
+            this.translationSuffix = translationSuffix;
+        }
+
+        public String translationKey() {
+            return "message.create_nuclear_industry.reactor_structure." + translationSuffix;
+        }
+    }
+
     public enum ColumnType {
         EMPTY,
         FUEL,
@@ -368,10 +420,14 @@ public final class ReactorStructureDefinition {
     public record ScanResult(
             boolean valid,
             String failureReason,
+            DiagnosticCode diagnosticCode,
             Map<CoreColumnPosition, ColumnMapping> columns,
             Map<PortType, List<LocalPosition>> ports
     ) {
         public ScanResult {
+            if (diagnosticCode == null) {
+                throw new IllegalArgumentException("structure diagnostic code is required");
+            }
             columns = Collections.unmodifiableMap(new TreeMap<>(columns));
             EnumMap<PortType, List<LocalPosition>> copiedPorts = new EnumMap<>(PortType.class);
             for (Map.Entry<PortType, List<LocalPosition>> entry : ports.entrySet()) {
@@ -384,15 +440,15 @@ public final class ReactorStructureDefinition {
                 Map<CoreColumnPosition, ColumnMapping> columns,
                 Map<PortType, List<LocalPosition>> ports
         ) {
-            return new ScanResult(true, "", columns, ports);
+            return new ScanResult(true, "", DiagnosticCode.VALID, columns, ports);
         }
 
-        private static ScanResult invalid(String reason) {
-            return new ScanResult(false, reason, Map.of(), Map.of());
+        private static ScanResult invalid(DiagnosticCode diagnosticCode, String reason) {
+            return new ScanResult(false, reason, diagnosticCode, Map.of(), Map.of());
         }
 
         public static ScanResult notScanned() {
-            return invalid("structure has not been scanned");
+            return invalid(DiagnosticCode.GENERIC_FAILURE, "structure has not been scanned");
         }
     }
 }

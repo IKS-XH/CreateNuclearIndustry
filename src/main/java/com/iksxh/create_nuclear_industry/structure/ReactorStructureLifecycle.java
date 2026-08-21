@@ -74,10 +74,19 @@ public final class ReactorStructureLifecycle {
     }
 
     /** Performs the explicit scan requested by a Create wrench on the instrument port. */
-    public static void rescanInstrumentPortNow(Level level, BlockPos instrumentPortPos) {
-        if (level == null || level.isClientSide || instrumentPortPos == null) {
-            return;
+    public static ReactorStructureScanner.WorldScanResult rescanInstrumentPortNow(
+            Level level,
+            BlockPos instrumentPortPos
+    ) {
+        if (!(level instanceof ServerLevel serverLevel) || instrumentPortPos == null) {
+            return null;
         }
-        ReactorStructureScanner.rescanAround(level, instrumentPortPos);
+        ReactorStructureScanner.WorldScanResult scan =
+                ReactorStructureScanner.scanInstrumentPort(serverLevel, instrumentPortPos);
+        if (serverLevel.getBlockEntity(instrumentPortPos)
+                instanceof com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity instrument) {
+            instrument.updateStructureCache(scan);
+        }
+        return scan;
     }
 }

@@ -8,7 +8,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /** Adapts the loader-independent reactor contract to a live Minecraft level. */
@@ -24,13 +26,15 @@ public final class ReactorStructureScanner {
      */
     public static WorldScanResult scanInstrumentPort(Level level, BlockPos instrumentPortPos) {
         if (level == null || instrumentPortPos == null) {
-            return WorldScanResult.invalid("level and instrument position are required");
+            return WorldScanResult.invalid(ReactorStructureDefinition.DiagnosticCode.GENERIC_FAILURE,
+                    "level and instrument position are required");
         }
         if (!INSTRUMENT_ID.equals(blockId(level, instrumentPortPos))) {
-            return WorldScanResult.invalid("instrument port is not present at " + instrumentPortPos);
+            return WorldScanResult.invalid(ReactorStructureDefinition.DiagnosticCode.INSTRUMENT_PORT,
+                    "instrument port is not present at " + instrumentPortPos);
         }
 
-        WorldScanResult firstFailure = null;
+        List<CandidateFailure> failures = new ArrayList<>();
         for (LocalPosition instrumentSlot : ReactorStructureDefinition.sidePortSlots()) {
             BlockPos origin = instrumentPortPos.offset(-instrumentSlot.x(), -instrumentSlot.y(), -instrumentSlot.z());
             Map<LocalPosition, String> blocks = readCandidate(level, origin);
@@ -39,13 +43,28 @@ public final class ReactorStructureScanner {
             if (result.valid()) {
                 return result;
             }
-            if (firstFailure == null) {
-                firstFailure = result;
+            failures.add(new CandidateFailure(result, structuralEvidence(blocks)));
+        }
+        if (failures.isEmpty()) {
+            return WorldScanResult.invalid(ReactorStructureDefinition.DiagnosticCode.GENERIC_FAILURE,
+                    "no legal instrument slot was tested");
+        }
+
+        CandidateFailure best = null;
+        boolean tied = false;
+        for (CandidateFailure failure : failures) {
+            if (best == null || failure.evidenceScore() > best.evidenceScore()) {
+                best = failure;
+                tied = false;
+            } else if (failure.evidenceScore() == best.evidenceScore()) {
+                tied = true;
             }
         }
-        return firstFailure == null
-                ? WorldScanResult.invalid("no legal instrument slot was tested")
-                : firstFailure;
+        if (best == null || tied || best.evidenceScore() == 0) {
+            return WorldScanResult.invalid(ReactorStructureDefinition.DiagnosticCode.GENERIC_FAILURE,
+                    "unable to determine a unique reactor structure candidate");
+        }
+        return best.result();
     }
 
     /** Scans every instrument port within the only distance a fixed structure can cover. */
@@ -89,6 +108,27 @@ public final class ReactorStructureScanner {
         return key == null ? "" : key.toString();
     }
 
+    private static int structuralEvidence(Map<LocalPosition, String> blocks) {
+        int evidence = 0;
+        for (String blockId : blocks.values()) {
+            if (isReactorComponent(blockId)) {
+                evidence++;
+            }
+        }
+        return evidence;
+    }
+
+    private static boolean isReactorComponent(String blockId) {
+        return blockId.equals(id(P1ContentIds.REACTOR_CASING_ID))
+                || blockId.equals(id(P1ContentIds.REACTOR_WINDOW_ID))
+                || blockId.equals(id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID))
+                || blockId.equals(id(P1ContentIds.REACTOR_COLD_PORT_ID))
+                || blockId.equals(id(P1ContentIds.REACTOR_HOT_PORT_ID))
+                || blockId.equals(id(P1ContentIds.REACTOR_REFUELING_PORT_ID))
+                || blockId.equals(id(P1ContentIds.REACTOR_FUEL_ROD_ID))
+                || blockId.equals(id(P1ContentIds.CONTROL_ROD_DRIVE_ID));
+    }
+
     private static String id(String path) {
         return "create_nuclear_industry:" + path;
     }
@@ -112,9 +152,20 @@ public final class ReactorStructureScanner {
             return contract.failureReason();
         }
 
-        private static WorldScanResult invalid(String reason) {
-            return new WorldScanResult(null,
-                    new ReactorStructureDefinition.ScanResult(false, reason, Map.of(), Map.of()));
+        public ReactorStructureDefinition.DiagnosticCode diagnosticCode() {
+            return contract.diagnosticCode();
         }
+
+        private static WorldScanResult invalid(
+                ReactorStructureDefinition.DiagnosticCode diagnosticCode,
+                String reason
+        ) {
+            return new WorldScanResult(null,
+                    new ReactorStructureDefinition.ScanResult(
+                            false, reason, diagnosticCode, Map.of(), Map.of()));
+        }
+    }
+
+    private record CandidateFailure(WorldScanResult result, int evidenceScore) {
     }
 }

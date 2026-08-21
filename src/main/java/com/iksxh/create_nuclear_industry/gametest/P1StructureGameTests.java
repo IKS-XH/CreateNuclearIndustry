@@ -9,7 +9,7 @@ import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
 import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
-import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
+import com.iksxh.create_nuclear_industry.structure.ReactorStructureDiagnostics;
 import com.simibubi.create.AllItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -165,6 +165,106 @@ public final class P1StructureGameTests {
         });
     }
 
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void wrenchFeedbackReportsCountsAndStableFailureCodes(GameTestHelper helper) {
+        buildCanonicalStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            ReactorStructureDefinition.ScanResult initial = instrument.structureScan();
+            require(helper, initial.valid(), "canonical structure was not valid before wrench feedback test");
+            require(helper, initial.diagnosticCode() == ReactorStructureDefinition.DiagnosticCode.VALID,
+                    "valid scan did not expose the success diagnostic code");
+            require(helper, initial.columns().values().stream()
+                            .filter(column -> column.type() == ReactorStructureDefinition.ColumnType.FUEL).count() == 8,
+                    "success scan did not count eight fuel columns");
+            require(helper, initial.columns().values().stream()
+                            .filter(column -> column.type() == ReactorStructureDefinition.ColumnType.EMPTY).count() == 1,
+                    "success scan did not count one empty column");
+            require(helper, initial.ports().get(ReactorStructureDefinition.PortType.COLD_COOLANT).size() == 1,
+                    "success scan did not count the cold port");
+            require(helper, initial.ports().get(ReactorStructureDefinition.PortType.HOT_COOLANT).size() == 1,
+                    "success scan did not count the hot port");
+            require(helper, ReactorStructureDiagnostics.message(initial) != null,
+                    "success scan did not produce a translated feedback component");
+
+            ReactorSnapshot expected = fixtureSnapshot();
+            instrument.setSnapshot(expected);
+            Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+            ItemStack wrench = AllItems.WRENCH.asStack();
+
+            helper.setBlock(OUTER_CASING, Blocks.AIR.defaultBlockState());
+            wrench(helper, player, wrench);
+            require(helper, instrument.structureScan().diagnosticCode()
+                            == ReactorStructureDefinition.DiagnosticCode.STRUCTURE_BLOCKS,
+                    "missing casing did not produce the structure-block diagnostic");
+            require(helper, instrument.snapshot().equals(expected),
+                    "structure diagnostic changed the authoritative snapshot");
+
+            helper.setBlock(OUTER_CASING, P1Blocks.REACTOR_CASING.get().defaultBlockState());
+            helper.setBlock(local(ReactorStructureDefinition.DEFAULT_COLD_PORT_POSITION),
+                    P1Blocks.REACTOR_CASING.get().defaultBlockState());
+            wrench(helper, player, wrench);
+            require(helper, instrument.structureScan().diagnosticCode()
+                            == ReactorStructureDefinition.DiagnosticCode.MISSING_COLD_PORT,
+                    "missing cold port did not produce the cold-port diagnostic");
+
+            helper.setBlock(local(ReactorStructureDefinition.DEFAULT_COLD_PORT_POSITION),
+                    P1Blocks.REACTOR_COLD_PORT.get().defaultBlockState());
+            helper.setBlock(local(ReactorStructureDefinition.DEFAULT_HOT_PORT_POSITION),
+                    P1Blocks.REACTOR_CASING.get().defaultBlockState());
+            wrench(helper, player, wrench);
+            require(helper, instrument.structureScan().diagnosticCode()
+                            == ReactorStructureDefinition.DiagnosticCode.MISSING_HOT_PORT,
+                    "missing hot port did not produce the hot-port diagnostic");
+
+            helper.setBlock(local(ReactorStructureDefinition.DEFAULT_HOT_PORT_POSITION),
+                    P1Blocks.REACTOR_HOT_PORT.get().defaultBlockState());
+            BlockPos emptyBody = new BlockPos(2, 1, 2);
+            helper.setBlock(emptyBody, P1Blocks.REACTOR_CASING.get().defaultBlockState());
+            wrench(helper, player, wrench);
+            require(helper, instrument.structureScan().diagnosticCode()
+                            == ReactorStructureDefinition.DiagnosticCode.COLUMN_LAYOUT,
+                    "wrong empty-column body did not produce the column-layout diagnostic");
+
+            helper.setBlock(emptyBody, Blocks.AIR.defaultBlockState());
+            wrench(helper, player, wrench);
+            require(helper, instrument.structureScan().diagnosticCode()
+                            == ReactorStructureDefinition.DiagnosticCode.VALID,
+                    "repaired structure did not produce the success diagnostic");
+            require(helper, instrument.snapshot().equals(expected),
+                    "repair diagnostic changed the authoritative snapshot");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void wrenchRequiresWrenchAndPerformsOneServerScan(GameTestHelper helper) {
+        buildCanonicalStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            long initialScans = instrument.structureScanCount();
+            Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+            helper.setBlock(OUTER_CASING, Blocks.AIR.defaultBlockState());
+
+            InteractionResult withoutWrench = wrench(helper, player, ItemStack.EMPTY);
+            require(helper, withoutWrench == InteractionResult.PASS,
+                    "instrument port accepted a non-wrench interaction as a diagnostic request");
+            require(helper, instrument.structureScanCount() == initialScans,
+                    "non-wrench interaction changed the server scan cache");
+            require(helper, instrument.structureValid(),
+                    "non-wrench interaction changed the cached validity");
+
+            InteractionResult withWrench = wrench(helper, player, AllItems.WRENCH.asStack());
+            require(helper, withWrench.consumesAction(), "wrench interaction was not consumed");
+            require(helper, instrument.structureScanCount() == initialScans + 1,
+                    "one wrench interaction performed more than one server scan");
+            require(helper, instrument.structureScan().diagnosticCode()
+                            == ReactorStructureDefinition.DiagnosticCode.STRUCTURE_BLOCKS,
+                    "single wrench scan did not publish the structure-block diagnostic");
+            helper.succeed();
+        });
+    }
+
     private static ReactorInstrumentPortBlockEntity instrument(GameTestHelper helper) {
         var blockEntity = helper.getBlockEntity(INSTRUMENT);
         require(helper, blockEntity instanceof ReactorInstrumentPortBlockEntity,
@@ -206,6 +306,21 @@ public final class P1StructureGameTests {
             case "create_nuclear_industry:control_rod_drive" -> P1Blocks.CONTROL_ROD_DRIVE.get();
             default -> throw new IllegalArgumentException("unknown canonical structure block " + id);
         };
+    }
+
+    private static InteractionResult wrench(GameTestHelper helper, Player player, ItemStack item) {
+        player.setItemInHand(InteractionHand.MAIN_HAND, item);
+        BlockPos absoluteInstrument = helper.absolutePos(INSTRUMENT);
+        BlockHitResult hit = new BlockHitResult(
+                Vec3.atCenterOf(absoluteInstrument), Direction.UP, absoluteInstrument, false);
+        return ((ReactorInstrumentPortBlock) P1Blocks.REACTOR_INSTRUMENT_PORT.get())
+                .onWrenched(helper.getLevel().getBlockState(absoluteInstrument),
+                        new net.minecraft.world.item.context.UseOnContext(
+                                player, InteractionHand.MAIN_HAND, hit));
+    }
+
+    private static BlockPos local(ReactorStructureDefinition.LocalPosition position) {
+        return new BlockPos(position.x(), position.y(), position.z());
     }
 
     private static void require(GameTestHelper helper, boolean condition, String message) {

@@ -23,5 +23,13 @@
   "item.create_nuclear_industry.control_rod": "Control Rod",
   "item.create_nuclear_industry.steel_plate": "Alloy Steel Plate",
   "fluid_type.create_nuclear_industry.compound_coolant": "Compound Coolant",
-  "fluid_type.create_nuclear_industry.hot_compound_coolant": "Hot Compound Coolant"
+  "fluid_type.create_nuclear_industry.hot_compound_coolant": "Hot Compound Coolant",
+  "message.create_nuclear_industry.reactor_structure.valid": "Experimental reactor formed: fuel columns %s, control-rod columns %s, empty columns %s, cold ports %s, hot ports %s",
+  "message.create_nuclear_industry.reactor_structure.structure_blocks": "Experimental reactor not formed: structure blocks or casing are incorrect",
+  "message.create_nuclear_industry.reactor_structure.instrument_port": "Experimental reactor not formed: instrument port count or position is incorrect",
+  "message.create_nuclear_industry.reactor_structure.missing_cold_port": "Experimental reactor not formed: at least one cold port is required",
+  "message.create_nuclear_industry.reactor_structure.missing_hot_port": "Experimental reactor not formed: at least one hot port is required",
+  "message.create_nuclear_industry.reactor_structure.column_layout": "Experimental reactor not formed: fuel, control-rod, or empty column body/cap is incorrect",
+  "message.create_nuclear_industry.reactor_structure.no_fuel": "Experimental reactor not formed: at least one fuel column is required",
+  "message.create_nuclear_industry.reactor_structure.generic_failure": "Experimental reactor not formed: the structure candidate could not be determined"
 }
