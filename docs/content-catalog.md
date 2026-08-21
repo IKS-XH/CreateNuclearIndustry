@@ -141,7 +141,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | `已有` | `experimental_reactor_casing` | 样例实验反应堆外壳；保留 ID，后续可升级纹理或作为 P1 外壳原型 |
 | `P1` | `reactor_casing`、`reactor_window` | 反应堆外壳、观察窗；外壳同时是棱边、转角、顶面和底面的唯一基础结构方块 |
 | `P1` | `reactor_cold_port`、`reactor_hot_port` | 一回路冷端、热端接口 |
-| `P1` | `reactor_instrument_port` | 反应堆仪表端口；反应堆核心状态锚点、工程师护目镜信息接口和红石 SCRAM 输入端 |
+| `P1` | `reactor_instrument_port` | 反应堆仪表端口；反应堆核心状态锚点、工程师护目镜信息接口和红石 SCRAM 输入端；所有玩家可用 Create 扳手普通右键请求服务端重扫，并在快捷栏获得本地化的成型结果或失败原因 |
 | `P2` | `reactor_control_port` | 反应堆控制端口；随烈焰人管理员提供可选自动控制桥接，不拥有反应堆状态 |
 | `P1` | `reactor_fuel_rod` | 燃料列内部的连续燃料柱方块；完整燃料列顶面必须配对 `reactor_refueling_port` |
 | `P1` | `reactor_refueling_port` | 单列换料端口；只能安装在燃料列正上方的顶面，无 GUI，供人工或 Create 动力机械臂逐列取放燃料组件；工程师护目镜指向它时显示下方燃料列的耐久、完整度/损坏度和当前发热量 |
@@ -289,7 +289,7 @@ Ponder 是所有可玩内容的第一入口，不是开发者调试工具。每�
 | `P3` | `pressure_pipe_tier_3` | 陶瓷内衬管的极限温压用途、损坏风险和禁止低级管替代的提示 |
 | `P1` | `reactor_cold_port` | 复合冷却剂冷端输入、流向和反应堆结构必需性；允许多个端口汇总，每端口默认上限 `128 mB/t`，不设全堆流量上限 |
 | `P1` | `reactor_hot_port` | 热复合冷却剂输出、冷却剂转化和热端不能徒手桶取；允许多个端口汇总，每端口默认上限 `128 mB/t`，不设全堆流量上限 |
-| `P1` | `reactor_instrument_port` | 唯一状态所有者、工程师护目镜信息、红石高电平保持 SCRAM/低电平恢复停堆前位置、无控制棒列时拒绝 SCRAM、不得重复安装 |
+| `P1` | `reactor_instrument_port` | 唯一状态所有者、Create 扳手普通右键成型诊断、工程师护目镜信息、红石高电平保持 SCRAM/低电平恢复停堆前位置、无控制棒列时拒绝 SCRAM、不得重复安装 |
 | `P2` | `reactor_control_port` | 随烈焰人管理员提供可选自动控制桥接、无状态所有权、不能替代仪表端口 SCRAM |
 | `P1` | `reactor_refueling_port` | 只能位于燃料列顶面、停堆/耗尽许可、人工或动力机械臂换料和护目镜列级信息 |
 | `P2` | `high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port` | 锅炉给水/超临界蒸汽方向；两者分别有入口，不能混接 |
