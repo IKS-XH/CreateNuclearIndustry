@@ -27,6 +27,8 @@ public final class P1ServerConfig {
         public final ModConfigSpec.DoubleValue fuelBurnTimeHours;
         public final ModConfigSpec.DoubleValue coolantAbsorptionHuPerMb;
         public final ModConfigSpec.IntValue perPortFlowMbPerTick;
+        public final ModConfigSpec.IntValue coldInventoryCapacityMb;
+        public final ModConfigSpec.IntValue hotInventoryCapacityMb;
         public final ModConfigSpec.DoubleValue damageHeatThresholdHuPerTick;
         public final ModConfigSpec.DoubleValue damageRatePerTickHuLoad;
         public final ModConfigSpec.DoubleValue damageTransferRate;
@@ -47,6 +49,12 @@ public final class P1ServerConfig {
             perPortFlowMbPerTick = builder
                     .comment("Maximum coolant flow through one port per tick.")
                     .defineInRange("perPortFlowMbPerTick", 128, 0, 1_000_000);
+            coldInventoryCapacityMb = builder
+                    .comment("Shared internal cold coolant buffer capacity in millibuckets.")
+                    .defineInRange("coldInventoryCapacityMb", 1_000, 0, 1_000_000_000);
+            hotInventoryCapacityMb = builder
+                    .comment("Shared internal hot coolant buffer capacity in millibuckets.")
+                    .defineInRange("hotInventoryCapacityMb", 1_000, 0, 1_000_000_000);
             damageHeatThresholdHuPerTick = builder
                     .comment("Effective heat load threshold before integrity damage begins.")
                     .defineInRange("damageHeatThresholdHuPerTick", 0.25D, 0.0D, 1_000_000.0D);

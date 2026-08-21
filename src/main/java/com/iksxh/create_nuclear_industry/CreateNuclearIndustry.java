@@ -12,6 +12,7 @@ import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeBlockEntities;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeContent;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeFluids;
 import com.iksxh.create_nuclear_industry.p0probe.events.P0ProbeEvents;
+import com.iksxh.create_nuclear_industry.reactor.ReactorCoolantFluidHandler;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -37,6 +38,7 @@ public final class CreateNuclearIndustry {
         P0ProbeBlockEntities.register(modEventBus);
         modEventBus.addListener(ControlRodSliderNetwork::registerPayloads);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
+        modEventBus.addListener(CreateNuclearIndustry::registerP1Capabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
         NeoForge.EVENT_BUS.register(ReactorStructureLifecycle.class);
         NeoForge.EVENT_BUS.register(ControlRodSliderNetwork.class);
@@ -57,6 +59,14 @@ public final class CreateNuclearIndustry {
                 Capabilities.FluidHandler.BLOCK,
                 P0ProbeBlockEntities.P0_PROBE_HOT_PORT.get(),
                 (blockEntity, side) -> blockEntity.fluidHandler()
+        );
+    }
+
+    private static void registerP1Capabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                P1BlockEntities.REACTOR_PORT.get(),
+                (blockEntity, side) -> ReactorCoolantFluidHandler.forPort(blockEntity)
         );
     }
 }

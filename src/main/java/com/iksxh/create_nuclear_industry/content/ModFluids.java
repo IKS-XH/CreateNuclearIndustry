@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public final class ModFluids {
     private static final int COOLANT_DENSITY = 1000;
@@ -57,6 +58,17 @@ public final class ModFluids {
     public static void register(IEventBus modEventBus) {
         FLUID_TYPES.register(modEventBus);
         FLUIDS.register(modEventBus);
+    }
+
+    public static boolean isCompoundCoolant(FluidStack stack) {
+        return stack != null && !stack.isEmpty()
+                && (stack.is(COMPOUND_COOLANT_SOURCE.get()) || stack.is(COMPOUND_COOLANT_FLOWING.get()));
+    }
+
+    public static boolean isHotCompoundCoolant(FluidStack stack) {
+        return stack != null && !stack.isEmpty()
+                && (stack.is(HOT_COMPOUND_COOLANT_SOURCE.get())
+                || stack.is(HOT_COMPOUND_COOLANT_FLOWING.get()));
     }
 
     private static FluidType coolantType(String id, int temperature) {

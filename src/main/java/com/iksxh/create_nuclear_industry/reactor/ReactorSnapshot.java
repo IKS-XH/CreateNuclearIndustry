@@ -66,6 +66,24 @@ public record ReactorSnapshot(
         return occupiedColumnCount() == MAX_CORE_COLUMNS;
     }
 
+    /**
+     * Returns a copy with only the shared coolant inventories changed.
+     *
+     * <p>The instrument port remains the sole owner of the complete reactor
+     * snapshot; fluid capabilities use this method instead of creating a
+     * port-local inventory.</p>
+     */
+    public ReactorSnapshot withCoolantInventories(long nextColdCoolantMb, long nextHotCoolantMb) {
+        return new ReactorSnapshot(
+                fuelColumns,
+                controlRodColumns,
+                nextColdCoolantMb,
+                nextHotCoolantMb,
+                meltdownProgressTicks,
+                meltdownCountdownStarted
+        );
+    }
+
     private static <T> Map<CoreColumnPosition, T> immutableOrderedCopy(
             Map<CoreColumnPosition, T> source,
             String name
