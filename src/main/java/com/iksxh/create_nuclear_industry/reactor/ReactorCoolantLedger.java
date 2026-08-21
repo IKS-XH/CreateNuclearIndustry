@@ -1,5 +1,9 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * Loader-independent, single-port coolant conservation ledger.
  *
@@ -10,7 +14,61 @@ package com.iksxh.create_nuclear_industry.reactor;
  * conversion.</p>
  */
 public final class ReactorCoolantLedger {
+    public static final double DEFAULT_PER_PORT_FLOW_MB = 128.0D;
+
     private ReactorCoolantLedger() {
+    }
+
+    /** Direction of one reactor coolant connection. */
+    public enum PortKind {
+        COLD_INPUT,
+        HOT_OUTPUT
+    }
+
+    /** One observed coolant connection; duplicate connection IDs are one port. */
+    public record Port(String connectionId, PortKind kind, double availableMb) {
+        public Port {
+            if (connectionId == null || connectionId.isBlank() || kind == null) {
+                throw new IllegalArgumentException("coolant port identity and kind are required");
+            }
+            requireFiniteNonNegative("port flow", availableMb);
+        }
+
+        public static Port cold(String connectionId, double availableMb) {
+            return new Port(connectionId, PortKind.COLD_INPUT, availableMb);
+        }
+
+        public static Port hot(String connectionId, double availableMb) {
+            return new Port(connectionId, PortKind.HOT_OUTPUT, availableMb);
+        }
+    }
+
+    /** Deduplicated, per-port-capped coolant flow summary for one tick. */
+    public record PortSummary(
+            double coldInputMb,
+            double hotOutputCapacityMb,
+            double coldFlowCapacityMb,
+            double hotFlowCapacityMb,
+            int uniqueColdPortCount,
+            int uniqueHotPortCount,
+            int duplicatePortCount,
+            double perPortFlowMb
+    ) {
+        public PortSummary {
+            requireFiniteNonNegative("cold input", coldInputMb);
+            requireFiniteNonNegative("hot output capacity", hotOutputCapacityMb);
+            requireFiniteNonNegative("cold flow capacity", coldFlowCapacityMb);
+            requireFiniteNonNegative("hot flow capacity", hotFlowCapacityMb);
+            requireFiniteNonNegative("per-port flow", perPortFlowMb);
+            if (uniqueColdPortCount < 0 || uniqueHotPortCount < 0 || duplicatePortCount < 0) {
+                throw new IllegalArgumentException("port counts must be non-negative");
+            }
+        }
+
+        /** Actual balanced flow before heat, inventory and absorption limits. */
+        public double balancedFlowMb() {
+            return Math.min(coldInputMb, hotOutputCapacityMb);
+        }
     }
 
     /** Persistent internal coolant inventories owned by the reactor snapshot. */
@@ -19,6 +77,68 @@ public final class ReactorCoolantLedger {
             requireFiniteNonNegative("cold coolant inventory", coldCoolantMb);
             requireFiniteNonNegative("hot coolant inventory", hotCoolantMb);
         }
+    }
+
+    /**
+     * Summarizes unique cold and hot ports using the frozen default limit.
+     * Duplicate connection IDs are counted once and never add throughput.
+     */
+    public static PortSummary summarizePorts(Collection<Port> ports) {
+        return summarizePorts(ports, DEFAULT_PER_PORT_FLOW_MB);
+    }
+
+    /**
+     * Summarizes unique ports with a caller-supplied single-port limit.
+     *
+     * <p>The actual flow fields sum each port's observed amount after the
+     * single-port cap. The theoretical capacity fields are exactly the number
+     * of unique ports multiplied by that cap; there is deliberately no
+     * aggregate reactor flow cap.</p>
+     */
+    public static PortSummary summarizePorts(Collection<Port> ports, double perPortFlowMb) {
+        if (ports == null) {
+            throw new IllegalArgumentException("coolant ports are required");
+        }
+        requireFiniteNonNegative("per-port flow", perPortFlowMb);
+
+        Map<String, Port> unique = new TreeMap<>();
+        int duplicatePortCount = 0;
+        for (Port port : ports) {
+            if (port == null) {
+                throw new IllegalArgumentException("coolant ports must not contain null");
+            }
+            Port previous = unique.putIfAbsent(port.connectionId(), port);
+            if (previous != null) {
+                duplicatePortCount++;
+                // Duplicate observations must not sum. Keep the larger single
+                // observation so ordering cannot change the deduplicated flow.
+                if (port.availableMb() > previous.availableMb()
+                        || (port.availableMb() == previous.availableMb()
+                        && port.kind().compareTo(previous.kind()) < 0)) {
+                    unique.put(port.connectionId(), port);
+                }
+            }
+        }
+
+        double coldInput = 0.0D;
+        double hotOutputCapacity = 0.0D;
+        int uniqueColdPortCount = 0;
+        int uniqueHotPortCount = 0;
+        for (Port port : unique.values()) {
+            double capped = Math.min(port.availableMb(), perPortFlowMb);
+            if (port.kind() == PortKind.COLD_INPUT) {
+                coldInput = safeAdd(coldInput, capped);
+                uniqueColdPortCount++;
+            } else {
+                hotOutputCapacity = safeAdd(hotOutputCapacity, capped);
+                uniqueHotPortCount++;
+            }
+        }
+
+        double coldFlowCapacity = uniqueColdPortCount * perPortFlowMb;
+        double hotFlowCapacity = uniqueHotPortCount * perPortFlowMb;
+        return new PortSummary(coldInput, hotOutputCapacity, coldFlowCapacity, hotFlowCapacity,
+                uniqueColdPortCount, uniqueHotPortCount, duplicatePortCount, perPortFlowMb);
     }
 
     /** One cold-port input and measured hot-port output for one tick. */
