@@ -7,6 +7,7 @@ import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
+import com.iksxh.create_nuclear_industry.control.ControlRodSliderNetwork;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeBlockEntities;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeContent;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeFluids;
@@ -34,9 +35,11 @@ public final class CreateNuclearIndustry {
         P0ProbeContent.register(modEventBus);
         P0ProbeFluids.register(modEventBus);
         P0ProbeBlockEntities.register(modEventBus);
+        modEventBus.addListener(ControlRodSliderNetwork::registerPayloads);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
         NeoForge.EVENT_BUS.register(ReactorStructureLifecycle.class);
+        NeoForge.EVENT_BUS.register(ControlRodSliderNetwork.class);
     }
 
     private static void registerP0Capabilities(RegisterCapabilitiesEvent event) {

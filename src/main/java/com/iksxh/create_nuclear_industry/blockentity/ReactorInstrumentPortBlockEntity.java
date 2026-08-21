@@ -1,6 +1,8 @@
 package com.iksxh.create_nuclear_industry.blockentity;
 
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
+import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
+import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshotNbtCodec;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
@@ -13,6 +15,8 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
+import java.util.Map;
+import java.util.TreeMap;
 
 /** Sole authoritative owner of the complete reactor snapshot. */
 public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity {
@@ -42,6 +46,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         setChanged();
         if (level != null && !level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            syncControlRodDrives();
         }
     }
 
@@ -69,6 +74,79 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         structureScan = scan.contract();
         structureOrigin = scan.origin();
         structureScanCount++;
+        initializeAndSyncControlRods();
+    }
+
+    /**
+     * A valid structure is the source of truth for which drives exist. A
+     * newly discovered control-rod column gets one authoritative fully
+     * inserted state; existing targets are preserved across rescans and only
+     * mirrored into Create's transient display behaviour.
+     */
+    private void initializeAndSyncControlRods() {
+        if (!structureScan.valid() || structureOrigin == null || level == null || level.isClientSide) {
+            return;
+        }
+
+        TreeMap<CoreColumnPosition, ControlRodColumnState> controlColumns =
+                new TreeMap<>(snapshot.controlRodColumns());
+        TreeMap<CoreColumnPosition, com.iksxh.create_nuclear_industry.reactor.FuelColumnState> fuelColumns =
+                new TreeMap<>(snapshot.fuelColumns());
+        boolean changed = false;
+
+        for (Map.Entry<CoreColumnPosition, ReactorStructureDefinition.ColumnMapping> entry
+                : structureScan.columns().entrySet()) {
+            if (entry.getValue().type() != ReactorStructureDefinition.ColumnType.CONTROL_ROD) {
+                continue;
+            }
+            changed |= fuelColumns.remove(entry.getKey()) != null;
+            if (!controlColumns.containsKey(entry.getKey())) {
+                controlColumns.put(entry.getKey(), ControlRodColumnState.fullyInserted());
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            setSnapshot(new ReactorSnapshot(
+                    fuelColumns,
+                    controlColumns,
+                    snapshot.coldCoolantMb(),
+                    snapshot.hotCoolantMb(),
+                    snapshot.meltdownProgressTicks(),
+                    snapshot.meltdownCountdownStarted()
+            ));
+        }
+
+        syncControlRodDrives();
+    }
+
+    private void syncControlRodDrives() {
+        if (!structureScan.valid() || structureOrigin == null || level == null || level.isClientSide) {
+            return;
+        }
+
+        for (Map.Entry<CoreColumnPosition, ReactorStructureDefinition.ColumnMapping> entry
+                : structureScan.columns().entrySet()) {
+            if (entry.getValue().type() != ReactorStructureDefinition.ColumnType.CONTROL_ROD) {
+                continue;
+            }
+            ControlRodColumnState state = snapshot.controlRodColumns().get(entry.getKey());
+            if (state == null) {
+                continue;
+            }
+            BlockPos drivePos = structureOrigin.offset(
+                    entry.getValue().capPosition().x(),
+                    entry.getValue().capPosition().y(),
+                    entry.getValue().capPosition().z());
+            if (level.getBlockEntity(drivePos) instanceof ControlRodDriveBlockEntity drive) {
+                drive.setServerColumnHint(entry.getKey().x(), entry.getKey().z());
+                drive.setServerDisplayedDepthPercent(toPercent(state.targetDepth()));
+            }
+        }
+    }
+
+    private static int toPercent(double depth) {
+        return (int) Math.round(depth * 100.0D);
     }
 
     @Override
@@ -80,14 +158,14 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(tag, registries, clientPacket);
         tag.put(SNAPSHOT_KEY, ReactorSnapshotNbtCodec.encode(snapshot));
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(tag, registries, clientPacket);
         snapshot = ReactorSnapshotNbtCodec.decode(
                 tag.contains(SNAPSHOT_KEY) ? tag.getCompound(SNAPSHOT_KEY) : null);
     }
