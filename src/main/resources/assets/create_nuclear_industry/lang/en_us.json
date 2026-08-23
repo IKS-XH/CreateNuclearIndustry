@@ -22,6 +22,7 @@
   "item.create_nuclear_industry.cooled_spent_fuel_assembly": "Cooled Spent Fuel Assembly",
   "item.create_nuclear_industry.control_rod": "Control Rod",
   "item.create_nuclear_industry.steel_plate": "Alloy Steel Plate",
+  "item.create_nuclear_industry.compound_coolant_bucket": "Compound Coolant Bucket",
   "fluid_type.create_nuclear_industry.compound_coolant": "Compound Coolant",
   "fluid_type.create_nuclear_industry.hot_compound_coolant": "Hot Compound Coolant",
   "message.create_nuclear_industry.reactor_structure.valid": "Experimental reactor formed: fuel columns %s, control-rod columns %s, empty columns %s, cold ports %s, hot ports %s",

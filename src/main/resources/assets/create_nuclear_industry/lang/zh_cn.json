@@ -22,6 +22,7 @@
   "item.create_nuclear_industry.cooled_spent_fuel_assembly": "枯竭铀燃料组件",
   "item.create_nuclear_industry.control_rod": "控制棒组件",
   "item.create_nuclear_industry.steel_plate": "合金钢板",
+  "item.create_nuclear_industry.compound_coolant_bucket": "复合冷却剂桶",
   "fluid_type.create_nuclear_industry.compound_coolant": "复合冷却剂",
   "fluid_type.create_nuclear_industry.hot_compound_coolant": "热复合冷却剂",
   "message.create_nuclear_industry.reactor_structure.valid": "实验反应堆已成型：燃料列 %s，控制棒列 %s，空列 %s，冷端 %s，热端 %s",

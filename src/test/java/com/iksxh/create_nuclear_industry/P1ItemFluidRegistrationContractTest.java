@@ -32,6 +32,8 @@ class P1ItemFluidRegistrationContractTest {
         }
         assertTrue(fluids.contains("P1ContentIds.COMPOUND_COOLANT_ID"));
         assertTrue(fluids.contains("P1ContentIds.HOT_COMPOUND_COOLANT_ID"));
+        assertTrue(items.contains("P1ContentIds.COMPOUND_COOLANT_BUCKET_ID"));
+        assertTrue(items.contains("new BucketItem(ModFluids.COMPOUND_COOLANT_SOURCE.get()"));
         assertFalse(items.contains("ENGINEER_GOGGLES"), "the mod must not register Create goggles");
         assertFalse(items.contains("alloy_steel_plate"), "the removed steel alias must not return");
         assertFalse(fluids.contains("purifier"));
@@ -65,7 +67,13 @@ class P1ItemFluidRegistrationContractTest {
         for (String id : new String[]{P1ContentIds.COMPOUND_COOLANT_ID, P1ContentIds.HOT_COMPOUND_COOLANT_ID}) {
             assertTrue(Files.exists(RESOURCES.resolve("assets/create_nuclear_industry/textures/fluid/" + id + "_still.png")));
             assertTrue(Files.exists(RESOURCES.resolve("assets/create_nuclear_industry/textures/fluid/" + id + "_flow.png")));
+            assertTrue(Files.exists(RESOURCES.resolve("assets/create_nuclear_industry/textures/block/" + id + "_still.png")));
+            assertTrue(Files.exists(RESOURCES.resolve("assets/create_nuclear_industry/textures/block/" + id + "_flow.png")));
         }
+        String bucketModel = readResource("assets/create_nuclear_industry/models/item/"
+                + P1ContentIds.COMPOUND_COOLANT_BUCKET_ID + ".json");
+        assertTrue(bucketModel.contains("neoforge:fluid_container"));
+        assertTrue(bucketModel.contains("create_nuclear_industry:compound_coolant"));
     }
 
     @Test
@@ -86,6 +94,8 @@ class P1ItemFluidRegistrationContractTest {
             assertTranslation(english, "fluid_type", id);
             assertTranslation(chinese, "fluid_type", id);
         }
+        assertTranslation(english, "item", P1ContentIds.COMPOUND_COOLANT_BUCKET_ID);
+        assertTranslation(chinese, "item", P1ContentIds.COMPOUND_COOLANT_BUCKET_ID);
     }
 
     @Test
@@ -96,7 +106,9 @@ class P1ItemFluidRegistrationContractTest {
         assertTrue(creativeTab.contains("ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()"));
         assertTrue(creativeTab.contains("ModItems.CONTROL_ROD.get()"));
         assertTrue(creativeTab.contains("ModItems.STEEL_PLATE.get()"));
+        assertTrue(creativeTab.contains("ModItems.COMPOUND_COOLANT_BUCKET.get()"));
         assertFalse(creativeTab.contains("ENGINEER_GOGGLES"));
+        assertFalse(creativeTab.contains("HOT_COMPOUND_COOLANT_BUCKET"));
         assertFalse(creativeTab.contains("P0Probe"));
     }
 

@@ -27,6 +27,7 @@ public final class P1ContentIds {
 
     public static final String COMPOUND_COOLANT_ID = "compound_coolant";
     public static final String HOT_COMPOUND_COOLANT_ID = "hot_compound_coolant";
+    public static final String COMPOUND_COOLANT_BUCKET_ID = "compound_coolant_bucket";
 
     /** Create owns this item; this mod only consumes it as an information trigger. */
     public static final String ENGINEER_GOGGLES_ID = "create:goggles";
@@ -53,6 +54,7 @@ public final class P1ContentIds {
             new Entry(STEEL_PLATE_ID, Kind.ITEM, Owner.MOD),
             new Entry(COMPOUND_COOLANT_ID, Kind.FLUID, Owner.MOD),
             new Entry(HOT_COMPOUND_COOLANT_ID, Kind.FLUID, Owner.MOD),
+            new Entry(COMPOUND_COOLANT_BUCKET_ID, Kind.ITEM, Owner.MOD),
             new Entry(ENGINEER_GOGGLES_ID, Kind.EXTERNAL_ITEM, Owner.CREATE)
     );
 

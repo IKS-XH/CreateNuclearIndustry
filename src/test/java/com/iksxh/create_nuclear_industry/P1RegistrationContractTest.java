@@ -32,7 +32,8 @@ class P1RegistrationContractTest {
             P1ContentIds.CONTROL_ROD_ID,
             P1ContentIds.STEEL_PLATE_ID,
             P1ContentIds.COMPOUND_COOLANT_ID,
-            P1ContentIds.HOT_COMPOUND_COOLANT_ID
+            P1ContentIds.HOT_COMPOUND_COOLANT_ID,
+            P1ContentIds.COMPOUND_COOLANT_BUCKET_ID
     );
 
     @Test

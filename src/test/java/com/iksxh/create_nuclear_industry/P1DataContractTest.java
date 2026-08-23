@@ -30,7 +30,8 @@ class P1DataContractTest {
             P1ContentIds.FRESH_FUEL_ASSEMBLY_ID,
             P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID,
             P1ContentIds.CONTROL_ROD_ID,
-            P1ContentIds.STEEL_PLATE_ID
+            P1ContentIds.STEEL_PLATE_ID,
+            P1ContentIds.COMPOUND_COOLANT_BUCKET_ID
     );
     private static final List<String> FLUID_IDS = List.of(
             P1ContentIds.COMPOUND_COOLANT_ID,
@@ -63,10 +64,19 @@ class P1DataContractTest {
         String chinese = read("assets/create_nuclear_industry/lang/zh_cn.json");
 
         for (String id : ITEM_IDS) {
-            assertTrue(Files.exists(ASSETS.resolve("models/item/" + id + ".json")),
+            Path model = ASSETS.resolve("models/item/" + id + ".json");
+            assertTrue(Files.exists(model),
                     "missing item model: " + id);
-            assertTrue(Files.exists(ASSETS.resolve("textures/item/" + id + ".png")),
-                    "missing item texture: " + id);
+            if (P1ContentIds.COMPOUND_COOLANT_BUCKET_ID.equals(id)) {
+                String bucketModel = read("assets/create_nuclear_industry/models/item/" + id + ".json");
+                assertTrue(bucketModel.contains("neoforge:fluid_container"),
+                        "coolant bucket must use NeoForge's dynamic fluid container model: " + id);
+                assertTrue(bucketModel.contains("create_nuclear_industry:compound_coolant"),
+                        "coolant bucket must point at the formal cold fluid: " + id);
+            } else {
+                assertTrue(Files.exists(ASSETS.resolve("textures/item/" + id + ".png")),
+                        "missing item texture: " + id);
+            }
             assertTrue(english.contains("\"item.create_nuclear_industry." + id + "\""),
                     "missing English item language key: " + id);
             assertTrue(chinese.contains("\"item.create_nuclear_industry." + id + "\""),
@@ -77,6 +87,10 @@ class P1DataContractTest {
                     "missing still fluid texture: " + id);
             assertTrue(Files.exists(ASSETS.resolve("textures/fluid/" + id + "_flow.png")),
                     "missing flowing fluid texture: " + id);
+            assertTrue(Files.exists(ASSETS.resolve("textures/block/" + id + "_still.png")),
+                    "missing block-atlas still fluid texture: " + id);
+            assertTrue(Files.exists(ASSETS.resolve("textures/block/" + id + "_flow.png")),
+                    "missing block-atlas flowing fluid texture: " + id);
             assertTrue(english.contains("\"fluid_type.create_nuclear_industry." + id + "\""),
                     "missing English fluid language key: " + id);
             assertTrue(chinese.contains("\"fluid_type.create_nuclear_industry." + id + "\""),
@@ -125,6 +139,32 @@ class P1DataContractTest {
                 }
             });
         }
+    }
+
+    @Test
+    void coldCoolantHasTheOnlyBucketAndLiquidBlockUsesTheFluidId() throws IOException {
+        String fluids = readSource("com/iksxh/create_nuclear_industry/content/ModFluids.java");
+        String items = readSource("com/iksxh/create_nuclear_industry/content/ModItems.java");
+        String creativeTab = readSource("com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java");
+
+        assertTrue(items.contains("P1ContentIds.COMPOUND_COOLANT_BUCKET_ID"));
+        assertTrue(items.contains("new BucketItem(ModFluids.COMPOUND_COOLANT_SOURCE.get()"));
+        assertTrue(fluids.contains("LIQUID_BLOCKS.register("));
+        assertTrue(fluids.contains("P1ContentIds.COMPOUND_COOLANT_ID"));
+        assertTrue(fluids.contains(".bucket(() -> ModItems.COMPOUND_COOLANT_BUCKET.get())"));
+        assertTrue(fluids.contains(".block(COMPOUND_COOLANT_BLOCK)"));
+        assertTrue(fluids.contains("initializeClient(Consumer<IClientFluidTypeExtensions> consumer)"));
+        assertTrue(fluids.contains("getStillTexture()"));
+        assertTrue(fluids.contains("getFlowingTexture()"));
+        assertTrue(fluids.contains("\"block/\" + id + \"_still\""));
+        assertTrue(fluids.contains("\"block/\" + id + \"_flow\""));
+        assertTrue(creativeTab.contains("ModItems.COMPOUND_COOLANT_BUCKET.get()"));
+        assertFalse(items.contains("HOT_COMPOUND_COOLANT_BUCKET"));
+        assertFalse(creativeTab.contains("HOT_COMPOUND_COOLANT_BUCKET"));
+    }
+
+    private static String readSource(String relativePath) throws IOException {
+        return Files.readString(Path.of("src", "main", "java").resolve(relativePath));
     }
 
     private static String read(String relativePath) throws IOException {

@@ -34,6 +34,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
                         output.accept(ModItems.CONTROL_ROD.get());
                         output.accept(ModItems.STEEL_PLATE.get());
+                        output.accept(ModItems.COMPOUND_COOLANT_BUCKET.get());
                     })
                     .build()
     );

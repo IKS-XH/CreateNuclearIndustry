@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry.content;
 
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BucketItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -34,6 +35,11 @@ public final class ModItems {
     public static final DeferredItem<Item> STEEL_PLATE = ITEMS.register(
             P1ContentIds.STEEL_PLATE_ID,
             () -> new Item(new Item.Properties())
+    );
+
+    public static final DeferredItem<BucketItem> COMPOUND_COOLANT_BUCKET = ITEMS.register(
+            P1ContentIds.COMPOUND_COOLANT_BUCKET_ID,
+            () -> new BucketItem(ModFluids.COMPOUND_COOLANT_SOURCE.get(), new Item.Properties().stacksTo(1))
     );
 
     private ModItems() {
