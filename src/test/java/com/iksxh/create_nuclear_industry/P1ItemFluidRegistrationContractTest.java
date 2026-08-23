@@ -72,8 +72,12 @@ class P1ItemFluidRegistrationContractTest {
         }
         String bucketModel = readResource("assets/create_nuclear_industry/models/item/"
                 + P1ContentIds.COMPOUND_COOLANT_BUCKET_ID + ".json");
-        assertTrue(bucketModel.contains("neoforge:fluid_container"));
-        assertTrue(bucketModel.contains("create_nuclear_industry:compound_coolant"));
+        assertTrue(bucketModel.contains("\"loader\": \"neoforge:fluid_container\""));
+        assertTrue(bucketModel.contains("\"parent\": \"neoforge:item/bucket\""));
+        assertTrue(bucketModel.contains("\"fluid\": \"create_nuclear_industry:compound_coolant\""));
+        assertFalse(bucketModel.contains("\"parent\": \"minecraft:item/generated\""));
+        assertFalse(bucketModel.contains("\"base\""));
+        assertFalse(bucketModel.contains("\"cover\""));
     }
 
     @Test

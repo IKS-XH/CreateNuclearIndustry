@@ -1,9 +1,5 @@
 {
   "loader": "neoforge:fluid_container",
-  "parent": "minecraft:item/generated",
-  "fluid": "create_nuclear_industry:compound_coolant",
-  "textures": {
-    "base": "minecraft:item/bucket",
-    "cover": "minecraft:item/bucket"
-  }
+  "parent": "neoforge:item/bucket",
+  "fluid": "create_nuclear_industry:compound_coolant"
 }

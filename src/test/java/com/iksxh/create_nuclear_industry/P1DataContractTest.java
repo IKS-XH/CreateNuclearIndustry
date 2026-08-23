@@ -69,10 +69,18 @@ class P1DataContractTest {
                     "missing item model: " + id);
             if (P1ContentIds.COMPOUND_COOLANT_BUCKET_ID.equals(id)) {
                 String bucketModel = read("assets/create_nuclear_industry/models/item/" + id + ".json");
-                assertTrue(bucketModel.contains("neoforge:fluid_container"),
-                        "coolant bucket must use NeoForge's dynamic fluid container model: " + id);
-                assertTrue(bucketModel.contains("create_nuclear_industry:compound_coolant"),
+                assertTrue(bucketModel.contains("\"loader\": \"neoforge:fluid_container\""),
+                        "coolant bucket must use NeoForge's dynamic fluid container loader: " + id);
+                assertTrue(bucketModel.contains("\"parent\": \"neoforge:item/bucket\""),
+                        "coolant bucket must use NeoForge's built-in bucket parent: " + id);
+                assertTrue(bucketModel.contains("\"fluid\": \"create_nuclear_industry:compound_coolant\""),
                         "coolant bucket must point at the formal cold fluid: " + id);
+                assertFalse(bucketModel.contains("\"parent\": \"minecraft:item/generated\""),
+                        "coolant bucket must not use the generated item parent: " + id);
+                assertFalse(bucketModel.contains("\"base\""),
+                        "coolant bucket must not override the built-in bucket base texture: " + id);
+                assertFalse(bucketModel.contains("\"cover\""),
+                        "coolant bucket must not override the built-in bucket cover texture: " + id);
             } else {
                 assertTrue(Files.exists(ASSETS.resolve("textures/item/" + id + ".png")),
                         "missing item texture: " + id);
