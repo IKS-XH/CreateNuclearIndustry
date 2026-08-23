@@ -80,6 +80,8 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--cyan); }
 .core-cell.empty .cell-icon { color: #617176; }
 .rod-editor-wrap { border-top: 1px solid var(--line-soft); margin-top: 17px; padding-top: 15px; }
 .rod-editor { display: grid; gap: 7px; max-height: 165px; overflow: auto; padding-right: 3px; }
+.rod-bulk-controls { display: grid; gap: 8px; margin-bottom: 8px; }
+.rod-bulk-controls .button { justify-self: start; }
 .rod-row { display: grid; grid-template-columns: 64px 1fr 44px; gap: 8px; align-items: center; color: var(--muted); font-size: 11px; }
 .rod-row input[type="range"] { width: 100%; accent-color: var(--blue); }
 .rod-row output { color: var(--text); text-align: right; }

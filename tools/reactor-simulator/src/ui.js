@@ -97,6 +97,47 @@ function applyLiveControlRodDepth(x, z, depth) {
   return true;
 }
 
+function setAllControlRodDepth(depth) {
+  const normalizedDepth = Math.max(0, Math.min(1, Number(depth)));
+  const rodKeys = [];
+  state.pendingLayout.forEach((row, z) => row.forEach((type, x) => {
+    if (type === "control_rod") rodKeys.push({ x, z, key: `${x},${z}` });
+  }));
+  if (!rodKeys.length) {
+    setStatus("当前没有控制棒列，无法统一设置深度。", "warning");
+    return false;
+  }
+  if (state.runtime.scramActive === true) {
+    setStatus("SCRAM 已建立；请先解除 SCRAM 后再统一设置控制棒深度。", "warning");
+    return false;
+  }
+  const sameCommittedLayout = !state.dirty && rodKeys.every(({ x, z }) =>
+    state.layout?.[z]?.[x] === "control_rod" && getColumn(state.snapshot, `${x},${z}`));
+  rodKeys.forEach(({ x, z, key }) => {
+    state.pendingDepths[z][x] = normalizedDepth;
+    if (sameCommittedLayout) {
+      state.snapshot = setControlDepth(state.snapshot, key, normalizedDepth);
+      state.initialSnapshot = setControlDepth(state.initialSnapshot, key, normalizedDepth);
+      state.depths[z][x] = normalizedDepth;
+    }
+  });
+  state.lastResult = null;
+  if (sameCommittedLayout) {
+    setStatus(state.runtime.running
+      ? `已将 ${rodKeys.length} 根控制棒统一设为 ${(normalizedDepth * 100).toFixed(0)}%，模拟继续运行。`
+      : `已将 ${rodKeys.length} 根控制棒统一设为 ${(normalizedDepth * 100).toFixed(0)}%。`, "success");
+    renderRodEditor();
+    renderOverview();
+    renderResultGridAndDetail();
+    return true;
+  }
+  if (state.runtime.running) pauseTimer();
+  markDirty(`已将 ${rodKeys.length} 根控制棒统一设为 ${(normalizedDepth * 100).toFixed(0)}%`);
+  renderRodEditor();
+  renderResultGridAndDetail();
+  return false;
+}
+
 function pauseTimer() {
   if (state.timer != null) {
     clearInterval(state.timer);
@@ -308,6 +349,39 @@ function stopPainting(message = "已停止刷涂。") {
 function renderRodEditor() {
   const root = $("#rod-editor");
   root.replaceChildren();
+  const rodKeys = [];
+  state.pendingLayout.forEach((row, z) => row.forEach((type, x) => {
+    if (type === "control_rod") rodKeys.push({ x, z });
+  }));
+  const bulk = document.createElement("div");
+  bulk.className = "rod-bulk-controls";
+  const bulkRow = document.createElement("label");
+  bulkRow.className = "rod-row";
+  bulkRow.innerHTML = `<span>统一深度</span>`;
+  const bulkInput = document.createElement("input");
+  bulkInput.id = "all-rod-depth-input";
+  bulkInput.type = "range";
+  bulkInput.min = "0";
+  bulkInput.max = "1";
+  bulkInput.step = "0.01";
+  bulkInput.value = "1";
+  bulkInput.disabled = state.runtime.scramActive === true || rodKeys.length === 0;
+  bulkInput.setAttribute("aria-label", "所有控制棒统一目标插入深度");
+  const bulkOutput = document.createElement("output");
+  bulkOutput.textContent = `${(Number(bulkInput.value) * 100).toFixed(0)}%`;
+  bulkInput.addEventListener("input", () => {
+    bulkOutput.textContent = `${(Number(bulkInput.value) * 100).toFixed(0)}%`;
+  });
+  bulkRow.append(bulkInput, bulkOutput);
+  const bulkButton = document.createElement("button");
+  bulkButton.id = "apply-all-rod-depth";
+  bulkButton.className = "button tiny secondary";
+  bulkButton.type = "button";
+  bulkButton.textContent = "应用到所有控制棒";
+  bulkButton.disabled = state.runtime.scramActive === true || rodKeys.length === 0;
+  bulkButton.addEventListener("click", () => setAllControlRodDepth(Number(bulkInput.value)));
+  bulk.append(bulkRow, bulkButton);
+  root.append(bulk);
   state.pendingLayout.forEach((row, z) => row.forEach((type, x) => {
     if (type !== "control_rod") return;
     const key = `${x},${z}`;
@@ -339,7 +413,7 @@ function renderRodEditor() {
     wrapper.append(input, output);
     root.append(wrapper);
   }));
-  if (!root.children.length) root.innerHTML = `<p class="muted">当前没有控制棒列；无控制棒是合法实验场景。</p>`;
+  if (!rodKeys.length) root.insertAdjacentHTML("beforeend", `<p class="muted">当前没有控制棒列；无控制棒是合法实验场景。</p>`);
 }
 
 function currentSummary() {

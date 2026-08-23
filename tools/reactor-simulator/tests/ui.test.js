@@ -16,6 +16,9 @@ test("fuel detail displays zero-integrity damage multiplier as 2.0x", () => {
 test("live control editing and explicit brush stop are present in both UI builds", () => {
   for (const source of [modularUi, singleFile]) {
     assert.match(source, /function applyLiveControlRodDepth/);
+    assert.match(source, /function setAllControlRodDepth/);
+    assert.match(source, /apply-all-rod-depth/);
+    assert.match(source, /统一深度/);
     assert.match(source, /模拟继续运行/);
     assert.match(source, /stop-painting/);
     assert.match(source, /function stopPainting/);
