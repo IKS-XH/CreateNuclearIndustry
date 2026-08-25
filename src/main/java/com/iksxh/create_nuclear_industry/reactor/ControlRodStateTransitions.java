@@ -24,6 +24,39 @@ public final class ControlRodStateTransitions {
         return requestTargetDepth(state, 1.0D);
     }
 
+    /** Emergency insertion updates the physical position for the SCRAM boundary. */
+    public static ControlRodColumnState scramInsert(ControlRodColumnState state) {
+        requireState(state);
+        if (state.jammed()) {
+            return state;
+        }
+        return new ControlRodColumnState(
+                state.integrity(),
+                1.0D,
+                1.0D,
+                false,
+                state.cachedHeatHu()
+        );
+    }
+
+    public static ControlRodColumnState restoreTargetDepth(
+            ControlRodColumnState state,
+            double targetDepth
+    ) {
+        requireState(state);
+        requireUnitInterval("SCRAM restore target depth", targetDepth);
+        if (state.jammed()) {
+            return state;
+        }
+        return new ControlRodColumnState(
+                state.integrity(),
+                targetDepth,
+                state.actualDepth(),
+                false,
+                state.cachedHeatHu()
+        );
+    }
+
     public static ControlRodColumnState moveActualDepth(ControlRodColumnState state, double actualDepth) {
         requireState(state);
         requireUnitInterval("requested actual depth", actualDepth);

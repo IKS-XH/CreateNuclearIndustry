@@ -111,14 +111,7 @@ public final class ReactorHeatPropagation {
             ));
         }
 
-        ReactorSnapshot next = new ReactorSnapshot(
-                nextFuel,
-                nextControls,
-                previous.coldCoolantMb(),
-                previous.hotCoolantMb(),
-                previous.meltdownProgressTicks(),
-                previous.meltdownCountdownStarted()
-        );
+        ReactorSnapshot next = previous.withColumns(nextFuel, nextControls);
         return new HeatPropagationResult(
                 next,
                 received,

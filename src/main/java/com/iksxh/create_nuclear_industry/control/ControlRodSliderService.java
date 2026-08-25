@@ -124,14 +124,7 @@ public final class ControlRodSliderService {
         Map<CoreColumnPosition, ControlRodColumnState> columns = new java.util.TreeMap<>(
                 snapshot.controlRodColumns());
         columns.put(target.column(), updated);
-        target.owner().setSnapshot(new ReactorSnapshot(
-                snapshot.fuelColumns(),
-                columns,
-                snapshot.coldCoolantMb(),
-                snapshot.hotCoolantMb(),
-                snapshot.meltdownProgressTicks(),
-                snapshot.meltdownCountdownStarted()
-        ));
+        target.owner().setSnapshot(snapshot.withColumns(snapshot.fuelColumns(), columns));
         target.drive().setServerDisplayedDepthPercent(payload.depthPercent());
         ACTIVE_DRAGS.remove(player.getUUID());
         return accepted(payload, target.column(), payload.depthPercent());
@@ -196,6 +189,10 @@ public final class ControlRodSliderService {
         if (!matchesColumnHint(payload, target.column())) {
             return invalid(payload, ControlRodSliderStatus.INVALID_COLUMN,
                     "client column does not match the server structure mapping");
+        }
+        if (requireMovable && target.owner().snapshot().scramActive()) {
+            return invalid(payload, ControlRodSliderStatus.SCRAM_LOCKED,
+                    "control rod slider is locked while SCRAM is active");
         }
         if (requireMovable && target.state().jammed()) {
             return invalid(payload, ControlRodSliderStatus.INVALID_STATE,

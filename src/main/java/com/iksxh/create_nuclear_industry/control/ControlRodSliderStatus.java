@@ -13,7 +13,8 @@ public enum ControlRodSliderStatus {
     INVALID_COLUMN(16, false),
     INVALID_STATE(17, false),
     STALE_SESSION(18, false),
-    OUT_OF_REACH(19, false);
+    OUT_OF_REACH(19, false),
+    SCRAM_LOCKED(20, false);
 
     private final int wireCode;
     private final boolean accepted;

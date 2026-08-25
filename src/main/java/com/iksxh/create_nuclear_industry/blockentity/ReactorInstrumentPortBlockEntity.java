@@ -1,6 +1,8 @@
 package com.iksxh.create_nuclear_industry.blockentity;
 
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
+import com.iksxh.create_nuclear_industry.control.ControlRodScramResult;
+import com.iksxh.create_nuclear_industry.control.ControlRodScramService;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
@@ -75,6 +77,16 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         structureOrigin = scan.origin();
         structureScanCount++;
         initializeAndSyncControlRods();
+        if (level != null && !level.isClientSide && structureScan.valid()) {
+            updateRedstoneScram(level.hasNeighborSignal(worldPosition));
+        }
+    }
+
+    public ControlRodScramResult updateRedstoneScram(boolean powered) {
+        if (level != null && level.isClientSide) {
+            throw new IllegalStateException("SCRAM can only be changed on the server");
+        }
+        return ControlRodScramService.apply(this, powered);
     }
 
     /**
@@ -107,14 +119,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         }
 
         if (changed) {
-            setSnapshot(new ReactorSnapshot(
-                    fuelColumns,
-                    controlColumns,
-                    snapshot.coldCoolantMb(),
-                    snapshot.hotCoolantMb(),
-                    snapshot.meltdownProgressTicks(),
-                    snapshot.meltdownCountdownStarted()
-            ));
+            setSnapshot(snapshot.withColumns(fuelColumns, controlColumns));
         }
 
         syncControlRodDrives();

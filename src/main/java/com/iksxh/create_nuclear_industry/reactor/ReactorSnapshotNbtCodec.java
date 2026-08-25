@@ -14,6 +14,7 @@ public final class ReactorSnapshotNbtCodec {
     private static final String FORMAT_VERSION_KEY = "FormatVersion";
     private static final String FUEL_COLUMNS_KEY = "FuelColumns";
     private static final String CONTROL_COLUMNS_KEY = "ControlRodColumns";
+    private static final String SCRAM_SAVED_TARGETS_KEY = "ScramSavedTargets";
 
     private ReactorSnapshotNbtCodec() {
     }
@@ -28,6 +29,7 @@ public final class ReactorSnapshotNbtCodec {
         root.putLong("HotCoolantMb", snapshot.hotCoolantMb());
         root.putLong("MeltdownProgressTicks", snapshot.meltdownProgressTicks());
         root.putBoolean("MeltdownCountdownStarted", snapshot.meltdownCountdownStarted());
+        root.putBoolean("ScramRequested", snapshot.scramRequested());
 
         ListTag fuelColumns = new ListTag();
         snapshot.fuelColumns().forEach((position, state) -> {
@@ -54,6 +56,14 @@ public final class ReactorSnapshotNbtCodec {
             controlColumns.add(entry);
         });
         root.put(CONTROL_COLUMNS_KEY, controlColumns);
+
+        ListTag scramTargets = new ListTag();
+        snapshot.scramSavedTargetDepths().forEach((position, targetDepth) -> {
+            CompoundTag entry = positionTag(position);
+            entry.putDouble("TargetDepth", targetDepth);
+            scramTargets.add(entry);
+        });
+        root.put(SCRAM_SAVED_TARGETS_KEY, scramTargets);
         return root;
     }
 
@@ -107,13 +117,28 @@ public final class ReactorSnapshotNbtCodec {
         long hotCoolant = Math.max(0L, root.getLong("HotCoolantMb"));
         long progress = Math.max(0L, root.getLong("MeltdownProgressTicks"));
         boolean started = root.getBoolean("MeltdownCountdownStarted") || progress > 0L;
+        boolean scramRequested = root.getBoolean("ScramRequested");
+        Map<CoreColumnPosition, Double> scramSavedTargets = new TreeMap<>();
+        ListTag scramTargetList = root.getList(SCRAM_SAVED_TARGETS_KEY, Tag.TAG_COMPOUND);
+        for (int index = 0; index < scramTargetList.size(); index++) {
+            CompoundTag entry = scramTargetList.getCompound(index);
+            CoreColumnPosition position = readPosition(entry);
+            if (position != null && controlColumns.containsKey(position)) {
+                scramSavedTargets.put(position, readUnit(entry, "TargetDepth", 1.0D));
+            }
+        }
+        if (!scramRequested) {
+            scramSavedTargets.clear();
+        }
         return new ReactorSnapshot(
                 fuelColumns,
                 controlColumns,
                 coldCoolant,
                 hotCoolant,
                 progress,
-                started
+                started,
+                scramSavedTargets,
+                scramRequested
         );
     }
 

@@ -57,14 +57,7 @@ public final class ReactorThermalCalculator {
             ));
         }
 
-        ReactorSnapshot nextSnapshot = new ReactorSnapshot(
-                nextFuelColumns,
-                previous.controlRodColumns(),
-                previous.coldCoolantMb(),
-                previous.hotCoolantMb(),
-                previous.meltdownProgressTicks(),
-                previous.meltdownCountdownStarted()
-        );
+        ReactorSnapshot nextSnapshot = previous.withColumns(nextFuelColumns, previous.controlRodColumns());
         return new ReactorThermalResult(nextSnapshot, results);
     }
 

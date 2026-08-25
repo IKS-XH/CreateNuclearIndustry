@@ -68,13 +68,6 @@ public final class ReactorMeltdownStateMachine {
     }
 
     private static ReactorSnapshot withMeltdown(ReactorSnapshot snapshot, long progress, boolean started) {
-        return new ReactorSnapshot(
-                snapshot.fuelColumns(),
-                snapshot.controlRodColumns(),
-                snapshot.coldCoolantMb(),
-                snapshot.hotCoolantMb(),
-                progress,
-                started
-        );
+        return snapshot.withMeltdown(progress, started);
     }
 }

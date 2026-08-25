@@ -6,10 +6,12 @@ import com.iksxh.create_nuclear_industry.structure.ReactorStructureDiagnostics;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,6 +27,24 @@ public final class ReactorInstrumentPortBlock extends P1EntityBlockBase implemen
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ReactorInstrumentPortBlockEntity(pos, state);
+    }
+
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
+                                   BlockPos neighborPos, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ReactorInstrumentPortBlockEntity instrument) {
+            instrument.updateRedstoneScram(level.hasNeighborSignal(pos));
+        }
+    }
+
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (!level.isClientSide && !state.is(oldState.getBlock())
+                && level.getBlockEntity(pos) instanceof ReactorInstrumentPortBlockEntity instrument) {
+            instrument.updateRedstoneScram(level.hasNeighborSignal(pos));
+        }
     }
 
     @Override

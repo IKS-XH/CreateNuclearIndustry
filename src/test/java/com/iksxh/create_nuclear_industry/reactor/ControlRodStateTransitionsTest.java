@@ -52,6 +52,28 @@ class ControlRodStateTransitionsTest {
     }
 
     @Test
+    void emergencyScramInsertsMovableRodAndRestoresOnlyItsTarget() {
+        ControlRodColumnState initial = new ControlRodColumnState(1.0D, 0.35D, 0.2D, false, 0.0D);
+
+        ControlRodColumnState inserted = ControlRodStateTransitions.scramInsert(initial);
+        ControlRodColumnState restored = ControlRodStateTransitions.restoreTargetDepth(inserted, 0.35D);
+
+        assertEquals(1.0D, inserted.targetDepth(), 1.0E-12D);
+        assertEquals(1.0D, inserted.actualDepth(), 1.0E-12D);
+        assertEquals(0.35D, restored.targetDepth(), 1.0E-12D);
+        assertEquals(1.0D, restored.actualDepth(), 1.0E-12D);
+        assertFalse(restored.jammed());
+    }
+
+    @Test
+    void emergencyScramLeavesJammedRodUntouched() {
+        ControlRodColumnState jammed = new ControlRodColumnState(0.0D, 0.35D, 0.2D, true, 0.0D);
+
+        assertSame(jammed, ControlRodStateTransitions.scramInsert(jammed));
+        assertSame(jammed, ControlRodStateTransitions.restoreTargetDepth(jammed, 0.9D));
+    }
+
+    @Test
     void jammedActualDepthStillSuppressesAdjacentIsolatedFuel() {
         CoreColumnPosition fuelPosition = new CoreColumnPosition(1, 1);
         ReactorSnapshot snapshot = new ReactorSnapshot(

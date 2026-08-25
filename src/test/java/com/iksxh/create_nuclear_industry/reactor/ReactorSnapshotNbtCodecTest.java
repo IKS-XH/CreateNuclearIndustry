@@ -149,6 +149,27 @@ class ReactorSnapshotNbtCodecTest {
         assertTrue(decoded.meltdownCountdownStarted(), "positive legacy progress implies a started countdown");
     }
 
+    @Test
+    void scramRequestAndSavedTargetsRoundTripWithoutCreatingASecondStateOwner() {
+        CoreColumnPosition position = new CoreColumnPosition(1, 1);
+        ReactorSnapshot expected = new ReactorSnapshot(
+                Map.of(),
+                Map.of(position, new ControlRodColumnState(1.0D, 1.0D, 1.0D, false, 0.0D)),
+                0L,
+                0L,
+                0L,
+                false,
+                Map.of(position, 0.35D),
+                true
+        );
+
+        ReactorSnapshot decoded = ReactorSnapshotNbtCodec.decode(ReactorSnapshotNbtCodec.encode(expected));
+
+        assertTrue(decoded.scramRequested());
+        assertTrue(decoded.scramActive());
+        assertEquals(Map.of(position, 0.35D), decoded.scramSavedTargetDepths());
+    }
+
     private static FuelColumnState fuel(double integrity, double cachedHeat) {
         return new FuelColumnState(FuelAssemblyState.installed(216_000, 10_000), integrity, cachedHeat);
     }

@@ -7,8 +7,11 @@ import com.iksxh.create_nuclear_industry.control.ControlRodSliderPayload;
 import com.iksxh.create_nuclear_industry.control.ControlRodSliderResponsePayloadFactory;
 import com.iksxh.create_nuclear_industry.control.ControlRodSliderService;
 import com.iksxh.create_nuclear_industry.control.ControlRodSliderStatus;
+import com.iksxh.create_nuclear_industry.control.ControlRodScramStatus;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
+import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
+import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
@@ -175,6 +178,119 @@ public final class P1ControlGameTests {
         });
     }
 
+    @GameTest(template = TEMPLATE, timeoutTicks = 120)
+    public static void redstoneScramLocksSavesAndRestoresMovableRodTargets(GameTestHelper helper) {
+        buildControlRodStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            instrument.setSnapshot(snapshotWithFuel(0.35D, 0.20D, false));
+
+            var engaged = instrument.updateRedstoneScram(true);
+            ControlRodColumnState scrammed = instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN);
+            require(helper, engaged.status() == ControlRodScramStatus.SCRAM_ACTIVE,
+                    "normal redstone SCRAM did not report active: " + engaged.reason());
+            require(helper, instrument.snapshot().scramRequested() && instrument.snapshot().scramActive(),
+                    "redstone SCRAM did not persist its active request state");
+            require(helper, scrammed.targetDepth() == 1.0D && scrammed.actualDepth() == 1.0D,
+                    "SCRAM did not insert the movable control rod to the bottom");
+            require(helper, instrument.snapshot().scramSavedTargetDepths().get(CONTROL_COLUMN) == 0.35D,
+                    "SCRAM did not save the pre-SCRAM target depth");
+
+            var repeatedHigh = instrument.updateRedstoneScram(true);
+            require(helper, repeatedHigh.status() == ControlRodScramStatus.SCRAM_ALREADY_ACTIVE,
+                    "continuous high redstone did not remain locked");
+            require(helper, instrument.snapshot().scramSavedTargetDepths().get(CONTROL_COLUMN) == 0.35D,
+                    "continuous high redstone overwrote the saved recovery target");
+
+            var lockedSlider = ControlRodSliderService.commitFromCreate(
+                    playerAtDrive(helper), helper.absolutePos(DRIVE), 0, 20);
+            require(helper, lockedSlider.status() == ControlRodSliderStatus.SCRAM_LOCKED,
+                    "SCRAM-active slider was not rejected by the server lock");
+            require(helper, instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN).targetDepth() == 1.0D,
+                    "SCRAM-active slider changed the inserted target");
+
+            var released = instrument.updateRedstoneScram(false);
+            require(helper, released.status() == ControlRodScramStatus.SCRAM_RELEASED,
+                    "redstone low level did not release SCRAM");
+            ControlRodColumnState restored = instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN);
+            require(helper, !instrument.snapshot().scramRequested() && !instrument.snapshot().scramActive(),
+                    "SCRAM release left the request state active");
+            require(helper, restored.targetDepth() == 0.35D && restored.actualDepth() == 1.0D,
+                    "SCRAM release did not restore the saved target depth");
+            require(helper, instrument.snapshot().scramSavedTargetDepths().isEmpty(),
+                    "SCRAM release retained a second saved target state");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 120)
+    public static void redstoneScramDistinguishesPartialAndFullyInsertedJammedRods(GameTestHelper helper) {
+        buildControlRodStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            instrument.setSnapshot(snapshotWithFuel(0.35D, 0.35D, true));
+
+            var incomplete = instrument.updateRedstoneScram(true);
+            require(helper, incomplete.status() == ControlRodScramStatus.SCRAM_INCOMPLETE,
+                    "partially inserted jammed rod did not report SCRAM_INCOMPLETE");
+            require(helper, incomplete.fissionHeatHu() > 0.0D,
+                    "incomplete SCRAM did not expose residual fission heat");
+            require(helper, instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN).targetDepth() == 0.35D,
+                    "SCRAM changed a jammed rod target");
+            require(helper, instrument.snapshot().scramSavedTargetDepths().isEmpty(),
+                    "SCRAM saved a recovery target for a jammed rod");
+
+            instrument.updateRedstoneScram(false);
+            instrument.setSnapshot(snapshotWithFuel(1.0D, 1.0D, true));
+            var complete = instrument.updateRedstoneScram(true);
+            require(helper, complete.status() == ControlRodScramStatus.SCRAM_ACTIVE,
+                    "fully inserted jammed rod was incorrectly reported as incomplete");
+            require(helper, complete.fissionHeatHu() == 0.0D,
+                    "fully inserted jammed rod left unexpected fission heat");
+            require(helper, instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN).actualDepth() == 1.0D,
+                    "fully inserted jammed rod was changed by SCRAM");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 120)
+    public static void redstoneScramWithoutControlRodsDoesNotMutateReactorState(GameTestHelper helper) {
+        buildFuelOnlyStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            ReactorSnapshot before = ReactorSnapshot.singleFuelColumn(
+                    new CoreColumnPosition(0, 0),
+                    new FuelColumnState(FuelAssemblyState.installed(216_000, 0), 1.0D, 3.0D));
+            instrument.setSnapshot(before);
+
+            var unavailable = instrument.updateRedstoneScram(true);
+            require(helper, unavailable.status() == ControlRodScramStatus.SCRAM_UNAVAILABLE_NO_CONTROL_RODS,
+                    "no-control-rod SCRAM did not return its explicit rejection reason");
+            require(helper, !instrument.snapshot().scramRequested() && !instrument.snapshot().scramActive(),
+                    "no-control-rod SCRAM changed request state");
+            require(helper, instrument.snapshot().equals(before),
+                    "no-control-rod SCRAM changed fuel, heat, coolant or meltdown state");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 120)
+    public static void redstoneOnControlRodDriveDoesNotTriggerScram(GameTestHelper helper) {
+        buildControlRodStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            instrument.setSnapshot(snapshot(0.35D, false));
+            helper.setBlock(DRIVE.above(), Blocks.REDSTONE_BLOCK.defaultBlockState());
+            helper.runAfterDelay(2, () -> {
+                require(helper, !instrument.snapshot().scramRequested(),
+                        "redstone on control_rod_drive incorrectly triggered SCRAM");
+                require(helper, instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN).targetDepth() == 0.35D,
+                        "redstone on control_rod_drive changed the rod target");
+                helper.succeed();
+            });
+        });
+    }
+
     private static void buildControlRodStructure(GameTestHelper helper) {
         for (Map.Entry<ReactorStructureDefinition.LocalPosition, String> entry
                 : ReactorStructureDefinition.canonicalTemplate().entrySet()) {
@@ -182,6 +298,14 @@ public final class P1ControlGameTests {
                     blockForId(entry.getValue()).defaultBlockState());
         }
         helper.setBlock(DRIVE, P1Blocks.CONTROL_ROD_DRIVE.get().defaultBlockState());
+    }
+
+    private static void buildFuelOnlyStructure(GameTestHelper helper) {
+        for (Map.Entry<ReactorStructureDefinition.LocalPosition, String> entry
+                : ReactorStructureDefinition.canonicalTemplate().entrySet()) {
+            helper.setBlock(new BlockPos(entry.getKey().x(), entry.getKey().y(), entry.getKey().z()),
+                    blockForId(entry.getValue()).defaultBlockState());
+        }
     }
 
     private static Block blockForId(String id) {
@@ -203,6 +327,20 @@ public final class P1ControlGameTests {
         return ReactorSnapshot.singleControlRodColumn(
                 CONTROL_COLUMN,
                 new ControlRodColumnState(1.0D, targetDepth, targetDepth, jammed, 0.0D));
+    }
+
+    private static ReactorSnapshot snapshotWithFuel(double targetDepth, double actualDepth, boolean jammed) {
+        return new ReactorSnapshot(
+                Map.of(new CoreColumnPosition(1, 0), new FuelColumnState(
+                        FuelAssemblyState.installed(216_000, 0), 1.0D, 0.0D)),
+                Map.of(CONTROL_COLUMN,
+                        new ControlRodColumnState(jammed ? 0.0D : 1.0D,
+                                targetDepth, actualDepth, jammed, 0.0D)),
+                0L,
+                0L,
+                0L,
+                false
+        );
     }
 
     private static ReactorInstrumentPortBlockEntity instrument(GameTestHelper helper) {
