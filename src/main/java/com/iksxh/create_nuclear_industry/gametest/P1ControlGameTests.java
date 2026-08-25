@@ -12,6 +12,8 @@ import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
 import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
+import com.iksxh.create_nuclear_industry.reactor.ReactorFissionCalculator;
+import com.iksxh.create_nuclear_industry.reactor.ReactorSimulationParameters;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
@@ -288,6 +290,51 @@ public final class P1ControlGameTests {
                         "redstone on control_rod_drive changed the rod target");
                 helper.succeed();
             });
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 120)
+    public static void controlRodTickAppliesTargetToFissionAndPreservesScramAndJammedState(
+            GameTestHelper helper
+    ) {
+        buildControlRodStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            instrument.setSnapshot(snapshotWithFuel(0.25D, 0.0D, false));
+
+            double beforeHeat = ReactorFissionCalculator.calculate(
+                    instrument.snapshot(), ReactorSimulationParameters.defaults(), false)
+                    .generatedHeatHu();
+            require(helper, beforeHeat == 3.0D,
+                    "target depth changed fission before the control tick");
+            require(helper, instrument.tickControlRods(),
+                    "control rod target did not produce a server-tick state change");
+            ControlRodColumnState moved = instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN);
+            require(helper, moved.targetDepth() == 0.25D && moved.actualDepth() == 0.25D,
+                    "target depth was not applied to actual depth on the server tick");
+            double afterHeat = ReactorFissionCalculator.calculate(
+                    instrument.snapshot(), ReactorSimulationParameters.defaults(), false)
+                    .generatedHeatHu();
+            require(helper, afterHeat == 2.25D,
+                    "actual control depth did not affect adjacent fuel fission after the tick");
+
+            instrument.setSnapshot(snapshotWithFuel(0.20D, 0.10D, false)
+                    .withScramState(Map.of(CONTROL_COLUMN, 0.20D), true));
+            require(helper, instrument.tickControlRods(),
+                    "SCRAM did not keep the movable rod locked through the tick adapter");
+            ControlRodColumnState scrammed = instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN);
+            require(helper, instrument.snapshot().scramActive()
+                            && scrammed.targetDepth() == 1.0D && scrammed.actualDepth() == 1.0D,
+                    "SCRAM tick bypassed the movable rod lock");
+
+            instrument.setSnapshot(snapshotWithFuel(0.80D, 0.35D, true)
+                    .withScramState(Map.of(), true));
+            ControlRodColumnState jammedBefore = instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN);
+            require(helper, !instrument.tickControlRods(),
+                    "jammed control rod was rewritten by the tick adapter");
+            require(helper, instrument.snapshot().controlRodColumns().get(CONTROL_COLUMN) == jammedBefore,
+                    "jammed rod state changed during SCRAM tick");
+            helper.succeed();
         });
     }
 

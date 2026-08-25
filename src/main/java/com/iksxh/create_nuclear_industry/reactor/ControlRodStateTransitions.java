@@ -72,6 +72,33 @@ public final class ControlRodStateTransitions {
         );
     }
 
+    /**
+     * Applies one server control tick. The first-version contract has no
+     * separate rod-speed parameter: a movable rod reaches its authoritative
+     * target on the next tick. SCRAM keeps that target locked at full
+     * insertion, while a jammed rod remains byte-for-byte unchanged.
+     */
+    public static ControlRodColumnState applyServerTick(
+            ControlRodColumnState state,
+            boolean scramActive
+    ) {
+        requireState(state);
+        if (state.jammed()) {
+            return state;
+        }
+        double nextTarget = scramActive ? 1.0D : state.targetDepth();
+        if (state.targetDepth() == nextTarget && state.actualDepth() == nextTarget) {
+            return state;
+        }
+        return new ControlRodColumnState(
+                state.integrity(),
+                nextTarget,
+                nextTarget,
+                false,
+                state.cachedHeatHu()
+        );
+    }
+
     public static ControlRodColumnState applyIntegrityDamage(
             ControlRodColumnState state,
             double damage,

@@ -7,6 +7,7 @@ import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshotNbtCodec;
+import com.iksxh.create_nuclear_industry.reactor.ReactorControlRodTick;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureScanner;
@@ -87,6 +88,25 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             throw new IllegalStateException("SCRAM can only be changed on the server");
         }
         return ControlRodScramService.apply(this, powered);
+    }
+
+    /**
+     * Advances only the control-rod actuator state. Full heat/coolant/damage
+     * simulation is intentionally left for P1-LOOP-01.
+     */
+    public boolean tickControlRods() {
+        if (level != null && level.isClientSide) {
+            return false;
+        }
+        if (!structureScan.valid()) {
+            return false;
+        }
+        ReactorSnapshot next = ReactorControlRodTick.advance(snapshot);
+        if (next == snapshot) {
+            return false;
+        }
+        setSnapshot(next);
+        return true;
     }
 
     /**

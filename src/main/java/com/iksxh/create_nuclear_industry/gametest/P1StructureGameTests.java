@@ -277,7 +277,7 @@ public final class P1StructureGameTests {
                 Map.of(new CoreColumnPosition(0, 0),
                         new FuelColumnState(FuelAssemblyState.installed(216_000, 12_345), 0.72D, 18.5D)),
                 Map.of(new CoreColumnPosition(1, 1),
-                        new ControlRodColumnState(0.91D, 0.63D, 0.48D, false, 4.25D)),
+                        new ControlRodColumnState(0.91D, 0.63D, 0.63D, false, 4.25D)),
                 4_096L,
                 512L,
                 27L,

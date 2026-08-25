@@ -1,6 +1,8 @@
 package com.iksxh.create_nuclear_industry.block;
 
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
+import com.iksxh.create_nuclear_industry.blockentity.ReactorControlRodTicker;
+import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDiagnostics;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
@@ -13,6 +15,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import com.simibubi.create.AllItems;
@@ -27,6 +31,18 @@ public final class ReactorInstrumentPortBlock extends P1EntityBlockBase implemen
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ReactorInstrumentPortBlockEntity(pos, state);
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level,
+            BlockState state,
+            BlockEntityType<T> type
+    ) {
+        if (type != P1BlockEntities.REACTOR_INSTRUMENT_PORT.get()) {
+            return null;
+        }
+        return ReactorControlRodTicker::advance;
     }
 
     @Override
