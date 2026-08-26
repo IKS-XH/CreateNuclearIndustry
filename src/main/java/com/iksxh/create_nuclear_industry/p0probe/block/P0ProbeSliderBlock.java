@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+/** P0 Create 滑块同步回归探针方块，不作为正式控制棒交互实现。 */
 public final class P0ProbeSliderBlock extends BaseEntityBlock {
     public static final MapCodec<P0ProbeSliderBlock> CODEC = simpleCodec(P0ProbeSliderBlock::new);
 

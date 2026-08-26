@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证失效燃料的四向等分传播、冷却拦截、对角线隔离和控制棒端点。 */
 class ReactorHeatPropagationTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final CoreColumnPosition SOURCE = new CoreColumnPosition(1, 1);

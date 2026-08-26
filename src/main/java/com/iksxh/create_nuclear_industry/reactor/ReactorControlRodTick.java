@@ -3,14 +3,14 @@ package com.iksxh.create_nuclear_industry.reactor;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Pure authoritative control-rod state adapter for one server tick. */
+/** 一次服务端 tick 中只推进控制棒权威状态的纯适配器。 */
 public final class ReactorControlRodTick {
     private ReactorControlRodTick() {
     }
 
     /**
-     * Advances every control rod in the snapshot without calculating heat,
-     * coolant, damage or meltdown. Those stages belong to P1-LOOP-01.
+     * 推进快照中的所有控制棒，但不计算热量、冷却、损伤或融毁；这些阶段属于
+     * 正式服务端循环的后续阶段。
      */
     public static ReactorSnapshot advance(ReactorSnapshot previous) {
         if (previous == null) {

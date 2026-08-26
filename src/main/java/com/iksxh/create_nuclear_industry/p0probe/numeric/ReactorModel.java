@@ -10,8 +10,9 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Deterministic, world-independent one-tick reactor prototype.
- * All reads happen from the previous snapshot and all writes go to a new snapshot.
+ * 确定性的、与世界无关的 P0 单 tick 反应堆原型。
+ * 所有读取来自上一快照，所有写入都生成新快照；本类仅保留历史数值回归依据，
+ * 不得被当作正式 P1 服务端状态源。
  */
 public final class ReactorModel {
     private static final int MAX_FEEDBACK_ITERATIONS = 256;
@@ -20,6 +21,7 @@ public final class ReactorModel {
     private ReactorModel() {
     }
 
+    /** 按 P0 固定顺序结算一次纯数值 tick，输入快照不被修改。 */
     public static ReactorTickResult tick(ReactorSnapshot previous, ReactorParameters parameters,
                                          ReactorTickInput input) {
         Map<ColumnKey, ColumnState> columns = previous.columns();
@@ -256,6 +258,7 @@ public final class ReactorModel {
                 convertedCoolant, removedHeat, coverage, meltdownDanger, ports.duplicatePortCount);
     }
 
+    /** 在列停止且有修复材料时按 P0 规则修复一根燃料或可动控制棒列。 */
     public static ColumnState repair(ColumnState column, double internalHeight, boolean columnStopped,
                                      int availablePlates) {
         if (column == null || !columnStopped || internalHeight <= 0 || !Double.isFinite(internalHeight)

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证单独控制棒 tick 的下一 tick 到位、SCRAM 锁定和无变化快照复用。 */
 class ReactorControlRodTickTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final CoreColumnPosition FUEL = new CoreColumnPosition(1, 1);

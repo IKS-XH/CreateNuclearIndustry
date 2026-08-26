@@ -12,6 +12,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/** P0 回归探针方块实体类型的隔离注册层，不向正式 P1 快照提供状态。 */
 public final class P0ProbeBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
@@ -46,6 +47,7 @@ public final class P0ProbeBlockEntities {
     private P0ProbeBlockEntities() {
     }
 
+    /** 在模组注册阶段提交 P0 探针方块实体类型。 */
     public static void register(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);
     }

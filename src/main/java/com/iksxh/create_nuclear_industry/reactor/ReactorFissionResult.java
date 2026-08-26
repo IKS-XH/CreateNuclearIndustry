@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Immutable aggregate of all per-column fission calculations for one step. */
+/** 一次模拟步所有燃料列裂变计算的不可变聚合结果，热量单位为 HU。 */
 public record ReactorFissionResult(
         Map<CoreColumnPosition, FuelColumnFissionResult> columns,
         double rawHeatHu,

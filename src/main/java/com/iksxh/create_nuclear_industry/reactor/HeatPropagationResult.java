@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/** Immutable result of one snapshot-based four-way heat propagation pass. */
+/** 基于同一快照进行一次四向热传播后的不可变结果，热量单位为 HU。 */
 public record HeatPropagationResult(
         ReactorSnapshot snapshot,
         Map<CoreColumnPosition, Double> receivedHeatHu,

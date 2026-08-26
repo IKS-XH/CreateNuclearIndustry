@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证方块事件重扫、服务端 tick 末端合并和扳手入口，禁止 per-tick 全量扫描。 */
 class ReactorStructureLifecycleContractTest {
     private static final Path JAVA_SOURCES = Path.of("src", "main", "java");
 

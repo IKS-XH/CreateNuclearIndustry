@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.control;
 
-/** Server result kept separate from the wire response so GameTests can exercise the rules directly. */
+/** 与线协议响应分离的服务端规则结果，便于 GameTest 直接验证校验与状态转换。 */
 public record ControlRodSliderResult(
         ControlRodSliderPhase phase,
         ControlRodSliderStatus status,
@@ -11,10 +11,12 @@ public record ControlRodSliderResult(
         String reason,
         boolean authoritativeDepth
 ) {
+    /** 返回状态码是否表示服务端接受了本次请求。 */
     public boolean accepted() {
         return status.accepted();
     }
 
+    /** 从请求中保留阶段、列和拖动 ID，构造不接受的结果。 */
     public static ControlRodSliderResult rejected(
             ControlRodSliderPayload payload,
             ControlRodSliderStatus status,
@@ -29,6 +31,7 @@ public record ControlRodSliderResult(
         return new ControlRodSliderResult(phase, status, columnX, columnZ, depth, dragId, reason, false);
     }
 
+    /** 复制结果并附加服务端当前目标深度，用于客户端回滚展示。 */
     public ControlRodSliderResult withAuthoritativeDepth(int columnX, int columnZ, int depthPercent) {
         return new ControlRodSliderResult(
                 phase, status, columnX, columnZ, depthPercent, dragId, reason, true);

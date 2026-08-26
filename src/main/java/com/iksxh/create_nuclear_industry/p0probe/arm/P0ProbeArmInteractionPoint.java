@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-/** Isolated Create mechanical-arm target type used by the P0 probe only. */
+/** 仅供 P0 探针使用的隔离 Create 机械臂目标类型，不拥有正式 P1 物品事务。 */
 public final class P0ProbeArmInteractionPoint extends ArmInteractionPoint {
     public static final ArmInteractionPointType TYPE = new ArmInteractionPointType() {
         @Override
@@ -35,6 +35,7 @@ public final class P0ProbeArmInteractionPoint extends ArmInteractionPoint {
         super(type, level, pos, state);
     }
 
+    /** 在 Create 注册生命周期中挂入历史探针目标类型。 */
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(P0ProbeArmInteractionPoint::onRegister);
     }

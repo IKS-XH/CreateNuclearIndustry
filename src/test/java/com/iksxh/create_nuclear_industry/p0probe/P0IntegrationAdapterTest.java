@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/** 验证 P0 适配缝隙的一次 tick、端口去重、快照交接和恢复行为。 */
 class P0IntegrationAdapterTest {
     @Test
     void serverAdapterTicksOnceDeduplicatesPortsAndCanResumeFromSnapshot() {

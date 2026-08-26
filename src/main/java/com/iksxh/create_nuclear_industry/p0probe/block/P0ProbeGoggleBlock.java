@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+/** P0 Create 护目镜信息回归探针方块，只验证显示适配边界。 */
 public final class P0ProbeGoggleBlock extends BaseEntityBlock {
     public static final MapCodec<P0ProbeGoggleBlock> CODEC = simpleCodec(P0ProbeGoggleBlock::new);
 

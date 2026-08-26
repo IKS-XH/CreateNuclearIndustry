@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/** P0 单 tick 的冷却端口、局部移热能力、内部高度和 SCRAM 输入。 */
 public record ReactorTickInput(
         List<CoolantPort> coolantPorts,
         Map<ColumnKey, Double> localCoolingCapacityHu,
@@ -33,10 +34,12 @@ public record ReactorTickInput(
         localCoolingCapacityHu = Collections.unmodifiableMap(capacities);
     }
 
+    /** 创建不提供冷却且未请求 SCRAM 的 P0 输入。 */
     public static ReactorTickInput noCooling(double internalHeight) {
         return new ReactorTickInput(List.of(), Map.of(), internalHeight, false);
     }
 
+    /** 复制输入并替换 SCRAM 电平。 */
     public ReactorTickInput withScram(boolean value) {
         return new ReactorTickInput(coolantPorts, localCoolingCapacityHu, internalHeight, value);
     }

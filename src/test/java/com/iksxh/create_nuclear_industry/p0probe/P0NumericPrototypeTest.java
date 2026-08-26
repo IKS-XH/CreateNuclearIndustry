@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** P0 历史数值回归集合，覆盖 HU、mB、四向传播、SCRAM、融毁边界和确定性。 */
 class P0NumericPrototypeTest {
     private static final ReactorParameters DEFAULTS = ReactorParameters.defaults();
     private static final List<String> SCENARIOS = new ArrayList<>();

@@ -43,6 +43,7 @@ import com.simibubi.create.AllBlocks;
 import java.util.ArrayList;
 import java.util.List;
 
+/** P0 历史 API、NBT、红石、Create 交互和流体 capability 的回归夹具。 */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P0ProbeGameTests {

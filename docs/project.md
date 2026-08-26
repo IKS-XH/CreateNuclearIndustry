@@ -195,7 +195,7 @@
 #### 燃料布局奖励
 
 相邻燃料列提供小幅增益，同时增加局部热点；相邻控制棒列降低热点。增益设置上限，确保玩家可以自由选择紧凑高功率布局或宽松稳定布局，而不必照抄唯一最优图。
-详情查阅文档：docs/reactor-local-control-revision-design.md
+详细规则见 [反应堆局部控制修订设计](./reactor-local-control-revision-design.md)。
 
 #### 在线单列换料
 

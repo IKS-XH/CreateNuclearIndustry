@@ -11,6 +11,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
+/** P0 单端口流体 capability 实体；冷端只填充，热端只排出。 */
 public final class P0ProbeFluidPortBlockEntity extends BlockEntity {
     private final boolean coldInput;
     private final PortTank tank;
@@ -27,6 +28,7 @@ public final class P0ProbeFluidPortBlockEntity extends BlockEntity {
         );
     }
 
+    /** 返回用于 capability 回归的内部流体槽。 */
     public IFluidHandler fluidHandler() {
         return tank;
     }
@@ -39,6 +41,7 @@ public final class P0ProbeFluidPortBlockEntity extends BlockEntity {
         return coldInput;
     }
 
+    /** 为测试夹具直接设置端口流体，不代表正式 P1 流体事务入口。 */
     public void setTestFluid(FluidStack stack) {
         tank.setFluid(stack);
         setChanged();

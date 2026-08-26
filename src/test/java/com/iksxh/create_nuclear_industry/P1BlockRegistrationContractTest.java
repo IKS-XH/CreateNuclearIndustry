@@ -11,6 +11,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证正式 P1 方块注册、模型链、纹理、自掉落和工具标签契约。 */
 class P1BlockRegistrationContractTest {
     private static final Path RESOURCES = Path.of("src", "main", "resources");
     private static final Path JAVA_SOURCES = Path.of("src", "main", "java");

@@ -30,10 +30,13 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Map;
 
+/** 验证服务端滑块校验、SCRAM 红石边沿、卡死棒和无控制棒结构边界。 */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P1ControlGameTests {
+    // 驱动器位于 5×5×5 结构顶部中心列帽；测试使用该固定局部坐标模拟玩家交互。
     private static final BlockPos DRIVE = new BlockPos(2, 4, 2);
+    // 中心列 (1,1) 是控制棒列，四向邻接逻辑据此选择受控燃料。
     private static final CoreColumnPosition CONTROL_COLUMN = new CoreColumnPosition(1, 1);
     private static final String TEMPLATE = "p0_probe_empty";
 

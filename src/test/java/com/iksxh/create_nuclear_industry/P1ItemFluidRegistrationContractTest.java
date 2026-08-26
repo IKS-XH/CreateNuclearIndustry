@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证正式物品、冷/热流体注册、语言条目和创造标签页暴露关系。 */
 class P1ItemFluidRegistrationContractTest {
     private static final Path RESOURCES = Path.of("src", "main", "resources");
     private static final Path JAVA_SOURCES = Path.of("src", "main", "java");

@@ -17,8 +17,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Server-only control boundary. It never trusts the client supplied column
- * number or depth and never stores a second reactor snapshot in the drive.
+ * 服务端专属控制边界。
+ *
+ * <p>客户端提供的列提示、深度和拖动阶段都必须重新校验；驱动器只作为交互目标，
+ * 不保存第二份反应堆快照。提交成功后，只有仪表端口的快照会发生权威状态变化。</p>
  */
 public final class ControlRodSliderService {
     private static final int MAX_INTERACTION_RANGE = 20;
@@ -27,6 +29,7 @@ public final class ControlRodSliderService {
     private ControlRodSliderService() {
     }
 
+    /** 统一处理滑块阶段，并在拒绝时尽可能返回服务端当前目标深度。 */
     public static ControlRodSliderResult handle(Player player, ControlRodSliderPayload payload) {
         if (payload == null || payload.phase() == null) {
             return restoreAuthoritativeDepth(player, payload,
@@ -42,7 +45,7 @@ public final class ControlRodSliderService {
         return restoreAuthoritativeDepth(player, payload, result);
     }
 
-    /** Entry point used by Create's final ValueSettingsPacket. */
+    /** Create 最终 ValueSettingsPacket 使用的提交入口。 */
     public static ControlRodSliderResult commitFromCreate(
             Player player,
             BlockPos drivePos,
@@ -55,12 +58,14 @@ public final class ControlRodSliderService {
         return handle(player, payload);
     }
 
+    /** 清除玩家退出或会话结束后的活动拖动状态。 */
     public static void clearSession(Player player) {
         if (player != null) {
             ACTIVE_DRAGS.remove(player.getUUID());
         }
     }
 
+    /** 返回当前服务端内存中的活动拖动会话数量，供回归测试观察。 */
     public static int activeSessionCount() {
         return ACTIVE_DRAGS.size();
     }
@@ -270,10 +275,8 @@ public final class ControlRodSliderService {
     }
 
     /**
-     * A rejected request must never leave a client-side preview stranded at a
-     * value the server did not accept.  If the request still identifies a
-     * reachable, valid drive, return that drive's current target as the
-     * rollback value; otherwise the client keeps its last known cache.
+     * 被拒绝的请求不得让客户端预览停留在服务端未接受的值上。若请求仍能定位到
+     * 可到达且有效的驱动器，返回其当前目标作为回滚值；否则客户端保留最近缓存。
      */
     private static ControlRodSliderResult restoreAuthoritativeDepth(
             Player player,

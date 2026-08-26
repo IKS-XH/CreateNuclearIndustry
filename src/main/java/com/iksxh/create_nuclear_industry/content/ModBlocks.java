@@ -11,6 +11,12 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/**
+ * 旧实验反应堆外壳的注册层。
+ *
+ * <p>该类保留早期样例内容，与正式 P1 反应堆注册分开；对象只有在模组事件总线
+ * 完成 {@link #register(IEventBus)} 后才交给 NeoForge 建立正式注册对象。</p>
+ */
 public final class ModBlocks {
     public static final String EXPERIMENTAL_REACTOR_CASING_ID = "experimental_reactor_casing";
 
@@ -35,6 +41,7 @@ public final class ModBlocks {
     private ModBlocks() {
     }
 
+    /** 将样例方块和对应方块物品挂入模组事件总线的注册阶段。 */
     public static void register(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);

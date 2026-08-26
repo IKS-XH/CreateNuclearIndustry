@@ -14,13 +14,11 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Loader-independent coordinate contract for the first P1 reactor.
+ * 首个 P1 反应堆的加载器无关结构坐标契约。
  *
- * <p>The local origin is the lower north-west corner of the 5 x 5 x 5
- * structure. X increases east, Y increases upward and Z increases south.
- * This class deliberately operates on namespaced block IDs instead of
- * {@code BlockState}; the world-facing scanner in STRUCT-03 can therefore
- * adapt a level without changing this contract.</p>
+ * <p>局部原点是 5×5×5 结构的西北下角；X 向东递增、Y 向上递增、Z 向南递增。
+ * 本类只处理带命名空间的方块 ID，不直接依赖 {@code BlockState}，因此世界扫描器
+ * 可以适配 Minecraft 世界而不改变坐标契约。</p>
  */
 public final class ReactorStructureDefinition {
     public static final String STRUCTURE_ID = P1ContentIds.EXPERIMENTAL_REACTOR_ID;
@@ -31,7 +29,7 @@ public final class ReactorStructureDefinition {
     public static final int INTERNAL_MAX = SIZE - 2;
     public static final int INTERNAL_HEIGHT = INTERNAL_MAX - INTERNAL_MIN + 1;
 
-    /** Canonical template positions; scan results may contain ports at any legal side slot. */
+    /** 标准模板位置；实际扫描结果允许端口出现在任一合法侧面槽位。 */
     public static final LocalPosition DEFAULT_INSTRUMENT_PORT_POSITION = new LocalPosition(2, 2, 0);
     public static final LocalPosition DEFAULT_COLD_PORT_POSITION = new LocalPosition(1, 2, 4);
     public static final LocalPosition DEFAULT_HOT_PORT_POSITION = new LocalPosition(3, 2, 4);
@@ -50,14 +48,17 @@ public final class ReactorStructureDefinition {
     private ReactorStructureDefinition() {
     }
 
+    /** 返回所有可放置侧面端口的局部坐标，结果不可变且按坐标排序。 */
     public static Set<LocalPosition> sidePortSlots() {
         return SIDE_PORT_SLOTS;
     }
 
+    /** 返回标准模板中的观察窗位置，结果不可变。 */
     public static Set<LocalPosition> windowPositions() {
         return DEFAULT_WINDOW_POSITIONS;
     }
 
+    /** 返回仪表、冷却剂输入和热冷却剂输出的标准端口位置。 */
     public static Map<PortType, LocalPosition> defaultPortPositions() {
         EnumMap<PortType, LocalPosition> ports = new EnumMap<>(PortType.class);
         ports.put(PortType.INSTRUMENT, DEFAULT_INSTRUMENT_PORT_POSITION);
@@ -66,6 +67,7 @@ public final class ReactorStructureDefinition {
         return Collections.unmodifiableMap(ports);
     }
 
+    /** 枚举完整 5×5×5 体积内的全部局部坐标。 */
     public static Set<LocalPosition> allPositions() {
         TreeSet<LocalPosition> positions = new TreeSet<>();
         for (int x = 0; x < SIZE; x++) {
@@ -78,23 +80,19 @@ public final class ReactorStructureDefinition {
         return Collections.unmodifiableSet(positions);
     }
 
+    /** 返回八根燃料列围绕一个中心空列的平衡锚点布局。 */
     public static Map<CoreColumnPosition, ColumnType> defaultColumnLayout() {
         return DEFAULT_COLUMNS;
     }
 
-    /**
-     * Returns the documented balance-anchor layout: eight fuel columns around
-     * one empty centre column. Control-rod columns are legal alternatives and
-     * are covered by {@link #templateFor(Map)}.
-     */
+    /** 返回文档定义的平衡锚点布局；控制棒列由 {@link #templateFor(Map)} 支持。 */
     public static Map<LocalPosition, String> canonicalTemplate() {
         return templateFor(DEFAULT_COLUMNS);
     }
 
     /**
-     * Builds a complete test/template layout. Every 3 x 3 core coordinate
-     * must be assigned exactly one role; no role is inferred from a missing
-     * map entry.
+     * 构造完整的测试/模板布局。3×3 堆芯坐标必须各自明确指定一种角色，缺少的
+     * 映射不会被推断成空列。
      */
     public static Map<LocalPosition, String> templateFor(
             Map<CoreColumnPosition, ColumnType> columns
@@ -156,9 +154,8 @@ public final class ReactorStructureDefinition {
     }
 
     /**
-     * Scans a complete local 5 x 5 x 5 snapshot. Missing coordinates, keys
-     * outside the volume, wrong casing/port/window placement and inconsistent
-     * fuel/control-rod columns are all rejected.
+     * 扫描完整的 5×5×5 局部快照。缺失坐标、体积外坐标、错误的外壳/端口/观察窗
+     * 位置，以及不一致的燃料列/控制棒列都会被拒绝。
      */
     public static ScanResult scan(Map<LocalPosition, String> blocks) {
         if (blocks == null) {
@@ -352,12 +349,14 @@ public final class ReactorStructureDefinition {
         return Collections.unmodifiableMap(columns);
     }
 
+    /** 结构端口的逻辑所有权类别。 */
     public enum PortType {
         INSTRUMENT,
         COLD_COOLANT,
         HOT_COOLANT
     }
 
+    /** 扫描失败或成功结果的稳定诊断类别。 */
     public enum DiagnosticCode {
         VALID("valid"),
         STRUCTURE_BLOCKS("structure_blocks"),
@@ -374,17 +373,20 @@ public final class ReactorStructureDefinition {
             this.translationSuffix = translationSuffix;
         }
 
+        /** 返回用于玩家可见消息的语言键，不改变诊断类别本身。 */
         public String translationKey() {
             return "message.create_nuclear_industry.reactor_structure." + translationSuffix;
         }
     }
 
+    /** 堆芯列帽及内部主体所表达的列角色。 */
     public enum ColumnType {
         EMPTY,
         FUEL,
         CONTROL_ROD
     }
 
+    /** 结构内部的不可变局部坐标，排序顺序为 X、Y、Z。 */
     public record LocalPosition(int x, int y, int z) implements Comparable<LocalPosition> {
         public boolean isInside() {
             return x >= 0 && x < SIZE && y >= 0 && y < SIZE && z >= 0 && z < SIZE;
@@ -406,6 +408,7 @@ public final class ReactorStructureDefinition {
         }
     }
 
+    /** 将堆芯列角色映射到主体坐标和列帽坐标。 */
     public record ColumnMapping(
             CoreColumnPosition corePosition,
             ColumnType type,
@@ -417,6 +420,7 @@ public final class ReactorStructureDefinition {
         }
     }
 
+    /** 结构契约扫描结果；有效结果才携带可用于后续模拟的列和端口映射。 */
     public record ScanResult(
             boolean valid,
             String failureReason,

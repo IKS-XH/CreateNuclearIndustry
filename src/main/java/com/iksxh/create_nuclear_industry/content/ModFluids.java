@@ -18,6 +18,13 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
+/**
+ * 冷、热复合冷却剂的 FluidType、流体源/流动态和可放置方块注册层。
+ *
+ * <p>冷却剂的流体注册 ID 与 {@link P1ContentIds} 保持一致，热态没有桶物品，
+ * 只能作为模拟和管路中的流体状态使用。客户端纹理只在 FluidType 的客户端扩展
+ * 初始化阶段提供，流体身份和事务判断仍由服务端注册对象决定。</p>
+ */
 public final class ModFluids {
     private static final int COOLANT_DENSITY = 1000;
     private static final int COOLANT_VISCOSITY = 1000;
@@ -54,7 +61,7 @@ public final class ModFluids {
             () -> new BaseFlowingFluid.Flowing(compoundCoolantProperties())
     );
 
-    /** The standard placeable block for the cold fluid; no BlockItem is registered for it. */
+    /** 冷态流体的标准可放置方块；这里不注册对应的 BlockItem。 */
     public static final DeferredBlock<LiquidBlock> COMPOUND_COOLANT_BLOCK = LIQUID_BLOCKS.register(
             P1ContentIds.COMPOUND_COOLANT_ID,
             () -> new LiquidBlock(COMPOUND_COOLANT_SOURCE.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER))
@@ -71,17 +78,20 @@ public final class ModFluids {
     private ModFluids() {
     }
 
+    /** 按 NeoForge 注册顺序提交 FluidType、流体和液体方块注册表。 */
     public static void register(IEventBus modEventBus) {
         FLUID_TYPES.register(modEventBus);
         FLUIDS.register(modEventBus);
         LIQUID_BLOCKS.register(modEventBus);
     }
 
+    /** 判断流体栈是否为冷态复合冷却剂的源流体或流动态。 */
     public static boolean isCompoundCoolant(FluidStack stack) {
         return stack != null && !stack.isEmpty()
                 && (stack.is(COMPOUND_COOLANT_SOURCE.get()) || stack.is(COMPOUND_COOLANT_FLOWING.get()));
     }
 
+    /** 判断流体栈是否为热态复合冷却剂的源流体或流动态。 */
     public static boolean isHotCompoundCoolant(FluidStack stack) {
         return stack != null && !stack.isEmpty()
                 && (stack.is(HOT_COMPOUND_COOLANT_SOURCE.get())

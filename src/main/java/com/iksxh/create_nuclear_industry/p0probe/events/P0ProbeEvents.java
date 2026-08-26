@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
+/** P0 探针专用事件监听器，验证锁定破坏和修复物品交互边界。 */
 public final class P0ProbeEvents {
     private P0ProbeEvents() {
     }

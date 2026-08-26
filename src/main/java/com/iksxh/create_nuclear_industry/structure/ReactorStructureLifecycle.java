@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-/** Schedules structure rescans only when the world can have changed. */
+/** 仅在世界可能发生变化时安排结构重扫，并在服务端 tick 末端执行。 */
 public final class ReactorStructureLifecycle {
     private static final Map<ServerLevel, Set<BlockPos>> PENDING =
             Collections.synchronizedMap(new IdentityHashMap<>());
@@ -37,7 +37,7 @@ public final class ReactorStructureLifecycle {
         scheduleRescanAround(serverLevel, event.getPos());
     }
 
-    /** Coalesces all changes in the current server turn into one dirty scan pass. */
+    /** 将当前服务端回合内的多个方块变化合并为一次脏位置扫描。 */
     public static void scheduleRescanAround(Level level, BlockPos changedPos) {
         if (!(level instanceof ServerLevel serverLevel) || changedPos == null) {
             return;
@@ -50,7 +50,7 @@ public final class ReactorStructureLifecycle {
         }
     }
 
-    /** Consumes only dirty positions after world mutations have completed for the tick. */
+    /** 在本 tick 的世界修改完成后消费脏位置，避免扫描看到中间状态。 */
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
         for (ServerLevel serverLevel : event.getServer().getAllLevels()) {
@@ -66,14 +66,14 @@ public final class ReactorStructureLifecycle {
         }
     }
 
-    /** Performs an immediate server-side scan for a direct block mutation or a test. */
+    /** 为直接方块修改或测试执行一次立即的服务端扫描。 */
     public static void rescanAroundNow(Level level, BlockPos changedPos) {
         if (level != null && !level.isClientSide && changedPos != null) {
             ReactorStructureScanner.rescanAround(level, changedPos);
         }
     }
 
-    /** Performs the explicit scan requested by a Create wrench on the instrument port. */
+    /** 执行 Create 扳手在仪表端口上明确请求的立即扫描，并更新仪表缓存。 */
     public static ReactorStructureScanner.WorldScanResult rescanInstrumentPortNow(
             Level level,
             BlockPos instrumentPortPos

@@ -18,11 +18,10 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * Formal P1 capability adapter for one cold or hot reactor port.
+ * 单个冷态或热态反应堆端口的正式 P1 capability 适配器。
  *
- * <p>The handler never owns a tank. Every read and write goes through the
- * instrument port's shared authoritative snapshot, so multiple ports cannot
- * create independent coolant inventories.</p>
+ * <p>处理器不拥有独立 tank；所有读写都经过仪表端口的共享权威快照，因此多个
+ * 端口不能产生彼此独立的冷却剂库存。流量限制按物理端口、按服务端 tick 计。</p>
  */
 public final class ReactorCoolantFluidHandler implements IFluidHandler {
     private static final Map<ReactorPortBlockEntity, ReactorCoolantPortFlowBudget> PORT_BUDGETS =
@@ -49,7 +48,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
         this.capacityOverrideMb = capacityOverrideMb;
     }
 
-    /** Creates the capability only for a cold/hot port bound to a valid reactor owner. */
+    /** 仅为绑定到有效反应堆所有者的冷/热端口创建 capability。 */
     public static ReactorCoolantFluidHandler forPort(ReactorPortBlockEntity port) {
         if (port == null) {
             return null;
@@ -66,7 +65,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
                 owner, cold, budgetFor(port), null);
     }
 
-    /** Uses the live server configuration for both the flow and buffer limits. */
+    /** 使用实时服务端配置中的流量上限和库存容量。 */
     public static ReactorCoolantFluidHandler forOwner(
             ReactorInstrumentPortBlockEntity owner,
             boolean coldInput
@@ -75,7 +74,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
                 new ReactorCoolantPortFlowBudget(), null);
     }
 
-    /** Exposed for deterministic tests with an explicit buffer capacity. */
+    /** 为确定性测试提供显式库存容量覆盖值。 */
     public static ReactorCoolantFluidHandler forOwner(
             ReactorInstrumentPortBlockEntity owner,
             boolean coldInput,

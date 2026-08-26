@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+/** 控制棒驱动器方块；其交互行为由对应方块实体的 Create behaviour 提供。 */
 public final class ControlRodDriveBlock extends P1EntityBlockBase {
     public static final MapCodec<ControlRodDriveBlock> CODEC = simpleCodec(ControlRodDriveBlock::new);
 

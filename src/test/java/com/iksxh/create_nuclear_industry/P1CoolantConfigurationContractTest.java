@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证冷却剂独立冷/热库存容量和服务端流量配置的读取边界。 */
 class P1CoolantConfigurationContractTest {
     private static final Path JAVA_SOURCES = Path.of("src", "main", "java");
 

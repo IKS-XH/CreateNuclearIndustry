@@ -9,6 +9,12 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/**
+ * 模组创造模式标签页的注册入口。
+ *
+ * <p>标签页只组织可见的物品列表，不拥有反应堆运行状态；图标和展示物品通过
+ * Deferred 注册对象读取，避免在注册阶段提前创建未完成注册的实例。</p>
+ */
 public final class ModCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(
             Registries.CREATIVE_MODE_TAB,
@@ -42,6 +48,7 @@ public final class ModCreativeTabs {
     private ModCreativeTabs() {
     }
 
+    /** 在模组注册阶段注册创造模式标签页。 */
     public static void register(IEventBus modEventBus) {
         CREATIVE_TABS.register(modEventBus);
     }

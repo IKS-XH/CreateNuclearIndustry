@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Immutable result of settling fission heat and local cooling for every fuel column. */
+/** 所有燃料列完成裂变热与局部冷却结算后的不可变结果，热量单位为 HU。 */
 public record ReactorThermalResult(
         ReactorSnapshot snapshot,
         Map<CoreColumnPosition, FuelColumnThermalResult> columns

@@ -4,9 +4,8 @@
 
 ## 当前规则
 
-- `docs/` 下的五份核心文档是活动设计依据；`docs/implementation-roadmap.md` 是活动阶段与验收依据。
+- `docs/` 下的五份设计文档（项目、反应堆局部控制、内容清单、配方、彩蛋与进度）是活动设计依据；`docs/implementation-roadmap.md` 是第六份核心文档，负责活动阶段与验收依据。
 - 活动任务放在 `docs/superpowers/plans/`；任务完成或被新计划替代后，才由项目经理移动到本目录。
-- 根目录 `NewMod/project.md` 是旧版设计稿，已经被 `docs/project.md` 取代；为保留历史，目前只标记不删除。
 - 任何归档动作必须由项目经理执行，并在提交说明中写明替代关系。
 
 ## 当前活动计划
@@ -22,3 +21,4 @@
 - `2026-08-17-project-manager-execution-plan.md`：已被 2026-08-18 的 Agent/开发者 P1 交接计划取代，保留作为历史任务记录。
 - `2026-08-18-reactor-html-simulator-plan.md`：HTML 数值模拟器的 SIMWEB-01 至 SIMWEB-07、15 项离线回归和人工验收已完成；保留为数值实验工具的交接与决策记录。
 - `2026-08-19-integrity-zero-simulator-alignment-plan.md`：P1-SIMWEB-08 已将零完整度继续运行、无全堆流量上限、`128 mB/t` 单端口、SCRAM 可用性和离线单文件同步到模拟器；项目经理复验 28 项 Node 测试通过，用户已完成人工验收。
+- `2026-08-25-chinese-code-comments-execution-plan.md`：P1-COMMENT-00 至 P1-COMMENT-06 已完成；存量 Java 中文注释通过全量审计，永久规则已收敛到根目录 `AGENTS.md`。

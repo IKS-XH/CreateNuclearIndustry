@@ -25,10 +25,12 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import java.util.List;
 import java.util.Map;
 
+/** 验证正式冷/热端口的 capability、共享库存、单端口流量和 Create 管路适配。 */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P1CoolantGameTests {
     private static final String TEMPLATE = "p0_probe_empty";
+    // 这些是标准模板的侧面端口槽位：仪表在北面，冷/热端口在南面。
     private static final BlockPos INSTRUMENT = new BlockPos(2, 2, 0);
     private static final BlockPos COLD = new BlockPos(1, 2, 4);
     private static final BlockPos HOT = new BlockPos(3, 2, 4);

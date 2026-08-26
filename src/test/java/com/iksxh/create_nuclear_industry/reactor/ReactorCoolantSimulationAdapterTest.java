@@ -8,6 +8,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/** 验证整数 mB 快照边界、热量余数、热端输出和正式 NBT 往返。 */
 class ReactorCoolantSimulationAdapterTest {
     private static final double EPSILON = 1.0E-12D;
 

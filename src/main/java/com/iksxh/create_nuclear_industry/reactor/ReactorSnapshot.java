@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Immutable, loader-independent state snapshot for the fixed P1 5 x 5 x 5 reactor.
- * Missing positions in the 3 x 3 interior map represent empty core columns.
+ * 固定 P1 5×5×5 反应堆的不可变、加载器无关状态快照。
+ * 3×3 内部映射中未出现的坐标代表空堆芯列；仪表端口拥有完整快照的权威副本。
  */
 public record ReactorSnapshot(
         Map<CoreColumnPosition, FuelColumnState> fuelColumns,
@@ -54,7 +54,7 @@ public record ReactorSnapshot(
         }
     }
 
-    /** Backward-compatible constructor for snapshots without SCRAM state. */
+    /** 兼容没有 SCRAM 状态字段的旧快照构造形式。 */
     public ReactorSnapshot(
             Map<CoreColumnPosition, FuelColumnState> fuelColumns,
             Map<CoreColumnPosition, ControlRodColumnState> controlRodColumns,
@@ -67,14 +67,17 @@ public record ReactorSnapshot(
                 meltdownProgressTicks, meltdownCountdownStarted, Map.of(), false);
     }
 
+    /** 创建没有燃料、控制棒、冷却剂和融毁进度的空快照。 */
     public static ReactorSnapshot empty() {
         return new ReactorSnapshot(Map.of(), Map.of(), 0L, 0L, 0L, false);
     }
 
+    /** 创建只含一根燃料列的测试快照。 */
     public static ReactorSnapshot singleFuelColumn(CoreColumnPosition position, FuelColumnState state) {
         return new ReactorSnapshot(Map.of(position, state), Map.of(), 0L, 0L, 0L, false);
     }
 
+    /** 创建只含一根控制棒列的测试快照。 */
     public static ReactorSnapshot singleControlRodColumn(
             CoreColumnPosition position,
             ControlRodColumnState state
@@ -82,20 +85,19 @@ public record ReactorSnapshot(
         return new ReactorSnapshot(Map.of(), Map.of(position, state), 0L, 0L, 0L, false);
     }
 
+    /** 返回已明确占用的燃料列与控制棒列数量。 */
     public int occupiedColumnCount() {
         return fuelColumns.size() + controlRodColumns.size();
     }
 
+    /** 判断 3×3 堆芯的九个列坐标是否都已有角色。 */
     public boolean hasCompleteCoreColumnSet() {
         return occupiedColumnCount() == MAX_CORE_COLUMNS;
     }
 
     /**
-     * Returns a copy with only the shared coolant inventories changed.
-     *
-     * <p>The instrument port remains the sole owner of the complete reactor
-     * snapshot; fluid capabilities use this method instead of creating a
-     * port-local inventory.</p>
+     * 只替换共享冷却剂账本并返回新快照；仪表端口仍是完整快照的唯一所有者，流体
+     * capability 不得在端口实体中创建独立库存。
      */
     public ReactorSnapshot withCoolantInventories(long nextColdCoolantMb, long nextHotCoolantMb) {
         return new ReactorSnapshot(
@@ -110,10 +112,12 @@ public record ReactorSnapshot(
         );
     }
 
+    /** 判断 SCRAM 请求是否仍绑定至少一根控制棒列。 */
     public boolean scramActive() {
         return scramRequested && !controlRodColumns.isEmpty();
     }
 
+    /** 替换列状态并裁剪已不存在控制棒列的 SCRAM 恢复目标。 */
     public ReactorSnapshot withColumns(
             Map<CoreColumnPosition, FuelColumnState> nextFuelColumns,
             Map<CoreColumnPosition, ControlRodColumnState> nextControlRodColumns
@@ -136,6 +140,7 @@ public record ReactorSnapshot(
         );
     }
 
+    /** 替换融毁进度与启动标记，进度单位为服务端 tick。 */
     public ReactorSnapshot withMeltdown(long nextProgressTicks, boolean nextStarted) {
         return new ReactorSnapshot(
                 fuelColumns,
@@ -149,6 +154,7 @@ public record ReactorSnapshot(
         );
     }
 
+    /** 替换 SCRAM 保存目标和请求标志，并由构造器校验列归属不变量。 */
     public ReactorSnapshot withScramState(
             Map<CoreColumnPosition, Double> nextSavedTargetDepths,
             boolean nextRequested

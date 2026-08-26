@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+/** P0 冷/热流体 capability 探针方块，验证方向权限但不拥有 P1 冷却账本。 */
 public final class P0ProbeFluidPortBlock extends BaseEntityBlock {
     public static final MapCodec<P0ProbeFluidPortBlock> CODEC = simpleCodec(properties -> new P0ProbeFluidPortBlock(properties, true));
     private final boolean cold;

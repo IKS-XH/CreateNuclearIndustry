@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.control;
 
-/** Wire phases for one client-side control-rod drag gesture. */
+/** 一次客户端控制棒拖动手势在线上传输的阶段。 */
 public enum ControlRodSliderPhase {
     START(0),
     PREVIEW(1),
@@ -13,10 +13,12 @@ public enum ControlRodSliderPhase {
         this.wireCode = wireCode;
     }
 
+    /** 返回稳定的协议阶段编号。 */
     public int wireCode() {
         return wireCode;
     }
 
+    /** 将协议编号转换为阶段；未知编号返回 {@code null}，由服务端拒绝。 */
     public static ControlRodSliderPhase fromWireCode(int wireCode) {
         for (ControlRodSliderPhase phase : values()) {
             if (phase.wireCode == wireCode) {

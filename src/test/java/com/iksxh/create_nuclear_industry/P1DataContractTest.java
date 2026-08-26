@@ -11,6 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证正式方块、物品、流体的资源链以及明确禁止的生存内容。 */
 class P1DataContractTest {
     private static final Path RESOURCES = Path.of("src", "main", "resources");
     private static final Path ASSETS = RESOURCES.resolve("assets/create_nuclear_industry");

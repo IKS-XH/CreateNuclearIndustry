@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证批准的本地/外部 ID 集合、旧样例隔离和禁止 ID 缺席。 */
 class P1RegistrationContractTest {
     private static final Path RESOURCES = Path.of("src", "main", "resources");
 

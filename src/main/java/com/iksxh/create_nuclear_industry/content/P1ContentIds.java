@@ -5,8 +5,11 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * P1 registration contract only. This class deliberately does not register
- * Minecraft objects; the follow-up data tasks consume these stable IDs.
+ * P1 注册 ID 与所有权的静态契约。
+ *
+ * <p>本类故意不创建或注册 Minecraft 对象；正式注册层、资源契约和测试共同消费
+ * 这些稳定 ID。模组自有 ID 必须保持未限定形式，Create 所有的外部 ID 则必须使用
+ * {@code create:} 命名空间。</p>
  */
 public final class P1ContentIds {
     public static final String EXPERIMENTAL_REACTOR_ID = "experimental_reactor";
@@ -29,13 +32,13 @@ public final class P1ContentIds {
     public static final String HOT_COMPOUND_COOLANT_ID = "hot_compound_coolant";
     public static final String COMPOUND_COOLANT_BUCKET_ID = "compound_coolant_bucket";
 
-    /** Create owns this item; this mod only consumes it as an information trigger. */
+    /** 该物品由 Create 所有，本模组只将其作为信息触发项消费。 */
     public static final String ENGINEER_GOGGLES_ID = "create:goggles";
 
-    /** Existing sample content is retained separately from the new P1 contract. */
+    /** 旧样例内容与新的 P1 正式契约分开保留。 */
     public static final String EXISTING_SAMPLE_REACTOR_CASING_ID = "experimental_reactor_casing";
 
-    /** The old descriptive name must never become a second item or alias. */
+    /** 旧描述性名称不得重新成为第二个物品或别名。 */
     public static final String REMOVED_ALLOY_STEEL_PLATE_ALIAS = "alloy_steel_plate";
 
     public static final List<Entry> FORMAL_IDS = List.of(
@@ -58,7 +61,7 @@ public final class P1ContentIds {
             new Entry(ENGINEER_GOGGLES_ID, Kind.EXTERNAL_ITEM, Owner.CREATE)
     );
 
-    /** IDs that are explicitly excluded from the P1 registration contract. */
+    /** 明确排除在 P1 注册契约之外的 ID。 */
     public static final Set<String> PROHIBITED_IDS = Set.of(
             "coolant_purifier",
             "contaminated_compound_coolant",
@@ -69,6 +72,7 @@ public final class P1ContentIds {
             REMOVED_ALLOY_STEEL_PLATE_ALIAS
     );
 
+    /** 注册条目的内容类别，用于资源与注册契约校验。 */
     public enum Kind {
         MULTIBLOCK,
         BLOCK,
@@ -77,11 +81,13 @@ public final class P1ContentIds {
         EXTERNAL_ITEM
     }
 
+    /** 注册条目的所有者；外部条目不由本模组创建。 */
     public enum Owner {
         MOD,
         CREATE
     }
 
+    /** 带有 ID、内容类别和所有权约束的不可变注册条目。 */
     public record Entry(String id, Kind kind, Owner owner) {
         public Entry {
             if (id == null || id.isBlank()) {
@@ -102,6 +108,7 @@ public final class P1ContentIds {
     private P1ContentIds() {
     }
 
+    /** 按大小写无关规则判断 ID 是否命中禁止注册名称或其保留关键词。 */
     public static boolean isProhibited(String id) {
         String normalized = id.toLowerCase(Locale.ROOT);
         return PROHIBITED_IDS.contains(normalized)

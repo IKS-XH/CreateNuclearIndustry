@@ -1,8 +1,8 @@
 package com.iksxh.create_nuclear_industry.p0probe.numeric;
 
 /**
- * Injectable P0 defaults. No value in this class is a formal server config yet.
- * The repair item cost and repair amount intentionally do not live here.
+ * 可注入的 P0 默认参数；本类中的值尚不是正式服务端配置。
+ * 修复物品成本与修复量故意不放在这里，以避免把历史原型当成 P1 玩法契约。
  */
 public record ReactorParameters(
         double baseHeatPerFuel,
@@ -47,6 +47,7 @@ public record ReactorParameters(
         requireFinitePositive("fuelCapacityPerBlock", fuelCapacityPerBlock);
     }
 
+    /** 返回 P0 历史回归使用的默认参数。 */
     public static ReactorParameters defaults() {
         return new ReactorParameters(
                 1.0,
@@ -69,11 +70,12 @@ public record ReactorParameters(
         );
     }
 
-    /** One block-equivalent of fuel consumed per tick at full isolated power. */
+    /** 在满功率且无邻列反馈时每 tick 消耗的燃料块等效量。 */
     public double baseBurnPerFuel() {
         return fuelCapacityPerBlock / (burnHoursPerBlock * 3600.0 * 20.0);
     }
 
+    /** 创建可修改数值后重新校验的构建器。 */
     public Builder toBuilder() {
         return new Builder(this);
     }
@@ -90,6 +92,7 @@ public record ReactorParameters(
         }
     }
 
+    /** P0 参数的受控修改器；build 时重新执行全部数值校验。 */
     public static final class Builder {
         private double baseHeatPerFuel;
         private double burnHoursPerBlock;

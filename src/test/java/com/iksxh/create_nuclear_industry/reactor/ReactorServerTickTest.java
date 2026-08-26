@@ -9,10 +9,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * 正式服务端反应堆单 tick 编排的确定性回归测试。
+ *
+ * <p>测试以阶段结果证据检查固定顺序：控制状态、裂变、冷却、热负荷与损伤、传播、融毁，
+ * 最后才提交燃耗。热量使用 HU，冷却剂库存使用 mB，冷却输入能力使用 mB/t。</p>
+ */
 class ReactorServerTickTest {
+    /** 使用正式默认热工、控制棒、燃耗和融毁参数。 */
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
+    /** 标准 3×3 堆芯中心列，作为单列 tick 测试的固定坐标。 */
     private static final CoreColumnPosition CENTER = new CoreColumnPosition(1, 1);
 
+    /** 验证一次完整 tick 的热量、冷却、损伤、燃耗和冷/热流体库存提交结果。 */
     @Test
     void oneTickCommitsFuelBurnCoolantAndDamageInTheDocumentedOrder() {
         ReactorSnapshot before = new ReactorSnapshot(
@@ -40,6 +49,7 @@ class ReactorServerTickTest {
         assertEquals(6L, result.snapshot().hotCoolantMb());
     }
 
+    /** 验证冷却不足时残余热、失效列传播和融毁倒计时按稳定顺序推进。 */
     @Test
     void missingCoolingCreatesResidualHeatDamageAndAStableMeltdownProgression() {
         CoreColumnPosition source = new CoreColumnPosition(1, 1);
@@ -72,6 +82,7 @@ class ReactorServerTickTest {
         assertFalse(result.snapshot().fuelColumns().get(source).fuelAssembly().exhausted());
     }
 
+    /** 验证本 tick 耗尽的燃料仍贡献本 tick 热量，但下一 tick 起停止产热。 */
     @Test
     void exhaustedAssemblyStopsGeneratingFromTheFollowingTick() {
         ReactorSimulationParameters oneTickFuel = new ReactorSimulationParameters(
@@ -105,6 +116,7 @@ class ReactorServerTickTest {
         assertEquals(0.0D, second.fission().generatedHeatHu(), 1.0E-12D);
     }
 
+    /** 验证小数燃耗余量会穿过热量传播并经过版本化 NBT 往返保持不变。 */
     @Test
     void fractionalFuelBurnSurvivesThermalPropagationAndNbtReload() {
         ReactorSnapshot before = ReactorSnapshot.singleFuelColumn(
@@ -123,6 +135,7 @@ class ReactorServerTickTest {
         assertEquals(after, ReactorSnapshotNbtCodec.decode(encoded));
     }
 
+    /** 构造同时含冷端输入、热端容量和单位吸热量的服务端冷却观测。 */
     private static ReactorServerTick.CoolantInput coolantInput(
             double coldAvailable,
             double hotAvailable,

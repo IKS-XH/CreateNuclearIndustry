@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证正式快照的列互斥、深度/库存/融毁不变量和防御性拷贝。 */
 class ReactorSnapshotTest {
     @Test
     void constructsEmptyReactorSnapshotWithSafeDefaults() {

@@ -34,17 +34,19 @@ import net.neoforged.neoforge.items.IItemHandler;
 import java.util.List;
 
 /**
- * Compile-only P0 probe. Nothing in this class is registered or invoked by the mod entry point.
- * Its purpose is to make accidental imports from old Forge/Create versions fail the build.
+ * 仅用于编译的 P0 API 探针。模组入口不会注册或调用本类；它只用来让旧版
+ * Forge/Create 的错误导入在编译期失败，不能被解释为正式 P1 API 或状态实现。
  */
 public final class P0CreateApiCompileProbe {
     private P0CreateApiCompileProbe() {
     }
 
+    /** 验证当前 NeoForge 方块流体 capability 的查找签名。 */
     public static IFluidHandler blockFluidCapability(Level level, BlockPos pos, Direction side) {
         return level.getCapability(Capabilities.FluidHandler.BLOCK, pos, side);
     }
 
+    /** 验证 Create 多 tank 包装器的组合入口。 */
     public static IFluidHandler combineFluidHandlers(IFluidHandler... handlers) {
         return new CombinedTankWrapper(handlers);
     }
@@ -105,6 +107,7 @@ public final class P0CreateApiCompileProbe {
         return blockEntity.getUpdatePacket();
     }
 
+    /** 验证 SyncedBlockEntity 的 P0 NBT 读写入口，不提供正式状态持久化实现。 */
     public static final class NbtProbeBlockEntity extends SyncedBlockEntity {
         public NbtProbeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
@@ -123,6 +126,7 @@ public final class P0CreateApiCompileProbe {
         }
     }
 
+    /** 验证方块邻居更新和服务端红石信号读取入口的最小探针。 */
     public static final class RedstoneProbeBlock extends Block {
         public RedstoneProbeBlock(Properties properties) {
             super(properties);
@@ -137,6 +141,7 @@ public final class P0CreateApiCompileProbe {
         }
     }
 
+    /** 验证 Create 机械臂交互点类型的创建回调签名，不注册正式交互点。 */
     public static final class ArmPointTypeProbe extends ArmInteractionPointType {
         @Override
         public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {

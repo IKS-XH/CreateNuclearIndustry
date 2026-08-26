@@ -8,6 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/** 验证冷/热端口按物理端口独立限流、去重和不设总流量上限。 */
 class ReactorCoolantPortAggregationTest {
     private static final double EPSILON = 1.0E-12D;
 

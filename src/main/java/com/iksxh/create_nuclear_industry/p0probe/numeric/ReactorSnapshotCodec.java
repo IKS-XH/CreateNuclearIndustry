@@ -3,11 +3,12 @@ package com.iksxh.create_nuclear_industry.p0probe.numeric;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Pure-Java deterministic snapshot codec used by N-14; the NBT adapter is separate. */
+/** N-14 使用的纯 Java 确定性快照编解码器；NBT 适配器独立存在，均属 P0 回归依据。 */
 public final class ReactorSnapshotCodec {
     private ReactorSnapshotCodec() {
     }
 
+    /** 将 P0 快照编码为稳定行格式字符串。 */
     public static String encode(ReactorSnapshot snapshot) {
         StringBuilder result = new StringBuilder()
                 .append(snapshot.meltdownProgress()).append('|')
@@ -22,6 +23,7 @@ public final class ReactorSnapshotCodec {
         return result.toString();
     }
 
+    /** 从稳定行格式字符串恢复 P0 快照。 */
     public static ReactorSnapshot decode(String encoded) {
         String[] lines = encoded.split("\\n");
         String[] header = lines[0].split("\\|");

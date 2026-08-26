@@ -5,13 +5,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Loader-independent, single-port coolant conservation ledger.
+ * 加载器无关、单 tick 的冷却剂守恒账本。
  *
- * <p>The caller supplies the coolant entering through the cold port and the
- * measured amount actually emitted by the hot port for the current tick. The
- * ledger also receives the total hot-inventory capacity, so a blocked hot port
- * may still use free internal buffer space, while a full buffer blocks further
- * conversion.</p>
+ * <p>调用方提供冷端进入量、热端本 tick 实际排出量和热库存总容量。热端阻塞时，
+ * 仍可使用内部剩余空间；热库存已满则停止继续转化。流体量单位为 mB，热量单位
+ * 为 HU。</p>
  */
 public final class ReactorCoolantLedger {
     public static final double DEFAULT_PER_PORT_FLOW_MB = 128.0D;
@@ -19,13 +17,13 @@ public final class ReactorCoolantLedger {
     private ReactorCoolantLedger() {
     }
 
-    /** Direction of one reactor coolant connection. */
+    /** 单个反应堆冷却剂连接的方向。 */
     public enum PortKind {
         COLD_INPUT,
         HOT_OUTPUT
     }
 
-    /** One observed coolant connection; duplicate connection IDs are one port. */
+    /** 一条观测到的冷却剂连接；重复 connection ID 只计为一个端口。 */
     public record Port(String connectionId, PortKind kind, double availableMb) {
         public Port {
             if (connectionId == null || connectionId.isBlank() || kind == null) {
@@ -43,7 +41,7 @@ public final class ReactorCoolantLedger {
         }
     }
 
-    /** Deduplicated, per-port-capped coolant flow summary for one tick. */
+    /** 一次 tick 去重并按端口限流后的冷却剂流量摘要。流量单位为 mB/t。 */
     public record PortSummary(
             double coldInputMb,
             double hotOutputCapacityMb,
@@ -65,13 +63,13 @@ public final class ReactorCoolantLedger {
             }
         }
 
-        /** Actual balanced flow before heat, inventory and absorption limits. */
+        /** 在热量、库存和吸收能力限制之前的实际平衡流量，单位为 mB。 */
         public double balancedFlowMb() {
             return Math.min(coldInputMb, hotOutputCapacityMb);
         }
     }
 
-    /** Persistent internal coolant inventories owned by the reactor snapshot. */
+    /** 由反应堆快照拥有的持久化内部冷却剂库存，单位为 mB。 */
     public record Inventory(double coldCoolantMb, double hotCoolantMb) {
         public Inventory {
             requireFiniteNonNegative("cold coolant inventory", coldCoolantMb);
@@ -79,21 +77,15 @@ public final class ReactorCoolantLedger {
         }
     }
 
-    /**
-     * Summarizes unique cold and hot ports using the frozen default limit.
-     * Duplicate connection IDs are counted once and never add throughput.
-     */
+    /** 使用固定默认单端口上限汇总冷、热端口；重复连接只计数一次且不增加吞吐。 */
     public static PortSummary summarizePorts(Collection<Port> ports) {
         return summarizePorts(ports, DEFAULT_PER_PORT_FLOW_MB);
     }
 
     /**
-     * Summarizes unique ports with a caller-supplied single-port limit.
-     *
-     * <p>The actual flow fields sum each port's observed amount after the
-     * single-port cap. The theoretical capacity fields are exactly the number
-     * of unique ports multiplied by that cap; there is deliberately no
-     * aggregate reactor flow cap.</p>
+     * 使用调用方提供的单端口上限汇总唯一端口。
+     * 实际流量是每个端口观测值限流后的总和；理论容量等于唯一端口数乘以上限，
+     * 故意不存在额外的反应堆总流量上限。
      */
     public static PortSummary summarizePorts(Collection<Port> ports, double perPortFlowMb) {
         if (ports == null) {
@@ -110,8 +102,7 @@ public final class ReactorCoolantLedger {
             Port previous = unique.putIfAbsent(port.connectionId(), port);
             if (previous != null) {
                 duplicatePortCount++;
-                // Duplicate observations must not sum. Keep the larger single
-                // observation so ordering cannot change the deduplicated flow.
+                // 重复观测不得相加；保留较大的单次观测，避免输入顺序改变去重流量。
                 if (port.availableMb() > previous.availableMb()
                         || (port.availableMb() == previous.availableMb()
                         && port.kind().compareTo(previous.kind()) < 0)) {
@@ -141,7 +132,7 @@ public final class ReactorCoolantLedger {
                 uniqueColdPortCount, uniqueHotPortCount, duplicatePortCount, perPortFlowMb);
     }
 
-    /** One cold-port input and measured hot-port output for one tick. */
+    /** 一次 tick 的冷端输入和热端实际输出观测。流体量单位为 mB，热量单位为 HU。 */
     public record Input(
             double availableHeatHu,
             double coldInAcceptedMb,
@@ -165,7 +156,7 @@ public final class ReactorCoolantLedger {
         }
     }
 
-    /** Result of one conservative conversion attempt. */
+    /** 一次保守转化尝试的库存、转化量和剩余热量结果。 */
     public record Settlement(
             Inventory nextInventory,
             double convertedCoolantMb,
@@ -185,9 +176,9 @@ public final class ReactorCoolantLedger {
     }
 
     /**
-     * Settles one cold-port to hot-port conversion without touching fuel state.
+     * 结算一次冷端到热端的转化，不修改燃料状态。
      *
-     * <p>The conversion amount is exactly:</p>
+     * <p>转化量严格按以下公式取最小值：</p>
      *
      * <pre>
      * hotSpaceAfterOutputMb = hotInventoryCapacityMb
@@ -199,11 +190,8 @@ public final class ReactorCoolantLedger {
      * )
      * </pre>
      *
-     * <p>The output capacity validates the measured hot-port transfer; the
-     * measured transfer itself is what frees hot-inventory space. Input
-     * coolant that cannot be converted remains in the cold inventory, and
-     * converted coolant is added to the hot inventory before the measured
-     * hot output is deducted.</p>
+     * <p>输出容量用于验证热端实测转移量，实测转移量本身才会释放热库存空间。
+     * 暂时无法转化的输入保留在冷库存；转化量先加入热库存，再扣除实测热端输出。</p>
      */
     public static Settlement settle(Inventory previous, Input input) {
         if (previous == null || input == null) {

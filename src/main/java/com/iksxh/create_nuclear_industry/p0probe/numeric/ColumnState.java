@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.p0probe.numeric;
 
-/** Immutable previous-tick state for one horizontal column. */
+/** P0 原型单个水平列的不可变上一 tick 状态，不是正式 P1 快照字段。 */
 public record ColumnState(
         ColumnKey key,
         ColumnKind kind,
@@ -31,26 +31,32 @@ public record ColumnState(
         }
     }
 
+    /** 创建带燃料剩余量、完整度和缓存热量的燃料列。热量单位为 HU。 */
     public static ColumnState fuel(ColumnKey key, double remaining, double integrity, double cachedHeat) {
         return new ColumnState(key, ColumnKind.FUEL, remaining, integrity, 0, 0, 0, cachedHeat, false);
     }
 
+    /** 创建未卡死的 P0 控制棒列，深度单位为 [0,1]。 */
     public static ColumnState controlRod(ColumnKey key, double integrity, double depth) {
         return new ColumnState(key, ColumnKind.CONTROL_ROD, 0, 0, integrity, depth, depth, 0, false);
     }
 
+    /** 创建携带缓存热量的 P0 控制棒列。热量单位为 HU。 */
     public static ColumnState controlRodWithHeat(ColumnKey key, double integrity, double depth, double cachedHeat) {
         return new ColumnState(key, ColumnKind.CONTROL_ROD, 0, 0, integrity, depth, depth, cachedHeat, false);
     }
 
+    /** 创建空列。 */
     public static ColumnState empty(ColumnKey key) {
         return new ColumnState(key, ColumnKind.EMPTY, 0, 0, 0, 0, 0, 0, false);
     }
 
+    /** 判断燃料剩余量和燃料列完整度是否都使其仍可参与反应。 */
     public boolean effectiveFuel() {
         return kind == ColumnKind.FUEL && fuelRemaining > 0 && fuelColumnIntegrity > 0;
     }
 
+    /** 返回考虑卡死阈值后的有效控制深度，范围为 [0,1]。 */
     public double effectiveControlDepth(ReactorParameters parameters) {
         if (kind != ColumnKind.CONTROL_ROD) {
             return 0;
@@ -59,10 +65,12 @@ public record ColumnState(
                 ? jammedDepth : controlRodDepth;
     }
 
+    /** 用新燃料状态创建同一列的替换值。 */
     public ColumnState withFuel(double remaining, double integrity, double nextCachedHeat) {
         return fuel(key, remaining, integrity, nextCachedHeat);
     }
 
+    /** 用新控制棒状态创建同一列的替换值。 */
     public ColumnState withControl(double integrity, double depth, double nextCachedHeat, boolean nextJammed,
                                    double nextJammedDepth) {
         return new ColumnState(key, ColumnKind.CONTROL_ROD, 0, 0, integrity, depth, nextJammedDepth,

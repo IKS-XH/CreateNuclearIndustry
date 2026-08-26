@@ -10,13 +10,13 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 
 import java.util.List;
 
-/** Shared persistence shell; it intentionally contains no reactor simulation state. */
+/** P1 方块实体共享的持久化壳；故意不包含反应堆模拟状态。 */
 public abstract class P1MinimalBlockEntity extends SmartBlockEntity {
     protected P1MinimalBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    /** Formal P1 entities opt into Create's behaviour host without adding a ticker. */
+    /** 正式 P1 实体可作为 Create behaviour 宿主，但不因此新增 ticker。 */
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
     }
@@ -32,12 +32,14 @@ public abstract class P1MinimalBlockEntity extends SmartBlockEntity {
         super.read(tag, registries, clientPacket);
     }
 
+    /** 为服务端契约测试导出与真实保存路径相同的附加 NBT。 */
     public CompoundTag saveForServerTest(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
         saveAdditional(tag, registries);
         return tag;
     }
 
+    /** 为服务端契约测试走与真实加载路径相同的附加 NBT 读取。 */
     public void loadForServerTest(CompoundTag tag, HolderLookup.Provider registries) {
         loadAdditional(tag, registries);
     }

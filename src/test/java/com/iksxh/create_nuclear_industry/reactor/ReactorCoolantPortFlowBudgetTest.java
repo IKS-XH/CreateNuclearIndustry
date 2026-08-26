@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/** 验证单物理端口 mB/t 预算在模拟、执行和服务端 tick 边界上的行为。 */
 class ReactorCoolantPortFlowBudgetTest {
     @Test
     void repeatedExecuteCallsShareOnePhysicalPortQuota() {

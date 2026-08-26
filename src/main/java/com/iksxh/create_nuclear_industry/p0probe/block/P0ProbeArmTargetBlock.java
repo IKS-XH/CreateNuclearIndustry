@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+/** P0 机械臂物品事务探针方块，不参与正式反应堆结构。 */
 public final class P0ProbeArmTargetBlock extends BaseEntityBlock {
     public static final MapCodec<P0ProbeArmTargetBlock> CODEC = simpleCodec(P0ProbeArmTargetBlock::new);
 

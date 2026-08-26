@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
+/** P0 护目镜信息提供实体，只验证 Create 显示适配，不拥有服务端模拟状态。 */
 public final class P0ProbeGoggleBlockEntity extends BlockEntity implements IHaveGoggleInformation {
     public P0ProbeGoggleBlockEntity(BlockPos pos, BlockState state) {
         super(P0ProbeBlockEntities.P0_PROBE_GOGGLE.get(), pos, state);

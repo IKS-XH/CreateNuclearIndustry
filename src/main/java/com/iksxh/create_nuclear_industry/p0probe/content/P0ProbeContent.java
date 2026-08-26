@@ -18,9 +18,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * Deliberately isolated registrations used only by the P0 API GameTests.
- * These are not added to the normal creative tab. The small survival recipes are
- * temporary test access only and must not be treated as P1 gameplay content.
+ * 仅供 P0 API GameTest 使用的隔离注册内容。
+ * 这些对象不加入普通创造标签页；简易生存配方只为测试取用，不能视为 P1 玩法内容。
  */
 public final class P0ProbeContent {
     public static final DeferredRegister.Blocks BLOCKS =
@@ -67,6 +66,7 @@ public final class P0ProbeContent {
     private P0ProbeContent() {
     }
 
+    /** 在模组注册阶段提交 P0 探针方块、物品和 Create 机械臂目标类型。 */
     public static void register(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);

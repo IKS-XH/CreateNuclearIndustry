@@ -1,10 +1,11 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
-/** Central state transitions that preserve the P1 control-rod jamming contract. */
+/** 集中维护控制棒状态转换，并保证 P1 的卡死棒不再移动约束。 */
 public final class ControlRodStateTransitions {
     private ControlRodStateTransitions() {
     }
 
+    /** 请求新的目标深度；卡死棒保持完整状态不变，深度单位为 [0,1]。 */
     public static ControlRodColumnState requestTargetDepth(ControlRodColumnState state, double targetDepth) {
         requireState(state);
         requireUnitInterval("requested target depth", targetDepth);
@@ -20,11 +21,12 @@ public final class ControlRodStateTransitions {
         );
     }
 
+    /** 将可动控制棒的目标深度请求为完全插入。 */
     public static ControlRodColumnState requestScram(ControlRodColumnState state) {
         return requestTargetDepth(state, 1.0D);
     }
 
-    /** Emergency insertion updates the physical position for the SCRAM boundary. */
+    /** 紧急插入同时更新物理深度，保证 SCRAM 边界立即反映完全插入。 */
     public static ControlRodColumnState scramInsert(ControlRodColumnState state) {
         requireState(state);
         if (state.jammed()) {
@@ -39,6 +41,7 @@ public final class ControlRodStateTransitions {
         );
     }
 
+    /** 释放 SCRAM 后恢复保存的目标深度；卡死棒不恢复。 */
     public static ControlRodColumnState restoreTargetDepth(
             ControlRodColumnState state,
             double targetDepth
@@ -57,6 +60,7 @@ public final class ControlRodStateTransitions {
         );
     }
 
+    /** 更新控制棒实际物理深度；卡死棒保持原值。 */
     public static ControlRodColumnState moveActualDepth(ControlRodColumnState state, double actualDepth) {
         requireState(state);
         requireUnitInterval("requested actual depth", actualDepth);
@@ -73,10 +77,8 @@ public final class ControlRodStateTransitions {
     }
 
     /**
-     * Applies one server control tick. The first-version contract has no
-     * separate rod-speed parameter: a movable rod reaches its authoritative
-     * target on the next tick. SCRAM keeps that target locked at full
-     * insertion, while a jammed rod remains byte-for-byte unchanged.
+     * 应用一次服务端控制棒 tick。首版契约没有独立棒速参数，因此可动棒在下一 tick
+     * 直接到达权威目标；SCRAM 将目标锁定为完全插入，卡死棒逐字段保持不变。
      */
     public static ControlRodColumnState applyServerTick(
             ControlRodColumnState state,
@@ -99,6 +101,7 @@ public final class ControlRodStateTransitions {
         );
     }
 
+    /** 扣减控制棒完整度；低于失效阈值后卡死状态单调成立。 */
     public static ControlRodColumnState applyIntegrityDamage(
             ControlRodColumnState state,
             double damage,
@@ -118,6 +121,7 @@ public final class ControlRodStateTransitions {
         );
     }
 
+    /** 修复控制棒完整度；只有超过失效阈值才解除既有卡死状态。 */
     public static ControlRodColumnState repairIntegrity(
             ControlRodColumnState state,
             double repairAmount,

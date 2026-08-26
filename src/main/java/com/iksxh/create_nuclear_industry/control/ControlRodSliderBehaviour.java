@@ -12,7 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** Create's value-settings UI adapter for one control-rod drive. */
+/** 单个控制棒驱动器的 Create ValueSettings 界面适配器。 */
 public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
     private final ControlRodDriveBlockEntity drive;
 
@@ -26,7 +26,7 @@ public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
         withFormatter(value -> value + "%");
     }
 
-    /** The drive display cache is sent to clients but never persisted as reactor state. */
+    /** 驱动器展示缓存可以发送到客户端，但永远不作为反应堆状态持久化。 */
     @Override
     public void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         if (clientPacket) {
@@ -81,6 +81,7 @@ public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
         value = Math.max(0, Math.min(100, depthPercent));
     }
 
+    /** 将服务端批准的深度写入客户端展示值，不修改仪表端口快照。 */
     public void setClientDisplayedValue(int depthPercent) {
         value = Math.max(0, Math.min(100, depthPercent));
     }

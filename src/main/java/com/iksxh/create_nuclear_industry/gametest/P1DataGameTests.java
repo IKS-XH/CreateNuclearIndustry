@@ -22,6 +22,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 
+/** 验证正式流体 ID、Create 流体罐适配和资源数据在运行时的契约。 */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P1DataGameTests {
@@ -42,6 +43,7 @@ public final class P1DataGameTests {
             require(helper, contained.getAmount() == FluidType.BUCKET_VOLUME,
                     "coolant bucket capacity is not one standard bucket");
 
+            // 空模板内的独立位置只承载流体源方块，避免与反应堆结构坐标耦合。
             BlockPos fluidPos = new BlockPos(1, 1, 1);
             helper.setBlock(fluidPos, Blocks.AIR.defaultBlockState());
             FluidActionResult emptied = FluidUtil.tryPlaceFluid(
@@ -76,6 +78,7 @@ public final class P1DataGameTests {
 
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void coldCoolantBucketFillsCreateFluidTankCapability(GameTestHelper helper) {
+        // 流体罐放在结构外的独立位置，用于验证管路转移而非反应堆库存。
         BlockPos tankPos = new BlockPos(3, 1, 3);
         helper.setBlock(tankPos, AllBlocks.FLUID_TANK.get().defaultBlockState());
         helper.runAfterDelay(5, () -> {

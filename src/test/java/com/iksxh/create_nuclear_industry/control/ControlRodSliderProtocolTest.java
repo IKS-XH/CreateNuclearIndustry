@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证控制棒滑块线协议的阶段码、服务端状态码和校验字段。 */
 class ControlRodSliderProtocolTest {
     @Test
     void wireCodesRoundTripAndUnknownValuesAreRejected() {

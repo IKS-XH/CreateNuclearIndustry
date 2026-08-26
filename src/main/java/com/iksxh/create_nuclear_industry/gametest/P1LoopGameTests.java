@@ -21,16 +21,26 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Map;
 
+/**
+ * 正式 P1 服务端反应堆循环的 GameTest 回归夹具。
+ *
+ * <p>测试使用与结构扫描器相同的本地坐标和方块 ID，在真实 GameTest 服务端中验证无效结构拒绝
+ * 推进、裂变—冷却—燃耗—持久化顺序，以及 SCRAM 对相邻和非相邻燃料列的边界影响。</p>
+ */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P1LoopGameTests {
+    /** 提供空世界的最小模板；正式结构由测试方法按契约坐标显式放置。 */
     private static final String TEMPLATE = "p0_probe_empty";
+    /** 仪表端口在 5×5×5 结构中的本地锚点，也是权威快照的读取入口。 */
     private static final BlockPos INSTRUMENT = new BlockPos(2, 2, 0);
+    /** 用于单列回归的堆芯坐标，采用固定 3×3 内部坐标系。 */
     private static final CoreColumnPosition TEST_COLUMN = new CoreColumnPosition(0, 0);
 
     private P1LoopGameTests() {
     }
 
+    /** 无效结构不得推进服务端权威快照，避免未成形反应堆产生热量或燃耗。 */
     @GameTest(template = TEMPLATE, timeoutTicks = 80)
     public static void unformedReactorDoesNotRun(GameTestHelper helper) {
         helper.setBlock(INSTRUMENT, P1Blocks.REACTOR_INSTRUMENT_PORT.get().defaultBlockState());
@@ -48,6 +58,7 @@ public final class P1LoopGameTests {
         });
     }
 
+    /** 验证完整结构的一次 tick 会结算裂变、冷却、燃耗、损伤并可经 NBT 恢复。 */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void formedReactorRunsFissionCoolingBurnAndReload(GameTestHelper helper) {
         buildCanonicalStructure(helper);
@@ -85,6 +96,7 @@ public final class P1LoopGameTests {
         });
     }
 
+    /** 验证 SCRAM 只抑制相邻控制棒列影响范围内的裂变，不会全局清零非相邻燃料。 */
     @GameTest(template = TEMPLATE, timeoutTicks = 120)
     public static void scrammedReactorDoesNotGloballyZeroNonAdjacentFuel(GameTestHelper helper) {
         Map<ReactorStructureDefinition.LocalPosition, String> layout =
@@ -118,6 +130,7 @@ public final class P1LoopGameTests {
         });
     }
 
+    /** 从固定仪表坐标取得方块实体，并把夹具错误转换为 GameTest 失败。 */
     private static ReactorInstrumentPortBlockEntity instrument(GameTestHelper helper) {
         var blockEntity = helper.getBlockEntity(INSTRUMENT);
         require(helper, blockEntity instanceof ReactorInstrumentPortBlockEntity,
@@ -125,10 +138,12 @@ public final class P1LoopGameTests {
         return (ReactorInstrumentPortBlockEntity) blockEntity;
     }
 
+    /** 使用结构定义的标准模板，避免 GameTest 自己维护第二份结构坐标。 */
     private static void buildCanonicalStructure(GameTestHelper helper) {
         buildStructure(helper, ReactorStructureDefinition.canonicalTemplate());
     }
 
+    /** 按结构定义的本地坐标逐项放置方块；空方块由模板 ID 显式表示并保持为空气。 */
     private static void buildStructure(
             GameTestHelper helper,
             Map<ReactorStructureDefinition.LocalPosition, String> template
@@ -139,6 +154,7 @@ public final class P1LoopGameTests {
         }
     }
 
+    /** 将结构契约中的命名空间 ID 映射为已注册方块，未知 ID 必须立即暴露夹具错误。 */
     private static net.minecraft.world.level.block.Block blockForId(String id) {
         return switch (id) {
             case "minecraft:air" -> Blocks.AIR;
@@ -154,6 +170,7 @@ public final class P1LoopGameTests {
         };
     }
 
+    /** 统一使用 GameTest 的失败通道，确保异步回调中的失败不会被普通断言吞掉。 */
     private static void require(GameTestHelper helper, boolean condition, String message) {
         if (!condition) {
             helper.fail(message);

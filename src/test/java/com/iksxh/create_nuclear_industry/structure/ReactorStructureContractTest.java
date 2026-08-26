@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证 5×5×5 结构坐标、端口槽位、九列角色和所有无效结构诊断。 */
 class ReactorStructureContractTest {
     private static final Path TEMPLATE = Path.of(
             "src", "main", "resources", "data", "create_nuclear_industry", "structures",

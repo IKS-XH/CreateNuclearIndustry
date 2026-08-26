@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
-/** One fuel column's settled heat load and integrity change for a simulation step. */
+/** 一次模拟步中单根燃料列的热负荷、移热量和完整度变化结果，热量单位为 HU。 */
 public record FuelColumnThermalResult(
         double generatedHeatHu,
         double removedHeatHu,

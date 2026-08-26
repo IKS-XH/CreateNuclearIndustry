@@ -7,7 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-/** Serverbound payload for start, preview, commit and cancel slider gestures. */
+/** 客户端发往服务端的滑块 START、PREVIEW、COMMIT、CANCEL 请求载荷。 */
 public record ControlRodSliderPayload(
         BlockPos drivePos,
         int columnX,
@@ -45,28 +45,33 @@ public record ControlRodSliderPayload(
         drivePos = drivePos == null ? null : drivePos.immutable();
     }
 
+    /** 将线上的阶段编号解析为协议阶段；未知编号返回 {@code null} 供服务端拒绝。 */
     public ControlRodSliderPhase phase() {
         return ControlRodSliderPhase.fromWireCode(phaseCode);
     }
 
+    /** 构造开始拖动请求。 */
     public static ControlRodSliderPayload start(BlockPos drivePos, int columnX, int columnZ,
                                                  int depthPercent, long dragId) {
         return new ControlRodSliderPayload(drivePos, columnX, columnZ, 0, depthPercent,
                 ControlRodSliderPhase.START.wireCode(), dragId);
     }
 
+    /** 构造拖动预览请求。 */
     public static ControlRodSliderPayload preview(BlockPos drivePos, int columnX, int columnZ,
                                                    int depthPercent, long dragId) {
         return new ControlRodSliderPayload(drivePos, columnX, columnZ, 0, depthPercent,
                 ControlRodSliderPhase.PREVIEW.wireCode(), dragId);
     }
 
+    /** 构造提交目标深度请求。 */
     public static ControlRodSliderPayload commit(BlockPos drivePos, int columnX, int columnZ,
                                                   int depthPercent, long dragId) {
         return new ControlRodSliderPayload(drivePos, columnX, columnZ, 0, depthPercent,
                 ControlRodSliderPhase.COMMIT.wireCode(), dragId);
     }
 
+    /** 构造取消拖动请求；取消阶段不使用深度字段。 */
     public static ControlRodSliderPayload cancel(BlockPos drivePos, int columnX, int columnZ,
                                                   long dragId) {
         return new ControlRodSliderPayload(drivePos, columnX, columnZ, 0, 0,

@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证模组元数据、Create/NeoForge 版本约束、语言和样例资源链。 */
 class ResourceContractTest {
     private static final Path RESOURCES = Path.of("src", "main", "resources");
     private static final String SAMPLE_ID = "create_nuclear_industry:experimental_reactor_casing";

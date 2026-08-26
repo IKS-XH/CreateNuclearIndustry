@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/** 验证模组入口与旧样例内容的稳定项目标识。 */
 class ProjectContractTest {
     @Test
     void exposesStableModAndSampleBlockIds() {

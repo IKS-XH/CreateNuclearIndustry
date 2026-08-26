@@ -21,6 +21,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import com.simibubi.create.AllItems;
 
+/**
+ * 反应堆唯一仪表端口的方块入口。
+ *
+ * <p>仪表端口方块实体拥有结构缓存和反应堆快照；本方块只负责创建实体、挂接
+ * 服务端 ticker、监听红石 SCRAM 信号以及响应 Create 扳手的显式重扫。</p>
+ */
 public final class ReactorInstrumentPortBlock extends P1EntityBlockBase implements IWrenchable {
     public static final MapCodec<ReactorInstrumentPortBlock> CODEC = simpleCodec(ReactorInstrumentPortBlock::new);
 
@@ -48,6 +54,7 @@ public final class ReactorInstrumentPortBlock extends P1EntityBlockBase implemen
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
                                    BlockPos neighborPos, boolean movedByPiston) {
+        // 红石状态只在服务端写入 SCRAM；客户端不拥有反应堆控制状态。
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof ReactorInstrumentPortBlockEntity instrument) {
             instrument.updateRedstoneScram(level.hasNeighborSignal(pos));
@@ -56,6 +63,7 @@ public final class ReactorInstrumentPortBlock extends P1EntityBlockBase implemen
 
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        // 放置或替换后立即采样一次，确保初始高电平不会等到下一次邻居更新。
         super.onPlace(state, level, pos, oldState, movedByPiston);
         if (!level.isClientSide && !state.is(oldState.getBlock())
                 && level.getBlockEntity(pos) instanceof ReactorInstrumentPortBlockEntity instrument) {
@@ -68,6 +76,7 @@ public final class ReactorInstrumentPortBlock extends P1EntityBlockBase implemen
         if (!context.getItemInHand().is(AllItems.WRENCH.get())) {
             return InteractionResult.PASS;
         }
+        // 客户端只确认交互，真正扫描和消息内容由服务端决定。
         if (context.getLevel().isClientSide) {
             return InteractionResult.SUCCESS;
         }

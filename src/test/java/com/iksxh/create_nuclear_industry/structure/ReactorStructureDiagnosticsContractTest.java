@@ -12,6 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证结构诊断码与双语语言键及成功统计摘要。 */
 class ReactorStructureDiagnosticsContractTest {
     private static final Path ENGLISH = Path.of(
             "src", "main", "resources", "assets", "create_nuclear_industry", "lang", "en_us.json");

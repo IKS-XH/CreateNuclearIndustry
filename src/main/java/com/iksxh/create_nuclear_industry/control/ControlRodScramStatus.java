@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.control;
 
-/** Stable server-side outcomes for the instrument-port redstone SCRAM edge. */
+/** 仪表端口红石 SCRAM 边沿的稳定服务端结果类别。 */
 public enum ControlRodScramStatus {
     SCRAM_ACTIVE,
     SCRAM_INCOMPLETE,

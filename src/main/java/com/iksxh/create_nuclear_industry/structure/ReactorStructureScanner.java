@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Adapts the loader-independent reactor contract to a live Minecraft level. */
+/** 将加载器无关的反应堆结构契约适配到实时 Minecraft 世界。 */
 public final class ReactorStructureScanner {
     private static final String INSTRUMENT_ID = id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID);
 
@@ -21,8 +21,8 @@ public final class ReactorStructureScanner {
     }
 
     /**
-     * Finds the local origin from an instrument port and scans exactly one
-     * fixed 5 x 5 x 5 candidate for every legal instrument slot.
+     * 根据仪表端口反推局部原点，并针对每个合法仪表槽扫描一个固定 5×5×5 候选。
+     * 候选证据无法唯一确定时返回无效结果，避免把错误结构当成有效结构。
      */
     public static WorldScanResult scanInstrumentPort(Level level, BlockPos instrumentPortPos) {
         if (level == null || instrumentPortPos == null) {
@@ -67,7 +67,7 @@ public final class ReactorStructureScanner {
         return best.result();
     }
 
-    /** Scans every instrument port within the only distance a fixed structure can cover. */
+    /** 扫描变化位置周围固定结构能够覆盖的全部仪表端口，并刷新对应缓存。 */
     public static void rescanAround(Level level, BlockPos changedPos) {
         if (level == null || changedPos == null) {
             return;
@@ -133,6 +133,7 @@ public final class ReactorStructureScanner {
         return "create_nuclear_industry:" + path;
     }
 
+    /** 世界坐标原点与加载器无关扫描契约的组合结果。 */
     public record WorldScanResult(
             BlockPos origin,
             ReactorStructureDefinition.ScanResult contract

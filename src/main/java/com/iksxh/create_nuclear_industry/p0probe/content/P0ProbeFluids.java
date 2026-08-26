@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-/** Minimal source/flowing fluids used by the P0 capability tests. */
+/** 仅供 P0 capability 测试使用的最小冷/热源流体与流动态注册层。 */
 public final class P0ProbeFluids {
     public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(
             NeoForgeRegistries.Keys.FLUID_TYPES,
@@ -58,15 +58,18 @@ public final class P0ProbeFluids {
     private P0ProbeFluids() {
     }
 
+    /** 在模组注册阶段提交 P0 流体类型和流体。 */
     public static void register(net.neoforged.bus.api.IEventBus modEventBus) {
         FLUID_TYPES.register(modEventBus);
         FLUIDS.register(modEventBus);
     }
 
+    /** 判断流体栈是否为 P0 冷态探针流体。 */
     public static boolean isCold(FluidStack stack) {
         return !stack.isEmpty() && (stack.is(COLD_SOURCE.get()) || stack.is(COLD_FLOWING.get()));
     }
 
+    /** 判断流体栈是否为 P0 热态探针流体。 */
     public static boolean isHot(FluidStack stack) {
         return !stack.isEmpty() && (stack.is(HOT_SOURCE.get()) || stack.is(HOT_FLOWING.get()));
     }

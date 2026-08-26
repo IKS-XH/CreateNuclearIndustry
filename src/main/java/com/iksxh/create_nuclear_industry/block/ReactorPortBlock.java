@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+/** 冷却剂或补料端口方块；具体端口类型由放置位置和结构扫描结果解释。 */
 public final class ReactorPortBlock extends P1EntityBlockBase {
     public static final MapCodec<ReactorPortBlock> CODEC = simpleCodec(ReactorPortBlock::new);
 

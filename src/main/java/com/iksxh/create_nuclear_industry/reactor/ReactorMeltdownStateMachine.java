@@ -1,10 +1,14 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
-/** Monotonic P1 meltdown countdown state machine. */
+/** P1 融毁倒计时状态机；进度只会保持或递增，修复完成时才清零。 */
 public final class ReactorMeltdownStateMachine {
     private ReactorMeltdownStateMachine() {
     }
 
+    /**
+     * 根据有效燃料列的传播覆盖率、SCRAM 与有效冷却更新融毁状态。危险覆盖率达到
+     * 阈值才启动倒计时；SCRAM 或有效冷却会暂停进度，但不会回退已累计 tick。
+     */
     public static MeltdownUpdateResult update(
             ReactorSnapshot beforePropagation,
             HeatPropagationResult propagation,

@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec2;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/** Keeps an already-open Create value panel aligned with a server response. */
+/** 将已打开的 Create 数值面板与服务端滑块响应保持一致。 */
 public final class ControlRodSliderScreenSync {
     private static final Field POS = field("pos");
     private static final Field INITIAL_SETTINGS = field("initialSettings");
@@ -19,6 +19,7 @@ public final class ControlRodSliderScreenSync {
     private ControlRodSliderScreenSync() {
     }
 
+    /** 仅在目标面板仍对应指定驱动器时刷新展示值；反射失败则保留安全的旧界面。 */
     public static void refresh(BlockPos drivePos, int depthPercent) {
         Minecraft minecraft = Minecraft.getInstance();
         if (!(minecraft.screen instanceof ValueSettingsScreen screen)
@@ -36,7 +37,7 @@ public final class ControlRodSliderScreenSync {
             try {
                 SET_CURSOR.invoke(screen, screen.getCoordinateOfValue(0, clamped));
             } catch (ReflectiveOperationException ignored) {
-                // The panel still receives the value; cursor movement is only visual polish.
+                // 面板已经收到数值；光标移动只影响视觉，不影响权威状态。
             }
         }
     }
@@ -59,7 +60,7 @@ public final class ControlRodSliderScreenSync {
         try {
             field.set(instance, value);
         } catch (ReflectiveOperationException ignored) {
-            // Create does not expose a public refresh API on this screen.
+            // Create 没有为该面板公开刷新 API，反射失败时保持当前展示。
         }
     }
 

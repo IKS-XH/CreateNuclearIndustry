@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证 P0 编译探针只引用当前 NeoForge/Create API 入口，不形成正式玩法契约。 */
 class P0ApiProbeContractTest {
     @Test
     void compileProbeNamesOnlyTheCurrentVersionEntrypoints() throws IOException {

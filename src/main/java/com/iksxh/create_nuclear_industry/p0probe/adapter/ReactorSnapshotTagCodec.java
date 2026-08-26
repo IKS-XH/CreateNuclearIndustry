@@ -11,11 +11,12 @@ import net.minecraft.nbt.Tag;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** P0-only NBT adapter; the numeric model itself has no Minecraft dependency. */
+/** P0 专用 NBT 适配器；数值模型本身不依赖 Minecraft，也不作为正式 P1 状态源。 */
 public final class ReactorSnapshotTagCodec {
     private ReactorSnapshotTagCodec() {
     }
 
+    /** 将 P0 数值快照写入历史探针 NBT 字段。 */
     public static CompoundTag save(ReactorSnapshot snapshot) {
         CompoundTag tag = new CompoundTag();
         tag.putDouble("MeltdownProgress", snapshot.meltdownProgress());
@@ -40,6 +41,7 @@ public final class ReactorSnapshotTagCodec {
         return tag;
     }
 
+    /** 从历史探针 NBT 字段恢复 P0 数值快照。 */
     public static ReactorSnapshot load(CompoundTag tag) {
         Map<ColumnKey, ColumnState> columns = new TreeMap<>();
         ListTag list = tag.getList("Columns", Tag.TAG_COMPOUND);

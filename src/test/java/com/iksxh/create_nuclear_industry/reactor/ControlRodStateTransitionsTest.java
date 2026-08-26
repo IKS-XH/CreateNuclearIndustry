@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证控制棒目标/实际深度、SCRAM、卡死和超过失效阈值修复的不变量。 */
 class ControlRodStateTransitionsTest {
     private static final double FAILURE_THRESHOLD = 0.0D;
 

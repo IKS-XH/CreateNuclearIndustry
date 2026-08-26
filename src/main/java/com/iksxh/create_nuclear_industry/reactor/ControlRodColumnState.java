@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
-/** Immutable target, physical and damage state for one control-rod column. */
+/** 一根控制棒列的不可变目标深度、实际深度、完整度、卡死状态和缓存热量。 */
 public record ControlRodColumnState(
         double integrity,
         double targetDepth,

@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证 P1 方块实体类型注册及唯一仪表端口状态所有者约束。 */
 class P1BlockEntityRegistrationContractTest {
     private static final Path JAVA_SOURCES = Path.of("src", "main", "java");
 

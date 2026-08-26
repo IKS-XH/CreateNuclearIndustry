@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
+/** P0 Create 滑块同步实体，只验证行为回调与更新标签传输。 */
 public final class P0ProbeSliderBlockEntity extends SmartBlockEntity {
     public ScrollValueBehaviour slider;
     private int clientCallbackValue;

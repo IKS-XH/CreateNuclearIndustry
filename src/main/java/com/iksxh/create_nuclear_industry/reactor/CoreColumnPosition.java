@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Zero-based position in the fixed P1 reactor's 3 x 3 interior column grid.
- * World and structure coordinates are intentionally left to the structure adapter.
+ * 固定 P1 反应堆 3×3 内部列网格中的零基坐标。
+ * 世界坐标与结构局部坐标故意留给结构适配器处理。
  */
 public record CoreColumnPosition(int x, int z) implements Comparable<CoreColumnPosition> {
     public static final int GRID_SIZE = 3;
@@ -16,6 +16,7 @@ public record CoreColumnPosition(int x, int z) implements Comparable<CoreColumnP
         }
     }
 
+    /** 按北、南、西、东顺序返回网格内的四向邻列，不跨越边界。 */
     public List<CoreColumnPosition> cardinalNeighbours() {
         List<CoreColumnPosition> neighbours = new ArrayList<>(4);
         addIfInside(neighbours, x, z - 1);

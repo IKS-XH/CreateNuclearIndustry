@@ -1,10 +1,9 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
 /**
- * Bridges the loader-independent coolant ledger to the formal reactor
- * snapshot. Fluid capabilities report whole-millibucket transfers, so heat
- * smaller than one millibucket of conversion remains as heat instead of
- * being rounded away.
+ * 将加载器无关冷却剂账本桥接到正式反应堆快照。
+ * 流体 capability 只报告整数 mB 转移，因此不足一个 mB 转化量的热不会被舍入丢失，
+ * 而是继续作为剩余热量返回给后续热工阶段。
  */
 public final class ReactorCoolantSimulationAdapter {
     private static final double WHOLE_MB_EPSILON = 1.0E-9D;
@@ -51,18 +50,14 @@ public final class ReactorCoolantSimulationAdapter {
         }
     }
 
-    /**
-     * Settles one formal reactor coolant conversion and returns a new
-     * authoritative snapshot. The previous snapshot is read-only.
-     */
+    /** 结算一次正式冷却剂转化并返回新的权威快照；输入快照保持只读。 */
     public static Result settle(ReactorSnapshot previous, TickInput input) {
         if (previous == null || input == null) {
             throw new IllegalArgumentException("previous snapshot and coolant input are required");
         }
 
-        // The formal snapshot stores fluid in integer mB. Keep a fractional
-        // heat remainder in the ledger result so it can be carried by the
-        // reactor thermal state instead of silently losing it.
+        // 正式快照以整数 mB 保存流体；账本结果保留不足一个 mB 的热量余数，交给
+        // 后续热工状态继续携带，避免静默丢失热量。
         double wholeMillibucketHeat = wholeMillibucketHeat(
                 input.availableHeatHu(), input.coolantAbsorptionHuPerMb());
         ReactorCoolantLedger.Settlement ledgerSettlement = ReactorCoolantLedger.settle(

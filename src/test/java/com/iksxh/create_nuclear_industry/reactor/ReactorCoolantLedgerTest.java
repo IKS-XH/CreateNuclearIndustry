@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/** 验证冷却账本的守恒、热端背压、容量边界和非法输入拒绝。 */
 class ReactorCoolantLedgerTest {
     private static final double EPSILON = 1.0E-12D;
 

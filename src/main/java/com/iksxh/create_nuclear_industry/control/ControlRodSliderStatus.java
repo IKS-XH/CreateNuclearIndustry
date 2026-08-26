@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.control;
 
-/** Stable result codes returned by the server-authoritative slider protocol. */
+/** 服务端权威滑块协议返回的稳定结果码；线上的数值不能随意重排。 */
 public enum ControlRodSliderStatus {
     ACCEPTED(0, true),
     CANCELLED(1, true),
@@ -24,14 +24,17 @@ public enum ControlRodSliderStatus {
         this.accepted = accepted;
     }
 
+    /** 返回稳定的线协议状态码。 */
     public int wireCode() {
         return wireCode;
     }
 
+    /** 判断该状态是否表示请求已被服务端接受。 */
     public boolean accepted() {
         return accepted;
     }
 
+    /** 将未知状态码安全映射为 INVALID_PACKET。 */
     public static ControlRodSliderStatus fromWireCode(int wireCode) {
         for (ControlRodSliderStatus status : values()) {
             if (status.wireCode == wireCode) {

@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证融毁覆盖率 19/20/21% 边界、暂停、完成、单调进度和完整修复复位。 */
 class ReactorMeltdownStateMachineTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
 

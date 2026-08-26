@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
-/** Validated, injectable numeric inputs for the loader-independent P1 simulation. */
+/** 已校验、可注入的加载器无关 P1 模拟数值；热量使用 HU/HU/t，比例使用 [0,1]。 */
 public record ReactorSimulationParameters(
         double baseHeatPerFuelBlockHuPerTick,
         double burnHoursPerBlock,
@@ -36,6 +36,7 @@ public record ReactorSimulationParameters(
         requireFinitePositive("total heat multiplier cap", totalHeatMultiplierCap);
     }
 
+    /** 返回与当前 P1 数值契约一致的默认参数。 */
     public static ReactorSimulationParameters defaults() {
         return new ReactorSimulationParameters(
                 1.0D,
@@ -55,6 +56,7 @@ public record ReactorSimulationParameters(
         );
     }
 
+    /** 将小时级燃耗寿命换算为每燃料块每 tick 的组件比例。 */
     public double baseBurnPerFuelBlockPerTick() {
         return 1.0D / (burnHoursPerBlock * 3_600.0D * 20.0D);
     }

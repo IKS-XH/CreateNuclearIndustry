@@ -10,6 +10,12 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/**
+ * 正式 P1 方块实体类型的注册层。
+ *
+ * <p>仪表端口、冷/热/补料端口和控制棒驱动器分别声明可承载它们的方块；
+ * 这些类型只负责注册和实例化，具体状态由各自的方块实体维护。</p>
+ */
 public final class P1BlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
@@ -48,6 +54,7 @@ public final class P1BlockEntities {
     private P1BlockEntities() {
     }
 
+    /** 在方块实体注册阶段提交所有 P1 方块实体类型。 */
     public static void register(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);
     }

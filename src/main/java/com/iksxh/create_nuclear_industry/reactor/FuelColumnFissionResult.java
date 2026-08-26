@@ -1,6 +1,6 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
-/** Settled fission heat and fuel demand for one fuel column during one simulation step. */
+/** 一次模拟步中单根燃料列结算后的裂变热、燃耗需求和控制反馈结果。热量单位为 HU。 */
 public record FuelColumnFissionResult(
         double controlledIntensity,
         double heatIntensity,

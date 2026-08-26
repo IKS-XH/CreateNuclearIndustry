@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
+/** P0 机械臂物品槽实体；只验证 capability 和 NBT 事务，不连接 P1 反应堆。 */
 public final class P0ProbeArmTargetBlockEntity extends BlockEntity {
     private final ItemStackHandler inventory = new ItemStackHandler(1) {
         @Override
@@ -22,6 +23,7 @@ public final class P0ProbeArmTargetBlockEntity extends BlockEntity {
         super(P0ProbeBlockEntities.P0_PROBE_ARM_TARGET.get(), pos, state);
     }
 
+    /** 返回单槽物品 capability 视图。 */
     public IItemHandler itemHandler() {
         return inventory;
     }

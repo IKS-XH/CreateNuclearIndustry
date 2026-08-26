@@ -2,15 +2,17 @@ package com.iksxh.create_nuclear_industry.structure;
 
 import net.minecraft.network.chat.Component;
 
-/** Builds the player-facing, language-backed result of a server structure scan. */
+/** 将服务端结构扫描结果转换为使用语言键的玩家可见消息。 */
 public final class ReactorStructureDiagnostics {
     private ReactorStructureDiagnostics() {
     }
 
+    /** 展开世界扫描包装结果；扫描契约本身负责有效性和诊断代码。 */
     public static Component message(ReactorStructureScanner.WorldScanResult result) {
         return message(result.contract());
     }
 
+    /** 根据结构有效性返回失败原因，或返回列与冷却端口统计摘要。 */
     public static Component message(ReactorStructureDefinition.ScanResult result) {
         if (!result.valid()) {
             return Component.translatable(result.diagnosticCode().translationKey());

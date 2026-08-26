@@ -32,11 +32,14 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Map;
 
+/** 验证结构形成、事件驱动重扫、扳手显式重扫和稳定诊断代码。 */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P1StructureGameTests {
     private static final String TEMPLATE = "p0_probe_empty";
+    // 仪表端口是标准模板北面中心槽位，也是结构原点推断的锚点。
     private static final BlockPos INSTRUMENT = new BlockPos(2, 2, 0);
+    // 西北下角是固定外壳边界，用于验证移除后失效、恢复后重建。
     private static final BlockPos OUTER_CASING = new BlockPos(0, 0, 0);
 
     private P1StructureGameTests() {
@@ -272,6 +275,7 @@ public final class P1StructureGameTests {
         return (ReactorInstrumentPortBlockEntity) blockEntity;
     }
 
+    /** 使用带损伤、缓存热量、冷/热库存和融毁进度的快照验证重扫不改状态。 */
     private static ReactorSnapshot fixtureSnapshot() {
         return new ReactorSnapshot(
                 Map.of(new CoreColumnPosition(0, 0),
@@ -285,6 +289,7 @@ public final class P1StructureGameTests {
         );
     }
 
+    /** 按结构契约生成 5×5×5 标准模板，坐标由契约统一提供。 */
     private static void buildCanonicalStructure(GameTestHelper helper) {
         for (Map.Entry<ReactorStructureDefinition.LocalPosition, String> entry
                 : ReactorStructureDefinition.canonicalTemplate().entrySet()) {

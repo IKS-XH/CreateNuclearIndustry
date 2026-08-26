@@ -13,7 +13,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-/** Create slider host; all reactor state remains owned by the instrument port. */
+/**
+ * Create 滑块的驱动器宿主。
+ *
+ * <p>驱动器只保存客户端展示所需的列提示和滑块值，不复制反应堆快照；权威状态
+ * 始终由仪表端口方块实体拥有，服务端校验也必须通过仪表端口完成。</p>
+ */
 public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity {
     private ControlRodSliderBehaviour slider;
     private int clientColumnX = -1;
@@ -41,7 +46,7 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity {
         return clientColumnZ;
     }
 
-    /** The structure scan supplies the mapping; the drive does not infer it locally. */
+    /** 结构扫描提供列映射；驱动器不得在本地推断控制棒列。 */
     public void setServerColumnHint(int columnX, int columnZ) {
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("server slider column cannot be changed on the client");
@@ -56,7 +61,7 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity {
         }
     }
 
-    /** Updates only the non-persistent server-side value shown by Create's widget. */
+    /** 只更新 Create 控件显示的服务端非持久化值，并同步给客户端。 */
     public void setServerDisplayedDepthPercent(int depthPercent) {
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("server slider display cannot be changed on the client");
@@ -71,7 +76,7 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity {
         }
     }
 
-    /** Applies a server response to the client-side presentation cache only. */
+    /** 仅将服务端响应应用到客户端展示缓存，不写入客户端权威状态。 */
     public void applyClientSliderResponse(ControlRodSliderResponsePayload response) {
         if (level == null || !level.isClientSide || response == null) {
             return;
@@ -83,7 +88,7 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity {
         }
     }
 
-    /** Reads the single authoritative snapshot without creating a drive-local copy. */
+    /** 读取仪表端口唯一权威快照，不创建驱动器本地副本。 */
     public ReactorSnapshot readAuthoritativeSnapshot(ReactorInstrumentPortBlockEntity owner) {
         if (owner == null) {
             throw new IllegalArgumentException("reactor instrument port is required");

@@ -16,7 +16,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Function;
 
-/** Formal P1 block registrations. Runtime behavior is added by later tasks. */
+/**
+ * 正式 P1 方块及其方块物品的注册层。
+ *
+ * <p>注册 ID 统一来自 {@link P1ContentIds}；本类只建立 Deferred 注册对象，
+ * 结构扫描、控制交互和服务端模拟由方块及方块实体层负责。</p>
+ */
 public final class P1Blocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(CreateNuclearIndustry.MOD_ID);
@@ -58,6 +63,7 @@ public final class P1Blocks {
     private P1Blocks() {
     }
 
+    /** 将正式 P1 方块和方块物品提交到模组事件总线。 */
     public static void register(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证热工阶段的冷却扣除、阈值损伤、缓存余热、过载和请求裁剪。 */
 class ReactorThermalCalculatorTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final CoreColumnPosition CENTER = new CoreColumnPosition(1, 1);

@@ -9,11 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Deterministic cross-stage regression coverage for the P1 simulation pipeline.
- * The fixture intentionally contains a failed fuel source, a jammed control rod,
- * a live target column, and a second control-rod endpoint.
- */
+/** 验证正式模拟流水线的顺序、确定性、SCRAM/冷却暂停和 NBT 续算。 */
 class ReactorSimulationRegressionTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final CoreColumnPosition SOURCE = new CoreColumnPosition(1, 2);

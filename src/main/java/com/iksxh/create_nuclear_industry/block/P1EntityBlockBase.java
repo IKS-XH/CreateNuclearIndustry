@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** Shared data-only block shell for P1 block entities. */
+/** P1 方块实体方块的共享数据壳，只提供模型渲染和实体创建约束。 */
 public abstract class P1EntityBlockBase extends BaseEntityBlock {
     protected P1EntityBlockBase(BlockBehaviour.Properties properties) {
         super(properties);

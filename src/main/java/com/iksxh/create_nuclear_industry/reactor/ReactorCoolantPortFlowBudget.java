@@ -1,17 +1,16 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
 /**
- * Mutable per-physical-port flow budget for one server tick.
+ * 单个物理端口在一个服务端 tick 内可用的可变流量预算。
  *
- * <p>Simulation calls only inspect the budget. Execute calls reserve the
- * returned amount, so repeated capability calls cannot bypass the configured
- * per-port limit.</p>
+ * <p>模拟调用只观察预算，EXECUTE 调用才预留已返回量，因此重复 capability 调用
+ * 不能绕过配置的单端口 mB/t 上限。</p>
  */
 public final class ReactorCoolantPortFlowBudget {
     private long activeServerTick = Long.MIN_VALUE;
     private int usedMb;
 
-    /** Returns the remaining quota without consuming it. */
+    /** 返回当前 tick 剩余配额但不消耗它。 */
     public int available(long serverTick, int configuredLimitMbPerTick) {
         validateLimit(configuredLimitMbPerTick);
         resetIfNeeded(serverTick);
@@ -19,8 +18,7 @@ public final class ReactorCoolantPortFlowBudget {
     }
 
     /**
-     * Returns the amount allowed by the current quota. Only an execute call
-     * consumes quota; a simulated call is observational.
+     * 返回当前配额允许的量；只有执行调用消耗配额，模拟调用只做观察。
      */
     public int reserve(
             long serverTick,
@@ -38,7 +36,7 @@ public final class ReactorCoolantPortFlowBudget {
         return accepted;
     }
 
-    /** Visible for deterministic unit tests and diagnostics. */
+    /** 为确定性单元测试和诊断暴露已使用量。 */
     public int used(long serverTick, int configuredLimitMbPerTick) {
         validateLimit(configuredLimitMbPerTick);
         resetIfNeeded(serverTick);

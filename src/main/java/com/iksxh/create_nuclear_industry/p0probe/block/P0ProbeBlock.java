@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+/** P0 红石、NBT、锁定与修复回归探针方块，不是 P1 状态源。 */
 public final class P0ProbeBlock extends BaseEntityBlock {
     public static final MapCodec<P0ProbeBlock> CODEC = simpleCodec(P0ProbeBlock::new);
 
