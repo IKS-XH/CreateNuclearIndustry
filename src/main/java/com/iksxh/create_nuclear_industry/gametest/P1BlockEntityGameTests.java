@@ -10,6 +10,7 @@ import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
 import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
+import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshotNbtCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.gametest.framework.GameTest;
@@ -20,6 +21,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Map;
 
+/** 验证正式 P1 方块实体的专用类型、服务端 NBT 往返和唯一状态所有者关系。 */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P1BlockEntityGameTests {
@@ -30,6 +32,7 @@ public final class P1BlockEntityGameTests {
 
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void formalBlockEntitiesLoadAndRoundTripOnDedicatedServer(GameTestHelper helper) {
+        // 这些坐标只用于在空模板内并排放置五种实体，避免结构扫描成为本测试前置条件。
         BlockPos instrument = new BlockPos(1, 1, 1);
         BlockPos cold = new BlockPos(2, 1, 1);
         BlockPos hot = new BlockPos(3, 1, 1);
@@ -64,7 +67,8 @@ public final class P1BlockEntityGameTests {
             CompoundTag saved = instrumentEntity.saveForServerTest(helper.getLevel().registryAccess());
             require(helper, saved.contains("ReactorSnapshot"),
                     "instrument port did not persist the reactor snapshot");
-            require(helper, saved.getCompound("ReactorSnapshot").getInt("FormatVersion") == 1,
+            require(helper, saved.getCompound("ReactorSnapshot").getInt("FormatVersion")
+                            == ReactorSnapshotNbtCodec.FORMAT_VERSION,
                     "instrument port persisted an unexpected snapshot format");
 
             ReactorInstrumentPortBlockEntity reloaded = new ReactorInstrumentPortBlockEntity(
@@ -92,6 +96,7 @@ public final class P1BlockEntityGameTests {
         });
     }
 
+    /** 使用非默认热量、库存、融毁进度和控制棒深度覆盖 NBT 字段。 */
     private static ReactorSnapshot fixtureSnapshot() {
         return new ReactorSnapshot(
                 Map.of(

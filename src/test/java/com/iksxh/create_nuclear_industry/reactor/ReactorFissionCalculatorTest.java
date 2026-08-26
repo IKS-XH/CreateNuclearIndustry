@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证控制棒深度、完整度乘数、四向燃料反馈、SCRAM 和热上限。 */
 class ReactorFissionCalculatorTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final int MAX_DAMAGE = 216_000;
@@ -120,7 +121,7 @@ class ReactorFissionCalculatorTest {
     }
 
     @Test
-    void emptyExhaustedAndScrammedIsolatedColumnsDoNotGenerate() {
+    void emptyExhaustedAndUncontrolledColumnsFollowLocalControlOnly() {
         CoreColumnPosition empty = new CoreColumnPosition(0, 0);
         CoreColumnPosition exhausted = new CoreColumnPosition(2, 0);
         CoreColumnPosition isolated = new CoreColumnPosition(1, 2);
@@ -137,12 +138,13 @@ class ReactorFissionCalculatorTest {
                 false
         );
 
-        ReactorFissionResult result = ReactorFissionCalculator.calculate(snapshot, PARAMETERS, true);
+        ReactorFissionResult result = ReactorFissionCalculator.calculate(snapshot, PARAMETERS);
 
         assertFalse(result.columns().get(empty).overclocked());
         assertEquals(0.0D, result.columns().get(empty).generatedHeatHu(), 1.0E-12D);
         assertEquals(0.0D, result.columns().get(exhausted).generatedHeatHu(), 1.0E-12D);
-        assertEquals(0.0D, result.columns().get(isolated).generatedHeatHu(), 1.0E-12D);
+        assertEquals(3.0D, result.columns().get(isolated).generatedHeatHu(), 1.0E-12D);
+        assertTrue(result.columns().get(isolated).plannedFuelBurnUnits() > 0.0D);
     }
 
     private static FuelColumnFissionResult result(

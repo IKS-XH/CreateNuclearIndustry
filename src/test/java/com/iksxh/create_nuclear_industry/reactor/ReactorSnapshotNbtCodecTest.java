@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证正式快照 NBT 字段、旧字段默认值、未知字段容忍和 SCRAM 目标往返。 */
 class ReactorSnapshotNbtCodecTest {
     @Test
     void roundTripsCompleteDamagedPausedAndJammedSnapshot() {
@@ -110,6 +111,31 @@ class ReactorSnapshotNbtCodecTest {
         assertEquals(0L, decoded.hotCoolantMb());
         assertEquals(0L, decoded.meltdownProgressTicks());
         assertFalse(decoded.meltdownCountdownStarted());
+    }
+
+    @Test
+    void legacyFormatWithoutFuelBurnRemainderMigratesToZero() {
+        CompoundTag root = new CompoundTag();
+        root.putInt("FormatVersion", 1);
+        ListTag fuels = new ListTag();
+        CompoundTag fuel = new CompoundTag();
+        fuel.putInt("X", 0);
+        fuel.putInt("Z", 0);
+        CompoundTag assembly = new CompoundTag();
+        assembly.putBoolean("Present", true);
+        assembly.putInt("MaxDamage", 216_000);
+        assembly.putInt("Damage", 12);
+        fuel.put("Assembly", assembly);
+        fuel.putDouble("Integrity", 0.8D);
+        fuel.putDouble("CachedHeatHu", 2.0D);
+        fuels.add(fuel);
+        root.put("FuelColumns", fuels);
+
+        ReactorSnapshot decoded = ReactorSnapshotNbtCodec.decode(root);
+
+        assertEquals(0.0D,
+                decoded.fuelColumns().get(new CoreColumnPosition(0, 0)).fuelBurnRemainder(),
+                1.0E-12D);
     }
 
     @Test

@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/** Snapshot-based four-way heat propagation from failed fuel columns. */
+/** 基于快照从失效燃料列进行四向热传播。 */
 public final class ReactorHeatPropagation {
     private ReactorHeatPropagation() {
     }
@@ -86,7 +86,8 @@ public final class ReactorHeatPropagation {
             nextFuel.put(position, new FuelColumnState(
                     fuel.fuelAssembly(),
                     nextIntegrity,
-                    finiteNonNegative(baseHeat + incoming)
+                    finiteNonNegative(baseHeat + incoming),
+                    fuel.fuelBurnRemainder()
             ));
         }
 

@@ -3,7 +3,7 @@ package com.iksxh.create_nuclear_industry.reactor;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Deterministic P1 fuel-column heat, burn, local control and feedback calculation. */
+/** 确定性计算 P1 燃料列的裂变热、燃耗、局部控制和邻列反馈，热量单位为 HU。 */
 public final class ReactorFissionCalculator {
     private static final int MAX_FEEDBACK_ITERATIONS = 256;
     private static final double FEEDBACK_EPSILON = 1.0E-9D;
@@ -11,10 +11,10 @@ public final class ReactorFissionCalculator {
     private ReactorFissionCalculator() {
     }
 
+    /** 根据快照和数值参数计算一 tick 的裂变结果，不修改输入快照。 */
     public static ReactorFissionResult calculate(
             ReactorSnapshot snapshot,
-            ReactorSimulationParameters parameters,
-            boolean scramActive
+            ReactorSimulationParameters parameters
     ) {
         if (snapshot == null || parameters == null) {
             throw new IllegalArgumentException("snapshot and parameters are required");
@@ -34,9 +34,8 @@ public final class ReactorFissionCalculator {
                     .mapToDouble(ControlRodColumnState::actualDepth)
                     .average()
                     .orElse(0.0D);
-            double controlledIntensity = scramActive
-                    ? 0.0D
-                    : Math.pow(clamp01(1.0D - meanDepth), parameters.controlResponseExponent());
+            double controlledIntensity = Math.pow(
+                    clamp01(1.0D - meanDepth), parameters.controlResponseExponent());
             controlled.put(position, controlledIntensity);
             overclocked.put(position, position.cardinalNeighbours().stream()
                     .map(snapshot.fuelColumns()::get)
@@ -139,6 +138,15 @@ public final class ReactorFissionCalculator {
             generatedHeat += settledHeat;
         }
         return new ReactorFissionResult(settled, rawHeat, generatedHeat, totalBurn);
+    }
+
+    /** 兼容旧调用方；SCRAM 由控制棒实际深度决定，不再使用全局布尔值清零裂变。 */
+    public static ReactorFissionResult calculate(
+            ReactorSnapshot snapshot,
+            ReactorSimulationParameters parameters,
+            boolean ignoredScramActive
+    ) {
+        return calculate(snapshot, parameters);
     }
 
     private static double clamp01(double value) {

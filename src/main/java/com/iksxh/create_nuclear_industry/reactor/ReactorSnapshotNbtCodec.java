@@ -7,9 +7,9 @@ import net.minecraft.nbt.Tag;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Versioned NBT adapter for the formal P1 reactor snapshot. */
+/** P1 反应堆权威快照的版本化 NBT 适配器。 */
 public final class ReactorSnapshotNbtCodec {
-    public static final int FORMAT_VERSION = 1;
+    public static final int FORMAT_VERSION = 2;
 
     private static final String FORMAT_VERSION_KEY = "FormatVersion";
     private static final String FUEL_COLUMNS_KEY = "FuelColumns";
@@ -41,6 +41,7 @@ public final class ReactorSnapshotNbtCodec {
             entry.put("Assembly", assembly);
             entry.putDouble("Integrity", state.integrity());
             entry.putDouble("CachedHeatHu", state.cachedHeatHu());
+            entry.putDouble("FuelBurnRemainder", state.fuelBurnRemainder());
             fuelColumns.add(entry);
         });
         root.put(FUEL_COLUMNS_KEY, fuelColumns);
@@ -92,7 +93,8 @@ public final class ReactorSnapshotNbtCodec {
             fuelColumns.put(position, new FuelColumnState(
                     assembly,
                     readUnit(entry, "Integrity", 1.0D),
-                    readNonNegative(entry, "CachedHeatHu", 0.0D)
+                    readNonNegative(entry, "CachedHeatHu", 0.0D),
+                    readUnit(entry, "FuelBurnRemainder", 0.0D)
             ));
         }
 

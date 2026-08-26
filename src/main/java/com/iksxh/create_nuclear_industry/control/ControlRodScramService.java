@@ -13,13 +13,20 @@ import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Server-authoritative redstone SCRAM transitions for one instrument port. */
+/**
+ * 单个仪表端口的服务端权威红石 SCRAM 转换服务。
+ *
+ * <p>高电平保存可动控制棒的目标深度并请求插入，低电平恢复仍未卡死控制棒的
+ * 目标深度；卡死棒不会被强行恢复。每次结果中的裂变热使用 {@code HU}，用于
+ * 表达 SCRAM 后是否仍有残余反应，而不是替代正式服务端 tick。</p>
+ */
 public final class ControlRodScramService {
     private static final double HEAT_EPSILON = 1.0E-9D;
 
     private ControlRodScramService() {
     }
 
+    /** 根据服务端红石电平应用一次 SCRAM 请求或释放请求。 */
     public static ControlRodScramResult apply(
             ReactorInstrumentPortBlockEntity instrument,
             boolean powered
@@ -129,13 +136,12 @@ public final class ControlRodScramService {
     }
 
     /**
-     * SCRAM has already physically inserted every movable rod. Calculating
-     * with normal control rules preserves the documented jammed-rod case:
-     * a jammed rod at a partial depth can still leave fission heat.
+     * SCRAM 已将所有可动棒物理插入；继续使用正常控制规则计算，保留“部分插入的
+     * 卡死棒仍可留下裂变热”的既定边界。
      */
     private static double projectedFissionHeat(ReactorSnapshot snapshot) {
         ReactorFissionResult result = ReactorFissionCalculator.calculate(
-                snapshot, ReactorSimulationParameters.defaults(), false);
+                snapshot, ReactorSimulationParameters.defaults());
         return result.generatedHeatHu();
     }
 

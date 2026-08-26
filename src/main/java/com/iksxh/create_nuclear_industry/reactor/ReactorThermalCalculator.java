@@ -3,7 +3,7 @@ package com.iksxh.create_nuclear_industry.reactor;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** Settles per-column effective heat load without world or fluid-network access. */
+/** 不访问世界或流体网络，结算逐列有效热负荷。 */
 public final class ReactorThermalCalculator {
     private ReactorThermalCalculator() {
     }
@@ -45,7 +45,8 @@ public final class ReactorThermalCalculator {
             FuelColumnState nextState = new FuelColumnState(
                     fuel.fuelAssembly(),
                     nextIntegrity,
-                    netHeatLoad
+                    netHeatLoad,
+                    fuel.fuelBurnRemainder()
             );
             nextFuelColumns.put(position, nextState);
             results.put(position, new FuelColumnThermalResult(

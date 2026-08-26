@@ -11,12 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/** 验证 P1 默认热量、燃耗、损伤和流量参数仍与冻结平衡锚点一致。 */
 class P1BalanceContractTest {
     private static final Path SERVER_CONFIG_SOURCE = Path.of(
             "src", "main", "java", "com", "iksxh", "create_nuclear_industry", "config", "P1ServerConfig.java");
     private static final Path P0_PARAMETERS_SOURCE = Path.of(
             "src", "main", "java", "com", "iksxh", "create_nuclear_industry", "p0probe", "numeric",
             "ReactorParameters.java");
+    private static final Path INSTRUMENT_SOURCE = Path.of(
+            "src", "main", "java", "com", "iksxh", "create_nuclear_industry", "blockentity",
+            "ReactorInstrumentPortBlockEntity.java");
 
     @Test
     void serverConfigUsesFrozenDefaultsAndHasNoAggregateFlowKey() throws IOException {
@@ -70,5 +74,27 @@ class P1BalanceContractTest {
         assertEquals(0.15D, parameters.overclockFeedbackGain());
         assertEquals(0.5D, parameters.overclockFeedbackExponent());
         assertEquals(20.0D, parameters.totalHeatMultiplierCap());
+    }
+
+    @Test
+    void formalTickReadsAllSevenPreviouslyFrozenSimulationParametersFromServerConfig() throws IOException {
+        String config = Files.readString(SERVER_CONFIG_SOURCE);
+        String instrument = Files.readString(INSTRUMENT_SOURCE);
+
+        assertTrue(config.contains("defineInRange(\"controlRodFailureThreshold\", 0.0D"));
+        assertTrue(config.contains("defineInRange(\"controlResponseExponent\", 1.0D"));
+        assertTrue(config.contains("defineInRange(\"overclockHeatMultiplier\", 10.0D"));
+        assertTrue(config.contains("defineInRange(\"overclockBurnMultiplier\", 10.0D"));
+        assertTrue(config.contains("defineInRange(\"overclockFeedbackGain\", 0.15D"));
+        assertTrue(config.contains("defineInRange(\"overclockFeedbackExponent\", 0.5D"));
+        assertTrue(config.contains("defineInRange(\"totalHeatMultiplierCap\", 20.0D"));
+
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.controlRodFailureThreshold.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.controlResponseExponent.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.overclockHeatMultiplier.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.overclockBurnMultiplier.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.overclockFeedbackGain.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.overclockFeedbackExponent.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.totalHeatMultiplierCap.get()"));
     }
 }
