@@ -23,8 +23,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /** 反应堆完整权威快照的唯一拥有者；历史契约短语为 {@code Sole authoritative owner}。 */
@@ -36,6 +39,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             ReactorStructureDefinition.ScanResult.notScanned();
     private BlockPos structureOrigin;
     private long structureScanCount;
+    private final Set<ReactorPortBlockEntity> boundPorts =
+            Collections.newSetFromMap(new IdentityHashMap<>());
 
     public ReactorInstrumentPortBlockEntity(BlockPos pos, BlockState state) {
         super(P1BlockEntities.REACTOR_INSTRUMENT_PORT.get(), pos, state);
@@ -75,15 +80,34 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         return structureScan.valid();
     }
 
+    /** 返回当前结构绑定的指定类型端口；结果只来自服务端缓存，不扫描世界。 */
+    public List<ReactorPortBlockEntity> boundPorts(ReactorPortBlockEntity.BindingType type) {
+        if (type == null) {
+            return List.of();
+        }
+        return boundPorts.stream()
+                .filter(port -> port.isBound() && port.boundOwner() == this
+                        && port.binding().type() == type)
+                .sorted(java.util.Comparator.comparingLong(port -> port.getBlockPos().asLong()))
+                .toList();
+    }
+
+    /** 返回该仪表端口已建立的端口绑定数量，用于服务端诊断和回归测试。 */
+    public int boundPortCount() {
+        return boundPorts.size();
+    }
+
     public void updateStructureCache(ReactorStructureScanner.WorldScanResult scan) {
         Objects.requireNonNull(scan, "structure scan is required");
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("structure cache can only be changed on the server");
         }
+        clearPortBindings();
         structureScan = scan.contract();
         structureOrigin = scan.origin();
         structureScanCount++;
         initializeAndSyncControlRods();
+        bindStructurePorts();
         if (level != null && !level.isClientSide && structureScan.valid()) {
             updateRedstoneScram(level.hasNeighborSignal(worldPosition));
         }
@@ -145,17 +169,13 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private ReactorServerTick.CoolantInput coolantInput() {
         double perPort = Math.max(0.0D, P1ServerConfig.VALUES.perPortFlowMbPerTick.get());
         List<ReactorCoolantLedger.Port> ports = new ArrayList<>();
-        for (ReactorStructureDefinition.LocalPosition position :
-                structureScan.ports().getOrDefault(
-                        ReactorStructureDefinition.PortType.COLD_COOLANT, List.of())) {
+        for (ReactorPortBlockEntity port : boundPorts(ReactorPortBlockEntity.BindingType.COLD_COOLANT)) {
             ports.add(ReactorCoolantLedger.Port.cold(
-                    "cold:" + position.x() + ":" + position.y() + ":" + position.z(), perPort));
+                    portConnectionId(port), perPort));
         }
-        for (ReactorStructureDefinition.LocalPosition position :
-                structureScan.ports().getOrDefault(
-                        ReactorStructureDefinition.PortType.HOT_COOLANT, List.of())) {
+        for (ReactorPortBlockEntity port : boundPorts(ReactorPortBlockEntity.BindingType.HOT_COOLANT)) {
             ports.add(ReactorCoolantLedger.Port.hot(
-                    "hot:" + position.x() + ":" + position.y() + ":" + position.z(), perPort));
+                    portConnectionId(port), perPort));
         }
         return new ReactorServerTick.CoolantInput(
                 ReactorCoolantLedger.summarizePorts(ports, perPort),
@@ -240,6 +260,53 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 drive.setServerDisplayedDepthPercent(toPercent(state.targetDepth()));
             }
         }
+    }
+
+    /** 按最新结构扫描结果建立端口缓存；不存在对应方块实体时不伪造绑定。 */
+    private void bindStructurePorts() {
+        if (!structureScan.valid() || structureOrigin == null || level == null || level.isClientSide) {
+            return;
+        }
+        for (ReactorStructureDefinition.LocalPosition position : structureScan.ports().getOrDefault(
+                ReactorStructureDefinition.PortType.COLD_COOLANT, List.of())) {
+            bindPortAt(position, ReactorPortBlockEntity.BindingType.COLD_COOLANT, null);
+        }
+        for (ReactorStructureDefinition.LocalPosition position : structureScan.ports().getOrDefault(
+                ReactorStructureDefinition.PortType.HOT_COOLANT, List.of())) {
+            bindPortAt(position, ReactorPortBlockEntity.BindingType.HOT_COOLANT, null);
+        }
+        for (Map.Entry<CoreColumnPosition, ReactorStructureDefinition.ColumnMapping> entry
+                : structureScan.columns().entrySet()) {
+            if (entry.getValue().type() == ReactorStructureDefinition.ColumnType.FUEL) {
+                bindPortAt(entry.getValue().capPosition(),
+                        ReactorPortBlockEntity.BindingType.REFUELING, entry.getKey());
+            }
+        }
+    }
+
+    private void bindPortAt(
+            ReactorStructureDefinition.LocalPosition localPosition,
+            ReactorPortBlockEntity.BindingType type,
+            CoreColumnPosition column
+    ) {
+        BlockPos position = structureOrigin.offset(
+                localPosition.x(), localPosition.y(), localPosition.z());
+        if (level.getBlockEntity(position) instanceof ReactorPortBlockEntity port
+                && port.bindTo(this, type, column)) {
+            boundPorts.add(port);
+        }
+    }
+
+    /** 清理本仪表端口上一次扫描建立的全部运行时绑定。 */
+    private void clearPortBindings() {
+        for (ReactorPortBlockEntity port : List.copyOf(boundPorts)) {
+            port.clearBinding(this);
+        }
+        boundPorts.clear();
+    }
+
+    private static String portConnectionId(ReactorPortBlockEntity port) {
+        return "port:" + port.getBlockPos().asLong();
     }
 
     private static int toPercent(double depth) {

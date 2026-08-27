@@ -5,15 +5,10 @@ import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
 import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
-import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -28,11 +23,13 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
             Collections.synchronizedMap(new WeakHashMap<>());
 
     private final ReactorInstrumentPortBlockEntity owner;
+    private final ReactorPortBlockEntity sourcePort;
     private final boolean coldInput;
     private final ReactorCoolantPortFlowBudget flowBudget;
     private final Long capacityOverrideMb;
 
     private ReactorCoolantFluidHandler(
+            ReactorPortBlockEntity sourcePort,
             ReactorInstrumentPortBlockEntity owner,
             boolean coldInput,
             ReactorCoolantPortFlowBudget flowBudget,
@@ -42,6 +39,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
                 || (capacityOverrideMb != null && capacityOverrideMb < 0L)) {
             throw new IllegalArgumentException("reactor owner, flow budget and capacity are required");
         }
+        this.sourcePort = sourcePort;
         this.owner = owner;
         this.coldInput = coldInput;
         this.flowBudget = flowBudget;
@@ -58,11 +56,14 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
         if (!cold && !hot) {
             return null;
         }
-        ReactorInstrumentPortBlockEntity owner = findOwner(port, cold
-                ? ReactorStructureDefinition.PortType.COLD_COOLANT
-                : ReactorStructureDefinition.PortType.HOT_COOLANT);
-        return owner == null ? null : new ReactorCoolantFluidHandler(
-                owner, cold, budgetFor(port), null);
+        ReactorPortBlockEntity.BindingType expectedType = cold
+                ? ReactorPortBlockEntity.BindingType.COLD_COOLANT
+                : ReactorPortBlockEntity.BindingType.HOT_COOLANT;
+        ReactorInstrumentPortBlockEntity owner = port.boundOwner();
+        if (owner == null || !port.isBoundTo(owner, expectedType, null)) {
+            return null;
+        }
+        return new ReactorCoolantFluidHandler(port, owner, cold, budgetFor(port), null);
     }
 
     /** 使用实时服务端配置中的流量上限和库存容量。 */
@@ -70,7 +71,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
             ReactorInstrumentPortBlockEntity owner,
             boolean coldInput
     ) {
-        return new ReactorCoolantFluidHandler(owner, coldInput,
+        return new ReactorCoolantFluidHandler(null, owner, coldInput,
                 new ReactorCoolantPortFlowBudget(), null);
     }
 
@@ -80,7 +81,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
             boolean coldInput,
             long capacityOverrideMb
     ) {
-        return new ReactorCoolantFluidHandler(owner, coldInput,
+        return new ReactorCoolantFluidHandler(null, owner, coldInput,
                 new ReactorCoolantPortFlowBudget(), capacityOverrideMb);
     }
 
@@ -99,7 +100,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
 
     @Override
     public FluidStack getFluidInTank(int tank) {
-        if (tank != 0) {
+        if (tank != 0 || !isCapabilityAvailable()) {
             return FluidStack.EMPTY;
         }
         long amount = coldInput ? owner.snapshot().coldCoolantMb() : owner.snapshot().hotCoolantMb();
@@ -112,17 +113,19 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
 
     @Override
     public int getTankCapacity(int tank) {
-        return tank == 0 ? (int) Math.min(Integer.MAX_VALUE, configuredCapacityMb()) : 0;
+        return tank == 0 && isCapabilityAvailable()
+                ? (int) Math.min(Integer.MAX_VALUE, configuredCapacityMb()) : 0;
     }
 
     @Override
     public boolean isFluidValid(int tank, FluidStack stack) {
-        return tank == 0 && (coldInput ? ModFluids.isCompoundCoolant(stack) : false);
+        return tank == 0 && isCapabilityAvailable()
+                && (coldInput ? ModFluids.isCompoundCoolant(stack) : false);
     }
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
-        if (!coldInput || !ModFluids.isCompoundCoolant(resource)) {
+        if (!isCapabilityAvailable() || !coldInput || !ModFluids.isCompoundCoolant(resource)) {
             return 0;
         }
         long current = owner.snapshot().coldCoolantMb();
@@ -148,7 +151,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
 
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
-        if (coldInput || maxDrain <= 0) {
+        if (!isCapabilityAvailable() || coldInput || maxDrain <= 0) {
             return FluidStack.EMPTY;
         }
         long current = owner.snapshot().hotCoolantMb();
@@ -167,7 +170,18 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
     }
 
     private boolean isDrainRequestValid(FluidStack resource) {
-        return !coldInput && ModFluids.isHotCompoundCoolant(resource);
+        return isCapabilityAvailable() && !coldInput && ModFluids.isHotCompoundCoolant(resource);
+    }
+
+    /** 判断从世界 capability 取得的处理器是否仍对应当前有效绑定。 */
+    private boolean isCapabilityAvailable() {
+        if (sourcePort == null) {
+            return true;
+        }
+        ReactorPortBlockEntity.BindingType expectedType = coldInput
+                ? ReactorPortBlockEntity.BindingType.COLD_COOLANT
+                : ReactorPortBlockEntity.BindingType.HOT_COOLANT;
+        return owner.structureValid() && sourcePort.isBoundTo(owner, expectedType, null);
     }
 
     private long configuredCapacityMb() {
@@ -184,7 +198,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
     }
 
     private long currentServerTick() {
-        Level level = owner.getLevel();
+        var level = owner.getLevel();
         return level == null ? 0L : level.getGameTime();
     }
 
@@ -194,44 +208,4 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
         }
     }
 
-    private static ReactorInstrumentPortBlockEntity findOwner(
-            ReactorPortBlockEntity port,
-            ReactorStructureDefinition.PortType expectedPortType
-    ) {
-        Level level = port.getLevel();
-        if (level == null) {
-            return null;
-        }
-        BlockPos portPos = port.getBlockPos();
-        ReactorInstrumentPortBlockEntity found = null;
-        int radius = ReactorStructureDefinition.SIZE - 1;
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dy = -radius; dy <= radius; dy++) {
-                for (int dz = -radius; dz <= radius; dz++) {
-                    BlockEntity candidate = level.getBlockEntity(portPos.offset(dx, dy, dz));
-                    if (!(candidate instanceof ReactorInstrumentPortBlockEntity instrument)
-                            || !instrument.structureValid()
-                            || instrument.structureOrigin() == null) {
-                        continue;
-                    }
-                    BlockPos origin = instrument.structureOrigin();
-                    ReactorStructureDefinition.LocalPosition local = new ReactorStructureDefinition.LocalPosition(
-                            portPos.getX() - origin.getX(),
-                            portPos.getY() - origin.getY(),
-                            portPos.getZ() - origin.getZ()
-                    );
-                    List<ReactorStructureDefinition.LocalPosition> ports = instrument.structureScan()
-                            .ports().getOrDefault(expectedPortType, List.of());
-                    if (!ports.contains(local)) {
-                        continue;
-                    }
-                    if (found != null && found != instrument) {
-                        return null;
-                    }
-                    found = instrument;
-                }
-            }
-        }
-        return found;
-    }
 }
