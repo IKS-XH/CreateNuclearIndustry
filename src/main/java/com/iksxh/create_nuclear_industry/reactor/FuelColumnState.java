@@ -38,6 +38,23 @@ public record FuelColumnState(
     }
 
     /**
+     * 将一个新燃料组件装入本列，同时清零上一组件遗留的小数燃耗余量；列完整度和
+     * 缓存余热属于结构状态，换料不会伪造修复或删除它们。
+     */
+    public FuelColumnState withFuelAssembly(FuelAssemblyState nextFuelAssembly) {
+        Objects.requireNonNull(nextFuelAssembly, "next fuel assembly");
+        if (!nextFuelAssembly.present() || nextFuelAssembly.exhausted()) {
+            throw new IllegalArgumentException("a loaded fuel assembly must have remaining durability");
+        }
+        return new FuelColumnState(nextFuelAssembly, integrity, cachedHeatHu, 0.0D);
+    }
+
+    /** 取出本列组件并保留列完整度和余热，防止换料事务无声清除结构状态。 */
+    public FuelColumnState withoutFuelAssembly() {
+        return new FuelColumnState(FuelAssemblyState.empty(), integrity, cachedHeatHu, 0.0D);
+    }
+
+    /**
      * 应用一个 tick 的小数燃耗，同时保留 ItemStack 暴露的整数耐久语义。
      * 模拟器以整根燃料组件的比例报告燃耗；小数部分保存在燃料列中，避免逐 tick 舍弃，
      * 从而使组件按配置寿命耗尽。

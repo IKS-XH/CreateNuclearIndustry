@@ -140,6 +140,31 @@ public record ReactorSnapshot(
         );
     }
 
+    /**
+     * 替换一个已绑定燃料列的状态；物品事务通过此入口提交，所有其他列和全堆状态保持不变。
+     * 列状态仍由仪表端口快照唯一拥有，端口方块不应缓存副本。
+     */
+    public ReactorSnapshot withFuelColumn(CoreColumnPosition position, FuelColumnState state) {
+        if (position == null || state == null) {
+            throw new IllegalArgumentException("fuel column position and state are required");
+        }
+        if (controlRodColumns.containsKey(position)) {
+            throw new IllegalArgumentException("a control rod column cannot receive fuel");
+        }
+        TreeMap<CoreColumnPosition, FuelColumnState> nextFuelColumns = new TreeMap<>(fuelColumns);
+        nextFuelColumns.put(position, state);
+        return new ReactorSnapshot(
+                nextFuelColumns,
+                controlRodColumns,
+                coldCoolantMb,
+                hotCoolantMb,
+                meltdownProgressTicks,
+                meltdownCountdownStarted,
+                scramSavedTargetDepths,
+                scramRequested
+        );
+    }
+
     /** 替换融毁进度与启动标记，进度单位为服务端 tick。 */
     public ReactorSnapshot withMeltdown(long nextProgressTicks, boolean nextStarted) {
         return new ReactorSnapshot(

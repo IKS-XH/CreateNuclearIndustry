@@ -41,9 +41,13 @@ class P1BlockEntityRegistrationContractTest {
         assertTrue(instrument.contains("ReactorSnapshotNbtCodec"));
         assertTrue(instrument.contains("getUpdatePacket"));
         assertTrue(port.contains("readAuthoritativeSnapshot"));
+        assertTrue(port.contains("FuelRefuelingTransaction"));
+        assertTrue(port.contains("tryInsertFuel"));
+        assertTrue(port.contains("tryExtractFuel"));
+        assertFalse(port.contains("currentFissionHeatHu"), "端口不得接受调用方伪造的发热值");
         assertTrue(drive.contains("readAuthoritativeSnapshot"));
-        for (String source : new String[]{port, drive}) {
-            assertFalse(source.contains("Fuel"));
+        assertFalse(port.contains("private FuelColumnState"), "fuel column state must stay in the instrument snapshot");
+        for (String source : new String[]{drive}) {
             assertFalse(source.contains("Integrity"));
             assertFalse(source.contains("Temperature"));
             assertFalse(source.contains("Coolant"));

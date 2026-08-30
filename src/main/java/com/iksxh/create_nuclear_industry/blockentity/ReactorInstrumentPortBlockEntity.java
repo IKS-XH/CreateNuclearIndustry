@@ -6,10 +6,12 @@ import com.iksxh.create_nuclear_industry.control.ControlRodScramResult;
 import com.iksxh.create_nuclear_industry.control.ControlRodScramService;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
+import com.iksxh.create_nuclear_industry.reactor.FuelColumnFissionResult;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshotNbtCodec;
 import com.iksxh.create_nuclear_industry.reactor.ReactorControlRodTick;
 import com.iksxh.create_nuclear_industry.reactor.ReactorCoolantLedger;
+import com.iksxh.create_nuclear_industry.reactor.ReactorFissionCalculator;
 import com.iksxh.create_nuclear_industry.reactor.ReactorServerTick;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSimulationParameters;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
@@ -152,6 +154,21 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         }
         setSnapshot(result.snapshot());
         return true;
+    }
+
+    /**
+     * 计算绑定燃料列当前的服务端裂变发热，单位为 HU/t。
+     *
+     * <p>换料端口调用此入口而不是接受客户端提供的“已停止”标记；计算只读取仪表端口
+     * 的权威快照和服务器配置，不扫描世界，也不修改快照。</p>
+     */
+    public double currentFuelColumnFissionHeatHu(CoreColumnPosition position) {
+        if (position == null || !structureScan.valid()) {
+            return 0.0D;
+        }
+        FuelColumnFissionResult result = ReactorFissionCalculator.calculate(
+                snapshot, simulationParameters()).columns().get(position);
+        return result == null ? 0.0D : result.generatedHeatHu();
     }
 
     /** 结构编辑后，列状态可能残留；列角色不匹配当前结构时暂不推进模拟。 */

@@ -22,6 +22,8 @@
 - `2026-08-18-reactor-html-simulator-plan.md`：HTML 数值模拟器的 SIMWEB-01 至 SIMWEB-07、15 项离线回归和人工验收已完成；保留为数值实验工具的交接与决策记录。
 - `2026-08-19-integrity-zero-simulator-alignment-plan.md`：P1-SIMWEB-08 已将零完整度继续运行、无全堆流量上限、`128 mB/t` 单端口、SCRAM 可用性和离线单文件同步到模拟器；项目经理复验 28 项 Node 测试通过，用户已完成人工验收。
 - `2026-08-25-chinese-code-comments-execution-plan.md`：P1-COMMENT-00 至 P1-COMMENT-06 已完成；存量 Java 中文注释通过全量审计，永久规则已收敛到根目录 `AGENTS.md`。
+- `P1-REFUEL-01.md`：单列燃料组件放入、取出、耐久度往返、燃尽产出和多列独立性已通过隔离自动验收。
+- `P1-REFUEL-02.md`：玩家顶部换料端口交互已通过隔离自动验收与客户端人工验收。
 
 ## 已归档任务验收报告
 

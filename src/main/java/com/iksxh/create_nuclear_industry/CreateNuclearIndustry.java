@@ -12,11 +12,14 @@ import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeBlockEntities;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeContent;
 import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeFluids;
 import com.iksxh.create_nuclear_industry.p0probe.events.P0ProbeEvents;
+import com.iksxh.create_nuclear_industry.ponder.P1PonderPlugin;
 import com.iksxh.create_nuclear_industry.reactor.ReactorCoolantFluidHandler;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -44,6 +47,7 @@ public final class CreateNuclearIndustry {
         P0ProbeFluids.register(modEventBus);
         P0ProbeBlockEntities.register(modEventBus);
         modEventBus.addListener(ControlRodSliderNetwork::registerPayloads);
+        modEventBus.addListener(CreateNuclearIndustry::registerPonder);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerP1Capabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
@@ -51,6 +55,14 @@ public final class CreateNuclearIndustry {
         NeoForge.EVENT_BUS.register(ControlRodSliderNetwork.class);
     }
 
+    /**
+     * 仅在客户端初始化阶段接入 Ponder；教学场景只操作临时演示世界，不参与服务端模拟。
+     */
+    private static void registerPonder(FMLClientSetupEvent event) {
+        PonderIndex.addPlugin(new P1PonderPlugin());
+    }
+
+    /** 注册 P0 历史探针的物品与流体 capability，不把探针状态接入正式 P1 反应堆。 */
     private static void registerP0Capabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,

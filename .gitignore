@@ -13,3 +13,4 @@ out/
 bin/
 config/
 logs/
+crash-reports/

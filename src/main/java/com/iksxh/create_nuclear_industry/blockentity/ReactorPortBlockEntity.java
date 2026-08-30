@@ -3,9 +3,12 @@ package com.iksxh.create_nuclear_industry.blockentity;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
+import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
+import com.iksxh.create_nuclear_industry.reactor.FuelRefuelingTransaction;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 /** 冷、热和补料端口共用的空壳方块实体；不拥有任何反应堆模拟状态。 */
@@ -109,6 +112,59 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
             throw new IllegalArgumentException("reactor instrument port is required");
         }
         return owner.snapshot();
+    }
+
+    /**
+     * 在服务端尝试向该端口绑定的空燃料列装入一个组件。
+     *
+     * <p>当前任务只提供事务入口；玩家右键和 Create 机械臂分别在后续任务调用此入口。
+     * 成功提交前不修改输入栈，成功后只替换仪表端口快照中的目标列。</p>
+     */
+    public FuelRefuelingTransaction.Result tryInsertFuel(ItemStack incoming) {
+        if (!isRefuelingBindingUsable()) {
+            return FuelRefuelingTransaction.invalidPort(incoming);
+        }
+        ReactorSnapshot before = boundOwner.snapshot();
+        CoreColumnPosition column = binding.column();
+        FuelColumnState current = before.fuelColumns().getOrDefault(column, FuelColumnState.empty());
+        FuelRefuelingTransaction.Result result = FuelRefuelingTransaction.insert(
+                current, incoming, boundOwner.currentFuelColumnFissionHeatHu(column));
+        if (result.success()) {
+            boundOwner.setSnapshot(before.withFuelColumn(column, result.nextColumn()));
+        }
+        return result;
+    }
+
+    /** 在服务端尝试取出该端口绑定燃料列中的组件或冷却乏燃料。 */
+    public FuelRefuelingTransaction.Result tryExtractFuel() {
+        if (!isRefuelingBindingUsable()) {
+            return FuelRefuelingTransaction.invalidPort(ItemStack.EMPTY);
+        }
+        ReactorSnapshot before = boundOwner.snapshot();
+        CoreColumnPosition column = binding.column();
+        FuelColumnState current = before.fuelColumns().getOrDefault(column, FuelColumnState.empty());
+        FuelRefuelingTransaction.Result result = FuelRefuelingTransaction.extract(
+                current, boundOwner.currentFuelColumnFissionHeatHu(column));
+        if (result.success()) {
+            boundOwner.setSnapshot(before.withFuelColumn(column, result.nextColumn()));
+        }
+        return result;
+    }
+
+    /** 只有有效结构中的真实换料端口才能提交列状态事务。 */
+    private boolean isRefuelingBindingUsable() {
+        return (level == null || !level.isClientSide)
+                && boundOwner != null
+                && structureBindingIsValid()
+                && binding != null
+                && binding.type() == BindingType.REFUELING
+                && binding.column() != null;
+    }
+
+    /** 再次检查仪表端口和绑定记录，避免失效结构留下的旧调用修改快照。 */
+    private boolean structureBindingIsValid() {
+        return boundOwner.structureValid() && isBoundTo(
+                boundOwner, BindingType.REFUELING, binding == null ? null : binding.column());
     }
 
     @Override
