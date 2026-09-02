@@ -1,0 +1,13 @@
+{
+  "name": "nuclear-plant-3d-probe",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:vendor": "node scripts/prepare-vendor.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  }
+}

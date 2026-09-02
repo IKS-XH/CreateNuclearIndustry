@@ -66,14 +66,9 @@ public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
     @Override
     public void newSettingHovered(ValueSettings valueSetting) {
         if (getWorld() != null && getWorld().isClientSide) {
-            boolean started = ControlRodSliderClientAdapter.ensureStarted(
+            ControlRodSliderClientAdapter.ensureStarted(
                     drive.getBlockPos(), drive.clientColumnX(), drive.clientColumnZ(),
                     getValue());
-            if (!started) {
-                ControlRodSliderClientAdapter.preview(
-                        drive.getBlockPos(), drive.clientColumnX(), drive.clientColumnZ(),
-                        valueSetting.value());
-            }
         }
     }
 

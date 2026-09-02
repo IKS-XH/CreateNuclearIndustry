@@ -10,12 +10,14 @@ import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDiagnostics;
+import com.iksxh.create_nuclear_industry.structure.ReactorInstrumentStructureSummary;
 import com.simibubi.create.AllItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -31,8 +33,10 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-/** 验证结构形成、事件驱动重扫、扳手显式重扫和稳定诊断代码。 */
+/** 验证结构形成、静态仪表摘要、事件驱动重扫、扳手显式重扫和稳定诊断代码。 */
 @GameTestHolder("create_nuclear_industry")
 @PrefixGameTestTemplate(false)
 public final class P1StructureGameTests {
@@ -264,6 +268,98 @@ public final class P1StructureGameTests {
             require(helper, instrument.structureScan().diagnosticCode()
                             == ReactorStructureDefinition.DiagnosticCode.STRUCTURE_BLOCKS,
                     "single wrench scan did not publish the structure-block diagnostic");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void instrumentStaticSummaryUsesCachedStructureAndInvalidatesAfterRescan(
+            GameTestHelper helper
+    ) {
+        buildCanonicalStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            ReactorInstrumentStructureSummary initial = instrument.structureSummary();
+            require(helper, initial.valid(), "canonical structure did not produce a valid static summary");
+            require(helper, initial.width() == 5 && initial.height() == 5 && initial.depth() == 5,
+                    "static summary reported incorrect fixed structure dimensions");
+            require(helper, initial.fuelColumnCount() == 8 && initial.controlRodColumnCount() == 0,
+                    "static summary reported incorrect canonical column counts");
+            require(helper, initial.coldPortCount() == 1 && initial.hotPortCount() == 1,
+                    "static summary reported incorrect canonical coolant port counts");
+            require(helper, initial.totalFluidCapacityMb() == 2_000L,
+                    "static summary did not add the configured cold and hot capacities");
+
+            long scansAfterSummary = instrument.structureScanCount();
+            require(helper, instrument.structureSummary().equals(initial),
+                    "repeated static summary reads changed the cached result");
+            require(helper, instrument.structureScanCount() == scansAfterSummary,
+                    "static summary read triggered a world structure scan");
+
+            helper.setBlock(OUTER_CASING, Blocks.AIR.defaultBlockState());
+            require(helper, instrument.structureSummary().valid(),
+                    "direct world mutation unexpectedly changed the cached summary");
+            wrench(helper, helper.makeMockPlayer(GameType.SURVIVAL), AllItems.WRENCH.asStack());
+            ReactorInstrumentStructureSummary invalid = instrument.structureSummary();
+            require(helper, !invalid.valid() && !invalid.unavailableReason().isBlank(),
+                    "invalid structure did not produce an unavailable summary");
+
+            helper.setBlock(OUTER_CASING, P1Blocks.REACTOR_CASING.get().defaultBlockState());
+            wrench(helper, helper.makeMockPlayer(GameType.SURVIVAL), AllItems.WRENCH.asStack());
+            require(helper, instrument.structureSummary().valid(),
+                    "restored structure did not rebuild the static summary");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void instrumentStaticSummarySyncsInReadOnlyGoggleTooltip(GameTestHelper helper) {
+        buildCanonicalStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            CompoundTag updateTag = instrument.getUpdateTag(helper.getLevel().registryAccess());
+            instrument.handleUpdateTag(updateTag, helper.getLevel().registryAccess());
+            List<Component> tooltip = new ArrayList<>();
+            long scansBeforeTooltip = instrument.structureScanCount();
+            ReactorSnapshot snapshotBeforeTooltip = instrument.snapshot();
+
+            require(helper, instrument.addToGoggleTooltip(tooltip, false),
+                    "valid static summary was not accepted by the Create goggle callback");
+            require(helper, tooltip.size() == 12,
+                    "valid goggle summary did not contain the static fields and runtime section: size="
+                            + tooltip.size() + ", texts=" + tooltip.stream().map(Component::getString).toList());
+            String[] expectedValues = {"5 × 5 × 5", "8", "0", "1", "1", "2000"};
+            for (int index = 0; index < expectedValues.length; index++) {
+                require(helper, tooltip.get(index + 1).getString().contains(expectedValues[index]),
+                        "goggle summary field " + index + " was missing or out of order");
+            }
+            require(helper, tooltip.get(7).getString().contains("dynamic_summary")
+                            || tooltip.get(7).getString().contains("动态运行遥测")
+                            || tooltip.get(7).getString().contains("Dynamic runtime telemetry"),
+                    "valid goggle summary did not contain the dynamic section header");
+            require(helper, tooltip.get(8).getString().contains("0 / 1000"),
+                    "valid goggle summary did not show the current cold stock and capacity");
+            require(helper, tooltip.get(9).getString().contains("0 / 1000"),
+                    "valid goggle summary did not show the current hot stock and capacity");
+            require(helper, tooltip.get(10).getString().contains("0.0 HU/t"),
+                    "valid goggle summary did not show zero fission heat");
+            require(helper, tooltip.get(11).getString().contains("0.0 mB/t"),
+                    "valid goggle summary did not show zero coolant conversion");
+            require(helper, instrument.snapshot().equals(snapshotBeforeTooltip),
+                    "goggle rendering changed the authoritative reactor snapshot");
+            require(helper, instrument.structureScanCount() == scansBeforeTooltip,
+                    "goggle rendering triggered a structure scan");
+
+            helper.setBlock(OUTER_CASING, Blocks.AIR.defaultBlockState());
+            wrench(helper, helper.makeMockPlayer(GameType.SURVIVAL), AllItems.WRENCH.asStack());
+            instrument.handleUpdateTag(
+                    instrument.getUpdateTag(helper.getLevel().registryAccess()),
+                    helper.getLevel().registryAccess());
+            tooltip.clear();
+            require(helper, instrument.addToGoggleTooltip(tooltip, false),
+                    "invalid static summary was not accepted by the Create goggle callback");
+            require(helper, tooltip.size() == 2,
+                    "invalid structure displayed zero-valued fields instead of an unavailable line");
             helper.succeed();
         });
     }

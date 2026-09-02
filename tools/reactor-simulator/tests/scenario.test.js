@@ -34,7 +34,7 @@ function applyFixtureSnapshot(fresh, raw) {
 
 test("all replay scenarios run deterministically and write handoff evidence", async () => {
   const files = (await readdir(scenarioDir)).filter((file) => file.endsWith(".json")).sort();
-  assert.equal(files.length, 7);
+  assert.equal(files.length, 8);
   const rows = [];
   const finalSnapshots = {};
   for (const file of files) {
@@ -81,4 +81,13 @@ test("all replay scenarios run deterministically and write handoff evidence", as
   assert.ok(rows.some((row) => row.scenario === "cold-end-limited" && row.convertedCoolantMbPerT === 0));
   assert.ok(rows.some((row) => row.scenario === "hot-end-limited" && row.convertedCoolantMbPerT === 0));
   assert.ok(rows.some((row) => row.scenario === "propagation-paused-meltdown" && row.meltdownTriggered));
+  const fcfRow = rows.find((row) => row.scenario === "p1-control-05-fcf");
+  assert.ok(fcfRow, "the P1-CONTROL-05 F-C-F scenario must be replayed");
+  assert.equal(fcfRow.generatedHeatHuPerT, 0,
+    "fully inserted F-C-F rods must suppress all new fission heat");
+  const fcfFuelColumns = finalSnapshots["p1-control-05-fcf.json"].columns
+    .filter((column) => column.type === "fuel");
+  assert.equal(fcfFuelColumns.length, 6);
+  assert.ok(fcfFuelColumns.every((column) => column.fuelRemaining === column.fuelCapacity),
+    "fully inserted F-C-F rods must not consume fuel");
 });

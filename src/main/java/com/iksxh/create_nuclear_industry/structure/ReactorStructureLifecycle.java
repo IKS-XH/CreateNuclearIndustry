@@ -1,6 +1,9 @@
 package com.iksxh.create_nuclear_industry.structure;
 
+import com.simibubi.create.content.fluids.FluidPropagator;
+import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -70,6 +73,28 @@ public final class ReactorStructureLifecycle {
     public static void rescanAroundNow(Level level, BlockPos changedPos) {
         if (level != null && !level.isClientSide && changedPos != null) {
             ReactorStructureScanner.rescanAround(level, changedPos);
+        }
+    }
+
+    /**
+     * 在冷/热端口的 capability 有效边沿后，通知相邻 Create 管道重新发现端点。
+     *
+     * <p>调用者必须先完成 {@link Level#invalidateCapabilities(BlockPos)}；这里使用
+     * Create 6.0.10 的公开 {@link FluidPropagator#propagateChangedPipe} 入口清理相邻
+     * 管道压力并重新发现机械泵，不访问 Create 私有字段，也不依赖固定延时或永久轮询。</p>
+     */
+    public static void notifyFluidNetworkAround(Level level, BlockPos endpointPos) {
+        if (!(level instanceof ServerLevel serverLevel) || endpointPos == null) {
+            return;
+        }
+        for (Direction direction : Direction.values()) {
+            BlockPos pipePos = endpointPos.relative(direction);
+            FluidTransportBehaviour pipe = FluidPropagator.getPipe(serverLevel, pipePos);
+            if (pipe == null) {
+                continue;
+            }
+            FluidPropagator.propagateChangedPipe(
+                    serverLevel, pipePos, serverLevel.getBlockState(pipePos));
         }
     }
 

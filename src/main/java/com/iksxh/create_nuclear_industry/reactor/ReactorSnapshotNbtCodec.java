@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 /** P1 反应堆权威快照的版本化 NBT 适配器。 */
 public final class ReactorSnapshotNbtCodec {
-    public static final int FORMAT_VERSION = 2;
+    public static final int FORMAT_VERSION = 3;
 
     private static final String FORMAT_VERSION_KEY = "FormatVersion";
     private static final String FUEL_COLUMNS_KEY = "FuelColumns";
@@ -42,6 +42,7 @@ public final class ReactorSnapshotNbtCodec {
             entry.putDouble("Integrity", state.integrity());
             entry.putDouble("CachedHeatHu", state.cachedHeatHu());
             entry.putDouble("FuelBurnRemainder", state.fuelBurnRemainder());
+            entry.putDouble("QuantizedHeatRemainderHu", state.quantizedHeatRemainderHu());
             fuelColumns.add(entry);
         });
         root.put(FUEL_COLUMNS_KEY, fuelColumns);
@@ -72,6 +73,8 @@ public final class ReactorSnapshotNbtCodec {
         if (root == null) {
             return ReactorSnapshot.empty();
         }
+        int formatVersion = root.contains(FORMAT_VERSION_KEY)
+                ? root.getInt(FORMAT_VERSION_KEY) : 0;
         Map<CoreColumnPosition, FuelColumnState> fuelColumns = new TreeMap<>();
         ListTag fuelList = root.getList(FUEL_COLUMNS_KEY, Tag.TAG_COMPOUND);
         for (int index = 0; index < fuelList.size(); index++) {
@@ -90,11 +93,16 @@ public final class ReactorSnapshotNbtCodec {
                 int damage = Math.max(0, Math.min(maxDamage, assemblyTag.getInt("Damage")));
                 assembly = FuelAssemblyState.installed(maxDamage, damage);
             }
+            double cachedHeat = readNonNegative(entry, "CachedHeatHu", 0.0D);
+            double quantizedHeat = formatVersion >= 3
+                    ? Math.min(cachedHeat, readNonNegative(entry,
+                    "QuantizedHeatRemainderHu", 0.0D)) : 0.0D;
             fuelColumns.put(position, new FuelColumnState(
                     assembly,
                     readUnit(entry, "Integrity", 1.0D),
-                    readNonNegative(entry, "CachedHeatHu", 0.0D),
-                    readUnit(entry, "FuelBurnRemainder", 0.0D)
+                    cachedHeat,
+                    readUnit(entry, "FuelBurnRemainder", 0.0D),
+                    quantizedHeat
             ));
         }
 

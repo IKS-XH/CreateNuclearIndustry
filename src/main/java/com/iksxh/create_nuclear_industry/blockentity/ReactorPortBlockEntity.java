@@ -5,16 +5,35 @@ import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.FuelRefuelingTransaction;
+import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentGoggleDisplay;
+import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentTelemetry;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.List;
+import java.util.Objects;
+
 /** 冷、热和补料端口共用的空壳方块实体；不拥有任何反应堆模拟状态。 */
-public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
+public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
+        implements IHaveGoggleInformation {
+    private static final String FUEL_COLUMN_BOUND_KEY = "FuelColumnBound";
+    private static final String FUEL_COLUMN_POSITION_X_KEY = "FuelColumnPositionX";
+    private static final String FUEL_COLUMN_POSITION_Z_KEY = "FuelColumnPositionZ";
+    private static final String FUEL_COLUMN_INTEGRITY_KEY = "FuelColumnIntegrity";
+    private static final String FUEL_COLUMN_HEAT_KEY = "FuelColumnHeatHuPerTick";
     private Binding binding;
     private ReactorInstrumentPortBlockEntity boundOwner;
+    private boolean serverFuelColumnBound;
+    private boolean clientFuelColumnBound;
+    private ReactorInstrumentTelemetry.FuelColumnTelemetry serverFuelColumnTelemetry;
+    private ReactorInstrumentTelemetry.FuelColumnTelemetry clientFuelColumnTelemetry;
 
     public ReactorPortBlockEntity(BlockPos pos, BlockState state) {
         super(P1BlockEntities.REACTOR_PORT.get(), pos, state);
@@ -27,7 +46,8 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
 
     /** 返回端口是否已经绑定到一个有效的仪表端口。 */
     public boolean isBound() {
-        return binding != null && boundOwner != null;
+        return binding != null && boundOwner != null && !isRemoved()
+                && !boundOwner.isRemoved() && boundOwner.structureValid();
     }
 
     /** 返回共享全堆账本或单列状态的唯一权威所有者。 */
@@ -64,6 +84,37 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
                 && java.util.Objects.equals(binding.column(), expectedColumn);
     }
 
+    /** 返回客户端最近一次同步的单列燃料遥测；服务端只读显示不使用该副本。 */
+    public ReactorInstrumentTelemetry.FuelColumnTelemetry clientFuelColumnTelemetry() {
+        return clientFuelColumnTelemetry;
+    }
+
+    /**
+     * 同步该换料端口所属燃料列的客户端显示数据。
+     *
+     * <p>只有仪表端口服务端权威循环可以调用；空遥测表示结构有效但尚未完成一次成功
+     * 正式 tick，客户端应显示等待态。此数据仅进入客户端更新包，不写入端口持久化 NBT。</p>
+     */
+    void setServerFuelColumnTelemetry(
+            ReactorInstrumentTelemetry.FuelColumnTelemetry telemetry
+    ) {
+        if (level != null && level.isClientSide) {
+            throw new IllegalStateException("fuel column telemetry can only be changed on the server");
+        }
+        boolean bound = binding != null
+                && binding.type() == BindingType.REFUELING
+                && binding.column() != null;
+        if (serverFuelColumnBound == bound
+                && Objects.equals(serverFuelColumnTelemetry, telemetry)) {
+            return;
+        }
+        serverFuelColumnBound = bound;
+        serverFuelColumnTelemetry = bound ? telemetry : null;
+        if (level != null && !level.isClientSide) {
+            sendData();
+        }
+    }
+
     /**
      * 由仪表端口在服务端结构重扫后写入绑定缓存。
      * 冷/热端口的列为空，表示它们只能访问该仪表端口拥有的全堆冷却剂账本；
@@ -82,14 +133,19 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
                 || (expectedType != BindingType.REFUELING && column != null)) {
             return false;
         }
-        if (boundOwner != null && boundOwner != owner) {
+        if (boundOwner != null && boundOwner != owner && !canReclaimBinding()) {
             return false;
         }
+        ReactorInstrumentPortBlockEntity previousOwner = boundOwner;
+        Binding previousBinding = binding;
         boolean changed = !isBoundTo(owner, expectedType, column);
         binding = new Binding(owner.getBlockPos(), expectedType, column);
         boundOwner = owner;
+        if (previousOwner != null && previousOwner != owner) {
+            previousOwner.detachPort(this);
+        }
         if (changed && level != null && !level.isClientSide) {
-            level.invalidateCapabilities(worldPosition);
+            invalidateCapabilityAndNetwork(previousBinding, expectedType);
         }
         return true;
     }
@@ -98,10 +154,18 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
     public void clearBinding(ReactorInstrumentPortBlockEntity owner) {
         if (owner == null || boundOwner == owner) {
             boolean changed = binding != null || boundOwner != null;
+            Binding previousBinding = binding;
+            ReactorInstrumentPortBlockEntity previousOwner = boundOwner;
             binding = null;
             boundOwner = null;
+            serverFuelColumnBound = false;
+            serverFuelColumnTelemetry = null;
+            if (previousOwner != null) {
+                previousOwner.detachPort(this);
+            }
             if (changed && level != null && !level.isClientSide) {
-                level.invalidateCapabilities(worldPosition);
+                invalidateCapabilityAndNetwork(previousBinding, null);
+                sendData();
             }
         }
     }
@@ -151,6 +215,66 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
         return result;
     }
 
+    /** 只有有效换料绑定才向护目镜提供单列燃料信息；冷/热端口不产生此文本。 */
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        if (bindingType() != BindingType.REFUELING || !clientFuelColumnBound) {
+            return false;
+        }
+        tooltip.add(Component.translatable("goggle.create_nuclear_industry.reactor.fuel_column_summary"));
+        if (clientFuelColumnTelemetry == null) {
+            tooltip.add(Component.translatable(
+                    "goggle.create_nuclear_industry.reactor.runtime_data_waiting"));
+            return true;
+        }
+        ReactorInstrumentGoggleDisplay.appendFuelColumnTooltip(tooltip, clientFuelColumnTelemetry);
+        return true;
+    }
+
+    @Override
+    protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(tag, registries, clientPacket);
+        if (clientPacket) {
+            tag.putBoolean(FUEL_COLUMN_BOUND_KEY, serverFuelColumnBound);
+            if (serverFuelColumnTelemetry != null) {
+                tag.putInt(FUEL_COLUMN_POSITION_X_KEY,
+                        serverFuelColumnTelemetry.position().x());
+                tag.putInt(FUEL_COLUMN_POSITION_Z_KEY,
+                        serverFuelColumnTelemetry.position().z());
+                tag.putDouble(FUEL_COLUMN_INTEGRITY_KEY,
+                        serverFuelColumnTelemetry.fuelColumnIntegrity());
+                tag.putDouble(FUEL_COLUMN_HEAT_KEY,
+                        serverFuelColumnTelemetry.generatedFissionHeatHuPerTick());
+            }
+        }
+    }
+
+    @Override
+    protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(tag, registries, clientPacket);
+        if (!clientPacket) {
+            return;
+        }
+        clientFuelColumnBound = tag.getBoolean(FUEL_COLUMN_BOUND_KEY);
+        clientFuelColumnTelemetry = null;
+        if (!clientFuelColumnBound || !tag.contains(FUEL_COLUMN_POSITION_X_KEY)
+                || !tag.contains(FUEL_COLUMN_POSITION_Z_KEY)
+                || !tag.contains(FUEL_COLUMN_INTEGRITY_KEY)
+                || !tag.contains(FUEL_COLUMN_HEAT_KEY)) {
+            return;
+        }
+        try {
+            clientFuelColumnTelemetry = new ReactorInstrumentTelemetry.FuelColumnTelemetry(
+                    new CoreColumnPosition(
+                            tag.getInt(FUEL_COLUMN_POSITION_X_KEY),
+                            tag.getInt(FUEL_COLUMN_POSITION_Z_KEY)),
+                    tag.getDouble(FUEL_COLUMN_INTEGRITY_KEY),
+                    tag.getDouble(FUEL_COLUMN_HEAT_KEY));
+        } catch (IllegalArgumentException exception) {
+            clientFuelColumnBound = false;
+        }
+    }
+
     /** 只有有效结构中的真实换料端口才能提交列状态事务。 */
     private boolean isRefuelingBindingUsable() {
         return (level == null || !level.isClientSide)
@@ -167,12 +291,55 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity {
                 boundOwner, BindingType.REFUELING, binding == null ? null : binding.column());
     }
 
+    /** 判断旧所有者是否已经移除、失效或不再占有世界中的仪表位置。 */
+    private boolean canReclaimBinding() {
+        if (boundOwner == null) {
+            return true;
+        }
+        if (boundOwner.isRemoved() || !boundOwner.structureValid()) {
+            return true;
+        }
+        var ownerLevel = boundOwner.getLevel();
+        return ownerLevel == null
+                || ownerLevel.getBlockEntity(boundOwner.getBlockPos()) != boundOwner;
+    }
+
+    /** 在绑定边沿同时刷新 NeoForge capability 缓存和相邻 Create 管网。 */
+    private void invalidateCapabilityAndNetwork(
+            Binding previousBinding,
+            BindingType nextType
+    ) {
+        level.invalidateCapabilities(worldPosition);
+        if (isFluidBinding(previousBinding == null ? null : previousBinding.type())
+                || isFluidBinding(nextType)) {
+            ReactorStructureLifecycle.notifyFluidNetworkAround(level, worldPosition);
+        }
+    }
+
+    /** 冷/热端口需要 Create 管网重新发现，换料端口不参与流体网络。 */
+    private static boolean isFluidBinding(BindingType type) {
+        return type == BindingType.COLD_COOLANT || type == BindingType.HOT_COOLANT;
+    }
+
     @Override
     public void onLoad() {
         super.onLoad();
         if (level != null && !level.isClientSide) {
             ReactorStructureLifecycle.scheduleRescanAround(level, worldPosition);
         }
+    }
+
+    /**
+     * 端口被移除或区块卸载时撤销反向所有者引用，避免旧 handler 在新结构上继续写入。
+     */
+    @Override
+    public void invalidate() {
+        ReactorInstrumentPortBlockEntity owner = boundOwner;
+        clearBinding(owner);
+        if (owner != null) {
+            owner.detachPort(this);
+        }
+        super.invalidate();
     }
 
     /** 端口绑定的职责；冷/热端口只使用全堆账本，换料端口只使用单列状态。 */

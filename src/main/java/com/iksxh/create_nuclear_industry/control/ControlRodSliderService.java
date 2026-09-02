@@ -52,10 +52,20 @@ public final class ControlRodSliderService {
             int row,
             int depthPercent
     ) {
+        long dragId = activeDragIdForCreate(player, drivePos);
         ControlRodSliderPayload payload = new ControlRodSliderPayload(
                 drivePos, -1, -1, row, depthPercent,
-                ControlRodSliderPhase.COMMIT.wireCode(), 0L);
+                ControlRodSliderPhase.COMMIT.wireCode(), dragId);
         return handle(player, payload);
+    }
+
+    /** Create 提交包没有自定义 dragId；从同一驱动器的临时会话补齐响应关联 ID。 */
+    private static long activeDragIdForCreate(Player player, BlockPos drivePos) {
+        if (player == null || drivePos == null) {
+            return 0L;
+        }
+        DragSession session = ACTIVE_DRAGS.get(player.getUUID());
+        return session != null && drivePos.equals(session.drivePos()) ? session.dragId() : 0L;
     }
 
     /** 清除玩家退出或会话结束后的活动拖动状态。 */

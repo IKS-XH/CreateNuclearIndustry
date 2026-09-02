@@ -109,6 +109,54 @@ test("control rod depth gates adjacent fuel feedback clusters", () => {
   assert.equal(heatByDepth[2], 0);
 });
 
+test("P1-CONTROL-05 exact three-row F-C-F layout gates heat and burn monotonically", () => {
+  const layout = createPreset(G, "fcf");
+  assert.deepEqual(layout, [
+    ["fuel", "control_rod", "fuel"],
+    ["fuel", "control_rod", "fuel"],
+    ["fuel", "control_rod", "fuel"],
+  ]);
+  const results = [0, .5, 1].map((depth) => {
+    const depths = createDepthMatrix(G, layout);
+    for (let z = 0; z < 3; z += 1) depths[z][1] = depth;
+    return tick(layout, DEFAULT_CONFIG, scene(layout, DEFAULT_CONFIG, depths));
+  });
+
+  assert.ok(results[0].summary.generatedHeat > results[1].summary.generatedHeat);
+  assert.ok(results[1].summary.generatedHeat > results[2].summary.generatedHeat);
+  assert.ok(results[0].summary.plannedBurn > results[1].summary.plannedBurn);
+  assert.ok(results[1].summary.plannedBurn > results[2].summary.plannedBurn);
+  assert.equal(results[2].summary.generatedHeat, 0);
+  assert.equal(results[2].summary.plannedBurn, 0);
+  for (const result of results) {
+    for (let z = 0; z < 3; z += 1) {
+      for (const x of [0, 2]) {
+        const column = result.columns[`${x},${z}`];
+        assert.ok(column);
+        assert.equal(column.overclocked, true);
+      }
+    }
+  }
+  assert.ok(results[2].columns["0,0"].generatedHeat === 0);
+  assert.ok(results[2].columns["2,2"].plannedBurn === 0);
+});
+
+test("P1-CONTROL-05 mixed coverage isolates zeroed rows and keeps un-covered feedback alive", () => {
+  const layout = createPreset(G, "fcf");
+  const depths = createDepthMatrix(G, layout);
+  depths[0][1] = 1;
+  depths[1][1] = .5;
+  depths[2][1] = 0;
+  const result = tick(layout, DEFAULT_CONFIG, scene(layout, DEFAULT_CONFIG, depths));
+  for (const x of [0, 2]) {
+    assert.equal(result.columns[`${x},0`].generatedHeat, 0);
+    assert.ok(result.columns[`${x},1`].generatedHeat > 0);
+    assert.ok(result.columns[`${x},2`].generatedHeat > 0);
+  }
+  assert.equal(result.columns["0,0"].plannedBurn, 0);
+  assert.equal(result.columns["2,0"].plannedBurn, 0);
+});
+
 test("cooling ledger is conserved and sufficient cooling prevents damage", () => {
   const layout = createPreset(G, "empty");
   layout[1][1] = "fuel";

@@ -45,8 +45,9 @@ public final class ReactorFissionCalculator {
         Map<CoreColumnPosition, Double> heatIntensity = new TreeMap<>();
         Map<CoreColumnPosition, Double> burnIntensity = new TreeMap<>();
         for (CoreColumnPosition position : controlled.keySet()) {
-            heatIntensity.put(position, 1.0D);
-            burnIntensity.put(position, 1.0D);
+            // 反馈迭代从本列的控制抑制强度开始，避免第一轮反馈绕过控制棒。
+            heatIntensity.put(position, controlled.get(position));
+            burnIntensity.put(position, controlled.get(position));
         }
 
         for (int iteration = 0; iteration < MAX_FEEDBACK_ITERATIONS; iteration++) {
@@ -66,10 +67,12 @@ public final class ReactorFissionCalculator {
                         .sum();
                 double activation = 1.0D - Math.exp(-parameters.overclockFeedbackGain()
                         * Math.pow(Math.max(0.0D, signal), parameters.overclockFeedbackExponent()));
-                nextHeat.put(position, 1.0D + (parameters.overclockHeatMultiplier() - 1.0D)
-                        * clamp01(activation));
-                nextBurn.put(position, 1.0D + (parameters.overclockBurnMultiplier() - 1.0D)
-                        * clamp01(activation));
+                double controlFactor = controlled.get(position);
+                // 反馈只放大控制后的基础强度；控制强度为零时热、燃耗和后续信号都为零。
+                nextHeat.put(position, controlFactor * (1.0D + (parameters.overclockHeatMultiplier() - 1.0D)
+                        * clamp01(activation)));
+                nextBurn.put(position, controlFactor * (1.0D + (parameters.overclockBurnMultiplier() - 1.0D)
+                        * clamp01(activation)));
             }
             for (CoreColumnPosition position : controlled.keySet()) {
                 largestDelta = Math.max(largestDelta,

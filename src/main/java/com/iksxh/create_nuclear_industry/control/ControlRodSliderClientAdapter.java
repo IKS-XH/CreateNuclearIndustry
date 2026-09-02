@@ -25,10 +25,7 @@ public final class ControlRodSliderClientAdapter {
                 drivePos, columnX, columnZ, currentDepth, dragId));
     }
 
-    /**
-     * Create 长按面板不一定调用 behaviour 的短交互回调，因此从第一次悬停回调开始
-     * 拖动；先等待服务端 START 响应建立初始光标值，再发送预览。
-     */
+    /** Create 长按面板从第一次悬停回调开始建立临时服务端会话。 */
     public static boolean ensureStarted(BlockPos drivePos, int columnX, int columnZ, int currentDepth) {
         if (active != null && active.drivePos().equals(drivePos)) {
             return false;
@@ -37,44 +34,51 @@ public final class ControlRodSliderClientAdapter {
         return true;
     }
 
-    /** 在活动会话内发送客户端预览值；预览不写入服务端快照。 */
-    public static void preview(BlockPos drivePos, int columnX, int columnZ, int depthPercent) {
-        if (active == null || !active.drivePos().equals(drivePos)) {
-            return;
-        }
-        PacketDistributor.sendToServer(ControlRodSliderPayload.preview(
-                drivePos, columnX, columnZ, depthPercent, active.dragId()));
-    }
-
-    /** 发送提交请求并结束本地拖动会话。 */
+    /** 发送自定义提交请求；会话保留到服务端最终响应，以便校验 dragId。 */
     public static void commit(BlockPos drivePos, int columnX, int columnZ, int depthPercent) {
         if (active == null || !active.drivePos().equals(drivePos)) {
             return;
         }
         PacketDistributor.sendToServer(ControlRodSliderPayload.commit(
                 drivePos, columnX, columnZ, depthPercent, active.dragId()));
-        active = null;
     }
 
-    /** 发送取消请求并丢弃本地拖动会话。 */
+    /** 发送取消请求；会话保留到服务端最终响应，以便校验 dragId。 */
     public static void cancel(BlockPos drivePos, int columnX, int columnZ) {
         if (active == null || !active.drivePos().equals(drivePos)) {
             return;
         }
         PacketDistributor.sendToServer(ControlRodSliderPayload.cancel(
                 drivePos, columnX, columnZ, active.dragId()));
+    }
+
+    /** 清理面板异常关闭、玩家退出或其他客户端上下文切换留下的临时会话。 */
+    static void clearSession() {
         active = null;
     }
 
-    /** 根据服务端结果结束已接受、被拒绝或已提交/取消的本地会话。 */
-    static void finishFromServer(ControlRodSliderResponsePayload response) {
-        if (active == null || response == null || !active.drivePos().equals(response.drivePos())) {
-            return;
-        }
-        if (!response.accepted() || response.phase() == ControlRodSliderPhase.COMMIT
-                || response.phase() == ControlRodSliderPhase.CANCEL) {
+    /**
+     * 应用服务端响应策略并按需结束当前会话。
+     *
+     * @return 是否允许本次响应更新驱动器的最终展示缓存
+     */
+    static boolean applyResponsePolicy(ControlRodSliderResponsePayload response) {
+        ControlRodSliderClientResponsePolicy.Session session = active == null
+                ? null
+                : new ControlRodSliderClientResponsePolicy.Session(active.drivePos(), active.dragId());
+        ControlRodSliderClientResponsePolicy.Decision decision =
+                ControlRodSliderClientResponsePolicy.decide(session, response);
+        if (decision.clearSession() && matchesActiveSession(response)) {
             active = null;
         }
+        return decision.applyFinalDisplay();
+    }
+
+    private static boolean matchesActiveSession(ControlRodSliderResponsePayload response) {
+        return active != null
+                && response != null
+                && active.drivePos().equals(response.drivePos())
+                && active.dragId() == response.dragId();
     }
 
     private record ActiveDrag(BlockPos drivePos, int columnX, int columnZ, long dragId) {

@@ -14,6 +14,7 @@
 
 - `../superpowers/plans/2026-08-18-agent-developer-execution-plan.md`
 - `../superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md`
+- `../superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md`
 
 ## 已归档计划
 
@@ -24,6 +25,14 @@
 - `2026-08-25-chinese-code-comments-execution-plan.md`：P1-COMMENT-00 至 P1-COMMENT-06 已完成；存量 Java 中文注释通过全量审计，永久规则已收敛到根目录 `AGENTS.md`。
 - `P1-REFUEL-01.md`：单列燃料组件放入、取出、耐久度往返、燃尽产出和多列独立性已通过隔离自动验收。
 - `P1-REFUEL-02.md`：玩家顶部换料端口交互已通过隔离自动验收与客户端人工验收。
+- `P1-GOGGLE-INSTRUMENT-01.md`：仪表端口静态结构摘要已通过 158 项 JUnit 与 38 个 required GameTest；摘要只读取结构缓存和服务器配置，不触发重扫或复制运行快照。
+- `P1-GOGGLE-INSTRUMENT-02.md`：仪表端口 Create 护目镜静态摘要已通过 162 项 JUnit、39 个 required GameTest 和客户端人工验收；显示使用客户端只读副本与本地化无效状态。
+- `P1-GOGGLE-INSTRUMENT-03.md`：仪表端口动态运行遥测已通过 169 项 JUnit 与 45 个 required GameTest；遥测由最后一次正式服务端 tick 只读派生，重载与结构失效不会泄露陈旧数据，真实更新包路径满足 10 tick 可见性上限。
+- `P1-GOGGLE-INSTRUMENT-04.md`：护目镜动态信息按用户确认的现场分层方案完成；仪表端口显示全堆总量，换料端口和控制棒驱动器显示绑定列详情，176 项 JUnit、47 个 required GameTest 与客户端人工验收通过。
+- `P1-CONTROL-04.md`：控制棒滑块已移除异步预览回包驱动的游标反馈环，改为客户端本地拖动预览与服务端最终提交；181 项 JUnit、47 个 required GameTest 与客户端人工验收通过。
+- `P1-COOL-04.md`：真实 Create 储罐—动力泵—管道已能向成型反应堆冷端输入复合冷却剂并从热端输出；181 项 JUnit、51 个 required GameTest 与客户端人工验收通过。后续热量量化和超频控制问题不属于管网接入范围。
+- `P1-THERMAL-01.md`：整数 `mB` 转化产生的安全热量余数已与真实冷却短缺分离，并由权威快照/NBT v3 守恒保存；192 项 JUnit、52 个 required GameTest 与客户端人工验收通过。
+- `P1-CONTROL-05.md`：正式 Java 裂变计算已按“控制抑制 × 反馈倍率”门控三行 `F-C-F` 反馈簇；195 项 JUnit、53 个 required GameTest、30 项模拟器 Node 测试与客户端人工验收通过。
 
 ## 已归档任务验收报告
 

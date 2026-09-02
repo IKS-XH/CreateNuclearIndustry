@@ -7,6 +7,7 @@ out/
 .worktrees/
 .gradle-user-home/
 .wrapper-bootstrap/
+node_modules/
 
 # Generated IDE and NeoForge development-runtime files
 .eclipse/

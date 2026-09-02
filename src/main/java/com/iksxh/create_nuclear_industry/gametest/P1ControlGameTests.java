@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.blockentity.ControlRodDriveBlockEntity;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
+import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.control.ControlRodSliderPayload;
 import com.iksxh.create_nuclear_industry.control.ControlRodSliderResponsePayloadFactory;
@@ -28,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /** 验证服务端滑块校验、SCRAM 红石边沿、卡死棒和无控制棒结构边界。 */
@@ -341,6 +343,102 @@ public final class P1ControlGameTests {
         });
     }
 
+    /**
+     * 在真实三行 F-C-F 成型结构中验证手动全插和仪表红石 SCRAM 都能切断反馈裂变，
+     * 并把六列零新生热同步到仪表及各自换料端口；缓存余热不计入该断言。
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void fcfManualFullInsertionAndRedstoneScramStopFeedback(GameTestHelper helper) {
+        buildFcfStructure(helper);
+        helper.runAfterDelay(5, () -> {
+            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+            instrument.setSnapshot(fcfSnapshot(0.0D));
+            require(helper, instrument.structureValid(), "three-row F-C-F structure did not form");
+            require(helper, instrument.structureScan().columns().values().stream()
+                            .filter(column -> column.type() == ReactorStructureDefinition.ColumnType.FUEL)
+                            .count() == 6,
+                    "three-row F-C-F structure did not map six fuel columns");
+            require(helper, instrument.structureScan().columns().values().stream()
+                            .filter(column -> column.type() == ReactorStructureDefinition.ColumnType.CONTROL_ROD)
+                            .count() == 3,
+                    "three-row F-C-F structure did not map three control rods");
+
+            require(helper, instrument.tickReactor(),
+                    "running F-C-F fixture did not complete its initial formal tick");
+            require(helper, instrument.telemetry().available()
+                            && instrument.telemetry().totalGeneratedFissionHeatHuPerTick() > 0.0D,
+                    "running F-C-F fixture did not publish positive pre-SCRAM fission heat");
+
+            for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+                CoreColumnPosition column = new CoreColumnPosition(1, z);
+                BlockPos drivePos = new BlockPos(2, 4, z + 1);
+                Player player = playerAtDrive(helper, drivePos);
+                var committed = ControlRodSliderService.commitFromCreate(
+                        player, helper.absolutePos(drivePos), 0, 100);
+                require(helper, committed.accepted(),
+                        "manual 100% commit was rejected for F-C-F control rod " + column);
+                require(helper, instrument.snapshot().controlRodColumns().get(column).targetDepth() == 1.0D,
+                        "manual 100% commit did not set the authoritative target for " + column);
+                ControlRodSliderService.clearSession(player);
+            }
+
+            for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+                require(helper, instrument.snapshot()
+                                .controlRodColumns().get(new CoreColumnPosition(1, z)).actualDepth() == 0.0D,
+                        "manual commit changed actual depth before the formal control tick");
+            }
+            ReactorSnapshot beforeScramTick = instrument.snapshot();
+            var scram = instrument.updateRedstoneScram(true);
+            require(helper, scram.status() == ControlRodScramStatus.SCRAM_ACTIVE,
+                    "fully covered F-C-F redstone SCRAM was not active: " + scram.reason());
+            require(helper, scram.fissionHeatHu() == 0.0D,
+                    "fully covered F-C-F redstone SCRAM reported residual new fission heat");
+
+            for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+                ControlRodColumnState rod = instrument.snapshot().controlRodColumns()
+                        .get(new CoreColumnPosition(1, z));
+                require(helper, rod.targetDepth() == 1.0D && rod.actualDepth() == 1.0D,
+                        "SCRAM did not fully insert F-C-F control rod at row " + z);
+            }
+
+            instrument.tickReactor();
+            require(helper, instrument.telemetry().available(),
+                    "post-SCRAM F-C-F formal tick did not publish telemetry");
+            require(helper, instrument.telemetry().totalGeneratedFissionHeatHuPerTick() == 0.0D,
+                    "post-SCRAM instrument telemetry still reported new fission heat");
+            require(helper, instrument.telemetry().fuelColumns().size() == 6
+                            && instrument.telemetry().fuelColumns().stream()
+                            .allMatch(column -> column.generatedFissionHeatHuPerTick() == 0.0D),
+                    "post-SCRAM per-column telemetry did not report six zero heat values");
+
+            for (Map.Entry<CoreColumnPosition, FuelColumnState> entry
+                    : beforeScramTick.fuelColumns().entrySet()) {
+                FuelColumnState after = instrument.snapshot().fuelColumns().get(entry.getKey());
+                require(helper, after.fuelAssembly().damage() == entry.getValue().fuelAssembly().damage(),
+                        "post-SCRAM tick consumed fuel in column " + entry.getKey());
+            }
+
+            for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+                for (int x : new int[]{0, 2}) {
+                    BlockPos portPos = new BlockPos(x + 1, 4, z + 1);
+                    ReactorPortBlockEntity port = refuelingPort(helper, portPos);
+                    CompoundTag update = port.getUpdateTag(helper.getLevel().registryAccess());
+                    require(helper, update.getBoolean("FuelColumnBound")
+                                    && update.contains("FuelColumnHeatHuPerTick")
+                                    && update.getDouble("FuelColumnHeatHuPerTick") == 0.0D,
+                            "refueling-port telemetry was not zero for fuel column "
+                                    + new CoreColumnPosition(x, z));
+                    port.handleUpdateTag(update, helper.getLevel().registryAccess());
+                    require(helper, port.clientFuelColumnTelemetry() != null
+                                    && port.clientFuelColumnTelemetry().generatedFissionHeatHuPerTick() == 0.0D,
+                            "client refueling-port telemetry was not zero for fuel column "
+                                    + new CoreColumnPosition(x, z));
+                }
+            }
+            helper.succeed();
+        });
+    }
+
     private static void buildControlRodStructure(GameTestHelper helper) {
         for (Map.Entry<ReactorStructureDefinition.LocalPosition, String> entry
                 : ReactorStructureDefinition.canonicalTemplate().entrySet()) {
@@ -348,6 +446,15 @@ public final class P1ControlGameTests {
                     blockForId(entry.getValue()).defaultBlockState());
         }
         helper.setBlock(DRIVE, P1Blocks.CONTROL_ROD_DRIVE.get().defaultBlockState());
+    }
+
+    /** 按任务固定的三行 F-C-F 角色生成真实 5×5×5 结构。 */
+    private static void buildFcfStructure(GameTestHelper helper) {
+        for (Map.Entry<ReactorStructureDefinition.LocalPosition, String> entry
+                : ReactorStructureDefinition.templateFor(fcfColumnLayout()).entrySet()) {
+            helper.setBlock(new BlockPos(entry.getKey().x(), entry.getKey().y(), entry.getKey().z()),
+                    blockForId(entry.getValue()).defaultBlockState());
+        }
     }
 
     private static void buildFuelOnlyStructure(GameTestHelper helper) {
@@ -393,6 +500,32 @@ public final class P1ControlGameTests {
         );
     }
 
+    /** 返回每行按 X 方向排列的燃料、控制棒、燃料角色。 */
+    private static Map<CoreColumnPosition, ReactorStructureDefinition.ColumnType> fcfColumnLayout() {
+        Map<CoreColumnPosition, ReactorStructureDefinition.ColumnType> columns = new HashMap<>();
+        for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+            columns.put(new CoreColumnPosition(0, z), ReactorStructureDefinition.ColumnType.FUEL);
+            columns.put(new CoreColumnPosition(1, z), ReactorStructureDefinition.ColumnType.CONTROL_ROD);
+            columns.put(new CoreColumnPosition(2, z), ReactorStructureDefinition.ColumnType.FUEL);
+        }
+        return columns;
+    }
+
+    /** 构造三根可动棒均处于目标/实际深度 0 的六燃料列权威快照。 */
+    private static ReactorSnapshot fcfSnapshot(double rodDepth) {
+        Map<CoreColumnPosition, FuelColumnState> fuels = new HashMap<>();
+        Map<CoreColumnPosition, ControlRodColumnState> controls = new HashMap<>();
+        for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+            fuels.put(new CoreColumnPosition(0, z),
+                    new FuelColumnState(FuelAssemblyState.installed(216_000, 0), 1.0D, 0.0D));
+            fuels.put(new CoreColumnPosition(2, z),
+                    new FuelColumnState(FuelAssemblyState.installed(216_000, 0), 1.0D, 0.0D));
+            controls.put(new CoreColumnPosition(1, z),
+                    new ControlRodColumnState(1.0D, rodDepth, rodDepth, false, 0.0D));
+        }
+        return new ReactorSnapshot(fuels, controls, 0L, 0L, 0L, false);
+    }
+
     private static ReactorInstrumentPortBlockEntity instrument(GameTestHelper helper) {
         var entity = helper.getBlockEntity(new BlockPos(2, 2, 0));
         require(helper, entity instanceof ReactorInstrumentPortBlockEntity,
@@ -407,9 +540,20 @@ public final class P1ControlGameTests {
         return (ControlRodDriveBlockEntity) entity;
     }
 
+    private static ReactorPortBlockEntity refuelingPort(GameTestHelper helper, BlockPos position) {
+        var entity = helper.getBlockEntity(position);
+        require(helper, entity instanceof ReactorPortBlockEntity,
+                "refueling port block entity was not created at " + position);
+        return (ReactorPortBlockEntity) entity;
+    }
+
     private static Player playerAtDrive(GameTestHelper helper) {
+        return playerAtDrive(helper, DRIVE);
+    }
+
+    private static Player playerAtDrive(GameTestHelper helper, BlockPos drivePos) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BlockPos absolute = helper.absolutePos(DRIVE);
+        BlockPos absolute = helper.absolutePos(drivePos);
         player.setPos(absolute.getX() + 0.5D, absolute.getY() + 0.5D, absolute.getZ() + 2.0D);
         return player;
     }

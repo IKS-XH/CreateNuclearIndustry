@@ -109,12 +109,19 @@ public final class ReactorServerTick {
                 fission,
                 coolant.settlement().removedHeatHu()
         );
+        Map<CoreColumnPosition, Double> quantizedRemainderByColumn = allocateQuantizedRemainder(
+                controlSnapshot,
+                fission,
+                coolingByColumn,
+                coolant.quantizedHeatRemainderHu()
+        );
 
         // 4. 逐列结算有效热负荷和完整度损伤；冷却后的库存仍由快照权威拥有。
         ReactorThermalResult thermal = ReactorThermalCalculator.settleFissionHeat(
                 coolant.nextSnapshot(),
                 fission,
                 coolingByColumn,
+                quantizedRemainderByColumn,
                 parameters
         );
 
@@ -197,6 +204,55 @@ public final class ReactorServerTick {
         if (last != null) {
             allocated.put(last, Math.max(0.0D,
                     allocated.get(last) + (boundedRemoval - assigned)));
+        }
+        return allocated;
+    }
+
+    /** 按各列冷却后剩余热量比例分配全堆整数 mB 量化余数。 */
+    private static Map<CoreColumnPosition, Double> allocateQuantizedRemainder(
+            ReactorSnapshot snapshot,
+            ReactorFissionResult fission,
+            Map<CoreColumnPosition, Double> removedHeatByColumn,
+            double totalQuantizedRemainderHu
+    ) {
+        if (!Double.isFinite(totalQuantizedRemainderHu) || totalQuantizedRemainderHu < 0.0D) {
+            throw new IllegalArgumentException("quantized reactor heat must be finite and non-negative");
+        }
+        if (totalQuantizedRemainderHu <= HEAT_EPSILON) {
+            return Map.of();
+        }
+
+        TreeMap<CoreColumnPosition, Double> remainingByColumn = new TreeMap<>();
+        double totalRemaining = 0.0D;
+        for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : snapshot.fuelColumns().entrySet()) {
+            FuelColumnFissionResult column = fission.columns().get(entry.getKey());
+            double available = (column == null ? 0.0D : column.generatedHeatHu())
+                    + entry.getValue().cachedHeatHu();
+            double removed = Math.min(available,
+                    removedHeatByColumn.getOrDefault(entry.getKey(), 0.0D));
+            double remaining = Math.max(0.0D, available - removed);
+            if (remaining > HEAT_EPSILON) {
+                remainingByColumn.put(entry.getKey(), remaining);
+                totalRemaining += remaining;
+            }
+        }
+        if (totalRemaining <= HEAT_EPSILON) {
+            return Map.of();
+        }
+
+        double boundedRemainder = Math.min(totalQuantizedRemainderHu, totalRemaining);
+        TreeMap<CoreColumnPosition, Double> allocated = new TreeMap<>();
+        double assigned = 0.0D;
+        CoreColumnPosition last = null;
+        for (Map.Entry<CoreColumnPosition, Double> entry : remainingByColumn.entrySet()) {
+            double share = boundedRemainder * entry.getValue() / totalRemaining;
+            allocated.put(entry.getKey(), share);
+            assigned += share;
+            last = entry.getKey();
+        }
+        if (last != null) {
+            allocated.put(last, Math.max(0.0D,
+                    allocated.get(last) + (boundedRemainder - assigned)));
         }
         return allocated;
     }

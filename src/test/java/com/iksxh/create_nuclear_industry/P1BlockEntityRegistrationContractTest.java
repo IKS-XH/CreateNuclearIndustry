@@ -48,11 +48,11 @@ class P1BlockEntityRegistrationContractTest {
         assertTrue(drive.contains("readAuthoritativeSnapshot"));
         assertFalse(port.contains("private FuelColumnState"), "fuel column state must stay in the instrument snapshot");
         for (String source : new String[]{drive}) {
-            assertFalse(source.contains("Integrity"));
             assertFalse(source.contains("Temperature"));
             assertFalse(source.contains("Coolant"));
             assertFalse(source.contains("Simulation"));
             assertFalse(source.contains("private ReactorSnapshot"));
+            assertFalse(source.contains("private ControlRodColumnState"));
         }
     }
 

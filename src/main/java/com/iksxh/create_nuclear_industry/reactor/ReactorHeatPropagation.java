@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/** 基于快照从失效燃料列进行四向热传播。 */
+/** 基于快照从失效燃料列进行四向热传播；整数 mB 量化余数不属于传播热源。 */
 public final class ReactorHeatPropagation {
     private ReactorHeatPropagation() {
     }
@@ -31,6 +31,7 @@ public final class ReactorHeatPropagation {
 
         Map<CoreColumnPosition, Double> remainingCooling = new TreeMap<>(localCoolingCapacityHu);
         Map<CoreColumnPosition, Double> sourceBaseHeat = new TreeMap<>();
+        Map<CoreColumnPosition, Double> sourceBaseQuantizedHeat = new TreeMap<>();
         Map<CoreColumnPosition, Double> received = new TreeMap<>();
         Map<CoreColumnPosition, Double> removed = new TreeMap<>();
         double totalTransferred = 0.0D;
@@ -38,20 +39,23 @@ public final class ReactorHeatPropagation {
         for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : previous.fuelColumns().entrySet()) {
             CoreColumnPosition sourcePosition = entry.getKey();
             FuelColumnState source = entry.getValue();
-            if (!source.hasUsableFuel() || source.integrity() > 0.0D || source.cachedHeatHu() <= 0.0D) {
+            double safeRemainder = Math.min(source.cachedHeatHu(), source.quantizedHeatRemainderHu());
+            double propagatableHeat = Math.max(0.0D, source.cachedHeatHu() - safeRemainder);
+            if (!source.hasUsableFuel() || source.integrity() > 0.0D || propagatableHeat <= 0.0D) {
                 continue;
             }
             double sourceCooling = Math.min(
-                    source.cachedHeatHu(),
+                    propagatableHeat,
                     remainingCooling.getOrDefault(sourcePosition, 0.0D)
             );
             removed.merge(sourcePosition, sourceCooling, Double::sum);
             remainingCooling.put(sourcePosition,
                     Math.max(0.0D, remainingCooling.getOrDefault(sourcePosition, 0.0D) - sourceCooling));
-            double residual = source.cachedHeatHu() - sourceCooling;
+            double residual = propagatableHeat - sourceCooling;
             List<CoreColumnPosition> targets = adjacentColumns(previous, sourcePosition);
             double transfer = targets.isEmpty() ? 0.0D : residual * parameters.damageTransferRate();
-            sourceBaseHeat.put(sourcePosition, residual - transfer);
+            sourceBaseHeat.put(sourcePosition, safeRemainder + residual - transfer);
+            sourceBaseQuantizedHeat.put(sourcePosition, safeRemainder);
             totalTransferred += transfer;
             if (transfer <= 0.0D) {
                 continue;
@@ -83,11 +87,15 @@ public final class ReactorHeatPropagation {
                     : 0.0D;
             double nextIntegrity = clamp01(fuel.integrity() - damage);
             double baseHeat = sourceBaseHeat.getOrDefault(position, fuel.cachedHeatHu());
+            double baseQuantizedHeat = Math.min(baseHeat,
+                    sourceBaseQuantizedHeat.getOrDefault(position,
+                            fuel.quantizedHeatRemainderHu()));
             nextFuel.put(position, new FuelColumnState(
                     fuel.fuelAssembly(),
                     nextIntegrity,
                     finiteNonNegative(baseHeat + incoming),
-                    fuel.fuelBurnRemainder()
+                    fuel.fuelBurnRemainder(),
+                    baseQuantizedHeat
             ));
         }
 

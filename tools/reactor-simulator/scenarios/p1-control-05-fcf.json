@@ -1,0 +1,22 @@
+{
+  "schema": "create-nuclear-industry/reactor-simulator",
+  "schemaVersion": 1,
+  "toolVersion": "1.2.0",
+  "ruleVersion": "P1.2-simulator-4",
+  "geometry": { "length": 5, "width": 5, "height": 5 },
+  "config": {},
+  "layout": {
+    "matrix": [
+      ["fuel", "control_rod", "fuel"],
+      ["fuel", "control_rod", "fuel"],
+      ["fuel", "control_rod", "fuel"]
+    ]
+  },
+  "controlRodDepths": [
+    [null, 1, null],
+    [null, 1, null],
+    [null, 1, null]
+  ],
+  "initialState": { "running": true, "scram": false },
+  "runTicks": 1
+}

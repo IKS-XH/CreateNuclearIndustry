@@ -2,12 +2,19 @@ package com.iksxh.create_nuclear_industry.reactor;
 
 import java.util.Objects;
 
-/** 服务端权威反应堆快照中由单个燃料列拥有的不可变状态。 */
+/**
+ * 服务端权威反应堆快照中由单个燃料列拥有的不可变状态。
+ *
+ * <p>{@code cachedHeatHu} 是该列尚未从热工账本移除的总热量，单位为 HU；
+ * {@code quantizedHeatRemainderHu} 是其中由整数 mB 冷却剂量化产生、不得造成损伤或传播
+ * 的安全子集。两者都由仪表端口快照持有，客户端只读取派生遥测，且安全子集不能大于总缓存。</p>
+ */
 public record FuelColumnState(
         FuelAssemblyState fuelAssembly,
         double integrity,
         double cachedHeatHu,
-        double fuelBurnRemainder
+        double fuelBurnRemainder,
+        double quantizedHeatRemainderHu
 ) {
     /** 兼容尚未持久化小数燃耗余量的旧快照构造方式。 */
     public FuelColumnState(
@@ -15,7 +22,17 @@ public record FuelColumnState(
             double integrity,
             double cachedHeatHu
     ) {
-        this(fuelAssembly, integrity, cachedHeatHu, 0.0D);
+        this(fuelAssembly, integrity, cachedHeatHu, 0.0D, 0.0D);
+    }
+
+    /** 兼容已经持久化小数燃耗余量、但尚未持久化热量余数的旧快照构造方式。 */
+    public FuelColumnState(
+            FuelAssemblyState fuelAssembly,
+            double integrity,
+            double cachedHeatHu,
+            double fuelBurnRemainder
+    ) {
+        this(fuelAssembly, integrity, cachedHeatHu, fuelBurnRemainder, 0.0D);
     }
 
     public FuelColumnState {
@@ -23,6 +40,10 @@ public record FuelColumnState(
         requireUnitInterval("fuel column integrity", integrity);
         requireFiniteNonNegative("fuel column cached heat", cachedHeatHu);
         requireUnitInterval("fuel burn remainder", fuelBurnRemainder);
+        requireFiniteNonNegative("fuel column quantized heat remainder", quantizedHeatRemainderHu);
+        if (quantizedHeatRemainderHu > cachedHeatHu + 1.0E-12D) {
+            throw new IllegalArgumentException("quantized heat remainder cannot exceed cached heat");
+        }
     }
 
     public static FuelColumnState empty() {
@@ -46,12 +67,14 @@ public record FuelColumnState(
         if (!nextFuelAssembly.present() || nextFuelAssembly.exhausted()) {
             throw new IllegalArgumentException("a loaded fuel assembly must have remaining durability");
         }
-        return new FuelColumnState(nextFuelAssembly, integrity, cachedHeatHu, 0.0D);
+        return new FuelColumnState(nextFuelAssembly, integrity, cachedHeatHu, 0.0D,
+                quantizedHeatRemainderHu);
     }
 
     /** 取出本列组件并保留列完整度和余热，防止换料事务无声清除结构状态。 */
     public FuelColumnState withoutFuelAssembly() {
-        return new FuelColumnState(FuelAssemblyState.empty(), integrity, cachedHeatHu, 0.0D);
+        return new FuelColumnState(FuelAssemblyState.empty(), integrity, cachedHeatHu, 0.0D,
+                quantizedHeatRemainderHu);
     }
 
     /**
@@ -82,7 +105,8 @@ public record FuelColumnState(
                 FuelAssemblyState.installed(fuelAssembly.maxDamage(), nextDamage),
                 integrity,
                 cachedHeatHu,
-                Math.min(1.0D, nextRemainder)
+                Math.min(1.0D, nextRemainder),
+                quantizedHeatRemainderHu
         );
     }
 

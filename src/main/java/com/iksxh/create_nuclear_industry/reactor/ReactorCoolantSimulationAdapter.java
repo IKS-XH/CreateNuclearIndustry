@@ -41,11 +41,26 @@ public final class ReactorCoolantSimulationAdapter {
 
     public record Result(
             ReactorSnapshot nextSnapshot,
-            ReactorCoolantLedger.Settlement settlement
+            ReactorCoolantLedger.Settlement settlement,
+            double quantizedHeatRemainderHu
     ) {
+        /** 兼容尚未暴露量化余数的旧调用方；旧结果默认没有安全余数。 */
+        public Result(
+                ReactorSnapshot nextSnapshot,
+                ReactorCoolantLedger.Settlement settlement
+        ) {
+            this(nextSnapshot, settlement, 0.0D);
+        }
+
         public Result {
             if (nextSnapshot == null || settlement == null) {
                 throw new IllegalArgumentException("coolant conversion result is required");
+            }
+            requireFiniteNonNegative("quantized heat remainder", quantizedHeatRemainderHu);
+            if (quantizedHeatRemainderHu
+                    > settlement.remainingHeatHu() + WHOLE_MB_EPSILON) {
+                throw new IllegalArgumentException(
+                        "quantized heat remainder cannot exceed remaining heat");
             }
         }
     }
@@ -56,8 +71,8 @@ public final class ReactorCoolantSimulationAdapter {
             throw new IllegalArgumentException("previous snapshot and coolant input are required");
         }
 
-        // 正式快照以整数 mB 保存流体；账本结果保留不足一个 mB 的热量余数，交给
-        // 后续热工状态继续携带，避免静默丢失热量。
+        // 正式快照以整数 mB 保存流体；先得到本 tick 可用的整数容量，随后只把
+        // 不足一个 mB 的量化余数标记为安全余热，真实容量不足仍必须进入损伤结算。
         double wholeMillibucketHeat = wholeMillibucketHeat(
                 input.availableHeatHu(), input.coolantAbsorptionHuPerMb());
         ReactorCoolantLedger.Settlement ledgerSettlement = ReactorCoolantLedger.settle(
@@ -82,10 +97,32 @@ public final class ReactorCoolantSimulationAdapter {
                 ledgerSettlement.removedHeatHu(),
                 input.availableHeatHu() - ledgerSettlement.removedHeatHu()
         );
+        double availableCold = previous.coldCoolantMb() + input.coldInAcceptedMb();
+        double hotSpaceAfterOutput = input.hotInventoryCapacityMb() - previous.hotCoolantMb()
+                + input.hotOutActualMb();
+        double integerCoolingCapacityMb = Math.min(availableCold, Math.max(0.0D, hotSpaceAfterOutput));
+        double quantizationRemainder = Math.max(0.0D,
+                input.availableHeatHu() - wholeMillibucketHeat);
+        double quantizedHeatRemainder = hasCapacityForQuantizedRemainder(
+                input.availableHeatHu(), integerCoolingCapacityMb)
+                ? Math.min(resultSettlement.remainingHeatHu(), quantizationRemainder) : 0.0D;
         return new Result(
                 previous.withCoolantInventories(nextCold, nextHot),
-                resultSettlement
+                resultSettlement,
+                quantizedHeatRemainder
         );
+    }
+
+    /** 判断当前是否存在真实整数 mB 冷却能力，使小数余数可以从真实短缺中分离。 */
+    private static boolean hasCapacityForQuantizedRemainder(
+            double availableHeatHu,
+            double integerCoolingCapacityMb
+    ) {
+        // 只要本 tick 存在至少一个真实 mB 的冷却能力，就可以把热量除以吸热量后
+        // 的小数部分单独归入量化余数；能力为零时（例如冷库存为空且热端堵塞），
+        // 0.49 HU 仍然是完整的真实短缺，不能获得免损伤标记。
+        return availableHeatHu > WHOLE_MB_EPSILON
+                && integerCoolingCapacityMb > WHOLE_MB_EPSILON;
     }
 
     private static double wholeMillibucketHeat(double availableHeatHu, double absorptionHuPerMb) {

@@ -39,8 +39,13 @@ export function createPreset(geometry = DEFAULT_GEOMETRY, preset = "mixed") {
       (x === centerX || z === centerZ) ? "control_rod" : "fuel"));
   }
 
-  // The initial scene is intentionally mixed: it demonstrates fuel, control,
-  // and empty columns without claiming to be a P1 game structure contract.
+  if (preset === "fcf") {
+    // P1-CONTROL-05 的固定三行布局：每行沿 X 方向为燃料、控制棒、燃料。
+    const centerX = Math.floor(columns / 2);
+    return matrix.map((row) => row.map((_, x) => x === centerX ? "control_rod" : "fuel"));
+  }
+
+  // 初始场景故意保持混合：用于展示燃料、控制棒和空列，不宣称是 P1 结构契约。
   const centerX = Math.floor(columns / 2);
   const centerZ = Math.floor(rows / 2);
   return matrix.map((row, z) => row.map((_, x) => {

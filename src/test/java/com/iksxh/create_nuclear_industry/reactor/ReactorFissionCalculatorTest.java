@@ -3,6 +3,7 @@ package com.iksxh.create_nuclear_industry.reactor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -98,7 +99,7 @@ class ReactorFissionCalculatorTest {
     }
 
     @Test
-    void adjacentFuelUsesBoundedFeedbackAndIgnoresControlAndScram() {
+    void adjacentFuelFeedbackUsesControlledPreviousRoundSignal() {
         CoreColumnPosition first = new CoreColumnPosition(1, 1);
         CoreColumnPosition second = new CoreColumnPosition(2, 1);
         ReactorSnapshot snapshot = new ReactorSnapshot(
@@ -114,10 +115,98 @@ class ReactorFissionCalculatorTest {
         ReactorFissionResult scrammed = ReactorFissionCalculator.calculate(snapshot, PARAMETERS, true);
 
         assertTrue(normal.columns().get(first).overclocked());
-        assertTrue(normal.columns().get(first).heatIntensity() > 1.0D);
-        assertTrue(normal.columns().get(first).heatIntensity() <= PARAMETERS.overclockHeatMultiplier());
+        assertEquals(0.0D, normal.columns().get(first).controlledIntensity(), 1.0E-12D);
+        assertEquals(0.0D, normal.columns().get(first).heatIntensity(), 1.0E-12D);
+        assertEquals(0.0D, normal.columns().get(first).burnIntensity(), 1.0E-12D);
+        assertEquals(0.0D, normal.columns().get(first).generatedHeatHu(), 1.0E-12D);
+        assertEquals(3.0D, normal.columns().get(second).generatedHeatHu(), 1.0E-12D);
+        assertEquals(PARAMETERS.baseBurnPerFuelBlockPerTick() * 3.0D,
+                normal.columns().get(second).plannedFuelBurnUnits(), 1.0E-15D);
         assertEquals(normal.columns().get(first).generatedHeatHu(),
                 scrammed.columns().get(first).generatedHeatHu(), 1.0E-9D);
+        assertEquals(normal.columns().get(second).generatedHeatHu(),
+                scrammed.columns().get(second).generatedHeatHu(), 1.0E-9D);
+    }
+
+    @Test
+    void threeRowFcfLayoutIsStrictlyMonotonicAndFullyInsertedStopsAllFission() {
+        ReactorFissionResult withdrawn = ReactorFissionCalculator.calculate(fcfSnapshot(0.0D), PARAMETERS);
+        ReactorFissionResult halfInserted = ReactorFissionCalculator.calculate(fcfSnapshot(0.5D), PARAMETERS);
+        ReactorFissionResult fullyInserted = ReactorFissionCalculator.calculate(fcfSnapshot(1.0D), PARAMETERS);
+
+        assertTrue(withdrawn.generatedHeatHu() > halfInserted.generatedHeatHu());
+        assertTrue(halfInserted.generatedHeatHu() > fullyInserted.generatedHeatHu());
+        assertTrue(withdrawn.plannedFuelBurnUnits() > halfInserted.plannedFuelBurnUnits());
+        assertTrue(halfInserted.plannedFuelBurnUnits() > fullyInserted.plannedFuelBurnUnits());
+        assertEquals(62.89770874243574D, withdrawn.generatedHeatHu(), 1.0E-12D);
+        assertEquals(23.604377652134303D, halfInserted.generatedHeatHu(), 1.0E-12D);
+        assertEquals(0.0002911930960297951D, withdrawn.plannedFuelBurnUnits(), 1.0E-15D);
+        assertEquals(0.00010927952616728845D, halfInserted.plannedFuelBurnUnits(), 1.0E-15D);
+        assertEquals(0.0D, fullyInserted.generatedHeatHu(), 1.0E-12D);
+        assertEquals(0.0D, fullyInserted.plannedFuelBurnUnits(), 1.0E-15D);
+
+        for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+            for (int x : new int[]{0, 2}) {
+                CoreColumnPosition position = new CoreColumnPosition(x, z);
+                FuelColumnFissionResult full = withdrawn.columns().get(position);
+                FuelColumnFissionResult half = halfInserted.columns().get(position);
+                FuelColumnFissionResult stopped = fullyInserted.columns().get(position);
+                assertEquals(1.0D, full.controlledIntensity(), 1.0E-12D);
+                assertEquals(0.5D, half.controlledIntensity(), 1.0E-12D);
+                assertEquals(0.0D, stopped.controlledIntensity(), 1.0E-12D);
+                assertTrue(full.generatedHeatHu() > half.generatedHeatHu());
+                assertTrue(half.generatedHeatHu() > stopped.generatedHeatHu());
+                assertTrue(full.plannedFuelBurnUnits() > half.plannedFuelBurnUnits());
+                assertTrue(half.plannedFuelBurnUnits() > stopped.plannedFuelBurnUnits());
+                assertEquals(0.0D, stopped.generatedHeatHu(), 1.0E-12D);
+                assertEquals(0.0D, stopped.plannedFuelBurnUnits(), 1.0E-15D);
+            }
+        }
+    }
+
+    @Test
+    void mixedFcfCoverageDoesNotCrossControlRodsOrEmptyCenter() {
+        TreeMap<CoreColumnPosition, FuelColumnState> fuels = new TreeMap<>();
+        TreeMap<CoreColumnPosition, ControlRodColumnState> controls = new TreeMap<>();
+        for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+            fuels.put(new CoreColumnPosition(0, z), fuel(1.0D));
+            fuels.put(new CoreColumnPosition(2, z), fuel(1.0D));
+            double depth = z == 0 ? 1.0D : z == 1 ? 0.5D : 0.0D;
+            controls.put(new CoreColumnPosition(1, z),
+                    new ControlRodColumnState(1.0D, depth, depth, false, 0.0D));
+        }
+        ReactorFissionResult result = ReactorFissionCalculator.calculate(
+                new ReactorSnapshot(fuels, controls, 0L, 0L, 0L, false), PARAMETERS);
+
+        for (int x : new int[]{0, 2}) {
+            assertEquals(0.0D,
+                    result.columns().get(new CoreColumnPosition(x, 0)).generatedHeatHu(), 1.0E-12D);
+            assertTrue(result.columns().get(new CoreColumnPosition(x, 1)).generatedHeatHu() > 0.0D);
+            assertTrue(result.columns().get(new CoreColumnPosition(x, 2)).generatedHeatHu() > 0.0D);
+        }
+        assertEquals(result.columns().get(new CoreColumnPosition(0, 1)).generatedHeatHu(),
+                result.columns().get(new CoreColumnPosition(2, 1)).generatedHeatHu(), 1.0E-12D);
+        assertEquals(6, result.columns().size());
+    }
+
+    @Test
+    void centerEmptyEightFuelAnchorUsesFourWayFeedbackWithoutControlState() {
+        TreeMap<CoreColumnPosition, FuelColumnState> fuels = new TreeMap<>();
+        for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+            for (int x = 0; x < CoreColumnPosition.GRID_SIZE; x++) {
+                if (x != 1 || z != 1) {
+                    fuels.put(new CoreColumnPosition(x, z), fuel(1.0D));
+                }
+            }
+        }
+        ReactorFissionResult result = ReactorFissionCalculator.calculate(
+                new ReactorSnapshot(fuels, Map.of(), 0L, 0L, 0L, false), PARAMETERS);
+
+        assertEquals(8, result.columns().size());
+        assertFalse(result.columns().containsKey(new CoreColumnPosition(1, 1)));
+        assertTrue(result.generatedHeatHu() > 8.0D * 3.0D);
+        assertTrue(result.plannedFuelBurnUnits()
+                > 8.0D * PARAMETERS.baseBurnPerFuelBlockPerTick() * 3.0D);
     }
 
     @Test
@@ -173,5 +262,18 @@ class ReactorFissionCalculatorTest {
 
     private static FuelColumnState fuel(double integrity) {
         return new FuelColumnState(FuelAssemblyState.installed(MAX_DAMAGE, 0), integrity, 0.0D);
+    }
+
+    /** 构造计划中固定的三行 F-C-F 堆芯：每行按 X 方向为燃料、控制棒、燃料。 */
+    private static ReactorSnapshot fcfSnapshot(double rodDepth) {
+        TreeMap<CoreColumnPosition, FuelColumnState> fuels = new TreeMap<>();
+        TreeMap<CoreColumnPosition, ControlRodColumnState> controls = new TreeMap<>();
+        for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+            fuels.put(new CoreColumnPosition(0, z), fuel(1.0D));
+            fuels.put(new CoreColumnPosition(2, z), fuel(1.0D));
+            controls.put(new CoreColumnPosition(1, z),
+                    new ControlRodColumnState(1.0D, rodDepth, rodDepth, false, 0.0D));
+        }
+        return new ReactorSnapshot(fuels, controls, 0L, 0L, 0L, false);
     }
 }

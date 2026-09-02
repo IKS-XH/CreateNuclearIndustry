@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>核电站三维可视化骨架</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">PLANT3D-03 · 实验反应堆视觉提案</p>
+        <h1>Create 风格核电站三维可视化</h1>
+        <p class="intro">当前已加入固定 5×5×5 实验反应堆的可评审外观与状态表现；其余设备仍是通用占位体，不代表正式游戏方块已经注册。</p>
+      </header>
+
+      <section class="viewport-frame" aria-label="三维探针场景">
+        <canvas id="plant-canvas" aria-label="可旋转、平移、缩放并可选择设备的核电站三维场景"></canvas>
+        <p id="loading-status" class="status status-loading" role="status" aria-live="polite">正在加载本地资源……</p>
+        <p id="error-message" class="status status-error" role="alert" hidden></p>
+      </section>
+
+      <section class="probe-controls" aria-label="场景控制">
+        <button id="toggle-play" type="button" aria-pressed="false">暂停</button>
+        <label class="select-control" for="time-scale">速度
+          <select id="time-scale">
+            <option value="0.25">0.25×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+          </select>
+        </label>
+        <button id="reset-view" type="button">恢复总览</button>
+        <label class="check-control">
+          <input id="auto-rotate" type="checkbox" checked>
+          <span>自动旋转</span>
+        </label>
+        <span id="runtime-status" class="runtime-status" aria-live="polite">等待场景加载</span>
+      </section>
+
+      <section class="selection-detail" aria-label="设备详情" aria-live="polite">
+        <div>
+          <span class="detail-label">当前选择</span>
+          <strong id="selection-name">未选择设备</strong>
+        </div>
+        <p id="selection-status">点击占位设备查看状态</p>
+        <p id="selection-flow">流向说明将在选择后显示</p>
+      </section>
+
+      <ul class="legend" aria-label="场景图例">
+        <li><span class="legend-swatch legend-device" aria-hidden="true"></span>场景合同占位设备</li>
+        <li><span class="legend-swatch legend-flow" aria-hidden="true"></span>工质/旋转应力方向</li>
+        <li><span class="legend-swatch legend-indicator" aria-hidden="true"></span>状态循环指示器</li>
+        <li><span class="legend-swatch legend-axis" aria-hidden="true"></span>世界坐标辅助轴</li>
+      </ul>
+    </main>
+
+    <script>
+      if (window.location.protocol === "file:") {
+        document.querySelector("#loading-status").hidden = true;
+        const errorMessage = document.querySelector("#error-message");
+        errorMessage.hidden = false;
+        errorMessage.textContent = "请通过本地静态服务器打开：在工具目录执行 npm run serve，然后访问 http://127.0.0.1:4173/。直接打开 file:// 会被浏览器安全策略拦截资源加载。";
+        document.querySelector("#runtime-status").textContent = "需要本地静态服务器";
+      } else {
+        const moduleScript = document.createElement("script");
+        moduleScript.type = "module";
+        moduleScript.src = "./src/app.js";
+        document.body.appendChild(moduleScript);
+      }
+    </script>
+  </body>
+</html>

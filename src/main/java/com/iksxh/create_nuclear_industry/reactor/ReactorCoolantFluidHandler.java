@@ -181,6 +181,11 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
         ReactorPortBlockEntity.BindingType expectedType = coldInput
                 ? ReactorPortBlockEntity.BindingType.COLD_COOLANT
                 : ReactorPortBlockEntity.BindingType.HOT_COOLANT;
+        if (sourcePort.isRemoved() || owner.isRemoved()
+                || sourcePort.getLevel() == null
+                || sourcePort.getLevel().getBlockEntity(sourcePort.getBlockPos()) != sourcePort) {
+            return false;
+        }
         return owner.structureValid() && sourcePort.isBoundTo(owner, expectedType, null);
     }
 

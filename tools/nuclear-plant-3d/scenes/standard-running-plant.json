@@ -1,0 +1,350 @@
+{
+  "schemaVersion": "1.0.0",
+  "sceneId": "standard-running-plant",
+  "sceneKind": "visual_concept",
+  "coordinateSystem": {
+    "unit": "minecraft_block",
+    "upAxis": "y",
+    "handedness": "right_handed",
+    "originMeaning": "device_min_corner"
+  },
+  "visualPolicy": {
+    "createOutput": "rotary_stress_only",
+    "forbiddenEnergyVisuals": ["FE", "RF", "electric_cable", "generator"],
+    "unfrozenDimensionsAreVisualOnly": true
+  },
+  "stateContract": {
+    "version": "1.0.0",
+    "fields": [
+      { "name": "timeScale", "type": "number", "range": [0, 4], "unit": "倍率" },
+      { "name": "reactorPower01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "controlRodDepth01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "primaryCoolantFlow01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "heatExchangerLoad01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "boilerWaterLevel01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "boilerPressure01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "steamFlow01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "turbineRpm01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "shaftLoad01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "condenserFlow01", "type": "number", "range": [0, 1], "unit": "归一化" },
+      { "name": "alarmState", "type": "enum", "values": ["normal", "warning", "critical"] },
+      { "name": "scramActive", "type": "boolean" }
+    ]
+  },
+  "defaultPresetId": "steady",
+  "presetIds": [
+    "startup",
+    "steady",
+    "scram",
+    "loss_of_coolant",
+    "feedwater_loss",
+    "steam_blockage",
+    "turbine_trip",
+    "load_rejection"
+  ],
+  "defaultState": {
+    "timeScale": 1,
+    "reactorPower01": 0.92,
+    "controlRodDepth01": 0.18,
+    "primaryCoolantFlow01": 0.94,
+    "heatExchangerLoad01": 0.88,
+    "boilerWaterLevel01": 0.82,
+    "boilerPressure01": 0.78,
+    "steamFlow01": 0.86,
+    "turbineRpm01": 0.82,
+    "shaftLoad01": 0.78,
+    "condenserFlow01": 0.86,
+    "alarmState": "normal",
+    "scramActive": false
+  },
+  "devices": [
+    {
+      "id": "primary_coolant_pump",
+      "registryId": "create_nuclear_industry:main_coolant_pump",
+      "kind": "main_coolant_pump",
+      "position": [0, 2, 0],
+      "dimensions": [2, 2, 2],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "cold_inlet", "direction": "inlet", "medium": "cold_compound_coolant", "localPosition": [0, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "cold_outlet", "direction": "outlet", "medium": "cold_compound_coolant", "localPosition": [2, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "rotary_stress_in", "direction": "inlet", "medium": "rotary_stress", "localPosition": [1, 2, 1], "required": false, "connectionPolicy": "external" }
+      ]
+    },
+    {
+      "id": "primary_coolant_inlet_valve",
+      "registryId": "create_nuclear_industry:coolant_isolation_valve",
+      "kind": "valve",
+      "position": [3, 2, 0],
+      "dimensions": [1, 2, 2],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "inlet", "direction": "inlet", "medium": "cold_compound_coolant", "localPosition": [0, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "outlet", "direction": "outlet", "medium": "cold_compound_coolant", "localPosition": [1, 1, 1], "required": true, "connectionPolicy": "internal" }
+      ]
+    },
+    {
+      "id": "experimental_reactor",
+      "registryId": "create_nuclear_industry:experimental_reactor",
+      "kind": "experimental_reactor",
+      "position": [6, 0, 0],
+      "dimensions": [5, 5, 5],
+      "sizeStatus": "game_contract",
+      "structureContract": "fixed_5x5x5",
+      "ports": [
+        { "id": "cold_coolant_inlet", "direction": "inlet", "medium": "cold_compound_coolant", "localPosition": [0, 1, 2.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "hot_coolant_outlet", "direction": "outlet", "medium": "hot_compound_coolant", "localPosition": [5, 4, 2.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "instrument_port", "direction": "interface", "medium": "control", "localPosition": [2.5, 5, 0], "required": false, "connectionPolicy": "optional" },
+        { "id": "refuel_port", "direction": "interface", "medium": "maintenance", "localPosition": [2.5, 5, 5], "required": false, "connectionPolicy": "optional" }
+      ]
+    },
+    {
+      "id": "primary_coolant_hot_valve",
+      "registryId": "create_nuclear_industry:coolant_isolation_valve",
+      "kind": "valve",
+      "position": [12, 2, 0],
+      "dimensions": [1, 2, 2],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "inlet", "direction": "inlet", "medium": "hot_compound_coolant", "localPosition": [0, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "outlet", "direction": "outlet", "medium": "hot_compound_coolant", "localPosition": [1, 1, 1], "required": true, "connectionPolicy": "internal" }
+      ]
+    },
+    {
+      "id": "nuclear_heat_exchanger",
+      "registryId": "create_nuclear_industry:nuclear_heat_exchanger",
+      "kind": "nuclear_heat_exchanger",
+      "mode": "nuclear_heat",
+      "modeExclusiveGroup": "nuclear_heat_exchanger_instance_mode",
+      "position": [15, 1, 0],
+      "dimensions": [3, 4, 3],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "nuclear_hot_inlet", "direction": "inlet", "medium": "hot_compound_coolant", "localPosition": [0, 2, 1.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "nuclear_cold_outlet", "direction": "outlet", "medium": "cold_compound_coolant", "localPosition": [3, 1, 1.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "nuclear_heat_outlet", "direction": "outlet", "medium": "nuclear_heat", "localPosition": [1.5, 4, 1.5], "required": true, "connectionPolicy": "internal" }
+      ]
+    },
+    {
+      "id": "high_pressure_boiler",
+      "registryId": "create_nuclear_industry:high_pressure_boiler",
+      "kind": "high_pressure_boiler",
+      "position": [20, 1, 0],
+      "dimensions": [6, 5, 5],
+      "sizeStatus": "visual_proposal",
+      "visualProposal": true,
+      "structureContract": "not_frozen",
+      "ports": [
+        { "id": "feedwater_inlet", "direction": "inlet", "medium": "water", "localPosition": [0, 1, 2.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "nuclear_heat_inlet", "direction": "inlet", "medium": "nuclear_heat", "localPosition": [0, 4, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "supercritical_steam_outlet", "direction": "outlet", "medium": "supercritical_steam", "localPosition": [6, 4, 2.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "safety_valve", "direction": "outlet", "medium": "steam", "localPosition": [3, 5, 2.5], "required": false, "connectionPolicy": "external" }
+      ]
+    },
+    {
+      "id": "supercritical_turbine",
+      "registryId": "create_nuclear_industry:supercritical_turbine",
+      "kind": "supercritical_turbine",
+      "position": [29, 1, 0],
+      "dimensions": [8, 3, 3],
+      "lengthBlocks": 8,
+      "sizeStatus": "visual_proposal",
+      "visualProposal": true,
+      "structureContract": "not_frozen",
+      "ports": [
+        { "id": "supercritical_steam_inlet", "direction": "inlet", "medium": "supercritical_steam", "localPosition": [0, 1.5, 1.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "steam_outlet", "direction": "outlet", "medium": "steam", "localPosition": [8, 1.5, 1.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "rotary_stress_outlet", "direction": "outlet", "medium": "rotary_stress", "localPosition": [8, 0.5, 0.5], "required": true, "connectionPolicy": "internal" }
+      ]
+    },
+    {
+      "id": "steam_inlet_valve",
+      "registryId": "create_nuclear_industry:steam_inlet_valve",
+      "kind": "valve",
+      "position": [27, 2, 0],
+      "dimensions": [1, 2, 3],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "inlet", "direction": "inlet", "medium": "supercritical_steam", "localPosition": [0, 1, 1.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "outlet", "direction": "outlet", "medium": "supercritical_steam", "localPosition": [1, 1, 1.5], "required": true, "connectionPolicy": "internal" }
+      ]
+    },
+    {
+      "id": "condenser_heat_exchanger",
+      "registryId": "create_nuclear_industry:nuclear_heat_exchanger",
+      "kind": "nuclear_heat_exchanger",
+      "mode": "condensing",
+      "modeExclusiveGroup": "nuclear_heat_exchanger_instance_mode",
+      "position": [39, 0, 0],
+      "dimensions": [3, 4, 3],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "steam_inlet", "direction": "inlet", "medium": "steam", "localPosition": [0, 2, 1.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "water_outlet", "direction": "outlet", "medium": "water", "localPosition": [1.5, 0, 1.5], "required": true, "connectionPolicy": "internal" },
+        { "id": "cold_source", "direction": "interface", "medium": "cooling_service", "localPosition": [3, 2, 1.5], "required": false, "connectionPolicy": "external" }
+      ]
+    },
+    {
+      "id": "condensate_return_valve",
+      "registryId": "create_nuclear_industry:water_return_valve",
+      "kind": "valve",
+      "position": [42, 1, 0],
+      "dimensions": [1, 2, 2],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "inlet", "direction": "inlet", "medium": "water", "localPosition": [0, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "outlet", "direction": "outlet", "medium": "water", "localPosition": [1, 1, 1], "required": true, "connectionPolicy": "internal" }
+      ]
+    },
+    {
+      "id": "feedwater_pump",
+      "registryId": "create_nuclear_industry:feedwater_pump",
+      "kind": "feedwater_pump",
+      "position": [45, 1, 0],
+      "dimensions": [2, 2, 2],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "water_inlet", "direction": "inlet", "medium": "water", "localPosition": [0, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "water_outlet", "direction": "outlet", "medium": "water", "localPosition": [2, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "rotary_stress_in", "direction": "inlet", "medium": "rotary_stress", "localPosition": [1, 2, 1], "required": false, "connectionPolicy": "external" }
+      ]
+    },
+    {
+      "id": "create_main_shaft_gearbox",
+      "registryId": "create:gearbox",
+      "kind": "create_gearbox",
+      "position": [37, 5, 0],
+      "dimensions": [3, 2, 2],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "rotary_stress_in", "direction": "inlet", "medium": "rotary_stress", "localPosition": [0, 1, 1], "required": true, "connectionPolicy": "internal" },
+        { "id": "rotary_stress_out", "direction": "outlet", "medium": "rotary_stress", "localPosition": [3, 1, 1], "required": true, "connectionPolicy": "internal" }
+      ]
+    },
+    {
+      "id": "create_stress_load",
+      "registryId": "create:stress_value",
+      "kind": "create_stress_load",
+      "position": [42, 5, 0],
+      "dimensions": [3, 2, 2],
+      "sizeStatus": "visual_proposal",
+      "ports": [
+        { "id": "rotary_stress_in", "direction": "inlet", "medium": "rotary_stress", "localPosition": [0, 1, 1], "required": true, "connectionPolicy": "internal" }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "primary_cold_pump_to_valve",
+      "from": { "deviceId": "primary_coolant_pump", "portId": "cold_outlet" },
+      "to": { "deviceId": "primary_coolant_inlet_valve", "portId": "inlet" },
+      "medium": "cold_compound_coolant",
+      "flowDirection": "from_to",
+      "path": [[2, 3, 1], [2.5, 3, 1], [3, 3, 1]]
+    },
+    {
+      "id": "primary_valve_to_reactor",
+      "from": { "deviceId": "primary_coolant_inlet_valve", "portId": "outlet" },
+      "to": { "deviceId": "experimental_reactor", "portId": "cold_coolant_inlet" },
+      "medium": "cold_compound_coolant",
+      "flowDirection": "from_to",
+      "path": [[4, 3, 1], [5, 3, 1], [5, 1, 2.5], [6, 1, 2.5]]
+    },
+    {
+      "id": "reactor_to_hot_valve",
+      "from": { "deviceId": "experimental_reactor", "portId": "hot_coolant_outlet" },
+      "to": { "deviceId": "primary_coolant_hot_valve", "portId": "inlet" },
+      "medium": "hot_compound_coolant",
+      "flowDirection": "from_to",
+      "path": [[11, 4, 2.5], [11.5, 4, 2.5], [12, 3, 1]]
+    },
+    {
+      "id": "hot_valve_to_nuclear_exchanger",
+      "from": { "deviceId": "primary_coolant_hot_valve", "portId": "outlet" },
+      "to": { "deviceId": "nuclear_heat_exchanger", "portId": "nuclear_hot_inlet" },
+      "medium": "hot_compound_coolant",
+      "flowDirection": "from_to",
+      "path": [[13, 3, 1], [14, 3, 1], [15, 3, 1.5]]
+    },
+    {
+      "id": "nuclear_exchanger_to_cold_pump",
+      "from": { "deviceId": "nuclear_heat_exchanger", "portId": "nuclear_cold_outlet" },
+      "to": { "deviceId": "primary_coolant_pump", "portId": "cold_inlet" },
+      "medium": "cold_compound_coolant",
+      "flowDirection": "from_to",
+      "path": [[18, 2, 1.5], [18, 1, 1.5], [1, 1, 1.5], [0, 3, 1]]
+    },
+    {
+      "id": "nuclear_heat_to_boiler",
+      "from": { "deviceId": "nuclear_heat_exchanger", "portId": "nuclear_heat_outlet" },
+      "to": { "deviceId": "high_pressure_boiler", "portId": "nuclear_heat_inlet" },
+      "medium": "nuclear_heat",
+      "flowDirection": "from_to",
+      "path": [[16.5, 5, 1.5], [18, 5, 1.5], [18, 5, 1], [20, 5, 1]]
+    },
+    {
+      "id": "feed_pump_to_boiler",
+      "from": { "deviceId": "feedwater_pump", "portId": "water_outlet" },
+      "to": { "deviceId": "high_pressure_boiler", "portId": "feedwater_inlet" },
+      "medium": "water",
+      "flowDirection": "from_to",
+      "path": [[47, 2, 1], [48, 1, 1], [19, 1, 2.5], [20, 2, 2.5]]
+    },
+    {
+      "id": "boiler_to_steam_valve",
+      "from": { "deviceId": "high_pressure_boiler", "portId": "supercritical_steam_outlet" },
+      "to": { "deviceId": "steam_inlet_valve", "portId": "inlet" },
+      "medium": "supercritical_steam",
+      "flowDirection": "from_to",
+      "path": [[26, 5, 2.5], [27, 3, 1.5]]
+    },
+    {
+      "id": "steam_valve_to_turbine",
+      "from": { "deviceId": "steam_inlet_valve", "portId": "outlet" },
+      "to": { "deviceId": "supercritical_turbine", "portId": "supercritical_steam_inlet" },
+      "medium": "supercritical_steam",
+      "flowDirection": "from_to",
+      "path": [[28, 3, 1.5], [29, 2.5, 1.5]]
+    },
+    {
+      "id": "turbine_to_condenser",
+      "from": { "deviceId": "supercritical_turbine", "portId": "steam_outlet" },
+      "to": { "deviceId": "condenser_heat_exchanger", "portId": "steam_inlet" },
+      "medium": "steam",
+      "flowDirection": "from_to",
+      "path": [[37, 2.5, 1.5], [38, 2.5, 1.5], [39, 2, 1.5]]
+    },
+    {
+      "id": "condenser_to_return_valve",
+      "from": { "deviceId": "condenser_heat_exchanger", "portId": "water_outlet" },
+      "to": { "deviceId": "condensate_return_valve", "portId": "inlet" },
+      "medium": "water",
+      "flowDirection": "from_to",
+      "path": [[40.5, 0, 1.5], [41, 0, 1.5], [41, 2, 1], [42, 2, 1]]
+    },
+    {
+      "id": "return_valve_to_feed_pump",
+      "from": { "deviceId": "condensate_return_valve", "portId": "outlet" },
+      "to": { "deviceId": "feedwater_pump", "portId": "water_inlet" },
+      "medium": "water",
+      "flowDirection": "from_to",
+      "path": [[43, 2, 1], [44, 2, 1], [45, 2, 1]]
+    },
+    {
+      "id": "turbine_to_gearbox",
+      "from": { "deviceId": "supercritical_turbine", "portId": "rotary_stress_outlet" },
+      "to": { "deviceId": "create_main_shaft_gearbox", "portId": "rotary_stress_in" },
+      "medium": "rotary_stress",
+      "flowDirection": "from_to",
+      "path": [[37, 1.5, 0.5], [37, 4, 0.5], [37, 6, 1]]
+    },
+    {
+      "id": "gearbox_to_stress_load",
+      "from": { "deviceId": "create_main_shaft_gearbox", "portId": "rotary_stress_out" },
+      "to": { "deviceId": "create_stress_load", "portId": "rotary_stress_in" },
+      "medium": "rotary_stress",
+      "flowDirection": "from_to",
+      "path": [[40, 6, 1], [41, 6, 1], [42, 6, 1]]
+    }
+  ]
+}
