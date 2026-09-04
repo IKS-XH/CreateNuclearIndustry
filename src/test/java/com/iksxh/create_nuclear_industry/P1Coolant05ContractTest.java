@@ -60,6 +60,21 @@ class P1Coolant05ContractTest {
         assertTrue(port.contains("invalidateCapabilityAndNetwork(previousBinding, expectedType)"));
     }
 
+    /** 约束本轮新增的 COOL-05 GameTest 必须覆盖多端口、隔离和加载生命周期。 */
+    @Test
+    void coverageTestsKeepTheRequestedCoolantScenarios() throws IOException {
+        String coverage = readSource(
+                "com/iksxh/create_nuclear_industry/gametest/P1Coolant05CoverageGameTests.java");
+
+        assertTrue(coverage.contains("multiplePortsRecoverTogetherWithIndependentBudgets"));
+        assertTrue(coverage.contains("adjacentReactorsKeepPortOwnershipIsolated"));
+        assertTrue(coverage.contains("portFirstAndCoreFirstLoadOrderRebuildsBindings"));
+        assertTrue(coverage.contains("crossChunkPortAndCoreUnloadReloadRebindsAutomatically"));
+        assertTrue(coverage.contains("perPortFlowMbPerTick"));
+        assertTrue(coverage.contains("BlockCapabilityCache"));
+        assertTrue(coverage.contains("FluidAction.EXECUTE"));
+    }
+
     private static String readSource(String relativePath) throws IOException {
         return Files.readString(JAVA_SOURCES.resolve(relativePath));
     }

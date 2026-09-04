@@ -33,6 +33,7 @@
 - `P1-COOL-04.md`：真实 Create 储罐—动力泵—管道已能向成型反应堆冷端输入复合冷却剂并从热端输出；181 项 JUnit、51 个 required GameTest 与客户端人工验收通过。后续热量量化和超频控制问题不属于管网接入范围。
 - `P1-THERMAL-01.md`：整数 `mB` 转化产生的安全热量余数已与真实冷却短缺分离，并由权威快照/NBT v3 守恒保存；192 项 JUnit、52 个 required GameTest 与客户端人工验收通过。
 - `P1-CONTROL-05.md`：正式 Java 裂变计算已按“控制抑制 × 反馈倍率”门控三行 `F-C-F` 反馈簇；195 项 JUnit、53 个 required GameTest、30 项模拟器 Node 测试与客户端人工验收通过。
+- `P1-COOL-05.md`：原位冷/热端口和既有 Create 管网在结构失效、仪表替换与跨区块重载后可自动恢复；199 项 JUnit、60 个 required GameTest 与客户端人工验收通过。
 
 ## 已归档任务验收报告
 
