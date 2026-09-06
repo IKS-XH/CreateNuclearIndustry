@@ -84,7 +84,7 @@ public final class P1StructureGameTests {
                     reloaded.loadForServerTest(saved, helper.getLevel().registryAccess());
                     require(helper, reloaded.structureValid(),
                             "instrument port did not rebuild the structure cache during block entity load");
-                    require(helper, reloaded.snapshot().equals(fixtureSnapshot()),
+                    require(helper, reloaded.snapshot().equals(fixtureSnapshot().withoutFuelAssemblies()),
                             "instrument port reload changed the authoritative snapshot");
                     helper.succeed();
                 });

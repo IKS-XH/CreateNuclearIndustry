@@ -165,6 +165,23 @@ public record ReactorSnapshot(
         );
     }
 
+    /** 去除仅供运行时计算的燃料投影，保留完整性、热量、燃耗余量和全堆状态。 */
+    public ReactorSnapshot withoutFuelAssemblies() {
+        TreeMap<CoreColumnPosition, FuelColumnState> nextFuelColumns = new TreeMap<>();
+        fuelColumns.forEach((position, state) ->
+                nextFuelColumns.put(position, state.withoutFuelAssemblyProjection()));
+        return new ReactorSnapshot(
+                nextFuelColumns,
+                controlRodColumns,
+                coldCoolantMb,
+                hotCoolantMb,
+                meltdownProgressTicks,
+                meltdownCountdownStarted,
+                scramSavedTargetDepths,
+                scramRequested
+        );
+    }
+
     /** 替换融毁进度与启动标记，进度单位为服务端 tick。 */
     public ReactorSnapshot withMeltdown(long nextProgressTicks, boolean nextStarted) {
         return new ReactorSnapshot(

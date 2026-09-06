@@ -2,7 +2,9 @@ package com.iksxh.create_nuclear_industry.control;
 
 import com.iksxh.create_nuclear_industry.blockentity.ControlRodDriveBlockEntity;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
+import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
+import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnRepairTransaction;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodStateTransitions;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
@@ -10,6 +12,7 @@ import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.HashMap;
@@ -78,6 +81,63 @@ public final class ControlRodSliderService {
     /** 返回当前服务端内存中的活动拖动会话数量，供回归测试观察。 */
     public static int activeSessionCount() {
         return ACTIVE_DRAGS.size();
+    }
+
+    /**
+     * 在服务端原子提交一次控制棒列钢板维修。
+     *
+     * <p>驱动器的位置只用于服务端重新定位结构映射，客户端不能指定仪表端口或列坐标。
+     * 卡死列允许进入维修事务；事务跨过服务端失效阈值后才解除卡死，融毁和冷却剂字段
+     * 则通过 {@link ReactorSnapshot#withColumns(Map, Map)} 原样保留。</p>
+     *
+     * @param player 发起交互的服务端玩家
+     * @param drivePos 被右键的控制棒驱动器世界坐标
+     * @param incoming 玩家手中输入栈，不会被本方法直接修改
+     * @return 维修结果；失败时输入栈和权威快照保持不变
+     */
+    public static ControlRodColumnRepairTransaction.Result repairFromPlayer(
+            Player player,
+            BlockPos drivePos,
+            ItemStack incoming
+    ) {
+        if (player == null || drivePos == null || player.isSpectator()
+                || !(player.level() instanceof ServerLevel level)
+                || !player.canInteractWithBlock(drivePos, MAX_INTERACTION_RANGE)) {
+            return ControlRodColumnRepairTransaction.invalidDrive(incoming);
+        }
+
+        Target target = findTarget(level, drivePos);
+        if (target == null) {
+            return ControlRodColumnRepairTransaction.invalidDrive(incoming);
+        }
+        ReactorSnapshot before = target.owner().snapshot();
+        ControlRodColumnState current = before.controlRodColumns().get(target.column());
+        if (current == null) {
+            return ControlRodColumnRepairTransaction.invalidDrive(incoming);
+        }
+        ControlRodColumnRepairTransaction.Result result =
+                ControlRodColumnRepairTransaction.repair(
+                        current,
+                        incoming,
+                        P1ServerConfig.VALUES.controlRodFailureThreshold.get());
+        if (!result.success()) {
+            return result;
+        }
+        if (target.owner().snapshot() != before) {
+            return ControlRodColumnRepairTransaction.invalidDrive(incoming);
+        }
+
+        Map<CoreColumnPosition, ControlRodColumnState> nextColumns = new java.util.TreeMap<>(
+                before.controlRodColumns());
+        nextColumns.put(target.column(), result.nextColumn());
+        ReactorSnapshot next = before.withColumns(before.fuelColumns(), nextColumns);
+        try {
+            target.owner().setSnapshot(next);
+            return result;
+        } catch (RuntimeException exception) {
+            target.owner().setSnapshot(before);
+            return ControlRodColumnRepairTransaction.invalidDrive(incoming);
+        }
     }
 
     private static ControlRodSliderResult start(Player player, ControlRodSliderPayload payload) {

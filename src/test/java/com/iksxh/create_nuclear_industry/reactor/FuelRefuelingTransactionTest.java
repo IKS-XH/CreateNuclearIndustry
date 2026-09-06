@@ -1,6 +1,8 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
 import com.iksxh.create_nuclear_industry.content.ModItems;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.junit.jupiter.api.Test;
 
@@ -64,6 +66,21 @@ class FuelRefuelingTransactionTest {
         assertEquals(0.63D, result.nextColumn().integrity(), 1.0E-12D);
         assertEquals(4.5D, result.nextColumn().cachedHeatHu(), 1.0E-12D);
         assertEquals(0.0D, result.nextColumn().fuelBurnRemainder(), 1.0E-12D);
+    }
+
+    @Test
+    void exactExtractionPreservesAllItemStackComponents() {
+        FuelColumnState loaded = new FuelColumnState(
+                FuelAssemblyState.installed(MAX_DAMAGE, 54_321), 1.0D, 0.0D);
+        ItemStack stored = freshFuel(54_321, 1);
+        stored.set(DataComponents.CUSTOM_NAME, Component.literal("带标记燃料"));
+
+        FuelRefuelingTransaction.Result result = FuelRefuelingTransaction.extract(
+                loaded, 0.0D, stored);
+
+        assertEquals(FuelRefuelingTransaction.Status.REMOVED, result.status());
+        assertTrue(ItemStack.matches(stored, result.output()),
+                "精确取料必须保留名称、耐久和其它 ItemStack 数据组件");
     }
 
     @Test

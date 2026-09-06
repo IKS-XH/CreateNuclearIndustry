@@ -75,13 +75,13 @@ public final class P1BlockEntityGameTests {
                     helper.absolutePos(instrument),
                     P1Blocks.REACTOR_INSTRUMENT_PORT.get().defaultBlockState());
             reloaded.loadForServerTest(saved, helper.getLevel().registryAccess());
-            require(helper, reloaded.snapshot().equals(expected),
-                    "instrument port snapshot did not survive a server reload round-trip");
+            require(helper, reloaded.snapshot().equals(expected.withoutFuelAssemblies()),
+                    "instrument port persisted a fuel assembly that belongs to a refueling port");
 
             CompoundTag updateTag = instrumentEntity.getUpdateTag(helper.getLevel().registryAccess());
             instrumentEntity.setSnapshot(ReactorSnapshot.empty());
             instrumentEntity.handleUpdateTag(updateTag, helper.getLevel().registryAccess());
-            require(helper, instrumentEntity.snapshot().equals(expected),
+            require(helper, instrumentEntity.snapshot().equals(expected.withoutFuelAssemblies()),
                     "instrument port snapshot did not restore from its update tag");
 
             require(helper, coldEntity.readAuthoritativeSnapshot(instrumentEntity) == instrumentEntity.snapshot(),

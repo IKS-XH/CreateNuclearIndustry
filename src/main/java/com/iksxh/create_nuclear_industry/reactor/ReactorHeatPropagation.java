@@ -34,11 +34,16 @@ public final class ReactorHeatPropagation {
         Map<CoreColumnPosition, Double> sourceBaseQuantizedHeat = new TreeMap<>();
         Map<CoreColumnPosition, Double> received = new TreeMap<>();
         Map<CoreColumnPosition, Double> removed = new TreeMap<>();
+        Set<CoreColumnPosition> coveredFuel = new TreeSet<>();
         double totalTransferred = 0.0D;
 
         for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : previous.fuelColumns().entrySet()) {
             CoreColumnPosition sourcePosition = entry.getKey();
             FuelColumnState source = entry.getValue();
+            // 完整度归零但组件尚未耗尽的列本身就是融毁覆盖源，即使没有余热可继续传播。
+            if (source.hasUsableFuel() && source.integrity() == 0.0D) {
+                coveredFuel.add(sourcePosition);
+            }
             double safeRemainder = Math.min(source.cachedHeatHu(), source.quantizedHeatRemainderHu());
             double propagatableHeat = Math.max(0.0D, source.cachedHeatHu() - safeRemainder);
             if (!source.hasUsableFuel() || source.integrity() > 0.0D || propagatableHeat <= 0.0D) {
@@ -72,13 +77,13 @@ public final class ReactorHeatPropagation {
             netReceived.put(target, entry.getValue() - targetRemoval);
         }
 
-        Set<CoreColumnPosition> coveredFuel = new TreeSet<>();
         Map<CoreColumnPosition, FuelColumnState> nextFuel = new TreeMap<>();
         for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : previous.fuelColumns().entrySet()) {
             CoreColumnPosition position = entry.getKey();
             FuelColumnState fuel = entry.getValue();
             double incoming = netReceived.getOrDefault(position, 0.0D);
-            if (fuel.isEffectiveFuel() && incoming > 0.0D) {
+            // 传播覆盖只统计仍有耐久的组件；完整度为零的列已在源集合中记录，集合会自动去重。
+            if (fuel.hasUsableFuel() && incoming > 0.0D) {
                 coveredFuel.add(position);
             }
             double damage = fuel.integrity() > 0.0D

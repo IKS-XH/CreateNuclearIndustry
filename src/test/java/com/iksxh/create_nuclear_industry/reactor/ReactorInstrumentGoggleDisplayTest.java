@@ -4,6 +4,8 @@ import com.iksxh.create_nuclear_industry.structure.ReactorInstrumentStructureSum
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import com.iksxh.create_nuclear_industry.content.ModItems;
+import net.minecraft.world.item.ItemStack;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -104,6 +106,19 @@ class ReactorInstrumentGoggleDisplayTest {
         assertEquals("87.5%", ReactorInstrumentGoggleDisplay.formatPercent(0.875D));
         assertEquals("3.3", ReactorInstrumentGoggleDisplay.formatRate(3.25D));
         assertEquals("0.0", ReactorInstrumentGoggleDisplay.formatRate(-0.0D));
+    }
+
+    @Test
+    void fuelAssemblyDisplayUsesDeterministicRemainingDurability() {
+        ItemStack fuel = new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get());
+        fuel.setDamageValue(54_321);
+        List<Component> tooltip = new ArrayList<>();
+
+        ReactorInstrumentGoggleDisplay.appendFuelAssemblyTooltip(tooltip, fuel);
+
+        assertEquals(1, tooltip.size());
+        assertKey(tooltip.get(0), "fuel_assembly_durability");
+        assertArguments(tooltip.get(0), "161679", "216000", "74.9%");
     }
 
     private static ReactorInstrumentStructureSummary validSummary() {

@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 /** P1 反应堆权威快照的版本化 NBT 适配器。 */
 public final class ReactorSnapshotNbtCodec {
-    public static final int FORMAT_VERSION = 3;
+    public static final int FORMAT_VERSION = 4;
 
     private static final String FORMAT_VERSION_KEY = "FormatVersion";
     private static final String FUEL_COLUMNS_KEY = "FuelColumns";
@@ -34,11 +34,6 @@ public final class ReactorSnapshotNbtCodec {
         ListTag fuelColumns = new ListTag();
         snapshot.fuelColumns().forEach((position, state) -> {
             CompoundTag entry = positionTag(position);
-            CompoundTag assembly = new CompoundTag();
-            assembly.putBoolean("Present", state.fuelAssembly().present());
-            assembly.putInt("Damage", state.fuelAssembly().damage());
-            assembly.putInt("MaxDamage", state.fuelAssembly().maxDamage());
-            entry.put("Assembly", assembly);
             entry.putDouble("Integrity", state.integrity());
             entry.putDouble("CachedHeatHu", state.cachedHeatHu());
             entry.putDouble("FuelBurnRemainder", state.fuelBurnRemainder());
@@ -70,12 +65,24 @@ public final class ReactorSnapshotNbtCodec {
     }
 
     public static ReactorSnapshot decode(CompoundTag root) {
+        return decodeWithMigration(root).snapshot();
+    }
+
+    /**
+     * 解码快照并分离 v3 及更早版本中错误地写入仪表快照的燃料投影。
+     *
+     * <p>返回的快照仍保留旧投影，供兼容旧调用方读取；仪表方块实体必须在迁移边界将
+     * 这些投影转移到对应换料端口后再调用 {@link ReactorSnapshot#withoutFuelAssemblies()}。
+     * v4 正式快照不再写入 Assembly 字段。</p>
+     */
+    public static DecodedSnapshot decodeWithMigration(CompoundTag root) {
         if (root == null) {
-            return ReactorSnapshot.empty();
+            return new DecodedSnapshot(ReactorSnapshot.empty(), Map.of(), 0);
         }
         int formatVersion = root.contains(FORMAT_VERSION_KEY)
                 ? root.getInt(FORMAT_VERSION_KEY) : 0;
         Map<CoreColumnPosition, FuelColumnState> fuelColumns = new TreeMap<>();
+        Map<CoreColumnPosition, FuelAssemblyState> legacyFuelAssemblies = new TreeMap<>();
         ListTag fuelList = root.getList(FUEL_COLUMNS_KEY, Tag.TAG_COMPOUND);
         for (int index = 0; index < fuelList.size(); index++) {
             CompoundTag entry = fuelList.getCompound(index);
@@ -83,15 +90,22 @@ public final class ReactorSnapshotNbtCodec {
             if (position == null) {
                 continue;
             }
-            CompoundTag assemblyTag = entry.getCompound("Assembly");
-            int maxDamage = Math.max(0, assemblyTag.getInt("MaxDamage"));
-            boolean present = assemblyTag.getBoolean("Present") || maxDamage > 0;
             FuelAssemblyState assembly;
-            if (!present || maxDamage == 0) {
+            if (formatVersion >= FORMAT_VERSION) {
                 assembly = FuelAssemblyState.empty();
             } else {
-                int damage = Math.max(0, Math.min(maxDamage, assemblyTag.getInt("Damage")));
-                assembly = FuelAssemblyState.installed(maxDamage, damage);
+                CompoundTag assemblyTag = entry.getCompound("Assembly");
+                int maxDamage = Math.max(0, assemblyTag.getInt("MaxDamage"));
+                boolean present = assemblyTag.getBoolean("Present") || maxDamage > 0;
+                if (!present || maxDamage == 0) {
+                    assembly = FuelAssemblyState.empty();
+                } else {
+                    int damage = Math.max(0, Math.min(maxDamage, assemblyTag.getInt("Damage")));
+                    assembly = FuelAssemblyState.installed(maxDamage, damage);
+                }
+            }
+            if (formatVersion < FORMAT_VERSION && assembly.present()) {
+                legacyFuelAssemblies.put(position, assembly);
             }
             double cachedHeat = readNonNegative(entry, "CachedHeatHu", 0.0D);
             double quantizedHeat = formatVersion >= 3
@@ -140,7 +154,7 @@ public final class ReactorSnapshotNbtCodec {
         if (!scramRequested) {
             scramSavedTargets.clear();
         }
-        return new ReactorSnapshot(
+        ReactorSnapshot snapshot = new ReactorSnapshot(
                 fuelColumns,
                 controlColumns,
                 coldCoolant,
@@ -150,6 +164,21 @@ public final class ReactorSnapshotNbtCodec {
                 scramSavedTargets,
                 scramRequested
         );
+        return new DecodedSnapshot(snapshot, legacyFuelAssemblies, formatVersion);
+    }
+
+    /** 版本化解码结果；旧燃料投影只作为一次性迁移信封输出。 */
+    public record DecodedSnapshot(
+            ReactorSnapshot snapshot,
+            Map<CoreColumnPosition, FuelAssemblyState> legacyFuelAssemblies,
+            int sourceFormatVersion
+    ) {
+        public DecodedSnapshot {
+            if (snapshot == null || legacyFuelAssemblies == null || sourceFormatVersion < 0) {
+                throw new IllegalArgumentException("decoded snapshot fields are required");
+            }
+            legacyFuelAssemblies = Map.copyOf(legacyFuelAssemblies);
+        }
     }
 
     private static CompoundTag positionTag(CoreColumnPosition position) {

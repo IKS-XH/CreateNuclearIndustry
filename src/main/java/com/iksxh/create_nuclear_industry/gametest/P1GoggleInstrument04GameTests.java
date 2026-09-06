@@ -151,12 +151,14 @@ public final class P1GoggleInstrument04GameTests {
             List<Component> fuelTooltip = new ArrayList<>();
             require(helper, refuelingPort.addToGoggleTooltip(fuelTooltip, false),
                     "bound refueling port did not accept the goggle callback");
-            require(helper, fuelTooltip.size() == 2
+            require(helper, fuelTooltip.size() == 3
                             && containsAny(fuelTooltip.get(0), "fuel_column_summary", "燃料列运行信息",
                             "Fuel column runtime")
-                            && fuelTooltip.get(1).getString().contains("100.0%")
-                            && fuelTooltip.get(1).getString().contains("HU/t"),
-                    "refueling port did not show its column integrity and heat");
+                            && containsAny(fuelTooltip.get(1), "fuel_assembly_durability", "燃料组件耐久",
+                            "Fuel assembly durability")
+                            && fuelTooltip.get(2).getString().contains("100.0%")
+                            && fuelTooltip.get(2).getString().contains("HU/t"),
+                    "refueling port did not show its fuel durability, integrity and heat");
 
             List<Component> firstControlRodTooltip = new ArrayList<>();
             require(helper, firstControlRodDrive.addToGoggleTooltip(firstControlRodTooltip, false),

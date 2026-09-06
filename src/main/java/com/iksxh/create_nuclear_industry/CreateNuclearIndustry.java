@@ -14,6 +14,7 @@ import com.iksxh.create_nuclear_industry.p0probe.content.P0ProbeFluids;
 import com.iksxh.create_nuclear_industry.p0probe.events.P0ProbeEvents;
 import com.iksxh.create_nuclear_industry.ponder.P1PonderPlugin;
 import com.iksxh.create_nuclear_industry.reactor.ReactorCoolantFluidHandler;
+import com.iksxh.create_nuclear_industry.reactor.FuelRefuelingArmInteractionPoint;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.neoforged.bus.api.IEventBus;
@@ -46,6 +47,7 @@ public final class CreateNuclearIndustry {
         P0ProbeContent.register(modEventBus);
         P0ProbeFluids.register(modEventBus);
         P0ProbeBlockEntities.register(modEventBus);
+        FuelRefuelingArmInteractionPoint.register(modEventBus);
         modEventBus.addListener(ControlRodSliderNetwork::registerPayloads);
         modEventBus.addListener(CreateNuclearIndustry::registerPonder);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);

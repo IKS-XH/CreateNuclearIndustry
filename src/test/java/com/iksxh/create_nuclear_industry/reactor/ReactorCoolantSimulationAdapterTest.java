@@ -111,7 +111,7 @@ class ReactorCoolantSimulationAdapterTest {
                 )
         );
 
-        assertEquals(result.nextSnapshot(), ReactorSnapshotNbtCodec.decode(
+        assertEquals(result.nextSnapshot().withoutFuelAssemblies(), ReactorSnapshotNbtCodec.decode(
                 ReactorSnapshotNbtCodec.encode(result.nextSnapshot())));
     }
 

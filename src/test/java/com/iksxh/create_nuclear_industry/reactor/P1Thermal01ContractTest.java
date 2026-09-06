@@ -163,7 +163,7 @@ class P1Thermal01ContractTest {
     }
 
     @Test
-    void failedColumnQuantizedRemainderCannotStartPropagationOrMeltdown() {
+    void failedColumnQuantizedRemainderCannotPropagateButStillStartsMeltdown() {
         ReactorSnapshot before = new ReactorSnapshot(
                 Map.of(
                         CENTER, fuel(0.0D, 0.49D, 0.49D),
@@ -183,7 +183,9 @@ class P1Thermal01ContractTest {
                 result.snapshot().fuelColumns().get(CENTER).quantizedHeatRemainderHu(), EPSILON);
         assertTrue(result.propagation().receivedHeatHu().isEmpty());
         assertEquals(1.0D, result.snapshot().fuelColumns().get(NORTH).integrity(), EPSILON);
-        assertFalse(result.snapshot().meltdownCountdownStarted());
+        assertTrue(result.snapshot().meltdownCountdownStarted());
+        assertEquals(1L, result.snapshot().meltdownProgressTicks());
+        assertEquals(MeltdownStatus.RUNNING, result.meltdown().status());
     }
 
     @Test
@@ -219,7 +221,7 @@ class P1Thermal01ContractTest {
         ReactorSnapshot reloaded = ReactorSnapshotNbtCodec.decode(
                 ReactorSnapshotNbtCodec.encode(result.snapshot()));
 
-        assertEquals(result.snapshot(), reloaded);
+        assertEquals(result.snapshot().withoutFuelAssemblies(), reloaded);
         CompoundTag encodedFuel = ReactorSnapshotNbtCodec.encode(result.snapshot())
                 .getList("FuelColumns", net.minecraft.nbt.Tag.TAG_COMPOUND).getCompound(0);
         assertEquals(0.49D, encodedFuel.getDouble("QuantizedHeatRemainderHu"), EPSILON);

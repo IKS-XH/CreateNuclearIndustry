@@ -132,7 +132,7 @@ class ReactorServerTickTest {
 
         assertTrue(after.fuelColumns().get(CENTER).fuelBurnRemainder() > 0.0D);
         CompoundTag encoded = ReactorSnapshotNbtCodec.encode(after);
-        assertEquals(after, ReactorSnapshotNbtCodec.decode(encoded));
+        assertEquals(after.withoutFuelAssemblies(), ReactorSnapshotNbtCodec.decode(encoded));
     }
 
     /** 构造同时含冷端输入、热端容量和单位吸热量的服务端冷却观测。 */

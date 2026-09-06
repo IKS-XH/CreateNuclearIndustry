@@ -26,6 +26,33 @@ public final class FuelAssemblyItemCodec {
                 && stack.is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
     }
 
+    /** 判断物品栈是否属于换料端口允许持久化的燃料组件形态。 */
+    public static boolean isValidStoredFuel(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) {
+            return true;
+        }
+        if (stack.getCount() != 1) {
+            return false;
+        }
+        if (isCooledSpentFuel(stack)) {
+            return true;
+        }
+        if (!isFreshFuel(stack)) {
+            return false;
+        }
+        try {
+            readFreshFuel(stack);
+            return true;
+        } catch (IllegalArgumentException ignored) {
+            return false;
+        }
+    }
+
+    /** 判断物品是否为可参与模拟的正式燃料组件，包括已耗尽但尚未转换的旧栈。 */
+    public static boolean isFuelAssembly(ItemStack stack) {
+        return isValidStoredFuel(stack) && stack != null && !stack.isEmpty();
+    }
+
     /**
      * 从新燃料物品栈读取原版耐久语义。
      *
@@ -56,6 +83,43 @@ public final class FuelAssemblyItemCodec {
         }
         stack.setDamageValue(state.damage());
         return stack;
+    }
+
+    /** 将端口物品转换为内存中的模拟投影；冷却乏燃料映射为已耗尽状态。 */
+    public static FuelAssemblyState simulationState(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) {
+            return FuelAssemblyState.empty();
+        }
+        if (isFreshFuel(stack)) {
+            return readFreshFuel(stack);
+        }
+        if (isCooledSpentFuel(stack) && stack.getCount() == 1) {
+            return FuelAssemblyState.installed(
+                    ModItems.FRESH_FUEL_ASSEMBLY_MAX_DURABILITY,
+                    ModItems.FRESH_FUEL_ASSEMBLY_MAX_DURABILITY);
+        }
+        throw new IllegalArgumentException("a valid stored fuel assembly is required");
+    }
+
+    /** 按旧快照中的耐久投影创建迁移用端口物品。 */
+    public static ItemStack fromLegacyState(FuelAssemblyState state) {
+        if (state == null || !state.present()) {
+            return ItemStack.EMPTY;
+        }
+        return state.exhausted()
+                ? createCooledSpentFuel()
+                : writeFreshFuel(state);
+    }
+
+    /** 复制完整 ItemStack，只修改原版耐久组件并固定为单件。 */
+    public static ItemStack copyWithDamage(ItemStack stack, int damage) {
+        if (!isFreshFuel(stack) || stack.getCount() != 1
+                || damage < 0 || damage > stack.getMaxDamage()) {
+            throw new IllegalArgumentException("a single fresh fuel assembly is required");
+        }
+        ItemStack copy = stack.copyWithCount(1);
+        copy.setDamageValue(damage);
+        return copy;
     }
 
     /** 创建首发规定的冷却乏燃料产物；该物品不携带热态或温度字段。 */

@@ -34,6 +34,12 @@
 - `P1-THERMAL-01.md`：整数 `mB` 转化产生的安全热量余数已与真实冷却短缺分离，并由权威快照/NBT v3 守恒保存；192 项 JUnit、52 个 required GameTest 与客户端人工验收通过。
 - `P1-CONTROL-05.md`：正式 Java 裂变计算已按“控制抑制 × 反馈倍率”门控三行 `F-C-F` 反馈簇；195 项 JUnit、53 个 required GameTest、30 项模拟器 Node 测试与客户端人工验收通过。
 - `P1-COOL-05.md`：原位冷/热端口和既有 Create 管网在结构失效、仪表替换与跨区块重载后可自动恢复；199 项 JUnit、60 个 required GameTest 与客户端人工验收通过。
+- `P1-REFUEL-02A.md`：换料端口成为单列完整燃料 `ItemStack` 的唯一持久化所有者，仪表快照升级至 v4 并完成旧存档迁移；202 项 JUnit、65 个 required GameTest 与客户端人工验收通过。
+- `P1-REFUEL-02B.md`：未成型换料端口在服务端确认安全时允许空手取回本地燃料，危险状态通过持久化锁拒绝绕过；202 项 JUnit、72 个 required GameTest 与客户端人工验收通过。
+- `P1-REFUEL-03.md`：换料端口已接入 Create 专用机械臂交互点，模拟只读、正式提交原子且失败回滚；202 项 JUnit、75 个 required GameTest 与客户端人工验收通过。
+- `P1-REPAIR-01.md`：玩家可用 `steel_plate` 维修停止放热的燃料列，每块恢复 `0.25 / internalHeight` 且不清除余热、燃料或融毁进度；208 项 JUnit、82 个 required GameTest 与客户端人工验收通过。
+- `P1-REPAIR-02.md`：玩家可用 `steel_plate` 维修绑定控制棒列，跨过服务端失效阈值后解除卡死并保留插入深度；集成基线 213 项 JUnit、86 个 required GameTest 与客户端人工验收通过。
+- `P1-MELTDOWN-01.md`：完整度归零且燃料未耗尽的失效源列计入融毁覆盖，支持覆盖并集去重、耗尽退出及持久化倒计时；217 项 JUnit、89 个 required GameTest 和完整构建通过。
 
 ## 已归档任务验收报告
 

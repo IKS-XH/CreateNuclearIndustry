@@ -2,7 +2,9 @@ package com.iksxh.create_nuclear_industry.block;
 
 import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
+import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyItemCodec;
+import com.iksxh.create_nuclear_industry.reactor.FuelColumnRepairTransaction;
 import com.iksxh.create_nuclear_industry.reactor.FuelRefuelingTransaction;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -97,11 +99,37 @@ public final class ReactorPortBlock extends P1EntityBlockBase {
         }
 
         if (incoming == null || incoming.isEmpty()) {
+            if (!port.isBound()) {
+                ItemStack extracted = port.tryExtractUnformedFuel();
+                if (!extracted.isEmpty()) {
+                    // 进入此分支前交互手已为空；先完成端口事务，再把精确栈交给玩家。
+                    player.setItemInHand(hand, extracted);
+                    player.displayClientMessage(message("removed_unformed"), true);
+                } else {
+                    player.displayClientMessage(message(port.isUnformedExtractionAllowed()
+                            ? "unformed_empty" : "unformed_locked"), true);
+                }
+                return ItemInteractionResult.CONSUME;
+            }
             FuelRefuelingTransaction.Result result = port.tryExtractFuel();
             if (result.success()) {
                 player.setItemInHand(hand, result.output());
             }
             player.displayClientMessage(messageFor(result), true);
+            return ItemInteractionResult.CONSUME;
+        }
+
+        if (!port.isBound()) {
+            player.displayClientMessage(message("unformed_insert_rejected"), true);
+            return ItemInteractionResult.CONSUME;
+        }
+
+        if (incoming.is(ModItems.STEEL_PLATE.get())) {
+            FuelColumnRepairTransaction.Result result = port.tryRepairFuelColumn(incoming);
+            if (result.success()) {
+                player.setItemInHand(hand, result.remainingInput());
+            }
+            player.displayClientMessage(repairMessageFor(result), true);
             return ItemInteractionResult.CONSUME;
         }
 
@@ -129,9 +157,22 @@ public final class ReactorPortBlock extends P1EntityBlockBase {
         return message(result.status().translationKeySuffix());
     }
 
+    /** 将燃料列维修事务转换为本地化动作栏提示。 */
+    private static Component repairMessageFor(FuelColumnRepairTransaction.Result result) {
+        if (result == null) {
+            return repairMessage("invalid_port");
+        }
+        return repairMessage(result.status().translationKeySuffix());
+    }
+
     /** 构造换料事务的本地化消息，不把服务端拒绝原因翻译成客户端硬编码文本。 */
     private static Component message(String suffix) {
         return Component.translatable("message.create_nuclear_industry.refueling." + suffix);
+    }
+
+    /** 构造合金钢板维修提示，不把服务端拒绝原因硬编码到客户端。 */
+    private static Component repairMessage(String suffix) {
+        return Component.translatable("message.create_nuclear_industry.repair." + suffix);
     }
 
     @Override

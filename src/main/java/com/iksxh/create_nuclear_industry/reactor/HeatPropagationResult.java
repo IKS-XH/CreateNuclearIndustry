@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/** 基于同一快照进行一次四向热传播后的不可变结果，热量单位为 HU。 */
+/** 基于同一快照进行一次四向热传播后的不可变结果，热量单位为 HU。覆盖集合包含失效源和未被冷却消除的燃料目标。 */
 public record HeatPropagationResult(
         ReactorSnapshot snapshot,
         Map<CoreColumnPosition, Double> receivedHeatHu,

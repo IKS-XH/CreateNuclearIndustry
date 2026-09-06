@@ -3,6 +3,7 @@ package com.iksxh.create_nuclear_industry.reactor;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,9 +11,72 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** 验证融毁覆盖率 19/20/21% 边界、暂停、完成、单调进度和完整修复复位。 */
+/** 验证融毁覆盖集合口径、19/20/21% 边界、暂停、完成、单调进度和完整修复复位。 */
 class ReactorMeltdownStateMachineTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
+
+    @Test
+    void isolatedFailedFuelColumnStartsCountdownAtFullCoverage() {
+        CoreColumnPosition position = new CoreColumnPosition(0, 0);
+        ReactorSnapshot snapshot = ReactorSnapshot.singleFuelColumn(
+                position,
+                fuel(0.0D)
+        );
+
+        MeltdownUpdateResult result = update(snapshot, Set.of(position), false, false);
+
+        assertEquals(1.0D, result.propagationCoverageFraction(), 1.0E-12D);
+        assertTrue(result.dangerThresholdReached());
+        assertEquals(MeltdownStatus.RUNNING, result.status());
+        assertEquals(1L, result.snapshot().meltdownProgressTicks());
+    }
+
+    @Test
+    void sourceAndTargetUnionCountsEachOfEightUsableFuelColumnsOnce() {
+        Map<CoreColumnPosition, FuelColumnState> fuels = fuelMap(8);
+        CoreColumnPosition source = fuels.keySet().iterator().next();
+        CoreColumnPosition target = fuels.keySet().stream().skip(1).findFirst().orElseThrow();
+        fuels.put(source, fuel(0.0D));
+        ReactorSnapshot snapshot = new ReactorSnapshot(fuels, Map.of(), 0L, 0L, 0L, false);
+
+        MeltdownUpdateResult below = update(snapshot, Set.of(source), false, false);
+        MeltdownUpdateResult triggered = update(
+                snapshot,
+                new LinkedHashSet<>(java.util.List.of(source, target, source)),
+                false,
+                false
+        );
+
+        assertEquals(1.0D / 8.0D, below.propagationCoverageFraction(), 1.0E-12D);
+        assertFalse(below.dangerThresholdReached());
+        assertEquals(2.0D / 8.0D, triggered.propagationCoverageFraction(), 1.0E-12D);
+        assertTrue(triggered.dangerThresholdReached());
+        assertEquals(1L, triggered.snapshot().meltdownProgressTicks());
+    }
+
+    @Test
+    void exhaustedFuelAndControlRodColumnsDoNotEnterCoverageDenominator() {
+        CoreColumnPosition source = new CoreColumnPosition(0, 0);
+        CoreColumnPosition exhausted = new CoreColumnPosition(0, 1);
+        CoreColumnPosition control = new CoreColumnPosition(1, 0);
+        ReactorSnapshot snapshot = new ReactorSnapshot(
+                Map.of(
+                        source, fuel(0.0D),
+                        exhausted, new FuelColumnState(
+                                FuelAssemblyState.installed(216_000, 216_000), 0.0D, 0.0D)
+                ),
+                Map.of(control, ControlRodColumnState.fullyInserted()),
+                0L,
+                0L,
+                0L,
+                false
+        );
+
+        MeltdownUpdateResult result = update(snapshot, Set.of(source, exhausted, control), false, false);
+
+        assertEquals(1.0D, result.propagationCoverageFraction(), 1.0E-12D);
+        assertTrue(result.dangerThresholdReached());
+    }
 
     @Test
     void coverageBoundaryCountsOnlyEffectiveFuelColumns() {

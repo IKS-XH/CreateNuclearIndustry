@@ -6,8 +6,9 @@ public final class ReactorMeltdownStateMachine {
     }
 
     /**
-     * 根据有效燃料列的传播覆盖率、SCRAM 与有效冷却更新融毁状态。危险覆盖率达到
-     * 阈值才启动倒计时；SCRAM 或有效冷却会暂停进度，但不会回退已累计 tick。
+     * 根据传播覆盖率、SCRAM 与有效冷却更新融毁状态。分母包含组件仍有耐久的燃料列，
+     * 包括完整度已经归零的失效源；危险覆盖率达到阈值才启动倒计时。SCRAM 或有效冷却
+     * 会暂停进度，但不会回退已累计 tick。
      */
     public static MeltdownUpdateResult update(
             ReactorSnapshot beforePropagation,
@@ -20,13 +21,15 @@ public final class ReactorMeltdownStateMachine {
             throw new IllegalArgumentException("meltdown update inputs are required");
         }
 
+        // 覆盖分母在传播前取样；本 tick 才耗尽的组件仍要参与本 tick 的危险结算，
+        // 从下一正式 tick 起再由 hasUsableFuel() 将其排除。
         long effectiveFuelCount = beforePropagation.fuelColumns().values().stream()
-                .filter(FuelColumnState::isEffectiveFuel)
+                .filter(FuelColumnState::hasUsableFuel)
                 .count();
         long coveredFuelCount = propagation.coveredEffectiveFuelColumns().stream()
                 .filter(position -> {
                     FuelColumnState fuel = beforePropagation.fuelColumns().get(position);
-                    return fuel != null && fuel.isEffectiveFuel();
+                    return fuel != null && fuel.hasUsableFuel();
                 })
                 .count();
         double coverage = effectiveFuelCount == 0L

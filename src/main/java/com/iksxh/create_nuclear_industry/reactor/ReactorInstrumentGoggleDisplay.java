@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry.reactor;
 
 import com.iksxh.create_nuclear_industry.structure.ReactorInstrumentStructureSummary;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Locale;
@@ -70,6 +71,21 @@ public final class ReactorInstrumentGoggleDisplay {
                 column(column.position()),
                 formatPercent(column.fuelColumnIntegrity()),
                 formatRate(column.generatedFissionHeatHuPerTick())));
+    }
+
+    /** 显示客户端已同步燃料物品的剩余耐久、上限和确定性百分比。 */
+    public static void appendFuelAssemblyTooltip(List<Component> tooltip, ItemStack fuelAssembly) {
+        Objects.requireNonNull(tooltip, "goggle tooltip is required");
+        Objects.requireNonNull(fuelAssembly, "fuel assembly is required");
+        if (fuelAssembly.isEmpty()) {
+            tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "fuel_assembly_empty"));
+            return;
+        }
+        int maxDamage = Math.max(0, fuelAssembly.getMaxDamage());
+        int remaining = Math.max(0, maxDamage - fuelAssembly.getDamageValue());
+        double fraction = maxDamage == 0 ? 0.0D : (double) remaining / maxDamage;
+        tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "fuel_assembly_durability",
+                Integer.toString(remaining), Integer.toString(maxDamage), formatPercent(fraction)));
     }
 
     /** 追加单个控制棒驱动器对应的控制棒列完整度，不显示其它列。 */

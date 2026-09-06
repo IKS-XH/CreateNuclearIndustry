@@ -98,7 +98,7 @@ class ReactorSimulationRegressionTest {
     void nbtRoundTripPreservesEveryPipelineContinuationResult() {
         ReactorSnapshot initial = persistedFixture();
         ReactorSnapshot restoredInitial = ReactorSnapshotNbtCodec.decode(ReactorSnapshotNbtCodec.encode(initial));
-        assertEquals(initial, restoredInitial);
+        assertEquals(initial.withoutFuelAssemblies(), restoredInitial);
 
         ReactorFissionResult fission = ReactorFissionCalculator.calculate(initial, PARAMETERS, false);
         ReactorThermalResult thermal = ReactorThermalCalculator.settleFissionHeat(
@@ -110,7 +110,16 @@ class ReactorSimulationRegressionTest {
         ReactorSnapshot restoredThermal = ReactorSnapshotNbtCodec.decode(
                 ReactorSnapshotNbtCodec.encode(thermal.snapshot())
         );
-        assertEquals(thermal.snapshot(), restoredThermal);
+        assertEquals(thermal.snapshot().withoutFuelAssemblies(), restoredThermal);
+        ReactorSnapshot rehydratedThermal = restoredThermal;
+        for (Map.Entry<CoreColumnPosition, FuelColumnState> entry
+                : thermal.snapshot().fuelColumns().entrySet()) {
+            CoreColumnPosition position = entry.getKey();
+            rehydratedThermal = rehydratedThermal.withFuelColumn(
+                    position,
+                    rehydratedThermal.fuelColumns().get(position)
+                            .withFuelAssemblyProjection(entry.getValue().fuelAssembly()));
+        }
 
         HeatPropagationResult propagation = ReactorHeatPropagation.propagate(
                 thermal.snapshot(),
@@ -118,11 +127,17 @@ class ReactorSimulationRegressionTest {
                 PARAMETERS
         );
         HeatPropagationResult restoredPropagation = ReactorHeatPropagation.propagate(
-                restoredThermal,
+                rehydratedThermal,
                 Map.of(),
                 PARAMETERS
         );
-        assertEquals(propagation, restoredPropagation);
+        assertEquals(propagation.snapshot().withoutFuelAssemblies(),
+                restoredPropagation.snapshot().withoutFuelAssemblies());
+        assertEquals(propagation.totalTransferredHeatHu(),
+                restoredPropagation.totalTransferredHeatHu(), 1.0E-12D);
+        assertEquals(propagation.receivedHeatHu(), restoredPropagation.receivedHeatHu());
+        assertEquals(propagation.coveredEffectiveFuelColumns(),
+                restoredPropagation.coveredEffectiveFuelColumns());
 
         MeltdownUpdateResult meltdown = ReactorMeltdownStateMachine.update(
                 thermal.snapshot(),
@@ -132,13 +147,18 @@ class ReactorSimulationRegressionTest {
                 PARAMETERS
         );
         MeltdownUpdateResult restoredMeltdown = ReactorMeltdownStateMachine.update(
-                restoredThermal,
+                rehydratedThermal,
                 restoredPropagation,
                 false,
                 false,
                 PARAMETERS
         );
-        assertEquals(meltdown, restoredMeltdown);
+        assertEquals(meltdown.snapshot().withoutFuelAssemblies(),
+                restoredMeltdown.snapshot().withoutFuelAssemblies());
+        assertEquals(meltdown.status(), restoredMeltdown.status());
+        assertEquals(meltdown.propagationCoverageFraction(),
+                restoredMeltdown.propagationCoverageFraction(), 1.0E-12D);
+        assertEquals(meltdown.dangerThresholdReached(), restoredMeltdown.dangerThresholdReached());
     }
 
     private static PipelineResult runPipeline(

@@ -107,7 +107,7 @@ public final class P1LoopGameTests {
                     helper.absolutePos(INSTRUMENT),
                     P1Blocks.REACTOR_INSTRUMENT_PORT.get().defaultBlockState());
             reloaded.loadForServerTest(saved, helper.getLevel().registryAccess());
-            require(helper, reloaded.snapshot().equals(after),
+            require(helper, reloaded.snapshot().equals(after.withoutFuelAssemblies()),
                     "formal tick state did not survive NBT reload");
             helper.succeed();
         });

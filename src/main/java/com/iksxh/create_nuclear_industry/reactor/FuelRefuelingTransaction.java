@@ -137,6 +137,20 @@ public final class FuelRefuelingTransaction {
      * @return 成功时的空燃料列和一个输出组件，失败时保留原列
      */
     public static Result extract(FuelColumnState current, double currentFissionHeatHu) {
+        return extract(current, currentFissionHeatHu, ItemStack.EMPTY);
+    }
+
+    /**
+     * 从停止放热的燃料列取出端口保存的精确物品栈。
+     *
+     * <p>精确栈用于保留自定义名称等全部数据组件。服务端调用方应先校验端口栈与
+     * {@code current} 投影一致；不一致时返回失败，避免快照与物品发生静默分叉。</p>
+     */
+    public static Result extract(
+            FuelColumnState current,
+            double currentFissionHeatHu,
+            ItemStack exactStoredFuel
+    ) {
         requireColumn(current);
         requireHeat(currentFissionHeatHu);
         if (!current.fuelAssembly().present()) {
@@ -146,9 +160,30 @@ public final class FuelRefuelingTransaction {
             return failure(Status.COLUMN_ACTIVE, current, ItemStack.EMPTY);
         }
 
-        ItemStack output = current.fuelAssembly().exhausted()
-                ? FuelAssemblyItemCodec.createCooledSpentFuel()
-                : FuelAssemblyItemCodec.writeFreshFuel(current.fuelAssembly());
+        ItemStack output;
+        if (exactStoredFuel != null && !exactStoredFuel.isEmpty()) {
+            if (!FuelAssemblyItemCodec.isValidStoredFuel(exactStoredFuel)) {
+                return failure(Status.WRONG_FUEL_ITEM, current, ItemStack.EMPTY);
+            }
+            if (current.fuelAssembly().exhausted()) {
+                output = FuelAssemblyItemCodec.isCooledSpentFuel(exactStoredFuel)
+                        ? exactStoredFuel.copyWithCount(1)
+                        : FuelAssemblyItemCodec.createCooledSpentFuel();
+            } else {
+                if (!FuelAssemblyItemCodec.isFreshFuel(exactStoredFuel)) {
+                    return failure(Status.WRONG_FUEL_ITEM, current, ItemStack.EMPTY);
+                }
+                FuelAssemblyState exactState = FuelAssemblyItemCodec.readFreshFuel(exactStoredFuel);
+                if (!exactState.equals(current.fuelAssembly())) {
+                    return failure(Status.WRONG_FUEL_ITEM, current, ItemStack.EMPTY);
+                }
+                output = exactStoredFuel.copyWithCount(1);
+            }
+        } else {
+            output = current.fuelAssembly().exhausted()
+                    ? FuelAssemblyItemCodec.createCooledSpentFuel()
+                    : FuelAssemblyItemCodec.writeFreshFuel(current.fuelAssembly());
+        }
         return new Result(Status.REMOVED, current.withoutFuelAssembly(), output, ItemStack.EMPTY);
     }
 

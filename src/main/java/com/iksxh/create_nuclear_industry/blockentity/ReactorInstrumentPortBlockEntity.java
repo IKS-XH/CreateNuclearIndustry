@@ -6,6 +6,9 @@ import com.iksxh.create_nuclear_industry.control.ControlRodScramResult;
 import com.iksxh.create_nuclear_industry.control.ControlRodScramService;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
+import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyItemCodec;
+import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
+import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.FuelColumnFissionResult;
 import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentTelemetry;
 import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentGoggleDisplay;
@@ -27,7 +30,10 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 import java.util.Objects;
 import java.util.ArrayList;
@@ -45,9 +51,12 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private static final String SNAPSHOT_KEY = "ReactorSnapshot";
     private static final String STRUCTURE_SUMMARY_KEY = "InstrumentStructureSummary";
     private static final String TELEMETRY_KEY = "InstrumentTelemetry";
+    private static final String LEGACY_FUEL_MIGRATION_KEY = "LegacyFuelMigration";
     private static final String GOGGLE_KEY_PREFIX = "goggle.create_nuclear_industry.reactor.";
     private static final int TELEMETRY_SYNC_INTERVAL_TICKS = 5;
     private static final String TELEMETRY_UNAVAILABLE_REASON = "telemetry is unavailable";
+    private static final double SAFETY_HEAT_EPSILON = 1.0E-12D;
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     private ReactorSnapshot snapshot = ReactorSnapshot.empty();
     private ReactorInstrumentTelemetry telemetry =
@@ -61,6 +70,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             ReactorInstrumentStructureSummary.unavailable("structure summary is not synchronized");
     private ReactorStructureDefinition.ScanResult structureScan =
             ReactorStructureDefinition.ScanResult.notScanned();
+    /** 等待对应换料端口加载后完成的一次性 v3 燃料迁移信封。 */
+    private Map<CoreColumnPosition, FuelAssemblyState> pendingLegacyFuelAssemblies = Map.of();
     private BlockPos structureOrigin;
     private long structureScanCount;
     private final Set<ReactorPortBlockEntity> boundPorts =
@@ -157,11 +168,13 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (structureScan.valid()) {
             initializeAndSyncControlRods();
             reconcilePortBindings();
+            migratePendingFuelAssemblies();
+            hydrateFuelProjectionsFromPorts();
             if (level != null && !level.isClientSide) {
                 updateRedstoneScram(level.hasNeighborSignal(worldPosition));
             }
         } else {
-            clearPortBindings();
+            clearPortBindings(true);
         }
         invalidateTelemetry();
     }
@@ -195,19 +208,36 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 || !snapshotMatchesStructure()) {
             return false;
         }
+        if (!hydrateFuelProjectionsFromPorts()) {
+            return false;
+        }
+        Map<CoreColumnPosition, ItemStack> beforePortItems = captureFuelPortItems();
+        if (beforePortItems == null) {
+            return false;
+        }
         ReactorServerTick.Result result = ReactorServerTick.advance(
                 snapshot,
                 simulationParameters(),
                 coolantInput()
         );
+        Map<CoreColumnPosition, ItemStack> nextPortItems = prepareFuelPortCommit(
+                beforePortItems, result.snapshot());
+        if (nextPortItems == null) {
+            return false;
+        }
         boolean stateChanged = !result.snapshot().equals(snapshot);
+        boolean portChanged = !sameFuelPortItems(beforePortItems, nextPortItems);
+        for (Map.Entry<CoreColumnPosition, ItemStack> entry : nextPortItems.entrySet()) {
+            ReactorPortBlockEntity port = findRefuelingPort(entry.getKey());
+            if (port != null) {
+                port.setFuelAssembly(entry.getValue());
+            }
+        }
         if (stateChanged) {
-            snapshot = result.snapshot();
-            setChanged();
-            syncControlRodDrives();
+            setSnapshot(result.snapshot());
         }
         publishTelemetry(ReactorInstrumentTelemetry.from(result));
-        return stateChanged;
+        return stateChanged || portChanged;
     }
 
     /**
@@ -258,6 +288,52 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         FuelColumnFissionResult result = ReactorFissionCalculator.calculate(
                 snapshot, simulationParameters()).columns().get(position);
         return result == null ? 0.0D : result.generatedHeatHu();
+    }
+
+    /**
+     * 使用指定瞬态列投影计算当前列裂变发热，单位为 HU/t。
+     *
+     * <p>换料端口是燃料组件的唯一持久化所有者；端口刚装料、刚加载或尚未完成下一次
+     * 正式 tick 时，仪表快照中的运行时投影可能尚未刷新。维修的“停止放热”校验必须
+     * 把端口当前组件投影到本次只读计算中，不能因旧快照为空而错误放行。</p>
+     */
+    public double currentFuelColumnFissionHeatHu(
+            CoreColumnPosition position,
+            FuelColumnState projectedColumn
+    ) {
+        if (position == null || projectedColumn == null || !structureScan.valid()) {
+            return 0.0D;
+        }
+        if (snapshot.controlRodColumns().containsKey(position)) {
+            return 0.0D;
+        }
+        ReactorSnapshot projectedSnapshot = snapshot.withFuelColumn(position, projectedColumn);
+        FuelColumnFissionResult result = ReactorFissionCalculator.calculate(
+                projectedSnapshot, simulationParameters()).columns().get(position);
+        return result == null ? 0.0D : result.generatedHeatHu();
+    }
+
+    /**
+     * 只读判断当前权威状态是否允许未成型人工取料。
+     *
+     * <p>安全条件是服务端快照没有运行中的裂变发热，且融毁倒计时未建立；
+     * {@code meltdownCountdownStarted} 同时覆盖正在倒计时和因 SCRAM/冷却暂停的状态。
+     * 方法不扫描世界、不修改快照，缺少服务端环境、数值配置异常或计算异常时一律拒绝。</p>
+     *
+     * @return 当前服务端能够证明安全时为 {@code true}
+     */
+    public boolean isSafeForUnformedFuelExtraction() {
+        if (level == null || level.isClientSide || snapshot == null
+                || snapshot.meltdownCountdownStarted()) {
+            return false;
+        }
+        try {
+            return ReactorFissionCalculator.calculate(snapshot, simulationParameters())
+                    .generatedHeatHu() <= SAFETY_HEAT_EPSILON;
+        } catch (RuntimeException exception) {
+            LOGGER.debug("unable to prove reactor safety for unformed fuel extraction", exception);
+            return false;
+        }
     }
 
     /** 结构编辑后，列状态可能残留；列角色不匹配当前结构时暂不推进模拟。 */
@@ -397,7 +473,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             boolean currentEntity = !port.isRemoved()
                     && level.getBlockEntity(port.getBlockPos()) == port;
             if (!currentEntity || spec == null) {
-                port.clearBinding(this);
+                port.clearBinding(this, true);
                 boundPorts.remove(port);
             }
         }
@@ -408,6 +484,194 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 boundPorts.add(port);
             }
         }
+    }
+
+    /**
+     * 将旧快照中的燃料投影迁移到已加载的换料端口。
+     *
+     * <p>端口已有物品时端口优先，旧投影只作为诊断镜像丢弃；尚未加载端口的条目保留在
+     * 迁移信封中，避免区块加载顺序造成燃料丢失。</p>
+     */
+    private void migratePendingFuelAssemblies() {
+        if (pendingLegacyFuelAssemblies.isEmpty()) {
+            return;
+        }
+        TreeMap<CoreColumnPosition, FuelAssemblyState> remaining =
+                new TreeMap<>(pendingLegacyFuelAssemblies);
+        for (Map.Entry<CoreColumnPosition, FuelAssemblyState> entry
+                : pendingLegacyFuelAssemblies.entrySet()) {
+            ReactorPortBlockEntity port = findRefuelingPort(entry.getKey());
+            if (port == null) {
+                continue;
+            }
+            ItemStack stored = port.fuelAssembly();
+            if (stored.isEmpty()) {
+                try {
+                    port.setFuelAssembly(FuelAssemblyItemCodec.fromLegacyState(entry.getValue()));
+                } catch (IllegalArgumentException exception) {
+                    LOGGER.warn("无法迁移反应堆 {} 的旧燃料列 {}：{}",
+                            worldPosition, entry.getKey(), exception.getMessage());
+                }
+            } else {
+                LOGGER.warn("反应堆 {} 的换料端口 {} 已有燃料，保留端口物品并丢弃旧快照镜像",
+                        worldPosition, entry.getKey());
+            }
+            remaining.remove(entry.getKey());
+        }
+        pendingLegacyFuelAssemblies = Map.copyOf(remaining);
+    }
+
+    /**
+     * 从每个已绑定换料端口重建内存燃料投影，并补齐结构新增的空列。
+     *
+     * @return 所有燃料列端口均已加载且物品合法时返回 {@code true}
+     */
+    private boolean hydrateFuelProjectionsFromPorts() {
+        if (!structureScan.valid() || structureOrigin == null || level == null || level.isClientSide) {
+            return false;
+        }
+        TreeMap<CoreColumnPosition, FuelColumnState> nextFuelColumns = new TreeMap<>();
+        for (Map.Entry<CoreColumnPosition, ReactorStructureDefinition.ColumnMapping> entry
+                : structureScan.columns().entrySet()) {
+            if (entry.getValue().type() != ReactorStructureDefinition.ColumnType.FUEL) {
+                continue;
+            }
+            CoreColumnPosition position = entry.getKey();
+            ReactorPortBlockEntity port = findRefuelingPort(position);
+            if (port == null) {
+                return false;
+            }
+            ItemStack stored = port.fuelAssembly();
+            FuelColumnState current = snapshot.fuelColumns()
+                    .getOrDefault(position, FuelColumnState.empty());
+            if (stored.isEmpty() && current.fuelAssembly().present()) {
+                try {
+                    port.setFuelAssembly(FuelAssemblyItemCodec.fromLegacyState(current.fuelAssembly()));
+                    stored = port.fuelAssembly();
+                } catch (IllegalArgumentException exception) {
+                    LOGGER.warn("无法将反应堆 {} 的旧燃料列 {} 写入换料端口：{}",
+                            worldPosition, position, exception.getMessage());
+                    return false;
+                }
+            }
+            if (!FuelAssemblyItemCodec.isValidStoredFuel(stored)) {
+                return false;
+            }
+            FuelColumnState projected = current.withFuelAssemblyProjection(
+                    FuelAssemblyItemCodec.simulationState(stored));
+            if (snapshot.fuelColumns().containsKey(position) || !stored.isEmpty()) {
+                nextFuelColumns.put(position, projected);
+            }
+        }
+        if (!nextFuelColumns.equals(snapshot.fuelColumns())) {
+            setSnapshot(snapshot.withColumns(nextFuelColumns, snapshot.controlRodColumns()));
+        }
+        return true;
+    }
+
+    /** 返回当前结构绑定指定燃料列的唯一换料端口，不扫描世界。 */
+    private ReactorPortBlockEntity findRefuelingPort(CoreColumnPosition position) {
+        if (position == null) {
+            return null;
+        }
+        for (ReactorPortBlockEntity port : boundPorts(
+                ReactorPortBlockEntity.BindingType.REFUELING)) {
+            if (position.equals(port.boundColumn())) {
+                return port;
+            }
+        }
+        return null;
+    }
+
+    /** 捕获快照已拥有或端口已装料的列物品，缺失端口时直接拒绝结算。 */
+    private Map<CoreColumnPosition, ItemStack> captureFuelPortItems() {
+        TreeMap<CoreColumnPosition, ItemStack> captured = new TreeMap<>();
+        for (CoreColumnPosition position : snapshot.fuelColumns().keySet()) {
+            ReactorStructureDefinition.ColumnMapping mapping = structureScan.columns().get(position);
+            ReactorPortBlockEntity port = findRefuelingPort(position);
+            if (mapping == null || mapping.type() != ReactorStructureDefinition.ColumnType.FUEL
+                    || port == null || !FuelAssemblyItemCodec.isValidStoredFuel(port.fuelAssembly())) {
+                return null;
+            }
+            captured.put(position, port.fuelAssembly());
+        }
+        return captured;
+    }
+
+    /** 在任何端口写入前准备完整下一状态；任一校验失败都会返回空并保持原状态。 */
+    private Map<CoreColumnPosition, ItemStack> prepareFuelPortCommit(
+            Map<CoreColumnPosition, ItemStack> beforeItems,
+            ReactorSnapshot nextSnapshot
+    ) {
+        TreeMap<CoreColumnPosition, ItemStack> nextItems = new TreeMap<>();
+        for (Map.Entry<CoreColumnPosition, ItemStack> entry : beforeItems.entrySet()) {
+            CoreColumnPosition position = entry.getKey();
+            ReactorPortBlockEntity port = findRefuelingPort(position);
+            ItemStack beforeItem = entry.getValue();
+            if (port == null || level.getBlockEntity(port.getBlockPos()) != port
+                    || !port.isBoundTo(this, ReactorPortBlockEntity.BindingType.REFUELING, position)
+                    || !ItemStack.matches(beforeItem, port.fuelAssembly())) {
+                LOGGER.warn("反应堆 {} 燃料 tick 提交前端口 {} 状态已变化，取消整 tick",
+                        worldPosition, position);
+                return null;
+            }
+            FuelColumnState nextColumn = nextSnapshot.fuelColumns().get(position);
+            if (nextColumn == null) {
+                return null;
+            }
+            ItemStack nextItem;
+            if (!nextColumn.fuelAssembly().present()) {
+                nextItem = FuelAssemblyItemCodec.isCooledSpentFuel(beforeItem)
+                        ? beforeItem.copyWithCount(1) : ItemStack.EMPTY;
+            } else if (nextColumn.fuelAssembly().exhausted()) {
+                nextItem = FuelAssemblyItemCodec.isCooledSpentFuel(beforeItem)
+                        ? beforeItem.copyWithCount(1)
+                        : FuelAssemblyItemCodec.createCooledSpentFuel();
+            } else {
+                if (!FuelAssemblyItemCodec.isFreshFuel(beforeItem)
+                        || beforeItem.getMaxDamage() != nextColumn.fuelAssembly().maxDamage()) {
+                    return null;
+                }
+                nextItem = FuelAssemblyItemCodec.copyWithDamage(
+                        beforeItem, nextColumn.fuelAssembly().damage());
+            }
+            if (!FuelAssemblyItemCodec.isValidStoredFuel(nextItem)) {
+                return null;
+            }
+            nextItems.put(position, nextItem);
+        }
+        return nextItems;
+    }
+
+    /** 比较本 tick 前后的端口物品，避免只有乏燃料转换时错误返回“无变化”。 */
+    private static boolean sameFuelPortItems(
+            Map<CoreColumnPosition, ItemStack> before,
+            Map<CoreColumnPosition, ItemStack> after
+    ) {
+        if (!before.keySet().equals(after.keySet())) {
+            return false;
+        }
+        for (CoreColumnPosition position : before.keySet()) {
+            if (!ItemStack.matches(before.get(position), after.get(position))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** 玩家或其他事务提交前再次确认端口实体、绑定和物品仍与读阶段一致。 */
+    boolean validateFuelColumnCommit(
+            ReactorPortBlockEntity port,
+            CoreColumnPosition position,
+            ItemStack expectedStored,
+            FuelColumnState nextColumn
+    ) {
+        return level != null && !level.isClientSide
+                && port != null
+                && level.getBlockEntity(port.getBlockPos()) == port
+                && port.isBoundTo(this, ReactorPortBlockEntity.BindingType.REFUELING, position)
+                && ItemStack.matches(expectedStored, port.fuelAssembly())
+                && nextColumn != null;
     }
 
     /** 将指定职责的局部端口位置转换为本结构的世界位置并加入预期绑定。 */
@@ -497,9 +761,9 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     }
 
     /** 清理本仪表端口上一次扫描建立的全部运行时绑定。 */
-    private void clearPortBindings() {
+    private void clearPortBindings(boolean structureInvalidated) {
         for (ReactorPortBlockEntity port : List.copyOf(boundPorts)) {
-            port.clearBinding(this);
+            port.clearBinding(this, structureInvalidated);
         }
         boundPorts.clear();
     }
@@ -535,7 +799,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      */
     @Override
     public void invalidate() {
-        clearPortBindings();
+        // 区块卸载不是安全重扫，不能借生命周期事件改变未成型取料锁。
+        clearPortBindings(false);
         clearControlRodTelemetry();
         structureScan = ReactorStructureDefinition.ScanResult.notScanned();
         structureOrigin = null;
@@ -577,7 +842,21 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
-        tag.put(SNAPSHOT_KEY, ReactorSnapshotNbtCodec.encode(snapshot));
+        CompoundTag snapshotTag = ReactorSnapshotNbtCodec.encode(snapshot);
+        if (!pendingLegacyFuelAssemblies.isEmpty()) {
+            net.minecraft.nbt.ListTag migration = new net.minecraft.nbt.ListTag();
+            pendingLegacyFuelAssemblies.forEach((position, assembly) -> {
+                CompoundTag entry = new CompoundTag();
+                entry.putInt("X", position.x());
+                entry.putInt("Z", position.z());
+                entry.putBoolean("Present", assembly.present());
+                entry.putInt("Damage", assembly.damage());
+                entry.putInt("MaxDamage", assembly.maxDamage());
+                migration.add(entry);
+            });
+            snapshotTag.put(LEGACY_FUEL_MIGRATION_KEY, migration);
+        }
+        tag.put(SNAPSHOT_KEY, snapshotTag);
         if (clientPacket) {
             tag.put(STRUCTURE_SUMMARY_KEY, structureSummary().writeSyncTag());
             tag.put(TELEMETRY_KEY, ReactorInstrumentTelemetryNbtCodec.encode(telemetry));
@@ -587,8 +866,36 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
-        snapshot = ReactorSnapshotNbtCodec.decode(
-                tag.contains(SNAPSHOT_KEY) ? tag.getCompound(SNAPSHOT_KEY) : null);
+        CompoundTag snapshotTag = tag.contains(SNAPSHOT_KEY)
+                ? tag.getCompound(SNAPSHOT_KEY) : null;
+        ReactorSnapshotNbtCodec.DecodedSnapshot decoded =
+                ReactorSnapshotNbtCodec.decodeWithMigration(snapshotTag);
+        snapshot = decoded.snapshot().withoutFuelAssemblies();
+        TreeMap<CoreColumnPosition, FuelAssemblyState> pending =
+                new TreeMap<>(decoded.legacyFuelAssemblies());
+        if (snapshotTag != null && snapshotTag.contains(LEGACY_FUEL_MIGRATION_KEY)) {
+            net.minecraft.nbt.ListTag migration = snapshotTag.getList(
+                    LEGACY_FUEL_MIGRATION_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND);
+            for (int index = 0; index < migration.size(); index++) {
+                CompoundTag entry = migration.getCompound(index);
+                if (!entry.contains("X") || !entry.contains("Z")) {
+                    continue;
+                }
+                try {
+                    CoreColumnPosition position = new CoreColumnPosition(
+                            entry.getInt("X"), entry.getInt("Z"));
+                    int maxDamage = Math.max(0, entry.getInt("MaxDamage"));
+                    if ((entry.getBoolean("Present") || maxDamage > 0) && maxDamage > 0) {
+                        pending.put(position, FuelAssemblyState.installed(
+                                maxDamage,
+                                Math.max(0, Math.min(maxDamage, entry.getInt("Damage")))));
+                    }
+                } catch (IllegalArgumentException ignored) {
+                    // 忽略超出固定堆芯坐标范围的迁移条目，不能让损坏 NBT 阻塞方块实体加载。
+                }
+            }
+        }
+        pendingLegacyFuelAssemblies = Map.copyOf(pending);
         if (clientPacket) {
             clientStructureSummary = ReactorInstrumentStructureSummary.readSyncTag(
                     tag.contains(STRUCTURE_SUMMARY_KEY)

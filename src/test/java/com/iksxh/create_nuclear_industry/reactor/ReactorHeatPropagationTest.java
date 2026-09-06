@@ -3,12 +3,13 @@ package com.iksxh.create_nuclear_industry.reactor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** 验证失效燃料的四向等分传播、冷却拦截、对角线隔离和控制棒端点。 */
+/** 验证失效燃料的四向等分传播、覆盖源集合、冷却拦截、对角线隔离和控制棒端点。 */
 class ReactorHeatPropagationTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final CoreColumnPosition SOURCE = new CoreColumnPosition(1, 1);
@@ -64,7 +65,7 @@ class ReactorHeatPropagationTest {
         assertEquals(0.0D, result.netReceivedHeatHu().get(NORTH), 1.0E-12D);
         assertEquals(1.0D, result.snapshot().fuelColumns().get(NORTH).integrity(), 1.0E-12D);
         assertEquals(0.0D, result.snapshot().fuelColumns().get(NORTH).cachedHeatHu(), 1.0E-12D);
-        assertTrue(result.coveredEffectiveFuelColumns().isEmpty());
+        assertEquals(Set.of(SOURCE), result.coveredEffectiveFuelColumns());
     }
 
     @Test
@@ -126,6 +127,20 @@ class ReactorHeatPropagationTest {
         assertTrue(result.receivedHeatHu().isEmpty());
         assertEquals(4.0D, result.snapshot().fuelColumns().get(SOURCE).cachedHeatHu(), 1.0E-12D);
         assertEquals(0.0D, result.snapshot().fuelColumns().get(NORTH).cachedHeatHu(), 1.0E-12D);
+        assertTrue(result.coveredEffectiveFuelColumns().isEmpty());
+    }
+
+    @Test
+    void isolatedFailedFuelWithRemainingDurabilityIsCoveredWithoutResidualHeat() {
+        ReactorSnapshot snapshot = ReactorSnapshot.singleFuelColumn(
+                SOURCE,
+                fuel(0.0D, 0.0D)
+        );
+
+        HeatPropagationResult result = ReactorHeatPropagation.propagate(snapshot, Map.of(), PARAMETERS);
+
+        assertTrue(result.receivedHeatHu().isEmpty());
+        assertEquals(Set.of(SOURCE), result.coveredEffectiveFuelColumns());
     }
 
     private static FuelColumnState fuel(double integrity, double cachedHeat) {

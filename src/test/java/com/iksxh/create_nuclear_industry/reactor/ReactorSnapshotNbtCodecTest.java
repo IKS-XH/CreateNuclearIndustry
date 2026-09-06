@@ -45,10 +45,10 @@ class ReactorSnapshotNbtCodecTest {
         ReactorSnapshot decoded = ReactorSnapshotNbtCodec.decode(encoded);
 
         assertEquals(ReactorSnapshotNbtCodec.FORMAT_VERSION, encoded.getInt("FormatVersion"));
-        assertEquals(expected, decoded);
+        assertEquals(expected.withoutFuelAssemblies(), decoded);
         CompoundTag firstFuel = encoded.getList("FuelColumns", Tag.TAG_COMPOUND).getCompound(0);
-        assertFalse(firstFuel.getCompound("Assembly").contains("Integrity"),
-                "fuel assembly durability must not contain column integrity");
+        assertFalse(firstFuel.contains("Assembly"),
+                "v4 reactor snapshots must not persist fuel assembly ownership");
     }
 
     @Test
@@ -80,7 +80,7 @@ class ReactorSnapshotNbtCodecTest {
         reordered.putLong("ColdCoolantMb", 100L);
         reordered.putInt("FormatVersion", ReactorSnapshotNbtCodec.FORMAT_VERSION);
 
-        assertEquals(expected, ReactorSnapshotNbtCodec.decode(reordered));
+        assertEquals(expected.withoutFuelAssemblies(), ReactorSnapshotNbtCodec.decode(reordered));
     }
 
     @Test
@@ -136,6 +136,33 @@ class ReactorSnapshotNbtCodecTest {
         assertEquals(0.0D,
                 decoded.fuelColumns().get(new CoreColumnPosition(0, 0)).fuelBurnRemainder(),
                 1.0E-12D);
+    }
+
+    @Test
+    void v3AssemblyIsReturnedAsMigrationInputAndNotConfusedWithV4State() {
+        CompoundTag root = new CompoundTag();
+        root.putInt("FormatVersion", 3);
+        ListTag fuels = new ListTag();
+        CompoundTag fuel = new CompoundTag();
+        fuel.putInt("X", 0);
+        fuel.putInt("Z", 0);
+        CompoundTag assembly = new CompoundTag();
+        assembly.putBoolean("Present", true);
+        assembly.putInt("MaxDamage", 216_000);
+        assembly.putInt("Damage", 123);
+        fuel.put("Assembly", assembly);
+        fuels.add(fuel);
+        root.put("FuelColumns", fuels);
+
+        ReactorSnapshotNbtCodec.DecodedSnapshot decoded =
+                ReactorSnapshotNbtCodec.decodeWithMigration(root);
+
+        CoreColumnPosition position = new CoreColumnPosition(0, 0);
+        assertEquals(FuelAssemblyState.installed(216_000, 123),
+                decoded.legacyFuelAssemblies().get(position));
+        assertEquals(FuelAssemblyState.installed(216_000, 123),
+                decoded.snapshot().fuelColumns().get(position).fuelAssembly());
+        assertEquals(3, decoded.sourceFormatVersion());
     }
 
     @Test

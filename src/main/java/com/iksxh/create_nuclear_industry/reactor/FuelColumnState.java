@@ -71,10 +71,48 @@ public record FuelColumnState(
                 quantizedHeatRemainderHu);
     }
 
+    /**
+     * 更新服务端模拟使用的燃料投影，但不重置燃耗小数余量。
+     *
+     * <p>投影来自换料端口持有的 {@link net.minecraft.world.item.ItemStack}，不是第二份
+     * 持久化库存；允许空或已耗尽投影，是为了让端口加载和乏燃料转换仍能经过同一 tick
+     * 结算路径。</p>
+     */
+    public FuelColumnState withFuelAssemblyProjection(FuelAssemblyState nextFuelAssembly) {
+        return new FuelColumnState(
+                Objects.requireNonNull(nextFuelAssembly, "next fuel assembly"),
+                integrity,
+                cachedHeatHu,
+                fuelBurnRemainder,
+                quantizedHeatRemainderHu
+        );
+    }
+
+    /** 移除运行时燃料投影而保留燃耗余量，供 v4 快照去除非权威字段。 */
+    public FuelColumnState withoutFuelAssemblyProjection() {
+        return withFuelAssemblyProjection(FuelAssemblyState.empty());
+    }
+
     /** 取出本列组件并保留列完整度和余热，防止换料事务无声清除结构状态。 */
     public FuelColumnState withoutFuelAssembly() {
         return new FuelColumnState(FuelAssemblyState.empty(), integrity, cachedHeatHu, 0.0D,
                 quantizedHeatRemainderHu);
+    }
+
+    /**
+     * 只替换燃料列完整度，保留组件投影、缓存余热和两个小数余量。
+     *
+     * <p>维修事务通过此入口提交，确保钢板维修不会补充燃料耐久、清除余热或回退
+     * 燃耗结算所需的小数状态。</p>
+     */
+    public FuelColumnState withIntegrity(double nextIntegrity) {
+        return new FuelColumnState(
+                fuelAssembly,
+                nextIntegrity,
+                cachedHeatHu,
+                fuelBurnRemainder,
+                quantizedHeatRemainderHu
+        );
     }
 
     /**
