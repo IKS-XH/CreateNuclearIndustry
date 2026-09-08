@@ -1,8 +1,8 @@
 # 《机械动力：核工业》实施路线图
 
-**路线图版本：** 2026-09-08 PM-25（损伤差异倍率游戏端通过验收）
+**路线图版本：** 2026-09-08 PM-26（事故主线优先，模拟器转辅助）
 **适用技术基线：** Minecraft 1.21.1 + Java 21 + NeoForge 21.1.219 + Create 6.0.10-280
-**路线图状态：** P1 核心功能实施中；`P1-BALANCE-02A` 已通过项目经理自动验收，下一项为 `P1-BALANCE-02B` 模拟器同步；`P1-MELTDOWN-02` 事故产物表仍待冻结
+**路线图状态：** P1 核心功能实施中；当前首先冻结并实施 `P1-MELTDOWN-02` 事故动作，`P1-BALANCE-02B` 仅在主要目标阻塞时穿插且不再阻塞最终验收
 
 本文只负责阶段依赖、出口条件和当前进度。玩法规则以 [project.md](./project.md) 为准，反应堆局部控制以 [reactor-local-control-revision-design.md](./reactor-local-control-revision-design.md) 为准，注册身份以 [content-catalog.md](./content-catalog.md) 为准，材料关系以 [recipes.md](./recipes.md) 为准，彩蛋以 [easter-eggs-and-advancements.md](./easter-eggs-and-advancements.md) 为准。
 
@@ -10,7 +10,7 @@
 
 截至 2026-09-08，P0 API/数值原型、P1 内容注册、固定 `5×5×5` 结构、冷热冷却剂 capability、真实 Create 储罐—动力泵—管网输入/输出、控制棒滑块与拖动抖动整改、仪表端口 SCRAM、正式服务端反应堆 tick、端口绑定、玩家换料交互、仪表端口静态摘要与动态护目镜显示、热量量化余数、反馈超频簇控制棒门控、原位流体端口/Create 管网生命周期恢复、换料端口燃料组件所有权与耐久显示、受危险锁保护的未成型人工取料、Create 机械臂原子换料、燃料列/控制棒列钢板维修、失效源计入覆盖比例的融毁倒计时闭环，以及游戏端可配置损伤产热/燃耗差异倍率已经实现并通过对应验收。当前基线为 225 项 JUnit、90 个 required GameTest 和完整构建通过。
 
-P1 尚未完成的关键功能是 HTML 损伤差异倍率同步、融毁事故动作、危险状态拆除、完全停机、破坏性重组成型和最终端到端验证。用户于 2026-09-08 确认损伤允许提高产热，燃耗倍率增长更快，默认满损伤产热 2 倍、燃耗 3 倍且均可配置；[P1-BALANCE-02A](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 已接入正式服务端配置与 tick，02B 现在可以同步模拟器。`P1-MELTDOWN-01` 已修正覆盖口径并闭合正式倒计时；事故线仍须先冻结事故产物表，再由 `P1-MELTDOWN-02` 实现幂等事故执行器，最后由 `P1-MAINT-01` 接入危险拆除。活动任务的精确状态、依赖和允许写集以 [P1 单步执行计划](./superpowers/plans/2026-08-18-agent-developer-execution-plan.md) 及其链接的专项任务卡为准。
+P1 尚未完成的关键功能是融毁事故动作、危险状态拆除、完全停机、破坏性重组成型和最终端到端验证。用户于 2026-09-08 确认损伤允许提高产热，燃耗倍率增长更快，默认满损伤产热 2 倍、燃耗 3 倍且均可配置；[P1-BALANCE-02A](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 已接入正式服务端配置与 tick。`P1-MELTDOWN-01` 已修正覆盖口径并闭合正式倒计时；事故线须先冻结事故产物表，再由 `P1-MELTDOWN-02` 实现幂等事故执行器，最后由 `P1-MAINT-01` 接入危险拆除。HTML 同步 `P1-BALANCE-02B` 保留为辅助任务，只在上述主要目标因决策、外部条件或技术问题阻塞时派发，不计入 P1 主线出口。活动任务的精确状态、依赖和允许写集以 [P1 单步执行计划](./superpowers/plans/2026-08-18-agent-developer-execution-plan.md) 及其链接的专项任务卡为准。
 
 ### 1.1 当前 P1 实施边界
 
@@ -149,7 +149,7 @@ P1 尚未完成的关键功能是 HTML 损伤差异倍率同步、融毁事故�
 
 ## 4. 当前关键路径
 
-新增数值任务顺序为 `P1-BALANCE-02A（游戏端配置与计算，已完成）→ P1-BALANCE-02B（HTML 模拟器同步，待派发）`。02B 无待定玩法参数，可在包含 02A 提交的基线上派发；两项均为 `P1-VERIFY-01` 的新增前置，不要求先完成事故产物表讨论。
+当前关键路径从 `P1-MELTDOWN-01（已完成）` 继续到事故动作、危险拆除和最终验证。`P1-BALANCE-02A` 已完成；`P1-BALANCE-02B` 无待定玩法参数，但只在主线阻塞时作为辅助任务派发，不再是 `P1-VERIFY-01` 或 P1 出口的前置。
 
 ```text
 LOOP-01 → LOOP-02（均已完成）
@@ -166,13 +166,13 @@ STRUCT-04 + COOL-03（均已完成）
   → THERMAL-01（已完成）→ CONTROL-05（已完成）
   → COOL-05（已完成）→ REFUEL-02A（已完成）→ REFUEL-02B（已完成）→ REFUEL-03（已完成）
 
-既有 P1 基线 → BALANCE-02A（已完成）→ BALANCE-02B
+[辅助，主线阻塞时] 既有 P1 基线 → BALANCE-02A（已完成）→ BALANCE-02B
 
-COOL-04 + REFUEL-03 + REFUEL-02B + GOGGLE-INSTRUMENT-04 + MELTDOWN-02 + MAINT-01 + MAINT-03 + LOOP-02 + BALANCE-02A + BALANCE-02B
+COOL-04 + REFUEL-03 + REFUEL-02B + GOGGLE-INSTRUMENT-04 + MELTDOWN-02 + MAINT-01 + MAINT-03 + LOOP-02 + BALANCE-02A
   → VERIFY-01 → VERIFY-02 → VERIFY-03
 ```
 
-`P1-REFUEL-02A/02B/03`、`P1-REPAIR-01/02`、`P1-MELTDOWN-01` 和 `P1-BALANCE-02A` 均已完成并归档。换料与维修通过自动及用户人工验收；02A 的公式、配置、正式燃耗和 NBT 连续性通过 225 项 JUnit、90 个 required GameTest 与完整构建，客户端对照和磁盘热重载留到最终人工总验收。`P1-MELTDOWN-02` 必须等待项目经理与用户冻结 P1 事故产物 ID、形态、数量和结构破坏范围后才能派发。原 `P1-MAINT-04` 已并入 `P1-MELTDOWN-02`，危险拆除随后由 `P1-MAINT-01` 复用同一个事故执行器。Ponder 任务按活动计划单独验收；连接纹理、正式多边形模型、动画、粒子和音效继续后置。
+`P1-REFUEL-02A/02B/03`、`P1-REPAIR-01/02`、`P1-MELTDOWN-01` 和 `P1-BALANCE-02A` 均已完成并归档。换料与维修通过自动及用户人工验收；02A 的公式、配置、正式燃耗和 NBT 连续性通过 225 项 JUnit、90 个 required GameTest 与完整构建，客户端对照和磁盘热重载留到最终人工总验收。当前首先由项目经理与用户冻结 P1 事故产物 ID、形态、数量和结构破坏范围，随后派发 `P1-MELTDOWN-02`。原 `P1-MAINT-04` 已并入该任务，危险拆除随后由 `P1-MAINT-01` 复用同一个事故执行器。`P1-BALANCE-02B` 不再阻塞这些任务或最终验收，只能在主线阻塞时穿插。Ponder 任务按活动计划单独验收；连接纹理、正式多边形模型、动画、粒子和音效继续后置。
 
 ## 5. 不可绕过的验收门
 
@@ -191,7 +191,7 @@ COOL-04 + REFUEL-03 + REFUEL-02B + GOGGLE-INSTRUMENT-04 + MELTDOWN-02 + MAINT-01
 ## 6. 当前剩余工作与待决策项
 
 - `P1-REFUEL-02A/02B/03`、`P1-REPAIR-01/02`、`P1-MELTDOWN-01` 与 `P1-BALANCE-02A` 的七份报告均已归档；当前自动验收基线为 225 项 JUnit、90 个 required GameTest 和完整构建通过。
-- `P1-BALANCE-02A` 已完成游戏端默认 `2.0/3.0` 与自定义差异倍率、联合配置校验、正式 tick 和燃料持久化；`P1-BALANCE-02B` 仍须同步模块化 HTML、离线单文件、参数显示、场景与导出，当前工具结果不可作为新倍率依据。
+- `P1-BALANCE-02A` 已完成游戏端默认 `2.0/3.0` 与自定义差异倍率、联合配置校验、正式 tick 和燃料持久化；`P1-BALANCE-02B` 保留为主线阻塞时的辅助任务，负责同步模块化 HTML、离线单文件、参数显示、场景与导出。它不影响游戏端合同或 P1 验收，完成前当前工具结果不可作为新倍率依据。
 - P1 仍须完成幂等事故动作、危险拆除、完全停机、破坏性重组成型和三阶段验证。`P1-MELTDOWN-02` 在事故产物表冻结前保持派发阻塞，原 `P1-MAINT-04` 不再单独派发。这些任务的顺序与写集以活动 P1 计划为准。
 - P1 数值合同保持为吸热 `0.5 HU/mB`、每端口 `128 mB/t`、冷热缓冲各 `1000 mB`、完整度损伤速率 `0.0000005 / (tick·HU/t)`，不存在全堆冷却剂流量上限。
 - 当前 P1 固定为 `5×5×5`，保留独立核废水；不实现受污染复合冷却剂、冷却剂净化器、工业仪表、独立 SCRAM 联锁器、完整生存生产线、锅炉、汽轮机、烈焰人管理员或可变反应堆。
