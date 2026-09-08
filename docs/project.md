@@ -2,13 +2,13 @@
 
 > 执行入口：阶段依赖、勾选清单与验收门见 [实施路线图](./implementation-roadmap.md)；新增流体、物品、方块和多方块结构见 [内容注册与素材清单](./content-catalog.md)；隐藏彩蛋与进度见 [隐藏彩蛋与进度设计](./easter-eggs-and-advancements.md)。已完成的设计与实施计划见 [文档归档索引](./archive/README.md)，当前任务只以活动计划目录和路线图为准。
 
-**文档版本：** v1.21－损伤产热与燃耗差异倍率修订稿
+**文档版本：** v1.22－损伤差异倍率游戏端验收状态修订稿
 **首发技术栈：** Java 21 + Minecraft 1.21.1 + NeoForge + Create 6.0.10；在开发开始前冻结具体 NeoForge、Create 及其 API 依赖版本
 **首发核心依赖：** Create（机械动力）
 **长期方向：** 先作为 Create 核工业附属模组完成可玩闭环，再逐步扩展电力、高级反应堆、聚变与反物质科技，最终演进为可独立运行的核工业模组
 **后续移植：** 旧版 Minecraft、Forge 与 Fabric 不纳入首发范围；核心模拟层应与加载器及 Create 接口解耦，为后续移植和独立化留出空间
 
-**2026-09-08 已确认、待实现：** 用户批准损伤可提高产热，但燃耗倍率增长必须更快；采用线性反馈，默认满损伤产热 2 倍、燃耗 3 倍，两个终点均可配置。公式与校验以 [局部控制设计](./reactor-local-control-revision-design.md) 为准，实现与模拟器同步见 [P1-BALANCE-02 计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)。既有等倍率实现及历史测试不作为新规则已完成的证据。
+**2026-09-08 实施状态：** 用户批准的损伤差异倍率已由 `P1-BALANCE-02A` 接入游戏端，并通过 225 项 JUnit、90 个 required GameTest 与完整构建；默认满损伤产热 2 倍、燃耗 3 倍，两个终点均可配置且燃耗增长更快。公式与校验以 [局部控制设计](./reactor-local-control-revision-design.md) 为准；HTML 模拟器仍待 [P1-BALANCE-02B](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 同步。历史等倍率实现及其测试只保留为旧基线记录。
 
 ---
 

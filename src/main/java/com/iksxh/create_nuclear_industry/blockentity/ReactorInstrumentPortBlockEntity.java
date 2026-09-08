@@ -367,11 +367,14 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     }
 
     private static ReactorSimulationParameters simulationParameters() {
+        P1ServerConfig.DamageMultipliers damageMultipliers = P1ServerConfig.damageMultipliers();
         return new ReactorSimulationParameters(
                 P1ServerConfig.VALUES.baseHeatPerFuelBlockHuPerTick.get(),
                 P1ServerConfig.VALUES.fuelBurnTimeHours.get(),
                 P1ServerConfig.VALUES.damageHeatThresholdHuPerTick.get(),
                 P1ServerConfig.VALUES.damageRatePerTickHuLoad.get(),
+                damageMultipliers.heatMultiplier(),
+                damageMultipliers.burnMultiplier(),
                 P1ServerConfig.VALUES.damageTransferRate.get(),
                 P1ServerConfig.VALUES.controlRodFailureThreshold.get(),
                 P1ServerConfig.VALUES.meltdownTriggerFraction.get(),

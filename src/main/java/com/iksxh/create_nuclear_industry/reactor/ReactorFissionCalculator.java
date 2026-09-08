@@ -101,16 +101,21 @@ public final class ReactorFissionCalculator {
                 rawResults.put(position, FuelColumnFissionResult.inactive());
                 continue;
             }
-            double damageMultiplier = 2.0D - fuel.integrity();
+            double damageFraction = 1.0D - clamp01(fuel.integrity());
+            double damageHeatMultiplier = 1.0D
+                    + (parameters.fuelColumnDamageHeatMultiplier() - 1.0D) * damageFraction;
+            double damageBurnMultiplier = 1.0D
+                    + (parameters.fuelColumnDamageBurnMultiplier() - 1.0D) * damageFraction;
             double columnHeat = finiteNonNegative(parameters.baseHeatPerFuelBlockHuPerTick()
-                    * ReactorSnapshot.INTERNAL_HEIGHT * heatIntensity.get(position) * damageMultiplier);
+                    * ReactorSnapshot.INTERNAL_HEIGHT * heatIntensity.get(position) * damageHeatMultiplier);
             double columnBurn = finiteNonNegative(parameters.baseBurnPerFuelBlockPerTick()
-                    * ReactorSnapshot.INTERNAL_HEIGHT * burnIntensity.get(position) * damageMultiplier);
+                    * ReactorSnapshot.INTERNAL_HEIGHT * burnIntensity.get(position) * damageBurnMultiplier);
             rawResults.put(position, new FuelColumnFissionResult(
                     controlled.get(position),
                     heatIntensity.get(position),
                     burnIntensity.get(position),
-                    damageMultiplier,
+                    damageHeatMultiplier,
+                    damageBurnMultiplier,
                     columnHeat,
                     columnBurn,
                     overclocked.get(position)
@@ -133,7 +138,8 @@ public final class ReactorFissionCalculator {
                     raw.controlledIntensity(),
                     raw.heatIntensity(),
                     raw.burnIntensity(),
-                    raw.damageMultiplier(),
+                    raw.damageHeatMultiplier(),
+                    raw.damageBurnMultiplier(),
                     settledHeat,
                     raw.plannedFuelBurnUnits(),
                     raw.overclocked()

@@ -32,6 +32,10 @@ class P1BalanceContractTest {
         assertTrue(source.contains("defineInRange(\"perPortFlowMbPerTick\", 128"));
         assertTrue(source.contains("defineInRange(\"damageHeatThresholdHuPerTick\", 0.25D"));
         assertTrue(source.contains("defineInRange(\"damageRatePerTickHuLoad\", 0.0000005D"));
+        assertTrue(source.contains("defineInRange(\"fuelColumnDamageHeatMultiplier\""));
+        assertTrue(source.contains("defineInRange(\"fuelColumnDamageBurnMultiplier\""));
+        assertTrue(source.contains("DEFAULT_FUEL_COLUMN_DAMAGE_HEAT_MULTIPLIER"));
+        assertTrue(source.contains("DEFAULT_FUEL_COLUMN_DAMAGE_BURN_MULTIPLIER"));
         assertTrue(source.contains("defineInRange(\"damageTransferRate\", 0.25D"));
         assertTrue(source.contains("defineInRange(\"meltdownTriggerFraction\", 0.20D"));
         assertTrue(source.contains("defineInRange(\"meltdownCountdownTicks\", 900"));
@@ -65,6 +69,8 @@ class P1BalanceContractTest {
         assertEquals(3.0D, parameters.burnHoursPerBlock());
         assertEquals(0.25D, parameters.damageHeatThresholdHuPerTick());
         assertEquals(0.0000005D, parameters.damageRatePerTickHuLoad());
+        assertEquals(2.0D, parameters.fuelColumnDamageHeatMultiplier());
+        assertEquals(3.0D, parameters.fuelColumnDamageBurnMultiplier());
         assertEquals(0.25D, parameters.damageTransferRate());
         assertEquals(0.20D, parameters.meltdownTriggerFraction());
         assertEquals(900, parameters.meltdownCountdownTicks());
@@ -96,5 +102,8 @@ class P1BalanceContractTest {
         assertTrue(instrument.contains("P1ServerConfig.VALUES.overclockFeedbackGain.get()"));
         assertTrue(instrument.contains("P1ServerConfig.VALUES.overclockFeedbackExponent.get()"));
         assertTrue(instrument.contains("P1ServerConfig.VALUES.totalHeatMultiplierCap.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.damageMultipliers()"));
+        assertTrue(instrument.contains("damageMultipliers.heatMultiplier()"));
+        assertTrue(instrument.contains("damageMultipliers.burnMultiplier()"));
     }
 }

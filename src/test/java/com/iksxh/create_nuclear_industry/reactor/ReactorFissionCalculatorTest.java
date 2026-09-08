@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** 验证控制棒深度、完整度乘数、四向燃料反馈、SCRAM 和热上限。 */
+/** 验证控制棒深度、损伤产热/燃耗倍率、四向燃料反馈、SCRAM 和热上限。 */
 class ReactorFissionCalculatorTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final int MAX_DAMAGE = 216_000;
@@ -66,7 +66,7 @@ class ReactorFissionCalculatorTest {
     }
 
     @Test
-    void zeroIntegrityWithRemainingFuelKeepsTwoTimesHeatAndBurnMultiplier() {
+    void zeroIntegrityWithRemainingFuelUsesIndependentHeatAndBurnMultipliers() {
         CoreColumnPosition full = new CoreColumnPosition(0, 0);
         CoreColumnPosition damaged = new CoreColumnPosition(2, 0);
         CoreColumnPosition failed = new CoreColumnPosition(1, 2);
@@ -80,22 +80,100 @@ class ReactorFissionCalculatorTest {
         );
         ReactorFissionResult result = ReactorFissionCalculator.calculate(snapshot, PARAMETERS, false);
 
-        assertEquals(1.5D, result.columns().get(damaged).damageMultiplier(), 1.0E-12D);
+        assertEquals(1.5D, result.columns().get(damaged).damageHeatMultiplier(), 1.0E-12D);
+        assertEquals(2.0D, result.columns().get(damaged).damageBurnMultiplier(), 1.0E-12D);
         assertEquals(1.5D,
                 result.columns().get(damaged).generatedHeatHu() / result.columns().get(full).generatedHeatHu(),
                 1.0E-12D);
-        assertEquals(1.5D,
+        assertEquals(2.0D,
                 result.columns().get(damaged).plannedFuelBurnUnits()
                         / result.columns().get(full).plannedFuelBurnUnits(),
                 1.0E-12D);
-        assertEquals(2.0D, result.columns().get(failed).damageMultiplier(), 1.0E-12D);
+        assertEquals(2.0D, result.columns().get(failed).damageHeatMultiplier(), 1.0E-12D);
+        assertEquals(3.0D, result.columns().get(failed).damageBurnMultiplier(), 1.0E-12D);
         assertEquals(2.0D,
                 result.columns().get(failed).generatedHeatHu() / result.columns().get(full).generatedHeatHu(),
                 1.0E-12D);
-        assertEquals(2.0D,
+        assertEquals(3.0D,
                 result.columns().get(failed).plannedFuelBurnUnits()
                         / result.columns().get(full).plannedFuelBurnUnits(),
                 1.0E-12D);
+    }
+
+    @Test
+    void defaultDamageCurveMatchesAllFiveIntegritySamples() {
+        double[] integrities = {1.0D, 0.75D, 0.5D, 0.25D, 0.0D};
+        double[] expectedHeat = {1.0D, 1.25D, 1.5D, 1.75D, 2.0D};
+        double[] expectedBurn = {1.0D, 1.5D, 2.0D, 2.5D, 3.0D};
+        CoreColumnPosition position = new CoreColumnPosition(1, 1);
+
+        for (int i = 0; i < integrities.length; i++) {
+            FuelColumnFissionResult result = ReactorFissionCalculator.calculate(
+                    ReactorSnapshot.singleFuelColumn(position, fuel(integrities[i])), PARAMETERS
+            ).columns().get(position);
+            assertEquals(expectedHeat[i], result.damageHeatMultiplier(), 1.0E-12D);
+            assertEquals(expectedBurn[i], result.damageBurnMultiplier(), 1.0E-12D);
+            assertEquals(3.0D * expectedHeat[i], result.generatedHeatHu(), 1.0E-12D);
+            assertEquals(PARAMETERS.baseBurnPerFuelBlockPerTick() * 3.0D * expectedBurn[i],
+                    result.plannedFuelBurnUnits(), 1.0E-15D);
+            assertEquals(expectedHeat[i] / expectedBurn[i],
+                    result.damageHeatMultiplier() / result.damageBurnMultiplier(), 1.0E-12D);
+        }
+    }
+
+    @Test
+    void customDamageEndpointsUseIndependentLinearCurves() {
+        ReactorSimulationParameters parameters = parameters(1.5D, 2.5D);
+        CoreColumnPosition position = new CoreColumnPosition(1, 1);
+
+        FuelColumnFissionResult halfDamage = ReactorFissionCalculator.calculate(
+                ReactorSnapshot.singleFuelColumn(position, fuel(0.5D)), parameters
+        ).columns().get(position);
+        FuelColumnFissionResult fullDamage = ReactorFissionCalculator.calculate(
+                ReactorSnapshot.singleFuelColumn(position, fuel(0.0D)), parameters
+        ).columns().get(position);
+
+        assertEquals(1.25D, halfDamage.damageHeatMultiplier(), 1.0E-12D);
+        assertEquals(1.75D, halfDamage.damageBurnMultiplier(), 1.0E-12D);
+        assertEquals(1.5D, fullDamage.damageHeatMultiplier(), 1.0E-12D);
+        assertEquals(2.5D, fullDamage.damageBurnMultiplier(), 1.0E-12D);
+        assertTrue(halfDamage.damageHeatMultiplier() < halfDamage.damageBurnMultiplier());
+        assertTrue(fullDamage.damageHeatMultiplier() < fullDamage.damageBurnMultiplier());
+    }
+
+    @Test
+    void overclockAndDamageUseSeparateMultipliersBeforeHeatCap() {
+        ReactorSimulationParameters parameters = parameters(3.0D, 5.0D);
+        CoreColumnPosition first = new CoreColumnPosition(1, 1);
+        CoreColumnPosition second = new CoreColumnPosition(2, 1);
+        ReactorSnapshot fullSnapshot = new ReactorSnapshot(
+                Map.of(first, fuel(1.0D), second, fuel(1.0D)), Map.of(), 0L, 0L, 0L, false);
+        ReactorSnapshot damagedSnapshot = new ReactorSnapshot(
+                Map.of(first, fuel(0.5D), second, fuel(0.5D)), Map.of(), 0L, 0L, 0L, false);
+
+        FuelColumnFissionResult full = ReactorFissionCalculator.calculate(fullSnapshot, parameters)
+                .columns().get(first);
+        FuelColumnFissionResult damaged = ReactorFissionCalculator.calculate(damagedSnapshot, parameters)
+                .columns().get(first);
+
+        assertTrue(full.overclocked());
+        assertTrue(damaged.overclocked());
+        assertEquals(2.0D, damaged.generatedHeatHu() / full.generatedHeatHu(), 1.0E-12D);
+        assertEquals(3.0D, damaged.plannedFuelBurnUnits() / full.plannedFuelBurnUnits(), 1.0E-12D);
+    }
+
+    @Test
+    void heatCapReducesHeatOnlyAndDoesNotRefundPlannedFuelBurn() {
+        CoreColumnPosition position = new CoreColumnPosition(1, 1);
+        ReactorSimulationParameters capped = parameters(
+                2.0D, 3.0D, 1.0D);
+        FuelColumnFissionResult result = ReactorFissionCalculator.calculate(
+                ReactorSnapshot.singleFuelColumn(position, fuel(0.0D)), capped
+        ).columns().get(position);
+        double expectedBurn = capped.baseBurnPerFuelBlockPerTick() * 3.0D * 3.0D;
+
+        assertEquals(3.0D, result.generatedHeatHu(), 1.0E-12D);
+        assertEquals(expectedBurn, result.plannedFuelBurnUnits(), 1.0E-15D);
     }
 
     @Test
@@ -262,6 +340,35 @@ class ReactorFissionCalculatorTest {
 
     private static FuelColumnState fuel(double integrity) {
         return new FuelColumnState(FuelAssemblyState.installed(MAX_DAMAGE, 0), integrity, 0.0D);
+    }
+
+    private static ReactorSimulationParameters parameters(double heatMultiplier, double burnMultiplier) {
+        return parameters(heatMultiplier, burnMultiplier, PARAMETERS.totalHeatMultiplierCap());
+    }
+
+    private static ReactorSimulationParameters parameters(
+            double heatMultiplier,
+            double burnMultiplier,
+            double totalHeatMultiplierCap
+    ) {
+        return new ReactorSimulationParameters(
+                PARAMETERS.baseHeatPerFuelBlockHuPerTick(),
+                PARAMETERS.burnHoursPerBlock(),
+                PARAMETERS.damageHeatThresholdHuPerTick(),
+                PARAMETERS.damageRatePerTickHuLoad(),
+                heatMultiplier,
+                burnMultiplier,
+                PARAMETERS.damageTransferRate(),
+                PARAMETERS.controlRodFailureThreshold(),
+                PARAMETERS.meltdownTriggerFraction(),
+                PARAMETERS.meltdownCountdownTicks(),
+                PARAMETERS.controlResponseExponent(),
+                PARAMETERS.overclockHeatMultiplier(),
+                PARAMETERS.overclockBurnMultiplier(),
+                PARAMETERS.overclockFeedbackGain(),
+                PARAMETERS.overclockFeedbackExponent(),
+                totalHeatMultiplierCap
+        );
     }
 
     /** 构造计划中固定的三行 F-C-F 堆芯：每行按 X 方向为燃料、控制棒、燃料。 */

@@ -1,8 +1,10 @@
 package com.iksxh.create_nuclear_industry.config;
 
+import com.mojang.logging.LogUtils;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import org.slf4j.Logger;
 
 /**
  * P1 反应堆的服务端配置契约。
@@ -12,8 +14,14 @@ import net.neoforged.neoforge.common.ModConfigSpec;
  * 和每 tick 的流体量，完整度与比例参数保持在 {@code [0,1]}。</p>
  */
 public final class P1ServerConfig {
+    public static final double DEFAULT_FUEL_COLUMN_DAMAGE_HEAT_MULTIPLIER = 2.0D;
+    public static final double DEFAULT_FUEL_COLUMN_DAMAGE_BURN_MULTIPLIER = 3.0D;
     public static final ModConfigSpec SPEC;
     public static final Values VALUES;
+
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Object DAMAGE_CONFIGURATION_LOCK = new Object();
+    private static String lastInvalidDamageConfiguration;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -39,6 +47,8 @@ public final class P1ServerConfig {
         public final ModConfigSpec.IntValue hotInventoryCapacityMb;
         public final ModConfigSpec.DoubleValue damageHeatThresholdHuPerTick;
         public final ModConfigSpec.DoubleValue damageRatePerTickHuLoad;
+        public final ModConfigSpec.DoubleValue fuelColumnDamageHeatMultiplier;
+        public final ModConfigSpec.DoubleValue fuelColumnDamageBurnMultiplier;
         public final ModConfigSpec.DoubleValue damageTransferRate;
         public final ModConfigSpec.DoubleValue controlRodFailureThreshold;
         public final ModConfigSpec.DoubleValue meltdownTriggerFraction;
@@ -76,6 +86,14 @@ public final class P1ServerConfig {
             damageRatePerTickHuLoad = builder
                     .comment("超过阈值的每 HU/t 有效热负荷每 tick 造成的完整度损伤。")
                     .defineInRange("damageRatePerTickHuLoad", 0.0000005D, 0.0D, 1_000_000.0D);
+            fuelColumnDamageHeatMultiplier = builder
+                    .comment("燃料列满损伤时的新生裂变热倍率；完整度损伤按 1 到该终点线性插值。")
+                    .defineInRange("fuelColumnDamageHeatMultiplier",
+                            DEFAULT_FUEL_COLUMN_DAMAGE_HEAT_MULTIPLIER, 0.0D, 1_000_000.0D);
+            fuelColumnDamageBurnMultiplier = builder
+                    .comment("燃料列满损伤时的计划燃耗倍率；完整度损伤按 1 到该终点线性插值。")
+                    .defineInRange("fuelColumnDamageBurnMultiplier",
+                            DEFAULT_FUEL_COLUMN_DAMAGE_BURN_MULTIPLIER, 0.0D, 1_000_000.0D);
             damageTransferRate = builder
                     .comment("四向热损伤传播系数。")
                     .defineInRange("damageTransferRate", 0.25D, 0.0D, 1.0D);
@@ -107,6 +125,72 @@ public final class P1ServerConfig {
                     .comment("单 tick 全堆热量倍率上限。")
                     .defineInRange("totalHeatMultiplierCap", 20.0D, 0.001D, 1_000_000.0D);
             builder.pop();
+        }
+    }
+
+    /**
+     * 返回本次模拟结算应采用的损伤终点倍率。
+     *
+     * <p>底层配置库会先按字段范围处理缺项和单字段越界；这里再执行两个终点的联合校验。
+     * 联合校验失败时整对回退到默认值，并按同一非法组合只记录一次告警，避免正式服务端
+     * 每个 tick 重复刷日志。返回值只作为当前结算的派生参数，不写入方块实体或 NBT。</p>
+     */
+    public static DamageMultipliers damageMultipliers() {
+        return resolveDamageMultipliers(
+                VALUES.fuelColumnDamageHeatMultiplier.get(),
+                VALUES.fuelColumnDamageBurnMultiplier.get()
+        );
+    }
+
+    /**
+     * 解析损伤倍率配置，允许以 {@code null} 表示配置文件缺项并补各自默认值，供纯逻辑测试复现
+     * 服务端配置装载边界。
+     */
+    public static DamageMultipliers resolveDamageMultipliers(Double heatMultiplier, Double burnMultiplier) {
+        double heat = heatMultiplier == null
+                ? DEFAULT_FUEL_COLUMN_DAMAGE_HEAT_MULTIPLIER : heatMultiplier;
+        double burn = burnMultiplier == null
+                ? DEFAULT_FUEL_COLUMN_DAMAGE_BURN_MULTIPLIER : burnMultiplier;
+        if (isValidDamageMultipliers(heat, burn)) {
+            clearInvalidDamageConfiguration();
+            return new DamageMultipliers(heat, burn);
+        }
+
+        String invalidConfiguration = Double.toString(heat) + "/" + Double.toString(burn);
+        synchronized (DAMAGE_CONFIGURATION_LOCK) {
+            if (!invalidConfiguration.equals(lastInvalidDamageConfiguration)) {
+                LOGGER.warn("反应堆燃料列损伤倍率配置 {} 无效，要求有限且 1 < 产热倍率 < 燃耗倍率；本次及后续结算采用默认 {}/{}。",
+                        invalidConfiguration,
+                        DEFAULT_FUEL_COLUMN_DAMAGE_HEAT_MULTIPLIER,
+                        DEFAULT_FUEL_COLUMN_DAMAGE_BURN_MULTIPLIER);
+                lastInvalidDamageConfiguration = invalidConfiguration;
+            }
+        }
+        return new DamageMultipliers(
+                DEFAULT_FUEL_COLUMN_DAMAGE_HEAT_MULTIPLIER,
+                DEFAULT_FUEL_COLUMN_DAMAGE_BURN_MULTIPLIER
+        );
+    }
+
+    private static boolean isValidDamageMultipliers(double heatMultiplier, double burnMultiplier) {
+        return Double.isFinite(heatMultiplier)
+                && Double.isFinite(burnMultiplier)
+                && heatMultiplier > 1.0D
+                && burnMultiplier > heatMultiplier;
+    }
+
+    private static void clearInvalidDamageConfiguration() {
+        synchronized (DAMAGE_CONFIGURATION_LOCK) {
+            lastInvalidDamageConfiguration = null;
+        }
+    }
+
+    /** 经过服务端联合校验的满损伤产热和燃耗终点倍率。 */
+    public record DamageMultipliers(double heatMultiplier, double burnMultiplier) {
+        public DamageMultipliers {
+            if (!isValidDamageMultipliers(heatMultiplier, burnMultiplier)) {
+                throw new IllegalArgumentException("damage multipliers must satisfy 1 < heat < burn");
+            }
         }
     }
 }

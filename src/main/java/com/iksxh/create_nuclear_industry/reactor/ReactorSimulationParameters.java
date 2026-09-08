@@ -6,6 +6,8 @@ public record ReactorSimulationParameters(
         double burnHoursPerBlock,
         double damageHeatThresholdHuPerTick,
         double damageRatePerTickHuLoad,
+        double fuelColumnDamageHeatMultiplier,
+        double fuelColumnDamageBurnMultiplier,
         double damageTransferRate,
         double controlRodFailureThreshold,
         double meltdownTriggerFraction,
@@ -22,6 +24,9 @@ public record ReactorSimulationParameters(
         requireFinitePositive("burn hours", burnHoursPerBlock);
         requireFiniteNonNegative("damage threshold", damageHeatThresholdHuPerTick);
         requireFiniteNonNegative("damage rate", damageRatePerTickHuLoad);
+        requireFiniteGreaterThanOne("fuel column damage heat multiplier", fuelColumnDamageHeatMultiplier);
+        requireFiniteGreaterThan("fuel column damage burn multiplier", fuelColumnDamageBurnMultiplier,
+                fuelColumnDamageHeatMultiplier);
         requireUnitInterval("damage transfer rate", damageTransferRate);
         requireUnitInterval("control rod failure threshold", controlRodFailureThreshold);
         requireUnitInterval("meltdown trigger fraction", meltdownTriggerFraction);
@@ -43,6 +48,8 @@ public record ReactorSimulationParameters(
                 3.0D,
                 0.25D,
                 0.0000005D,
+                2.0D,
+                3.0D,
                 0.25D,
                 0.0D,
                 0.20D,
@@ -53,6 +60,45 @@ public record ReactorSimulationParameters(
                 0.15D,
                 0.5D,
                 20.0D
+        );
+    }
+
+    /**
+     * 兼容旧的直接构造入口；旧调用方现在采用新的默认 2.0/3.0 差异倍率，不能回到等倍率规则。
+     */
+    public ReactorSimulationParameters(
+            double baseHeatPerFuelBlockHuPerTick,
+            double burnHoursPerBlock,
+            double damageHeatThresholdHuPerTick,
+            double damageRatePerTickHuLoad,
+            double damageTransferRate,
+            double controlRodFailureThreshold,
+            double meltdownTriggerFraction,
+            int meltdownCountdownTicks,
+            double controlResponseExponent,
+            double overclockHeatMultiplier,
+            double overclockBurnMultiplier,
+            double overclockFeedbackGain,
+            double overclockFeedbackExponent,
+            double totalHeatMultiplierCap
+    ) {
+        this(
+                baseHeatPerFuelBlockHuPerTick,
+                burnHoursPerBlock,
+                damageHeatThresholdHuPerTick,
+                damageRatePerTickHuLoad,
+                2.0D,
+                3.0D,
+                damageTransferRate,
+                controlRodFailureThreshold,
+                meltdownTriggerFraction,
+                meltdownCountdownTicks,
+                controlResponseExponent,
+                overclockHeatMultiplier,
+                overclockBurnMultiplier,
+                overclockFeedbackGain,
+                overclockFeedbackExponent,
+                totalHeatMultiplierCap
         );
     }
 
@@ -76,6 +122,18 @@ public record ReactorSimulationParameters(
     private static void requireFiniteAtLeastOne(String name, double value) {
         if (!Double.isFinite(value) || value < 1.0D) {
             throw new IllegalArgumentException(name + " must be finite and at least one");
+        }
+    }
+
+    private static void requireFiniteGreaterThanOne(String name, double value) {
+        if (!Double.isFinite(value) || value <= 1.0D) {
+            throw new IllegalArgumentException(name + " must be finite and greater than one");
+        }
+    }
+
+    private static void requireFiniteGreaterThan(String name, double value, double lowerBound) {
+        if (!Double.isFinite(value) || !(value > lowerBound)) {
+            throw new IllegalArgumentException(name + " must be finite and greater than heat multiplier");
         }
     }
 
