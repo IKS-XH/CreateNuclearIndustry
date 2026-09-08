@@ -1,11 +1,13 @@
 package com.iksxh.create_nuclear_industry.structure;
 
+import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -29,7 +31,38 @@ public final class ReactorStructureLifecycle {
         if (!(event.getLevel() instanceof ServerLevel serverLevel) || event.isCanceled()) {
             return;
         }
+        prepareDangerousDisassembly(serverLevel, event.getPos(), event.getState());
         scheduleRescanAround(serverLevel, event.getPos());
+    }
+
+    /**
+     * 在原方块仍存在时收集附近全部仪表权威者；每个世界坐标只处理一次，允许同一方块
+     * 同时属于多个有效缓存结构。事件不取消原 BreakEvent，后续仍由原世界链路移除方块。
+     */
+    private static void prepareDangerousDisassembly(
+            ServerLevel serverLevel,
+            BlockPos brokenPos,
+            BlockState brokenState
+    ) {
+        Set<BlockPos> candidates = new LinkedHashSet<>();
+        int radius = ReactorStructureDefinition.SIZE - 1;
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dy = -radius; dy <= radius; dy++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    BlockPos candidate = brokenPos.offset(dx, dy, dz);
+                    if (serverLevel.getBlockEntity(candidate)
+                            instanceof ReactorInstrumentPortBlockEntity) {
+                        candidates.add(candidate.immutable());
+                    }
+                }
+            }
+        }
+        for (BlockPos candidate : candidates) {
+            if (serverLevel.getBlockEntity(candidate)
+                    instanceof ReactorInstrumentPortBlockEntity instrument) {
+                instrument.tryCommitDangerousDisassembly(brokenPos, brokenState);
+            }
+        }
     }
 
     @SubscribeEvent

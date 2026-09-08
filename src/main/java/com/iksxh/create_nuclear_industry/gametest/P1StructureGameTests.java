@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.block.ReactorInstrumentPortBlock;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
+import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
@@ -106,12 +107,15 @@ public final class P1StructureGameTests {
                     helper.getLevel(), absoluteCasing, helper.getLevel().getBlockState(absoluteCasing), player);
             NeoForge.EVENT_BUS.post(breakEvent);
             require(helper, !breakEvent.isCanceled(), "structure casing break was unexpectedly blocked");
+            int countdownTicks = Math.max(1, P1ServerConfig.VALUES.meltdownCountdownTicks.get());
+            ReactorSnapshot committed = expected.withMeltdown(countdownTicks, true)
+                    .withMeltdownEventPublished(true);
             helper.setBlock(OUTER_CASING, Blocks.AIR.defaultBlockState());
 
             helper.runAfterDelay(2, () -> {
                 require(helper, !instrument.structureValid(),
                         "structure remained valid after an outer casing was removed");
-                require(helper, instrument.snapshot().equals(expected),
+                require(helper, instrument.snapshot().equals(committed),
                         "invalid structure scan overwrote the authoritative reactor snapshot");
 
                 helper.setBlock(OUTER_CASING, P1Blocks.REACTOR_CASING.get().defaultBlockState());
@@ -123,7 +127,7 @@ public final class P1StructureGameTests {
                 helper.runAfterDelay(2, () -> {
                     require(helper, instrument.structureValid(),
                             "structure did not revalidate after the missing casing was restored");
-                    require(helper, instrument.snapshot().equals(expected),
+                    require(helper, instrument.snapshot().equals(committed),
                             "structure restoration changed the authoritative reactor snapshot");
                     helper.succeed();
                 });

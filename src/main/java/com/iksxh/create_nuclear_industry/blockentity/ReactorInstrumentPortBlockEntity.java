@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.blockentity;
 
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
+import com.iksxh.create_nuclear_industry.content.P1ContentIds;
 import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.control.ControlRodScramResult;
 import com.iksxh.create_nuclear_industry.control.ControlRodScramService;
@@ -30,9 +31,11 @@ import com.iksxh.create_nuclear_industry.structure.ReactorStructureScanner;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import com.mojang.logging.LogUtils;
@@ -187,6 +190,63 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             throw new IllegalStateException("SCRAM can only be changed on the server");
         }
         return ControlRodScramService.apply(this, powered);
+    }
+
+    /**
+     * 在方块移除前为当前有效结构提交危险拆除状态，并发布一次占位事件。
+     *
+     * <p>调用方必须来自逻辑服务端的 {@code BreakEvent}，且方块仍存在于世界中；本方法
+     * 只读取缓存结构和当前快照，不执行正式 tick，不消耗燃料或冷却剂。新生裂变热使用
+     * 当前服务端配置计算，缓存余热不满足“仍在裂变运行”的条件。</p>
+     *
+     * @param brokenPos 即将被玩家破坏的方块位置
+     * @param brokenState 破坏事件观察到的当前方块状态
+     * @return 本次仪表端口是否完成危险状态提交并发布事件
+     */
+    public boolean tryCommitDangerousDisassembly(BlockPos brokenPos, BlockState brokenState) {
+        if (!(level instanceof ServerLevel) || level.isClientSide
+                || brokenPos == null || brokenState == null
+                || !structureScan.valid() || structureOrigin == null
+                || level.getBlockState(brokenPos).getBlock() != brokenState.getBlock()) {
+            return false;
+        }
+
+        String expectedId = cachedComponentId(brokenPos);
+        String brokenId = blockId(brokenState);
+        if (expectedId == null || !expectedId.equals(brokenId)) {
+            return false;
+        }
+
+        ReactorSimulationParameters parameters;
+        boolean fissionRunning;
+        try {
+            parameters = simulationParameters();
+            fissionRunning = ReactorFissionCalculator.calculate(snapshot, parameters)
+                    .generatedHeatHu() > SAFETY_HEAT_EPSILON;
+        } catch (RuntimeException exception) {
+            LOGGER.debug("无法为反应堆 {} 证明危险拆除条件", worldPosition, exception);
+            return false;
+        }
+        if (snapshot.meltdownEventPublished()
+                || snapshot.meltdownProgressTicks() >= parameters.meltdownCountdownTicks()) {
+            return false;
+        }
+        if (!fissionRunning && !snapshot.meltdownCountdownStarted()) {
+            return false;
+        }
+
+        ReactorSnapshot nextSnapshot = snapshot
+                .withMeltdown(parameters.meltdownCountdownTicks(), true)
+                .withMeltdownEventPublished(true);
+        setSnapshot(nextSnapshot);
+        ReactorMeltdownEvents.publish(
+                ReactorMeltdownEvent.Reason.DANGEROUS_DISASSEMBLY,
+                level,
+                structureOrigin,
+                worldPosition,
+                nextSnapshot
+        );
+        return true;
     }
 
     /** 只推进控制棒执行器状态，不执行完整热、冷却和损伤模拟。 */
@@ -406,6 +466,55 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 P1ServerConfig.VALUES.overclockFeedbackExponent.get(),
                 P1ServerConfig.VALUES.totalHeatMultiplierCap.get()
         );
+    }
+
+    /** 根据最近一次有效结构缓存确认待破坏方块是八类固定组件之一。 */
+    private String cachedComponentId(BlockPos brokenPos) {
+        int localX = brokenPos.getX() - structureOrigin.getX();
+        int localY = brokenPos.getY() - structureOrigin.getY();
+        int localZ = brokenPos.getZ() - structureOrigin.getZ();
+        ReactorStructureDefinition.LocalPosition local =
+                new ReactorStructureDefinition.LocalPosition(localX, localY, localZ);
+        if (!local.isInside()) {
+            return null;
+        }
+
+        if (ReactorStructureDefinition.windowPositions().contains(local)) {
+            return id(P1ContentIds.REACTOR_WINDOW_ID);
+        }
+        for (Map.Entry<ReactorStructureDefinition.PortType, List<ReactorStructureDefinition.LocalPosition>> entry
+                : structureScan.ports().entrySet()) {
+            if (entry.getValue().contains(local)) {
+                return switch (entry.getKey()) {
+                    case INSTRUMENT -> id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID);
+                    case COLD_COOLANT -> id(P1ContentIds.REACTOR_COLD_PORT_ID);
+                    case HOT_COOLANT -> id(P1ContentIds.REACTOR_HOT_PORT_ID);
+                };
+            }
+        }
+        for (ReactorStructureDefinition.ColumnMapping column : structureScan.columns().values()) {
+            if (column.bodyPositions().contains(local)) {
+                return column.type() == ReactorStructureDefinition.ColumnType.FUEL
+                        ? id(P1ContentIds.REACTOR_FUEL_ROD_ID) : null;
+            }
+            if (column.capPosition().equals(local)) {
+                return switch (column.type()) {
+                    case FUEL -> id(P1ContentIds.REACTOR_REFUELING_PORT_ID);
+                    case CONTROL_ROD -> id(P1ContentIds.CONTROL_ROD_DRIVE_ID);
+                    case EMPTY -> id(P1ContentIds.REACTOR_CASING_ID);
+                };
+            }
+        }
+        return local.isBoundary() ? id(P1ContentIds.REACTOR_CASING_ID) : null;
+    }
+
+    private static String blockId(BlockState state) {
+        var key = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        return key == null ? "" : key.toString();
+    }
+
+    private static String id(String path) {
+        return "create_nuclear_industry:" + path;
     }
 
     /**
