@@ -9,7 +9,8 @@ import java.util.TreeMap;
 
 /** P1 反应堆权威快照的版本化 NBT 适配器。 */
 public final class ReactorSnapshotNbtCodec {
-    public static final int FORMAT_VERSION = 4;
+    public static final int FORMAT_VERSION = 5;
+    private static final int FUEL_PROJECTION_FREE_FORMAT_VERSION = 4;
 
     private static final String FORMAT_VERSION_KEY = "FormatVersion";
     private static final String FUEL_COLUMNS_KEY = "FuelColumns";
@@ -29,6 +30,7 @@ public final class ReactorSnapshotNbtCodec {
         root.putLong("HotCoolantMb", snapshot.hotCoolantMb());
         root.putLong("MeltdownProgressTicks", snapshot.meltdownProgressTicks());
         root.putBoolean("MeltdownCountdownStarted", snapshot.meltdownCountdownStarted());
+        root.putBoolean("MeltdownEventPublished", snapshot.meltdownEventPublished());
         root.putBoolean("ScramRequested", snapshot.scramRequested());
 
         ListTag fuelColumns = new ListTag();
@@ -73,7 +75,7 @@ public final class ReactorSnapshotNbtCodec {
      *
      * <p>返回的快照仍保留旧投影，供兼容旧调用方读取；仪表方块实体必须在迁移边界将
      * 这些投影转移到对应换料端口后再调用 {@link ReactorSnapshot#withoutFuelAssemblies()}。
-     * v4 正式快照不再写入 Assembly 字段。</p>
+     * v4 及以后正式快照不再写入 Assembly 字段；v5 额外持久化融毁事件去重标记。</p>
      */
     public static DecodedSnapshot decodeWithMigration(CompoundTag root) {
         if (root == null) {
@@ -91,7 +93,7 @@ public final class ReactorSnapshotNbtCodec {
                 continue;
             }
             FuelAssemblyState assembly;
-            if (formatVersion >= FORMAT_VERSION) {
+            if (formatVersion >= FUEL_PROJECTION_FREE_FORMAT_VERSION) {
                 assembly = FuelAssemblyState.empty();
             } else {
                 CompoundTag assemblyTag = entry.getCompound("Assembly");
@@ -104,7 +106,7 @@ public final class ReactorSnapshotNbtCodec {
                     assembly = FuelAssemblyState.installed(maxDamage, damage);
                 }
             }
-            if (formatVersion < FORMAT_VERSION && assembly.present()) {
+            if (formatVersion < FUEL_PROJECTION_FREE_FORMAT_VERSION && assembly.present()) {
                 legacyFuelAssemblies.put(position, assembly);
             }
             double cachedHeat = readNonNegative(entry, "CachedHeatHu", 0.0D);
@@ -141,6 +143,7 @@ public final class ReactorSnapshotNbtCodec {
         long hotCoolant = Math.max(0L, root.getLong("HotCoolantMb"));
         long progress = Math.max(0L, root.getLong("MeltdownProgressTicks"));
         boolean started = root.getBoolean("MeltdownCountdownStarted") || progress > 0L;
+        boolean meltdownEventPublished = root.getBoolean("MeltdownEventPublished");
         boolean scramRequested = root.getBoolean("ScramRequested");
         Map<CoreColumnPosition, Double> scramSavedTargets = new TreeMap<>();
         ListTag scramTargetList = root.getList(SCRAM_SAVED_TARGETS_KEY, Tag.TAG_COMPOUND);
@@ -162,7 +165,8 @@ public final class ReactorSnapshotNbtCodec {
                 progress,
                 started,
                 scramSavedTargets,
-                scramRequested
+                scramRequested,
+                meltdownEventPublished
         );
         return new DecodedSnapshot(snapshot, legacyFuelAssemblies, formatVersion);
     }

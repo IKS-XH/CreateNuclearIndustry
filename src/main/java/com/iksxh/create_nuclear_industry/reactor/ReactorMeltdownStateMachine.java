@@ -39,7 +39,8 @@ public final class ReactorMeltdownStateMachine {
 
         ReactorSnapshot propagated = propagation.snapshot();
         if (allColumnsFullyRepaired(propagated)) {
-            ReactorSnapshot reset = withMeltdown(propagated, 0L, false);
+            ReactorSnapshot reset = withMeltdown(propagated, 0L, false)
+                    .withMeltdownEventPublished(false);
             return new MeltdownUpdateResult(reset, MeltdownStatus.INACTIVE, coverage, danger);
         }
 

@@ -166,6 +166,28 @@ class ReactorMeltdownStateMachineTest {
         assertEquals(MeltdownStatus.INACTIVE, reset.status());
     }
 
+    @Test
+    void fullRepairAlsoClearsThePersistedCompletionEventMarker() {
+        CoreColumnPosition position = new CoreColumnPosition(0, 0);
+        ReactorSnapshot completed = new ReactorSnapshot(
+                Map.of(position, fuel(1.0D)),
+                Map.of(),
+                0L,
+                0L,
+                PARAMETERS.meltdownCountdownTicks(),
+                true,
+                Map.of(),
+                false,
+                true
+        );
+
+        MeltdownUpdateResult reset = update(completed, Set.of(), false, false);
+
+        assertEquals(MeltdownStatus.INACTIVE, reset.status());
+        assertFalse(reset.snapshot().meltdownCountdownStarted());
+        assertFalse(reset.snapshot().meltdownEventPublished());
+    }
+
     private static MeltdownUpdateResult update(
             ReactorSnapshot snapshot,
             Set<CoreColumnPosition> covered,

@@ -42,6 +42,7 @@
 - `P1-REPAIR-02.md`：玩家可用 `steel_plate` 维修绑定控制棒列，跨过服务端失效阈值后解除卡死并保留插入深度；集成基线 213 项 JUnit、86 个 required GameTest 与客户端人工验收通过。
 - `P1-MELTDOWN-01.md`：完整度归零且燃料未耗尽的失效源列计入融毁覆盖，支持覆盖并集去重、耗尽退出及持久化倒计时；217 项 JUnit、89 个 required GameTest 和完整构建通过。
 - `P1-BALANCE-02A.md`：游戏端已接入可配置的损伤产热/燃耗差异倍率，默认满损伤 `2.0/3.0`，并通过联合配置校验、正式 tick 与燃料/NBT 连续性验证；225 项 JUnit、90 个 required GameTest 和完整构建通过。
+- `P1-MELTDOWN-02.md`：正式服务端倒计时首次完成时发布一次不可取消的内部事件，持久化去重覆盖重复 tick 与重载，且事件没有世界副作用；228 项 JUnit、93 个 required GameTest 和完整构建通过。
 
 ## 已归档任务验收报告
 

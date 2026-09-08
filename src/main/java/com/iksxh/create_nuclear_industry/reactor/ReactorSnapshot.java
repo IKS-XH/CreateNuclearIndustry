@@ -16,7 +16,8 @@ public record ReactorSnapshot(
         long meltdownProgressTicks,
         boolean meltdownCountdownStarted,
         Map<CoreColumnPosition, Double> scramSavedTargetDepths,
-        boolean scramRequested
+        boolean scramRequested,
+        boolean meltdownEventPublished
 ) {
     public static final int OUTER_SIZE = 5;
     public static final int INTERNAL_HEIGHT = OUTER_SIZE - 2;
@@ -44,6 +45,9 @@ public record ReactorSnapshot(
         if (!meltdownCountdownStarted && meltdownProgressTicks != 0L) {
             throw new IllegalArgumentException("inactive meltdown countdown cannot have progress");
         }
+        if (meltdownEventPublished && !meltdownCountdownStarted) {
+            throw new IllegalArgumentException("published meltdown event requires a started countdown");
+        }
         for (CoreColumnPosition position : scramSavedTargetDepths.keySet()) {
             if (!controlRodColumns.containsKey(position)) {
                 throw new IllegalArgumentException("SCRAM restore targets must identify control rod columns");
@@ -64,7 +68,23 @@ public record ReactorSnapshot(
             boolean meltdownCountdownStarted
     ) {
         this(fuelColumns, controlRodColumns, coldCoolantMb, hotCoolantMb,
-                meltdownProgressTicks, meltdownCountdownStarted, Map.of(), false);
+                meltdownProgressTicks, meltdownCountdownStarted, Map.of(), false, false);
+    }
+
+    /** 兼容没有融毁事件去重字段的旧快照构造形式。 */
+    public ReactorSnapshot(
+            Map<CoreColumnPosition, FuelColumnState> fuelColumns,
+            Map<CoreColumnPosition, ControlRodColumnState> controlRodColumns,
+            long coldCoolantMb,
+            long hotCoolantMb,
+            long meltdownProgressTicks,
+            boolean meltdownCountdownStarted,
+            Map<CoreColumnPosition, Double> scramSavedTargetDepths,
+            boolean scramRequested
+    ) {
+        this(fuelColumns, controlRodColumns, coldCoolantMb, hotCoolantMb,
+                meltdownProgressTicks, meltdownCountdownStarted, scramSavedTargetDepths,
+                scramRequested, false);
     }
 
     /** 创建没有燃料、控制棒、冷却剂和融毁进度的空快照。 */
@@ -108,7 +128,8 @@ public record ReactorSnapshot(
                 meltdownProgressTicks,
                 meltdownCountdownStarted,
                 scramSavedTargetDepths,
-                scramRequested
+                scramRequested,
+                meltdownEventPublished
         );
     }
 
@@ -136,7 +157,8 @@ public record ReactorSnapshot(
                 meltdownProgressTicks,
                 meltdownCountdownStarted,
                 nextSavedTargetDepths,
-                scramRequested && !nextControlRodColumns.isEmpty()
+                scramRequested && !nextControlRodColumns.isEmpty(),
+                meltdownEventPublished
         );
     }
 
@@ -161,7 +183,8 @@ public record ReactorSnapshot(
                 meltdownProgressTicks,
                 meltdownCountdownStarted,
                 scramSavedTargetDepths,
-                scramRequested
+                scramRequested,
+                meltdownEventPublished
         );
     }
 
@@ -178,7 +201,8 @@ public record ReactorSnapshot(
                 meltdownProgressTicks,
                 meltdownCountdownStarted,
                 scramSavedTargetDepths,
-                scramRequested
+                scramRequested,
+                meltdownEventPublished
         );
     }
 
@@ -192,7 +216,23 @@ public record ReactorSnapshot(
                 nextProgressTicks,
                 nextStarted,
                 scramSavedTargetDepths,
-                scramRequested
+                scramRequested,
+                nextStarted && meltdownEventPublished
+        );
+    }
+
+    /** 替换完成事件去重标记；该标记只服务端持久化，不改变热工状态。 */
+    public ReactorSnapshot withMeltdownEventPublished(boolean nextPublished) {
+        return new ReactorSnapshot(
+                fuelColumns,
+                controlRodColumns,
+                coldCoolantMb,
+                hotCoolantMb,
+                meltdownProgressTicks,
+                meltdownCountdownStarted,
+                scramSavedTargetDepths,
+                scramRequested,
+                nextPublished
         );
     }
 
@@ -209,7 +249,8 @@ public record ReactorSnapshot(
                 meltdownProgressTicks,
                 meltdownCountdownStarted,
                 nextSavedTargetDepths,
-                nextRequested
+                nextRequested,
+                meltdownEventPublished
         );
     }
 

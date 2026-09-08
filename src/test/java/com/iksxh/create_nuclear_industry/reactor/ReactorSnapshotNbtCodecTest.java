@@ -223,6 +223,32 @@ class ReactorSnapshotNbtCodecTest {
         assertEquals(Map.of(position, 0.35D), decoded.scramSavedTargetDepths());
     }
 
+    @Test
+    void meltdownEventPublishedMarkerSurvivesReloadAndOldSnapshotsDefaultToFalse() {
+        CoreColumnPosition position = new CoreColumnPosition(0, 0);
+        ReactorSnapshot expected = new ReactorSnapshot(
+                Map.of(position, fuel(0.0D, 2.0D)),
+                Map.of(),
+                11L,
+                7L,
+                99L,
+                true,
+                Map.of(),
+                false,
+                true
+        );
+
+        CompoundTag encoded = ReactorSnapshotNbtCodec.encode(expected);
+        ReactorSnapshot decoded = ReactorSnapshotNbtCodec.decode(encoded);
+
+        assertTrue(encoded.getBoolean("MeltdownEventPublished"));
+        assertTrue(decoded.meltdownEventPublished());
+        assertEquals(expected.withoutFuelAssemblies(), decoded);
+
+        encoded.remove("MeltdownEventPublished");
+        assertFalse(ReactorSnapshotNbtCodec.decode(encoded).meltdownEventPublished());
+    }
+
     private static FuelColumnState fuel(double integrity, double cachedHeat) {
         return new FuelColumnState(FuelAssemblyState.installed(216_000, 10_000), integrity, cachedHeat);
     }

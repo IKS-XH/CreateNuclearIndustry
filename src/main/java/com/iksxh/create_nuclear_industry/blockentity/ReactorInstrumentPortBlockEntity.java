@@ -20,6 +20,9 @@ import com.iksxh.create_nuclear_industry.reactor.ReactorCoolantLedger;
 import com.iksxh.create_nuclear_industry.reactor.ReactorFissionCalculator;
 import com.iksxh.create_nuclear_industry.reactor.ReactorServerTick;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSimulationParameters;
+import com.iksxh.create_nuclear_industry.reactor.MeltdownStatus;
+import com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvent;
+import com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvents;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.iksxh.create_nuclear_industry.structure.ReactorInstrumentStructureSummary;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
@@ -215,9 +218,10 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (beforePortItems == null) {
             return false;
         }
+        ReactorSimulationParameters parameters = simulationParameters();
         ReactorServerTick.Result result = ReactorServerTick.advance(
                 snapshot,
-                simulationParameters(),
+                parameters,
                 coolantInput()
         );
         Map<CoreColumnPosition, ItemStack> nextPortItems = prepareFuelPortCommit(
@@ -225,7 +229,14 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (nextPortItems == null) {
             return false;
         }
-        boolean stateChanged = !result.snapshot().equals(snapshot);
+        // 只有从未完成状态跨入 COMPLETE 才允许发布；持久化标记覆盖重复 tick 和重载。
+        boolean enteredComplete = !snapshot.meltdownEventPublished()
+                && snapshot.meltdownProgressTicks() < parameters.meltdownCountdownTicks()
+                && result.meltdown().status() == MeltdownStatus.COMPLETE;
+        ReactorSnapshot nextSnapshot = enteredComplete
+                ? result.snapshot().withMeltdownEventPublished(true)
+                : result.snapshot();
+        boolean stateChanged = !nextSnapshot.equals(snapshot);
         boolean portChanged = !sameFuelPortItems(beforePortItems, nextPortItems);
         for (Map.Entry<CoreColumnPosition, ItemStack> entry : nextPortItems.entrySet()) {
             ReactorPortBlockEntity port = findRefuelingPort(entry.getKey());
@@ -234,7 +245,16 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             }
         }
         if (stateChanged) {
-            setSnapshot(result.snapshot());
+            setSnapshot(nextSnapshot);
+        }
+        if (enteredComplete) {
+            ReactorMeltdownEvents.publish(
+                    ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE,
+                    level,
+                    structureOrigin,
+                    worldPosition,
+                    nextSnapshot
+            );
         }
         publishTelemetry(ReactorInstrumentTelemetry.from(result));
         return stateChanged || portChanged;
