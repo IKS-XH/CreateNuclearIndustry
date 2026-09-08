@@ -197,6 +197,7 @@ GameTest/人工验收结果：
 | `P1-GOGGLE-INSTRUMENT-04` | 已完成 | 用户确认采用分层显示以避免单个窗口过长：仪表端口显示全堆库存、总发热和转化速率，换料端口与控制棒驱动器显示各自绑定列详情；项目经理复验 176 项 JUnit 与 47 个 required GameTest，用户完成人工验收，报告归档于 `docs/archive/P1-GOGGLE-INSTRUMENT-04.md`。 |
 | `P1-THERMAL-01` | 已完成 | 量化余数已由权威快照独立保存并排除出损伤、传播和融毁覆盖，真实冷却短缺仍正常损伤；项目经理复验 192 项 JUnit、52 个 required GameTest，用户完成人工验收，报告归档于 `docs/archive/P1-THERMAL-01.md`。 |
 | `P1-MAINT-01` | 已完成（含测试整改） | 危险拆除在方块移除前提交融毁完成态并复用唯一事件入口，八类组件、相邻结构、客户端和零世界副作用边界已通过；项目经理独立复验 229 项 JUnit、97 个 required GameTest 和完整构建，报告归档于 `docs/archive/P1-MAINT-01.md`。 |
+| `P1-MAINT-02` | 当前可派发 | 完全停机纯判定合同已细化；待执行者从 `05feb0858f3dd786922f8dc657564e91c851c30b` 实现并交付。 |
 
 **本次独立复验：** `2026-08-18` 运行 `./gradlew.bat test --rerun-tasks` 成功；运行 `./gradlew.bat runGameTestServer --rerun-tasks` 成功，7 个 required GameTest 全部通过。用户已完成客户端中物品/方块可见和方块可放置的人工验收。
 
@@ -876,11 +877,17 @@ GameTest/人工验收结果：
 ### P1-MAINT-02：实现完全停机条件
 
 **前置：** P1-LOOP-01、P1-SIM-06。
-**唯一目标：** 定义可重新成型所需的完全停机判定。
-**必须同时满足：** 无裂变产热、无燃料消耗、余热进入安全区、没有运行中或暂停中的融毁倒计时。仅 SCRAM、仅插棒或仅暂停倒计时都不够。
-**允许修改：** 纯逻辑判定、JUnit/GameTest。
-**验收：** 每个单独条件缺失时判定为不可拆除；全部满足时判定为可拆除。
-**交付：** 完全停机判定表。
+**状态 / 派发门：** 可派发；前置和 `P1-MAINT-01` 均已完成。执行者从项目经理提交 `05feb0858f3dd786922f8dc657564e91c851c30b` 开工；本任务只建立纯判定，不接入拆除或重组成型生命周期。
+**需求来源：** 用户已确认先推进 P1 主线并将具体事故后置；核心设计已冻结“完全停机且余热进入安全区后才能破坏性重组成型”。`P1-THERMAL-01` 已把整数 `mB` 量化余数定义为安全余热，本任务据此关闭数值口径，不新增玩法配置。
+**唯一目标：** 提供一个加载器无关、无副作用、可由 `P1-MAINT-03` 复用的完全停机判定结果；不得监听世界事件、写方块实体、修改快照或提前清空任何状态。
+**四项必要且充分条件：** 使用同一份当前权威 `ReactorSnapshot` 和 `ReactorSimulationParameters` 只调用一次 `ReactorFissionCalculator.calculate`；其 `generatedHeatHu <= 1.0E-12`、`plannedFuelBurnUnits <= 1.0E-12`、全部燃料列活动余热总和 `<= 1.0E-12`，并且 `meltdownCountdownStarted == false` 时才是完全停机。任一条件不满足即拒绝，条件不得互相替代；仅 SCRAM、仅完全插棒、仅暂停倒计时或仅停止新生热均不够。
+**余热口径：** 单列活动余热为 `max(0, cachedHeatHu - min(cachedHeatHu, quantizedHeatRemainderHu))`，全堆按确定性顺序求和。完全由整数冷却剂量化产生、已经标记为安全的余数可以保留，不得因此制造永远无法通过的停机状态。控制棒列接收的传播热已在传播 tick 中结算为完整度损失，之后不再充当热源、参与冷却或继续传播，因此 `ControlRodColumnState.cachedHeatHu` 不纳入当前活动余热；报告必须明确这是现有模型边界，不得趁机改写传播或冷却公式。
+**不参与判定的存量：** 冷/热冷却剂库存、换料端口内燃料物品、燃料是否耗尽、`fuelBurnRemainder` 历史小数、控制棒目标/实际深度、SCRAM 请求、列完整度和卡死状态本身均不阻止完全停机；这些内容不是当前产热/燃耗，玩家在 `P1-MAINT-03` 选择破坏性重组时会永久丢失。`meltdownEventPublished` 不单独放行或拒绝，合法已发布状态仍因 `meltdownCountdownStarted == true` 被拒绝。
+**结果合同：** 建议返回不可变结果，至少暴露最终布尔值、四项分条件、总新生裂变热、计划燃耗、活动余热和安全量化余数，供测试、后续拒绝诊断和 `P1-MAINT-03` 使用。输入为 `null`、数值无效或计算异常时必须失败关闭；不得调用正式 `ReactorServerTick.advance`，不得消耗燃料、冷却剂或推进控制状态。
+**允许修改：** `src/main/java/com/iksxh/create_nuclear_industry/reactor/` 下一个最小纯逻辑判定/结果模型、对应 `src/test/java/.../reactor/` JUnit，以及 `build/reports/p1/P1-MAINT-02.md`。不得修改方块实体、结构扫描/生命周期、事件发布器、GameTest 生产入口、快照/NBT 格式、配置、热工/燃耗/损伤/传播/融毁公式、注册/资源、核心文档、其他活动计划、Gradle、模拟器或 Git 历史。
+**自动验收：** 至少逐项覆盖：(1) 四项全部满足；(2) 新生热非零但计划燃耗低于 epsilon；(3) 计划燃耗非零但新生热低于 epsilon；(4) 只有活动缓存余热；(5) 只有安全量化余数且数额大于 epsilon；(6) 同列安全余数只覆盖部分缓存，剩余活动余热拒绝；(7) 倒计时刚建立、运行、SCRAM 暂停、冷却暂停和已完成/已发布状态；(8) 非零燃料、冷/热库存、燃耗小数、控制棒深度、损伤、卡死和 SCRAM 在其余四项满足时不造成误拒绝；(9) 控制棒历史缓存热不造成不可达停机；(10) epsilon 等于边界通过、略高于边界拒绝；(11) 输入快照不变、重复求值相等、空堆与无效输入边界。独立热/燃耗条件应使用合法参数构造，不通过伪造结果绕过生产计算器。全量 `test --rerun-tasks`、现有 required GameTest、`build` 和任务范围 `git diff --check` 通过；本纯逻辑任务不要求新增 GameTest。
+**人工验收：** 本任务没有世界接线和玩家可见行为，不要求客户端人工验收；真实拆除与重组成型由 `P1-MAINT-03` 和最终验收覆盖。
+**交付：** `build/reports/p1/P1-MAINT-02.md`，包含四条件真值表、活动/安全余热公式、结果字段、控制棒缓存热边界、改动文件、JUnit 名称与精确计数、全量验证结果、无副作用证明及 `P1-MAINT-03` 接入说明。报告必须记录实际使用 `minecraft-modding` 与 `minecraft-testing`；执行者禁止任何 Git 写操作。
 
 ### P1-MAINT-03：实现停机破坏性重组成型
 
