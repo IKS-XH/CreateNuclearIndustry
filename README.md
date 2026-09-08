@@ -92,6 +92,7 @@ Linux / macOS：
 
 ## 项目文档
 
+- [项目经理职责、技能要求与版本管理协议](docs/project-governance.md)
 - [项目定位、玩法规则与阶段验收](docs/project.md)
 - [实施路线图与当前进度](docs/implementation-roadmap.md)
 - [反应堆局部控制与状态模型](docs/reactor-local-control-revision-design.md)
@@ -100,7 +101,7 @@ Linux / macOS：
 - [当前 P1 单步执行计划](docs/superpowers/plans/2026-08-18-agent-developer-execution-plan.md)
 - [历史计划与验收报告](docs/archive/README.md)
 
-开发者和自动化执行者开始工作前必须阅读 [`AGENTS.md`](AGENTS.md)。新增或修改的手写代码使用中文注释；核心文档、活动计划和 Git 历史由项目经理与项目所有者统一维护，Git 提交信息统一使用中文。
+开发者和自动化执行者开始工作前必须阅读 [`AGENTS.md`](AGENTS.md)、[项目治理与协作协议](docs/project-governance.md) 和活动任务计划。用户指定的项目经理 Codex 负责玩法与技术讨论、可行性评审、文档、任务计划、验收及版本管理，不编写实现代码；其他 Agent 和开发者只按任务卡实施，禁止暂存、提交、回退、分支、合并等 Git 写操作。项目经理与执行者均须使用任务相关的已安装 Minecraft 技能。新增或修改的手写代码使用中文注释，Git 提交信息统一使用中文。
 
 ## 已知边界
 
