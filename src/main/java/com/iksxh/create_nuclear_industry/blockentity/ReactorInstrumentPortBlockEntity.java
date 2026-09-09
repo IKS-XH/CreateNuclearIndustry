@@ -19,6 +19,8 @@ import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshotNbtCodec;
 import com.iksxh.create_nuclear_industry.reactor.ReactorControlRodTick;
 import com.iksxh.create_nuclear_industry.reactor.ReactorCoolantLedger;
 import com.iksxh.create_nuclear_industry.reactor.ReactorFissionCalculator;
+import com.iksxh.create_nuclear_industry.reactor.ReactorFullShutdownAssessment;
+import com.iksxh.create_nuclear_industry.reactor.ReactorFullShutdownResult;
 import com.iksxh.create_nuclear_industry.reactor.ReactorServerTick;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSimulationParameters;
 import com.iksxh.create_nuclear_industry.reactor.MeltdownStatus;
@@ -28,6 +30,7 @@ import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.iksxh.create_nuclear_industry.structure.ReactorInstrumentStructureSummary;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureScanner;
+import com.iksxh.create_nuclear_industry.structure.ReactorDisassemblyPlan;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -193,60 +196,244 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     }
 
     /**
-     * 在方块移除前为当前有效结构提交危险拆除状态，并发布一次占位事件。
+     * 在破坏事件写入前只读构造一个停机拆除计划。
      *
-     * <p>调用方必须来自逻辑服务端的 {@code BreakEvent}，且方块仍存在于世界中；本方法
-     * 只读取缓存结构和当前快照，不执行正式 tick，不消耗燃料或冷却剂。新生裂变热使用
-     * 当前服务端配置计算，缓存余热不满足“仍在裂变运行”的条件。</p>
+     * <p>该阶段先按当前结构映射逐列枚举顶部换料端口，再从精确物品栈构造无副作用的
+     * 燃料投影，并用该投影完成危险/完全停机判定。任何端口、绑定、物品或配置无法
+     * 证明时返回拒绝计划；方法本身不写快照、端口、事件总线或世界。</p>
      *
-     * @param brokenPos 即将被玩家破坏的方块位置
-     * @param brokenState 破坏事件观察到的当前方块状态
-     * @return 本次仪表端口是否完成危险状态提交并发布事件
+     * @param brokenPos 即将被玩家破坏的世界坐标
+     * @param brokenState BreakEvent 携带的方块状态
+     * @return 当前仪表端口确实拥有该位置时返回计划，否则返回 {@code null}
      */
-    public boolean tryCommitDangerousDisassembly(BlockPos brokenPos, BlockState brokenState) {
+    public ReactorDisassemblyPlan prepareDisassemblyPlan(
+            BlockPos brokenPos,
+            BlockState brokenState
+    ) {
         if (!(level instanceof ServerLevel) || level.isClientSide
                 || brokenPos == null || brokenState == null
-                || !structureScan.valid() || structureOrigin == null
-                || level.getBlockState(brokenPos).getBlock() != brokenState.getBlock()) {
-            return false;
+                || isRemoved()
+                || level.getBlockEntity(worldPosition) != this
+                || !structureScan.valid() || structureOrigin == null) {
+            return null;
         }
 
         String expectedId = cachedComponentId(brokenPos);
-        String brokenId = blockId(brokenState);
-        if (expectedId == null || !expectedId.equals(brokenId)) {
-            return false;
+        if (expectedId == null) {
+            return null;
+        }
+        if (!expectedId.equals(blockId(brokenState))
+                || !expectedId.equals(blockId(level.getBlockState(brokenPos)))) {
+            return rejectedDisassemblyPlan(brokenPos, brokenState, ReactorFullShutdownResult.invalid());
+        }
+
+        List<ReactorDisassemblyPlan.PortCapture> fuelPorts = captureFuelPortsForReset();
+        if (fuelPorts == null) {
+            return rejectedDisassemblyPlan(
+                    brokenPos, brokenState, ReactorFullShutdownResult.invalid());
         }
 
         ReactorSimulationParameters parameters;
-        boolean fissionRunning;
+        ReactorSnapshot projectedSnapshot;
+        ReactorFullShutdownResult assessment;
         try {
             parameters = simulationParameters();
-            fissionRunning = ReactorFissionCalculator.calculate(snapshot, parameters)
-                    .generatedHeatHu() > SAFETY_HEAT_EPSILON;
+            projectedSnapshot = projectFuelSnapshot(fuelPorts);
+            assessment = ReactorFullShutdownAssessment.assess(projectedSnapshot, parameters);
         } catch (RuntimeException exception) {
-            LOGGER.debug("无法为反应堆 {} 证明危险拆除条件", worldPosition, exception);
-            return false;
+            LOGGER.debug("无法评估反应堆 {} 的停机拆除状态", worldPosition, exception);
+            return rejectedDisassemblyPlan(brokenPos, brokenState, ReactorFullShutdownResult.invalid());
         }
-        if (snapshot.meltdownEventPublished()
-                || snapshot.meltdownProgressTicks() >= parameters.meltdownCountdownTicks()) {
-            return false;
-        }
-        if (!fissionRunning && !snapshot.meltdownCountdownStarted()) {
-            return false;
+        if (!assessment.inputValid()) {
+            return rejectedDisassemblyPlan(brokenPos, brokenState, assessment);
         }
 
-        ReactorSnapshot nextSnapshot = snapshot
-                .withMeltdown(parameters.meltdownCountdownTicks(), true)
-                .withMeltdownEventPublished(true);
-        setSnapshot(nextSnapshot);
-        ReactorMeltdownEvents.publish(
+        boolean dangerous = assessment.generatedHeatHu() > SAFETY_HEAT_EPSILON
+                || projectedSnapshot.meltdownCountdownStarted();
+        if (dangerous) {
+            boolean alreadyCommitted = projectedSnapshot.meltdownEventPublished()
+                    || projectedSnapshot.meltdownProgressTicks() >= parameters.meltdownCountdownTicks();
+            ReactorSnapshot nextSnapshot = alreadyCommitted
+                    ? snapshot
+                    : projectedSnapshot.withMeltdown(parameters.meltdownCountdownTicks(), true)
+                            .withMeltdownEventPublished(true);
+            return createDisassemblyPlan(
+                    ReactorDisassemblyPlan.Action.DANGEROUS,
+                    brokenPos,
+                    brokenState,
+                    expectedId,
+                    snapshot,
+                    projectedSnapshot,
+                    nextSnapshot,
+                    assessment,
+                    fuelPorts,
+                    pendingLegacyFuelAssemblies,
+                    !alreadyCommitted
+            );
+        }
+
+        if (!assessment.fullyStopped()) {
+            return rejectedDisassemblyPlan(brokenPos, brokenState, assessment);
+        }
+        if (expectedId.equals(id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID))) {
+            return createDisassemblyPlan(
+                    ReactorDisassemblyPlan.Action.INSTRUMENT_MAINTENANCE,
+                    brokenPos,
+                    brokenState,
+                    expectedId,
+                    snapshot,
+                    projectedSnapshot,
+                    projectedSnapshot,
+                    assessment,
+                    fuelPorts,
+                    pendingLegacyFuelAssemblies,
+                    false
+            );
+        }
+
+        return createDisassemblyPlan(
+                ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET,
+                brokenPos,
+                brokenState,
+                expectedId,
+                snapshot,
+                projectedSnapshot,
+                ReactorSnapshot.empty(),
+                assessment,
+                fuelPorts,
+                pendingLegacyFuelAssemblies,
+                false
+        );
+    }
+
+    /**
+     * 提交已经完成全量预检的危险或安全拆除计划；提交期间仍保持原方块存在。
+     *
+     * @param plan 当前仪表端口生成的预检计划
+     * @return 写入成功或本计划无需写入时返回 {@code true}
+     */
+    public boolean commitDisassemblyPlan(ReactorDisassemblyPlan plan) {
+        if (plan == null || plan.owner() != this
+                || !validateDisassemblyPlan(plan)) {
+            return false;
+        }
+        try {
+            switch (plan.action()) {
+                case DANGEROUS -> {
+                    if (!snapshot.equals(plan.nextSnapshot())) {
+                        setSnapshot(plan.nextSnapshot());
+                    }
+                }
+                case FULL_SHUTDOWN_RESET -> {
+                    for (ReactorDisassemblyPlan.PortCapture capture : plan.fuelPorts()) {
+                        capture.port().setFuelAssembly(ItemStack.EMPTY);
+                    }
+                    pendingLegacyFuelAssemblies = Map.of();
+                    setSnapshot(plan.nextSnapshot());
+                    invalidateTelemetry();
+                }
+                case INSTRUMENT_MAINTENANCE -> {
+                    if (!snapshot.equals(plan.nextSnapshot())) {
+                        setSnapshot(plan.nextSnapshot());
+                    }
+                }
+                case REJECTED -> {
+                    return false;
+                }
+            }
+            return true;
+        } catch (RuntimeException exception) {
+            LOGGER.warn("反应堆 {} 的停机拆除提交失败", worldPosition, exception);
+            return false;
+        }
+    }
+
+    /** 验证提交后的计划状态，确认没有留下半清空快照或端口物品。 */
+    public boolean verifyDisassemblyPlan(ReactorDisassemblyPlan plan) {
+        if (plan == null || plan.owner() != this) {
+            return false;
+        }
+        return switch (plan.action()) {
+            case DANGEROUS, INSTRUMENT_MAINTENANCE -> snapshot.equals(plan.nextSnapshot())
+                    && sameFuelPortCaptures(plan.fuelPorts(), captureFuelPortsForReset())
+                    && pendingLegacyFuelAssemblies.equals(plan.pendingLegacyFuelAssemblies());
+            case FULL_SHUTDOWN_RESET -> verifyFullShutdownReset(plan);
+            case REJECTED -> false;
+        };
+    }
+
+    /**
+     * 恢复一次失败事务的精确快照、迁移信封、端口物品和运行时显示。
+     *
+     * <p>调用方只在本次 BreakEvent 事务失败时使用；恢复操作继续在服务端执行，失败会
+     * 记录日志但不会再次发布融毁事件。</p>
+     */
+    public void rollbackDisassemblyPlan(ReactorDisassemblyPlan plan) {
+        if (plan == null || plan.owner() != this
+                || (plan.action() != ReactorDisassemblyPlan.Action.DANGEROUS
+                && plan.action() != ReactorDisassemblyPlan.Action.INSTRUMENT_MAINTENANCE
+                && plan.action() != ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET)) {
+            return;
+        }
+        try {
+            for (ReactorDisassemblyPlan.PortCapture capture : plan.fuelPorts()) {
+                capture.port().setFuelAssembly(capture.fuelAssembly());
+            }
+            pendingLegacyFuelAssemblies = Map.copyOf(plan.pendingLegacyFuelAssemblies());
+            if (!snapshot.equals(plan.beforeSnapshot())) {
+                setSnapshot(plan.beforeSnapshot());
+            }
+            telemetry = plan.beforeTelemetry();
+            lastSentTelemetry = plan.beforeLastSentTelemetry();
+            telemetryTicksSinceLastSync = plan.beforeTelemetryTicksSinceLastSync();
+            syncColumnTelemetryDisplays();
+            if (level != null && !level.isClientSide) {
+                setChanged();
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            }
+        } catch (RuntimeException exception) {
+            LOGGER.error("反应堆 {} 的停机拆除回滚失败", worldPosition, exception);
+        }
+    }
+
+    /** 在所有者计划已提交且原方块仍存在时发布一次既有危险事件占位。 */
+    public boolean publishDangerousDisassembly(ReactorDisassemblyPlan plan) {
+        if (plan == null || plan.owner() != this
+                || plan.action() != ReactorDisassemblyPlan.Action.DANGEROUS
+                || !plan.publishDangerousEvent()) {
+            return false;
+        }
+        return ReactorMeltdownEvents.publish(
                 ReactorMeltdownEvent.Reason.DANGEROUS_DISASSEMBLY,
                 level,
                 structureOrigin,
                 worldPosition,
-                nextSnapshot
+                plan.nextSnapshot()
         );
-        return true;
+    }
+
+    /**
+     * 保留 P1-MAINT-01 的直接危险提交兼容入口；真实 BreakEvent 使用上面的多所有者事务。
+     */
+    public boolean tryCommitDangerousDisassembly(BlockPos brokenPos, BlockState brokenState) {
+        ReactorDisassemblyPlan plan = prepareDisassemblyPlan(brokenPos, brokenState);
+        if (plan == null || plan.action() != ReactorDisassemblyPlan.Action.DANGEROUS) {
+            return false;
+        }
+        try {
+            if (!commitDisassemblyPlan(plan)
+                    || !verifyDisassemblyPlan(plan)
+                    || !plan.publishDangerousEvent()
+                    || !publishDangerousDisassembly(plan)) {
+                rollbackDisassemblyPlan(plan);
+                return false;
+            }
+            return true;
+        } catch (RuntimeException exception) {
+            rollbackDisassemblyPlan(plan);
+            LOGGER.warn("反应堆 {} 的危险拆除兼容提交失败", worldPosition, exception);
+            return false;
+        }
     }
 
     /** 只推进控制棒执行器状态，不执行完整热、冷却和损伤模拟。 */
@@ -468,6 +655,201 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         );
     }
 
+    /** 构造包含回滚所需运行时副本的不可变预检计划。 */
+    private ReactorDisassemblyPlan createDisassemblyPlan(
+            ReactorDisassemblyPlan.Action action,
+            BlockPos brokenPos,
+            BlockState brokenState,
+            String expectedId,
+            ReactorSnapshot beforeSnapshot,
+            ReactorSnapshot projectedSnapshot,
+            ReactorSnapshot nextSnapshot,
+            ReactorFullShutdownResult assessment,
+            List<ReactorDisassemblyPlan.PortCapture> fuelPorts,
+            Map<CoreColumnPosition, FuelAssemblyState> pendingFuel,
+            boolean publishDangerousEvent
+    ) {
+        return new ReactorDisassemblyPlan(
+                action,
+                this,
+                brokenPos,
+                brokenState,
+                expectedId,
+                structureOrigin,
+                beforeSnapshot,
+                projectedSnapshot,
+                nextSnapshot,
+                assessment,
+                fuelPorts,
+                pendingFuel,
+                telemetry,
+                lastSentTelemetry,
+                telemetryTicksSinceLastSync,
+                publishDangerousEvent
+        );
+    }
+
+    /** 构造不会携带任何可提交状态的拒绝计划，供生命周期统一取消原事件。 */
+    private ReactorDisassemblyPlan rejectedDisassemblyPlan(
+            BlockPos brokenPos,
+            BlockState brokenState,
+            ReactorFullShutdownResult assessment
+    ) {
+        return createDisassemblyPlan(
+                ReactorDisassemblyPlan.Action.REJECTED,
+                brokenPos,
+                brokenState,
+                blockId(brokenState),
+                snapshot,
+                snapshot,
+                snapshot,
+                assessment,
+                List.of(),
+                pendingLegacyFuelAssemblies,
+                false
+        );
+    }
+
+    /**
+     * 按当前有效结构映射逐一读取燃料列顶部端口，不依赖可能缺项的绑定集合。
+     *
+     * @return 每根燃料列的端口和精确物品副本；任一端口无法验证时返回 {@code null}
+     */
+    private List<ReactorDisassemblyPlan.PortCapture> captureFuelPortsForReset() {
+        if (level == null || level.isClientSide || !structureScan.valid()
+                || structureOrigin == null) {
+            return null;
+        }
+        List<ReactorDisassemblyPlan.PortCapture> captures = new ArrayList<>();
+        for (Map.Entry<CoreColumnPosition, ReactorStructureDefinition.ColumnMapping> entry
+                : structureScan.columns().entrySet()) {
+            if (entry.getValue().type() != ReactorStructureDefinition.ColumnType.FUEL) {
+                continue;
+            }
+            CoreColumnPosition column = entry.getKey();
+            BlockPos portPos = absolutePosition(entry.getValue().capPosition());
+            if (!(level.getBlockEntity(portPos) instanceof ReactorPortBlockEntity port)
+                    || level.getBlockEntity(portPos) != port
+                    || !port.isBoundTo(this, ReactorPortBlockEntity.BindingType.REFUELING, column)) {
+                return null;
+            }
+            ItemStack stored = port.fuelAssembly();
+            if (!FuelAssemblyItemCodec.isValidStoredFuel(stored)) {
+                return null;
+            }
+            captures.add(new ReactorDisassemblyPlan.PortCapture(column, port, stored));
+        }
+        return List.copyOf(captures);
+    }
+
+    /** 用读阶段捕获的精确端口物品创建当前燃料投影，不写入快照或端口。 */
+    private ReactorSnapshot projectFuelSnapshot(
+            List<ReactorDisassemblyPlan.PortCapture> fuelPorts
+    ) {
+        TreeMap<CoreColumnPosition, FuelColumnState> nextFuelColumns =
+                new TreeMap<>(snapshot.fuelColumns());
+        for (ReactorDisassemblyPlan.PortCapture capture : fuelPorts) {
+            FuelAssemblyState projectedFuel = FuelAssemblyItemCodec.simulationState(
+                    capture.fuelAssembly());
+            FuelColumnState current = nextFuelColumns.get(capture.column());
+            if (current != null) {
+                nextFuelColumns.put(
+                        capture.column(), current.withFuelAssemblyProjection(projectedFuel));
+            } else if (projectedFuel.present()) {
+                nextFuelColumns.put(
+                        capture.column(), FuelColumnState.empty()
+                                .withFuelAssemblyProjection(projectedFuel));
+            }
+        }
+        return snapshot.withColumns(nextFuelColumns, snapshot.controlRodColumns());
+    }
+
+    /**
+     * 在事务提交前再次确认原方块、缓存结构、所有权和完全停机证明没有变化。
+     * 这是服务端单线程事件中的最后安全门，也是多所有者提交的共同前置条件。
+     */
+    private boolean validateDisassemblyPlan(ReactorDisassemblyPlan plan) {
+        if (!(level instanceof ServerLevel) || level.isClientSide || isRemoved()
+                || level.getBlockEntity(worldPosition) != this
+                || !structureScan.valid() || structureOrigin == null
+                || !Objects.equals(structureOrigin, plan.structureOrigin())
+                || !plan.expectedComponentId().equals(cachedComponentId(plan.brokenPos()))
+                || !plan.expectedComponentId().equals(blockId(plan.brokenState()))
+                || !plan.expectedComponentId().equals(blockId(level.getBlockState(plan.brokenPos())))
+                || !plan.beforeSnapshot().equals(snapshot)) {
+            return false;
+        }
+
+        if (plan.action() == ReactorDisassemblyPlan.Action.REJECTED) {
+            return false;
+        }
+        List<ReactorDisassemblyPlan.PortCapture> currentFuelPorts = captureFuelPortsForReset();
+        if (currentFuelPorts == null
+                || !sameFuelPortCaptures(plan.fuelPorts(), currentFuelPorts)
+                || !pendingLegacyFuelAssemblies.equals(plan.pendingLegacyFuelAssemblies())) {
+            return false;
+        }
+        ReactorSnapshot currentProjected;
+        ReactorFullShutdownResult current;
+        try {
+            currentProjected = projectFuelSnapshot(currentFuelPorts);
+            current = ReactorFullShutdownAssessment.assess(
+                    currentProjected, simulationParameters());
+        } catch (RuntimeException exception) {
+            return false;
+        }
+        if (!current.inputValid()
+                || !currentProjected.equals(plan.projectedSnapshot())
+                || !current.equals(plan.shutdownAssessment())) {
+            return false;
+        }
+        boolean dangerous = current.generatedHeatHu() > SAFETY_HEAT_EPSILON
+                || currentProjected.meltdownCountdownStarted();
+        if (plan.action() == ReactorDisassemblyPlan.Action.DANGEROUS) {
+            if (!dangerous) {
+                return false;
+            }
+        } else if (dangerous || !current.fullyStopped()) {
+            return false;
+        }
+        return true;
+    }
+
+    /** 比较读阶段与当前结构的端口实体、列坐标及完整物品组件。 */
+    private boolean sameFuelPortCaptures(
+            List<ReactorDisassemblyPlan.PortCapture> expected,
+            List<ReactorDisassemblyPlan.PortCapture> actual
+    ) {
+        if (expected == null || actual == null || expected.size() != actual.size()) {
+            return false;
+        }
+        for (int index = 0; index < expected.size(); index++) {
+            ReactorDisassemblyPlan.PortCapture first = expected.get(index);
+            ReactorDisassemblyPlan.PortCapture second = actual.get(index);
+            if (!first.column().equals(second.column())
+                    || first.port() != second.port()
+                    || !ItemStack.matches(first.fuelAssembly(), second.fuelAssembly())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** 检查安全重置已清除快照、迁移信封、所有端口物品和运行时遥测。 */
+    private boolean verifyFullShutdownReset(ReactorDisassemblyPlan plan) {
+        if (!snapshot.equals(plan.nextSnapshot())
+                || !pendingLegacyFuelAssemblies.isEmpty()
+                || telemetry.available()) {
+            return false;
+        }
+        for (ReactorDisassemblyPlan.PortCapture capture : plan.fuelPorts()) {
+            if (!capture.port().fuelAssembly().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /** 根据最近一次有效结构缓存确认待破坏方块是八类固定组件之一。 */
     private String cachedComponentId(BlockPos brokenPos) {
         int localX = brokenPos.getX() - structureOrigin.getX();
@@ -562,16 +944,18 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 continue;
             }
             ControlRodColumnState state = snapshot.controlRodColumns().get(entry.getKey());
-            if (state == null) {
-                continue;
-            }
             BlockPos drivePos = structureOrigin.offset(
                     entry.getValue().capPosition().x(),
                     entry.getValue().capPosition().y(),
                     entry.getValue().capPosition().z());
             if (level.getBlockEntity(drivePos) instanceof ControlRodDriveBlockEntity drive) {
                 drive.setServerColumnHint(entry.getKey().x(), entry.getKey().z());
-                drive.setServerDisplayedDepthPercent(toPercent(state.targetDepth()));
+                if (state == null) {
+                    drive.setServerDisplayedDepthPercent(100);
+                    drive.setServerControlRodIntegrity(null);
+                } else {
+                    drive.setServerDisplayedDepthPercent(toPercent(state.targetDepth()));
+                }
             }
         }
     }

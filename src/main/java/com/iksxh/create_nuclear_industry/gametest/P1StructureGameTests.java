@@ -2,10 +2,12 @@ package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.block.ReactorInstrumentPortBlock;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
+import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
 import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
+import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyItemCodec;
 import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
 import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
@@ -100,6 +102,13 @@ public final class P1StructureGameTests {
             ReactorInstrumentPortBlockEntity instrument = instrument(helper);
             ReactorSnapshot expected = fixtureSnapshot();
             instrument.setSnapshot(expected);
+            ReactorPortBlockEntity sourcePort = instrument.boundPorts(
+                            ReactorPortBlockEntity.BindingType.REFUELING).stream()
+                    .filter(port -> port.boundColumn().equals(new CoreColumnPosition(0, 0)))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("canonical fuel port is not bound"));
+            sourcePort.setFuelAssembly(FuelAssemblyItemCodec.fromLegacyState(
+                    FuelAssemblyState.installed(216_000, 12_345)));
 
             BlockPos absoluteCasing = helper.absolutePos(OUTER_CASING);
             Player player = helper.makeMockPlayer(GameType.SURVIVAL);

@@ -6,6 +6,7 @@ import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.ControlRodColumnState;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
+import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyItemCodec;
 import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyState;
 import com.iksxh.create_nuclear_industry.reactor.FuelColumnState;
 import com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvent;
@@ -79,14 +80,22 @@ public final class P1Maint01GameTests {
 
             for (Map.Entry<BlockPos, String> entry : components.entrySet()) {
                 expectedEvents++;
+                ReactorPortBlockEntity refueling = firstRefuelingPort(instrument);
+                refueling.setFuelAssembly(FuelAssemblyItemCodec.fromLegacyState(
+                        FuelAssemblyState.installed(216_000, 0)));
                 ReactorSnapshot before = fissionRunningSnapshot();
                 instrument.setSnapshot(before);
                 BlockPos relative = entry.getKey();
                 BlockPos absolute = helper.absolutePos(relative);
                 currentBroken.set(absolute);
                 Block beforeBlock = helper.getLevel().getBlockState(absolute).getBlock();
-                ReactorPortBlockEntity refueling = firstRefuelingPort(instrument);
                 var beforeFuel = refueling.fuelAssembly();
+                var prepared = instrument.prepareDisassemblyPlan(absolute,
+                        helper.getLevel().getBlockState(absolute));
+                require(helper, prepared != null
+                                && prepared.action()
+                                == com.iksxh.create_nuclear_industry.structure.ReactorDisassemblyPlan.Action.DANGEROUS,
+                        "component " + entry.getValue() + " prepared unexpected plan: " + prepared);
 
                 BlockEvent.BreakEvent breakEvent = postBreak(helper, absolute, player, false);
                 require(helper, !breakEvent.isCanceled(),
@@ -224,9 +233,20 @@ public final class P1Maint01GameTests {
                     first, helper, BlockPos.ZERO, () -> helper.absolutePos(firstEastWindow));
             List<ReactorMeltdownEvent> secondEvents = listenFor(
                     second, helper, new BlockPos(5, 0, 0), () -> helper.absolutePos(firstEastWindow));
+            firstRefuelingPort(first).setFuelAssembly(FuelAssemblyItemCodec.fromLegacyState(
+                    FuelAssemblyState.installed(216_000, 0)));
+            firstRefuelingPort(second).setFuelAssembly(FuelAssemblyItemCodec.fromLegacyState(
+                    FuelAssemblyState.installed(216_000, 0)));
             first.setSnapshot(fissionRunningSnapshot());
             second.setSnapshot(fissionRunningSnapshot());
             Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+            var prepared = first.prepareDisassemblyPlan(
+                    helper.absolutePos(firstEastWindow),
+                    helper.getLevel().getBlockState(helper.absolutePos(firstEastWindow)));
+            require(helper, prepared != null
+                            && prepared.action()
+                            == com.iksxh.create_nuclear_industry.structure.ReactorDisassemblyPlan.Action.DANGEROUS,
+                    "owning adjacent reactor prepared unexpected plan: " + prepared);
 
             BlockEvent.BreakEvent breakEvent = postBreak(
                     helper, helper.absolutePos(firstEastWindow), player, false);
@@ -381,8 +401,9 @@ public final class P1Maint01GameTests {
     /** 返回自定义结构中任意一个已绑定换料端口，供物品不变断言使用。 */
     private static ReactorPortBlockEntity firstRefuelingPort(ReactorInstrumentPortBlockEntity instrument) {
         return instrument.boundPorts(ReactorPortBlockEntity.BindingType.REFUELING).stream()
+                .filter(port -> SOURCE_FUEL.equals(port.boundColumn()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("maintenance refueling port is not bound"));
+                .orElseThrow(() -> new IllegalStateException("maintenance source fuel port is not bound"));
     }
 
     /** 比较方块物品而不共享测试侧可变引用。 */

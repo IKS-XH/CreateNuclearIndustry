@@ -5,15 +5,20 @@ import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -26,25 +31,49 @@ public final class ReactorStructureLifecycle {
     private ReactorStructureLifecycle() {
     }
 
-    @SubscribeEvent
+    /**
+     * 在普通 BreakEvent 监听器完成后执行停机破坏决策；所有者先只读预检，之后才提交
+     * 危险事件或安全清空事务。LOWEST 是 NeoForge 常规优先级中最晚的处理点。
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (!(event.getLevel() instanceof ServerLevel serverLevel) || event.isCanceled()) {
             return;
         }
-        prepareDangerousDisassembly(serverLevel, event.getPos(), event.getState());
-        scheduleRescanAround(serverLevel, event.getPos());
+
+        List<ReactorDisassemblyPlan> plans = collectDisassemblyPlans(serverLevel, event);
+        if (plans.stream().anyMatch(plan -> plan.action() == ReactorDisassemblyPlan.Action.REJECTED)) {
+            cancelBreak(event, event.getPlayer(), "not_fully_stopped");
+            return;
+        }
+        if (event.isCanceled()) {
+            return;
+        }
+
+        boolean hasReset = plans.stream()
+                .anyMatch(plan -> plan.action() == ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET);
+        try {
+            commitDisassemblyPlans(plans, event);
+            if (hasReset) {
+                notifyPlayer(event.getPlayer(), "state_cleared");
+            }
+            scheduleRescanAround(serverLevel, event.getPos());
+        } catch (RuntimeException exception) {
+            rollbackDisassemblyPlans(plans);
+            cancelBreak(event, event.getPlayer(), "transaction_failed");
+        }
     }
 
     /**
-     * 在原方块仍存在时收集附近全部仪表权威者；每个世界坐标只处理一次，允许同一方块
-     * 同时属于多个有效缓存结构。事件不取消原 BreakEvent，后续仍由原世界链路移除方块。
+     * 以破坏位置为中心去重收集所有可能的仪表端口，并在任何写入前完成全部只读预检。
+     * 无效缓存不是所有者；有效缓存但无法证明安全或无法枚举端口时则形成拒绝计划。
      */
-    private static void prepareDangerousDisassembly(
+    private static List<ReactorDisassemblyPlan> collectDisassemblyPlans(
             ServerLevel serverLevel,
-            BlockPos brokenPos,
-            BlockState brokenState
+            BlockEvent.BreakEvent event
     ) {
         Set<BlockPos> candidates = new LinkedHashSet<>();
+        BlockPos brokenPos = event.getPos();
         int radius = ReactorStructureDefinition.SIZE - 1;
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
@@ -57,11 +86,76 @@ public final class ReactorStructureLifecycle {
                 }
             }
         }
+
+        List<ReactorDisassemblyPlan> plans = new ArrayList<>();
         for (BlockPos candidate : candidates) {
             if (serverLevel.getBlockEntity(candidate)
                     instanceof ReactorInstrumentPortBlockEntity instrument) {
-                instrument.tryCommitDangerousDisassembly(brokenPos, brokenState);
+                ReactorDisassemblyPlan plan = instrument.prepareDisassemblyPlan(
+                        brokenPos, event.getState());
+                if (plan != null) {
+                    plans.add(plan);
+                }
             }
+        }
+        return List.copyOf(plans);
+    }
+
+    /** 所有预检成功后按固定顺序提交，危险状态和安全清空都仍发生在原方块存在时。 */
+    private static void commitDisassemblyPlans(
+            List<ReactorDisassemblyPlan> plans,
+            BlockEvent.BreakEvent event
+    ) {
+        if (event.isCanceled()) {
+            throw new IllegalStateException("break event was canceled before disassembly commit");
+        }
+        for (ReactorDisassemblyPlan plan : plans) {
+            if (plan.action() == ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET
+                    || plan.action() == ReactorDisassemblyPlan.Action.DANGEROUS
+                    || plan.action() == ReactorDisassemblyPlan.Action.INSTRUMENT_MAINTENANCE) {
+                if (!plan.owner().commitDisassemblyPlan(plan)) {
+                    throw new IllegalStateException("disassembly plan commit failed");
+                }
+            }
+        }
+        for (ReactorDisassemblyPlan plan : plans) {
+            if (!plan.owner().verifyDisassemblyPlan(plan)) {
+                throw new IllegalStateException("disassembly plan post-check failed");
+            }
+        }
+        for (ReactorDisassemblyPlan plan : plans) {
+            if (plan.action() == ReactorDisassemblyPlan.Action.DANGEROUS
+                    && plan.publishDangerousEvent()) {
+                if (!plan.owner().publishDangerousDisassembly(plan)) {
+                    throw new IllegalStateException("dangerous disassembly event publish failed");
+                }
+            }
+        }
+    }
+
+    /** 事务失败时按所有者恢复读阶段副本；恢复失败只记录日志，不能吞掉原始异常。 */
+    private static void rollbackDisassemblyPlans(List<ReactorDisassemblyPlan> plans) {
+        for (ReactorDisassemblyPlan plan : plans) {
+            if (plan.action() == ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET
+                    || plan.action() == ReactorDisassemblyPlan.Action.DANGEROUS
+                    || plan.action() == ReactorDisassemblyPlan.Action.INSTRUMENT_MAINTENANCE) {
+                plan.owner().rollbackDisassemblyPlan(plan);
+            }
+        }
+    }
+
+    /** 向触发玩家发送服务端决定的本地化动作栏消息；无玩家事件仍保持纯服务端行为。 */
+    private static void cancelBreak(BlockEvent.BreakEvent event, Player player, String suffix) {
+        event.setCanceled(true);
+        notifyPlayer(player, suffix);
+    }
+
+    /** 发送维护事务提示，不把服务端失败原因硬编码到客户端。 */
+    private static void notifyPlayer(Player player, String suffix) {
+        if (player != null) {
+            player.displayClientMessage(
+                    Component.translatable("message.create_nuclear_industry.maintenance." + suffix),
+                    true);
         }
     }
 
