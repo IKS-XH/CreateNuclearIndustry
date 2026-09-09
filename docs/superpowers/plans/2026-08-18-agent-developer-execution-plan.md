@@ -199,6 +199,8 @@ GameTest/人工验收结果：
 | `P1-MAINT-01` | 已完成（含测试整改） | 危险拆除在方块移除前提交融毁完成态并复用唯一事件入口，八类组件、相邻结构、客户端和零世界副作用边界已通过；项目经理独立复验 229 项 JUnit、97 个 required GameTest 和完整构建，报告归档于 `docs/archive/P1-MAINT-01.md`。 |
 | `P1-MAINT-02` | 已完成 | 四项完全停机条件、活动/安全余热口径和失败关闭结果已实现；项目经理独立复验 242 项 JUnit、97 个 required GameTest 与完整构建，报告归档于 `docs/archive/P1-MAINT-02.md`。 |
 | `P1-MAINT-03` | 已完成（含增量整改） | 换料端口权威物品先投影再分类，两阶段拆除事务、失败回滚、仪表维护例外、迁移信封与重组成型均已闭环；项目经理独立复验 245 项 JUnit、106 个 required GameTest 和完整构建，报告归档于 `docs/archive/P1-MAINT-03.md`。 |
+| `P1-PONDER-01` | 待用户手动派发 | 任务卡已按现有 11 个直接入口、5 类间接展示项和后置排除边界冻结；不得重复创建第二套 Ponder 插件或提前制作运行事故场景。 |
+| `P1-VERIFY-01` | 待用户手动派发 | 全部功能前置已完成；任务卡已冻结四类跨系统 required GameTest，只允许新增总回归测试和报告，发现生产缺陷时停止并报告。 |
 
 **本次独立复验：** `2026-08-18` 运行 `./gradlew.bat test --rerun-tasks` 成功；运行 `./gradlew.bat runGameTestServer --rerun-tasks` 成功，7 个 required GameTest 全部通过。用户已完成客户端中物品/方块可见和方块可放置的人工验收。
 
@@ -262,7 +264,7 @@ GameTest/人工验收结果：
 
 **MELTDOWN-01 验收记录：** 执行者已把完整度归零且组件仍有耐久的失效源燃料列纳入融毁覆盖集合，并保留目标列未冷却传播、并集去重、耗尽燃料退出、倒计时暂停/继续/封顶和 NBT 连续性。项目经理于 `2026-09-06` 独立复验 217/217 JUnit、89/89 required GameTest、完整构建及任务范围空白检查通过；本任务按合同不执行世界事故动作且不要求客户端人工验收。归档报告见 `docs/archive/P1-MELTDOWN-01.md`。
 
-**下一步：** `P1-MAINT-03` 已完成并归档，当前可以进入 `P1-PONDER-01` 与 `P1-VERIFY-01` 的任务卡收口；执行任务继续由用户手动派发，项目经理不得代用户创建或发送任务。P1 不生成废物或流体，不制造火灾、爆炸、污染或结构破坏，也不注册事故专用内容。具体反应堆事故与锅炉、汽轮机事故统一后置，原 `P1-MAINT-04` 不再属于 P1。`P1-BALANCE-02B` 只在主要目标因等待决策、外部条件或技术问题阻塞时派发，不进入 `P1-VERIFY-01` 前置或 P1 出口条件。所有后续任务必须使用 `0.5 HU/mB`、每端口 `128 mB/t`、冷热缓冲各 `1000 mB`、损伤速率 `0.0000005 / (tick·HU/t)` 和“无全堆冷却剂流量上限”合同；新增损伤倍率以 02A 已验收的游戏端实现为准，不得恢复旧等倍率合同。
+**下一步：** `P1-PONDER-01` 与 `P1-VERIFY-01` 任务卡均已冻结，建议用户先手动派发范围较小的 `P1-PONDER-01`；项目经理不得代用户创建或发送任务。同一共享工作区内按任务顺序执行；确需并行时由项目经理先创建隔离工作树，执行者仍禁止 Git 写操作。P1 不生成废物或流体，不制造火灾、爆炸、污染或结构破坏，也不注册事故专用内容。具体反应堆事故与锅炉、汽轮机事故统一后置，原 `P1-MAINT-04` 不再属于 P1。`P1-BALANCE-02B` 只在主要目标因等待决策、外部条件或技术问题阻塞时派发，不进入 `P1-VERIFY-01` 前置或 P1 出口条件。所有后续任务必须使用 `0.5 HU/mB`、每端口 `128 mB/t`、冷热缓冲各 `1000 mB`、损伤速率 `0.0000005 / (tick·HU/t)` 和“无全堆冷却剂流量上限”合同；新增损伤倍率以 02A 已验收的游戏端实现为准，不得恢复旧等倍率合同。
 
 **视觉任务暂停：** 当前只推进功能实现。连接纹理、正式 Blockbench 多边形模型、Flywheel 动画、粒子、音效和最终视觉统一均不得在现阶段派发；现有有效占位资源继续用于功能开发和测试。视觉任务将在 P1 功能闭环完成后由项目经理另行拆分，执行者不得借功能任务扩大到纹理或模型写集。
 
@@ -929,11 +931,17 @@ GameTest/人工验收结果：
 ### P1-PONDER-01：注册 Ponder 入口
 
 **前置：** P1-DATA-06、P1-STRUCT-01。
-**唯一目标：** 为当前已注册的多方块、单方块、端口/管道和主动使用物品建立 Ponder 入口清单和注册骨架。
-**允许修改：** Ponder 注册类、场景索引、语言。
-**禁止：** 为未实现对象创建假玩法场景。
-**验收：** 每个已批准对象可打开入口；未实现对象没有入口。
-**交付：** Ponder 覆盖清单。
+**状态 / 派发门：** 任务卡已冻结，功能基线为 `8246bfa`，并以项目经理本任务卡提交为需求基线，等待用户手动派发。当前仓库已有 `P1PonderPlugin`、`P1PonderScenes.experimentalReactorBasics`、客户端 `PonderIndex.addPlugin` 接线和 `experimental_reactor.nbt` 预备实现；执行者必须增量审计，不得重新创建插件、故事线或结构资源，也不得把预备场景据此标记为 `P1-PONDER-02` 已完成。
+**唯一目标：** 建立可由自动化检查的 P1 Ponder 入口清单与唯一注册骨架，明确每个现有注册 ID 是直接入口、在反应堆故事线中间接展示，还是因未实现/纯材料而排除；本任务不扩写实际教学步骤。
+**直接入口冻结清单：** 现有同一 `experimental_reactor` 故事板应由 11 个触发组件打开：`reactor_casing`、`reactor_window`、`reactor_instrument_port`、`reactor_cold_port`、`reactor_hot_port`、`reactor_refueling_port`、`reactor_fuel_rod`、`control_rod_drive`、`fresh_fuel_assembly`、`cooled_spent_fuel_assembly` 和 `compound_coolant_bucket`。列表必须确定、无重复、全部属于当前已注册 P1 内容；多个入口可以复用同一故事板，但不得丢失各自触发物。
+**间接展示冻结清单：** `control_rod` 只在 `control_rod_drive` 场景中说明装配用途；`steel_plate` 在后续 `P1-PONDER-03` 中演示两类维修；`compound_coolant` 与 `hot_compound_coolant` 通过桶、冷端和热端展示流向与转化；外部 `create:goggles` 通过仪表端口、换料端口和控制棒驱动器展示观察结果。这些对象不新增空洞的独立故事板。
+**明确排除：** P0 探针、旧样例 `experimental_reactor_casing`、未注册的 `main_coolant_pump`、一级压力管/阀门，以及全部 P2/P3/暂缓内容不得进入当前入口列表；不得注册事故产物、火灾、爆炸、污染、净化器、独立联锁器、锅炉或汽轮机的假入口。
+**技术路线：** 保持 `CreateNuclearIndustry` 仅在客户端初始化阶段注册唯一 `P1PonderPlugin`；插件继续以模组命名空间和 `P1ContentIds` 作为身份来源。新增一个定向 JUnit 契约测试，验证 11 个直接入口的精确集合、唯一性、已注册归属、故事板 ID、客户端注册点、间接项不误入及明确排除项缺席。测试可以检查静态合同和资源存在性，但不得用源码字符串搜索冒充后续客户端“实际可打开”验收；真实打开与画面检查留给 `P1-PONDER-04`。
+**允许修改：** 仅 `src/main/java/com/iksxh/create_nuclear_industry/ponder/P1PonderPlugin.java`、新增 `src/test/java/com/iksxh/create_nuclear_industry/P1Ponder01ContractTest.java`，以及 `build/reports/p1/P1-PONDER-01.md`。如果审计证明现有注册接线本身失效，停止该范围并在报告中给出证据，不得自行扩大到主类、场景、语言或结构资源。
+**禁止：** 不得修改 `P1PonderScenes`、任何 Ponder NBT、中英文语言、玩法生产代码、注册 ID、配方、GameTest、Gradle、模拟器、核心文档或 Git 历史；不得提前实现 `P1-PONDER-02/03/04`。
+**自动验收：** 定向契约测试、全量 `test --rerun-tasks`、当前 106 个 required GameTest、`build --rerun-tasks` 和任务范围 `git diff --check` 全部通过。GameTest 若在全部成功后停于已知 `Saving worlds`，记录成功行后由项目经理处理退出，不得修改测试框架规避。
+**人工验收：** 本卡不要求用户进入客户端逐项打开；Ponder 真实入口、语言替换、镜头、文字可读性和资源错误统一由 `P1-PONDER-04` 客户端验收。
+**技能与交付：** 开工前实际读取并应用 `minecraft-modding` 与 `minecraft-testing`，严格使用仓库固定 Minecraft `1.21.1`、Java `21`、NeoForge `21.1.219`、Create `6.0.10-280` 与 Ponder `1.0.82`。报告必须给出直接/间接/排除矩阵、现有预备实现审计结果、测试名称和精确计数、改动文件及未完成场景边界。执行者禁止所有 Git 写操作。
 
 ### P1-PONDER-02：制作反应堆基础场景
 
@@ -962,10 +970,21 @@ GameTest/人工验收结果：
 ### P1-VERIFY-01：建立 P1 GameTest 总回归
 
 **前置：** P1-LOOP-02、P1-COOL-05、P1-REFUEL-02B、P1-REFUEL-03、P1-GOGGLE-INSTRUMENT-04、P1-MELTDOWN-02、P1-MAINT-01、P1-MAINT-03、P1-BALANCE-02A。
-**唯一目标：** 将正式反应堆的成型、运行、停堆、SCRAM、控制棒、冷却剂、换料、维修、护目镜、拆除和重载组合成 GameTest 回归集。
-**允许修改：** `src/test/java/`、`src/test/resources/`、测试结构。
-**验收：** `.\gradlew.bat runGameTestServer --rerun`；所有 required tests 通过。
-**交付：** 测试名称、通过日志和失败重现步骤。
+**状态 / 派发门：** 任务卡已冻结，全部前置均已完成，功能基线为 `8246bfa`，并以项目经理本任务卡提交为需求基线，等待用户手动派发。此任务只建立跨系统验收回归，不修改生产行为；发现正式入口无法完成下述场景时必须保留失败证据并停止，不得顺带修复生产代码。
+**唯一目标：** 用少量高价值 required GameTest 将已分别验收的成型、换料、Create 冷却管网、控制棒、SCRAM、正式 tick、损伤倍率、维修、护目镜遥测、持久化、危险拆除和停机重组成型串成 P1 总回归；不得机械复制既有单功能测试。
+**四类必要场景：**
+
+1. **冷启动—受控运行—遥测：** 真实扫描成型，通过正式换料端口装入燃料，通过现有 Create 管网或正式 capability 接受冷态复合冷却剂，以服务端校验的控制棒入口建立非零功率并执行正式 tick；同时断言燃料耐久下降、冷态库存减少、热态库存增加、仪表与列级遥测来自同一 tick，并在相同布局、控制棒深度和基础配置下对照完好/受损列，证明默认损伤的燃耗倍率增长快于产热倍率。
+2. **运行—SCRAM—恢复：** 使用真实三行 `F-C-F` 六燃料布局，先证明反馈簇运行，再由仪表端口红石高电平触发 SCRAM；覆盖完整插棒停止新生热/燃耗、部分卡死时 `SCRAM_INCOMPLETE`、持续高电平幂等及低电平恢复停堆前目标。不得用孤立燃料列替代反馈簇。
+3. **自动换料/维修—保存重载：** 至少跨越 Create 机械臂原子换料、燃料列或控制棒列钢板维修、仪表与端口 NBT 保存重载中的三项；断言端口 `ItemStack` 仍是唯一燃料所有者，耐久和数据组件不复制，维修不补燃料、不清余热、不回退融毁进度，重扫后绑定与 capability 可恢复。
+4. **危险拆除与安全重组成型互斥：** 同一正式结构先证明裂变或倒计时状态下 BreakEvent 只发布一次现有事件占位且不清空，再证明四项完全停机后破坏非仪表组件会清空端口、快照、迁移信封和遥测；至少一次实际移除—重扫—补回，并断言全部控制棒默认完全插入。全程不得要求事故世界效果。
+
+**测试设计边界：** 每个新增用例至少跨越三个已实现子系统，并通过正式世界事件、端口事务、capability、红石或方块实体保存入口操作；允许为确定性和运行时长设置合法配置或夹具，但不得直接伪造最终结果、跳过正式 tick、用源码字符串搜索代替行为断言，或依赖测试执行顺序。现有 `p0_probe_empty` 模板足够时必须复用，避免新增重复 NBT。
+**允许修改：** 新增 `src/main/java/com/iksxh/create_nuclear_industry/gametest/P1Verify01GameTests.java`；确有重复夹具时可新增同包测试专用 `P1GameTestFixtures.java`，但不得改写既有测试断言。交付只写 `build/reports/p1/P1-VERIFY-01.md`。如确有必要新增专用空模板，先在报告中说明现有模板不足，执行者不得自行扩大写集。
+**禁止：** 不得修改 `blockentity`、`reactor`、`structure`、`control`、网络、配置、注册、资源、Ponder、既有 GameTest、JUnit、Gradle、模拟器、核心文档或 Git 历史；不得把发现的生产缺陷隐藏在测试辅助代码中。
+**自动验收：** 至少新增上述四类 required GameTest；逐项核对新增场景输出，并运行全量 `test --rerun-tasks`、`runGameTestServer --rerun-tasks --max-workers=1`、`build --rerun-tasks` 和任务范围 `git diff --check`。报告给出新增测试名、每项跨越的子系统、精确 JUnit/GameTest 总数、执行时间、失败重现步骤及是否触发已知 `Saving worlds` 退出问题。
+**人工验收：** 本卡不替代客户端观察；真实滑块拖动、护目镜排版、Create 管网现场连接、机械臂动作、Ponder 和破坏提示仍由 `P1-VERIFY-02` 统一验收。
+**技能与交付：** 开工前实际读取并应用 `minecraft-modding` 与 `minecraft-testing`，核对 Minecraft `1.21.1`、Java `21`、NeoForge `21.1.219`、Create `6.0.10-280`。执行者禁止 Git 写操作；生产缺陷、框架瞬态失败和断言失败必须分开记录，不能以重跑掩盖可复现缺陷。
 
 ### P1-VERIFY-02：完成客户端和服务端人工验收
 

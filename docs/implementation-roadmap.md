@@ -1,8 +1,8 @@
 # 《机械动力：核工业》实施路线图
 
-**路线图版本：** 2026-09-09 PM-33（P1 破坏性重组成型复验通过）
+**路线图版本：** 2026-09-09 PM-34（Ponder 入口与总回归任务卡冻结）
 **适用技术基线：** Minecraft 1.21.1 + Java 21 + NeoForge 21.1.219 + Create 6.0.10-280
-**路线图状态：** P1 核心功能与破坏性重组成型已闭环，当前进入 Ponder 完成与三阶段最终验证；具体反应堆、锅炉和汽轮机事故统一后置；`P1-BALANCE-02B` 仅在主要目标阻塞时穿插
+**路线图状态：** P1 核心功能与破坏性重组成型已闭环；`P1-PONDER-01` 与 `P1-VERIFY-01` 已形成可手动派发任务卡，当前建议先完成 Ponder 入口审计；具体反应堆、锅炉和汽轮机事故统一后置；`P1-BALANCE-02B` 仅在主要目标阻塞时穿插
 
 本文只负责阶段依赖、出口条件和当前进度。玩法规则以 [project.md](./project.md) 为准，反应堆局部控制以 [reactor-local-control-revision-design.md](./reactor-local-control-revision-design.md) 为准，注册身份以 [content-catalog.md](./content-catalog.md) 为准，材料关系以 [recipes.md](./recipes.md) 为准，彩蛋以 [easter-eggs-and-advancements.md](./easter-eggs-and-advancements.md) 为准。
 
@@ -152,6 +152,8 @@ P1 尚未完成的关键工作是 Ponder 教学覆盖和最终端到端验证。
 ## 4. 当前关键路径
 
 当前关键路径已通过 `P1-MAINT-03` 完成破坏性重组成型，接下来推进 Ponder 教学覆盖和最终验证。`P1-BALANCE-02A` 已完成；`P1-BALANCE-02B` 无待定玩法参数，但只在主线阻塞时作为辅助任务派发，不再是 `P1-VERIFY-01` 或 P1 出口的前置。
+
+下一张建议由用户手动派发 `P1-PONDER-01`，先冻结当前已注册内容的直接入口、间接展示和明确排除项。`P1-VERIFY-01` 已具备全部前置，可在 Ponder 入口任务验收后继续；如果需要并行，只能由项目经理先建立隔离工作树，不能让两个执行者在同一共享工作区同时运行测试和写交付报告。
 
 ```text
 LOOP-01 → LOOP-02（均已完成）
