@@ -25,7 +25,7 @@ public final class P1PonderPlugin implements PonderPlugin {
      * P1 条目列表故意排除 P0 探针、保留的样例外壳、纯材料和不可直接放置的控制棒组件。
      * 后者只有在后续故事线讲解装配用途时，才通过控制棒驱动器条目间接展示。
      */
-    public static final List<String> COVERED_COMPONENT_IDS = List.of(
+    public static final List<String> DIRECT_ENTRY_IDS = List.of(
             P1ContentIds.REACTOR_CASING_ID,
             P1ContentIds.REACTOR_WINDOW_ID,
             P1ContentIds.REACTOR_INSTRUMENT_PORT_ID,
@@ -48,7 +48,7 @@ public final class P1PonderPlugin implements PonderPlugin {
     /** 将已注册组件绑定到唯一 P1 反应堆故事线，不创建或修改服务端内容。 */
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
-        helper.forComponents(COVERED_COMPONENT_IDS.stream()
+        helper.forComponents(DIRECT_ENTRY_IDS.stream()
                         .map(P1PonderPlugin::componentId)
                 .toList())
                 .addStoryBoard(
