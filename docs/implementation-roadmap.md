@@ -1,8 +1,8 @@
 # 《机械动力：核工业》实施路线图
 
-**路线图版本：** 2026-09-09 PM-31（P1 破坏性重组成型合同冻结）
+**路线图版本：** 2026-09-09 PM-32（P1 破坏性重组成型首轮验收退回）
 **适用技术基线：** Minecraft 1.21.1 + Java 21 + NeoForge 21.1.219 + Create 6.0.10-280
-**路线图状态：** P1 核心功能实施中；`P1-MAINT-02` 完全停机判定已完成，`P1-MAINT-03` 破坏性重组成型合同已冻结，等待用户手动派发；具体反应堆、锅炉和汽轮机事故统一后置；`P1-BALANCE-02B` 仅在主要目标阻塞时穿插
+**路线图状态：** P1 核心功能实施中；`P1-MAINT-03` 首轮交付已退回，等待用户手动转交端口权威燃料投影与关键事务测试整改；具体反应堆、锅炉和汽轮机事故统一后置；`P1-BALANCE-02B` 仅在主要目标阻塞时穿插
 
 本文只负责阶段依赖、出口条件和当前进度。玩法规则以 [project.md](./project.md) 为准，反应堆局部控制以 [reactor-local-control-revision-design.md](./reactor-local-control-revision-design.md) 为准，注册身份以 [content-catalog.md](./content-catalog.md) 为准，材料关系以 [recipes.md](./recipes.md) 为准，彩蛋以 [easter-eggs-and-advancements.md](./easter-eggs-and-advancements.md) 为准。
 
@@ -174,7 +174,7 @@ COOL-04 + REFUEL-03 + REFUEL-02B + GOGGLE-INSTRUMENT-04 + MELTDOWN-02 + MAINT-01
   → VERIFY-01 → VERIFY-02 → VERIFY-03
 ```
 
-`P1-REFUEL-02A/02B/03`、`P1-REPAIR-01/02`、`P1-MELTDOWN-01/02`、`P1-MAINT-01/02` 和 `P1-BALANCE-02A` 均已完成并归档。换料与维修通过自动及用户人工验收；完全停机判定通过 242 项 JUnit、97 个 required GameTest 与完整构建。`P1-MAINT-03` 破坏性重组成型任务卡已冻结，当前等待用户手动派发。02A 的客户端对照和磁盘热重载留到最终人工总验收。原 `P1-MAINT-04` 的具体事故产物已移出 P1，待锅炉和汽轮机运行状态完成后统一规划。`P1-BALANCE-02B` 不再阻塞这些任务或最终验收，只能在主线阻塞时穿插。Ponder 任务按活动计划单独验收；连接纹理、正式多边形模型、动画、粒子和音效继续后置。
+`P1-REFUEL-02A/02B/03`、`P1-REPAIR-01/02`、`P1-MELTDOWN-01/02`、`P1-MAINT-01/02` 和 `P1-BALANCE-02A` 均已完成并归档。换料与维修通过自动及用户人工验收；完全停机判定通过 242 项 JUnit、97 个 required GameTest 与完整构建。`P1-MAINT-03` 首轮交付的 245 项 JUnit、102 个 required GameTest 和构建均通过，但安全判定没有使用换料端口权威燃料投影，且回滚、仪表维护例外、旧迁移信封和控制棒重建缺少充分行为断言，当前等待用户手动转交整改。02A 的客户端对照和磁盘热重载留到最终人工总验收。原 `P1-MAINT-04` 的具体事故产物已移出 P1，待锅炉和汽轮机运行状态完成后统一规划。`P1-BALANCE-02B` 不再阻塞这些任务或最终验收，只能在主线阻塞时穿插。Ponder 任务按活动计划单独验收；连接纹理、正式多边形模型、动画、粒子和音效继续后置。
 
 ## 5. 不可绕过的验收门
 
