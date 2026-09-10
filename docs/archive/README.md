@@ -47,6 +47,7 @@
 - `P1-MAINT-02.md`：完全停机由新生热、计划燃耗、燃料列活动余热和融毁倒计时四项共同判定，安全量化余数不会造成不可达停机；242 项 JUnit、97 个 required GameTest 和完整构建通过。
 - `P1-MAINT-03.md`：完全停机时七类非仪表组件进入可回滚的破坏性清空，仪表维护保留原位燃料；端口权威投影、迁移信封回滚、多所有者预检和重组成型通过 245 项 JUnit、106 个 required GameTest 与完整构建。
 - `P1-PONDER-01.md`：P1 Ponder 已冻结 11 项直接入口、间接展示与排除清单，并验证唯一客户端插件/故事板注册合同；项目经理复验 251 项 JUnit、106 个 required GameTest 与完整构建通过。
+- `P1-VERIFY-01.md`：四类 required GameTest 已串接冷启动运行与损伤倍率、F-C-F SCRAM、机械臂换料/维修/NBT 重载、危险拆除与安全重组成型；项目经理复验 251 项 JUnit、110 个 required GameTest 与完整构建通过。
 
 ## 已归档任务验收报告
 
