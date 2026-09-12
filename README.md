@@ -38,7 +38,7 @@
 
 当前自动化基线为 **251 项 JUnit、110 个 required GameTest 和完整构建通过**。换料端口燃料所有权、未成型安全取料、Create 机械臂换料及燃料列/控制棒列维修均已完成客户端人工验收。`P1-MELTDOWN-01/02` 与 `P1-MAINT-01/02/03` 已完成融毁覆盖、倒计时、事件占位、危险拆除、完全停机判定和破坏性重组成型；`P1-PONDER-01` 已冻结 11 项直接教学入口，`P1-PONDER-02` 已完成固定实验堆成型与安全控制的十段双语基础场景；`P1-VERIFY-01` 已用四类跨系统 GameTest 串接主要功能；P1 不实现具体事故后果。
 
-`P1-PONDER-02` 已通过项目经理复验并归档。用户于 `2026-09-12` 确认思索功能不再阻塞核心玩法，当前主线转入 `P1-VERIFY-02/03` 人工总验收与交接；尚未完成的 `P1-PONDER-03/04` 及后续设备思索场景统一移动到反应堆、锅炉和汽轮机具体事故实现并验收之后。`P1-BALANCE-02B` 仍只在主要目标因等待决策、外部条件或技术阻塞而无法继续时派发。
+`P1-PONDER-02` 已通过项目经理复验并归档。用户于 `2026-09-12` 确认思索功能不再阻塞核心玩法；随后发现现有固定 `2000 mB` 容量遗漏了“堆芯空置空间决定容量”的核心合同，当前主线先执行 `P1-COOL-06` 整改，再进入 `P1-VERIFY-02/03` 人工总验收与交接。尚未完成的 `P1-PONDER-03/04` 及后续设备思索场景统一移动到反应堆、锅炉和汽轮机具体事故实现并验收之后。`P1-BALANCE-02B` 仍只在主要目标因等待决策、外部条件或技术阻塞而无法继续时派发。
 
 ## 设计方向
 
@@ -103,6 +103,7 @@ Linux / macOS：
 - [注册内容与素材清单](docs/content-catalog.md)
 - [配方、材料关系与守恒约束](docs/recipes.md)
 - [当前 P1 单步执行计划](docs/superpowers/plans/2026-08-18-agent-developer-execution-plan.md)
+- [布局派生冷却剂容量整改计划](docs/superpowers/plans/2026-09-13-layout-derived-coolant-capacity-plan.md)
 - [损伤产热与燃耗平衡任务计划](docs/superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)
 - [历史计划与验收报告](docs/archive/README.md)
 
