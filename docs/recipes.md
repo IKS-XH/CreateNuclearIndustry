@@ -443,4 +443,4 @@
 - `reactor_instrument_port` 的配方/结构 Ponder 必须展示红石 SCRAM 输入；`reactor_refueling_port` 的 Ponder 必须展示受控换料条件。两者都不能被误画成普通物流口或独立库存设备。
 - `control_rod_drive` 的 Ponder 必须展示玩家浮动滑块和烈焰人管理员两条正常调节路径，并明确演示红石信号不会改变控制棒深度；红石 SCRAM 只进入 `reactor_instrument_port`。
 - 燃料组件、乏燃料容器和防护物品的主动使用必须有独立 Ponder 入口；纯矿物、金属、粉末、板材、焊料和仅作为装配材料的 `control_rod` 只在实际配方/设备场景中出现。
-- 配方改动若改变设备输入输出、管道等级或物品使用方式，必须同步更新 Ponder 文案、场景和资源契约；Ponder 缺失视为该内容未完成，而不是可后补的宣传素材。
+- 配方改动若改变设备输入输出、管道等级或物品使用方式，必须登记对应 Ponder 更新范围；场景和资源契约按 [事故实现后的 Ponder 教学计划](./superpowers/plans/2026-09-12-post-accident-ponder-plan.md)，在反应堆、锅炉和汽轮机具体事故实现后的统一教学阶段完成。Ponder 缺失不阻塞前置功能实现，但会阻止首发发布，且不能被当作可省略的宣传素材。
