@@ -16,7 +16,7 @@ public final class ReactorCoolantSimulationAdapter {
             ReactorCoolantLedger.PortSummary ports,
             double coldInAcceptedMb,
             double hotOutActualMb,
-            long hotInventoryCapacityMb,
+            long coolantCapacityMb,
             double coolantAbsorptionHuPerMb
     ) {
         public TickInput {
@@ -32,8 +32,8 @@ public final class ReactorCoolantSimulationAdapter {
             if (hotOutActualMb > ports.hotOutputCapacityMb() + WHOLE_MB_EPSILON) {
                 throw new IllegalArgumentException("actual hot output exceeds observed hot capacity");
             }
-            if (hotInventoryCapacityMb < 0L) {
-                throw new IllegalArgumentException("hot inventory capacity must be non-negative");
+            if (coolantCapacityMb < 0L) {
+                throw new IllegalArgumentException("shared coolant capacity must be non-negative");
             }
             requirePositiveFinite("coolant absorption", coolantAbsorptionHuPerMb);
         }
@@ -83,7 +83,7 @@ public final class ReactorCoolantSimulationAdapter {
                         input.coldInAcceptedMb(),
                         input.ports().hotOutputCapacityMb(),
                         input.hotOutActualMb(),
-                        input.hotInventoryCapacityMb(),
+                        input.coolantCapacityMb(),
                         input.coolantAbsorptionHuPerMb()
                 )
         );
@@ -92,15 +92,14 @@ public final class ReactorCoolantSimulationAdapter {
         long nextHot = wholeLong("next hot inventory", ledgerSettlement.nextInventory().hotCoolantMb());
         ReactorCoolantLedger.Settlement resultSettlement = new ReactorCoolantLedger.Settlement(
                 ledgerSettlement.nextInventory(),
+                ledgerSettlement.coldInAcceptedMb(),
                 ledgerSettlement.convertedCoolantMb(),
                 ledgerSettlement.hotOutActualMb(),
                 ledgerSettlement.removedHeatHu(),
                 input.availableHeatHu() - ledgerSettlement.removedHeatHu()
         );
-        double availableCold = previous.coldCoolantMb() + input.coldInAcceptedMb();
-        double hotSpaceAfterOutput = input.hotInventoryCapacityMb() - previous.hotCoolantMb()
-                + input.hotOutActualMb();
-        double integerCoolingCapacityMb = Math.min(availableCold, Math.max(0.0D, hotSpaceAfterOutput));
+        double availableCold = previous.coldCoolantMb() + ledgerSettlement.coldInAcceptedMb();
+        double integerCoolingCapacityMb = Math.max(0.0D, availableCold);
         double quantizationRemainder = Math.max(0.0D,
                 input.availableHeatHu() - wholeMillibucketHeat);
         double quantizedHeatRemainder = hasCapacityForQuantizedRemainder(

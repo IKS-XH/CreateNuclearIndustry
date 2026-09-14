@@ -127,15 +127,20 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /**
      * 返回最近一次结构缓存对应的静态摘要；读取只发生在服务端已缓存数据上，不触发扫描。
      *
-     * <p>容量从当前服务端配置读取，因此配置热更新后摘要会自然反映新的冷/热缓冲总容量；
-     * 列和端口计数仍完全来自最近一次有效结构扫描。该摘要不属于反应堆运行快照。</p>
+     * <p>容量从当前服务端配置和最近一次有效结构扫描中的主体坐标派生，因此配置热更新后
+     * 摘要会自然反映新的共享容量；该读取不会重新扫描世界，也不属于反应堆运行快照。</p>
      */
     public ReactorInstrumentStructureSummary structureSummary() {
         return ReactorInstrumentStructureSummary.from(
                 structureScan,
-                P1ServerConfig.VALUES.coldInventoryCapacityMb.get().longValue(),
-                P1ServerConfig.VALUES.hotInventoryCapacityMb.get().longValue()
+                P1ServerConfig.VALUES.coolantCapacityPerEmptyBlockMb.get().longValue()
         );
+    }
+
+    /** 返回当前有效结构和服务端配置派生的共享容量；无效结构返回零。 */
+    public long coolantCapacityMb() {
+        ReactorInstrumentStructureSummary summary = structureSummary();
+        return summary.valid() ? summary.coolantCapacityMb() : 0L;
     }
 
     /** 返回服务端最近一次正式 tick 生成的动态遥测；未完成有效 tick 时返回不可用状态。 */
@@ -628,7 +633,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         }
         return new ReactorServerTick.CoolantInput(
                 ReactorCoolantLedger.summarizePorts(ports, perPort),
-                Math.max(0L, P1ServerConfig.VALUES.hotInventoryCapacityMb.get().longValue()),
+                coolantCapacityMb(),
                 Math.max(1.0E-12D, P1ServerConfig.VALUES.coolantAbsorptionHuPerMb.get())
         );
     }
@@ -1348,8 +1353,14 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 clientStructureSummary.coldPortCount()));
         tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "hot_ports",
                 clientStructureSummary.hotPortCount()));
+        tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "empty_columns",
+                clientStructureSummary.emptyColumnCount()));
+        tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "coolant_space_blocks",
+                clientStructureSummary.coolantSpaceBlockCount()));
+        tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "capacity_per_space_block",
+                clientStructureSummary.coolantCapacityPerEmptyBlockMb()));
         tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "fluid_capacity",
-                clientStructureSummary.totalFluidCapacityMb()));
+                clientStructureSummary.coolantCapacityMb()));
         ReactorInstrumentGoggleDisplay.appendDynamicTooltip(
                 tooltip, clientStructureSummary, clientTelemetry);
         return true;

@@ -39,12 +39,13 @@ class ReactorInstrumentGoggleDisplayTest {
         List<Component> tooltip = new ArrayList<>();
         ReactorInstrumentGoggleDisplay.appendDynamicTooltip(tooltip, summary, telemetry);
 
-        assertEquals(5, tooltip.size(), "instrument dynamic section must contain only whole-reactor rows");
+        assertEquals(6, tooltip.size(), "instrument dynamic section must contain only whole-reactor rows");
         assertKey(tooltip.get(0), "dynamic_summary");
-        assertArguments(tooltip.get(1), "128", "1500");
-        assertArguments(tooltip.get(2), "64", "750");
-        assertArguments(tooltip.get(3), "3.3");
-        assertArguments(tooltip.get(4), "0.0");
+        assertArguments(tooltip.get(1), "128");
+        assertArguments(tooltip.get(2), "64");
+        assertArguments(tooltip.get(3), "192", "1500");
+        assertArguments(tooltip.get(4), "3.3");
+        assertArguments(tooltip.get(5), "0.0");
         assertTrue(tooltip.stream().noneMatch(component ->
                         component.getString().contains("fuel_column")
                                 || component.getString().contains("control_rod_column")),
@@ -79,11 +80,27 @@ class ReactorInstrumentGoggleDisplayTest {
                 new ReactorInstrumentTelemetry(true, "", 0L, 0L,
                         List.of(), List.of(), 0.0D, 0.0D));
 
-        assertEquals(5, tooltip.size());
-        assertArguments(tooltip.get(1), "0", "1500");
-        assertArguments(tooltip.get(2), "0", "750");
-        assertArguments(tooltip.get(3), "0.0");
+        assertEquals(6, tooltip.size());
+        assertArguments(tooltip.get(1), "0");
+        assertArguments(tooltip.get(2), "0");
+        assertArguments(tooltip.get(3), "0", "1500");
         assertArguments(tooltip.get(4), "0.0");
+        assertArguments(tooltip.get(5), "0.0");
+    }
+
+    @Test
+    void overCapacityRuntimeDataShowsSharedOccupancyAndExcess() {
+        List<Component> tooltip = new ArrayList<>();
+        ReactorInstrumentGoggleDisplay.appendDynamicTooltip(
+                tooltip,
+                validSummary(),
+                new ReactorInstrumentTelemetry(true, "", 1_000L, 600L,
+                        List.of(), List.of(), 0.0D, 0.0D));
+
+        assertEquals(7, tooltip.size());
+        assertArguments(tooltip.get(3), "1600", "1500");
+        assertKey(tooltip.get(4), "over_capacity");
+        assertArguments(tooltip.get(4), "100");
     }
 
     @Test
@@ -124,8 +141,7 @@ class ReactorInstrumentGoggleDisplayTest {
     private static ReactorInstrumentStructureSummary validSummary() {
         return ReactorInstrumentStructureSummary.from(
                 ReactorStructureDefinition.scan(ReactorStructureDefinition.canonicalTemplate()),
-                1_500L,
-                750L);
+                500L);
     }
 
     private static void assertKey(Component component, String expectedKey) {

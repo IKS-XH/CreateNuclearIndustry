@@ -7,20 +7,23 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-/** 验证冷却剂独立冷/热库存容量和服务端流量配置的读取边界。 */
+/** 验证布局派生共享容量和服务端流量配置的读取边界。 */
 class P1CoolantConfigurationContractTest {
     private static final Path JAVA_SOURCES = Path.of("src", "main", "java");
 
     @Test
-    void serverConfigExposesIndependentThousandMillibucketBuffers() throws IOException {
+    void serverConfigExposesPerSpaceBlockSharedCapacity() throws IOException {
         String source = readSource("com/iksxh/create_nuclear_industry/config/P1ServerConfig.java");
 
         assertTrue(source.contains("defineInRange(\"perPortFlowMbPerTick\", 128"));
-        assertTrue(source.contains("defineInRange(\"coldInventoryCapacityMb\", 1_000"));
-        assertTrue(source.contains("defineInRange(\"hotInventoryCapacityMb\", 1_000"));
-        assertTrue(source.contains("coldInventoryCapacityMb"));
-        assertTrue(source.contains("hotInventoryCapacityMb"));
+        assertTrue(source.contains("defineInRange(\"coolantCapacityPerEmptyBlockMb\""));
+        assertTrue(source.contains("ReactorCoolantCapacity.DEFAULT_CAPACITY_PER_EMPTY_BLOCK_MB"));
+        assertTrue(source.contains("ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB"));
+        assertTrue(source.contains("0, ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB"));
+        assertFalse(source.contains("coldInventoryCapacityMb"));
+        assertFalse(source.contains("hotInventoryCapacityMb"));
     }
 
     @Test
@@ -29,8 +32,9 @@ class P1CoolantConfigurationContractTest {
                 "com/iksxh/create_nuclear_industry/reactor/ReactorCoolantFluidHandler.java");
 
         assertTrue(source.contains("P1ServerConfig.VALUES.perPortFlowMbPerTick.get()"));
-        assertTrue(source.contains("P1ServerConfig.VALUES.coldInventoryCapacityMb.get()"));
-        assertTrue(source.contains("P1ServerConfig.VALUES.hotInventoryCapacityMb.get()"));
+        assertTrue(source.contains("owner.coolantCapacityMb()"));
+        assertFalse(source.contains("coldInventoryCapacityMb"));
+        assertFalse(source.contains("hotInventoryCapacityMb"));
         assertTrue(source.contains("ReactorCoolantPortFlowBudget"));
     }
 

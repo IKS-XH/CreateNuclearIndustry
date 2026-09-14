@@ -22,15 +22,15 @@ public final class ReactorServerTick {
     /** 世界侧适配器提供的本 tick 冷却剂观测。 */
     public record CoolantInput(
             ReactorCoolantLedger.PortSummary ports,
-            long hotInventoryCapacityMb,
+            long coolantCapacityMb,
             double coolantAbsorptionHuPerMb
     ) {
         public CoolantInput {
             if (ports == null) {
                 throw new IllegalArgumentException("coolant port summary is required");
             }
-            if (hotInventoryCapacityMb < 0L) {
-                throw new IllegalArgumentException("hot inventory capacity must be non-negative");
+            if (coolantCapacityMb < 0L) {
+                throw new IllegalArgumentException("shared coolant capacity must be non-negative");
             }
             if (!Double.isFinite(coolantAbsorptionHuPerMb) || coolantAbsorptionHuPerMb <= 0.0D) {
                 throw new IllegalArgumentException("coolant absorption must be finite and positive");
@@ -99,7 +99,7 @@ public final class ReactorServerTick {
                                 coolantInput.ports(),
                                 0.0D,
                                 0.0D,
-                                coolantInput.hotInventoryCapacityMb(),
+                                coolantInput.coolantCapacityMb(),
                                 coolantInput.coolantAbsorptionHuPerMb()
                         )
                 );

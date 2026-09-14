@@ -54,13 +54,13 @@ public final class P1GoggleInstrument04GameTests {
         List<Component> tooltip = new ArrayList<>();
         require(helper, instrument.addToGoggleTooltip(tooltip, false),
                 "valid instrument did not accept the goggle callback before the first tick");
-        require(helper, tooltip.size() == 9,
+        require(helper, tooltip.size() == 12,
                 "pre-tick goggle output did not contain static fields and runtime waiting state: size="
                         + tooltip.size() + ", texts=" + tooltip.stream().map(Component::getString).toList());
-        require(helper, containsAny(tooltip.get(7), "dynamic_summary", "动态运行遥测",
+        require(helper, containsAny(tooltip.get(10), "dynamic_summary", "动态运行遥测",
                         "Dynamic runtime telemetry"),
                 "pre-tick goggle output missed the dynamic section header");
-        require(helper, containsAny(tooltip.get(8), "runtime_data_waiting", "等待首次成功运行数据",
+        require(helper, containsAny(tooltip.get(11), "runtime_data_waiting", "等待首次成功运行数据",
                         "Waiting for the first successful runtime tick"),
                 "pre-tick goggle output exposed runtime values instead of waiting state");
         helper.succeed();
@@ -100,9 +100,11 @@ public final class P1GoggleInstrument04GameTests {
             ReactorInstrumentTelemetry telemetry = instrument.telemetry();
             require(helper, telemetry.available(), "formal tick telemetry was unavailable");
             ReactorInstrumentStructureSummary summary = instrument.structureSummary();
-            require(helper, summary.coldInventoryCapacityMb() == 1_000L
-                            && summary.hotInventoryCapacityMb() == 1_000L,
-                    "client display source did not expose the separate configured capacities");
+            require(helper, summary.emptyColumnCount() == 1
+                            && summary.coolantSpaceBlockCount() == 9
+                            && summary.coolantCapacityPerEmptyBlockMb() == 1_000L
+                            && summary.coolantCapacityMb() == 9_000L,
+                    "client display source did not expose the derived shared capacity");
 
             instrument.handleUpdateTag(
                     instrument.getUpdateTag(helper.getLevel().registryAccess()),
@@ -126,20 +128,21 @@ public final class P1GoggleInstrument04GameTests {
             List<Component> tooltip = new ArrayList<>();
             require(helper, instrument.addToGoggleTooltip(tooltip, false),
                     "valid instrument did not accept the goggle callback after the first tick");
-            require(helper, tooltip.size() == 12,
+            require(helper, tooltip.size() == 16,
                     "instrument goggle output must contain only whole-reactor rows after static summary");
-            require(helper, containsAny(tooltip.get(7), "dynamic_summary", "动态运行遥测",
+            require(helper, containsAny(tooltip.get(10), "dynamic_summary", "动态运行遥测",
                             "Dynamic runtime telemetry"),
                     "dynamic goggle output was not grouped after static summary");
-            require(helper, tooltip.get(8).getString().contains(Long.toString(telemetry.coldCoolantMb()))
-                            && tooltip.get(8).getString().contains("1000"),
-                    "cold inventory row did not show current and configured capacity");
-            require(helper, tooltip.get(9).getString().contains(Long.toString(telemetry.hotCoolantMb()))
-                            && tooltip.get(9).getString().contains("1000"),
-                    "hot inventory row did not show current and configured capacity");
-            require(helper, tooltip.get(10).getString().contains("HU/t"),
+            require(helper, tooltip.get(11).getString().contains(Long.toString(telemetry.coldCoolantMb())),
+                    "cold inventory row did not show current stock");
+            require(helper, tooltip.get(12).getString().contains(Long.toString(telemetry.hotCoolantMb())),
+                    "hot inventory row did not show current stock");
+            require(helper, tooltip.get(13).getString().contains(
+                            (telemetry.coldCoolantMb() + telemetry.hotCoolantMb()) + " / 9000"),
+                    "total coolant row did not show shared occupancy and capacity");
+            require(helper, tooltip.get(14).getString().contains("HU/t"),
                     "total fission heat row did not include HU/t");
-            require(helper, tooltip.get(11).getString().contains("mB/t"),
+            require(helper, tooltip.get(15).getString().contains("mB/t"),
                     "coolant conversion row did not include mB/t");
             require(helper, tooltip.subList(7, tooltip.size()).stream().noneMatch(text ->
                             text.getString().contains("Fuel column")

@@ -7,9 +7,9 @@ import java.util.TreeMap;
 /**
  * 加载器无关、单 tick 的冷却剂守恒账本。
  *
- * <p>调用方提供冷端进入量、热端本 tick 实际排出量和热库存总容量。热端阻塞时，
- * 仍可使用内部剩余空间；热库存已满则停止继续转化。流体量单位为 mB，热量单位
- * 为 HU。</p>
+ * <p>调用方提供冷端进入量、热端本 tick 实际排出量和布局派生的单一共享容量。冷转热
+ * 只改变状态、不改变总体积，因此热端阻塞不再制造独立热缓冲上限。流体量单位为 mB，
+ * 热量单位为 HU。</p>
  */
 public final class ReactorCoolantLedger {
     public static final double DEFAULT_PER_PORT_FLOW_MB = 128.0D;
@@ -138,7 +138,7 @@ public final class ReactorCoolantLedger {
             double coldInAcceptedMb,
             double hotOutputCapacityMb,
             double hotOutActualMb,
-            double hotInventoryCapacityMb,
+            double coolantCapacityMb,
             double coolantAbsorptionHuPerMb
     ) {
         public Input {
@@ -146,7 +146,7 @@ public final class ReactorCoolantLedger {
             requireFiniteNonNegative("accepted cold input", coldInAcceptedMb);
             requireFiniteNonNegative("hot output capacity", hotOutputCapacityMb);
             requireFiniteNonNegative("actual hot output", hotOutActualMb);
-            requireFiniteNonNegative("hot inventory capacity", hotInventoryCapacityMb);
+            requireFiniteNonNegative("shared coolant capacity", coolantCapacityMb);
             if (hotOutActualMb > hotOutputCapacityMb) {
                 throw new IllegalArgumentException("actual hot output cannot exceed hot output capacity");
             }
@@ -159,6 +159,7 @@ public final class ReactorCoolantLedger {
     /** 一次保守转化尝试的库存、转化量和剩余热量结果。 */
     public record Settlement(
             Inventory nextInventory,
+            double coldInAcceptedMb,
             double convertedCoolantMb,
             double hotOutActualMb,
             double removedHeatHu,
@@ -168,6 +169,7 @@ public final class ReactorCoolantLedger {
             if (nextInventory == null) {
                 throw new IllegalArgumentException("next coolant inventory is required");
             }
+            requireFiniteNonNegative("accepted cold input", coldInAcceptedMb);
             requireFiniteNonNegative("converted coolant", convertedCoolantMb);
             requireFiniteNonNegative("actual hot output", hotOutActualMb);
             requireFiniteNonNegative("removed heat", removedHeatHu);
@@ -181,32 +183,30 @@ public final class ReactorCoolantLedger {
      * <p>转化量严格按以下公式取最小值：</p>
      *
      * <pre>
-     * hotSpaceAfterOutputMb = hotInventoryCapacityMb
-     *     - previousHotInventoryMb + hotOutActualMb
+     * acceptedColdInMb = min(
+     *     observedColdInMb,
+     *     max(0, sharedCapacityMb - previousColdMb - previousHotMb)
+     * )
      * convertedCoolantMb = min(
      *     availableHeatHu / coolantAbsorptionHuPerMb,
-     *     previousColdInventoryMb + coldInAcceptedMb,
-     *     hotSpaceAfterOutputMb
+     *     previousColdMb + acceptedColdInMb
      * )
      * </pre>
      *
-     * <p>输出容量用于验证热端实测转移量，实测转移量本身才会释放热库存空间。
-     * 暂时无法转化的输入保留在冷库存；转化量先加入热库存，再扣除实测热端输出。</p>
+     * <p>超容量旧状态不会被截断；它只会使本次 acceptedColdInMb 为零。热端实际输出先由
+     * 外部 capability 观测并校验，再从热库存扣除，因此热端排出和后续冷转热都能逐步恢复
+     * 超容量状态。</p>
      */
     public static Settlement settle(Inventory previous, Input input) {
         if (previous == null || input == null) {
             throw new IllegalArgumentException("previous inventory and input are required");
         }
-        if (previous.hotCoolantMb() > input.hotInventoryCapacityMb()) {
-            throw new IllegalArgumentException("hot inventory exceeds its configured capacity");
-        }
-
-        double availableCold = safeAdd(previous.coldCoolantMb(), input.coldInAcceptedMb());
-        double hotSpaceAfterOutput = input.hotInventoryCapacityMb() - previous.hotCoolantMb()
-                + input.hotOutActualMb();
+        double previousTotal = safeAdd(previous.coldCoolantMb(), previous.hotCoolantMb());
+        double sharedSpace = Math.max(0.0D, input.coolantCapacityMb() - previousTotal);
+        double acceptedColdInput = Math.min(input.coldInAcceptedMb(), sharedSpace);
+        double availableCold = safeAdd(previous.coldCoolantMb(), acceptedColdInput);
         double heatLimitedCoolant = input.availableHeatHu() / input.coolantAbsorptionHuPerMb();
-        double converted = Math.min(heatLimitedCoolant,
-                Math.min(availableCold, Math.max(0.0D, hotSpaceAfterOutput)));
+        double converted = Math.min(heatLimitedCoolant, availableCold);
         converted = finiteNonNegative(converted);
 
         double removedHeat = converted * input.coolantAbsorptionHuPerMb();
@@ -218,7 +218,8 @@ public final class ReactorCoolantLedger {
             throw new IllegalArgumentException("actual hot output exceeds available hot coolant");
         }
         Inventory next = new Inventory(nextCold, nextHot);
-        return new Settlement(next, converted, input.hotOutActualMb(), removedHeat, remainingHeat);
+        return new Settlement(next, acceptedColdInput, converted,
+                input.hotOutActualMb(), removedHeat, remainingHeat);
     }
 
     private static double safeAdd(double left, double right) {

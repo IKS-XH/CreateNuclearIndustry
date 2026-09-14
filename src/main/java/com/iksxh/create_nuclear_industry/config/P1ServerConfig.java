@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.config;
 
 import com.mojang.logging.LogUtils;
+import com.iksxh.create_nuclear_industry.structure.ReactorCoolantCapacity;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -43,8 +44,7 @@ public final class P1ServerConfig {
         public final ModConfigSpec.DoubleValue fuelBurnTimeHours;
         public final ModConfigSpec.DoubleValue coolantAbsorptionHuPerMb;
         public final ModConfigSpec.IntValue perPortFlowMbPerTick;
-        public final ModConfigSpec.IntValue coldInventoryCapacityMb;
-        public final ModConfigSpec.IntValue hotInventoryCapacityMb;
+        public final ModConfigSpec.IntValue coolantCapacityPerEmptyBlockMb;
         public final ModConfigSpec.DoubleValue damageHeatThresholdHuPerTick;
         public final ModConfigSpec.DoubleValue damageRatePerTickHuLoad;
         public final ModConfigSpec.DoubleValue fuelColumnDamageHeatMultiplier;
@@ -74,12 +74,11 @@ public final class P1ServerConfig {
             perPortFlowMbPerTick = builder
                     .comment("单个端口每 tick 的最大冷却剂流量。")
                     .defineInRange("perPortFlowMbPerTick", 128, 0, 1_000_000);
-            coldInventoryCapacityMb = builder
-                    .comment("共享内部冷端冷却剂缓冲容量，单位为毫桶。")
-                    .defineInRange("coldInventoryCapacityMb", 1_000, 0, 1_000_000_000);
-            hotInventoryCapacityMb = builder
-                    .comment("共享内部热端冷却剂缓冲容量，单位为毫桶。")
-                    .defineInRange("hotInventoryCapacityMb", 1_000, 0, 1_000_000_000);
+            coolantCapacityPerEmptyBlockMb = builder
+                    .comment("每个空列或控制棒列内部主体格提供的共享冷却剂容量，单位为毫桶。")
+                    .defineInRange("coolantCapacityPerEmptyBlockMb",
+                            ReactorCoolantCapacity.DEFAULT_CAPACITY_PER_EMPTY_BLOCK_MB,
+                            0, ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB);
             damageHeatThresholdHuPerTick = builder
                     .comment("开始造成完整度损伤前的有效热负荷阈值。")
                     .defineInRange("damageHeatThresholdHuPerTick", 0.25D, 0.0D, 1_000_000.0D);

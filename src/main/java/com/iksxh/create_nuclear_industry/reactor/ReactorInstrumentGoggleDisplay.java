@@ -47,16 +47,31 @@ public final class ReactorInstrumentGoggleDisplay {
         }
 
         tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "cold_inventory",
-                Long.toString(telemetry.coldCoolantMb()),
-                Long.toString(structureSummary.coldInventoryCapacityMb())));
+                Long.toString(telemetry.coldCoolantMb())));
         tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "hot_inventory",
-                Long.toString(telemetry.hotCoolantMb()),
-                Long.toString(structureSummary.hotInventoryCapacityMb())));
+                Long.toString(telemetry.hotCoolantMb())));
+        long totalCoolantMb = sharedInventoryTotalMb(telemetry);
+        tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "total_inventory",
+                Long.toString(totalCoolantMb),
+                Long.toString(structureSummary.coolantCapacityMb())));
+        if (totalCoolantMb > structureSummary.coolantCapacityMb()) {
+            tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "over_capacity",
+                    Long.toString(totalCoolantMb - structureSummary.coolantCapacityMb())));
+        }
         tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "total_fission_heat",
                 formatRate(telemetry.totalGeneratedFissionHeatHuPerTick())));
         tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "coolant_conversion",
                 formatRate(telemetry.convertedCoolantMbPerTick())));
 
+    }
+
+    /** 汇总客户端同步的冷热库存；超容量旧状态仍原样显示，不伪造更大的容量。 */
+    private static long sharedInventoryTotalMb(ReactorInstrumentTelemetry telemetry) {
+        try {
+            return Math.addExact(telemetry.coldCoolantMb(), telemetry.hotCoolantMb());
+        } catch (ArithmeticException exception) {
+            return Long.MAX_VALUE;
+        }
     }
 
     /** 追加单个换料端口对应的燃料列完整度和发热量，不显示其它列。 */

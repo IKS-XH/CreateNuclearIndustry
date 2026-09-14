@@ -49,14 +49,13 @@ public final class P1CoolantGameTests {
             IFluidHandler hot = fluidHandler(helper, HOT);
             FluidStack coldStack = new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 256);
             int configuredFlowLimit = Math.max(0, P1ServerConfig.VALUES.perPortFlowMbPerTick.get());
-            long configuredColdCapacity = P1ServerConfig.VALUES.coldInventoryCapacityMb.get().longValue();
-            long configuredHotCapacity = P1ServerConfig.VALUES.hotInventoryCapacityMb.get().longValue();
+            long configuredCapacity = instrument.coolantCapacityMb();
             int initialSimulation = (int) Math.min(
-                    Math.min(256L, configuredFlowLimit), configuredColdCapacity);
+                    Math.min(256L, configuredFlowLimit), configuredCapacity);
             int firstRequest = Math.min(80, initialSimulation);
             int secondRequest = (int) Math.min(
                     Math.max(0L, configuredFlowLimit - firstRequest),
-                    Math.max(0L, configuredColdCapacity - firstRequest));
+                    Math.max(0L, configuredCapacity - firstRequest));
 
             require(helper, cold.fill(coldStack, FluidAction.SIMULATE) == initialSimulation,
                     "cold capability did not apply the per-port limit");
@@ -81,7 +80,7 @@ public final class P1CoolantGameTests {
             helper.runAfterDelay(1, () -> {
                 int nextTickAccepted = (int) Math.min(
                         Math.min(256L, configuredFlowLimit),
-                        Math.max(0L, configuredColdCapacity - acceptedThisTick));
+                        Math.max(0L, configuredCapacity - acceptedThisTick));
                 require(helper, coldAgain.fill(coldStack, FluidAction.EXECUTE) == nextTickAccepted,
                         "physical port quota did not reset on the next server tick");
                 require(helper, instrument.snapshot().coldCoolantMb() == acceptedThisTick + nextTickAccepted,
@@ -96,7 +95,7 @@ public final class P1CoolantGameTests {
                         instrument.snapshot(),
                         new ReactorCoolantSimulationAdapter.TickInput(
                                 acceptedThisTick * 0.5D, ports, 0.0D, 0.0D,
-                                configuredHotCapacity, 0.5D));
+                                configuredCapacity, 0.5D));
                 instrument.setSnapshot(converted.nextSnapshot());
                 require(helper, instrument.snapshot().coldCoolantMb() == 0L
                                 && instrument.snapshot().hotCoolantMb() == acceptedThisTick,
@@ -124,12 +123,11 @@ public final class P1CoolantGameTests {
                 require(helper, instrument.snapshot().hotCoolantMb() == 0L,
                         "hot output was not deducted from the shared snapshot");
 
-                long blockedCold = Math.min(64L, configuredColdCapacity);
                 ReactorSnapshot blocked = new ReactorSnapshot(
                         instrument.snapshot().fuelColumns(),
                         instrument.snapshot().controlRodColumns(),
-                        blockedCold,
-                        configuredHotCapacity,
+                        0L,
+                        configuredCapacity,
                         instrument.snapshot().meltdownProgressTicks(),
                         instrument.snapshot().meltdownCountdownStarted()
                 );
@@ -142,9 +140,9 @@ public final class P1CoolantGameTests {
                         instrument.snapshot(),
                         new ReactorCoolantSimulationAdapter.TickInput(
                                 100.0D, blockedPorts, 0.0D, 0.0D,
-                                configuredHotCapacity, 0.5D));
+                                configuredCapacity, 0.5D));
                 require(helper, blockedResult.nextSnapshot().equals(blocked),
-                        "full hot buffer and blocked hot port consumed coolant or heat");
+                        "full shared coolant inventory and blocked hot port consumed coolant or heat");
 
                 CompoundTag saved = instrument.saveForServerTest(helper.getLevel().registryAccess());
                 ReactorInstrumentPortBlockEntity reloaded = new ReactorInstrumentPortBlockEntity(

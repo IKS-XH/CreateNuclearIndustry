@@ -21,10 +21,12 @@ class P1GoggleInstrument01ContractTest {
                 "com/iksxh/create_nuclear_industry/structure/ReactorInstrumentStructureSummary.java");
 
         assertTrue(instrument.contains("ReactorInstrumentStructureSummary structureSummary()"));
-        assertTrue(instrument.contains("P1ServerConfig.VALUES.coldInventoryCapacityMb.get()"));
-        assertTrue(instrument.contains("P1ServerConfig.VALUES.hotInventoryCapacityMb.get()"));
+        assertTrue(instrument.contains("P1ServerConfig.VALUES.coolantCapacityPerEmptyBlockMb.get()"));
+        assertTrue(instrument.contains("coolantCapacityMb()"));
         assertTrue(instrument.contains("ReactorInstrumentStructureSummary.from("));
-        assertTrue(summary.contains("totalFluidCapacityMb"));
+        assertTrue(summary.contains("coolantSpaceBlockCount"));
+        assertTrue(summary.contains("coolantCapacityPerEmptyBlockMb"));
+        assertTrue(summary.contains("coolantCapacityMb"));
         assertTrue(summary.contains("distinct()"));
         assertFalse(summary.contains("ReactorSnapshot snapshot"),
                 "static structure summary must not duplicate the authoritative runtime snapshot");

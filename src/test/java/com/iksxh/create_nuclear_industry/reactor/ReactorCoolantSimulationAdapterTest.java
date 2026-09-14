@@ -60,7 +60,7 @@ class ReactorCoolantSimulationAdapterTest {
 
     @Test
     void fullHotBufferAndBlockedOutputKeepColdInventoryAndHeat() {
-        ReactorSnapshot previous = snapshot(10L, 1_000L);
+        ReactorSnapshot previous = snapshot(0L, 1_000L);
         ReactorCoolantSimulationAdapter.Result result = ReactorCoolantSimulationAdapter.settle(
                 previous,
                 new ReactorCoolantSimulationAdapter.TickInput(
@@ -76,6 +76,28 @@ class ReactorCoolantSimulationAdapterTest {
         assertEquals(previous, result.nextSnapshot());
         assertEquals(0.0D, result.settlement().convertedCoolantMb(), EPSILON);
         assertEquals(100.0D, result.settlement().remainingHeatHu(), EPSILON);
+    }
+
+    @Test
+    void fullColdSharedCapacityStillConvertsWithoutChangingTotalVolume() {
+        ReactorSnapshot previous = snapshot(1_000L, 0L);
+        ReactorCoolantSimulationAdapter.Result result = ReactorCoolantSimulationAdapter.settle(
+                previous,
+                new ReactorCoolantSimulationAdapter.TickInput(
+                        500.0D,
+                        ports(128.0D, 0.0D),
+                        0.0D,
+                        0.0D,
+                        1_000L,
+                        0.5D
+                )
+        );
+
+        assertEquals(0L, result.nextSnapshot().coldCoolantMb());
+        assertEquals(1_000L, result.nextSnapshot().hotCoolantMb());
+        assertEquals(1_000L, result.nextSnapshot().coldCoolantMb()
+                + result.nextSnapshot().hotCoolantMb());
+        assertEquals(500.0D, result.settlement().removedHeatHu(), EPSILON);
     }
 
     @Test

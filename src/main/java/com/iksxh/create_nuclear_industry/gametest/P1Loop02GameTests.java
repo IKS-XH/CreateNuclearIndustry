@@ -105,7 +105,7 @@ public final class P1Loop02GameTests {
                     "多个端口没有共享同一个仪表端口状态所有者");
 
             int configuredLimit = Math.max(0, P1ServerConfig.VALUES.perPortFlowMbPerTick.get());
-            long coldCapacity = Math.max(0L, P1ServerConfig.VALUES.coldInventoryCapacityMb.get().longValue());
+            long sharedCapacity = Math.max(0L, instrument.coolantCapacityMb());
             int request = Math.max(200, configuredLimit);
             int firstAccepted = firstCold.fill(
                     new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), request),
@@ -113,9 +113,9 @@ public final class P1Loop02GameTests {
             int secondAccepted = secondCold.fill(
                     new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), request),
                     IFluidHandler.FluidAction.EXECUTE);
-            int expectedFirst = (int) Math.min(coldCapacity, configuredLimit);
+            int expectedFirst = (int) Math.min(sharedCapacity, configuredLimit);
             int expectedSecond = (int) Math.min(
-                    Math.max(0L, coldCapacity - expectedFirst), configuredLimit);
+                    Math.max(0L, sharedCapacity - expectedFirst), configuredLimit);
             require(helper, firstAccepted == expectedFirst && secondAccepted == expectedSecond,
                     "多个冷端口没有分别应用单端口流量上限：" + firstAccepted + "/" + secondAccepted
                             + "，配置值为" + configuredLimit);

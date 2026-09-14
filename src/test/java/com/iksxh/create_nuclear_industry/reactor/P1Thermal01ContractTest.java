@@ -116,19 +116,15 @@ class P1Thermal01ContractTest {
     }
 
     @Test
-    void blockedHotEndDisablesQuantizedProtectionAndKeepsHeatInFuelColumn() {
+    void blockedHotEndStillAllowsQuantizedRemainderProtectionWithColdStock() {
         ReactorServerTick.Result result = advance(
                 snapshot(fuel(1.0D, 0.0D, 0.0D), 1L, 0L),
                 parametersForGeneratedHeat(0.49D),
                 0L
         );
-        double expectedDamage = (0.49D - DEFAULTS.damageHeatThresholdHuPerTick())
-                * DEFAULTS.damageRatePerTickHuLoad();
-
         assertEquals(0.0D, result.coolant().settlement().convertedCoolantMb(), EPSILON);
-        assertEquals(0.0D, result.coolant().quantizedHeatRemainderHu(), EPSILON);
-        assertEquals(expectedDamage,
-                result.thermal().columns().get(CENTER).integrityDamage(), EPSILON);
+        assertEquals(0.49D, result.coolant().quantizedHeatRemainderHu(), EPSILON);
+        assertEquals(0.0D, result.thermal().columns().get(CENTER).integrityDamage(), EPSILON);
         assertEquals(0.49D, result.snapshot().fuelColumns().get(CENTER).cachedHeatHu(), EPSILON);
     }
 

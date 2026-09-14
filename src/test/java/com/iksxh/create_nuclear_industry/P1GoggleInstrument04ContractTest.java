@@ -35,8 +35,9 @@ class P1GoggleInstrument04ContractTest {
         assertTrue(controlRodDrive.contains("appendControlRodColumnTooltip"));
         assertTrue(display.contains("客户端"));
         assertTrue(display.contains("不读取世界") || display.contains("不触发"));
-        assertTrue(summary.contains("coldInventoryCapacityMb"));
-        assertTrue(summary.contains("hotInventoryCapacityMb"));
+        assertTrue(summary.contains("emptyColumnCount"));
+        assertTrue(summary.contains("coolantSpaceBlockCount"));
+        assertTrue(summary.contains("coolantCapacityMb"));
         assertFalse(display.contains("getBlockEntity"),
                 "display adapter must not inspect neighboring block entities");
         assertFalse(display.contains("ReactorFissionCalculator"),

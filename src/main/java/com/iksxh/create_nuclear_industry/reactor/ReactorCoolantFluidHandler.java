@@ -128,13 +128,12 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
         if (!isCapabilityAvailable() || !coldInput || !ModFluids.isCompoundCoolant(resource)) {
             return 0;
         }
-        long current = owner.snapshot().coldCoolantMb();
-        long available = Math.max(0L, configuredCapacityMb() - current);
+        ReactorSnapshot snapshot = owner.snapshot();
+        long available = sharedRemainingCapacityMb(snapshot, configuredCapacityMb());
         int requested = (int) Math.min((long) resource.getAmount(), available);
         int accepted = flowBudget.reserve(currentServerTick(), requested,
                 configuredFlowLimitMbPerTick(), action == FluidAction.EXECUTE);
         if (accepted > 0 && action == FluidAction.EXECUTE) {
-            ReactorSnapshot snapshot = owner.snapshot();
             owner.setSnapshot(snapshot.withCoolantInventories(
                     snapshot.coldCoolantMb() + accepted, snapshot.hotCoolantMb()));
         }
@@ -193,9 +192,26 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
         if (capacityOverrideMb != null) {
             return capacityOverrideMb;
         }
-        return coldInput
-                ? P1ServerConfig.VALUES.coldInventoryCapacityMb.get().longValue()
-                : P1ServerConfig.VALUES.hotInventoryCapacityMb.get().longValue();
+        return owner.coolantCapacityMb();
+    }
+
+    /**
+     * 返回共享账本在本次冷端输入前的剩余空间，单位为 mB。
+     *
+     * <p>旧状态可能因配置缩小而超过派生容量；此时只拒绝新输入，不截断已有冷/热库存，
+     * 由正式冷转热和热端排出路径逐步恢复到容量以内。</p>
+     */
+    private static long sharedRemainingCapacityMb(ReactorSnapshot snapshot, long capacityMb) {
+        if (capacityMb < 0L) {
+            throw new IllegalArgumentException("coolant capacity must be non-negative");
+        }
+        long total;
+        try {
+            total = Math.addExact(snapshot.coldCoolantMb(), snapshot.hotCoolantMb());
+        } catch (ArithmeticException exception) {
+            total = Long.MAX_VALUE;
+        }
+        return total >= capacityMb ? 0L : capacityMb - total;
     }
 
     private int configuredFlowLimitMbPerTick() {

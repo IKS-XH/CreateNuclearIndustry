@@ -25,29 +25,29 @@ class ReactorCoolantLedgerTest {
     }
 
     @Test
-    void blockedHotOutputUsesFreeInternalBufferSpaceWithoutDiscardingCoolant() {
+    void fullSharedCapacityStillAllowsColdToHotStateConversion() {
         ReactorCoolantLedger.Settlement result = ReactorCoolantLedger.settle(
-                new ReactorCoolantLedger.Inventory(5.0D, 7.0D),
-                new ReactorCoolantLedger.Input(100.0D, 2.0D, 0.0D, 0.0D, 10.0D, 0.5D)
+                new ReactorCoolantLedger.Inventory(10.0D, 0.0D),
+                new ReactorCoolantLedger.Input(100.0D, 0.0D, 0.0D, 0.0D, 10.0D, 0.5D)
         );
 
-        assertEquals(3.0D, result.convertedCoolantMb(), EPSILON);
+        assertEquals(10.0D, result.convertedCoolantMb(), EPSILON);
         assertEquals(0.0D, result.hotOutActualMb(), EPSILON);
-        assertEquals(1.5D, result.removedHeatHu(), EPSILON);
-        assertEquals(4.0D, result.nextInventory().coldCoolantMb(), EPSILON);
+        assertEquals(5.0D, result.removedHeatHu(), EPSILON);
+        assertEquals(0.0D, result.nextInventory().coldCoolantMb(), EPSILON);
         assertEquals(10.0D, result.nextInventory().hotCoolantMb(), EPSILON);
     }
 
     @Test
-    void fullBufferAndBlockedHotOutputStopConversion() {
+    void fullMixedSharedCapacityConvertsTheRemainingColdVolume() {
         ReactorCoolantLedger.Settlement result = ReactorCoolantLedger.settle(
-                new ReactorCoolantLedger.Inventory(5.0D, 10.0D),
-                new ReactorCoolantLedger.Input(100.0D, 2.0D, 0.0D, 0.0D, 10.0D, 0.5D)
+                new ReactorCoolantLedger.Inventory(5.0D, 5.0D),
+                new ReactorCoolantLedger.Input(100.0D, 0.0D, 0.0D, 0.0D, 10.0D, 0.5D)
         );
 
-        assertEquals(0.0D, result.convertedCoolantMb(), EPSILON);
-        assertEquals(0.0D, result.removedHeatHu(), EPSILON);
-        assertEquals(7.0D, result.nextInventory().coldCoolantMb(), EPSILON);
+        assertEquals(5.0D, result.convertedCoolantMb(), EPSILON);
+        assertEquals(2.5D, result.removedHeatHu(), EPSILON);
+        assertEquals(0.0D, result.nextInventory().coldCoolantMb(), EPSILON);
         assertEquals(10.0D, result.nextInventory().hotCoolantMb(), EPSILON);
     }
 
@@ -69,17 +69,31 @@ class ReactorCoolantLedgerTest {
     }
 
     @Test
-    void existingColdInventoryCanCoolUntilHotOutputBackpressureApplies() {
+    void existingColdInventoryConvertsWithoutIndependentHotBackpressure() {
         ReactorCoolantLedger.Settlement result = ReactorCoolantLedger.settle(
                 new ReactorCoolantLedger.Inventory(5.0D, 0.0D),
-                new ReactorCoolantLedger.Input(100.0D, 0.0D, 2.0D, 0.0D, 2.0D, 1.0D)
+                new ReactorCoolantLedger.Input(100.0D, 0.0D, 0.0D, 0.0D, 10.0D, 1.0D)
         );
 
-        assertEquals(2.0D, result.convertedCoolantMb(), EPSILON);
+        assertEquals(5.0D, result.convertedCoolantMb(), EPSILON);
         assertEquals(0.0D, result.hotOutActualMb(), EPSILON);
-        assertEquals(2.0D, result.removedHeatHu(), EPSILON);
-        assertEquals(3.0D, result.nextInventory().coldCoolantMb(), EPSILON);
-        assertEquals(2.0D, result.nextInventory().hotCoolantMb(), EPSILON);
+        assertEquals(5.0D, result.removedHeatHu(), EPSILON);
+        assertEquals(0.0D, result.nextInventory().coldCoolantMb(), EPSILON);
+        assertEquals(5.0D, result.nextInventory().hotCoolantMb(), EPSILON);
+    }
+
+    @Test
+    void overCapacityStateIsPreservedAndCanBeReducedByConversionAndOutput() {
+        ReactorCoolantLedger.Settlement result = ReactorCoolantLedger.settle(
+                new ReactorCoolantLedger.Inventory(5.0D, 7.0D),
+                new ReactorCoolantLedger.Input(100.0D, 2.0D, 7.0D, 2.0D, 10.0D, 0.5D)
+        );
+
+        assertEquals(0.0D, result.coldInAcceptedMb(), EPSILON);
+        assertEquals(5.0D, result.convertedCoolantMb(), EPSILON);
+        assertEquals(2.0D, result.hotOutActualMb(), EPSILON);
+        assertEquals(0.0D, result.nextInventory().coldCoolantMb(), EPSILON);
+        assertEquals(10.0D, result.nextInventory().hotCoolantMb(), EPSILON);
     }
 
     @Test
@@ -98,6 +112,6 @@ class ReactorCoolantLedgerTest {
         assertThrows(IllegalArgumentException.class, () ->
                 ReactorCoolantLedger.settle(
                         new ReactorCoolantLedger.Inventory(0.0D, 11.0D),
-                        new ReactorCoolantLedger.Input(0.0D, 0.0D, 0.0D, 0.0D, 10.0D, 0.5D)));
+                        new ReactorCoolantLedger.Input(0.0D, 0.0D, 1.0D, 2.0D, 10.0D, 0.5D)));
     }
 }

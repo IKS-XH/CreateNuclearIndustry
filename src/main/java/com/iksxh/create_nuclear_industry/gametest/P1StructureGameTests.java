@@ -300,8 +300,9 @@ public final class P1StructureGameTests {
                     "static summary reported incorrect canonical column counts");
             require(helper, initial.coldPortCount() == 1 && initial.hotPortCount() == 1,
                     "static summary reported incorrect canonical coolant port counts");
-            require(helper, initial.totalFluidCapacityMb() == 2_000L,
-                    "static summary did not add the configured cold and hot capacities");
+            require(helper, initial.coolantSpaceBlockCount() == 3
+                            && initial.coolantCapacityMb() == 3_000L,
+                    "static summary did not derive the shared capacity from coolant-space blocks");
 
             long scansAfterSummary = instrument.structureScanCount();
             require(helper, instrument.structureSummary().equals(initial),
@@ -338,25 +339,27 @@ public final class P1StructureGameTests {
 
             require(helper, instrument.addToGoggleTooltip(tooltip, false),
                     "valid static summary was not accepted by the Create goggle callback");
-            require(helper, tooltip.size() == 12,
+            require(helper, tooltip.size() == 16,
                     "valid goggle summary did not contain the static fields and runtime section: size="
                             + tooltip.size() + ", texts=" + tooltip.stream().map(Component::getString).toList());
-            String[] expectedValues = {"5 × 5 × 5", "8", "0", "1", "1", "2000"};
+            String[] expectedValues = {"5 × 5 × 5", "8", "0", "1", "1", "1", "3", "1000", "3000"};
             for (int index = 0; index < expectedValues.length; index++) {
                 require(helper, tooltip.get(index + 1).getString().contains(expectedValues[index]),
                         "goggle summary field " + index + " was missing or out of order");
             }
-            require(helper, tooltip.get(7).getString().contains("dynamic_summary")
-                            || tooltip.get(7).getString().contains("动态运行遥测")
-                            || tooltip.get(7).getString().contains("Dynamic runtime telemetry"),
+            require(helper, tooltip.get(10).getString().contains("dynamic_summary")
+                            || tooltip.get(10).getString().contains("动态运行遥测")
+                            || tooltip.get(10).getString().contains("Dynamic runtime telemetry"),
                     "valid goggle summary did not contain the dynamic section header");
-            require(helper, tooltip.get(8).getString().contains("0 / 1000"),
-                    "valid goggle summary did not show the current cold stock and capacity");
-            require(helper, tooltip.get(9).getString().contains("0 / 1000"),
-                    "valid goggle summary did not show the current hot stock and capacity");
-            require(helper, tooltip.get(10).getString().contains("0.0 HU/t"),
+            require(helper, tooltip.get(11).getString().contains("0 mB"),
+                    "valid goggle summary did not show the current cold stock");
+            require(helper, tooltip.get(12).getString().contains("0 mB"),
+                    "valid goggle summary did not show the current hot stock");
+            require(helper, tooltip.get(13).getString().contains("0 / 3000"),
+                    "valid goggle summary did not show shared occupancy and capacity");
+            require(helper, tooltip.get(14).getString().contains("0.0 HU/t"),
                     "valid goggle summary did not show zero fission heat");
-            require(helper, tooltip.get(11).getString().contains("0.0 mB/t"),
+            require(helper, tooltip.get(15).getString().contains("0.0 mB/t"),
                     "valid goggle summary did not show zero coolant conversion");
             require(helper, instrument.snapshot().equals(snapshotBeforeTooltip),
                     "goggle rendering changed the authoritative reactor snapshot");

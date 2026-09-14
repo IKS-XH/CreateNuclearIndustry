@@ -17,7 +17,7 @@ class ReactorInstrumentStructureSummaryTest {
     @Test
     void canonicalStructureProducesFixedDimensionsAndExpectedCounts() {
         ReactorInstrumentStructureSummary summary = ReactorInstrumentStructureSummary.from(
-                scan(ReactorStructureDefinition.canonicalTemplate()), 1_000L, 1_000L);
+                scan(ReactorStructureDefinition.canonicalTemplate()), 1_000L);
 
         assertTrue(summary.valid());
         assertEquals("", summary.unavailableReason());
@@ -28,9 +28,10 @@ class ReactorInstrumentStructureSummaryTest {
         assertEquals(0, summary.controlRodColumnCount());
         assertEquals(1, summary.coldPortCount());
         assertEquals(1, summary.hotPortCount());
-        assertEquals(1_000L, summary.coldInventoryCapacityMb());
-        assertEquals(1_000L, summary.hotInventoryCapacityMb());
-        assertEquals(2_000L, summary.totalFluidCapacityMb());
+        assertEquals(1, summary.emptyColumnCount());
+        assertEquals(3, summary.coolantSpaceBlockCount());
+        assertEquals(1_000L, summary.coolantCapacityPerEmptyBlockMb());
+        assertEquals(3_000L, summary.coolantCapacityMb());
     }
 
     @Test
@@ -46,16 +47,17 @@ class ReactorInstrumentStructureSummaryTest {
                 ReactorStructureDefinition.PortType.HOT_COOLANT);
 
         ReactorInstrumentStructureSummary summary = ReactorInstrumentStructureSummary.from(
-                scan(blocks), 1_500L, 750L);
+                scan(blocks), 500L);
 
         assertTrue(summary.valid());
         assertEquals(7, summary.fuelColumnCount());
         assertEquals(1, summary.controlRodColumnCount());
         assertEquals(2, summary.coldPortCount());
         assertEquals(2, summary.hotPortCount());
-        assertEquals(1_500L, summary.coldInventoryCapacityMb());
-        assertEquals(750L, summary.hotInventoryCapacityMb());
-        assertEquals(2_250L, summary.totalFluidCapacityMb());
+        assertEquals(1, summary.emptyColumnCount());
+        assertEquals(6, summary.coolantSpaceBlockCount());
+        assertEquals(500L, summary.coolantCapacityPerEmptyBlockMb());
+        assertEquals(3_000L, summary.coolantCapacityMb());
     }
 
     @Test
@@ -75,7 +77,7 @@ class ReactorInstrumentStructureSummaryTest {
                 valid.columns(), ports);
 
         ReactorInstrumentStructureSummary summary = ReactorInstrumentStructureSummary.from(
-                duplicated, 1_000L, 1_000L);
+                duplicated, 1_000L);
 
         assertEquals(1, summary.coldPortCount());
         assertEquals(1, summary.hotPortCount());
@@ -89,12 +91,12 @@ class ReactorInstrumentStructureSummaryTest {
                 "create_nuclear_industry:reactor_casing");
 
         ReactorInstrumentStructureSummary summary = ReactorInstrumentStructureSummary.from(
-                scan(blocks), 1_000L, 1_000L);
+                scan(blocks), 1_000L);
 
         assertFalse(summary.valid());
         assertFalse(summary.unavailableReason().isBlank());
         assertEquals(0, summary.width());
-        assertEquals(0L, summary.totalFluidCapacityMb());
+        assertEquals(0L, summary.coolantCapacityMb());
     }
 
     @Test
@@ -103,15 +105,16 @@ class ReactorInstrumentStructureSummaryTest {
                 ReactorStructureDefinition.canonicalTemplate());
 
         assertThrows(IllegalArgumentException.class,
-                () -> ReactorInstrumentStructureSummary.from(scan, -1L, 1_000L));
+                () -> ReactorInstrumentStructureSummary.from(scan, -1L));
         assertThrows(IllegalArgumentException.class,
-                () -> ReactorInstrumentStructureSummary.from(scan, 1_000L, -1L));
+                () -> ReactorInstrumentStructureSummary.from(scan,
+                        ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB + 1L));
     }
 
     @Test
     void validSummaryRoundTripsThroughClientUpdateTag() {
         ReactorInstrumentStructureSummary source = ReactorInstrumentStructureSummary.from(
-                scan(ReactorStructureDefinition.canonicalTemplate()), 1_500L, 750L);
+                scan(ReactorStructureDefinition.canonicalTemplate()), 500L);
 
         ReactorInstrumentStructureSummary decoded =
                 ReactorInstrumentStructureSummary.readSyncTag(source.writeSyncTag());
