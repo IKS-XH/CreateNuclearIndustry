@@ -2,13 +2,13 @@
 
 > 执行入口：阶段依赖、勾选清单与验收门见 [实施路线图](./implementation-roadmap.md)；新增流体、物品、方块和多方块结构见 [内容注册与素材清单](./content-catalog.md)；隐藏彩蛋与进度见 [隐藏彩蛋与进度设计](./easter-eggs-and-advancements.md)。已完成的设计与实施计划见 [文档归档索引](./archive/README.md)，当前任务只以活动计划目录和路线图为准。
 
-**文档版本：** v1.29－布局派生冷却剂容量稿
+**文档版本：** v1.30－布局派生冷却剂容量验收稿
 **首发技术栈：** Java 21 + Minecraft 1.21.1 + NeoForge + Create 6.0.10；在开发开始前冻结具体 NeoForge、Create 及其 API 依赖版本
 **首发核心依赖：** Create（机械动力）
 **长期方向：** 先作为 Create 核工业附属模组完成可玩闭环，再逐步扩展电力、高级反应堆、聚变与反物质科技，最终演进为可独立运行的核工业模组
 **后续移植：** 旧版 Minecraft、Forge 与 Fabric 不纳入首发范围；核心模拟层应与加载器及 Create 接口解耦，为后续移植和独立化留出空间
 
-**2026-09-13 实施状态：** 用户批准的损伤差异倍率已由 `P1-BALANCE-02A` 接入游戏端，默认满损伤产热 2 倍、燃耗 3 倍，两个终点均可配置且燃耗增长更快。`P1-MELTDOWN-01/02` 与 `P1-MAINT-01/02/03` 已闭合融毁倒计时、服务端事件占位、危险拆除、完全停机纯判定和破坏性重组成型；`P1-PONDER-01` 已冻结 11 项直接入口，`P1-PONDER-02` 已完成固定实验堆成型与安全控制的十段双语基础场景；`P1-VERIFY-01` 已用四类 required GameTest 串接冷启动运行、SCRAM、换料/维修/重载以及危险拆除与安全重组成型，当前整合基线为 251 项 JUnit、110 个 required GameTest 与完整构建通过。用户确认思索功能不阻塞核心玩法；随后确认现有固定 `2000 mB` 冷却剂容量遗漏了“堆芯空置空间决定容量”的玩法，当前 P1 主线先执行 [P1-COOL-06 布局派生容量整改](./superpowers/plans/2026-09-13-layout-derived-coolant-capacity-plan.md)，通过后再进入 `P1-VERIFY-02/03`。尚未完成的 Ponder 教学和总资源验收仍统一在反应堆、锅炉、汽轮机具体事故实现并验收之后执行。公式与校验以 [局部控制设计](./reactor-local-control-revision-design.md) 为准。HTML 模拟器仍待 [P1-BALANCE-02B](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 同步，但该任务只在主要目标阻塞时穿插，不是 P1 主线或最终验收的前置。历史等倍率和固定双缓冲实现及其测试只保留为旧基线记录。
+**2026-09-14 实施状态：** 用户批准的损伤差异倍率已由 `P1-BALANCE-02A` 接入游戏端，默认满损伤产热 2 倍、燃耗 3 倍，两个终点均可配置且燃耗增长更快。`P1-MELTDOWN-01/02` 与 `P1-MAINT-01/02/03` 已闭合融毁倒计时、服务端事件占位、危险拆除、完全停机纯判定和破坏性重组成型；`P1-PONDER-01/02` 与 `P1-VERIFY-01` 已完成并归档。`P1-COOL-06` 已把错误的固定 `2000 mB` 双缓冲替换为由空列和控制棒列内部空气格派生的单一共享容量，并通过用户客户端验收、261 项 JUnit、111 个 required GameTest 和完整构建；验收见 [P1-COOL-06 归档](./archive/P1-COOL-06.md)。当前 P1 主线进入 `P1-VERIFY-02` 客户端与独立服务端总验收，随后执行 `P1-VERIFY-03` 最终交接。尚未完成的 Ponder 教学和总资源验收仍统一在反应堆、锅炉、汽轮机具体事故实现并验收之后执行。公式与校验以 [局部控制设计](./reactor-local-control-revision-design.md) 为准。HTML 模拟器仍待 [P1-BALANCE-02B](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 同步，但该任务只在主要目标阻塞时穿插，不是 P1 主线或最终验收的前置。历史等倍率和固定双缓冲实现及其测试只保留为旧基线记录。
 
 ---
 

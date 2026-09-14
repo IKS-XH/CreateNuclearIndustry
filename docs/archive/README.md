@@ -20,6 +20,7 @@
 
 ## 已归档计划
 
+- `2026-09-13-layout-derived-coolant-capacity-plan.md`：固定实验堆容量已改为由空列和控制棒列内部空气格派生的单一冷/热共享容量；`P1-COOL-06` 通过用户客户端验收、261 项 JUnit、111 个 required GameTest 和完整构建。
 - `2026-08-18-p0-api-probe-and-numeric-prototype-plan.md`：P0 API 探针、数值原型、GameTest 和人工验收已通过，作为 P1 开工门禁完成。
 - `2026-08-17-project-manager-execution-plan.md`：已被 2026-08-18 的 Agent/开发者 P1 交接计划取代，保留作为历史任务记录。
 - `2026-08-18-reactor-html-simulator-plan.md`：HTML 数值模拟器的 SIMWEB-01 至 SIMWEB-07、15 项离线回归和人工验收已完成；保留为数值实验工具的交接与决策记录。
@@ -36,6 +37,7 @@
 - `P1-THERMAL-01.md`：整数 `mB` 转化产生的安全热量余数已与真实冷却短缺分离，并由权威快照/NBT v3 守恒保存；192 项 JUnit、52 个 required GameTest 与客户端人工验收通过。
 - `P1-CONTROL-05.md`：正式 Java 裂变计算已按“控制抑制 × 反馈倍率”门控三行 `F-C-F` 反馈簇；195 项 JUnit、53 个 required GameTest、30 项模拟器 Node 测试与客户端人工验收通过。
 - `P1-COOL-05.md`：原位冷/热端口和既有 Create 管网在结构失效、仪表替换与跨区块重载后可自动恢复；199 项 JUnit、60 个 required GameTest 与客户端人工验收通过。
+- `P1-COOL-06.md`：空列和控制棒列内部空气格已派生单一冷/热共享容量，默认中心空列与三行 `F-C-F` 分别为 `3000/9000 mB`；用户完成 Create 管网、配置缩小、超容量恢复和存档重进验收，项目经理复验 261 项 JUnit、111 个 required GameTest 与完整构建通过。
 - `P1-REFUEL-02A.md`：换料端口成为单列完整燃料 `ItemStack` 的唯一持久化所有者，仪表快照升级至 v4 并完成旧存档迁移；202 项 JUnit、65 个 required GameTest 与客户端人工验收通过。
 - `P1-REFUEL-02B.md`：未成型换料端口在服务端确认安全时允许空手取回本地燃料，危险状态通过持久化锁拒绝绕过；202 项 JUnit、72 个 required GameTest 与客户端人工验收通过。
 - `P1-REFUEL-03.md`：换料端口已接入 Create 专用机械臂交互点，模拟只读、正式提交原子且失败回滚；202 项 JUnit、75 个 required GameTest 与客户端人工验收通过。
