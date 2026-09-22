@@ -15,6 +15,7 @@
 - `../superpowers/plans/2026-08-18-agent-developer-execution-plan.md`
 - `../superpowers/plans/2026-09-12-post-accident-ponder-plan.md`
 - `../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md`
+- `../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md`（规划交付；实现尚未派发）
 - `../superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md`
 - `../superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md`
 
