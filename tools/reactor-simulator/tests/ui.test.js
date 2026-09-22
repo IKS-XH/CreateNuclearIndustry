@@ -5,14 +5,6 @@ import { readFile } from "node:fs/promises";
 const modularUi = await readFile(new URL("../src/ui.js", import.meta.url), "utf8");
 const singleFile = await readFile(new URL("../reactor-simulator-single.html", import.meta.url), "utf8");
 
-test("fuel detail displays zero-integrity damage multiplier as 2.0x", () => {
-  const displayExpression = "${formatNumber(2 - integrity, 5)}×";
-  assert.ok(modularUi.includes(displayExpression));
-  assert.ok(singleFile.includes(displayExpression));
-  assert.doesNotMatch(modularUi, /integrity <= 1e-12 \? 0 : 2 - integrity/);
-  assert.doesNotMatch(singleFile, /integrity <= 1e-12 \? 0 : 2 - integrity/);
-});
-
 test("live control editing and explicit brush stop are present in both UI builds", () => {
   for (const source of [modularUi, singleFile]) {
     assert.match(source, /function applyLiveControlRodDepth/);

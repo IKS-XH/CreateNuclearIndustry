@@ -1,7 +1,7 @@
-export const TOOL_VERSION = "1.2.0";
+export const TOOL_VERSION = "1.3.0";
 export const SCHEMA_ID = "create-nuclear-industry/reactor-simulator";
 export const SCHEMA_VERSION = 1;
-export const RULE_VERSION = "P1.2-simulator-4";
+export const RULE_VERSION = "P1.2-simulator-5";
 export const TICKS_PER_SECOND = 20;
 
 export const LIMITS = Object.freeze({
@@ -15,8 +15,8 @@ export const LIMITS = Object.freeze({
 
 export const DEFAULT_GEOMETRY = Object.freeze({ length: 5, width: 5, height: 5 });
 
-// These are the P1 prototype values from reactor-local-control-revision-design.md.
-// Values not frozen by that document are explicitly marked as tool experiment defaults.
+// 默认值来自局部控制设计；未冻结的参数仍标为工具实验默认。
+// 损伤终点遵守 P1-BALANCE-02：只放大新生热与计划燃耗，不修改游戏配置。
 export const DEFAULT_CONFIG = Object.freeze({
   controlResponseExponent: 1.0,
   baseHeatPerFuel: 1.0,
@@ -33,6 +33,8 @@ export const DEFAULT_CONFIG = Object.freeze({
   coolantAbsorptionHuPerMb: 0.5,
   actualColdIn: 10000000.0,
   actualHotOut: 10000000.0,
+  fuelColumnDamageHeatMultiplier: 2.0,
+  fuelColumnDamageBurnMultiplier: 3.0,
   fuelColumnDamageHeatThreshold: 0.25,
   fuelColumnDamageRate: 0.0000005,
   fuelColumnDamageTransferRate: 0.25,
@@ -201,6 +203,26 @@ export const CONFIG_FIELDS = Object.freeze([
   },
   {
     group: "损伤与融毁",
+    key: "fuelColumnDamageHeatMultiplier",
+    label: "满损伤产热倍率 Hmax",
+    unit: "×",
+    min: 1,
+    max: Number.MAX_VALUE,
+    step: "any",
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
+    key: "fuelColumnDamageBurnMultiplier",
+    label: "满损伤燃耗倍率 Bmax",
+    unit: "×",
+    min: 1,
+    max: Number.MAX_VALUE,
+    step: "any",
+    frozen: true,
+  },
+  {
+    group: "损伤与融毁",
     key: "fuelColumnDamageHeatThreshold",
     label: "燃料列损伤热阈值",
     unit: "HU/t",
@@ -303,10 +325,55 @@ export function validateConfig(raw = {}) {
     }
     value[field.key] = field.integer ? Math.trunc(number) : number;
   }
+  // 缺项已各自补默认；显式空值不能通过 Number(null/空串) 冒充合法数字。
+  const damageKeys = ["fuelColumnDamageHeatMultiplier", "fuelColumnDamageBurnMultiplier"];
+  for (const key of damageKeys) {
+    const input = raw[key];
+    if (Object.hasOwn(raw, key) && (input == null || typeof input === "boolean"
+        || (typeof input !== "number" && typeof input !== "string")
+        || (typeof input === "string" && input.trim() === ""))) {
+      errors.push(`${fieldByKey.get(key).label} 必须是有限数字`);
+    }
+  }
+  if (!(value.fuelColumnDamageHeatMultiplier > 1
+      && value.fuelColumnDamageBurnMultiplier > value.fuelColumnDamageHeatMultiplier)) {
+    errors.push("满损伤倍率必须满足 1 < Hmax（产热）< Bmax（燃耗）");
+  }
   if (value.meltdownTriggerFraction < 0 || value.meltdownTriggerFraction > 1) {
     errors.push("meltdownTriggerFraction 必须在 0～1 之间");
   }
   return { ok: errors.length === 0, value, errors };
+}
+
+/** 纯工具入口拒绝非法配置；补默认后的有效参数用于下一次结算或导出。 */
+export function requireValidConfig(raw = {}) {
+  const result = validateConfig(raw);
+  if (!result.ok) throw new RangeError(result.errors.join("；"));
+  return result.value;
+}
+
+/**
+ * 从有限完整度和已校验配置派生无量纲损伤倍率，不保存第二份状态。
+ * 调用方负责先校验配置；此函数不处理冷却、余热或实际燃料扣除。
+ */
+export function damageMultipliers(integrity, config) {
+  if (!Number.isFinite(integrity)) throw new RangeError("燃料列完整度必须是有限数字");
+  const damage = 1 - Math.max(0, Math.min(1, integrity));
+  return {
+    damageHeatMultiplier: 1 + (config.fuelColumnDamageHeatMultiplier - 1) * damage,
+    damageBurnMultiplier: 1 + (config.fuelColumnDamageBurnMultiplier - 1) * damage,
+  };
+}
+
+/** 记录结果实际使用的规则与终点；未知或旧规则不能补写为本模型的实测参数。 */
+export function createResultMetadata(config, ruleVersion = RULE_VERSION, toolVersion = TOOL_VERSION) {
+  const current = ruleVersion === RULE_VERSION;
+  return {
+    ruleVersion,
+    toolVersion,
+    fuelColumnDamageHeatMultiplier: current ? config.fuelColumnDamageHeatMultiplier : null,
+    fuelColumnDamageBurnMultiplier: current ? config.fuelColumnDamageBurnMultiplier : null,
+  };
 }
 
 export function fieldDefinition(key) {

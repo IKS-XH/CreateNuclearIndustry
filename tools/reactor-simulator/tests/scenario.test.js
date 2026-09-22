@@ -6,7 +6,7 @@ import { parseSceneText } from "../src/report.js";
 import { createInitialSnapshot, runTicks } from "../src/simulation.js";
 
 const scenarioDir = resolve(process.cwd(), "scenarios");
-const reportDir = resolve(process.cwd(), "../../build/reports/reactor-simulator");
+const reportDir = resolve(process.cwd(), "../../build/reports/p1/P1-BALANCE-02B");
 
 function applyFixtureSnapshot(fresh, raw) {
   if (!raw || !Array.isArray(raw.columns)) return fresh;
@@ -34,7 +34,7 @@ function applyFixtureSnapshot(fresh, raw) {
 
 test("all replay scenarios run deterministically and write handoff evidence", async () => {
   const files = (await readdir(scenarioDir)).filter((file) => file.endsWith(".json")).sort();
-  assert.equal(files.length, 8);
+  assert.equal(files.length, 12);
   const rows = [];
   const finalSnapshots = {};
   for (const file of files) {
@@ -55,6 +55,9 @@ test("all replay scenarios run deterministically and write handoff evidence", as
       ruleConverged: true,
     };
     rows.push({
+      ruleVersion: scene.ruleVersion,
+      fuelColumnDamageHeatMultiplier: scene.config.fuelColumnDamageHeatMultiplier,
+      fuelColumnDamageBurnMultiplier: scene.config.fuelColumnDamageBurnMultiplier,
       scenario: file.replace(/\.json$/, ""),
       ticks: replay.snapshot.tick,
       generatedHeatHuPerT: final.generatedHeat ?? 0,
@@ -71,11 +74,11 @@ test("all replay scenarios run deterministically and write handoff evidence", as
       coolantCapacityHeadroomMb: final.coolantCapacityHeadroomMb ?? 0,
       coolantLedgerError: final.coolantLedgerError ?? 0,
     });
-    finalSnapshots[file] = replay.snapshot;
+    finalSnapshots[file] = { ...replay.snapshot, resultMetadata: replay.results.at(-1)?.summary?.resultMetadata };
   }
   await mkdir(reportDir, { recursive: true });
-  const header = "scenario,ticks,generated_heat_HU_per_t,converted_coolant_mB_per_t,residual_heat_HU,minimum_integrity,meltdown_progress,meltdown_triggered,rule_converged,coolant_total_capacity_mB,cold_inventory_mB,hot_inventory_mB,total_coolant_mB,coolant_headroom_mB,coolant_ledger_error_mB";
-  const csv = [header, ...rows.map((row) => [row.scenario, row.ticks, row.generatedHeatHuPerT, row.convertedCoolantMbPerT, row.residualHeatHu, row.minimumIntegrity, row.meltdownProgress, row.meltdownTriggered, row.ruleConverged, row.coolantTotalCapacityMb, row.coldCoolantMb, row.hotCoolantMb, row.totalCoolantMb, row.coolantCapacityHeadroomMb, row.coolantLedgerError].join(","))].join("\n") + "\n";
+  const header = "scenario,ticks,generated_heat_HU_per_t,converted_coolant_mB_per_t,residual_heat_HU,minimum_integrity,meltdown_progress,meltdown_triggered,rule_converged,coolant_total_capacity_mB,cold_inventory_mB,hot_inventory_mB,total_coolant_mB,coolant_headroom_mB,coolant_ledger_error_mB,rule_version,fuelColumnDamageHeatMultiplier,fuelColumnDamageBurnMultiplier";
+  const csv = [header, ...rows.map((row) => [row.scenario, row.ticks, row.generatedHeatHuPerT, row.convertedCoolantMbPerT, row.residualHeatHu, row.minimumIntegrity, row.meltdownProgress, row.meltdownTriggered, row.ruleConverged, row.coolantTotalCapacityMb, row.coldCoolantMb, row.hotCoolantMb, row.totalCoolantMb, row.coolantCapacityHeadroomMb, row.coolantLedgerError, row.ruleVersion, row.fuelColumnDamageHeatMultiplier, row.fuelColumnDamageBurnMultiplier].join(","))].join("\n") + "\n";
   await writeFile(resolve(reportDir, "scenario-results.csv"), csv, "utf8");
   await writeFile(resolve(reportDir, "scenario-final-snapshots.json"), JSON.stringify(finalSnapshots, null, 2), "utf8");
   assert.ok(rows.some((row) => row.scenario === "cold-end-limited" && row.convertedCoolantMbPerT === 0));

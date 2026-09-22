@@ -249,7 +249,7 @@ test("control rod jams at actual depth and stays jammed", () => {
   assert.equal(changed.columns.find((column) => column.key === "2,1").depth, .35);
 });
 
-test("zero-integrity fuel keeps fission and burn at the 2.0 damage multiplier", () => {
+test("zero-integrity fuel keeps fission at 2.0 and burn at 3.0 damage multipliers", () => {
   const layout = createPreset(G, "empty");
   layout[1][1] = "fuel";
   const config = { ...DEFAULT_CONFIG, actualColdIn: 0, actualHotOut: 0, fuelColumnDamageRate: 0 };
@@ -260,7 +260,7 @@ test("zero-integrity fuel keeps fission and burn at the 2.0 damage multiplier", 
     : column);
   const failed = tick(layout, config, failedSnapshot);
   assert.equal(failed.columns["1,1"].generatedHeat, healthy.columns["1,1"].generatedHeat * 2);
-  assert.equal(failed.columns["1,1"].plannedBurn, healthy.columns["1,1"].plannedBurn * 2);
+  assert.equal(failed.columns["1,1"].plannedBurn, healthy.columns["1,1"].plannedBurn * 3);
 });
 
 test("failed unexhausted fuel propagates current generated plus cached heat, while exhaustion stops propagation", () => {

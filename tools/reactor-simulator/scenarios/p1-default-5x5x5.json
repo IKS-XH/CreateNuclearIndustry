@@ -1,10 +1,10 @@
 {
   "schema": "create-nuclear-industry/reactor-simulator",
   "schemaVersion": 1,
-  "toolVersion": "1.2.0",
-  "ruleVersion": "P1.2-simulator-4",
+  "toolVersion": "1.3.0",
+  "ruleVersion": "P1.2-simulator-5",
   "geometry": { "length": 5, "width": 5, "height": 5 },
-  "config": {},
+  "config": { "fuelColumnDamageHeatMultiplier": 2, "fuelColumnDamageBurnMultiplier": 3},
   "layout": { "matrix": [["empty","fuel","empty"],["fuel","control_rod","fuel"],["empty","fuel","empty"]] },
   "controlRodDepths": [[null,null,null],[null,1,null],[null,null,null]],
   "initialState": { "running": true, "scram": false },

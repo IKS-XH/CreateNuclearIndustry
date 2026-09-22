@@ -1,4 +1,4 @@
-import { baseBurnPerFuel, LIMITS } from "./config.js";
+import { baseBurnPerFuel, LIMITS, damageMultipliers, requireValidConfig, createResultMetadata } from "./config.js";
 import { cellKey, coolantTotalCapacityMb, getNeighbors, listCells, internalDimensions } from "./layout.js";
 
 const EPSILON = 1e-12;
@@ -31,6 +31,7 @@ export function cloneSnapshot(snapshot) {
 }
 
 export function createInitialSnapshot(geometry, layout, depths, config) {
+  config = requireValidConfig(config);
   const { height } = internalDimensions(geometry);
   const fuelCapacity = config.fuelCapacityPerBlock * height;
   const coolantCapacity = coolantTotalCapacityMb(geometry, layout);
@@ -296,6 +297,13 @@ function makeColumnResult(column, details) {
 }
 
 export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
+  // 浏览器与 Node 都走同一拒绝入口，非法参数或非有限完整度不能进入热量账本。
+  config = requireValidConfig(config);
+  for (const column of snapshot.columns) {
+    if (column.type === "fuel" && !Number.isFinite(column.integrity)) {
+      throw new RangeError(`燃料列 [${column.key}] 完整度必须是有限数字`);
+    }
+  }
   const prepared = prepareScram(snapshot, runtime);
   const previous = prepared.snapshot;
   const currentRuntime = prepared.runtime;
@@ -385,10 +393,22 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
     };
   }
 
+  // 终点允许任意合法有限值，但乘法或求和可能溢出；在扣燃料、冷却和损伤前原子拒绝。
+  const overflowResult = (quantity) => {
+    const message = `损伤倍率结算数值溢出：${quantity}；本次结算已停止，tick、燃料和完整度未改变。`;
+    const failed = { ...snapshot, simulationFailed: message };
+    return {
+      nextSnapshot: failed, converged: false, iterations,
+      runtime: { ...currentRuntime, running: false }, columns: {}, warnings: [message],
+      summary: { ...summarizeSnapshot(failed, null, config, geometry),
+        ruleConverged: false, resultMetadata: createResultMetadata(config) },
+    };
+  };
   const rawHeat = new Map();
   const generatedHeat = new Map();
   const plannedBurn = new Map();
   let rawTotalHeat = 0;
+  let rawTotalBurn = 0;
   let installedFuelColumns = 0;
   const baseBurn = baseBurnPerFuel(config);
   for (const column of columns) {
@@ -398,13 +418,19 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
       plannedBurn.set(column.key, 0);
       continue;
     }
-    const damageMultiplier = 2 - clamp01(column.integrity);
-    const raw = finiteNonNegative(config.baseHeatPerFuel * height
-      * (heatIntensity.get(column.key) ?? 0) * damageMultiplier);
-    rawHeat.set(column.key, raw);
-    plannedBurn.set(column.key, finiteNonNegative(baseBurn * height
-      * (burnIntensity.get(column.key) ?? 0) * damageMultiplier));
+    // 损伤只分别叠乘本 tick 新生热和计划燃耗；后续热量截断不返还燃耗。
+    const { damageHeatMultiplier, damageBurnMultiplier } = damageMultipliers(column.integrity, config);
+    const raw = config.baseHeatPerFuel * height
+      * (heatIntensity.get(column.key) ?? 0) * damageHeatMultiplier;
+    const burn = baseBurn * height * (burnIntensity.get(column.key) ?? 0) * damageBurnMultiplier;
+    if (!Number.isFinite(raw)) return overflowResult(`列 [${column.key}] 新生裂变热`);
+    if (!Number.isFinite(burn)) return overflowResult(`列 [${column.key}] 计划燃耗`);
     rawTotalHeat += raw;
+    rawTotalBurn += burn;
+    if (!Number.isFinite(rawTotalHeat)) return overflowResult("全堆新生裂变热总和");
+    if (!Number.isFinite(rawTotalBurn)) return overflowResult("全堆计划燃耗总和");
+    rawHeat.set(column.key, raw);
+    plannedBurn.set(column.key, burn);
   }
   const heatCap = config.baseHeatPerFuel * height * installedFuelColumns * config.totalHeatMultiplierCap;
   const heatScale = rawTotalHeat <= EPSILON ? 0 : Math.min(1, heatCap / rawTotalHeat);
@@ -507,6 +533,8 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
     }
     nextColumns.push(next);
     resultColumns[column.key] = makeColumnResult(column, {
+      // 记录结算前完整度的两个倍率，详情不会误用结算后继续受损的完整度。
+      ...(column.type === "fuel" ? damageMultipliers(column.integrity, config) : {}),
       generatedHeat: heat,
       rawHeat: rawHeat.get(column.key) ?? 0,
       heatIntensity: heatIntensity.get(column.key) ?? 0,
@@ -560,6 +588,7 @@ export function stepSnapshot(snapshot, geometry, layout, config, runtime = {}) {
     simulationFailed: null,
   };
   const summary = summarizeSnapshot(nextSnapshot, resultColumns, config, geometry);
+  summary.resultMetadata = createResultMetadata(config);
   summary.rawHeat = rawTotalHeat;
   summary.generatedHeat = totalGeneratedHeat;
   summary.heatCap = heatCap;

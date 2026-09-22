@@ -10,6 +10,8 @@ import {
   formatDecimal,
   baseBurnPerFuel,
   validateConfig,
+  damageMultipliers,
+  createResultMetadata,
 } from "./config.js";
 import {
   COLUMN_LABELS,
@@ -61,6 +63,7 @@ const state = {
   snapshot: null,
   runtime: { running: false, scram: false },
   lastResult: null,
+  resultMetadata: createResultMetadata(DEFAULT_CONFIG),
   history: [],
   selectedKey: null,
   brush: "fuel",
@@ -216,16 +219,18 @@ function renderParameterFields() {
 function updateBurnRateNote() {
   const values = readConfigFromForm();
   const result = validateConfig(values);
-  const burn = result.ok ? baseBurnPerFuel(result.value) : baseBurnPerFuel(state.config);
+  const burn = result.ok ? baseBurnPerFuel(result.value) : NaN;
   const note = $("#burn-rate-note");
-  if (note) note.textContent = `baseBurnPerFuel = ${formatNumber(burn, 9)} 列等价份/tick（由 burnHoursPerBlock 反推）`;
+  if (note) note.textContent = result.ok
+    ? `baseBurnPerFuel = ${formatNumber(burn, 9)} 列等价份/tick（由 burnHoursPerBlock 反推）；满损伤终点须满足 1 < Hmax < Bmax。`
+    : `参数无效：${result.errors.join("；")}；运行和导出已阻止。`;
 }
 
 function readConfigFromForm() {
   const config = {};
   for (const field of CONFIG_FIELDS) {
     const input = field.sceneInputId ? $(`#${field.sceneInputId}`) : $(`#param-${field.key}`);
-    config[field.key] = Number(input.value);
+    config[field.key] = input.value.trim() === "" ? NaN : Number(input.value);
   }
   return config;
 }
@@ -522,11 +527,19 @@ function renderColumnDetails() {
   const burnRate = result?.plannedBurn ?? 0;
   const ticksToEmpty = burnRate > 0 ? column.fuelRemaining / burnRate : Infinity;
   const integrity = column.integrity;
+  // 有结果时显示结算前派生值；旧模型记录不以新配置反推。无结果时明确标为预览。
+  const currentRule = state.resultMetadata.ruleVersion === RULE_VERSION;
+  const multipliers = result?.damageHeatMultiplier != null && result?.damageBurnMultiplier != null
+    ? result : currentRule ? damageMultipliers(integrity, state.config) : null;
+  const multiplierLabel = result ? "本 tick 损伤" : "当前完整度预览：损伤";
+  const heatMultiplier = multipliers ? `${formatNumber(multipliers.damageHeatMultiplier, 5)}×` : "未记录（旧规则）";
+  const burnMultiplier = multipliers ? `${formatNumber(multipliers.damageBurnMultiplier, 5)}×` : "未记录（旧规则）";
   root.innerHTML = `<h3>[${key}] 燃料列</h3><dl class="detail-list">
     <div><dt>当前发热</dt><dd>${formatNumber(result?.generatedHeat ?? 0)} HU/t</dd></div>
     <div><dt>控制强度</dt><dd>${formatNumber(result?.controlledIntensity ?? 0, 5)}×</dd></div>
     <div><dt>超频热/燃耗倍率</dt><dd>${formatNumber(result?.heatIntensity ?? 0, 5)}× / ${formatNumber(result?.burnIntensity ?? 0, 5)}×</dd></div>
-    <div><dt>损伤倍率</dt><dd>${formatNumber(2 - integrity, 5)}×</dd></div>
+    <div><dt>${multiplierLabel}产热倍率</dt><dd>${heatMultiplier}</dd></div>
+    <div><dt>${multiplierLabel}燃耗倍率</dt><dd>${burnMultiplier}</dd></div>
     <div><dt>等价燃料剩余</dt><dd>${formatNumber(column.fuelRemaining, 6)} / ${formatNumber(column.fuelCapacity, 6)}</dd></div>
     <div><dt>消耗率</dt><dd>${formatDecimal(burnRate, 12)} 份/tick</dd></div>
     <div><dt>预计耗尽</dt><dd>${Number.isFinite(ticksToEmpty) ? `${formatNumber(ticksToEmpty, 1)} tick / ${formatNumber(ticksToEmpty / 20 / 60, 2)} min` : "不消耗"}</dd></div>
@@ -604,7 +617,9 @@ function renderFormulaText() {
     <li>外尺寸为 length × width × height；有效区为 (length−2) × (width−2) × (height−2)，每个横截面格是一根垂直列。</li>
     <li>燃料控制门控：controlledIntensity = (1 − 相邻控制棒平均有效插入深度)<sup>controlResponseExponent</sup>；该门控同时作用于孤立燃料和相邻燃料反馈簇。</li>
     <li>燃料四向直接相邻时使用从 1.0 开始的同步单调有界反馈，最多 ${256} 轮，变化 ≤ 0.000000001 收敛；控制棒不进入燃料间反馈信号，但深度会门控该簇最终发热与燃耗。</li>
-    <li>列发热与燃耗乘以 2 − 完整度；完整度归零仍继续裂变、燃耗和传播，燃料耗尽才停止该列的新裂变。损伤只来自超过安全阈值的净热负荷。</li>
+    <li>损伤 D = 1 − clamp(完整度, 0, 1)；新生裂变热乘 H(D) = 1 + (Hmax − 1) × D，计划燃耗乘 B(D) = 1 + (Bmax − 1) × D。满损伤终点默认 Hmax=2、Bmax=3，均有限且 1 &lt; Hmax &lt; Bmax。</li>
+    <li>H/B 仅表示足够燃料、未截断新生热时相对完好状态的产热/燃料效率，不代表整堆 SU 效率。热量截断不退还燃耗，缓存余热不再乘损伤倍率。</li>
+    <li>完整度归零仍继续裂变、燃耗和传播；完整插棒或耗尽会把新生热与燃耗归零。损伤只来自超过安全阈值的净热负荷。</li>
     <li>反应堆冷却剂总容量 = (空列数量 + 控制棒列数量) × 有效高度 × 1000 mB；内存冷却剂 + 热冷却剂始终不超过该上限。换热转换只受冷/热端口、实际流量、库存、可用热量与吸收率约束，不存在隐藏全堆流量上限。</li>
     <li>SCRAM 只有在至少存在一个控制棒列时才建立；启用时可移动控制棒插入到底并锁定，解除后恢复启用前目标深度。卡死棒保持原位，仍有裂变产热时报告 SCRAM_INCOMPLETE。</li>
     <li>燃料组件以每列有效高度份等价容量抽象；不会模拟 Create 流体 capability、管网、区块、NBT 或实际物品事务。</li>
@@ -613,7 +628,10 @@ function renderFormulaText() {
 
 function renderAll() {
   $("#tool-version").textContent = TOOL_VERSION;
-  $("#rule-version").textContent = RULE_VERSION;
+  const record = state.resultMetadata;
+  $("#rule-version").textContent = record.ruleVersion === RULE_VERSION
+    ? `${RULE_VERSION} · 结果满损伤产热/燃耗 ${record.fuelColumnDamageHeatMultiplier}/${record.fuelColumnDamageBurnMultiplier} · 续算终点 ${state.config.fuelColumnDamageHeatMultiplier}/${state.config.fuelColumnDamageBurnMultiplier}`
+    : `${RULE_VERSION}（续算规则） · 旧结果：${record.ruleVersion}；重新运行时另起记录`;
   renderLayoutGrid("pending");
   renderRodEditor();
   renderOverview();
@@ -641,6 +659,7 @@ function commitPendingScene() {
   state.layout = state.pendingLayout.map((row) => [...row]);
   state.depths = normalizeDepths(state.pendingDepths, state.layout);
   state.config = configResult.value;
+  state.resultMetadata = createResultMetadata(state.config);
   state.initialState = {
     running: $("#initial-running").checked,
     scram: $("#initial-scram").checked,
@@ -696,22 +715,57 @@ function resetSimulation() {
   state.runtime = setScramRequest(state.snapshot, initialRuntime, state.initialState.scram).runtime;
   state.lastResult = null;
   state.history = [];
+  state.resultMetadata = createResultMetadata(state.config);
   state.selectedKey = null;
   setStatus("模拟状态已重置，配置与布局未改变。", "success");
   renderAll();
 }
 
-function advanceBy(count, forceRunning = false) {
+/** 表单输入始终先校验；不能显示非法终点却继续运行或导出上一次有效配置。 */
+function readyForRunOrExport() {
+  const validation = validateConfig(readConfigFromForm());
+  if (!validation.ok) {
+    pauseTimer();
+    const message = `参数无效：${validation.errors.join("；")}；运行和导出已阻止。`;
+    setStatus(message);
+    $("#io-message").textContent = message;
+    return false;
+  }
   if (state.dirty) {
     setStatus("存在未应用修改；请先暂停并点击“应用并重置”。");
     return false;
   }
+  return true;
+}
+
+/** 旧规则或不同终点的结果只作续算种子；新记录保留来源规则和起始 tick，不重标旧采样。 */
+function prepareCurrentRuleRun() {
+  const record = state.resultMetadata;
+  if (record.ruleVersion === RULE_VERSION
+      && record.fuelColumnDamageHeatMultiplier === state.config.fuelColumnDamageHeatMultiplier
+      && record.fuelColumnDamageBurnMultiplier === state.config.fuelColumnDamageBurnMultiplier) return;
+  const sourceRuleVersion = record.ruleVersion;
+  state.initialSnapshot = cloneSnapshot(state.snapshot);
+  state.history = [];
+  state.lastResult = null;
+  state.resultMetadata = {
+    ...createResultMetadata(state.config), sourceRuleVersion, sourceTick: state.snapshot.tick,
+  };
+  $("#io-message").textContent = `已从规则 ${sourceRuleVersion} 的 tick ${state.snapshot.tick} 快照开始新记录；旧采样未混入。`;
+}
+
+function advanceBy(count, forceRunning = false) {
+  if (!readyForRunOrExport()) return false;
+  prepareCurrentRuleRun();
   const runState = { ...state.runtime, running: forceRunning || state.runtime.running };
   for (let index = 0; index < count; index += 1) {
     const result = stepSnapshot(state.snapshot, state.geometry, state.layout, state.config, runState);
+    result.summary.resultMetadata = { ...state.resultMetadata };
     state.lastResult = result;
     state.snapshot = result.nextSnapshot;
-    state.history.push({ summary: result.summary, columns: result.columns });
+    // 拒绝的结算只展示失败原因，不伪装为一个成功推进的历史采样。
+    if (result.converged) state.history.push({ summary: result.summary, columns: result.columns });
+    else setStatus(result.warnings.join("；"));
     runState.running = result.runtime.running;
     if (!result.converged || state.snapshot.meltdownMelted) {
       runState.running = false;
@@ -727,10 +781,7 @@ function advanceBy(count, forceRunning = false) {
 }
 
 function startRunning() {
-  if (state.dirty) {
-    setStatus("有未应用修改；请先暂停并点击“应用并重置”。");
-    return;
-  }
+  if (!readyForRunOrExport()) return;
   if (state.snapshot.meltdownMelted) {
     setStatus("当前场景已融毁；只能导出、导入或重置后继续。");
     return;
@@ -758,18 +809,16 @@ function startRunning() {
 
 function singleStep() {
   pauseTimer();
-  if (state.dirty) {
-    setStatus("有未应用修改；请先点击“应用并重置”。");
-    return;
-  }
+  if (!readyForRunOrExport()) return;
   const count = Number($("#tick-step").value);
   advanceBy(count, true);
   state.runtime.running = false;
-  setStatus(`已单步 ${count} tick。`, "success");
+  if (!state.snapshot.simulationFailed) setStatus(`已单步 ${count} tick。`, "success");
   renderAll();
 }
 
 function exportCurrentJson() {
+  if (!readyForRunOrExport()) return;
   const scene = buildScene({
     geometry: state.geometry,
     layout: state.layout,
@@ -783,13 +832,16 @@ function exportCurrentJson() {
     finalSnapshot: state.snapshot,
     history: state.history,
     summary: currentSummary(),
+    resultMetadata: state.resultMetadata,
   });
   downloadText(`reactor-scene-t${state.snapshot.tick}.json`, sceneJson(scene), "application/json;charset=utf-8");
-  $("#io-message").textContent = `已导出 tick ${state.snapshot.tick} 场景；包含规则版本 ${RULE_VERSION} 与 ${state.history.length} 条 tick 采样。`;
+  $("#io-message").textContent = `已导出 tick ${state.snapshot.tick} 场景；包含结果规则版本 ${scene.ruleVersion} 与 ${state.history.length} 条 tick 采样。`;
 }
 
 function exportCurrentCsv() {
-  const csv = buildCsv(state.history, state.snapshot, currentSummary(), RULE_VERSION);
+  if (!readyForRunOrExport()) return;
+  const csv = buildCsv(state.history, state.snapshot, currentSummary(),
+    state.resultMetadata.ruleVersion, state.config, state.resultMetadata);
   downloadText(`reactor-history-t${state.snapshot.tick}.csv`, csv, "text/csv;charset=utf-8");
   $("#io-message").textContent = `已导出 ${state.history.length} 行 tick 总览和 ${state.snapshot.columns.length} 行最终列快照。`;
 }
@@ -841,6 +893,7 @@ async function importScene(file) {
   state.layout = scene.layout.matrix.map((row) => [...row]);
   state.depths = normalizeDepths(scene.controlRodDepths, state.layout);
   state.config = scene.config;
+  state.resultMetadata = scene.resultMetadata;
   state.initialState = { ...scene.initialState };
   const importedBase = importedInitial ?? createInitialSnapshot(state.geometry, state.layout, state.depths, state.config);
   const importedPrepared = setScramRequest(importedBase, { ...state.initialState, running: false }, state.initialState.scram);
@@ -850,6 +903,14 @@ async function importScene(file) {
   state.runtime = setScramRequest(state.snapshot, { ...state.initialState, running: false }, state.initialState.scram).runtime;
   state.lastResult = null;
   state.history = Array.isArray(scene.history) ? scene.history : [];
+  // 恢复文件中的实际结果而非生成一个零发热的替代摘要；来源标签由导入层保留。
+  const importedSummary = scene.summary ?? state.history.at(-1)?.summary;
+  if (importedSummary) {
+    state.lastResult = {
+      summary: { ...summarizeSnapshot(state.snapshot, null, state.config, state.geometry), ...importedSummary },
+      columns: state.history.at(-1)?.columns ?? {}, warnings: [],
+    };
+  }
   state.pendingGeometry = { ...state.geometry };
   state.pendingLayout = state.layout.map((row) => [...row]);
   state.pendingDepths = state.depths.map((row) => [...row]);
@@ -860,7 +921,7 @@ async function importScene(file) {
   $("#initial-running").checked = state.initialState.running;
   $("#initial-scram").checked = state.initialState.scram;
   setConfigFormValues(state.config);
-  $("#io-message").textContent = `已导入 tick ${state.snapshot.tick}；规则版本 ${scene.ruleVersion}。当前状态保持暂停，避免文件自动启动。`;
+  $("#io-message").textContent = `已导入 tick ${state.snapshot.tick}；结果规则版本 ${scene.ruleVersion}${scene.ruleVersion === RULE_VERSION ? "" : "（旧记录；新结算将另起记录）"}。当前状态保持暂停，避免文件自动启动。`;
   renderAll();
 }
 

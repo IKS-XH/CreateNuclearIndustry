@@ -1,0 +1,167 @@
+{
+  "schema": "create-nuclear-industry/reactor-simulator",
+  "schemaVersion": 1,
+  "toolVersion": "1.3.0",
+  "ruleVersion": "P1.2-simulator-5",
+  "resultMetadata": {
+    "ruleVersion": "P1.2-simulator-5",
+    "toolVersion": "1.3.0",
+    "fuelColumnDamageHeatMultiplier": 2,
+    "fuelColumnDamageBurnMultiplier": 3
+  },
+  "geometry": {
+    "length": 5,
+    "width": 5,
+    "height": 5
+  },
+  "config": {
+    "controlResponseExponent": 1,
+    "baseHeatPerFuel": 1,
+    "burnHoursPerBlock": 3,
+    "fuelCapacityPerBlock": 1,
+    "overclockHeatMultiplier": 10,
+    "overclockBurnMultiplier": 10,
+    "overclockFeedbackGain": 0.15,
+    "overclockFeedbackExponent": 0.5,
+    "totalHeatMultiplierCap": 20,
+    "coldPortCount": 2,
+    "hotPortCount": 2,
+    "coolantMaxFlowPerPort": 128,
+    "coolantAbsorptionHuPerMb": 0.5,
+    "actualColdIn": 10000000,
+    "actualHotOut": 10000000,
+    "fuelColumnDamageHeatMultiplier": 2,
+    "fuelColumnDamageBurnMultiplier": 3,
+    "fuelColumnDamageHeatThreshold": 0.25,
+    "fuelColumnDamageRate": 5e-7,
+    "fuelColumnDamageTransferRate": 0.25,
+    "controlRodColumnFailureThreshold": 0,
+    "meltdownTriggerFraction": 0.2,
+    "meltdownCountdownTicks": 900,
+    "safeResidualHeatThreshold": 0.25,
+    "tickStep": 20,
+    "runTicks": 1000
+  },
+  "layout": {
+    "matrix": [
+      [
+        "fuel",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ]
+  },
+  "controlRodDepths": [
+    [
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null
+    ]
+  ],
+  "initialState": {
+    "running": true,
+    "scram": false
+  },
+  "runTicks": 1,
+  "initialSnapshot": {
+    "tick": 0,
+    "meltdownProgress": 0,
+    "meltdownTriggered": false,
+    "meltdownMelted": false,
+    "coolantTotalCapacityMb": 24000,
+    "coldCoolantMb": 24000,
+    "hotCoolantMb": 0,
+    "columns": [
+      {
+        "key": "0,0",
+        "x": 0,
+        "z": 0,
+        "type": "fuel",
+        "fuelCapacity": 3,
+        "fuelRemaining": 3,
+        "integrity": 0.5,
+        "cachedHeat": 0
+      },
+      {
+        "key": "1,0",
+        "x": 1,
+        "z": 0,
+        "type": "empty",
+        "cachedHeat": 0
+      },
+      {
+        "key": "2,0",
+        "x": 2,
+        "z": 0,
+        "type": "empty",
+        "cachedHeat": 0
+      },
+      {
+        "key": "0,1",
+        "x": 0,
+        "z": 1,
+        "type": "empty",
+        "cachedHeat": 0
+      },
+      {
+        "key": "1,1",
+        "x": 1,
+        "z": 1,
+        "type": "empty",
+        "cachedHeat": 0
+      },
+      {
+        "key": "2,1",
+        "x": 2,
+        "z": 1,
+        "type": "empty",
+        "cachedHeat": 0
+      },
+      {
+        "key": "0,2",
+        "x": 0,
+        "z": 2,
+        "type": "empty",
+        "cachedHeat": 0
+      },
+      {
+        "key": "1,2",
+        "x": 1,
+        "z": 2,
+        "type": "empty",
+        "cachedHeat": 0
+      },
+      {
+        "key": "2,2",
+        "x": 2,
+        "z": 2,
+        "type": "empty",
+        "cachedHeat": 0
+      }
+    ],
+    "simulationFailed": null
+  },
+  "finalSnapshot": null,
+  "summary": null,
+  "history": []
+}
