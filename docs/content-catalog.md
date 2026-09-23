@@ -74,13 +74,15 @@
 | `P1` | `maintenance_seal` | 维护密封件 | 停机维修泄漏部件 |
 | `P1` | `heavy_bearing` | 重型轴承 | 汽轮机、泵和离心机 |
 | `P1` | `coal_dust`、`charcoal_dust`、`quartz_dust`、`glass_dust` | 煤粉、木炭粉、石英粉、玻璃碎料 | 钢材、陶瓷和灌封材料 |
-| `P2` | `obsidian_dust` | 黑曜石粉 | 高级耐热材料 |
+| `P1` | `obsidian_dust` | 黑曜石粉 | 首发扩展的基础材料阶段获取，先于耐热玻璃和相关设备制备 |
 | `P1` | `industrial_ceramic`、`refractory_brick`、`insulation_plate` | 工业陶瓷、耐火砖、隔热板 | 锅炉和高温结构 |
 | `P1` | `neutron_absorbing_ceramic` | 中子吸收陶瓷 | 控制棒 |
 | `P1` | `heat_resistant_glass`、`shielded_glass` | 耐热玻璃、铅屏蔽玻璃 | 观察窗与热室 |
-| `P3` | `vitrification_medium` | 玻璃固化基材 | 放射性废物灌封 |
+| `P1` | `vitrification_medium` | 玻璃固化基材 | 首发基础封存前提供制备路线；不要求先于全部设备实现，高放处理仍后置 |
 
 复合冷却剂直接使用原版下界资源 `minecraft:glowstone_dust`（中文名“荧石粉”）。本模组不新增荧石矿物或荧石粉，也不为原版荧石复制注册项和素材。
+
+用户于 2026-09-23 确认先完成基础材料、设备与燃料生产，再完成机组运行闭环和乏燃料基础封存，复杂再处理后置。上述两种材料的 `P1` 标记表示后续首发扩展，不加入当前固定实验堆核心切片；本次只调整阶段，不表示已经注册或实现，不提前引入 P3 辐射、污染或高放处理系统。
 
 合金钢板的正式注册 ID 冻结为 `steel_plate`，显示名为“合金钢板”，并加入对应的 `c:plates/steel` 通用标签。`alloy_steel_plate` 是早期需求记录中使用过的描述性旧名，不注册为物品、别名或兼容转发 ID；燃料列和控制棒列维修统一消耗 `steel_plate`。
 
