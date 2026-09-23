@@ -74,6 +74,7 @@
 | `P1` | `maintenance_seal` | 维护密封件 | 停机维修泄漏部件 |
 | `P1` | `heavy_bearing` | 重型轴承 | 汽轮机、泵和离心机 |
 | `P1` | `coal_dust`、`charcoal_dust`、`quartz_dust`、`glass_dust` | 煤粉、木炭粉、石英粉、玻璃碎料 | 钢材、陶瓷和灌封材料 |
+| `P1` | `lapis_dust` | 青金石粉 | 首发扩展冷却剂中间材料；加入 `c:dusts/lapis` 并汇入 `c:dusts`，配方接受同标签等价材料 |
 | `P1` | `obsidian_dust` | 黑曜石粉 | 首发扩展的基础材料阶段获取，先于耐热玻璃和相关设备制备 |
 | `P1` | `industrial_ceramic`、`refractory_brick`、`insulation_plate` | 工业陶瓷、耐火砖、隔热板 | 锅炉和高温结构 |
 | `P1` | `neutron_absorbing_ceramic` | 中子吸收陶瓷 | 控制棒 |
@@ -81,6 +82,8 @@
 | `P1` | `vitrification_medium` | 玻璃固化基材 | 首发基础封存前提供制备路线；不要求先于全部设备实现，高放处理仍后置 |
 
 复合冷却剂直接使用原版下界资源 `minecraft:glowstone_dust`（中文名“荧石粉”）。本模组不新增荧石矿物或荧石粉，也不为原版荧石复制注册项和素材。
+
+用户于 2026-09-23 确认保留青金石制粉工序并对接 NeoForge 通用材料标签。青金石粉正式身份为 `create_nuclear_industry:lapis_dust`，不依赖第三方模组提供基础产物；`c:dusts/lapis` 是按通用约定补充的标签，并非 NeoForge 21.1.219 已内置的粉末。原料读取 `c:gems/lapis`，粉末用途读取 `c:dusts/lapis`，不能把整颗青金石或蓝色染料加入粉末标签绕过工序。Create 已有青金石磨制染料配方，具体设备分工待准备计划 D-02a 确认；本次只登记需求，不表示已实现。
 
 用户于 2026-09-23 确认先完成基础材料、设备与燃料生产，再完成机组运行闭环和乏燃料基础封存，复杂再处理后置。上述两种材料的 `P1` 标记表示后续首发扩展，不加入当前固定实验堆核心切片；本次只调整阶段，不表示已经注册或实现，不提前引入 P3 辐射、污染或高放处理系统。
 
