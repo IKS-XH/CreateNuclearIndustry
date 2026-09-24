@@ -15,12 +15,14 @@
 - `../superpowers/plans/2026-08-18-agent-developer-execution-plan.md`
 - `../superpowers/plans/2026-09-12-post-accident-ponder-plan.md`
 - `../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md`
-- `../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md`（规划交付；实现尚未派发）
+- `../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md`（生产依赖审计已验收；等待烧结炉热源决策，实现尚未派发）
+- [首套生产线成本草案](../superpowers/plans/2026-09-24-first-production-cost-draft.md)（讨论候选，未批准数值）
 - `../superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md`
 - `../superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md`
 
 ## 已归档计划
 
+- [EXT-A-DEPS-01](./EXT-A-DEPS-01.md)：首发生产依赖和通用标签只读审计通过 PM 验收；原始报告与证据在 build/reports/extension。记录配方竞争、烧结热源、燃料柱制造及装配自动化缺口，不代表生产实现通过。
 - `2026-09-13-layout-derived-coolant-capacity-plan.md`：固定实验堆容量已改为由空列和控制棒列内部空气格派生的单一冷/热共享容量；`P1-COOL-06` 通过用户客户端验收、261 项 JUnit、111 个 required GameTest 和完整构建。
 - `2026-08-18-p0-api-probe-and-numeric-prototype-plan.md`：P0 API 探针、数值原型、GameTest 和人工验收已通过，作为 P1 开工门禁完成。
 - `2026-08-17-project-manager-execution-plan.md`：已被 2026-08-18 的 Agent/开发者 P1 交接计划取代，保留作为历史任务记录。
