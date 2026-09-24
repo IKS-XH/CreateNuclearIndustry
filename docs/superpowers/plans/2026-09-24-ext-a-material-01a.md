@@ -1,12 +1,14 @@
 # EXT-A-MATERIAL-01A：青金石粉物品与通用标签基础
 
-**状态：** 待派发；PM 创建隔离工作树后记录执行者。
+**状态：** 执行中；执行者 Boyle（`01a0d22c-f59a-71b2-a0ad-7184181cbeb9`），2026-09-24 已由子 Agent 工具实际启动。
 **目标：** 注册唯一的 `create_nuclear_industry:lapis_dust`，在创造标签页显示“青金石粉 / Lapis Dust”，加载有效物品模型和纹理，并正确加入具体及父粉末标签。本卡不提供生存配方。
 **需求与授权：** D-02 已批准物品身份及 `c:dusts/lapis`、`c:dusts` 合同；用户于 2026-09-24 在纠正重复确认后明确要求“开始让执行者执行吧”。PM 据此拆出不依赖加工数值的基础实现，允许在隔离候选中开发；这是本小卡的排程调整，不是免除 P1 客户端验收或授权其余生产实现。合并主线仍等待 P1 交接，不改变 P1 测试工作树。
 **设计入口：** `docs/recipes.md` 标签合同、生产准备计划 2.2 节、本卡及 `AGENTS.md`、`docs/project-governance.md`、活动 P1 计划。D-03e 候选不得作为本卡已批准参数。
 **架构：** 沿用 DeferredRegister 注册普通物品、现有创造页、1.21.1 模型与语言资源；用数据包标签建立兼容入口。普通物品无新增状态、网络、配置或方块实体。
 **技术栈：** Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6，All Rights Reserved，不升级依赖。
 **基线：** 功能源自 `3c0b7cd`；PM 将本卡提交后创建原生管理的独立工作树，执行者记录实际路径和 HEAD；不得在主工作区实现。
+
+**实际派发：** 原生工作树 `C:/Users/lenovo/.codex/worktrees/ext-a-material-01a/CreateNuclearIndustry`，PM 创建分支 `codex/ext-a-material-01a`，任务卡与代码基线 `c8b8f8e2bc938d5c74a9b76f87eae087b2ce765d`。开工前 Git 干净；本段仅由主工作区 PM 补记，执行者无须同步 Git 或修改核心文档。
 
 ## 角色与技能
 
