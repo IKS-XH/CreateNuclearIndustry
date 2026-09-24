@@ -15,8 +15,8 @@
 - `../superpowers/plans/2026-08-18-agent-developer-execution-plan.md`
 - `../superpowers/plans/2026-09-12-post-accident-ponder-plan.md`
 - `../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md`
-- `../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md`（生产依赖审计已验收；首发烧结普通加热已确认，当前评审冷却剂批量，实现尚未派发）
-- [首套生产线成本草案](../superpowers/plans/2026-09-24-first-production-cost-draft.md)（讨论候选，未批准数值）
+- `../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md`（生产依赖审计已验收；烧结普通加热及冷却剂首轮试验配比已确认，实现尚未派发）
+- [首套生产线成本草案](../superpowers/plans/2026-09-24-first-production-cost-draft.md)（冷却剂 1000 mB 档已批准试验，其余候选待评审）
 - `../superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md`
 - `../superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md`
 
