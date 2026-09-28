@@ -43,6 +43,12 @@ public final class ModItems {
             () -> new Item(new Item.Properties())
     );
 
+    /** 普通青金石粉供两端注册与创造页使用；保持默认堆叠，不承载燃料、热量或核安全状态。 */
+    public static final DeferredItem<Item> LAPIS_DUST = ITEMS.register(
+            "lapis_dust",
+            () -> new Item(new Item.Properties())
+    );
+
     public static final DeferredItem<BucketItem> COMPOUND_COOLANT_BUCKET = ITEMS.register(
             P1ContentIds.COMPOUND_COOLANT_BUCKET_ID,
             () -> new BucketItem(ModFluids.COMPOUND_COOLANT_SOURCE.get(), new Item.Properties().stacksTo(1))

@@ -1,4 +1,5 @@
 {
+  "item.create_nuclear_industry.lapis_dust": "青金石粉",
   "itemGroup.create_nuclear_industry.main": "机械动力：核工业",
   "block.create_nuclear_industry.experimental_reactor_casing": "实验反应堆外壳",
   "block.create_nuclear_industry.p0_probe_block": "P0 验证方块",
