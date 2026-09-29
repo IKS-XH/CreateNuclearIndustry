@@ -4,6 +4,8 @@
 
 ## 当前工作
 
+**本轮执行：** [资源、生产与 SVG 美术启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。用户已授权自动派发与审核，决策或手动测试门前暂停。
+
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |

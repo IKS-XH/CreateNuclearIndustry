@@ -205,6 +205,8 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 
 ## 6. 第一批素材清单
 
+**2026-09-29 制作方式更新：** 用户授权美术重绘采用 Agent 绘制像素 SVG 源稿，再确定性导出游戏使用的 16×16 PNG，不直接使用生图模型。先完成青金石粉、铅锭、铅矿石、合金钢板四张样稿并确认风格，再分批重绘；源稿和候选保留在开发资产目录，未通过评审不覆盖游戏资源。具体合同见 [启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。该授权提前基础贴图工作，不提前复杂设备模型或动画。
+
 第一批只服务 P1.1 的矿物与材料注册，按以下顺序绘制：
 
 1. **6 张矿石方块纹理：** `lead_ore`、`deepslate_lead_ore`、`tin_ore`、`deepslate_tin_ore`、`uranium_ore`、`deepslate_uranium_ore`。
