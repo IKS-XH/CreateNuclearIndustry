@@ -1,0 +1,620 @@
+{
+  "head": "034406387bcd97c68f6a8d9affa6b2c04231a8e2",
+  "count": 51,
+  "records": [
+    {
+      "game": "block/compound_coolant_flow.png",
+      "size": [
+        16,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "ff5fc3fe7a385cb77343c81d191ffec7ca4801c1003c250e2d27658331f48adf",
+      "references": [
+        "src/main/java/com/iksxh/create_nuclear_industry/content/ModFluids.java:100-123 (动态 block/id_still 与 block/id_flow)"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/compound_coolant_still.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "de30924110d0ec43e801151e94369db6a39d5fee08db889155c991b2116d3bc9",
+      "references": [
+        "src/main/java/com/iksxh/create_nuclear_industry/content/ModFluids.java:100-123 (动态 block/id_still 与 block/id_flow)"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/control_rod_drive_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "fb1ddfde558f590d198063aa23963c5896947be6cfecdcc68c5c2ba9c52586de",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/control_rod_drive.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/control_rod_drive_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "ab7b15b72fbe7f9d40015ab5342a38599744b89b24bbeb56b37f8e5f475a1fe3",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/control_rod_drive.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/deepslate_lead_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "e0010a050eca8e4c08d15a88a54c389ef231ca43a6fe22681592eb0188ac7a06",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/deepslate_tin_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "083438e94d84f0a9ba29ce1a9f60904e0cfa693ed7c66d17cd69d1e7d493e794",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/deepslate_uranium_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "e39ce99ba4f0dd5bfc669194daa8b7ec2eecf91e5cf5bb2543916650d06ae9f1",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/hot_compound_coolant_flow.png",
+      "size": [
+        16,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "44aee2d725d6baa6c4a60232aad0d87549fb61a086b064d0ccbc99b7ea5f29f6",
+      "references": [
+        "src/main/java/com/iksxh/create_nuclear_industry/content/ModFluids.java:100-123 (动态 block/id_still 与 block/id_flow)"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/hot_compound_coolant_still.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "7456bf7510e47f104b9481eed3468ab0de1454a500c437d9af7b8541b468f9ea",
+      "references": [
+        "src/main/java/com/iksxh/create_nuclear_industry/content/ModFluids.java:100-123 (动态 block/id_still 与 block/id_flow)"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/lead_block.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "4cedcb16af00b2d78d12bc7cb46b930da5701b5a0f188cb3ef002d9962c34d5d",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/lead_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "9faa97cb8899d755c0c9ac01a4a48caf92b2d63d6ee932ddffc7f6d76f3f8158",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/main_coolant_pump_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "1ce7acc80ffe2a60e27746e7afac1da9df6bb83dbdb8e5579b96c4d4e48aaf2b",
+      "references": [
+        "src/main/java/com/iksxh/create_nuclear_industry/content/ModFluids.java:100-123 (动态 block/id_still 与 block/id_flow)"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/main_coolant_pump_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "90fa53eaff29066658cc651c1973f0711fc780648edc0df1baddd3fe391f5cd9",
+      "references": [
+        "src/main/java/com/iksxh/create_nuclear_industry/content/ModFluids.java:100-123 (动态 block/id_still 与 block/id_flow)"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/pressure_pipe_tier_1.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "97e92bd61893fab2f96980c306a8334591a6f8e6aa557f10f84722f8de79b487",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/pressure_valve_tier_1.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "d2371016403543a0387e57326216402f5c8cc6ad4b07dd3941a3ffa0eeb48d24",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/raw_lead_block.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "31fe685888d02610a66cdefbc587dd8fab775a70ca849f1cb2ddd02ebb8b6afc",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/raw_tin_block.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "40154e92bad55cc9bd2928a29aec7f66bff5b0d6b5aef11520eb716d199cd195",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/raw_uranium_block.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "8eb4c1e3c21d2b3b61f39062b7ae39b1cef4a805a7229a9a1a955c501f2a2c0c",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/reactor_casing_bottom.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "361d82bf0e82b9f3e6092cd087b45e8d2471ead38221c72a6ea78511ba064bc9",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_casing.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_casing_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "a225e84cbe521580e55bccaff75ffd310a90dc336d19fb1307dde4aa48734425",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_casing.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_casing_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "5ef679cfd062c984c9583328def9e0e9ca9060710760a68b6855b63c3f5cccca",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_casing.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_cold_port_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "ebc6d2c10bbb6c02391dee77cb071c4cc9608e316c83012d29714ebc0ffb3729",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_cold_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_cold_port_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "dc1f9fda11b9e20fe5ae2285b24efc544193bf6e29f99dfe6815a36c4537e549",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_cold_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_fuel_rod_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "4cc85e7578372579918734a27acab80a82437da395e3b6078626d1b548a0f7f4",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_fuel_rod.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_fuel_rod_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "8c74c2684eb2aa55505e5b87045c279f52881ccef9997b5c8eae1d744aeeb4e8",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_fuel_rod.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_hot_port_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "486bf297dc0999550b43c7318530b7d711b63004057810eecc033786cd496adc",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_hot_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_hot_port_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "93df425e807b93b7636104e3c40f395fa14fa5828f57e05f6edd47be5e5a7e08",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_hot_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_instrument_port_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "dd24f4a2a63682679cceb6b9311a4a95d6069f56da39eaa395753fd5d574e8ce",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_instrument_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_instrument_port_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "06ba8e0608e2f3fdc3c9a0ca67bb0d16919b2584270d6a46a73a94ce90793378",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_instrument_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_refueling_port_side.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "096d17c72664c73fec62298d87e14006d19beac989b5a5e127fd8b9215f0b116",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_refueling_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_refueling_port_top.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "adf2a37d595e5978289acc6c5bd464228d82c2c939fd1e023a528e43171e7c45",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_refueling_port.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_window.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "02a8c3d63514597e0728cb2a60d95d87f8b74eafe27dd56bd49b43dd7623bf19",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/block/reactor_window.json",
+        "src/main/resources/assets/create_nuclear_industry/models/item/reactor_window.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/tin_block.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "095930f5d8ad44ccedf7268e7a9a9593737709b14cfb344ce2121c56383c7c7b",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/tin_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "53cd561213f7703a281171cb7a0fdc1e261c1edfa96b25a7803950b99e3ced87",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/uranium_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "82b073ff9ebe8088a65ecada474bc1980b0bb0326a71c9bb7bb14f8405d22c8b",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/compound_coolant_flow.png",
+      "size": [
+        16,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "ff5fc3fe7a385cb77343c81d191ffec7ca4801c1003c250e2d27658331f48adf",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/compound_coolant_still.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "de30924110d0ec43e801151e94369db6a39d5fee08db889155c991b2116d3bc9",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/hot_compound_coolant_flow.png",
+      "size": [
+        16,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "44aee2d725d6baa6c4a60232aad0d87549fb61a086b064d0ccbc99b7ea5f29f6",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/hot_compound_coolant_still.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "7456bf7510e47f104b9481eed3468ab0de1454a500c437d9af7b8541b468f9ea",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/control_rod.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "cb0a889685d5e20dbc0585cd22f258186c41f431a2670690ca6e1ccd8b288ec1",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/item/control_rod.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/cooled_spent_fuel_assembly.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "b88135f6dcd7b7eb559ba883d63bb66022d5276a186577e567a1711334063602",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/item/cooled_spent_fuel_assembly.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/dosimeter.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "d5467c9887629fd257ab9e3dc8d710fcbda34359153e099bf280cd53df9455bf",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/fresh_fuel_assembly.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "d4ff7545c78e114eaa9a761a247c15c8eadb47fc4da6bbad511b42c0355d64a1",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/item/fresh_fuel_assembly.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/lead_ingot.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "e64d908f72fac45ee2f183a39d2a61103237153329151b0d79150a63e323ae30",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/lead_shielding_cask.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "78e063b6d0f2c2f79ac53296b907606ec27a4b7a2d4213fbc7f5026308f017c3",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/raw_lead.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "7770e05068639bc5219119fe828fb1c416483d8710bba2a570ab0e0d2d125070",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/raw_tin.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "0cca3a16e4081979c1c28d366da0c49ed9fdb60ca2cd26e1aa5fe4ac9c380eb9",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/raw_uranium.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "c53f3d7601bc147a98a5749487ec0a19cad1ed40d33ec75389fde0d182e43214",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/steel_plate.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "00ebd2460f886855eb7f5e5833ba76086a6cb72d010ff1dff6e733e61473522e",
+      "references": [
+        "src/main/resources/assets/create_nuclear_industry/models/item/steel_plate.json"
+      ],
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/tin_ingot.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "6be7b2f79ffe755e8817ece8c017301b6aaa49009351882f179c7616a4109479",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/uranium_concentrate.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "5062d561f9ca425bf44f65b10a6e98875046a6b45bdeec490f6ee07ab2f6aad8",
+      "references": [],
+      "use": "本基线未引用素材；重绘不等于注册"
+    }
+  ]
+}

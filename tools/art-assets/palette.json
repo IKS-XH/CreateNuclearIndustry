@@ -1,19 +1,441 @@
 {
   "lapis_dust": {
-    "outline": "#182746", "shadow": "#203D76", "body": "#2856A0",
-    "facet": "#3973BD", "light": "#699ADA", "glint": "#A0BFE8"
+    "outline": "#182746",
+    "shadow": "#203D76",
+    "body": "#2856A0",
+    "facet": "#3973BD",
+    "light": "#699ADA",
+    "glint": "#A0BFE8"
   },
   "lead_ingot": {
-    "outline": "#303441", "shadow": "#464C5D", "side": "#60687A",
-    "body": "#7E8798", "light": "#A6AFBF", "glint": "#CDD3DE"
+    "outline": "#303441",
+    "shadow": "#464C5D",
+    "side": "#60687A",
+    "body": "#7E8798",
+    "light": "#A6AFBF",
+    "glint": "#CDD3DE"
   },
   "steel_plate": {
-    "outline": "#28353A", "shadow": "#3E5058", "side": "#5B7078",
-    "body": "#788E94", "light": "#A3B7B8", "glint": "#D1DFDA"
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "side": "#5B7078",
+    "body": "#788E94",
+    "light": "#A3B7B8",
+    "glint": "#D1DFDA"
   },
   "lead_ore": {
-    "stone_dark": "#646460", "stone_mid": "#767671", "stone_light": "#878780",
-    "stone_glint": "#96958D", "ore_deep": "#404550", "ore_shadow": "#5B6475",
-    "ore_body": "#818B9F", "ore_light": "#B3BECE"
+    "stone_dark": "#646460",
+    "stone_mid": "#767671",
+    "stone_light": "#878780",
+    "stone_glint": "#96958D",
+    "ore_deep": "#404550",
+    "ore_shadow": "#5B6475",
+    "ore_body": "#818B9F",
+    "ore_light": "#B3BECE"
+  },
+  "deepslate_lead_ore": {
+    "color_00": "#454C54",
+    "color_01": "#59616A",
+    "color_02": "#343A41",
+    "color_03": "#707881",
+    "color_04": "#A6AFBF",
+    "color_05": "#7E8798",
+    "color_06": "#60687A",
+    "color_07": "#303441"
+  },
+  "tin_ore": {
+    "color_00": "#767671",
+    "color_01": "#878780",
+    "color_02": "#646460",
+    "color_03": "#96958D",
+    "color_04": "#E2E9DE",
+    "color_05": "#B9CED5",
+    "color_06": "#8AA4B1",
+    "color_07": "#556875",
+    "color_08": "#354249"
+  },
+  "deepslate_tin_ore": {
+    "color_00": "#454C54",
+    "color_01": "#59616A",
+    "color_02": "#343A41",
+    "color_03": "#707881",
+    "color_04": "#E2E9DE",
+    "color_05": "#B9CED5",
+    "color_06": "#8AA4B1",
+    "color_07": "#556875",
+    "color_08": "#354249"
+  },
+  "uranium_ore": {
+    "color_00": "#767671",
+    "color_01": "#878780",
+    "color_02": "#646460",
+    "color_03": "#96958D",
+    "color_04": "#A9B56B",
+    "color_05": "#D1D794",
+    "color_06": "#536347",
+    "color_07": "#7D8954",
+    "color_08": "#343C32"
+  },
+  "deepslate_uranium_ore": {
+    "color_00": "#454C54",
+    "color_01": "#59616A",
+    "color_02": "#343A41",
+    "color_03": "#707881",
+    "color_04": "#A9B56B",
+    "color_05": "#D1D794",
+    "color_06": "#536347",
+    "color_07": "#7D8954",
+    "color_08": "#343C32"
+  },
+  "raw_lead": {
+    "color_00": "#303441",
+    "color_01": "#A6AFBF",
+    "color_02": "#464C5D",
+    "color_03": "#CDD3DE",
+    "color_04": "#60687A"
+  },
+  "raw_lead_block": {
+    "color_00": "#303441",
+    "color_01": "#464C5D",
+    "color_02": "#60687A",
+    "color_03": "#A6AFBF",
+    "color_04": "#CDD3DE"
+  },
+  "raw_tin": {
+    "color_00": "#354249",
+    "color_01": "#B9CED5",
+    "color_02": "#556875",
+    "color_03": "#E2E9DE",
+    "color_04": "#8AA4B1"
+  },
+  "raw_tin_block": {
+    "color_00": "#354249",
+    "color_01": "#556875",
+    "color_02": "#8AA4B1",
+    "color_03": "#B9CED5",
+    "color_04": "#E2E9DE"
+  },
+  "raw_uranium": {
+    "color_00": "#343C32",
+    "color_01": "#A9B56B",
+    "color_02": "#536347",
+    "color_03": "#D1D794",
+    "color_04": "#7D8954"
+  },
+  "raw_uranium_block": {
+    "color_00": "#343C32",
+    "color_01": "#536347",
+    "color_02": "#7D8954",
+    "color_03": "#A9B56B",
+    "color_04": "#D1D794"
+  },
+  "lead_block": {
+    "color_00": "#60687A",
+    "color_01": "#A6AFBF",
+    "color_02": "#7E8798",
+    "color_03": "#CDD3DE",
+    "color_04": "#464C5D"
+  },
+  "tin_block": {
+    "color_00": "#8AA4B1",
+    "color_01": "#B9CED5",
+    "color_02": "#E2E9DE",
+    "color_03": "#556875"
+  },
+  "tin_ingot": {
+    "color_00": "#354249",
+    "color_01": "#F2F1E6",
+    "color_02": "#E2E9DE",
+    "color_03": "#B9CED5",
+    "color_04": "#8AA4B1",
+    "color_05": "#556875"
+  },
+  "uranium_concentrate": {
+    "color_00": "#343C32",
+    "color_01": "#536347",
+    "color_02": "#A9B56B",
+    "color_03": "#7D8954",
+    "color_04": "#D1D794"
+  },
+  "reactor_casing_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "reactor_casing_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#D1DFDA"
+  },
+  "reactor_casing_bottom": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "reactor_cold_port_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#83C4C8",
+    "color_08": "#367E92",
+    "color_09": "#235C71",
+    "color_10": "#163E52"
+  },
+  "reactor_cold_port_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#83C4C8",
+    "color_07": "#5B7078",
+    "color_08": "#367E92",
+    "color_09": "#235C71",
+    "color_10": "#163E52"
+  },
+  "reactor_hot_port_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#F4C985",
+    "color_08": "#BC714A",
+    "color_09": "#925039",
+    "color_10": "#59392E"
+  },
+  "reactor_hot_port_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#F4C985",
+    "color_07": "#5B7078",
+    "color_08": "#BC714A",
+    "color_09": "#925039",
+    "color_10": "#59392E"
+  },
+  "reactor_refueling_port_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#AD7A42"
+  },
+  "reactor_instrument_port_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#BC714A",
+    "color_08": "#52A2AD"
+  },
+  "control_rod_drive_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#AD7A42"
+  },
+  "reactor_fuel_rod_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "reactor_refueling_port_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#F0CF87",
+    "color_07": "#5B7078"
+  },
+  "reactor_instrument_port_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "control_rod_drive_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "reactor_fuel_rod_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#F0CF87"
+  },
+  "reactor_window": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "main_coolant_pump_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#83C4C8",
+    "color_08": "#367E92",
+    "color_09": "#235C71",
+    "color_10": "#163E52"
+  },
+  "main_coolant_pump_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#83C4C8",
+    "color_08": "#367E92",
+    "color_09": "#235C71",
+    "color_10": "#163E52"
+  },
+  "pressure_pipe_tier_1": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#5B7078",
+    "color_03": "#788E94",
+    "color_04": "#D2A359",
+    "color_05": "#715035",
+    "color_06": "#3E5058"
+  },
+  "pressure_valve_tier_1": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#F0CF87",
+    "color_08": "#AD7A42"
+  },
+  "fresh_fuel_assembly": {
+    "color_00": "#A3B7B8",
+    "color_01": "#3E5058",
+    "color_02": "#D2A359",
+    "color_03": "#F0CF87",
+    "color_04": "#28353A",
+    "color_05": "#5B7078",
+    "color_06": "#788E94"
+  },
+  "cooled_spent_fuel_assembly": {
+    "color_00": "#A3B7B8",
+    "color_01": "#3E5058",
+    "color_02": "#5B7078",
+    "color_03": "#367E92",
+    "color_04": "#28353A",
+    "color_05": "#788E94"
+  },
+  "control_rod": {
+    "color_00": "#D2A359",
+    "color_01": "#715035",
+    "color_02": "#788E94",
+    "color_03": "#28353A",
+    "color_04": "#AD7A42"
+  },
+  "dosimeter": {
+    "color_00": "#28353A",
+    "color_01": "#F0CF87",
+    "color_02": "#AD7A42",
+    "color_03": "#3E5058",
+    "color_04": "#52A2AD"
+  },
+  "lead_shielding_cask": {
+    "color_00": "#60687A",
+    "color_01": "#303441",
+    "color_02": "#A6AFBF",
+    "color_03": "#CDD3DE",
+    "color_04": "#7E8798",
+    "color_05": "#464C5D",
+    "color_06": "#D2A359"
+  },
+  "compound_coolant_still": {
+    "color_00": "#235C71",
+    "color_01": "#367E92",
+    "color_02": "#83C4C8",
+    "color_03": "#52A2AD",
+    "color_04": "#163E52"
+  },
+  "compound_coolant_flow": {
+    "color_00": "#235C71",
+    "color_01": "#367E92",
+    "color_02": "#83C4C8",
+    "color_03": "#52A2AD",
+    "color_04": "#163E52"
+  },
+  "hot_compound_coolant_still": {
+    "color_00": "#925039",
+    "color_01": "#BC714A",
+    "color_02": "#F4C985",
+    "color_03": "#E39C60",
+    "color_04": "#59392E"
+  },
+  "hot_compound_coolant_flow": {
+    "color_00": "#925039",
+    "color_01": "#BC714A",
+    "color_02": "#F4C985",
+    "color_03": "#E39C60",
+    "color_04": "#59392E"
   }
 }
