@@ -1,6 +1,7 @@
 """严格像素 SVG 渲染器及 EXT-ART-02 离线导出入口。
 
-默认输入为 manifest 指定 SVG 和色板；默认只输出 generated 和预览。
+默认输入为 manifest 指定 SVG 和色板，八项冷却剂按批准哈希保留原 PNG；
+默认只输出 generated 和预览。
 显式 --install 通过固定白名单接入原有 51 个游戏路径，由 pipeline 管理。
 受限 SVG 使用整数 rect 和色板内的 #RRGGBB，按文档顺序覆盖像素。
 任何不支持的元素、属性或非空文本均报错；全部源稿验证后才开始写出。

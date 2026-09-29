@@ -1,4 +1,4 @@
-"""离线验收51张既有贴图：清单、独立像素对照、复现性和失败不写出。
+"""离线核对51张既有贴图：原冷却剂保留、SVG像素、复现性和失败不写出。
 
 只在显式执行本脚本时做临时坏输入实验，finally 原样恢复源稿/清单。
 不调用游戏、Gradle 或 Git 写操作；结果保存在本任务证据目录。
@@ -18,10 +18,15 @@ import pipeline
 from export import render_svg, read_palette, ROOT
 
 REPO=ROOT.parents[1]
-EVIDENCE=REPO/'build/reports/extension/EXT-ART-02'
+EVIDENCE=REPO/'build/reports/extension/EXT-ART-02A'
 EVIDENCE.mkdir(parents=True,exist_ok=True)
 ENV=dict(os.environ,PYTHONIOENCODING='utf-8',PYTHONDONTWRITEBYTECODE='1')
 log=[]
+# 用户只撤回两种冷却剂的八条路径；独立列举，避免随管线白名单错误一起放宽。
+RETAINED_COOLANTS=frozenset(f'{directory}/{name}_{state}.png'
+    for directory in ('block','fluid')
+    for name in ('compound_coolant','hot_compound_coolant')
+    for state in ('still','flow'))
 
 
 def digest(path):
@@ -42,7 +47,7 @@ def state():
     return {p.relative_to(REPO).as_posix():digest(p) for p in sorted(paths)}
 
 
-entries,images,before=pipeline.prepare();palette=read_palette()
+entries,images,before,retained=pipeline.prepare();palette=read_palette()
 baseline=json.loads((ROOT/'baseline.json').read_text(encoding='utf-8'))
 assert {r['game'] for r in baseline['records']}==pipeline.GAME_FILES
 assert len(entries)==52
@@ -50,6 +55,14 @@ assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):47,(16,
 results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'game_count':51,'source_count':len({e['source'] for e in entries}),'records':[]}
 for e in entries:
     name=e['game'] or 'item/lapis_dust.png'
+    if name in RETAINED_COOLANTS:
+        original=subprocess.check_output(['git','show',f'eddd097^:src/main/resources/assets/create_nuclear_industry/textures/{name}'],cwd=REPO)
+        assert (ROOT/'generated'/name).read_bytes()==original==(ROOT/'baseline'/name).read_bytes(),f'冷却剂必须逐字节保留原图: {name}'
+        with Image.open(ROOT/'generated'/name) as output:
+            pipeline.validate_alpha(e,output)
+            assert output.tobytes()==images[name].tobytes()
+        results['records'].append({'game':name,'size':e['size'],'retained_original_sha256':hashlib.sha256(original).hexdigest()})
+        continue
     source=ROOT/'sources'/e['source']
     # 独立使用 Pillow 矩形 API，核对导出器手动覆盖像素的坐标和边界。
     reference=Image.new('RGBA',tuple(e['size']));draw=ImageDraw.Draw(reference)
@@ -107,36 +120,39 @@ for _ in range(2):run();assert state()==prior,'默认导出非确定或改动了
 results['default_repeat_exports']=2
 
 # 临时向后序源稿加入未知元素，确认真实CLI在写第一个输出前就失败。
-source=ROOT/'sources/item/uranium_concentrate.svg';saved=source.read_bytes()
+source=ROOT/'sources/fluid/hot_compound_coolant_still.svg';saved=source.read_bytes()
 try:
     source.write_text(saved.decode('utf-8').replace('</svg>','<circle/></svg>'),encoding='utf-8')
     run('--install',good=False);assert state()==prior
 finally:source.write_bytes(saved)
 
 manifest=ROOT/'manifest.json';saved=manifest.read_bytes()
-for mutation in ('extra_path','wrong_size','wrong_mapping'):
+for mutation in ('extra_path','wrong_size','wrong_mapping','unauthorized_preserve','missing_preserve'):
     data=json.loads(saved)
     if mutation=='extra_path':data['entries'][0]['game']='block/not_authorized.png'
     elif mutation=='wrong_size':data['entries'][0]['size']=[16,16]
-    else:data['entries'][0]['source']='../outside.svg'
+    elif mutation=='wrong_mapping':data['entries'][0]['source']='../outside.svg'
+    elif mutation=='unauthorized_preserve':data['entries'][2]['preserve']='baseline-original'
+    else:data['entries'][0].pop('preserve',None)
     try:
         manifest.write_text(json.dumps(data),encoding='utf-8')
         run('--install',good=False);assert state()==prior
     finally:manifest.write_bytes(saved)
-results['cli_failure_no_writes']=['unsupported_svg','extra_path','wrong_size','wrong_mapping']
+results['cli_failure_no_writes']=['unsupported_svg','extra_path','wrong_size','wrong_mapping','unauthorized_preserve','missing_preserve']
 
-# 显式接入是本卡授权步骤；51文件逐一对照，block/fluid兼容路径必须字节一致。
+# 显式接入后逐条核对：八项冷却剂保留各自旧字节，其余43张保持重绘。
 run('--install')
 assert {p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}==pipeline.GAME_FILES
 for e in entries:
     if e['game']:
         assert (pipeline.GAME_ROOT/e['game']).read_bytes()==(ROOT/'generated'/e['game']).read_bytes()
-        assert (pipeline.GAME_ROOT/e['game']).read_bytes()!=(ROOT/'baseline'/e['game']).read_bytes(),'既有纹理未重绘'
-for suffix in ('compound_coolant_flow','compound_coolant_still','hot_compound_coolant_flow','hot_compound_coolant_still'):
-    assert (pipeline.GAME_ROOT/'block'/f'{suffix}.png').read_bytes()==(pipeline.GAME_ROOT/'fluid'/f'{suffix}.png').read_bytes()
+        if e['game'] in RETAINED_COOLANTS:
+            assert (pipeline.GAME_ROOT/e['game']).read_bytes()==(ROOT/'baseline'/e['game']).read_bytes(),'旧冷却剂被再次覆盖'
+        else:
+            assert (pipeline.GAME_ROOT/e['game']).read_bytes()!=(ROOT/'baseline'/e['game']).read_bytes(),'既有纹理未重绘'
 after=state();run('--install');assert state()==after
 results['install_repeat_exports']=2
-results['source_generated_game_equal']=True
+results['svg_or_retained_original_generated_game_equal']=True
 results['output_hashes']=after
 results['result']='PASS'
 (EVIDENCE/'verification.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

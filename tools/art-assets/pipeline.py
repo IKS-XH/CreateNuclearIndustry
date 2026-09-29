@@ -1,7 +1,7 @@
 """EXT-ART-02 固定白名单管线，先验证全部输入，再输出候选或显式接入游戏。
 
 无游戏逻辑、注册、模型或动画修改。清单仅允许基线 51 PNG 和一个工具候选；
-保留完整 flow 画布，block/fluid 的兼容路径明确共用一张源稿。
+保留完整 flow 画布；EXT-ART-02A 的八项冷却剂按各自原始 PNG 保留。
 """
 import argparse
 import hashlib
@@ -67,6 +67,19 @@ item/steel_plate.png
 item/tin_ingot.png
 item/uranium_concentrate.png'''.splitlines())
 
+# 用户批准的原始 PNG 例外，路径与哈希均冻结；不能借 manifest 导入任意位图。
+# block/fluid 分别核对，即使当前字节相同也不以兼容路径替代原图。
+RETAINED_ORIGINALS = {
+    'block/compound_coolant_flow.png': 'ff5fc3fe7a385cb77343c81d191ffec7ca4801c1003c250e2d27658331f48adf',
+    'block/compound_coolant_still.png': 'de30924110d0ec43e801151e94369db6a39d5fee08db889155c991b2116d3bc9',
+    'block/hot_compound_coolant_flow.png': '44aee2d725d6baa6c4a60232aad0d87549fb61a086b064d0ccbc99b7ea5f29f6',
+    'block/hot_compound_coolant_still.png': '7456bf7510e47f104b9481eed3468ab0de1454a500c437d9af7b8541b468f9ea',
+    'fluid/compound_coolant_flow.png': 'ff5fc3fe7a385cb77343c81d191ffec7ca4801c1003c250e2d27658331f48adf',
+    'fluid/compound_coolant_still.png': 'de30924110d0ec43e801151e94369db6a39d5fee08db889155c991b2116d3bc9',
+    'fluid/hot_compound_coolant_flow.png': '44aee2d725d6baa6c4a60232aad0d87549fb61a086b064d0ccbc99b7ea5f29f6',
+    'fluid/hot_compound_coolant_still.png': '7456bf7510e47f104b9481eed3468ab0de1454a500c437d9af7b8541b468f9ea',
+}
+
 
 def load_manifest():
     """验证路径、尺寸、用途及兼容映射，禁止 manifest 扩大游戏写集。"""
@@ -82,7 +95,11 @@ def load_manifest():
     if sum(e.get('game') is None for e in entries)!=1:
         raise ValueError('只能有一个工具候选')
     for e in entries:
-        if set(e)!={'game','source','palette','size','kind','group','use'}:
+        fields={'game','source','palette','size','kind','group','use'}
+        if e['game'] in RETAINED_ORIGINALS:
+            fields.add('preserve')
+            if e.get('preserve')!='baseline-original':raise ValueError('冷却剂必须保留已批准原图')
+        if set(e)!=fields:
             raise ValueError('manifest 记录字段不匹配')
         game=e['game']; name=game or 'item/lapis_dust.png'
         source=('fluid/'+name.split('/')[-1] if 'compound_coolant' in name else name)[:-4]+'.svg'
@@ -114,7 +131,7 @@ def validate_alpha(entry,image):
 
 def prepare():
     """先完整解析全部源和基线；调用者在此成功返回之前不能写任何输出。"""
-    entries=load_manifest();palette=read_palette();images={};before={}
+    entries=load_manifest();palette=read_palette();images={};before={};retained={}
     if set(palette)!={e['palette'] for e in entries}:raise ValueError('清单与色板集合不同')
     for e in entries:
         key=e['game'] or 'item/lapis_dust.png'
@@ -124,7 +141,16 @@ def prepare():
         if e['game']:
             with Image.open(ROOT/'baseline'/key) as old:before[key]=old.convert('RGBA')
             if list(before[key].size)!=e['size']:raise ValueError('基线尺寸不匹配')
-    return entries,images,before
+        if key in RETAINED_ORIGINALS:
+            data=(ROOT/'baseline'/key).read_bytes()
+            if hashlib.sha256(data).hexdigest()!=RETAINED_ORIGINALS[key]:
+                raise ValueError(f'{key}: 固定保留原图哈希不匹配')
+            with Image.open(io.BytesIO(data)) as original:
+                validate_alpha(e,original)
+                images[key]=original.copy()
+            # 预览只解码；输出直接使用已验证的原字节，禁止重编码或套用新色板。
+            retained[key]=data
+    return entries,images,before,retained
 
 
 def png_bytes(image):
@@ -158,7 +184,7 @@ def previews(entries,images,before):
                 label=key[:-4];split=label.rfind('_',0,30) if len(label)>30 else -1
                 lines=[label] if split<0 else [label[:split],label[split+1:]]
                 for j,line in enumerate(lines):draw.text((x+10,y+10+j*16),line,font=font,fill='#ECF0EB')
-                draw.text((x+10,y+49),'BEFORE' if e['game'] else 'APPROVED PILOT',font=small,fill='#A6B9C2');draw.text((x+138,y+49),'AFTER' if e['game'] else 'UNCHANGED',font=small,fill='#DDE5CF')
+                draw.text((x+10,y+49),'BEFORE' if e['game'] else 'APPROVED PILOT',font=small,fill='#A6B9C2');draw.text((x+138,y+49),'RESTORED' if key in RETAINED_ORIGINALS else ('AFTER' if e['game'] else 'UNCHANGED'),font=small,fill='#DDE5CF')
                 scale=2 if im.height==64 else 7
                 image_on(sheet,old,x+10,y+67,scale,'#D8D9D4');image_on(sheet,im,x+138,y+67,scale,'#D8D9D4')
                 image_on(sheet,im,x+10,y+208,1,'#69737A');draw.text((x+38,y+210),'1x',font=small,fill='#A6B9C2')
@@ -185,7 +211,7 @@ def previews(entries,images,before):
         for j,line in enumerate(lines):od.text((x,y+72+j*13),line,font=small,fill='#E3ECE8')
         od.text((x,y+102),key.split('/')[0],font=small,fill='#A6B9C2')
     outputs['preview.png']=png_bytes(overview)
-    outputs['preview.html']=('''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>EXT-ART-02 全量贴图对照</title><style>body{background:#17212a;color:#e3ece8;font:16px system-ui;margin:24px}figure{margin:24px 0}img{max-width:100%;height:auto;image-rendering:pixelated}figcaption{margin-top:8px}</style><h1>EXT-ART-02 全量贴图对照</h1><p>原路径 51 张重绘，另保留青金石粉候选。每页含前后、原尺寸、明暗底与平铺；屏幕缩放会改变原尺寸显示。客户端视觉验收待用户完成。</p>'''+links+'</html>\n').encode('utf-8')
+    outputs['preview.html']=('''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>EXT-ART-02 全量贴图对照</title><style>body{background:#17212a;color:#e3ece8;font:16px system-ui;margin:24px}figure{margin:24px 0}img{max-width:100%;height:auto;image-rendering:pixelated}figcaption{margin-top:8px}</style><h1>EXT-ART-02 全量贴图对照</h1><p>51 个原路径：43 张保留重绘，8 张冷却剂按 EXT-ART-02A 恢复原图，另保留青金石粉候选。冷却剂 BEFORE 为重绘前原图，RESTORED 为本次恢复结果。每页含原尺寸、明暗底与平铺；屏幕缩放会改变原尺寸显示。冷却剂客户端视觉复验待用户完成。</p>'''+links+'</html>\n').encode('utf-8')
     return outputs
 
 
@@ -193,8 +219,8 @@ def main():
     parser=argparse.ArgumentParser(description='固定51张贴图SVG导出，默认不接入游戏')
     parser.add_argument('--install',action='store_true',help='显式覆盖固定51个已有PNG，不新增路径')
     args=parser.parse_args()
-    entries,images,before=prepare()
-    outputs={f'generated/{key}':png_bytes(im) for key,im in images.items()}
+    entries,images,before,retained=prepare()
+    outputs={f'generated/{key}':retained[key] if key in retained else png_bytes(im) for key,im in images.items()}
     outputs.update(previews(entries,images,before))
     game_outputs={e['game']:outputs['generated/'+e['game']] for e in entries if e['game']}
     if args.install:

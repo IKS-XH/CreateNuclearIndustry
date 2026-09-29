@@ -11,7 +11,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "已引用纹理"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "block/compound_coolant_still.png",
@@ -23,7 +24,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "已引用纹理"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "block/control_rod_drive_side.png",
@@ -95,7 +97,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "已引用纹理"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "block/hot_compound_coolant_still.png",
@@ -107,7 +110,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "已引用纹理"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "block/lead_block.png",
@@ -431,7 +435,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "本基线未引用素材；重绘不等于注册"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "fluid/compound_coolant_still.png",
@@ -443,7 +448,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "本基线未引用素材；重绘不等于注册"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "fluid/hot_compound_coolant_flow.png",
@@ -455,7 +461,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "本基线未引用素材；重绘不等于注册"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "fluid/hot_compound_coolant_still.png",
@@ -467,7 +474,8 @@
       ],
       "kind": "opaque",
       "group": "coolant",
-      "use": "本基线未引用素材；重绘不等于注册"
+      "use": "EXT-ART-02A 固定保留各自旧 PNG；SVG 仅存档，不再安装",
+      "preserve": "baseline-original"
     },
     {
       "game": "item/control_rod.png",
