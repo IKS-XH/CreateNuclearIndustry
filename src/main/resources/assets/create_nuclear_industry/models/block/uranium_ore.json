@@ -1,0 +1,6 @@
+{
+  "textures": {
+    "all": "create_nuclear_industry:block/uranium_ore"
+  },
+  "parent": "minecraft:block/cube_all"
+}

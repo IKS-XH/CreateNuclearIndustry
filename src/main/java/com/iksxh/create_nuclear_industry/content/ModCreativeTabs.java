@@ -41,6 +41,12 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CONTROL_ROD.get());
                         output.accept(ModItems.STEEL_PLATE.get());
                         output.accept(ModItems.COMPOUND_COOLANT_BUCKET.get());
+                        for (OreContent.Mineral mineral : OreContent.MINERALS) {
+                            output.accept(mineral.ore().get());
+                            output.accept(mineral.deepslateOre().get());
+                            output.accept(mineral.raw().get());
+                            output.accept(mineral.rawBlock().get());
+                        }
                     })
                     .build()
     );

@@ -1,0 +1,50 @@
+{
+  "pools": [
+    {
+      "entries": [
+        {
+          "children": [
+            {
+              "name": "create_nuclear_industry:uranium_ore",
+              "conditions": [
+                {
+                  "predicate": {
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantments": "minecraft:silk_touch",
+                          "levels": {
+                            "min": 1
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "condition": "minecraft:match_tool"
+                }
+              ],
+              "type": "minecraft:item"
+            },
+            {
+              "name": "create_nuclear_industry:raw_uranium",
+              "functions": [
+                {
+                  "enchantment": "minecraft:fortune",
+                  "function": "minecraft:apply_bonus",
+                  "formula": "minecraft:ore_drops"
+                },
+                {
+                  "function": "minecraft:explosion_decay"
+                }
+              ],
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "type": "minecraft:block"
+}

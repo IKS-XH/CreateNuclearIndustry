@@ -1,0 +1,33 @@
+{
+  "placement": [
+    {
+      "mode": "auto",
+      "type": "create_nuclear_industry:ore_generation",
+      "ore_tag": "c:ores/uranium"
+    },
+    {
+      "count": 2,
+      "type": "minecraft:count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": -16
+        },
+        "min_inclusive": {
+          "absolute": -64
+        },
+        "plateau": 0,
+        "type": "minecraft:trapezoid"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ],
+  "feature": "create_nuclear_industry:ore_uranium"
+}

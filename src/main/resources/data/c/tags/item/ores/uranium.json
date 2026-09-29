@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "create_nuclear_industry:uranium_ore",
+    "create_nuclear_industry:deepslate_uranium_ore"
+  ]
+}

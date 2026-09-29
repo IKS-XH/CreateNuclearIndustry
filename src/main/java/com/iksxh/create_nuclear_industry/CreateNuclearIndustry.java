@@ -4,6 +4,8 @@ import com.iksxh.create_nuclear_industry.content.ModBlocks;
 import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.ModItems;
+import com.iksxh.create_nuclear_industry.content.OreContent;
+import com.iksxh.create_nuclear_industry.worldgen.OreGenerationFilter;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
@@ -40,6 +42,8 @@ public final class CreateNuclearIndustry {
         P1ServerConfig.register(modContainer);
         ModFluids.register(modEventBus);
         ModItems.register(modEventBus);
+        OreContent.register(modEventBus);
+        OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);
         P1Blocks.register(modEventBus);
         P1BlockEntities.register(modEventBus);

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "create_nuclear_industry:lead_ore",
+    "create_nuclear_industry:deepslate_lead_ore"
+  ]
+}

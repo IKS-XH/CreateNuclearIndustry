@@ -98,5 +98,17 @@
   "goggle.create_nuclear_industry.reactor.fuel_assembly_empty": "燃料组件：空",
   "goggle.create_nuclear_industry.reactor.fuel_column_data_unavailable": "燃料列结构数据不可用",
   "goggle.create_nuclear_industry.reactor.fuel_column": "燃料列 行%s列%s：完整度 %s，发热 %s HU/t",
-  "goggle.create_nuclear_industry.reactor.control_rod_column": "控制棒列 行%s列%s：完整度 %s"
+  "goggle.create_nuclear_industry.reactor.control_rod_column": "控制棒列 行%s列%s：完整度 %s",
+  "block.create_nuclear_industry.lead_ore": "铅矿石",
+  "block.create_nuclear_industry.deepslate_lead_ore": "深层铅矿石",
+  "block.create_nuclear_industry.raw_lead_block": "粗铅块",
+  "item.create_nuclear_industry.raw_lead": "粗铅",
+  "block.create_nuclear_industry.tin_ore": "锡矿石",
+  "block.create_nuclear_industry.deepslate_tin_ore": "深层锡矿石",
+  "block.create_nuclear_industry.raw_tin_block": "粗锡块",
+  "item.create_nuclear_industry.raw_tin": "粗锡",
+  "block.create_nuclear_industry.uranium_ore": "铀矿石",
+  "block.create_nuclear_industry.deepslate_uranium_ore": "深层铀矿石",
+  "block.create_nuclear_industry.raw_uranium_block": "粗铀块",
+  "item.create_nuclear_industry.raw_uranium": "粗铀"
 }

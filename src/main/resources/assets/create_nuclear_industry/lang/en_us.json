@@ -98,5 +98,17 @@
   "goggle.create_nuclear_industry.reactor.fuel_assembly_empty": "Fuel assembly: empty",
   "goggle.create_nuclear_industry.reactor.fuel_column_data_unavailable": "Fuel-column structure data unavailable",
   "goggle.create_nuclear_industry.reactor.fuel_column": "Fuel column row %s, column %s: integrity %s, heat %s HU/t",
-  "goggle.create_nuclear_industry.reactor.control_rod_column": "Control-rod column row %s, column %s: integrity %s"
+  "goggle.create_nuclear_industry.reactor.control_rod_column": "Control-rod column row %s, column %s: integrity %s",
+  "block.create_nuclear_industry.lead_ore": "Lead Ore",
+  "block.create_nuclear_industry.deepslate_lead_ore": "Deepslate Lead Ore",
+  "block.create_nuclear_industry.raw_lead_block": "Block of Raw Lead",
+  "item.create_nuclear_industry.raw_lead": "Raw Lead",
+  "block.create_nuclear_industry.tin_ore": "Tin Ore",
+  "block.create_nuclear_industry.deepslate_tin_ore": "Deepslate Tin Ore",
+  "block.create_nuclear_industry.raw_tin_block": "Block of Raw Tin",
+  "item.create_nuclear_industry.raw_tin": "Raw Tin",
+  "block.create_nuclear_industry.uranium_ore": "Uranium Ore",
+  "block.create_nuclear_industry.deepslate_uranium_ore": "Deepslate Uranium Ore",
+  "block.create_nuclear_industry.raw_uranium_block": "Block of Raw Uranium",
+  "item.create_nuclear_industry.raw_uranium": "Raw Uranium"
 }

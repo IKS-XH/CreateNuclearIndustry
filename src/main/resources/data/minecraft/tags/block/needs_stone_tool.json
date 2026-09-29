@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "create_nuclear_industry:tin_ore",
+    "create_nuclear_industry:deepslate_tin_ore",
+    "create_nuclear_industry:raw_tin_block"
+  ]
+}

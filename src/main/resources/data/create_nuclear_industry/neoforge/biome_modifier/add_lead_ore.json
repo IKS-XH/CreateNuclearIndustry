@@ -1,0 +1,6 @@
+{
+  "features": "create_nuclear_industry:ore_lead",
+  "biomes": "#minecraft:is_overworld",
+  "step": "underground_ores",
+  "type": "neoforge:add_features"
+}

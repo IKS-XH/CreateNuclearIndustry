@@ -9,6 +9,15 @@
     "create_nuclear_industry:reactor_hot_port",
     "create_nuclear_industry:reactor_refueling_port",
     "create_nuclear_industry:reactor_fuel_rod",
-    "create_nuclear_industry:control_rod_drive"
+    "create_nuclear_industry:control_rod_drive",
+    "create_nuclear_industry:lead_ore",
+    "create_nuclear_industry:deepslate_lead_ore",
+    "create_nuclear_industry:raw_lead_block",
+    "create_nuclear_industry:tin_ore",
+    "create_nuclear_industry:deepslate_tin_ore",
+    "create_nuclear_industry:raw_tin_block",
+    "create_nuclear_industry:uranium_ore",
+    "create_nuclear_industry:deepslate_uranium_ore",
+    "create_nuclear_industry:raw_uranium_block"
   ]
 }

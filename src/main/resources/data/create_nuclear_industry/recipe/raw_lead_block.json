@@ -1,0 +1,18 @@
+{
+  "category": "building",
+  "result": {
+    "id": "create_nuclear_industry:raw_lead_block",
+    "count": 1
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:raw_materials/lead"
+    }
+  },
+  "type": "minecraft:crafting_shaped"
+}

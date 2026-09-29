@@ -1,0 +1,6 @@
+{
+  "textures": {
+    "layer0": "create_nuclear_industry:item/raw_tin"
+  },
+  "parent": "minecraft:item/generated"
+}

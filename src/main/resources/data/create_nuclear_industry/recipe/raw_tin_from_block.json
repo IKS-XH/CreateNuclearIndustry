@@ -1,0 +1,13 @@
+{
+  "ingredients": [
+    {
+      "tag": "c:storage_blocks/raw_tin"
+    }
+  ],
+  "category": "misc",
+  "result": {
+    "id": "create_nuclear_industry:raw_tin",
+    "count": 9
+  },
+  "type": "minecraft:crafting_shapeless"
+}

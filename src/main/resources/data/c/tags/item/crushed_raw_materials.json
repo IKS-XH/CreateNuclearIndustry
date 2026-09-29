@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#c:crushed_raw_materials/lead",
+    "#c:crushed_raw_materials/tin",
+    "#c:crushed_raw_materials/uranium"
+  ]
+}

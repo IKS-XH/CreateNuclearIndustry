@@ -1,0 +1,18 @@
+{
+  "category": "building",
+  "result": {
+    "id": "create_nuclear_industry:raw_uranium_block",
+    "count": 1
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:raw_materials/uranium"
+    }
+  },
+  "type": "minecraft:crafting_shaped"
+}
