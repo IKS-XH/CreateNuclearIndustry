@@ -4,7 +4,7 @@
 
 ## 当前工作
 
-**本轮执行：** [资源、生产与 SVG 美术启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。用户已授权自动派发与审核，决策或手动测试门前暂停。
+**本轮执行：** [资源、生产与 SVG 美术启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。用户已授权自动派发与审核；用户已批准样稿风格与三矿推荐方案，进入 [三矿资源入口](./superpowers/plans/2026-09-29-ext-a-ore-01.md) 和 [现有 51 张贴图重绘](./superpowers/plans/2026-09-29-ext-art-02.md)。实现后在客户端测试门暂停。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
@@ -30,7 +30,7 @@
 ## 后置与辅助工作
 
 - [事故后的 Ponder 教学](./superpowers/plans/2026-09-12-post-accident-ponder-plan.md)：具体事故验收后继续，仍属首发发布门。
-- [P1 PNG 素材说明](./superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md)：美术参考，不是当前派发；正式视觉在功能闭环后安排。
+- [P1 PNG 素材说明](./superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md)：旧生图说明保留作历史，当前绘制方式由 SVG 启动计划取代；复杂结构视觉仍后置。
 - [三维核电站工具计划](./superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：未确认整体验收完成的辅助工具；恢复前须复核已有交付和剩余任务，不作为游戏功能完成证据。
 - [反应堆模拟器说明](../tools/reactor-simulator/README.md)：工具使用与限制；当前 main 不能当作 02B 新倍率已同步。
 
