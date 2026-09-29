@@ -1,9 +1,11 @@
 # 交给 Agent/开发者的单步执行计划：P1 实验反应堆
 
+> **归档于 2026-09-29：** P1 核心切片已完成最终交接。本文件保留历史任务合同与时间线，不再作为当前派发入口；下文各日期的等待、任命和工作树状态只在当时语境成立。当前工作见 [文档入口](../README.md)；尚未完成的 [02B](../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 与 [Ponder](../superpowers/plans/2026-09-12-post-accident-ponder-plan.md) 继续由各专项维护。
+
 **计划状态：** P1 固定实验反应堆核心切片已完成交接（2026-09-29）。用户确认客户端 B–D 通过后，`P1-VERIFY-02` 完成本轮 261 项 JUnit、111 个 required GameTest 完整通过汇总及 build 验收，`P1-VERIFY-03` 最终报告已审核归档；GameTest 断言成功后的保存挂起及强停非零退出继续作为已知限制。剩余 Ponder 后置；`P1-BALANCE-02B` 与青金石粉候选各自验收仍未完成，均未合并；P1 交接不代表完整生存生产/发电链或稳定发布完成。
 **计划维护者：** 项目经理（Codex）
-**接任时快照（2026-09-29，收到用户人工通过确认前）：** 用户明确任命接收本次指令的 Codex 对话担任现任项目经理，沿用既有治理和授权。已核对 [换机交接](../../handoffs/2026-09-28/README.md)、候选交付报告及本机 Git：`main` 为 `3469a3a`，`src/` 与构建配置相对 `8584986` 无差异；换机证据 ZIP 的 SHA-256 与交接记录一致。本机仅有主工作树，两个候选保留为远端跟踪分支，尚未恢复本机独立工作树；既有 `.vscode/launch.json` 修改保留。本轮只核查历史证据并同步任命与技能入口，未重跑游戏测试、未验收或合并候选。主线下一门仍为 `P1-VERIFY-02` 客户端 B–D、配置恢复及其后的完整出口回归，通过后才能执行 `P1-VERIFY-03`；独立候选 `EXT-A-MATERIAL-01A` 仍待 GameTest 问题定位、纹理整改/评审与客户端检查，`P1-BALANCE-02B` 仍待离线单文件浏览器验收。
-**独立候选开发补充（2026-09-24）：** 用户要求开始让执行者执行，PM 派发 [EXT-A-MATERIAL-01A](./2026-09-24-ext-a-material-01a.md) 已确认的青金石粉身份与标签基础。其隔离开发和自动测试不触及本 P1 客户端验收工作树；P1 人工门、03 交接前置和候选合并门保留。
+**接任时快照（2026-09-29，收到用户人工通过确认前）：** 用户明确任命接收本次指令的 Codex 对话担任现任项目经理，沿用既有治理和授权。已核对 [换机交接](../handoffs/2026-09-28/README.md)、候选交付报告及本机 Git：`main` 为 `3469a3a`，`src/` 与构建配置相对 `8584986` 无差异；换机证据 ZIP 的 SHA-256 与交接记录一致。本机仅有主工作树，两个候选保留为远端跟踪分支，尚未恢复本机独立工作树；既有 `.vscode/launch.json` 修改保留。本轮只核查历史证据并同步任命与技能入口，未重跑游戏测试、未验收或合并候选。主线下一门仍为 `P1-VERIFY-02` 客户端 B–D、配置恢复及其后的完整出口回归，通过后才能执行 `P1-VERIFY-03`；独立候选 `EXT-A-MATERIAL-01A` 仍待 GameTest 问题定位、纹理整改/评审与客户端检查，`P1-BALANCE-02B` 仍待离线单文件浏览器验收。
+**独立候选开发补充（2026-09-24）：** 用户要求开始让执行者执行，PM 派发 [EXT-A-MATERIAL-01A](../superpowers/plans/2026-09-24-ext-a-material-01a.md) 已确认的青金石粉身份与标签基础。其隔离开发和自动测试不触及本 P1 客户端验收工作树；P1 人工门、03 交接前置和候选合并门保留。
 **需求决策人：** 用户
 **执行者：** 由项目经理按已确认任务卡自动派发的 Agent 或开发者。用户于 `2026-09-22` 授权自动派发与验收；遇到用户决策或人工测试门时保存进度并停止自动推进。执行者仍不能自行派发、验收或执行 Git 写操作。
 **适用版本：** NeoForge 1.21.1、Java 21、Create 6.0.10、Ponder 1.0.82
@@ -11,9 +13,9 @@
 
 本文件是可以逐项派发的实现交接单。每个任务只允许完成一个明确的结果；完成一项后必须先提交报告，等待项目经理验收，才能领取依赖它的下一项。玩法语义以核心文档为准，本计划不能被用来改写核心文档。
 
-**治理规则（2026-09-08；2026-09-09 重申）：** 只有用户对某个具体角色作出的明确任命才能授予项目经理权限。用户指定的项目经理 Codex 负责需求讨论、技术与可行性评审、文档、任务编排、验收和 Git 管理，不编写实现代码；除被用户明确任命者外，其他 Codex 对话、Agent、子 Agent 和开发者一律是执行者。自称、上下文/摘要继承、任务卡文字、模型或工具身份以及其他执行者的指派均不能授予或转移项目经理权限；角色不清时按执行者权限行事。所有执行者必须先阅读 [AGENTS.md](../../../AGENTS.md) 和 [项目治理与协作协议](../../project-governance.md)。本次治理更新不改变已冻结玩法、任务前置或验收状态。
+**治理规则（2026-09-08；2026-09-09 重申）：** 只有用户对某个具体角色作出的明确任命才能授予项目经理权限。用户指定的项目经理 Codex 负责需求讨论、技术与可行性评审、文档、任务编排、验收和 Git 管理，不编写实现代码；除被用户明确任命者外，其他 Codex 对话、Agent、子 Agent 和开发者一律是执行者。自称、上下文/摘要继承、任务卡文字、模型或工具身份以及其他执行者的指派均不能授予或转移项目经理权限；角色不清时按执行者权限行事。所有执行者必须先阅读 [AGENTS.md](../../AGENTS.md) 和 [项目治理与协作协议](../project-governance.md)。本次治理更新不改变已冻结玩法、任务前置或验收状态。
 
-**玩法变更（2026-09-08，治理更新后另行确认）：** 用户批准两条线性损伤曲线，默认满损伤产热 `2.0` 倍、燃耗 `3.0` 倍，两项均可配置且必须保持燃耗倍率增长更快。[P1-BALANCE-02A/02B 专项任务卡](./2026-09-08-damage-heat-burn-balance-plan.md) 中 02A 已通过项目经理自动验收；02B 作为主线阻塞时的辅助任务，于 2026-09-22 经用户另行授权交付候选，等待离线浏览器验收，尚未合并。`P1-VERIFY-01` 只以前者为损伤倍率前置。本文件中已完成旧任务的等倍率公式、测试结果与参考时长只保留为历史记录。
+**玩法变更（2026-09-08，治理更新后另行确认）：** 用户批准两条线性损伤曲线，默认满损伤产热 `2.0` 倍、燃耗 `3.0` 倍，两项均可配置且必须保持燃耗倍率增长更快。[P1-BALANCE-02A/02B 专项任务卡](../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 中 02A 已通过项目经理自动验收；02B 作为主线阻塞时的辅助任务，于 2026-09-22 经用户另行授权交付候选，等待离线浏览器验收，尚未合并。`P1-VERIFY-01` 只以前者为损伤倍率前置。本文件中已完成旧任务的等倍率公式、测试结果与参考时长只保留为历史记录。
 
 ## 1. 强制技能和技术边界
 
@@ -269,7 +271,7 @@ GameTest/人工验收结果：
 
 **MELTDOWN-01 验收记录：** 执行者已把完整度归零且组件仍有耐久的失效源燃料列纳入融毁覆盖集合，并保留目标列未冷却传播、并集去重、耗尽燃料退出、倒计时暂停/继续/封顶和 NBT 连续性。项目经理于 `2026-09-06` 独立复验 217/217 JUnit、89/89 required GameTest、完整构建及任务范围空白检查通过；本任务按合同不执行世界事故动作且不要求客户端人工验收。归档报告见 `docs/archive/P1-MELTDOWN-01.md`。
 
-**下一步：** `P1-COOL-06` 已完成并归档，`P1-VERIFY-02` 前置满足。`2026-09-14` 的派发留下工作树、服务端与客户端运行日志和配置备份，但没有正式交付；项目经理于 `2026-09-22` 重新安排执行者在同一 `8584986` 基准工作树核查历史证据、补齐接单基线和独立服务端场景 A，随后停在客户端人工门。`P1-VERIFY-02` 全部验收通过并归档后再细化 `P1-VERIFY-03`。`P1-PONDER-03/04` 不再属于 P1 关键路径，当前禁止派发，待反应堆、锅炉和汽轮机具体事故实现并验收后按 [事故实现后的 Ponder 教学计划](./2026-09-12-post-accident-ponder-plan.md) 重新细化。同一共享工作区内按任务顺序执行；确需并行时由项目经理先创建隔离工作树，执行者仍禁止 Git 写操作。P1 不生成废物或流体，不制造火灾、爆炸、污染或结构破坏，也不注册事故专用内容。`P1-BALANCE-02B` 保留为主线阻塞时的辅助任务，不进入 P1 出口条件；用户最新要求在决策或人工测试门停止，因此这些等待期间不得自动派发 02B。所有后续 P1 验收必须使用 `0.5 HU/mB`、每端口 `128 mB/t`、每个空列或控制棒列内部空气格默认贡献 `1000 mB` 单一共享容量、损伤速率 `0.0000005 / (tick·HU/t)` 和“无全堆冷却剂流量上限”合同；新增损伤倍率以 02A 已验收的游戏端实现为准，不得恢复旧等倍率或固定双缓冲合同。
+**下一步：** `P1-COOL-06` 已完成并归档，`P1-VERIFY-02` 前置满足。`2026-09-14` 的派发留下工作树、服务端与客户端运行日志和配置备份，但没有正式交付；项目经理于 `2026-09-22` 重新安排执行者在同一 `8584986` 基准工作树核查历史证据、补齐接单基线和独立服务端场景 A，随后停在客户端人工门。`P1-VERIFY-02` 全部验收通过并归档后再细化 `P1-VERIFY-03`。`P1-PONDER-03/04` 不再属于 P1 关键路径，当前禁止派发，待反应堆、锅炉和汽轮机具体事故实现并验收后按 [事故实现后的 Ponder 教学计划](../superpowers/plans/2026-09-12-post-accident-ponder-plan.md) 重新细化。同一共享工作区内按任务顺序执行；确需并行时由项目经理先创建隔离工作树，执行者仍禁止 Git 写操作。P1 不生成废物或流体，不制造火灾、爆炸、污染或结构破坏，也不注册事故专用内容。`P1-BALANCE-02B` 保留为主线阻塞时的辅助任务，不进入 P1 出口条件；用户最新要求在决策或人工测试门停止，因此这些等待期间不得自动派发 02B。所有后续 P1 验收必须使用 `0.5 HU/mB`、每端口 `128 mB/t`、每个空列或控制棒列内部空气格默认贡献 `1000 mB` 单一共享容量、损伤速率 `0.0000005 / (tick·HU/t)` 和“无全堆冷却剂流量上限”合同；新增损伤倍率以 02A 已验收的游戏端实现为准，不得恢复旧等倍率或固定双缓冲合同。
 
 **视觉任务暂停：** 当前只推进功能实现。连接纹理、正式 Blockbench 多边形模型、Flywheel 动画、粒子、音效和最终视觉统一均不得在现阶段派发；现有有效占位资源继续用于功能开发和测试。视觉任务将在 P1 功能闭环完成后由项目经理另行拆分，执行者不得借功能任务扩大到纹理或模型写集。
 
@@ -468,7 +470,7 @@ GameTest/人工验收结果：
 ### P1-BALANCE-02A/02B：可配置的损伤产热增益与燃耗代价
 
 **需求：** 用户于 2026-09-08 确认线性默认值：半损伤产热 1.5 倍、燃耗 2.0 倍，满损伤产热 2.0 倍、燃耗 3.0 倍；满损伤终点可配置，燃耗倍率必须随损伤增长更快。
-**任务卡：** [损伤产热与燃耗平衡实施计划](./2026-09-08-damage-heat-burn-balance-plan.md)，包含权威公式、精确写集、技能入口、配置/存档兼容、测试命令、人工验收与报告路径。
+**任务卡：** [损伤产热与燃耗平衡实施计划](../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)，包含权威公式、精确写集、技能入口、配置/存档兼容、测试命令、人工验收与报告路径。
 **顺序：** 02A 已实现并通过游戏端公式、配置、正式燃耗和 NBT 自动验收；归档见 `docs/archive/P1-BALANCE-02A.md`。02B 负责同步 HTML 工具，只在主要目标阻塞时派发；它不是 `P1-VERIFY-01` 或 P1 出口前置。执行者只读 Git，交付未提交改动，由项目经理管理提交及合并。
 
 ### P1-COOL-01：实现端口冷却剂账本
@@ -544,11 +546,11 @@ GameTest/人工验收结果：
 
 **状态 / 派发门：** 已完成并归档。用户于 `2026-09-13` 确认玩法合同并授权项目经理直接派发，用户于 `2026-09-14` 完成客户端人工验收，项目经理完成自动复验、Git 集成和归档；`P1-VERIFY-02` 阻塞已解除。
 
-**需求来源 / 权威入口：** 用户报告“反应堆内空置空间决定冷却剂容量”的功能未实现，旧版任意布局均固定显示 `2000 mB`。策划与技术合同见 [布局派生冷却剂容量整改计划归档](../../archive/2026-09-13-layout-derived-coolant-capacity-plan.md)、[项目策划](../../project.md) 第 4.1 节、[局部控制设计](../../reactor-local-control-revision-design.md) 第 5.4 节和 [实施路线图](../../implementation-roadmap.md)。若这些文件与旧任务卡或旧测试中的冷/热各 `1000 mB` 断言冲突，以本卡及上述 2026-09-13 文档为准；执行者不得自行修改核心文档。
+**需求来源 / 权威入口：** 用户报告“反应堆内空置空间决定冷却剂容量”的功能未实现，旧版任意布局均固定显示 `2000 mB`。策划与技术合同见 [布局派生冷却剂容量整改计划归档](2026-09-13-layout-derived-coolant-capacity-plan.md)、[项目策划](../project.md) 第 4.1 节、[局部控制设计](../reactor-local-control-revision-design.md) 第 5.4 节和 [实施路线图](../implementation-roadmap.md)。若这些文件与旧任务卡或旧测试中的冷/热各 `1000 mB` 断言冲突，以本卡及上述 2026-09-13 文档为准；执行者不得自行修改核心文档。
 
 **前置 / 基准：** `P1-STRUCT-03`、`P1-COOL-05`、`P1-THERMAL-01`、`P1-GOGGLE-INSTRUMENT-04`、`P1-VERIFY-01` 均已完成。接单后先只读记录 `git status --short --branch`、`git rev-parse HEAD` 和实际版本，确认 HEAD 包含本卡及专项计划；不得切换、回退、清理或提交。先在未改代码的基线上用两个不同合法布局证明其容量都错误地为 `2000 mB`，把复现方式和结果写入报告，不得把旧固定断言当成正确需求。
 
-**必读与技能：** 开工前完整阅读根目录 `AGENTS.md`、[治理协议](../../project-governance.md)、本卡和四个权威入口，并实际读取、应用 `C:/Users/lenovo/.codex/skills/minecraft-modding/SKILL.md` 与 `C:/Users/lenovo/.codex/skills/minecraft-testing/SKILL.md`。前者用于 NeoForge `IFluidHandler`、服务端配置、方块实体同步、Create 流体网络和物理客户端边界；后者用于纯 JUnit、NeoForge GameTest、Create 管网集成与客户端观察的分层证据。固定栈为 Minecraft `1.21.1`、Java `21`、NeoForge `21.1.219`、Create `6.0.10-280`、Ponder `1.0.82`、Flywheel `1.0.6`，不得采用技能中的 26.x、Fabric、Forge 或 Java 25 示例升级项目。
+**必读与技能：** 开工前完整阅读根目录 `AGENTS.md`、[治理协议](../project-governance.md)、本卡和四个权威入口，并实际读取、应用 `C:/Users/lenovo/.codex/skills/minecraft-modding/SKILL.md` 与 `C:/Users/lenovo/.codex/skills/minecraft-testing/SKILL.md`。前者用于 NeoForge `IFluidHandler`、服务端配置、方块实体同步、Create 流体网络和物理客户端边界；后者用于纯 JUnit、NeoForge GameTest、Create 管网集成与客户端观察的分层证据。固定栈为 Minecraft `1.21.1`、Java `21`、NeoForge `21.1.219`、Create `6.0.10-280`、Ponder `1.0.82`、Flywheel `1.0.6`，不得采用技能中的 26.x、Fabric、Forge 或 Java 25 示例升级项目。
 
 **唯一目标 / 玩家可观察结果：** 让固定实验堆的冷却剂总容量由有效堆芯中空列和控制棒列的内部空气格数量决定；冷态和热态共同占用这一容量。默认中心空列八燃料布局显示并使用 `3000 mB`，三行 `F-C-F` 显示并使用 `9000 mB`，九燃料布局为零容量但仍可成型。容量与实际 fill、冷转热、drain、服务端 tick、结构摘要和护目镜必须使用同一服务端权威结果。
 
@@ -957,7 +959,7 @@ nextCold + nextHot = previousCold + previousHot
 **人工验收：** 本任务没有玩家可见事故效果，不要求客户端人工验收；不得为了“看见触发”临时增加聊天消息、粒子、声音或世界破坏。
 **交付：** `build/reports/p1/P1-MELTDOWN-02.md`，包含事件载荷、发布时机、去重依据、改动文件、自动测试结果、明确的零世界副作用证明和后期接入边界。
 
-**验收记录：** 项目经理独立审查事件模型、服务端发布边界、权威快照提交顺序、NBT 去重与零世界副作用；首轮退回并补齐真实 `ClientLevel` 拒绝测试。最终 228/228 项 JUnit、93/93 个 required GameTest 和完整构建通过，报告归档于 [P1-MELTDOWN-02](../../archive/P1-MELTDOWN-02.md)。NeoForge GameTest 首次运行出现历史已知的 FastUtil 瞬态崩溃，单 worker 复跑全部通过；完成后停在 `Saving worlds` 的退出问题不影响测试结论。
+**验收记录：** 项目经理独立审查事件模型、服务端发布边界、权威快照提交顺序、NBT 去重与零世界副作用；首轮退回并补齐真实 `ClientLevel` 拒绝测试。最终 228/228 项 JUnit、93/93 个 required GameTest 和完整构建通过，报告归档于 [P1-MELTDOWN-02](P1-MELTDOWN-02.md)。NeoForge GameTest 首次运行出现历史已知的 FastUtil 瞬态崩溃，单 worker 复跑全部通过；完成后停在 `Saving worlds` 的退出问题不影响测试结论。
 
 ### P1-MAINT-01：拦截危险状态拆除
 
@@ -973,7 +975,7 @@ nextCold + nextHot = previousCold + previousHot
 **人工验收：** P1 仍无玩家可见事故效果，不要求客户端人工验收，也不得为观察触发临时增加消息或特效。
 **交付：** `build/reports/p1/P1-MAINT-01.md`，包含危险状态真值表、八类组件覆盖矩阵、事件/状态提交顺序、重复与取消边界、改动文件、自动测试结果、零附加世界副作用证明和 `P1-MAINT-02/03` 接口说明。报告必须记录实际使用 `minecraft-modding` 与 `minecraft-testing`；执行者不得执行任何 Git 写操作。
 
-**验收记录：** 项目经理审查服务端破坏前接线、有效缓存槽位归属、新生裂变热/倒计时危险口径、权威快照提交顺序、持久化去重和零附加世界副作用。首轮退回补齐真实 `ClientLevel` 事务短路，以及事件回调当下的维度、结构原点、方块仍存在和快照已提交断言。最终 229/229 项 JUnit、97/97 个 required GameTest 和完整构建通过；GameTest 全部成功后停在已知的 `Saving worlds` 退出阶段，由项目经理终止已完成会话。报告归档于 [P1-MAINT-01](../../archive/P1-MAINT-01.md)。
+**验收记录：** 项目经理审查服务端破坏前接线、有效缓存槽位归属、新生裂变热/倒计时危险口径、权威快照提交顺序、持久化去重和零附加世界副作用。首轮退回补齐真实 `ClientLevel` 事务短路，以及事件回调当下的维度、结构原点、方块仍存在和快照已提交断言。最终 229/229 项 JUnit、97/97 个 required GameTest 和完整构建通过；GameTest 全部成功后停在已知的 `Saving worlds` 退出阶段，由项目经理终止已完成会话。报告归档于 [P1-MAINT-01](P1-MAINT-01.md)。
 
 ### P1-MAINT-02：实现完全停机条件
 
@@ -990,7 +992,7 @@ nextCold + nextHot = previousCold + previousHot
 **人工验收：** 本任务没有世界接线和玩家可见行为，不要求客户端人工验收；真实拆除与重组成型由 `P1-MAINT-03` 和最终验收覆盖。
 **交付：** `build/reports/p1/P1-MAINT-02.md`，包含四条件真值表、活动/安全余热公式、结果字段、控制棒缓存热边界、改动文件、JUnit 名称与精确计数、全量验证结果、无副作用证明及 `P1-MAINT-03` 接入说明。报告必须记录实际使用 `minecraft-modding` 与 `minecraft-testing`；执行者禁止任何 Git 写操作。
 
-**验收记录：** 项目经理审查单次正式裂变计算、四条件合取、确定性余热求和、安全量化余数、控制棒历史热边界、失败关闭和结果不变量；实现未接入世界或修改快照。独立复验 48 个测试文件、242/242 项 JUnit、97/97 个 required GameTest 与完整构建通过；GameTest 全部成功后停在已知的 `Saving worlds` 退出阶段，由项目经理终止已完成会话。报告归档于 [P1-MAINT-02](../../archive/P1-MAINT-02.md)。
+**验收记录：** 项目经理审查单次正式裂变计算、四条件合取、确定性余热求和、安全量化余数、控制棒历史热边界、失败关闭和结果不变量；实现未接入世界或修改快照。独立复验 48 个测试文件、242/242 项 JUnit、97/97 个 required GameTest 与完整构建通过；GameTest 全部成功后停在已知的 `Saving worlds` 退出阶段，由项目经理终止已完成会话。报告归档于 [P1-MAINT-02](P1-MAINT-02.md)。
 
 ### P1-MAINT-03：实现停机破坏性重组成型
 
@@ -1019,7 +1021,7 @@ nextCold + nextHot = previousCold + previousHot
 
 **整改复验门：** 保留现有七类组件、多所有者和真实移除—重扫—补回覆盖；新增测试应验证行为而非仅镜像源代码。重新运行全量 `test --rerun-tasks`、全部 required GameTest、`build` 和 `git diff --check`，报告给出新的精确计数、上述四项逐条证据，并继续遵守 Minecraft 技能、中文注释和零 Git 写操作要求。
 
-**整改验收记录（2026-09-09，通过）：** 项目经理确认换料端口精确 `ItemStack` 已在停机分类前形成无副作用投影，并在提交前复验端口实体、绑定、物品、迁移信封、原快照和判定结果；危险、完全清空与仪表维护进入统一提交、后置校验和回滚路径。新增行为测试覆盖陈旧空投影下的真实危险 BreakEvent、提交后受控故障恢复快照/端口/迁移信封/遥测、双燃料端口仪表拆换保留，以及危险兼容入口首次/重复/完成/已发布返回语义；重新成型同时断言控制棒数量、坐标和逐列 `fullyInserted()`。项目经理独立重跑 49 个测试文件、245/245 项 JUnit、106/106 个 required GameTest、完整 `build --rerun-tasks` 与 `git diff --check`，全部通过；GameTest 成功后停在已知 `Saving worlds` 退出阶段，由项目经理终止已完成会话。执行者未执行 Git 写操作，报告归档于 [P1-MAINT-03](../../archive/P1-MAINT-03.md)。
+**整改验收记录（2026-09-09，通过）：** 项目经理确认换料端口精确 `ItemStack` 已在停机分类前形成无副作用投影，并在提交前复验端口实体、绑定、物品、迁移信封、原快照和判定结果；危险、完全清空与仪表维护进入统一提交、后置校验和回滚路径。新增行为测试覆盖陈旧空投影下的真实危险 BreakEvent、提交后受控故障恢复快照/端口/迁移信封/遥测、双燃料端口仪表拆换保留，以及危险兼容入口首次/重复/完成/已发布返回语义；重新成型同时断言控制棒数量、坐标和逐列 `fullyInserted()`。项目经理独立重跑 49 个测试文件、245/245 项 JUnit、106/106 个 required GameTest、完整 `build --rerun-tasks` 与 `git diff --check`，全部通过；GameTest 成功后停在已知 `Saving worlds` 退出阶段，由项目经理终止已完成会话。执行者未执行 Git 写操作，报告归档于 [P1-MAINT-03](P1-MAINT-03.md)。
 
 ### P1-MAINT-04：融毁具体事故后果
 
@@ -1084,7 +1086,7 @@ nextCold + nextHot = previousCold + previousHot
 
 ### P1-PONDER-03：制作运行、维修和融毁状态场景
 
-**状态 / 派发门：** 已后置，当前禁止派发；历史 ID 保留。待反应堆、锅炉和汽轮机的具体事故合同、实现和验收完成后，由项目经理按 [事故实现后的 Ponder 教学计划](./2026-09-12-post-accident-ponder-plan.md) 重写任务卡。本节旧的“只展示事件占位符”范围已被 `2026-09-12` 用户决定取代，不得作为实现依据。
+**状态 / 派发门：** 已后置，当前禁止派发；历史 ID 保留。待反应堆、锅炉和汽轮机的具体事故合同、实现和验收完成后，由项目经理按 [事故实现后的 Ponder 教学计划](../superpowers/plans/2026-09-12-post-accident-ponder-plan.md) 重写任务卡。本节旧的“只展示事件占位符”范围已被 `2026-09-12` 用户决定取代，不得作为实现依据。
 
 ### P1-PONDER-04：完成 Ponder 资源验收
 
@@ -1113,7 +1115,7 @@ nextCold + nextHot = previousCold + previousHot
 
 ### P1-VERIFY-02：完成客户端和服务端人工验收
 
-**最终验收（2026-09-29）：** 用户 B–D 确认、历史 A 及本轮完整出口回归已由 PM 审核通过，报告与原始证据已归档于 [P1-VERIFY-02](../../archive/P1-VERIFY-02.md)。JUnit 261/0/0/0，required GameTest 111/111，build 退出 0；GameTest 全部成功后的保存挂起及强停导致退出 1 作为已知限制保留，不写成正常退出。执行者交付后，PM 已保全两份自动日志再定向恢复，隔离工作树干净且差异检查通过。下方回归安排与人工等待文字为分阶段历史，当前状态以本条为准。
+**最终验收（2026-09-29）：** 用户 B–D 确认、历史 A 及本轮完整出口回归已由 PM 审核通过，报告与原始证据已归档于 [P1-VERIFY-02](P1-VERIFY-02.md)。JUnit 261/0/0/0，required GameTest 111/111，build 退出 0；GameTest 全部成功后的保存挂起及强停导致退出 1 作为已知限制保留，不写成正常退出。执行者交付后，PM 已保全两份自动日志再定向恢复，隔离工作树干净且差异检查通过。下方回归安排与人工等待文字为分阶段历史，当前状态以本条为准。
 
 **用户人工验收确认（2026-09-29）：** 用户在本项目经理对话明确回复“客户端手动测试都通过了”，承接上轮列出的本卡 B–D 场景及 D6 配置恢复要求，记录为用户完成并确认通过。实际操作者为用户，项目经理未代操作，也不将该确认扩展为青金石粉候选或模拟器离线页面通过。本卡人工等待门解除，转入人工后的 JUnit、完整 required GameTest 和 build 出口回归；未取得本轮完整结果前不宣布整卡通过，不派发 `P1-VERIFY-03`。用户确认是本轮人工证据，旧机器截图、配置备份及哈希不冒充本轮新采集。
 
@@ -1129,7 +1131,7 @@ nextCold + nextHot = previousCold + previousHot
 
 独立服务端使用专用测试世界 `P1_VERIFY_02_SERVER`。允许在证据目录备份 `run/server.properties` 后临时设置 `level-name=P1_VERIFY_02_SERVER`、`server-ip=127.0.0.1`，其余参数保持不变；停止后逐字节恢复该文件并核对前后 SHA-256。不得打开未知旧世界。运行配置、启动日志和退出结果按下文场景 A 留证；人工客户端世界仍为 `P1_VERIFY_02`。该补充不缩减 A–D 和最终自动回归的完成条件。
 
-**需求来源 / 确认日期 / 权威入口：** 用户于 `2026-09-12` 决定将剩余 Ponder 后置，并于 `2026-09-13` 要求继续主线；同日确认堆芯空置空间决定共享冷却剂容量。验收口径来自 [项目策划](../../project.md)、[局部控制设计](../../reactor-local-control-revision-design.md)、[实施路线图](../../implementation-roadmap.md)、[P1-COOL-06 验收归档](../../archive/P1-COOL-06.md)、[损伤倍率专项计划](./2026-09-08-damage-heat-burn-balance-plan.md)和本计划内各已完成任务卡。
+**需求来源 / 确认日期 / 权威入口：** 用户于 `2026-09-12` 决定将剩余 Ponder 后置，并于 `2026-09-13` 要求继续主线；同日确认堆芯空置空间决定共享冷却剂容量。验收口径来自 [项目策划](../project.md)、[局部控制设计](../reactor-local-control-revision-design.md)、[实施路线图](../implementation-roadmap.md)、[P1-COOL-06 验收归档](P1-COOL-06.md)、[损伤倍率专项计划](../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)和本计划内各已完成任务卡。
 
 **唯一目标 / 玩家可观察结果：** 在当前整合版本上完成一次不改代码的客户端与独立服务端总走查，证明固定实验堆能通过真实 Create 交互完成成型、换料、冷却、控制、保存重开和维护重组，并证明损伤产热/燃耗倍率会从实际磁盘服务器配置加载。此卡只验证现有行为，不实现或修复功能。
 
@@ -1137,7 +1139,7 @@ nextCold + nextHot = previousCold + previousHot
 
 **分支与基准提交 / 技术栈：** 实际派发基准必须包含 `P1-COOL-06` 实现提交 `ba5d7b2` 及本任务卡的项目经理验收提交。执行者先用只读命令记录 `git status --short --branch` 与 `git rev-parse HEAD`，确认活动计划包含本节完整内容且容量整改已归档；不满足时报告用户和项目经理，不自行切换或回退。固定版本为 Minecraft `1.21.1`、Java `21`、NeoForge `21.1.219`、Create `6.0.10-280`、Ponder `1.0.82`、Flywheel `1.0.6`。
 
-**必读与技能：** 开工前完整阅读根目录 `AGENTS.md`、[治理协议](../../project-governance.md)、本卡、上述权威文档和 [P1-VERIFY-01 归档](../../archive/P1-VERIFY-01.md)。实际读取并应用 `C:/Users/lenovo/.codex/skills/minecraft-modding/SKILL.md` 与 `C:/Users/lenovo/.codex/skills/minecraft-testing/SKILL.md`：前者用于核对 NeoForge 客户端/集成服务端/独立服务端边界和 Create 真实交互，后者用于区分 JUnit、GameTest、客户端人工观察及独立服务端生命周期证据。不得采用技能中 26.x、Fabric、Forge 或 Java 25 示例升级项目。
+**必读与技能：** 开工前完整阅读根目录 `AGENTS.md`、[治理协议](../project-governance.md)、本卡、上述权威文档和 [P1-VERIFY-01 归档](P1-VERIFY-01.md)。实际读取并应用 `C:/Users/lenovo/.codex/skills/minecraft-modding/SKILL.md` 与 `C:/Users/lenovo/.codex/skills/minecraft-testing/SKILL.md`：前者用于核对 NeoForge 客户端/集成服务端/独立服务端边界和 Create 真实交互，后者用于区分 JUnit、GameTest、客户端人工观察及独立服务端生命周期证据。不得采用技能中 26.x、Fabric、Forge 或 Java 25 示例升级项目。
 
 **允许写集 / 运行副作用：** 唯一交付文件是 `build/reports/p1/P1-VERIFY-02.md`；截图、截取日志、配置备份和计算表可写入 `build/reports/p1/P1-VERIFY-02/`。允许 `run/` 下由 `runClient`、`runServer` 生成的测试世界、配置、日志和普通运行文件。不得修改 `src/`、`docs/`、`README.md`、Gradle 文件、模拟器、资源、注册、测试或仓库内 Agent 配置；不得创建 `.claude/settings.local.json`。根目录已跟踪的 `logs/debug.log`、`logs/latest.log` 若被 GameTest 自然改写，只记录差异并留给项目经理处理，执行者不得用 Git 或文件复制恢复它们。
 
@@ -1145,12 +1147,12 @@ nextCold + nextHot = previousCold + previousHot
 
 | 能力 | 可引用归档 | 本轮要求 |
 | :--- | :--- | :--- |
-| 滑块连续拖动、`F-C-F` 的 `0%/50%/100%` 门控、红石 SCRAM、部分卡死 `SCRAM_INCOMPLETE` | [P1-CONTROL-04](../../archive/P1-CONTROL-04.md)、[P1-CONTROL-05](../../archive/P1-CONTROL-05.md) | 新跑正常拖动、`0%/50%/100%` 和完整 SCRAM；部分卡死只引用，不重复制造 |
-| 仪表、换料端口、控制棒驱动器的分层护目镜显示 | [P1-GOGGLE-INSTRUMENT-02](../../archive/P1-GOGGLE-INSTRUMENT-02.md)、[P1-GOGGLE-INSTRUMENT-04](../../archive/P1-GOGGLE-INSTRUMENT-04.md)、[P1-REFUEL-02A](../../archive/P1-REFUEL-02A.md) | 新跑三类目标的当前整合显示 |
-| Create 储罐—动力泵—管道输入/输出和原位生命周期恢复 | [P1-COOL-04](../../archive/P1-COOL-04.md)、[P1-COOL-05](../../archive/P1-COOL-05.md) | 新跑一条完整冷入热出链路；多端口极限与全部重绑矩阵可引用 |
-| 人工换料、Create 机械臂原子换料、燃料所有权与存档重载 | [P1-REFUEL-02](../../archive/P1-REFUEL-02.md)、[P1-REFUEL-02A](../../archive/P1-REFUEL-02A.md)、[P1-REFUEL-02B](../../archive/P1-REFUEL-02B.md)、[P1-REFUEL-03](../../archive/P1-REFUEL-03.md) | 新跑手动装料与一次机械臂往返；拒绝矩阵可引用 |
-| 燃料列/控制棒列维修 | [P1-REPAIR-01](../../archive/P1-REPAIR-01.md)、[P1-REPAIR-02](../../archive/P1-REPAIR-02.md) | 可引用，不为本卡重复制造卡死；本轮若已有安全受损列，可补做一次钢板维修 |
-| 危险事件占位、安全清空与重组成型内部状态 | [P1-MAINT-03](../../archive/P1-MAINT-03.md)、[P1-VERIFY-01](../../archive/P1-VERIFY-01.md) | 新跑玩家可见的保留/清空提示和重组成型；事件发布次数等内部字段引用 GameTest |
+| 滑块连续拖动、`F-C-F` 的 `0%/50%/100%` 门控、红石 SCRAM、部分卡死 `SCRAM_INCOMPLETE` | [P1-CONTROL-04](P1-CONTROL-04.md)、[P1-CONTROL-05](P1-CONTROL-05.md) | 新跑正常拖动、`0%/50%/100%` 和完整 SCRAM；部分卡死只引用，不重复制造 |
+| 仪表、换料端口、控制棒驱动器的分层护目镜显示 | [P1-GOGGLE-INSTRUMENT-02](P1-GOGGLE-INSTRUMENT-02.md)、[P1-GOGGLE-INSTRUMENT-04](P1-GOGGLE-INSTRUMENT-04.md)、[P1-REFUEL-02A](P1-REFUEL-02A.md) | 新跑三类目标的当前整合显示 |
+| Create 储罐—动力泵—管道输入/输出和原位生命周期恢复 | [P1-COOL-04](P1-COOL-04.md)、[P1-COOL-05](P1-COOL-05.md) | 新跑一条完整冷入热出链路；多端口极限与全部重绑矩阵可引用 |
+| 人工换料、Create 机械臂原子换料、燃料所有权与存档重载 | [P1-REFUEL-02](P1-REFUEL-02.md)、[P1-REFUEL-02A](P1-REFUEL-02A.md)、[P1-REFUEL-02B](P1-REFUEL-02B.md)、[P1-REFUEL-03](P1-REFUEL-03.md) | 新跑手动装料与一次机械臂往返；拒绝矩阵可引用 |
+| 燃料列/控制棒列维修 | [P1-REPAIR-01](P1-REPAIR-01.md)、[P1-REPAIR-02](P1-REPAIR-02.md) | 可引用，不为本卡重复制造卡死；本轮若已有安全受损列，可补做一次钢板维修 |
+| 危险事件占位、安全清空与重组成型内部状态 | [P1-MAINT-03](P1-MAINT-03.md)、[P1-VERIFY-01](P1-VERIFY-01.md) | 新跑玩家可见的保留/清空提示和重组成型；事件发布次数等内部字段引用 GameTest |
 
 **准备与证据规则：**
 
@@ -1201,7 +1203,7 @@ nextCold + nextHot = previousCold + previousHot
 
 ### P1-VERIFY-03：提交 P1 交接报告
 
-**状态（2026-09-29）：** 已完成；子 Agent `/root/p1_verify03_handoff` 在 `C:/Users/IKSXH/.codex/worktrees/p1-final-verification/Create_NuclearIndustry`、HEAD `3469a3a` 完成交付，PM 已审核报告和源码清单，见 [P1-VERIFY-03 归档](../../archive/P1-VERIFY-03.md)。P1 固定实验堆核心切片完成最终交接，后续候选和未决需求保持各自验收/派发门。
+**状态（2026-09-29）：** 已完成；子 Agent `/root/p1_verify03_handoff` 在 `C:/Users/IKSXH/.codex/worktrees/p1-final-verification/Create_NuclearIndustry`、HEAD `3469a3a` 完成交付，PM 已审核报告和源码清单，见 [P1-VERIFY-03 归档](P1-VERIFY-03.md)。P1 固定实验堆核心切片完成最终交接，后续候选和未决需求保持各自验收/派发门。
 **需求与基线：** 沿用已确认 P1 固定实验反应堆范围和自动派发授权，只汇总已有实现与证据。执行者以 PM 实际派发路径和 HEAD 为准，记录与 `P1-VERIFY-02` 验收代码的一致性；主工作区未提交的治理文档变化不冒充代码变更。
 **必读与技能：** 根目录 `AGENTS.md`、治理协议、本活动计划、路线图、`P1-VERIFY-02` 新报告及本轮原始证据、已归档 P1 报告和换机交接。实际读取 `C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`、`minecraft-ci-release/SKILL.md`，分别核对服务端边界、分层验证及版本/制品/已知限制；固定既有 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6，不套用技能里的发布或版本升级示例。
 **报告要求补充：** 列出 P1 实现任务及各自归档/验收依据，明确后置、取消和未合并候选；汇总本轮实际 JUnit 计数、全部 required GameTest 名称或可追溯清单、构建和运行退出情况。分别标注 2026-09-22 服务端 A 历史引用、2026-09-29 用户客户端 B–D 通过确认及本轮自动出口回归，不补造截图、配置哈希或正常退出。核对当前 NBT/燃料所有权、固定结构与容量、事故仅事件占位、未实现生产/发电/封存、正式资源与模拟器候选边界，给出适用于 `0.1.0` 开发快照的版本说明建议；不得宣称稳定发布、生存闭环或存档无限兼容。

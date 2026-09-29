@@ -1,7 +1,9 @@
 # 首批生产工序：冲突收敛方案
 
+> **归档于 2026-09-29：** 已采纳工序已写入 [正式配方](../recipes.md) 和 [扩展准备计划](../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)。本稿保留讨论历史，P1 人工等待已解除；尚未批准的数量、时间和热级继续由 [成本草案](../superpowers/plans/2026-09-24-first-production-cost-draft.md) 维护，不能从归档推断参数获批。
+
 **状态：** 第 2 节三项工序取舍已由用户于 2026-09-24 整组确认，记为 D-03d，已同步正式配方与准备计划；剩余参数尚未批准，本次不派发功能实现。
-**依据：** [已验收的生产依赖审计](../../archive/EXT-A-DEPS-01.md)、[生产准备计划](./2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./2026-09-24-first-production-cost-draft.md)及 `recipes.md` 第 5–8 节。沿用审计对锁定 Create 6.0.10-280 的证据，不重复运行审计或声称已完成配方原型。
+**依据：** [已验收的生产依赖审计](EXT-A-DEPS-01.md)、[生产准备计划](../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](../superpowers/plans/2026-09-24-first-production-cost-draft.md)及 `recipes.md` 第 5–8 节。沿用审计对锁定 Create 6.0.10-280 的证据，不重复运行审计或声称已完成配方原型。
 **目的：** 先解决设备如何明确选择产物、哪些工序实际消耗液体，再提出完整批次数量和加工时间，避免对无法执行的配方先做精确成本核算。
 
 ## 1. 在已有可选工序中安排的分工

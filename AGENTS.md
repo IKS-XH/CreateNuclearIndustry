@@ -29,4 +29,4 @@
 - 由项目经理或用户创建的 Git 提交必须使用中文提交信息；任务 ID、类名、注册 ID 和必要技术术语可以保留原文。
 - 执行者不得覆盖、删除、格式化或夹带任务范围外的既有改动。
 
-详细职责、技能矩阵、需求状态、任务卡模板、验收和版本流程以 [项目治理与协作协议](docs/project-governance.md) 为统一入口；活动任务仍以 [P1 单步执行计划](docs/superpowers/plans/2026-08-18-agent-developer-execution-plan.md) 为准。
+详细职责、技能矩阵、需求状态、任务卡模板、验收和版本流程以 [项目治理与协作协议](docs/project-governance.md) 为统一入口；当前活动任务从 [文档入口](docs/README.md) 和 [首发扩展准备计划](docs/superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) 查阅；已完成 P1 的历史合同见 [归档计划](docs/archive/2026-08-18-agent-developer-execution-plan.md)。

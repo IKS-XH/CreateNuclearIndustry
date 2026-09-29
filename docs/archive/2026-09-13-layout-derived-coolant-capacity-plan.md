@@ -6,7 +6,7 @@
 
 **适用版本：** Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280
 
-**实施入口：** [P1 单步执行计划中的 P1-COOL-06](../superpowers/plans/2026-08-18-agent-developer-execution-plan.md#p1-cool-06按堆芯空置空间派生共享冷却剂容量)
+**实施入口：** [P1 单步执行计划中的 P1-COOL-06](2026-08-18-agent-developer-execution-plan.md#p1-cool-06按堆芯空置空间派生共享冷却剂容量)
 
 ## 1. 问题与目标
 

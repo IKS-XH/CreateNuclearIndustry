@@ -1,7 +1,7 @@
 # EXT-A-DEPS-01：首发生产依赖审计验收
 
 **结论：** 2026-09-24 项目经理验收通过，完成的是只读依赖审计，未验收任何生产实现或生存运行闭环。发现的缺口仍需后续处理。
-**任务卡：** [EXT-A-DEPS-01](../superpowers/plans/2026-09-24-ext-a-deps-01.md)。执行者 Bacon（`01a0d16d-72fd-7003-b6f6-37b3b27fb416`），需求基线 `4f03d73`，任务卡 `ded6ff6`，交付时 HEAD `e0eee1a`。
+**任务卡：** [EXT-A-DEPS-01](2026-09-24-ext-a-deps-01.md)。执行者 Bacon（`01a0d16d-72fd-7003-b6f6-37b3b27fb416`），需求基线 `4f03d73`，任务卡 `ded6ff6`，交付时 HEAD `e0eee1a`。
 **原始交付：** 仓库 `build/reports/extension/EXT-A-DEPS-01.md` 及同名证据目录；报告 SHA-256 为 `2dcad9f26ee11b734cd11add22ebe02a914cd77f6ff791c3687e205b94a2fc05`。build 报告不入 Git，本归档保存结论与证据定位。
 
 ## 复验与边界

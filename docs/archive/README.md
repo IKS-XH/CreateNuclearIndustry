@@ -10,17 +10,15 @@
 
 ## 当前活动计划
 
-当前活动计划为：
-
-- `../superpowers/plans/2026-08-18-agent-developer-execution-plan.md`
-- `../superpowers/plans/2026-09-12-post-accident-ponder-plan.md`
-- `../superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md`
-- `../superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md`（生产依赖审计已验收；烧结普通加热及冷却剂首轮试验配比已确认，实现尚未派发）
-- [首套生产线成本草案](../superpowers/plans/2026-09-24-first-production-cost-draft.md)（冷却剂 1000 mB 档已批准试验，其余候选待评审）
-- `../superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md`
-- `../superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md`
+统一查阅 [文档入口](../README.md) 和 [实施路线图](../implementation-roadmap.md)，本索引不重复维护活动清单。
 
 ## 已归档计划
+
+- [v1.8 旧主策划](./legacy-project-v1.8.md)：原 NewMod/project.md，已由当前主策划取代；保留历史玩法，不再作为平行设计入口。
+
+- [P1 单步执行计划](./2026-08-18-agent-developer-execution-plan.md)：2026-09-29 核心切片完成交接后归档；保留任务卡和决策时间线。当前派发入口改为首发扩展准备计划，未完成的 02B/Ponder 分别保留专项计划。
+- [EXT-A-DEPS-01 原任务卡](./2026-09-24-ext-a-deps-01.md)：审计已完成，与下方验收报告配套保留。
+- [首批生产工序讨论稿](./2026-09-24-production-process-proposal.md)：D-03d 已采纳并同步正式配方；未决参数继续在成本草案和扩展准备计划维护，旧等待状态仅作历史。
 
 - [P1-VERIFY-03](./P1-VERIFY-03.md)：P1 固定实验反应堆完成最终交接；包含任务验收索引、当前 NBT v5、兼容/功能边界和 27 类 111 项 GameTest 源码清单。未合并候选和后续生存/发电/具体事故不计入完成范围。
 - [P1-VERIFY-02](./P1-VERIFY-02.md)：2026-09-29 用户确认客户端 B–D 通过，PM 核对历史独立服务端 A、本轮 261 项 JUnit、111 个 required GameTest 与完整构建；GameTest 断言全过后的保存挂起和强停非零退出继续保留。原始证据随 2026-09-29 交接 ZIP 保存。
