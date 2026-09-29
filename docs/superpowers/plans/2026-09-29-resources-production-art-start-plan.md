@@ -5,7 +5,7 @@
 **需求依据：** [扩展准备计划](./2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./2026-09-24-first-production-cost-draft.md)、[内容清单](../../content-catalog.md)、[配方关系](../../recipes.md)及本轮用户对四张样稿路线的执行授权。
 **架构 / 基线：** 不改 P1 核心状态和注册身份。游戏纹理仍为 PNG，SVG 留在开发资产目录。代码基线 `8af153f`；技术栈固定 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6，许可证 All Rights Reserved。
 
-**当前检查点：** 两项工作已形成交付，PM 与独立审查完成技术复核；已停止新派发，等待 [样稿风格与首轮资源参数评审](../../reviews/2026-09-29/README.md)。此为用户决策门，不是实现完成。
+**当前检查点：** 用户于 2026-09-29 批准 [样稿风格与三矿推荐方案](../../reviews/2026-09-29/README.md)，并授权将现有 51 张贴图全部按此风格重绘。自动推进恢复，当前实现卡为 [EXT-A-ORE-01](./2026-09-29-ext-a-ore-01.md) 与 [EXT-ART-02](./2026-09-29-ext-art-02.md)。以下第 3、4 节保留已完成启动准备的原任务范围。
 
 ## 1. 实施顺序与停止条件
 
@@ -28,7 +28,7 @@
 
 ## 3. EXT-ART-01：像素 SVG 样稿与导出
 
-**状态：** 执行者 `svg_art_pilot` 已交付；PM/独立技术及静态视觉复核通过，用户风格确认待完成。候选提交 `49e6c86` 位于 `codex/svg-material-pilot`，未合并、未推送；实际开工基线 `9669458`。
+**状态：** 执行者 `svg_art_pilot` 已交付；PM/独立技术及静态视觉复核通过，用户风格确认已于 2026-09-29 完成。候选提交 `49e6c86` 位于 `codex/svg-material-pilot`，未合并、未推送；实际开工基线 `9669458`。
 **唯一结果：** 四张可复现的候选贴图，交给用户做风格评审；不接入游戏、不宣称客户端验收通过。
 **位置：** 复用已空闲的托管工作树 `C:/Users/IKSXH/.codex/worktrees/p1-final-verification/Create_NuclearIndustry`。PM 在派发前切至包含本卡的分支 `codex/svg-material-pilot`，旧 P1 忽略证据保留。
 
@@ -64,7 +64,7 @@
 
 ## 4. EXT-A-START-01：最小开工批次与决策包
 
-**状态：** 执行者 `production_start_packet` 已交付，PM 验收静态准备结果，用户参数未批准；主工作区开工基线 `9669458`。只读源码和现有证据，唯一写集 `build/reports/extension/EXT-A-START-01.md` 及同名证据目录，位置在主工作区。
+**状态：** 执行者 `production_start_packet` 已交付，PM 验收静态准备结果，用户已于 2026-09-29 批准三矿推荐参数；主工作区开工基线 `9669458`。只读源码和现有证据，唯一写集 `build/reports/extension/EXT-A-START-01.md` 及同名证据目录，位置在主工作区。
 **唯一结果：** 让用户能一次理解并决定下一批真正缺少的玩法参数；不重做 EXT-A-DEPS-01，不编写世界生成、配方或设备代码。
 
 - [x] 读取已验收依赖审计和成本草案；原报告可从 `docs/handoffs/2026-09-28/previous-task-evidence.zip` 只读打开，必须保留旧证据与未批准候选的区别。
