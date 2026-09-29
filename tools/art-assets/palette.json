@@ -1,0 +1,19 @@
+{
+  "lapis_dust": {
+    "outline": "#182746", "shadow": "#203D76", "body": "#2856A0",
+    "facet": "#3973BD", "light": "#699ADA", "glint": "#A0BFE8"
+  },
+  "lead_ingot": {
+    "outline": "#303441", "shadow": "#464C5D", "side": "#60687A",
+    "body": "#7E8798", "light": "#A6AFBF", "glint": "#CDD3DE"
+  },
+  "steel_plate": {
+    "outline": "#28353A", "shadow": "#3E5058", "side": "#5B7078",
+    "body": "#788E94", "light": "#A3B7B8", "glint": "#D1DFDA"
+  },
+  "lead_ore": {
+    "stone_dark": "#646460", "stone_mid": "#767671", "stone_light": "#878780",
+    "stone_glint": "#96958D", "ore_deep": "#404550", "ore_shadow": "#5B6475",
+    "ore_body": "#818B9F", "ore_light": "#B3BECE"
+  }
+}
