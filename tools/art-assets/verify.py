@@ -1,0 +1,144 @@
+"""离线验收51张既有贴图：清单、独立像素对照、复现性和失败不写出。
+
+只在显式执行本脚本时做临时坏输入实验，finally 原样恢复源稿/清单。
+不调用游戏、Gradle 或 Git 写操作；结果保存在本任务证据目录。
+"""
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+from collections import Counter
+
+sys.dont_write_bytecode=True
+from PIL import Image, ImageDraw, __version__ as pillow_version
+import pipeline
+from export import render_svg, read_palette, ROOT
+
+REPO=ROOT.parents[1]
+EVIDENCE=REPO/'build/reports/extension/EXT-ART-02'
+EVIDENCE.mkdir(parents=True,exist_ok=True)
+ENV=dict(os.environ,PYTHONIOENCODING='utf-8',PYTHONDONTWRITEBYTECODE='1')
+log=[]
+
+
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def run(*args,good=True):
+    """保留真实子进程命令和退出码；失败检查不得只调用内部解析函数。"""
+    command=[sys.executable,str(ROOT/'export.py'),*args]
+    result=subprocess.run(command,cwd=REPO,env=ENV,text=True,encoding='utf-8',capture_output=True)
+    log.append({'command':command,'exit':result.returncode,'stdout':result.stdout,'stderr':result.stderr})
+    assert (result.returncode==0)==good,result.stderr
+
+
+def state():
+    """记录候选、全部预览、游戏路径的字节；失败实验不允许改变其中任何一项。"""
+    paths=list((ROOT/'generated').rglob('*.png'))+list((ROOT/'previews').glob('*.png'))+[ROOT/'preview.html',ROOT/'preview.png']+list(pipeline.GAME_ROOT.rglob('*.png'))
+    return {p.relative_to(REPO).as_posix():digest(p) for p in sorted(paths)}
+
+
+entries,images,before=pipeline.prepare();palette=read_palette()
+baseline=json.loads((ROOT/'baseline.json').read_text(encoding='utf-8'))
+assert {r['game'] for r in baseline['records']}==pipeline.GAME_FILES
+assert len(entries)==52
+assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):47,(16,64):4}
+results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'game_count':51,'source_count':len({e['source'] for e in entries}),'records':[]}
+for e in entries:
+    name=e['game'] or 'item/lapis_dust.png'
+    source=ROOT/'sources'/e['source']
+    # 独立使用 Pillow 矩形 API，核对导出器手动覆盖像素的坐标和边界。
+    reference=Image.new('RGBA',tuple(e['size']));draw=ImageDraw.Draw(reference)
+    for rect in ET.parse(source).getroot():
+        x,y,w,h=[int(rect.get(k)) for k in ('x','y','width','height')]
+        draw.rectangle((x,y,x+w-1,y+h-1),fill=rect.get('fill'))
+    with Image.open(ROOT/'generated'/name) as output:
+        assert output.mode=='RGBA' and list(output.size)==e['size']
+        assert output.tobytes()==reference.tobytes()==images[name].tobytes(),name
+        pipeline.validate_alpha(e,output)
+        colors={p[:3] for p in output.get_flattened_data() if p[3]}
+        allowed={tuple(int(c[i:i+2],16) for i in (1,3,5)) for c in palette[e['palette']].values()}
+        assert colors<=allowed and len(colors)<=16
+    results['records'].append({'game':e['game'],'source':e['source'],'size':e['size'],'colors':len(colors),'generated_sha256':digest(ROOT/'generated'/name),'use':e['use']})
+    if e['game']:
+        record=next(r for r in baseline['records'] if r['game']==name)
+        assert digest(ROOT/'baseline'/name)==record['sha256'],'旧图证据改变'
+
+# 已批准四样稿使用工具基线的原始字节作独立回归依据，不以新导出互相比较。
+for name in ('item/lapis_dust','item/lead_ingot','item/steel_plate','block/lead_ore'):
+    for directory,suffix in (('sources','.svg'),('generated','.png')):
+        rel=f'tools/art-assets/{directory}/{name}{suffix}'
+        original=subprocess.check_output(['git','show',f'49e6c86:{rel}'],cwd=REPO)
+        current=(REPO/rel).read_bytes()
+        # Git 工作树可能启用 CRLF；SVG 只归一化行尾，PNG 仍逐字节比较。
+        if suffix=='.svg':current=current.replace(b'\r\n',b'\n');original=original.replace(b'\r\n',b'\n')
+        assert current==original,f'已批准样稿被改变: {rel}'
+results['approved_pilot_unchanged']=True
+
+valid='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="1" y="1" width="2" height="3" fill="#28353A"/></svg>'
+bad={}
+for tag in ('path','image','use','g','linearGradient','filter','text'):
+    bad[tag]=valid.replace('<rect ',f'<{tag} ').replace('/></svg>',f'/></svg>')
+for attr in ('style','transform','opacity','stroke','rx','href'):
+    bad[attr]=valid.replace('<rect ',f'<rect {attr}="unsupported" ')
+for key,old,new in [('fraction','x="1"','x="1.5"'),('negative','x="1"','x="-1"'),('zero','width="2"','width="0"'),('bounds','width="2"','width="16"'),('missing',' height="3"',''),('named','#28353A','gray'),('palette','#28353A','#000000'),('alpha','#28353A','#28353A80'),('url','#28353A','url(#x)'),('namespace','http://www.w3.org/2000/svg','urn:x'),('viewbox','0 0 16 16','0 0 32 32'),('tail','/></svg>','/>bad</svg>'),('child','/></svg>','><rect/></rect></svg>')]:
+    bad[key]=valid.replace(old,new)
+bad['DTD']='<!DOCTYPE svg>'+valid
+bad['PI']=valid.replace('<rect','<?x y?><rect')
+bad['empty']=valid[:valid.index('<rect')]+'</svg>'
+for name,text in bad.items():
+    try:render_svg(text,{'#28353A'})
+    except (ValueError,ET.ParseError):pass
+    else:raise AssertionError(f'非法输入未拒绝: {name}')
+flow=valid.replace('height="16"','height="64"').replace('0 0 16 16','0 0 16 64').replace('y="1"','y="61"')
+assert render_svg(flow,{'#28353A'},(16,64)).getpixel((2,63))==(40,53,58,255)
+try:render_svg(flow.replace('y="61"','y="62"'),{'#28353A'},(16,64))
+except ValueError:pass
+else:raise AssertionError('长画布越界未拒绝')
+results['invalid_svg_rejected']=list(bad)+['flow_bounds']
+
+# 默认导出两次必须保持全部游戏字节不变，同时派生PNG和预览可复现。
+prior=state()
+for _ in range(2):run();assert state()==prior,'默认导出非确定或改动了游戏'
+results['default_repeat_exports']=2
+
+# 临时向后序源稿加入未知元素，确认真实CLI在写第一个输出前就失败。
+source=ROOT/'sources/item/uranium_concentrate.svg';saved=source.read_bytes()
+try:
+    source.write_text(saved.decode('utf-8').replace('</svg>','<circle/></svg>'),encoding='utf-8')
+    run('--install',good=False);assert state()==prior
+finally:source.write_bytes(saved)
+
+manifest=ROOT/'manifest.json';saved=manifest.read_bytes()
+for mutation in ('extra_path','wrong_size','wrong_mapping'):
+    data=json.loads(saved)
+    if mutation=='extra_path':data['entries'][0]['game']='block/not_authorized.png'
+    elif mutation=='wrong_size':data['entries'][0]['size']=[16,16]
+    else:data['entries'][0]['source']='../outside.svg'
+    try:
+        manifest.write_text(json.dumps(data),encoding='utf-8')
+        run('--install',good=False);assert state()==prior
+    finally:manifest.write_bytes(saved)
+results['cli_failure_no_writes']=['unsupported_svg','extra_path','wrong_size','wrong_mapping']
+
+# 显式接入是本卡授权步骤；51文件逐一对照，block/fluid兼容路径必须字节一致。
+run('--install')
+assert {p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}==pipeline.GAME_FILES
+for e in entries:
+    if e['game']:
+        assert (pipeline.GAME_ROOT/e['game']).read_bytes()==(ROOT/'generated'/e['game']).read_bytes()
+        assert (pipeline.GAME_ROOT/e['game']).read_bytes()!=(ROOT/'baseline'/e['game']).read_bytes(),'既有纹理未重绘'
+for suffix in ('compound_coolant_flow','compound_coolant_still','hot_compound_coolant_flow','hot_compound_coolant_still'):
+    assert (pipeline.GAME_ROOT/'block'/f'{suffix}.png').read_bytes()==(pipeline.GAME_ROOT/'fluid'/f'{suffix}.png').read_bytes()
+after=state();run('--install');assert state()==after
+results['install_repeat_exports']=2
+results['source_generated_game_equal']=True
+results['output_hashes']=after
+results['result']='PASS'
+(EVIDENCE/'verification.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(EVIDENCE/'commands.json').write_text(json.dumps(log,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({k:v for k,v in results.items() if k not in ('records','output_hashes','invalid_svg_rejected')},ensure_ascii=True,indent=2))

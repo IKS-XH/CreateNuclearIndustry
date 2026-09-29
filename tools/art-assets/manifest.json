@@ -1,0 +1,629 @@
+{
+  "schema": 1,
+  "entries": [
+    {
+      "game": "block/compound_coolant_flow.png",
+      "source": "fluid/compound_coolant_flow.svg",
+      "palette": "compound_coolant_flow",
+      "size": [
+        16,
+        64
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/compound_coolant_still.png",
+      "source": "fluid/compound_coolant_still.svg",
+      "palette": "compound_coolant_still",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/control_rod_drive_side.png",
+      "source": "block/control_rod_drive_side.svg",
+      "palette": "control_rod_drive_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/control_rod_drive_top.png",
+      "source": "block/control_rod_drive_top.svg",
+      "palette": "control_rod_drive_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/deepslate_lead_ore.png",
+      "source": "block/deepslate_lead_ore.svg",
+      "palette": "deepslate_lead_ore",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/deepslate_tin_ore.png",
+      "source": "block/deepslate_tin_ore.svg",
+      "palette": "deepslate_tin_ore",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/deepslate_uranium_ore.png",
+      "source": "block/deepslate_uranium_ore.svg",
+      "palette": "deepslate_uranium_ore",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/hot_compound_coolant_flow.png",
+      "source": "fluid/hot_compound_coolant_flow.svg",
+      "palette": "hot_compound_coolant_flow",
+      "size": [
+        16,
+        64
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/hot_compound_coolant_still.png",
+      "source": "fluid/hot_compound_coolant_still.svg",
+      "palette": "hot_compound_coolant_still",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/lead_block.png",
+      "source": "block/lead_block.svg",
+      "palette": "lead_block",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/lead_ore.png",
+      "source": "block/lead_ore.svg",
+      "palette": "lead_ore",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/main_coolant_pump_side.png",
+      "source": "block/main_coolant_pump_side.svg",
+      "palette": "main_coolant_pump_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/main_coolant_pump_top.png",
+      "source": "block/main_coolant_pump_top.svg",
+      "palette": "main_coolant_pump_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/pressure_pipe_tier_1.png",
+      "source": "block/pressure_pipe_tier_1.svg",
+      "palette": "pressure_pipe_tier_1",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/pressure_valve_tier_1.png",
+      "source": "block/pressure_valve_tier_1.svg",
+      "palette": "pressure_valve_tier_1",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/raw_lead_block.png",
+      "source": "block/raw_lead_block.svg",
+      "palette": "raw_lead_block",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/raw_tin_block.png",
+      "source": "block/raw_tin_block.svg",
+      "palette": "raw_tin_block",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/raw_uranium_block.png",
+      "source": "block/raw_uranium_block.svg",
+      "palette": "raw_uranium_block",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/reactor_casing_bottom.png",
+      "source": "block/reactor_casing_bottom.svg",
+      "palette": "reactor_casing_bottom",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_casing_side.png",
+      "source": "block/reactor_casing_side.svg",
+      "palette": "reactor_casing_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_casing_top.png",
+      "source": "block/reactor_casing_top.svg",
+      "palette": "reactor_casing_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_cold_port_side.png",
+      "source": "block/reactor_cold_port_side.svg",
+      "palette": "reactor_cold_port_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_cold_port_top.png",
+      "source": "block/reactor_cold_port_top.svg",
+      "palette": "reactor_cold_port_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_fuel_rod_side.png",
+      "source": "block/reactor_fuel_rod_side.svg",
+      "palette": "reactor_fuel_rod_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_fuel_rod_top.png",
+      "source": "block/reactor_fuel_rod_top.svg",
+      "palette": "reactor_fuel_rod_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_hot_port_side.png",
+      "source": "block/reactor_hot_port_side.svg",
+      "palette": "reactor_hot_port_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_hot_port_top.png",
+      "source": "block/reactor_hot_port_top.svg",
+      "palette": "reactor_hot_port_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_instrument_port_side.png",
+      "source": "block/reactor_instrument_port_side.svg",
+      "palette": "reactor_instrument_port_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_instrument_port_top.png",
+      "source": "block/reactor_instrument_port_top.svg",
+      "palette": "reactor_instrument_port_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_refueling_port_side.png",
+      "source": "block/reactor_refueling_port_side.svg",
+      "palette": "reactor_refueling_port_side",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_refueling_port_top.png",
+      "source": "block/reactor_refueling_port_top.svg",
+      "palette": "reactor_refueling_port_top",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/reactor_window.png",
+      "source": "block/reactor_window.svg",
+      "palette": "reactor_window",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "window",
+      "group": "reactor",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "block/tin_block.png",
+      "source": "block/tin_block.svg",
+      "palette": "tin_block",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/tin_ore.png",
+      "source": "block/tin_ore.svg",
+      "palette": "tin_ore",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "block/uranium_ore.png",
+      "source": "block/uranium_ore.svg",
+      "palette": "uranium_ore",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "minerals",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/compound_coolant_flow.png",
+      "source": "fluid/compound_coolant_flow.svg",
+      "palette": "compound_coolant_flow",
+      "size": [
+        16,
+        64
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/compound_coolant_still.png",
+      "source": "fluid/compound_coolant_still.svg",
+      "palette": "compound_coolant_still",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/hot_compound_coolant_flow.png",
+      "source": "fluid/hot_compound_coolant_flow.svg",
+      "palette": "hot_compound_coolant_flow",
+      "size": [
+        16,
+        64
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "fluid/hot_compound_coolant_still.png",
+      "source": "fluid/hot_compound_coolant_still.svg",
+      "palette": "hot_compound_coolant_still",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "opaque",
+      "group": "coolant",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/control_rod.png",
+      "source": "item/control_rod.svg",
+      "palette": "control_rod",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/cooled_spent_fuel_assembly.png",
+      "source": "item/cooled_spent_fuel_assembly.svg",
+      "palette": "cooled_spent_fuel_assembly",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/dosimeter.png",
+      "source": "item/dosimeter.svg",
+      "palette": "dosimeter",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/fresh_fuel_assembly.png",
+      "source": "item/fresh_fuel_assembly.svg",
+      "palette": "fresh_fuel_assembly",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/lead_ingot.png",
+      "source": "item/lead_ingot.svg",
+      "palette": "lead_ingot",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/lead_shielding_cask.png",
+      "source": "item/lead_shielding_cask.svg",
+      "palette": "lead_shielding_cask",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/raw_lead.png",
+      "source": "item/raw_lead.svg",
+      "palette": "raw_lead",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/raw_tin.png",
+      "source": "item/raw_tin.svg",
+      "palette": "raw_tin",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/raw_uranium.png",
+      "source": "item/raw_uranium.svg",
+      "palette": "raw_uranium",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/steel_plate.png",
+      "source": "item/steel_plate.svg",
+      "palette": "steel_plate",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "已引用纹理"
+    },
+    {
+      "game": "item/tin_ingot.png",
+      "source": "item/tin_ingot.svg",
+      "palette": "tin_ingot",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/uranium_concentrate.png",
+      "source": "item/uranium_concentrate.svg",
+      "palette": "uranium_concentrate",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": null,
+      "source": "item/lapis_dust.svg",
+      "palette": "lapis_dust",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "已批准候选，本批不新增注册和游戏PNG"
+    }
+  ]
+}
