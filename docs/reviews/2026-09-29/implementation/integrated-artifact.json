@@ -1,0 +1,9 @@
+{
+  "jar": "build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "sha256": "319101981b8e05ec53c0ddf3c0840dcf3ec12d04ba96337aad6dcd65e96234c7",
+  "packaged_texture_count": 51,
+  "png_mismatches": [],
+  "raw_compression_recipes": 6,
+  "ore_content_class": true,
+  "ore_filter_class": true
+}

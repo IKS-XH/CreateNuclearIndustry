@@ -4,7 +4,7 @@
 
 ## 当前工作
 
-**本轮执行：** [资源、生产与 SVG 美术启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。用户已授权自动派发与审核；用户已批准样稿风格与三矿推荐方案，进入 [三矿资源入口](./superpowers/plans/2026-09-29-ext-a-ore-01.md) 和 [现有 51 张贴图重绘](./superpowers/plans/2026-09-29-ext-art-02.md)。实现后在客户端测试门暂停。
+**本轮执行：** [资源、生产与 SVG 美术启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。用户已授权自动派发与审核；三矿资源入口与现有 51 张贴图重绘已形成整合候选，代码/静态视觉审查与自动验证完成；现暂停于 [客户端测试包与验收清单](./reviews/2026-09-29/implementation/README.md)。候选未合入 main，不沿用旧 P1 手测结论。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
