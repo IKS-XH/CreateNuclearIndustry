@@ -6,6 +6,8 @@
 
 **本轮执行：** [资源、生产与 SVG 美术启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。用户已授权自动派发与审核；三矿资源入口与现有 51 张贴图重绘已形成整合候选，代码/静态视觉审查与自动验证完成；现暂停于 [客户端测试包与验收清单](./reviews/2026-09-29/implementation/README.md)。候选未合入 main，不沿用旧 P1 手测结论。
 
+**最新反馈：** 三矿自然生成、采集及其他新素材已获用户认可；两种冷却剂已按用户选择 [恢复旧外观](./superpowers/plans/2026-09-29-ext-art-02a-coolant-restore.md)，候选 `b4d78d5` 等待冷却剂复验与其余人工项，见上述验收清单。
+
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |

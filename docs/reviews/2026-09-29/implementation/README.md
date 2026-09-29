@@ -1,6 +1,6 @@
 # 三矿资源与美术重绘：客户端验收候选
 
-**状态：** 两任务的代码/静态视觉审查已通过，已组成可测试候选；按用户要求暂停于本批客户端人工验收，未合入 main、未推送或发布。用户已批准的三矿方案和 SVG 风格见 [前一决策检查点](../README.md)。本批只到三矿获取、粗矿压缩、Create 粉碎与现有贴图重绘；材料熔炼/洗矿、制钢及新设备制造继续在后续批次。
+**状态：** 用户于 2026-09-29 确认三矿自然生成与采集正常，认可其他重绘素材，指出两种冷却剂不如旧版，并明确选择恢复旧冷却剂、保留其余新素材。[冷却剂恢复整改 EXT-ART-02A](../../../superpowers/plans/2026-09-29-ext-art-02a-coolant-restore.md) 已通过 PM/独立审查，当前候选 `b4d78d5b934f39e5cc2172635cda4c6313c74a40` 等待冷却剂视觉复验。用户明确表示粗矿压缩、真实粉碎与保存重进尚未全部测试，继续保留待验收。候选未合入 main、未推送或发布。本批只到三矿获取、粗矿压缩、Create 粉碎与现有贴图调整；材料熔炼/洗矿、制钢及新设备制造继续在后续批次。
 
 ## 1. 本批内容与验证
 
@@ -14,7 +14,9 @@
 
 ## 2. 获取候选与启动
 
-[下载/打开测试 JAR](../../../../build/reports/extension/client-candidate-2026-09-29/create_nuclear_industry-0.1.0-ore-svg-candidate.jar)。它是内部版本仍为 `0.1.0` 的测试候选；在测试客户端 mods 目录替换本模组旧 JAR，同一模组保留一份，NeoForge/Create 等依赖维持本页列出的锁定版本。
+[下载/打开冷却剂恢复后的测试 JAR](../../../../build/reports/extension/client-candidate-2026-09-29/create_nuclear_industry-0.1.0-ore-svg-coolant-restored.jar)。它是内部版本仍为 `0.1.0` 的测试候选；在测试客户端 mods 目录替换本模组旧 JAR，同一模组保留一份，NeoForge/Create 等依赖维持本页列出的锁定版本。
+
+**最新资源修订 EXT-ART-02A：** 两种冷却剂的 8 张 PNG 逐字节恢复到重绘前版本，其他 43 张游戏 PNG 保持 `c92e762` 的新素材。`processResources jar prepareClientRun` 退出 0；JAR 中全部 51 张贴图与当前候选逐字节一致。当前 JAR SHA-256 为 `4ba7b0aa2a25c30d1fddc29d7e4ea2f50b66101c6ffca32a368a8e685efc65f5`。本次未改 Java/数据/构建，不重复运行全量游戏逻辑测试；下文 `c92e762` 和旧 JAR 哈希保留上一轮自动验证语境。
 
 也可直接从已整合的隔离工作树启动开发客户端：
 
@@ -24,15 +26,17 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 ./gradlew.bat runClient
 ```
 
-主工作区保存文档和用户既有配置；本次候选在上述工作树 `codex/ore-acquisition` 分支，整合提交 `c92e76282828927915dea5b5b3be399cb880eaab`。功能提交为 `16cd164`，美术提交为 `eddd097`。候选构建实际重跑 JUnit，265/0/0/0，build exit0；JAR 内 51 张贴图与审核源输出逐字节一致，六压缩配方和矿物注册/过滤器类已核对。GameTest 功能证据来自整合前相同 Java/数据实现，纯 PNG 整合没有再次运行 GameTest。
+主工作区保存文档和用户既有配置；本次候选在上述工作树 `codex/ore-acquisition` 分支，原始整合提交 `c92e76282828927915dea5b5b3be399cb880eaab`，当前增加冷却剂恢复提交 `b4d78d5`。功能提交为 `16cd164`，美术提交为 `eddd097`。原始整合构建实际重跑 JUnit，265/0/0/0，build exit0；当时 JAR 内 51 张贴图与审核源输出逐字节一致，六压缩配方和矿物注册/过滤器类已核对。GameTest 功能证据来自整合前相同 Java/数据实现，纯 PNG 整合没有再次运行 GameTest。
 
 2026-09-29 按用户要求，将两个隔离工作树迁到主工程同级目录：整合候选在 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，美术分支在 `E:/MyMC/NewMod/Create_NuclearIndustry-svg-art`。迁移前后 3,304 个文件完成逐文件 SHA-256 核对（重建 Git 登记后仅 `.git` 指针按新位置变化），忽略的构建产物、测试世界和报告一并保留；两分支候选提交与测试 JAR 哈希不变。旧 C 盘工作树通过 Codex 归档接口保存恢复快照并清理，应用中的旧附件属于历史归档，不是当前启动位置。历史交付报告中的 C 盘路径保留当时运行语境。
 
 搬迁后已在整合候选运行 `runClient --dry-run` 和 `classes prepareClientRun`，均退出 0；启动参数已重新生成。此项只验证启动准备，不代表本批客户端人工验收通过。迁移清单保存在主工程 `build/reports/maintenance/2026-09-29-worktree-relocation/`。
 
-JAR SHA-256：`319101981b8e05ec53c0ddf3c0840dcf3ec12d04ba96337aad6dcd65e96234c7`。原位副本仍在候选工作树 `build/libs/create_nuclear_industry-0.1.0.jar`；主工作区测试包位置为 `build/reports/extension/client-candidate-2026-09-29/`。这些构建文件未纳入 Git；可从所列提交复建。
+上一轮 `c92e762` JAR SHA-256：`319101981b8e05ec53c0ddf3c0840dcf3ec12d04ba96337aad6dcd65e96234c7`。该旧包保留在主工程测试包目录的 `create_nuclear_industry-0.1.0-ore-svg-candidate.jar`；候选工作树 `build/libs/create_nuclear_industry-0.1.0.jar` 已更新为上述冷却剂恢复版本。这些构建文件未纳入 Git；可从对应候选提交复建。
 
 ## 3. 客户端操作与预期
+
+用户已明确反馈：粗矿 9:1 合成/拆解、真实 Create 粉碎轮和保存退出后重进尚未全部测试，先保留待验收；不要求重复已经确认正常的三矿自然生成与采集。冷却剂按批准的旧外观恢复后，另看静止及流动面。
 
 使用本候选及锁定 Minecraft 1.21.1 / NeoForge 21.1.219 / Create 6.0.10-280 环境。建议先用新的测试世界，seed `20260929`；默认去重会在外部矿物模组提供等价矿石标签时关闭对应本模组矿物，此时种子坐标不再作为匹配保证。旧存档只在新生成区域添加矿物，不回填已经生成的区块。
 
@@ -57,6 +61,8 @@ JAR SHA-256：`319101981b8e05ec53c0ddf3c0840dcf3ec12d04ba96337aad6dcd65e96234c7`
 只需反馈上述检查是否通过；若有问题，附具体对象、操作和现象。当前自动推进将停在本轮客户端门，不能沿用之前 P1 手测结论代替本批。通过后再推进基础材料加工和设备制造，新的玩法参数在对应批次集中确认。
 
 ## 4. 美术与保存证据
+
+当前冷却剂恢复结果见 [预览](./coolant-restored.png)、[整改交付](./EXT-ART-02A.md)、[独立审查](./EXT-ART-02A-REVIEW.md)、[PM 制品核对](./EXT-ART-02A-artifact.json) 及 [整改证据包](./coolant-restore-evidence.zip)。下方总览和初轮报告保留原重绘候选语境，其中冷却剂已经被当前恢复版本取代。
 
 ![51 张贴图重绘总览](./art-overview.png)
 

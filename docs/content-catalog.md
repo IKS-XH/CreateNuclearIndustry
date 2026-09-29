@@ -207,6 +207,8 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 
 **2026-09-29 制作方式更新：** 用户授权美术重绘采用 Agent 绘制像素 SVG 源稿，再确定性导出游戏使用的 16×16 PNG，不直接使用生图模型。用户现已批准青金石粉、铅锭、铅矿石、合金钢板四张样稿风格，并明确将现有全部 51 张 PNG（含反应堆平面纹理）按此重绘。源稿保留在开发资产目录，候选游戏接入按 [EXT-ART-02](./superpowers/plans/2026-09-29-ext-art-02.md) 审核及客户端验收；四张 flow 保留现有 16×64 布局。具体合同见 [启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。该授权提前基础贴图工作，不提前复杂设备模型或动画。
 
+**同日客户端反馈修订：** 用户认可其他新素材，要求两种冷却剂恢复重绘前外观。因此当前采用 43 张新 SVG 贴图与 8 张保留原始 PNG 的冷却剂贴图（block/fluid 各含冷/热 still/flow）。冷却剂原图例外由 [EXT-ART-02A](./superpowers/plans/2026-09-29-ext-art-02a-coolant-restore.md) 管理，批量导出不得重新覆盖为撤回的新外观；流体渲染、颜色和行为不变。
+
 原始基础素材清单如下；当前重绘范围已扩展为 EXT-ART-02 的 51 张现有贴图，不以本表限制：
 
 1. **6 张矿石方块纹理：** `lead_ore`、`deepslate_lead_ore`、`tin_ore`、`deepslate_tin_ore`、`uranium_ore`、`deepslate_uranium_ore`。
