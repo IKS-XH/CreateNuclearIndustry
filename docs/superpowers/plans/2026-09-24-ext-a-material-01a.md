@@ -23,7 +23,7 @@
 - `C:/Users/lenovo/.codex/skills/minecraft-modding/SKILL.md`
 - `C:/Users/lenovo/.codex/skills/minecraft-testing/SKILL.md`
 - `C:/Users/lenovo/.codex/skills/minecraft-resource-pack/SKILL.md`
-- 如制作新纹理，读取 `C:/Users/lenovo/.codex/skills/minecraft-imagegen/SKILL.md`，按其生成图像流程执行；无法使用时报告资源阻塞，不借用原青金石/蓝染料图标冒充成品粉末。
+- 资源方式于 2026-09-29 按用户授权改为 [SVG 样稿路线](./2026-09-29-resources-production-art-start-plan.md)：读取本机 `minecraft-resource-pack/SKILL.md`，不再调用生图模型。已有候选纹理保留为历史；EXT-ART-01 样稿获用户风格确认后另派定向替换，本卡不会自动合并。不得借用原青金石/蓝染料图标冒充成品粉末。
 
 ## 精确允许写集（相对独立工作树根目录）
 

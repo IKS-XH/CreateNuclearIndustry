@@ -7,6 +7,8 @@
 
 已完成的过程记录见 [P1 历史计划](../../archive/2026-08-18-agent-developer-execution-plan.md)、[依赖审计](../../archive/EXT-A-DEPS-01.md)及 [D-03d 工序讨论归档](../../archive/2026-09-24-production-process-proposal.md)。[成本草案](./2026-09-24-first-production-cost-draft.md)继续维护已批准试验值与待评审候选。
 
+**本轮派发入口（2026-09-29）：** [资源、生产与 SVG 美术启动计划](./2026-09-29-resources-production-art-start-plan.md)。先完成样稿及最小开工决策包，具体参数获批后再派发依赖实现。
+
 ## 1. 当前门槛与证据
 
 - `P1-VERIFY-02/03`：2026-09-29 用户确认 B–D 后，完整出口回归及最终交接均已通过 PM 验收，见 [VERIFY-02](../../archive/P1-VERIFY-02.md)、[VERIFY-03](../../archive/P1-VERIFY-03.md)。P1 交接前置解除；GameTest 断言全过后的保存挂起继续记录，独立服务端 A 仍为历史引用。
