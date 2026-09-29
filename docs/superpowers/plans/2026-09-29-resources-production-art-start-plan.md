@@ -30,7 +30,7 @@
 
 **状态：** 执行者 `svg_art_pilot` 已交付；PM/独立技术及静态视觉复核通过，用户风格确认已于 2026-09-29 完成。候选提交 `49e6c86` 位于 `codex/svg-material-pilot`，未合并、未推送；实际开工基线 `9669458`。
 **唯一结果：** 四张可复现的候选贴图，交给用户做风格评审；不接入游戏、不宣称客户端验收通过。
-**位置：** 复用已空闲的托管工作树 `C:/Users/IKSXH/.codex/worktrees/p1-final-verification/Create_NuclearIndustry`。PM 在派发前切至包含本卡的分支 `codex/svg-material-pilot`，旧 P1 忽略证据保留。
+**位置：** 复用已空闲的美术工作树，当前位于 `E:/MyMC/NewMod/Create_NuclearIndustry-svg-art`（2026-09-29 按用户要求从 C 盘迁至主工程同级目录）。PM 在派发前切至包含本卡的分支 `codex/svg-material-pilot`，旧 P1 忽略证据保留。
 
 **精确允许写集：**
 

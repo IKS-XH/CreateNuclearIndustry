@@ -19,12 +19,16 @@
 也可直接从已整合的隔离工作树启动开发客户端：
 
 ```powershell
-Set-Location 'C:/Users/IKSXH/.codex/worktrees/ore-acquisition/Create_NuclearIndustry'
+Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 ./gradlew.bat runClient
 ```
 
 主工作区保存文档和用户既有配置；本次候选在上述工作树 `codex/ore-acquisition` 分支，整合提交 `c92e76282828927915dea5b5b3be399cb880eaab`。功能提交为 `16cd164`，美术提交为 `eddd097`。候选构建实际重跑 JUnit，265/0/0/0，build exit0；JAR 内 51 张贴图与审核源输出逐字节一致，六压缩配方和矿物注册/过滤器类已核对。GameTest 功能证据来自整合前相同 Java/数据实现，纯 PNG 整合没有再次运行 GameTest。
+
+2026-09-29 按用户要求，将两个隔离工作树迁到主工程同级目录：整合候选在 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，美术分支在 `E:/MyMC/NewMod/Create_NuclearIndustry-svg-art`。迁移前后 3,304 个文件完成逐文件 SHA-256 核对（重建 Git 登记后仅 `.git` 指针按新位置变化），忽略的构建产物、测试世界和报告一并保留；两分支候选提交与测试 JAR 哈希不变。旧 C 盘工作树通过 Codex 归档接口保存恢复快照并清理，应用中的旧附件属于历史归档，不是当前启动位置。历史交付报告中的 C 盘路径保留当时运行语境。
+
+搬迁后已在整合候选运行 `runClient --dry-run` 和 `classes prepareClientRun`，均退出 0；启动参数已重新生成。此项只验证启动准备，不代表本批客户端人工验收通过。迁移清单保存在主工程 `build/reports/maintenance/2026-09-29-worktree-relocation/`。
 
 JAR SHA-256：`319101981b8e05ec53c0ddf3c0840dcf3ec12d04ba96337aad6dcd65e96234c7`。原位副本仍在候选工作树 `build/libs/create_nuclear_industry-0.1.0.jar`；主工作区测试包位置为 `build/reports/extension/client-candidate-2026-09-29/`。这些构建文件未纳入 Git；可从所列提交复建。
 

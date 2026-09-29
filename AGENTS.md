@@ -28,5 +28,6 @@
 - 执行者仅可只读检查 Git 状态、差异与历史，交付未提交改动和报告；提交、回退、分支、合并及其继续/中止操作由项目经理或用户执行。Git 冲突涉及代码时，项目经理确定处理范围，由执行者修改冲突文件，项目经理审核后完成 Git 操作。
 - 由项目经理或用户创建的 Git 提交必须使用中文提交信息；任务 ID、类名、注册 ID 和必要技术术语可以保留原文。
 - 执行者不得覆盖、删除、格式化或夹带任务范围外的既有改动。
+- 用户于 `2026-09-29` 要求本项目隔离工作树放在主工程的同级目录，即 `E:/MyMC/NewMod/` 下；工作树位置由项目经理管理，当前路径与启动方式见 [客户端候选说明](docs/reviews/2026-09-29/implementation/README.md)。
 
 详细职责、技能矩阵、需求状态、任务卡模板、验收和版本流程以 [项目治理与协作协议](docs/project-governance.md) 为统一入口；当前活动任务从 [文档入口](docs/README.md) 和 [首发扩展准备计划](docs/superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) 查阅；已完成 P1 的历史合同见 [归档计划](docs/archive/2026-08-18-agent-developer-execution-plan.md)。
