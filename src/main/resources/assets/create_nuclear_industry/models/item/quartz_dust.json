@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {"layer0": "create_nuclear_industry:item/quartz_dust"}
+}

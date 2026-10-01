@@ -552,5 +552,37 @@
     "light": "#A6AFBF",
     "glint": "#CDD3DE",
     "hazard": "#E6C24A"
+  },
+  "quartz_dust": {
+    "outline": "#3E3C46",
+    "shadow": "#807D82",
+    "body": "#B6B4AE",
+    "facet": "#D8D5CA",
+    "light": "#F2EDD9",
+    "glint": "#FFF9E8"
+  },
+  "refractory_brick": {
+    "outline": "#3B3736",
+    "shadow": "#67534A",
+    "body": "#9B7962",
+    "facet": "#BD9874",
+    "light": "#D9BE96",
+    "glint": "#EEE1C4"
+  },
+  "heavy_bearing": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "side": "#5B7078",
+    "body": "#788E94",
+    "light": "#A3B7B8",
+    "glint": "#D1DFDA"
+  },
+  "incomplete_heavy_bearing": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "side": "#5B7078",
+    "body": "#788E94",
+    "light": "#A3B7B8",
+    "glint": "#D1DFDA"
   }
 }

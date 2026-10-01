@@ -126,5 +126,9 @@
   "item.create_nuclear_industry.industrial_sensor": "Industrial Sensor",
   "item.create_nuclear_industry.radiation_sensor": "Radiation Sensor",
   "item.create_nuclear_industry.incomplete_industrial_sensor": "Incomplete Industrial Sensor",
-  "item.create_nuclear_industry.incomplete_radiation_sensor": "Incomplete Radiation Sensor"
+  "item.create_nuclear_industry.incomplete_radiation_sensor": "Incomplete Radiation Sensor",
+  "item.create_nuclear_industry.quartz_dust": "Quartz Dust",
+  "item.create_nuclear_industry.refractory_brick": "Refractory Brick",
+  "item.create_nuclear_industry.heavy_bearing": "Heavy Bearing",
+  "item.create_nuclear_industry.incomplete_heavy_bearing": "Incomplete Heavy Bearing"
 }

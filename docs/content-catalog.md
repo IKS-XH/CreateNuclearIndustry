@@ -74,7 +74,7 @@
 | `P1` | `seal_ring`、`pressure_fitting` | 密封环、耐压接头 | 流体与蒸汽接口 |
 | `P1` | `industrial_sensor`、`radiation_sensor` | 工业传感器、辐射传感器 | 仪表、联锁和危险检测 |
 | 材料04中间态 | `incomplete_industrial_sensor`、`incomplete_radiation_sensor` | 工业传感器半成品、辐射传感器半成品 | Create原生序列装配进度；非独立成品，不加入模组创造页；不赋予检测功能 |
-| 材料05中间态 | `incomplete_heavy_bearing` | 重型轴承半成品 | 已批准身份，按材料05任务实施；Create原生单件及进度组件，不加入模组创造页 |
+| 材料05中间态 | `incomplete_heavy_bearing` | 重型轴承半成品 | 同级候选已实现，待客户端验收；Create原生单件及进度组件，不加入模组创造页 |
 | `P1` | `maintenance_seal` | 维护密封件 | 停机维修泄漏部件 |
 | `P1` | `heavy_bearing` | 重型轴承 | 汽轮机、泵和离心机 |
 | `P1` | `coal_dust`、`charcoal_dust`、`quartz_dust`、`glass_dust` | 煤粉、木炭粉、石英粉、玻璃碎料 | 钢材、陶瓷和灌封材料 |

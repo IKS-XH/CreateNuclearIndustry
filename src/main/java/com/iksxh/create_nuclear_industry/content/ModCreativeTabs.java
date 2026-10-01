@@ -61,6 +61,9 @@ public final class ModCreativeTabs {
                         output.accept(BasicMaterialContent.TIN_WIRE.get());
                         output.accept(BasicMaterialContent.INDUSTRIAL_SENSOR.get());
                         output.accept(BasicMaterialContent.RADIATION_SENSOR.get());
+                        output.accept(BasicMaterialContent.QUARTZ_DUST.get());
+                        output.accept(BasicMaterialContent.REFRACTORY_BRICK.get());
+                        output.accept(BasicMaterialContent.HEAVY_BEARING.get());
                     })
                     .build()
     );

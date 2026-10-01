@@ -1,0 +1,6 @@
+{
+  "type": "create:milling",
+  "ingredients": [{"tag": "c:gems/quartz"}],
+  "processing_time": 100,
+  "results": [{"id": "create_nuclear_industry:quartz_dust"}]
+}

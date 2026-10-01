@@ -1,0 +1,11 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {"item": "minecraft:bricks"},
+    {"item": "minecraft:clay_ball"},
+    {"tag": "c:dusts/quartz"}
+  ],
+  "processing_time": 100,
+  "heat_requirement": "heated",
+  "results": [{"id": "create_nuclear_industry:refractory_brick", "count": 4}]
+}

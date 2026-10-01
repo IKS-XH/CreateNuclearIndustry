@@ -1,0 +1,11 @@
+{
+  "command": [
+    "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\build\\reports\\extension\\EXT-ART-07\\pm-before-final-fix\\verify.py"
+  ],
+  "exit_code": 1,
+  "expected_failure": "FileNotFoundError for the build-local snapshot",
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\build\\reports\\extension\\EXT-ART-07\\pm-before-final-fix\\verify.py\", line 57, in <module>\n    snapshot=json.loads((EVIDENCE/'preexisting-game-png-sha256.json').read_text(encoding='utf-8'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\pathlib.py\", line 1027, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'E:\\\\MyMC\\\\NewMod\\\\Create_NuclearIndustry-ore-acquisition\\\\build\\\\reports\\\\extension\\\\EXT-ART-07\\\\preexisting-game-png-sha256.json'\n",
+  "result": "RED_REPRODUCED"
+}

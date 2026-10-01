@@ -790,6 +790,54 @@
       "use": "EXT-ART-06 新增incomplete_radiation_sensor素材；无旧图基线"
     },
     {
+      "game": "item/quartz_dust.png",
+      "source": "item/quartz_dust.svg",
+      "palette": "quartz_dust",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-07 新增石英粉素材；无旧图基线"
+    },
+    {
+      "game": "item/refractory_brick.png",
+      "source": "item/refractory_brick.svg",
+      "palette": "refractory_brick",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-07 新增耐火砖素材；无旧图基线"
+    },
+    {
+      "game": "item/heavy_bearing.png",
+      "source": "item/heavy_bearing.svg",
+      "palette": "heavy_bearing",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-07 新增重型轴承素材；无旧图基线"
+    },
+    {
+      "game": "item/incomplete_heavy_bearing.png",
+      "source": "item/incomplete_heavy_bearing.svg",
+      "palette": "incomplete_heavy_bearing",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-07 新增重型轴承半成品素材；无旧图基线"
+    },
+    {
       "game": null,
       "source": "item/lapis_dust.svg",
       "palette": "lapis_dust",

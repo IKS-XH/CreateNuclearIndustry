@@ -1,0 +1,5 @@
+ZIP=evidence-small.zip
+entries=111
+bytes=196916
+sha256=C3A11ACFC573A72F165FBD6EAB6DB334E2180B766A42CBC9658081470D88CEE1
+manifest=evidence-manifest.csv

@@ -126,5 +126,9 @@
   "item.create_nuclear_industry.industrial_sensor": "工业传感器",
   "item.create_nuclear_industry.radiation_sensor": "辐射传感器",
   "item.create_nuclear_industry.incomplete_industrial_sensor": "工业传感器半成品",
-  "item.create_nuclear_industry.incomplete_radiation_sensor": "辐射传感器半成品"
+  "item.create_nuclear_industry.incomplete_radiation_sensor": "辐射传感器半成品",
+  "item.create_nuclear_industry.quartz_dust": "石英粉",
+  "item.create_nuclear_industry.refractory_brick": "耐火砖",
+  "item.create_nuclear_industry.heavy_bearing": "重型轴承",
+  "item.create_nuclear_industry.incomplete_heavy_bearing": "重型轴承半成品"
 }

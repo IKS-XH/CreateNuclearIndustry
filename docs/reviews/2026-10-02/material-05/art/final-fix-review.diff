@@ -1,0 +1,66 @@
+diff --git a/build/reports/extension/EXT-ART-07/pm-before-final-fix/verify.py b/tools/art-assets/verify.py
+index c06b32e..13efc16 100644
+--- a/build/reports/extension/EXT-ART-07/pm-before-final-fix/verify.py
++++ b/tools/art-assets/verify.py
+@@ -11,24 +11,25 @@ import subprocess
+ import sys
+ import xml.etree.ElementTree as ET
+ from collections import Counter
+ 
+ sys.dont_write_bytecode=True
+ from PIL import Image, ImageDraw, __version__ as pillow_version
+ import pipeline
+ from export import render_svg, read_palette, ROOT
+ 
+ REPO=ROOT.parents[1]
+ EVIDENCE=REPO/'build/reports/extension/EXT-ART-07'
+ EVIDENCE.mkdir(parents=True,exist_ok=True)
++PREEXISTING_SNAPSHOT=REPO/'docs/reviews/2026-10-02/material-05/art/preexisting-game-png-sha256.json'
+ ENV=dict(os.environ,PYTHONIOENCODING='utf-8',PYTHONDONTWRITEBYTECODE='1')
+ log=[]
+ # 用户只撤回两种冷却剂的八条路径；独立列举，避免随管线白名单错误一起放宽。
+ RETAINED_COOLANTS=frozenset(f'{directory}/{name}_{state}.png'
+     for directory in ('block','fluid')
+     for name in ('compound_coolant','hot_compound_coolant')
+     for state in ('still','flow'))
+ 
+ 
+ def digest(path):
+     return hashlib.sha256(path.read_bytes()).hexdigest()
+ 
+@@ -45,33 +46,33 @@ def state():
+     """记录候选、全部预览、游戏路径的字节；失败实验不允许改变其中任何一项。"""
+     paths=list((ROOT/'generated').rglob('*.png'))+list((ROOT/'previews').glob('*.png'))+[ROOT/'preview.html',ROOT/'preview.png']+list(pipeline.GAME_ROOT.rglob('*.png'))
+     return {p.relative_to(REPO).as_posix():digest(p) for p in sorted(paths)}
+ 
+ 
+ entries,images,before,retained=pipeline.prepare();palette=read_palette()
+ baseline=json.loads((ROOT/'baseline.json').read_text(encoding='utf-8'))
+ assert {r['game'] for r in baseline['records']}==pipeline.GAME_FILES
+ assert len(baseline['records'])==51
+ assert len(entries)==70
+ assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):65,(16,64):4}
+ actual_before={p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}
+-snapshot=json.loads((EVIDENCE/'preexisting-game-png-sha256.json').read_text(encoding='utf-8'))
++snapshot=json.loads(PREEXISTING_SNAPSHOT.read_text(encoding='utf-8'))
+ plate_stage=pipeline.GAME_FILES|frozenset({'item/lead_plate.png','item/tin_plate.png'})
+ nugget_stage=plate_stage|frozenset({'item/lead_nugget.png','item/tin_nugget.png'})
+ previous_material_stage=nugget_stage
+ steel_stage=previous_material_stage|frozenset({'item/iron_dust.png','item/coal_dust.png','item/charcoal_dust.png','item/steel_dust.png','item/steel_ingot.png'})
+ sensor_stage=steel_stage|frozenset({'item/tin_wire.png','item/industrial_sensor.png','item/radiation_sensor.png','item/incomplete_industrial_sensor.png','item/incomplete_radiation_sensor.png'})
+ assert actual_before in (pipeline.GAME_FILES,plate_stage,nugget_stage,steel_stage,sensor_stage,pipeline.ALLOWED_GAME_FILES),'开工时游戏PNG必须是已知历史/素材阶段的完整白名单'
+ pre_existing_hashes={name:digest(pipeline.GAME_ROOT/name) for name in actual_before}
+-results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'historical_game_count':51,'pre_existing_game_count':len(snapshot),'game_count_at_verifier_start':len(pre_existing_hashes),'new_game_count':18,'current_batch_game_count':4,'final_game_count':69,'manifest_entry_count':70,'source_count':len({e['source'] for e in entries}),'records':[]}
++results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'preexisting_snapshot':str(PREEXISTING_SNAPSHOT.relative_to(REPO).as_posix()),'historical_game_count':51,'pre_existing_game_count':len(snapshot),'game_count_at_verifier_start':len(pre_existing_hashes),'new_game_count':18,'current_batch_game_count':4,'final_game_count':69,'manifest_entry_count':70,'source_count':len({e['source'] for e in entries}),'records':[]}
+ for e in entries:
+     name=e['game'] or 'item/lapis_dust.png'
+     if name in RETAINED_COOLANTS:
+         original=subprocess.check_output(['git','show',f'eddd097^:src/main/resources/assets/create_nuclear_industry/textures/{name}'],cwd=REPO)
+         assert (ROOT/'generated'/name).read_bytes()==original==(ROOT/'baseline'/name).read_bytes(),f'冷却剂必须逐字节保留原图: {name}'
+         with Image.open(ROOT/'generated'/name) as output:
+             pipeline.validate_alpha(e,output)
+             assert output.tobytes()==images[name].tobytes()
+         results['records'].append({'game':name,'size':e['size'],'retained_original_sha256':hashlib.sha256(original).hexdigest()})
+         continue
+     source=ROOT/'sources'/e['source']
+     # 独立使用 Pillow 矩形 API，核对导出器手动覆盖像素的坐标和边界。

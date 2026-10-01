@@ -1,0 +1,12 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {"item": "create:sturdy_sheet"},
+  "transitional_item": {"id": "create_nuclear_industry:incomplete_heavy_bearing"},
+  "sequence": [
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_heavy_bearing"}, {"tag": "c:ingots/steel"}], "results": [{"id": "create_nuclear_industry:incomplete_heavy_bearing"}]},
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_heavy_bearing"}, {"item": "create:precision_mechanism"}], "results": [{"id": "create_nuclear_industry:incomplete_heavy_bearing"}]},
+    {"type": "create:pressing", "ingredients": [{"item": "create_nuclear_industry:incomplete_heavy_bearing"}], "results": [{"id": "create_nuclear_industry:incomplete_heavy_bearing"}]}
+  ],
+  "results": [{"id": "create_nuclear_industry:heavy_bearing"}],
+  "loops": 1
+}
