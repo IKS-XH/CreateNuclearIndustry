@@ -453,5 +453,21 @@
     "body": "#B9CED5",
     "light": "#E2E9DE",
     "glint": "#F2F1E6"
+  },
+  "lead_nugget": {
+    "outline": "#303441",
+    "shadow": "#464C5D",
+    "side": "#60687A",
+    "body": "#7E8798",
+    "light": "#A6AFBF",
+    "glint": "#CDD3DE"
+  },
+  "tin_nugget": {
+    "outline": "#354249",
+    "shadow": "#556875",
+    "side": "#8AA4B1",
+    "body": "#B9CED5",
+    "light": "#E2E9DE",
+    "glint": "#F2F1E6"
   }
 }

@@ -1,4 +1,4 @@
-"""离线核对历史贴图及EXT-ART-03新增板材：原冷却剂保留、SVG像素、复现性和失败不写出。
+"""离线核对历史贴图及EXT-ART-04新增金属粒：原冷却剂保留、SVG像素、复现性和失败不写出。
 
 只在显式执行本脚本时做临时坏输入实验，finally 原样恢复源稿/清单。
 不调用游戏、Gradle 或 Git 写操作；结果保存在本任务证据目录。
@@ -18,7 +18,7 @@ import pipeline
 from export import render_svg, read_palette, ROOT
 
 REPO=ROOT.parents[1]
-EVIDENCE=REPO/'build/reports/extension/EXT-ART-03'
+EVIDENCE=REPO/'build/reports/extension/EXT-ART-04'
 EVIDENCE.mkdir(parents=True,exist_ok=True)
 ENV=dict(os.environ,PYTHONIOENCODING='utf-8',PYTHONDONTWRITEBYTECODE='1')
 log=[]
@@ -51,9 +51,13 @@ entries,images,before,retained=pipeline.prepare();palette=read_palette()
 baseline=json.loads((ROOT/'baseline.json').read_text(encoding='utf-8'))
 assert {r['game'] for r in baseline['records']}==pipeline.GAME_FILES
 assert len(baseline['records'])==51
-assert len(entries)==54
-assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):49,(16,64):4}
-results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'historical_game_count':51,'new_game_count':2,'source_count':len({e['source'] for e in entries}),'records':[]}
+assert len(entries)==56
+assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):51,(16,64):4}
+actual_before={p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}
+staged_game_paths=pipeline.GAME_FILES|frozenset({'item/lead_plate.png','item/tin_plate.png'})
+assert actual_before in (pipeline.GAME_FILES,staged_game_paths,pipeline.ALLOWED_GAME_FILES),'开工时游戏PNG必须是51项历史、53项板材阶段或完整55项白名单'
+pre_existing_hashes={name:digest(pipeline.GAME_ROOT/name) for name in actual_before}
+results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'historical_game_count':51,'pre_existing_game_count':len(pre_existing_hashes),'new_game_count':4,'final_game_count':55,'manifest_entry_count':56,'source_count':len({e['source'] for e in entries}),'records':[]}
 for e in entries:
     name=e['game'] or 'item/lapis_dust.png'
     if name in RETAINED_COOLANTS:
@@ -155,9 +159,11 @@ for e in entries:
         elif e['game'] in RETAINED_COOLANTS:
             assert (pipeline.GAME_ROOT/e['game']).read_bytes()==(ROOT/'baseline'/e['game']).read_bytes(),'旧冷却剂被再次覆盖'
 assert {name:digest(pipeline.GAME_ROOT/name) for name in pipeline.GAME_FILES}==historical_before,'原51张游戏PNG被改动'
+assert all(digest(pipeline.GAME_ROOT/name)==value for name,value in pre_existing_hashes.items()),'两次安装改动了开工前已有的游戏PNG'
 after=state();run('--install');assert state()==after
 results['install_repeat_exports']=2
 results['historical_51_game_png_unchanged']=True
+results['pre_existing_game_png_unchanged']=True
 results['svg_or_retained_original_generated_game_equal']=True
 results['output_hashes']=after
 results['result']='PASS'

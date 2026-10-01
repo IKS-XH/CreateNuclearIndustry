@@ -1,6 +1,6 @@
-"""EXT-ART-02 固定白名单管线及EXT-ART-03板材扩展，先验证全部输入再接入游戏。
+"""EXT-ART-02 固定白名单管线及EXT-ART-04粒素材扩展，先验证全部输入再接入游戏。
 
-无游戏逻辑、注册、模型或动画修改。清单仅允许基线 51 PNG、两张新增板材和一个工具候选；
+无游戏逻辑、注册、模型或动画修改。清单仅允许基线 51 PNG、两张板材、两种金属粒和一个工具候选；
 保留完整 flow 画布；EXT-ART-02A 的八项冷却剂按各自原始 PNG 保留。
 """
 import argparse
@@ -66,7 +66,7 @@ item/raw_uranium.png
 item/steel_plate.png
 item/tin_ingot.png
 item/uranium_concentrate.png'''.splitlines())
-NEW_GAME_FILES = frozenset({'item/lead_plate.png', 'item/tin_plate.png'})
+NEW_GAME_FILES = frozenset({'item/lead_plate.png', 'item/tin_plate.png', 'item/lead_nugget.png', 'item/tin_nugget.png'})
 ALLOWED_GAME_FILES = GAME_FILES | NEW_GAME_FILES
 
 # 用户批准的原始 PNG 例外，路径与哈希均冻结；不能借 manifest 导入任意位图。
@@ -89,11 +89,11 @@ def load_manifest():
     if set(document)!={'schema','entries'} or document['schema']!=1:
         raise ValueError('manifest 版本或字段错误')
     entries=document['entries']
-    if not isinstance(entries,list) or len(entries)!=54:
-        raise ValueError('清单必须恰好为53个游戏路径加lapis候选')
+    if not isinstance(entries,list) or len(entries)!=56:
+        raise ValueError('清单必须恰好为55个游戏路径加lapis候选')
     games=[e.get('game') for e in entries if isinstance(e,dict) and e.get('game') is not None]
-    if len(games)!=53 or len(set(games))!=53 or set(games)!=ALLOWED_GAME_FILES:
-        raise ValueError('游戏路径必须与固定51项白名单及两张板材扩展完全一致')
+    if len(games)!=55 or len(set(games))!=55 or set(games)!=ALLOWED_GAME_FILES:
+        raise ValueError('游戏路径必须与固定51项白名单及两张板材、金属粒扩展完全一致')
     if sum(e.get('game') is None for e in entries)!=1:
         raise ValueError('只能有一个工具候选')
     for e in entries:
@@ -182,7 +182,7 @@ def previews(entries,images,before):
         for page in range((len(items)+7)//8):
             selected=items[page*8:page*8+8]
             sheet=Image.new('RGBA',(1184,960),'#17212A');draw=ImageDraw.Draw(sheet)
-            draw.text((24,18),f'EXT-ART-03 / {group.upper()} / {page+1}',font=ImageFont.load_default(size=25),fill='#E3ECE8')
+            draw.text((24,18),f'EXT-ART-04 / {group.upper()} / {page+1}',font=ImageFont.load_default(size=25),fill='#E3ECE8')
             draw.text((24,54),'BEFORE / AFTER  |  nearest neighbour  |  original size + light / dark + 2x2 tiling',font=font,fill='#A6B9C2')
             for i,e in enumerate(selected):
                 x=24+(i%4)*290;y=95+(i//4)*424;key=e['game'] or 'item/lapis_dust.png';im=images[key];old=before.get(key,im)
@@ -207,8 +207,8 @@ def previews(entries,images,before):
             name=f'previews/{group}-{page+1}.png';outputs[name]=png_bytes(sheet);names.append(name)
     links=''.join(f'<figure><img src="{name}" alt="{name}"><figcaption>{name}</figcaption></figure>' for name in names)
     overview=Image.new('RGBA',(1184,1010),'#17212A');od=ImageDraw.Draw(overview)
-    od.text((24,18),'EXT-ART-03 / 53 GAME TEXTURES + LAPIS PILOT',font=ImageFont.load_default(size=22),fill='#E3ECE8')
-    od.text((24,52),'51 historical paths + 2 explicitly new plate paths / client review pending',font=font,fill='#A6B9C2')
+    od.text((24,18),'EXT-ART-04 / 55 GAME TEXTURES + LAPIS PILOT',font=ImageFont.load_default(size=22),fill='#E3ECE8')
+    od.text((24,52),'51 historical paths + 2 plates + 2 nuggets / client review pending',font=font,fill='#A6B9C2')
     for i,e in enumerate(entries):
         x=24+(i%8)*145;y=95+(i//8)*130;key=e['game'] or 'item/lapis_dust.png';im=images[key]
         image_on(overview,im,x,y,1 if im.height==64 else 4,'#596773')
@@ -218,13 +218,13 @@ def previews(entries,images,before):
         for j,line in enumerate(lines):od.text((x,y+72+j*13),line,font=small,fill='#E3ECE8')
         od.text((x,y+102),key.split('/')[0],font=small,fill='#A6B9C2')
     outputs['preview.png']=png_bytes(overview)
-    outputs['preview.html']=('''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>EXT-ART-03 贴图预览</title><style>body{background:#17212a;color:#e3ece8;font:16px system-ui;margin:24px}figure{margin:24px 0}img{max-width:100%;height:auto;image-rendering:pixelated}figcaption{margin-top:8px}</style><h1>EXT-ART-03 贴图预览</h1><p>包含原51条游戏路径、铅板和锡板两条新增路径，以及青金石粉工具候选。新增板材标记为 NEW，不登记或伪造旧基线。旧冷却剂仍按 EXT-ART-02A 保留原图。每页含原尺寸、明暗底与平铺；Minecraft 客户端视觉验收待用户完成。</p>'''+links+'</html>\n').encode('utf-8')
+    outputs['preview.html']=('''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>EXT-ART-04 贴图预览</title><style>body{background:#17212a;color:#e3ece8;font:16px system-ui;margin:24px}figure{margin:24px 0}img{max-width:100%;height:auto;image-rendering:pixelated}figcaption{margin-top:8px}</style><h1>EXT-ART-04 贴图预览</h1><p>包含原51条游戏路径、铅板和锡板两条已新增路径、本次新增的铅粒和锡粒，以及青金石粉工具候选。新增素材标记为 NEW，不登记或伪造旧基线。旧冷却剂仍按 EXT-ART-02A 保留原图。每页含原尺寸、明暗底与平铺；Minecraft 客户端视觉验收待用户完成。</p>'''+links+'</html>\n').encode('utf-8')
     return outputs
 
 
 def main():
-    parser=argparse.ArgumentParser(description='固定51项白名单及两条板材新增路径；默认不接入游戏')
-    parser.add_argument('--install',action='store_true',help='显式接入51张既有贴图并添加两张板材PNG')
+    parser=argparse.ArgumentParser(description='固定51项历史白名单及四条明确新增路径；默认不接入游戏')
+    parser.add_argument('--install',action='store_true',help='显式接入51张既有贴图并添加板材、金属粒PNG')
     args=parser.parse_args()
     entries,images,before,retained=prepare()
     outputs={f'generated/{key}':retained[key] if key in retained else png_bytes(im) for key,im in images.items()}
@@ -232,8 +232,9 @@ def main():
     game_outputs={e['game']:outputs['generated/'+e['game']] for e in entries if e['game']}
     if args.install:
         actual={p.relative_to(GAME_ROOT).as_posix() for p in GAME_ROOT.rglob('*.png')}
-        if actual not in (GAME_FILES, ALLOWED_GAME_FILES):
-            raise ValueError('实际游戏PNG集合必须为原51项或完整53项白名单，拒绝接入')
+        staged_new = GAME_FILES | frozenset({'item/lead_plate.png', 'item/tin_plate.png'})
+        if actual not in (GAME_FILES, staged_new, ALLOWED_GAME_FILES):
+            raise ValueError('实际游戏PNG集合必须为原51项、已有板材阶段53项或完整55项白名单，拒绝接入')
         for e in entries:
             if not e['game']:continue
             target=GAME_ROOT/e['game']
@@ -246,7 +247,7 @@ def main():
         path=ROOT/relative;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(data)
     if args.install:
         for relative,data in game_outputs.items():(GAME_ROOT/relative).write_bytes(data)
-    print(f'PASS: {len(images)} generated PNG; 53 game targets (51 historical + 2 new); install={args.install}; {len(outputs)-len(images)-2} comparison pages + overview')
+    print(f'PASS: {len(images)} generated PNG; 55 game targets (51 historical + 4 new); install={args.install}; {len(outputs)-len(images)-2} comparison pages + overview')
     print('manifest sha256='+hashlib.sha256((ROOT/'manifest.json').read_bytes()).hexdigest())
 
 
