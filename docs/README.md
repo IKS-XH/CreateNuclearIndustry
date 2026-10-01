@@ -13,7 +13,7 @@
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
-| [材料04：锡条与传感器方案](./superpowers/plans/2026-10-01-mainline-material-04-proposal.md) | 当前决策门：三件材料的数量及序列装配参数待用户确认，未派发实现 |
+| [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 参数已由用户确认；自动执行功能、SVG素材及审查，完成后停在客户端人工门 |
 | [青金石粉 01A](./superpowers/plans/2026-09-24-ext-a-material-01a.md) | 未合并候选：GameTest、纹理整改/评审和客户端验收仍待完成 |
 | [首套生产线成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) | 已批准试验配比与未批准候选分开记录；不是完整配方冻结表 |
 | [损伤倍率专项](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) | 游戏端 02A 已完成；模拟器 02B 仍待离线浏览器验收，未合并 |
