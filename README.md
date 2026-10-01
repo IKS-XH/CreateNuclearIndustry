@@ -22,7 +22,7 @@ P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，�
 
 客户端总验收由用户确认通过；本轮 261 项 JUnit、111 项 required GameTest 断言与 build 通过。GameTest 断言全过后保存挂起，强停导致 Gradle 退出 1，该限制未消除。详见[总验收](docs/archive/P1-VERIFY-02.md)和[最终交接](docs/archive/P1-VERIFY-03.md)。
 
-三矿获取、粉碎与素材批，以及铅锡直熔、水洗9粒、粒锭合拆、压板和新素材，均已于2026-10-01完成人工验收并合入main，见[铅锡收尾记录](docs/reviews/2026-10-01/material-02-acceptance.md)。铁粉与煤/木炭粉→4+1搅拌成5钢粉→熔炼钢锭→现有钢板，已在同级候选实现，正等待[客户端验收](docs/reviews/2026-10-01/material-03-client.md)，尚未合入main；本批专项通过，全量GameTest中断限制见[证据记录](docs/reviews/2026-10-01/material-03/README.md)。后接基础零件、设备与燃料制备，铅锡水洗副产物暂缓。完整生存生产和发电链尚未完成；当前任务见[实施路线图](docs/implementation-roadmap.md)。
+三矿获取、粉碎与素材批，以及铅锡直熔、水洗9粒、粒锭合拆、压板和新素材，均已于2026-10-01完成人工验收并合入main，见[铅锡收尾记录](docs/reviews/2026-10-01/material-02-acceptance.md)。铁粉与煤/木炭粉→4+1搅拌成5钢粉→熔炼钢锭→现有钢板的候选也已通过[完整客户端清单](docs/reviews/2026-10-01/material-03-client.md)，物品名现简称“钢”；[03A收尾](docs/superpowers/plans/2026-10-01-ext-a-material-03a.md)保留全量GameTest异常门，功能尚未合入main。后接基础零件、设备与燃料制备，铅锡水洗副产物暂缓。完整生存生产和发电链尚未完成；当前任务见[实施路线图](docs/implementation-roadmap.md)。
 
 ## 设计方向
 
