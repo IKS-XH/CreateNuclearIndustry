@@ -15,7 +15,7 @@
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
-| [首台富集离心机方案](./superpowers/plans/2026-10-02-enrichment-centrifuge-proposal.md) | 当前：用户截图已确认21格制造布局与输入数量，中央为搅拌器零件；产出及运行参数待确认，未派发实现 |
+| [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 当前：用户已确认截图布局及其余完整方案，转入功能、原料配方和SVG实现；中央为`create:whisk` |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |
 | [材料05：石英粉、耐火砖与重型轴承实施](./superpowers/plans/2026-10-02-ext-a-material-05.md) | 完整人工清单通过，已合入main；[最终验收](./reviews/2026-10-02/material-05/ACCEPTANCE.md)，下一步设备合同 |
 | [青金石粉 01A](./superpowers/plans/2026-09-24-ext-a-material-01a.md) | 未合并候选：GameTest、纹理整改/评审和客户端验收仍待完成 |
