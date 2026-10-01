@@ -80,6 +80,21 @@ tasks.named('runServer', JavaExec) {
     standardInput = System.in
 }
 
+configurations {
+    developmentJei {
+        canBeConsumed = false
+        canBeResolved = true
+    }
+}
+
+// JEI 仅进入客户端实际启动 classpath；放入 legacy 清单会被当作启动库，随后被模组发现去重跳过。
+// 此独立配置不扩展通用 runtimeClasspath，避免影响服务端、测试或发布依赖。
+['client', 'clientA', 'clientB'].each { runName ->
+    tasks.named("run${runName.capitalize()}", JavaExec) {
+        classpath(configurations.developmentJei)
+    }
+}
+
 dependencies {
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") {
         transitive = false
@@ -89,10 +104,7 @@ dependencies {
     runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
 
-    // JEI 仅加入三个开发客户端，不进入服务端、测试或发布依赖。
-    clientAdditionalRuntimeClasspath "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-    clientAAdditionalRuntimeClasspath "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-    clientBAdditionalRuntimeClasspath "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    developmentJei "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'
