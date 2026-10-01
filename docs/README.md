@@ -4,17 +4,19 @@
 
 ## 当前工作
 
+**推进方式（2026-10-02）：** 按用户要求启用[按改动范围验证](./project-governance.md#51-按改动范围验证2026-10-02起生效)：默认增量构建和定向测试，未变实现复用已审证据，普通批次一轮合并审查，全量仅在明确风险触发时运行。
+
 **开发环境（2026-10-01）：** [JEI 加载整改](./superpowers/plans/2026-10-01-dev-jei-01a.md) 已同步三个开发客户端，用户确认界面出现；随后铅锡复测清单中的配方/用途查询也获确认。该证据只覆盖实际测试范围，不代表未来配方已验收。
 
-**本轮执行：** 三矿、铅锡和粉末制钢及对应素材均已验收并合入main，普通钢材名称为钢粉、钢锭、钢板，见[材料03最终验收](./reviews/2026-10-01/material-03b/README.md)。材料04锡条、两种传感器及5项SVG素材已通过[完整客户端清单](./reviews/2026-10-01/material-04/CLIENT-CHECKLIST.md)并合入main；[收尾验收](./reviews/2026-10-01/material-04/ACCEPTANCE.md)分别记录人工确认与主工程复验。材料05石英粉、耐火砖、重型轴承及4项SVG已完成候选自动检查和独立审查，现等待[完整手测](./reviews/2026-10-02/material-05/CLIENT-CHECKLIST.md)；设备运行合同后续另列，水洗副产物暂缓。
+**本轮执行：** 三矿、铅锡和粉末制钢及对应素材均已验收并合入main，普通钢材名称为钢粉、钢锭、钢板，见[材料03最终验收](./reviews/2026-10-01/material-03b/README.md)。材料04锡条、两种传感器及5项SVG素材已通过[完整客户端清单](./reviews/2026-10-01/material-04/CLIENT-CHECKLIST.md)并合入main；[收尾验收](./reviews/2026-10-01/material-04/ACCEPTANCE.md)分别记录人工确认与主工程复验。材料05石英粉、耐火砖、重型轴承及4项SVG已[完整手测通过并合入main](./reviews/2026-10-02/material-05/ACCEPTANCE.md)；设备运行合同后续另列，水洗副产物暂缓。
 
-**已确认反馈（2026-10-01）：** 三矿、铅锡、钢材及锡条与传感器的各批人工门均已解除；不等于设备、燃料、冷却剂和发电链已实现。各批客户端清单保留实际人工范围。
+**已确认反馈（2026-10-02）：** 三矿、铅锡、钢材、锡条与传感器，以及石英粉、耐火砖与重型轴承的各批人工门均已解除；不等于设备、燃料、冷却剂和发电链已实现。各批客户端清单保留实际人工范围。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |
-| [材料05：石英粉、耐火砖与重型轴承实施](./superpowers/plans/2026-10-02-ext-a-material-05.md) | 候选自动检查及终审通过，等待客户端；[交接与证据](./reviews/2026-10-02/material-05/README.md)，主工程人工通过前不整合 |
+| [材料05：石英粉、耐火砖与重型轴承实施](./superpowers/plans/2026-10-02-ext-a-material-05.md) | 完整人工清单通过，已合入main；[最终验收](./reviews/2026-10-02/material-05/ACCEPTANCE.md)，下一步设备合同 |
 | [青金石粉 01A](./superpowers/plans/2026-09-24-ext-a-material-01a.md) | 未合并候选：GameTest、纹理整改/评审和客户端验收仍待完成 |
 | [首套生产线成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) | 已批准试验配比与未批准候选分开记录；不是完整配方冻结表 |
 | [损伤倍率专项](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) | 游戏端 02A 已完成；模拟器 02B 仍待离线浏览器验收，未合并 |

@@ -1,6 +1,6 @@
 # 材料05与素材07：石英粉、耐火砖和重型轴承
 
-**状态：候选自动检查及独立审查通过，等待客户端人工验收。** 用户于2026-10-02确认本批参数；功能与4项SVG在同级候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition` / `codex/ore-acquisition`实施，派发基线`53f4ebd`。主工程功能仍为材料04，人工通过前不合并材料05。已按用户授权暂停自动推进。
+**状态（2026-10-02）：完整人工验收通过，已合入main。** 用户确认本批清单全部手测通过；PM已将候选`aabe974`快进主工程，并按用户新的精简验证要求完成增量assemble及制品核对，见[最终验收](./ACCEPTANCE.md)。下文保留派发基线`53f4ebd`之后的候选阶段证据，不冒充合入后新测试；同级工作树保留。
 
 ## 本批内容
 
@@ -40,10 +40,10 @@
 - [合法编辑RED](./art/update-regression-red.json)、[修复GREEN及还原](./art/update-regression.json)、[限定修复差异](./art/art-fix1-review.diff)。
 - [build快照缺失RED](./art/snapshot-resolution-red.json)、[归档输入GREEN](./art/snapshot-resolution-green.json)、[验证器最终修复差异](./art/final-fix-review.diff)。
 - 四图原尺寸及明暗底预览：[石英粉](./art/quartz_dust-comparison.png)、[耐火砖](./art/refractory_brick-comparison.png)、[重型轴承](./art/heavy_bearing-comparison.png)、[半成品](./art/incomplete_heavy_bearing-comparison.png)。
-- [客户端完整验收清单](./CLIENT-CHECKLIST.md)：现可从同级候选启动；只测试部分时明确未测项。
+- [客户端完整验收清单](./CLIENT-CHECKLIST.md)：用户已确认全部通过；现在可从主工程启动。
 
 最终JAR SHA-256：`8D5BB2559370A47CB5DD9AE087DB20826E5BCB3C9FA54727DB725B54D37DB6E4`。精简包SHA-256：`C3A11ACFC573A72F165FBD6EAB6DB334E2180B766A42CBC9658081470D88CEE1`。主工程原`.vscode/launch.json`保持`65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07`，不纳入本批提交。
 
-## 人工门
+## 人工验收
 
-此处尚未记录任何材料05人工通过。交接时核对磨石/粉碎轮、加热与耗料、轴承装配、中断恢复、半成品保存重进、JEI/双语名称及4项外观。自动组件序列化、离线PNG检查和服务端GameTest分别保留证据，不能代替客户端结果。
+用户已确认磨石/粉碎轮、加热与耗料、轴承装配、中断恢复、半成品保存重进、JEI/双语名称及4项外观全部通过，人工门解除。该证据与自动组件序列化、离线PNG及服务端GameTest分别记录；后续设备的新玩法合同仍需明确。
