@@ -1,0 +1,10 @@
+{
+  "block/compound_coolant_flow.png": "ff5fc3fe7a385cb77343c81d191ffec7ca4801c1003c250e2d27658331f48adf",
+  "block/compound_coolant_still.png": "de30924110d0ec43e801151e94369db6a39d5fee08db889155c991b2116d3bc9",
+  "block/hot_compound_coolant_flow.png": "44aee2d725d6baa6c4a60232aad0d87549fb61a086b064d0ccbc99b7ea5f29f6",
+  "block/hot_compound_coolant_still.png": "7456bf7510e47f104b9481eed3468ab0de1454a500c437d9af7b8541b468f9ea",
+  "fluid/compound_coolant_flow.png": "ff5fc3fe7a385cb77343c81d191ffec7ca4801c1003c250e2d27658331f48adf",
+  "fluid/compound_coolant_still.png": "de30924110d0ec43e801151e94369db6a39d5fee08db889155c991b2116d3bc9",
+  "fluid/hot_compound_coolant_flow.png": "44aee2d725d6baa6c4a60232aad0d87549fb61a086b064d0ccbc99b7ea5f29f6",
+  "fluid/hot_compound_coolant_still.png": "7456bf7510e47f104b9481eed3468ab0de1454a500c437d9af7b8541b468f9ea"
+}

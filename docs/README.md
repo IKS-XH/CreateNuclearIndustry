@@ -6,14 +6,14 @@
 
 **开发环境（2026-10-01）：** [JEI 加载整改](./superpowers/plans/2026-10-01-dev-jei-01a.md) 已同步三个开发客户端，用户确认界面出现；随后铅锡复测清单中的配方/用途查询也获确认。该证据只覆盖实际测试范围，不代表未来配方已验收。
 
-**本轮执行：** 三矿、铅锡和粉末制钢及对应素材均已验收并合入main，普通钢材名称为钢粉、钢锭、钢板。材料03收尾已修复旧遥测测试的调度重入，155项required断言全过，候选与main各新跑265项JUnit/build通过；保存退出停滞单列，见[最终验收](./reviews/2026-10-01/material-03b/README.md)。水洗副产物暂不处理，接下来整理基础零件参数，未经确认不派发实现。
+**本轮执行：** 三矿、铅锡和粉末制钢及对应素材均已验收并合入main，普通钢材名称为钢粉、钢锭、钢板，见[材料03最终验收](./reviews/2026-10-01/material-03b/README.md)。材料04锡条、两种传感器及5项SVG素材的候选已完成自动验证和独立审查，停在[客户端人工门](./reviews/2026-10-01/material-04/CLIENT-CHECKLIST.md)：265项JUnit/build通过、167项required断言全过，GameTest保存退出停滞单列，功能尚未合入main。水洗副产物暂缓；用户反馈前不推进下一批。
 
 **已确认反馈（2026-10-01）：** 三矿、铅锡和钢材的各批人工门均已解除；不等于设备、燃料、冷却剂和发电链已实现。[完整制钢客户端清单](./reviews/2026-10-01/material-03-client.md)保留实际人工范围。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
-| [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 参数已由用户确认；自动执行功能、SVG素材及审查，完成后停在客户端人工门 |
+| [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 同级候选待人工验收；[证据与启动说明](./reviews/2026-10-01/material-04/README.md)，自动推进已停在本批人工门 |
 | [青金石粉 01A](./superpowers/plans/2026-09-24-ext-a-material-01a.md) | 未合并候选：GameTest、纹理整改/评审和客户端验收仍待完成 |
 | [首套生产线成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) | 已批准试验配比与未批准候选分开记录；不是完整配方冻结表 |
 | [损伤倍率专项](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) | 游戏端 02A 已完成；模拟器 02B 仍待离线浏览器验收，未合并 |
