@@ -14,7 +14,7 @@
 | 铅锡基础加工02A / 板材03A / 金属粒04 | 全部人工门通过，已合入main | [收尾记录](./reviews/2026-10-01/material-02-acceptance.md)：直熔、水洗9粒、粒锭合拆、压板及新外观 |
 | 主线材料03 / 素材05：铁粉、碳粉、钢粉、钢锭与钢板 | 已验收并合入main，名称简称钢 | [最终验收](./reviews/2026-10-01/material-03b/README.md)：155项required断言全过，候选与main各新跑265项JUnit/build通过，264项资源和60图打包一致；保存退出停滞单列 |
 | 主线材料04 / 素材06：锡条、工业传感器、辐射传感器 | 完整人工清单通过，已合入main | [最终验收](./reviews/2026-10-01/material-04/ACCEPTANCE.md)：主工程新跑265JUnit/build通过、167required断言全过；保存退出停滞单列，候选与主工程证据分开保留 |
-| 主线材料05：石英粉、耐火砖、重型轴承 | 2026-10-02整理方案，待参数决策，未派发实现 | [候选方案](./superpowers/plans/2026-10-02-mainline-material-05-proposal.md)：先补烧结炉与离心机的直接材料缺项，设备运行合同另列 |
+| 主线材料05 / 素材07：石英粉、耐火砖、重型轴承 | 2026-10-02参数已确认，进入实施 | [任务卡](./superpowers/plans/2026-10-02-ext-a-material-05.md)：先补烧结炉与离心机的直接材料缺项及4项SVG，设备运行合同另列 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 下一阶段主线，尚未形成完整生存链 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
 | 热端、动力、具体事故与剩余 Ponder | 后续实施 | 先补接口探针、冻结对应合同；教学在具体事故验收后继续 |
