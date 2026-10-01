@@ -12,7 +12,7 @@
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 青金石粉 EXT-A-MATERIAL-01A | 候选未合并；P1 交接前置已满足 | [任务卡](./superpowers/plans/2026-09-24-ext-a-material-01a.md)：完整 GameTest、纹理整改/评审和客户端检查 |
 | 铅锡基础加工02A / 板材03A / 金属粒04 | 全部人工门通过，已合入main | [收尾记录](./reviews/2026-10-01/material-02-acceptance.md)：直熔、水洗9粒、粒锭合拆、压板及新外观 |
-| 主线材料03 / 素材05：铁粉、碳粉、钢粉、钢锭与钢板 | 人工清单全过，显示名简称钢；全量GameTest未完成 | [03A收尾](./superpowers/plans/2026-10-01-ext-a-material-03a.md)：中英文名称与维修提示打包核对通过，注册ID不变。此前265项JUnit/build、本批14项及真实重载通过；155项全量异常仍待定位，未合入main |
+| 主线材料03 / 素材05：铁粉、碳粉、钢粉、钢锭与钢板 | 人工清单全过，改名完成；正在定位剩余全量回归中断 | [03B执行卡](./superpowers/plans/2026-10-01-ext-a-material-03b.md)：先隔离复现再做最小测试整改，保留所有业务断言，通过后整合main。此前265项JUnit/build、本批14项及真实重载通过，尚无155项完成证据 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 下一阶段主线，尚未形成完整生存链 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
 | 热端、动力、具体事故与剩余 Ponder | 后续实施 | 先补接口探针、冻结对应合同；教学在具体事故验收后继续 |
