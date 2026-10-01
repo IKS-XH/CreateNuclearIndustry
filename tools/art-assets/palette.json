@@ -509,5 +509,48 @@
     "body": "#788E94",
     "light": "#A3B7B8",
     "glint": "#D1DFDA"
+  },
+  "tin_wire": {
+    "outline": "#354249",
+    "shadow": "#556875",
+    "side": "#8AA4B1",
+    "body": "#B9CED5",
+    "light": "#E2E9DE",
+    "glint": "#F2F1E6"
+  },
+  "industrial_sensor": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "side": "#5B7078",
+    "body": "#788E94",
+    "light": "#A3B7B8",
+    "glint": "#D1DFDA",
+    "screen": "#52A2AD"
+  },
+  "radiation_sensor": {
+    "outline": "#303441",
+    "shadow": "#464C5D",
+    "side": "#60687A",
+    "body": "#7E8798",
+    "light": "#A6AFBF",
+    "glint": "#CDD3DE",
+    "hazard": "#E6C24A"
+  },
+  "incomplete_industrial_sensor": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "side": "#5B7078",
+    "body": "#788E94",
+    "light": "#A3B7B8",
+    "glint": "#D1DFDA"
+  },
+  "incomplete_radiation_sensor": {
+    "outline": "#303441",
+    "shadow": "#464C5D",
+    "side": "#60687A",
+    "body": "#7E8798",
+    "light": "#A6AFBF",
+    "glint": "#CDD3DE",
+    "hazard": "#E6C24A"
   }
 }

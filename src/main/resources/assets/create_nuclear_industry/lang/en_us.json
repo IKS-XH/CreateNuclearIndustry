@@ -121,5 +121,10 @@
   "item.create_nuclear_industry.coal_dust": "Coal Dust",
   "item.create_nuclear_industry.charcoal_dust": "Charcoal Dust",
   "item.create_nuclear_industry.steel_dust": "Steel Dust",
-  "item.create_nuclear_industry.steel_ingot": "Steel Ingot"
+  "item.create_nuclear_industry.steel_ingot": "Steel Ingot",
+  "item.create_nuclear_industry.tin_wire": "Tin Wire",
+  "item.create_nuclear_industry.industrial_sensor": "Industrial Sensor",
+  "item.create_nuclear_industry.radiation_sensor": "Radiation Sensor",
+  "item.create_nuclear_industry.incomplete_industrial_sensor": "Incomplete Industrial Sensor",
+  "item.create_nuclear_industry.incomplete_radiation_sensor": "Incomplete Radiation Sensor"
 }

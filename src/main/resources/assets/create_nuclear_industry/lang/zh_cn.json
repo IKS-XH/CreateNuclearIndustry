@@ -121,5 +121,10 @@
   "item.create_nuclear_industry.coal_dust": "煤粉",
   "item.create_nuclear_industry.charcoal_dust": "木炭粉",
   "item.create_nuclear_industry.steel_dust": "钢粉",
-  "item.create_nuclear_industry.steel_ingot": "钢锭"
+  "item.create_nuclear_industry.steel_ingot": "钢锭",
+  "item.create_nuclear_industry.tin_wire": "锡条",
+  "item.create_nuclear_industry.industrial_sensor": "工业传感器",
+  "item.create_nuclear_industry.radiation_sensor": "辐射传感器",
+  "item.create_nuclear_industry.incomplete_industrial_sensor": "工业传感器半成品",
+  "item.create_nuclear_industry.incomplete_radiation_sensor": "辐射传感器半成品"
 }

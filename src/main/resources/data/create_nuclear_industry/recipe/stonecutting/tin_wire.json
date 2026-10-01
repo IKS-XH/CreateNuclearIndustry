@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {"tag": "c:ingots/tin"},
+  "result": {"id": "create_nuclear_industry:tin_wire", "count": 2}
+}

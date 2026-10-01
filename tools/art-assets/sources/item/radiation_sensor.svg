@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- 辐射传感器：铅灰仪表壳内嵌高对比三叶辐射标识，与工业传感器明显区分。 -->
+  <rect x="6" y="1" width="4" height="1" fill="#303441"/>
+  <rect x="5" y="2" width="1" height="1" fill="#303441"/>
+  <rect x="6" y="2" width="4" height="1" fill="#60687A"/>
+  <rect x="10" y="2" width="1" height="1" fill="#303441"/>
+  <rect x="3" y="3" width="10" height="1" fill="#303441"/>
+  <rect x="2" y="4" width="1" height="7" fill="#303441"/>
+  <rect x="3" y="4" width="2" height="1" fill="#CDD3DE"/>
+  <rect x="5" y="4" width="6" height="1" fill="#A6AFBF"/>
+  <rect x="11" y="4" width="2" height="1" fill="#60687A"/>
+  <rect x="13" y="4" width="1" height="7" fill="#303441"/>
+  <rect x="3" y="5" width="1" height="1" fill="#A6AFBF"/>
+  <rect x="4" y="5" width="8" height="4" fill="#E6C24A"/>
+  <rect x="3" y="6" width="1" height="1" fill="#7E8798"/>
+  <rect x="3" y="7" width="1" height="1" fill="#60687A"/>
+  <rect x="7" y="5" width="2" height="2" fill="#303441"/>
+  <rect x="6" y="7" width="4" height="1" fill="#303441"/>
+  <rect x="5" y="8" width="2" height="1" fill="#303441"/>
+  <rect x="9" y="8" width="2" height="1" fill="#303441"/>
+  <rect x="3" y="9" width="10" height="1" fill="#464C5D"/>
+  <rect x="3" y="10" width="10" height="1" fill="#464C5D"/>
+  <rect x="3" y="11" width="10" height="1" fill="#303441"/>
+  <rect x="5" y="12" width="2" height="1" fill="#303441"/>
+  <rect x="9" y="12" width="2" height="1" fill="#303441"/>
+  <rect x="5" y="13" width="2" height="1" fill="#60687A"/>
+  <rect x="9" y="13" width="2" height="1" fill="#60687A"/>
+</svg>

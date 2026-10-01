@@ -1,4 +1,4 @@
-"""离线核对历史贴图及EXT-ART-05制钢素材：原冷却剂保留、SVG像素、复现性和失败不写出。
+"""离线核对EXT-ART-06传感器素材：原冷却剂保留、SVG像素、复现性和失败不写出。
 
 只在显式执行本脚本时做临时坏输入实验，finally 原样恢复源稿/清单。
 不调用游戏、Gradle 或 Git 写操作；结果保存在本任务证据目录。
@@ -18,7 +18,7 @@ import pipeline
 from export import render_svg, read_palette, ROOT
 
 REPO=ROOT.parents[1]
-EVIDENCE=REPO/'build/reports/extension/EXT-ART-05'
+EVIDENCE=REPO/'build/reports/extension/EXT-ART-06'
 EVIDENCE.mkdir(parents=True,exist_ok=True)
 ENV=dict(os.environ,PYTHONIOENCODING='utf-8',PYTHONDONTWRITEBYTECODE='1')
 log=[]
@@ -51,14 +51,16 @@ entries,images,before,retained=pipeline.prepare();palette=read_palette()
 baseline=json.loads((ROOT/'baseline.json').read_text(encoding='utf-8'))
 assert {r['game'] for r in baseline['records']}==pipeline.GAME_FILES
 assert len(baseline['records'])==51
-assert len(entries)==61
-assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):56,(16,64):4}
+assert len(entries)==66
+assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):61,(16,64):4}
 actual_before={p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}
 plate_stage=pipeline.GAME_FILES|frozenset({'item/lead_plate.png','item/tin_plate.png'})
 nugget_stage=plate_stage|frozenset({'item/lead_nugget.png','item/tin_nugget.png'})
-assert actual_before in (pipeline.GAME_FILES,plate_stage,nugget_stage,pipeline.ALLOWED_GAME_FILES),'开工时游戏PNG必须是已知历史/素材阶段的完整白名单'
+previous_material_stage=nugget_stage
+steel_stage=previous_material_stage|frozenset({'item/iron_dust.png','item/coal_dust.png','item/charcoal_dust.png','item/steel_dust.png','item/steel_ingot.png'})
+assert actual_before in (pipeline.GAME_FILES,plate_stage,nugget_stage,steel_stage,pipeline.ALLOWED_GAME_FILES),'开工时游戏PNG必须是已知历史/素材阶段的完整白名单'
 pre_existing_hashes={name:digest(pipeline.GAME_ROOT/name) for name in actual_before}
-results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'historical_game_count':51,'pre_existing_game_count':len(pre_existing_hashes),'new_game_count':9,'current_batch_game_count':5,'final_game_count':60,'manifest_entry_count':61,'source_count':len({e['source'] for e in entries}),'records':[]}
+results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'historical_game_count':51,'pre_existing_game_count':len(pre_existing_hashes),'new_game_count':14,'current_batch_game_count':5,'final_game_count':65,'manifest_entry_count':66,'source_count':len({e['source'] for e in entries}),'records':[]}
 for e in entries:
     name=e['game'] or 'item/lapis_dust.png'
     if name in RETAINED_COOLANTS:
@@ -148,7 +150,7 @@ for mutation in ('extra_path','wrong_size','wrong_mapping','unauthorized_preserv
     finally:manifest.write_bytes(saved)
 results['cli_failure_no_writes']=['unsupported_svg','extra_path','wrong_size','wrong_mapping','unauthorized_preserve','missing_preserve']
 
-# 显式接入后逐条核对：旧51张图保持当前字节，九项无历史基线路径与导出候选一致。
+# 显式接入后逐条核对：开工60张图保持原字节，十四项无历史基线路径与导出候选一致。
 historical_before={name:digest(pipeline.GAME_ROOT/name) for name in pipeline.GAME_FILES}
 run('--install')
 assert {p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}==pipeline.ALLOWED_GAME_FILES

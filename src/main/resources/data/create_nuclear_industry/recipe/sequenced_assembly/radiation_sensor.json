@@ -1,0 +1,12 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {"tag": "c:plates/lead"},
+  "transitional_item": {"id": "create_nuclear_industry:incomplete_radiation_sensor"},
+  "sequence": [
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_radiation_sensor"}, {"item": "create_nuclear_industry:industrial_sensor"}], "results": [{"id": "create_nuclear_industry:incomplete_radiation_sensor"}]},
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_radiation_sensor"}, {"item": "create:electron_tube"}], "results": [{"id": "create_nuclear_industry:incomplete_radiation_sensor"}]},
+    {"type": "create:pressing", "ingredients": [{"item": "create_nuclear_industry:incomplete_radiation_sensor"}], "results": [{"id": "create_nuclear_industry:incomplete_radiation_sensor"}]}
+  ],
+  "results": [{"id": "create_nuclear_industry:radiation_sensor"}],
+  "loops": 1
+}

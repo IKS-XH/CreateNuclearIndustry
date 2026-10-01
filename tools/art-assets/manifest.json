@@ -730,6 +730,66 @@
       "use": "EXT-ART-05 新增制钢合金钢锭路径；无旧图基线"
     },
     {
+      "game": "item/tin_wire.png",
+      "source": "item/tin_wire.svg",
+      "palette": "tin_wire",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-06 新增tin_wire素材；无旧图基线"
+    },
+    {
+      "game": "item/industrial_sensor.png",
+      "source": "item/industrial_sensor.svg",
+      "palette": "industrial_sensor",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-06 新增industrial_sensor素材；无旧图基线"
+    },
+    {
+      "game": "item/radiation_sensor.png",
+      "source": "item/radiation_sensor.svg",
+      "palette": "radiation_sensor",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-06 新增radiation_sensor素材；无旧图基线"
+    },
+    {
+      "game": "item/incomplete_industrial_sensor.png",
+      "source": "item/incomplete_industrial_sensor.svg",
+      "palette": "incomplete_industrial_sensor",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-06 新增incomplete_industrial_sensor素材；无旧图基线"
+    },
+    {
+      "game": "item/incomplete_radiation_sensor.png",
+      "source": "item/incomplete_radiation_sensor.svg",
+      "palette": "incomplete_radiation_sensor",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-06 新增incomplete_radiation_sensor素材；无旧图基线"
+    },
+    {
       "game": null,
       "source": "item/lapis_dust.svg",
       "palette": "lapis_dust",

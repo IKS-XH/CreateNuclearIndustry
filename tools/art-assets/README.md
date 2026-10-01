@@ -1,6 +1,6 @@
 # 原创像素 SVG 美术管线
 
-EXT-ART-02 为历史51张游戏PNG建立可编辑SVG与确定性导出；EXT-ART-03新增铅板、锡板路径；EXT-ART-04新增铅粒、锡粒路径；EXT-ART-05再新增铁粉、煤粉、木炭粉、合金钢粉和合金钢锭五条路径。历史51项路径和基线规则保持不变。用户于2026-09-29在EXT-ART-02A中明确撤回两种冷却剂重绘：8个冷却剂路径逐字节恢复原PNG，其余43张保持重绘。另保留已批准的青金石粉工具候选，不新增该候选的游戏注册。此前批准的青金石粉、铅锭、铅矿石、合金钢板四张图形保持不变。
+EXT-ART-02 为历史51张游戏PNG建立可编辑SVG与确定性导出；EXT-ART-03新增铅板、锡板路径；EXT-ART-04新增铅粒、锡粒路径；EXT-ART-05新增铁粉、煤粉、木炭粉、钢粉和钢锭五条路径；EXT-ART-06新增锡条、工业传感器、辐射传感器及两种半成品。历史51项路径和基线规则保持不变。用户于2026-09-29在EXT-ART-02A中明确撤回两种冷却剂重绘：8个冷却剂路径逐字节恢复原PNG，其余43张保持重绘。另保留已批准的青金石粉工具候选，不新增该候选的游戏注册。此前批准的青金石粉、铅锭、铅矿石、钢板四张图形保持不变。
 
 ## 运行
 
@@ -10,7 +10,7 @@ EXT-ART-02 为历史51张游戏PNG建立可编辑SVG与确定性导出；EXT-ART
 # 默认仅更新 generated/、previews/、preview.png 和 preview.html。
 & 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/export.py
 
-# 显式接入原51张既有游戏PNG，并添加板材、金属粒和五种制钢素材。
+# 显式接入原51张既有游戏PNG及14张新增材料、传感器素材。
 & 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/export.py --install
 
 # 自动核对并显式接入，包含短暂坏输入试验及finally恢复；不要与编辑源稿并行。
@@ -21,13 +21,13 @@ EXT-ART-02 为历史51张游戏PNG建立可编辑SVG与确定性导出；EXT-ART
 
 ## 源、清单与输出
 
-- `sources/`：57张唯一SVG，其中4张冷却剂SVG仅存档、不再安装；53张用于43张历史游戏图重绘、两张板材、两种金属粒、五种制钢物品和青金石粉候选。首次设计脚本仅在交付证据中记录，不作为正式导出步骤。
+- `sources/`：62张唯一SVG，其中4张冷却剂SVG仅存档、不再安装；58张用于43张历史游戏图重绘、两张板材、两种金属粒、五种制钢物品、本批五项素材和青金石粉候选。首次设计脚本仅在交付证据中记录，不作为正式导出步骤。
 - `palette.json`：每张源稿有限色板，实际 4–11 色；导出允许每张最多16种实色。
-- `manifest.json`：61条显式记录，列出游戏相对路径、SVG、色板、尺寸、透明合同、分组与基线用途。60条对应游戏路径（历史51条加9条无历史基线的材料路径），lapis条目的game为null；仅8项冷却剂必须声明 `preserve: baseline-original`，其他项禁止此字段。
-- `pipeline.py`：独立硬编码原51路径白名单，并单独列出铅锡板材、金属粒和五项制钢素材；不由manifest任意扩展写集。严格校验映射、尺寸后才准备输出；旧 `baseline/` 与 `baseline.json` 仍恰为51条。
-- `generated/`：61个导出候选；56个16×16游戏图、4个16×64游戏flow、1个16×16工具候选。无历史基线的新增路径在预览中标为NEW，不生成历史对照图或基线记录。
+- `manifest.json`：66条显式记录，列出游戏相对路径、SVG、色板、尺寸、透明合同、分组与基线用途。65条对应游戏路径（历史51条加14条无历史基线的材料路径），lapis条目的game为null；仅8项冷却剂必须声明 `preserve: baseline-original`，其他项禁止此字段。
+- `pipeline.py`：独立硬编码原51路径白名单，并单独列出14项新增材料和传感器素材；不由manifest任意扩展写集。严格校验映射、尺寸后才准备输出；旧 `baseline/` 与 `baseline.json` 仍恰为51条。
+- `generated/`：66个导出候选；61个16×16游戏图、4个16×64游戏flow、1个16×16工具候选。无历史基线的新增路径在预览中标为NEW，不生成历史对照图或基线记录。
 - `baseline/` 与 `baseline.json`：51张开工旧图及其路径、尺寸、哈希、引用，保持不变。除用户批准的8项冷却剂原字节保留外，只用于 before/after；不从旧纹理采样绘制新图。
-- `preview.png`：全量总览；`preview.html`：离线分组索引；`previews/`：9页前后对照，均含原尺寸、最近邻放大、明暗底与2×2平铺。文字使用 Pillow 内置字体，无外部字体文件。
+- `preview.png`：全量总览；`preview.html`：离线分组索引；`previews/`：10页前后对照，均含原尺寸、最近邻放大、明暗底与2×2平铺。文字使用 Pillow 内置字体，无外部字体文件。
 
 block/fluid 八个冷却剂路径分别读取各自 baseline PNG，以管线中冻结的 SHA-256 验证后原样输出，不重编码、不套用新色板。这是固定八项例外，不能通过清单指定任意位图。旧 SVG 仍经过严格语法校验，但不参与最终纹理生成。flow 保持完整16×64静态画布及原路径；本仓库没有相关 mcmeta，本工具不添加动画元数据或把长画布裁成16×16。运行时透明度、UV与流体渲染仍由原游戏代码处理。
 
@@ -39,7 +39,9 @@ block/fluid 八个冷却剂路径分别读取各自 baseline PNG，以管线中�
 
 ## 验证和当前边界
 
-EXT-ART-02A 的历史验证覆盖51条既有路径/尺寸、冷却剂原图字节保留、SVG像素一致性、四样稿回归、非法SVG与失败不写保护，以及重复导出和接入哈希。其历史证据保存在 `build/reports/extension/EXT-ART-02A/verification.json` 和 `build/reports/extension/EXT-ART-02A/commands.json`。EXT-ART-03、04、05逐批增加板材、金属粒及制钢素材路径，均保留51项历史基线，新增纹理不伪造旧图记录。EXT-ART-04证据保存在 `build/reports/extension/EXT-ART-04/verification.json` 和 `build/reports/extension/EXT-ART-04/commands.json`；EXT-ART-05本批证据保存在 `build/reports/extension/EXT-ART-05/verification.json` 和 `build/reports/extension/EXT-ART-05/commands.json`，另记录开工时55张游戏PNG哈希。用户于2026-10-01确认铅锡复测清单全部通过，方正板材和金属粒已完成客户端外观验收并合入main，见 `docs/reviews/2026-10-01/material-02-acceptance.md`。制钢素材需另行完成客户端验收。冷却剂预览的BEFORE为重绘前原图，RESTORED为本次恢复结果；旧02A/03/03A报告保留各自历史语境。
+EXT-ART-02A 的历史验证覆盖51条既有路径/尺寸、冷却剂原图字节保留、SVG像素一致性、四样稿回归、非法SVG与失败不写保护，以及重复导出和接入哈希。其历史证据保存在 `build/reports/extension/EXT-ART-02A/verification.json` 和 `build/reports/extension/EXT-ART-02A/commands.json`。EXT-ART-03、04、05逐批增加板材、金属粒及制钢素材路径，均保留51项历史基线，新增纹理不伪造旧图记录。用户于2026-10-01确认铅锡和制钢完整手测通过，相应素材已验收并合入main，见 `docs/reviews/2026-10-01/material-02-acceptance.md` 和 `docs/reviews/2026-10-01/material-03b/README.md`。冷却剂预览的BEFORE为重绘前原图，RESTORED为恢复结果；旧报告保留各自历史语境。
+
+EXT-ART-06本批证据位于 `build/reports/extension/EXT-ART-06/`：`verification.json` 和 `commands.json`记录66条清单/65张游戏图，导出与安装各两次一致、30类SVG负例拒绝和6类CLI失败不写；`baseline-60-game-png-sha256.json`记录开工60图并用于保留核对。PM实际查看五图原尺寸、明暗底放大对照，锡条调整为易与锡锭区分的细长方条。本批新外观仍待客户端验收，不能以离线检查代替。
 
 EXT-ART-02A、EXT-ART-03与EXT-ART-03A的历史报告分别记录了当时查看的预览范围及审查结果；EXT-ART-04实际查看铅粒、锡粒与铅锡锭、粗矿、板材的放大对照图。EXT-ART-05实际查看`items-3.png`中的五种新物品（原尺寸、明暗底、2×平铺）和报告目录中的五物品/钢板放大对照预览；钢锭采用锡锭式平顶厚锭轮廓。PNG查看不是Minecraft客户端验收。重复周期、游戏环境光、物品手持表现及流体UV最终需在客户端判断。跨Pillow版本的编码/预览字体字节不保证相同。
 

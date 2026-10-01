@@ -1,0 +1,13 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {"tag": "c:plates/iron"},
+  "transitional_item": {"id": "create_nuclear_industry:incomplete_industrial_sensor"},
+  "sequence": [
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_industrial_sensor"}, {"tag": "c:wires/tin"}], "results": [{"id": "create_nuclear_industry:incomplete_industrial_sensor"}]},
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_industrial_sensor"}, {"item": "minecraft:redstone"}], "results": [{"id": "create_nuclear_industry:incomplete_industrial_sensor"}]},
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_industrial_sensor"}, {"item": "create:electron_tube"}], "results": [{"id": "create_nuclear_industry:incomplete_industrial_sensor"}]},
+    {"type": "create:pressing", "ingredients": [{"item": "create_nuclear_industry:incomplete_industrial_sensor"}], "results": [{"id": "create_nuclear_industry:incomplete_industrial_sensor"}]}
+  ],
+  "results": [{"id": "create_nuclear_industry:industrial_sensor"}],
+  "loops": 1
+}
