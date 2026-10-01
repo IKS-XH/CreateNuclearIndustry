@@ -1,0 +1,38 @@
+[
+  {
+    "Root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry",
+    "Run": "client",
+    "JeiCount": 1,
+    "SHA256": "8AAF547432F1B4958239B036356B910692FE40F858C3073D996F56BBF7C99826"
+  },
+  {
+    "Root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry",
+    "Run": "clientA",
+    "JeiCount": 1,
+    "SHA256": "8AAF547432F1B4958239B036356B910692FE40F858C3073D996F56BBF7C99826"
+  },
+  {
+    "Root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry",
+    "Run": "clientB",
+    "JeiCount": 1,
+    "SHA256": "8AAF547432F1B4958239B036356B910692FE40F858C3073D996F56BBF7C99826"
+  },
+  {
+    "Root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition",
+    "Run": "client",
+    "JeiCount": 1,
+    "SHA256": "8AAF547432F1B4958239B036356B910692FE40F858C3073D996F56BBF7C99826"
+  },
+  {
+    "Root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition",
+    "Run": "clientA",
+    "JeiCount": 1,
+    "SHA256": "8AAF547432F1B4958239B036356B910692FE40F858C3073D996F56BBF7C99826"
+  },
+  {
+    "Root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition",
+    "Run": "clientB",
+    "JeiCount": 1,
+    "SHA256": "8AAF547432F1B4958239B036356B910692FE40F858C3073D996F56BBF7C99826"
+  }
+]

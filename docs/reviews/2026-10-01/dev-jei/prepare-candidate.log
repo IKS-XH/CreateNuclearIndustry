@@ -1,0 +1,11 @@
+> Task :downloadAssets UP-TO-DATE
+> Task :writeClientLegacyClasspath
+> Task :prepareClientRun
+> Task :writeClientALegacyClasspath
+> Task :prepareClientARun
+> Task :writeClientBLegacyClasspath
+> Task :prepareClientBRun
+
+BUILD SUCCESSFUL in 1s
+7 actionable tasks: 6 executed, 1 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

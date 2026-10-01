@@ -69,7 +69,11 @@ Linux / macOS：
 ./gradlew runClient
 ```
 
-构建成功后，开发 JAR 位于 `build/libs/`。常用验证命令：
+构建成功后，开发 JAR 位于 `build/libs/`。
+
+开发客户端 `runClient`、`runClientA`、`runClientB` 自动加载 JEI，版本固定在 `gradle.properties` 的 `jei_version`。JEI 仅用于开发时查看物品和配方，不进入服务端/GameTest/JUnit、发布依赖或模组 JAR。配置变更后需重启开发客户端。当前三矿与美术验收仍在 [整合候选工作树](docs/reviews/2026-09-29/implementation/README.md) 中进行。
+
+常用验证命令：
 
 ```powershell
 .\gradlew.bat test --rerun-tasks --max-workers=1

@@ -14,6 +14,8 @@
 
 ## 2. 获取候选与启动
 
+**2026-10-01 开发环境更新：** 当前候选分支 HEAD 为 `9c4fb39`，在玩法/资源候选 `b4d78d5` 上仅增加 JEI `19.27.0.340` 的开发客户端依赖。主工程也有同样配置，`runClient`、`runClientA`、`runClientB` 自动加载；已运行的游戏需重启。JEI 不内嵌到下方测试 JAR，玩法及冷却剂人工验收状态不变。详见 [DEV-JEI-01](../../../superpowers/plans/2026-10-01-dev-jei-01.md)。
+
 [下载/打开冷却剂恢复后的测试 JAR](../../../../build/reports/extension/client-candidate-2026-09-29/create_nuclear_industry-0.1.0-ore-svg-coolant-restored.jar)。它是内部版本仍为 `0.1.0` 的测试候选；在测试客户端 mods 目录替换本模组旧 JAR，同一模组保留一份，NeoForge/Create 等依赖维持本页列出的锁定版本。
 
 **最新资源修订 EXT-ART-02A：** 两种冷却剂的 8 张 PNG 逐字节恢复到重绘前版本，其他 43 张游戏 PNG 保持 `c92e762` 的新素材。`processResources jar prepareClientRun` 退出 0；JAR 中全部 51 张贴图与当前候选逐字节一致。当前 JAR SHA-256 为 `4ba7b0aa2a25c30d1fddc29d7e4ea2f50b66101c6ffca32a368a8e685efc65f5`。本次未改 Java/数据/构建，不重复运行全量游戏逻辑测试；下文 `c92e762` 和旧 JAR 哈希保留上一轮自动验证语境。

@@ -1,0 +1,49 @@
+{
+  "JeiConfigurations": [
+    "clientAAdditionalRuntimeClasspath",
+    "clientALegacyClasspath",
+    "clientAdditionalRuntimeClasspath",
+    "clientBAdditionalRuntimeClasspath",
+    "clientBLegacyClasspath",
+    "clientLegacyClasspath"
+  ],
+  "LaunchChecks": [
+    {
+      "Run": "client",
+      "JeiCount": 1,
+      "JeiPaths": [
+        "C:\\Users\\IKSXH\\.gradle\\caches\\modules-2\\files-2.1\\mezz.jei\\jei-1.21.1-neoforge\\19.27.0.340\\27d0d85e7e32e926fc3664ab6815df5cdabb7941\\jei-1.21.1-neoforge-19.27.0.340.jar"
+      ]
+    },
+    {
+      "Run": "clientA",
+      "JeiCount": 1,
+      "JeiPaths": [
+        "C:\\Users\\IKSXH\\.gradle\\caches\\modules-2\\files-2.1\\mezz.jei\\jei-1.21.1-neoforge\\19.27.0.340\\27d0d85e7e32e926fc3664ab6815df5cdabb7941\\jei-1.21.1-neoforge-19.27.0.340.jar"
+      ]
+    },
+    {
+      "Run": "clientB",
+      "JeiCount": 1,
+      "JeiPaths": [
+        "C:\\Users\\IKSXH\\.gradle\\caches\\modules-2\\files-2.1\\mezz.jei\\jei-1.21.1-neoforge\\19.27.0.340\\27d0d85e7e32e926fc3664ab6815df5cdabb7941\\jei-1.21.1-neoforge-19.27.0.340.jar"
+      ]
+    },
+    {
+      "Run": "server",
+      "JeiCount": 0,
+      "JeiPaths": []
+    },
+    {
+      "Run": "gameTestServer",
+      "JeiCount": 0,
+      "JeiPaths": []
+    }
+  ],
+  "JeiSHA256": "8AAF547432F1B4958239B036356B910692FE40F858C3073D996F56BBF7C99826",
+  "ProjectJarSHA256": "CF93E36E4B0F874F58F340F5E07E307B57BED0EDBD093587F137511E7F811E62",
+  "EmbeddedJeiEntries": 0,
+  "ProjectMetadataContainsJei": false,
+  "VscodeSHA256": "65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07",
+  "ClientActuallyStarted": false
+}
