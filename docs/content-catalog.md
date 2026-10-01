@@ -76,6 +76,7 @@
 | `P1` | `maintenance_seal` | 维护密封件 | 停机维修泄漏部件 |
 | `P1` | `heavy_bearing` | 重型轴承 | 汽轮机、泵和离心机 |
 | `P1` | `coal_dust`、`charcoal_dust`、`quartz_dust`、`glass_dust` | 煤粉、木炭粉、石英粉、玻璃碎料 | 钢材、陶瓷和灌封材料 |
+| `P1` | `iron_dust`、`steel_dust` | 铁粉、合金钢粉 | 粉末制钢中间材料；分别加入 `c:dusts/iron`、`c:dusts/steel` 及父标签 `c:dusts` |
 | `P1` | `lapis_dust` | 青金石粉 | 首发扩展冷却剂中间材料；加入 `c:dusts/lapis` 并汇入 `c:dusts`，配方接受同标签等价材料 |
 | `P1` | `obsidian_dust` | 黑曜石粉 | 首发扩展的基础材料阶段获取，先于耐热玻璃和相关设备制备 |
 | `P1` | `industrial_ceramic`、`refractory_brick`、`insulation_plate` | 工业陶瓷、耐火砖、隔热板 | 锅炉和高温结构 |
@@ -90,6 +91,8 @@
 用户于 2026-09-23 确认先完成基础材料、设备与燃料生产，再完成机组运行闭环和乏燃料基础封存，复杂再处理后置。上述两种材料的 `P1` 标记表示后续首发扩展，不加入当前固定实验堆核心切片；本次只调整阶段，不表示已经注册或实现，不提前引入 P3 辐射、污染或高放处理系统。
 
 合金钢板的正式注册 ID 冻结为 `steel_plate`，显示名为“合金钢板”，并加入对应的 `c:plates/steel` 通用标签。`alloy_steel_plate` 是早期需求记录中使用过的描述性旧名，不注册为物品、别名或兼容转发 ID；燃料列和控制棒列维修统一消耗 `steel_plate`。
+
+用户于2026-10-01将制钢改为铁锭经粉碎轮制铁粉，4铁粉+1煤粉或木炭粉动力搅拌成5合金钢粉，再熔炼成合金钢锭。`iron_dust` 不复用 `create:crushed_raw_iron`，两者分别代表金属粉和粉碎粗矿；`steel_dust` 是熔炼前的独立中间物。原有 `steel_plate` 保持身份与维修语义，本批不新增钢材逆向拆粉路线。上述登记是已确认需求，尚未注册或接入游戏；实施与剩余参数见 [材料03方案](./superpowers/plans/2026-10-01-mainline-material-03-proposal.md)。
 
 ### 3.3 燃料、乏燃料与废物
 
