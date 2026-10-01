@@ -7,7 +7,7 @@
 
 已完成的过程记录见 [P1 历史计划](../../archive/2026-08-18-agent-developer-execution-plan.md)、[依赖审计](../../archive/EXT-A-DEPS-01.md)及 [D-03d 工序讨论归档](../../archive/2026-09-24-production-process-proposal.md)。[成本草案](./2026-09-24-first-production-cost-draft.md)继续维护已批准试验值与待评审候选。
 
-**本轮派发入口（2026-09-29）：** [资源、生产与 SVG 美术启动计划](./2026-09-29-resources-production-art-start-plan.md)。样稿及最小开工决策包已完成；用户已批准三矿推荐方案与现有全部贴图重绘，当前卡为 [EXT-A-ORE-01](./2026-09-29-ext-a-ore-01.md) 和 [EXT-ART-02](./2026-09-29-ext-art-02.md)。
+**本轮派发入口（2026-09-29）：** [资源、生产与 SVG 美术启动计划](./2026-09-29-resources-production-art-start-plan.md)。样稿及最小开工决策包已完成；用户已批准三矿推荐方案与现有全部贴图重绘，两张卡 [EXT-A-ORE-01](./2026-09-29-ext-a-ore-01.md) 和 [EXT-ART-02](./2026-09-29-ext-art-02.md) 已交付整合候选，当前停止在 [客户端人工验收](../../reviews/2026-09-29/implementation/README.md)。
 
 ## 1. 当前门槛与证据
 

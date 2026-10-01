@@ -1,0 +1,21 @@
+> Task :downloadAssets UP-TO-DATE
+> Task :writeClientLegacyClasspath
+> Task :prepareClientRun
+> Task :writeClientALegacyClasspath
+> Task :prepareClientARun
+> Task :writeClientBLegacyClasspath
+> Task :prepareClientBRun
+> Task :writeServerLegacyClasspath UP-TO-DATE
+> Task :prepareServerRun
+> Task :writeGameTestServerLegacyClasspath UP-TO-DATE
+> Task :prepareGameTestServerRun
+> Task :createMinecraftArtifacts UP-TO-DATE
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :jarJar NO-SOURCE
+> Task :jar
+
+BUILD SUCCESSFUL in 9s
+15 actionable tasks: 9 executed, 6 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

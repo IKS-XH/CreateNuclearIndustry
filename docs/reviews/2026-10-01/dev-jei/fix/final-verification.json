@@ -1,0 +1,37 @@
+{
+  "JeiConfigurations": [
+    "developmentJei"
+  ],
+  "RunChecks": [
+    {
+      "Run": "runClient",
+      "ActualJeiCount": 1,
+      "LegacyJeiCount": 0
+    },
+    {
+      "Run": "runClientA",
+      "ActualJeiCount": 1,
+      "LegacyJeiCount": 0
+    },
+    {
+      "Run": "runClientB",
+      "ActualJeiCount": 1,
+      "LegacyJeiCount": 0
+    },
+    {
+      "Run": "runServer",
+      "ActualJeiCount": 0,
+      "LegacyJeiCount": 0
+    },
+    {
+      "Run": "runGameTestServer",
+      "ActualJeiCount": 0,
+      "LegacyJeiCount": 0
+    }
+  ],
+  "ProjectJarSHA256": "CF93E36E4B0F874F58F340F5E07E307B57BED0EDBD093587F137511E7F811E62",
+  "VscodeSHA256": "65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07",
+  "SmokePID": 25660,
+  "SmokeGradleExitCode": 0,
+  "WorldEntered": false
+}

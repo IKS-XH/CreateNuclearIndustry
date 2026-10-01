@@ -1,0 +1,6 @@
+{
+  "Source": "E:\\MyMC\\NewMod\\Create_NuclearIndustry\\run\\mods\\[JEI物品管理器] jei-1.21.1-neoforge-19.27.0.336.jar",
+  "Backup": "E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\reports\\development\\DEV-JEI-01A\\legacy-mod-backup\\[JEI物品管理器] jei-1.21.1-neoforge-19.27.0.336.jar",
+  "SHA256": "2B6D84DF11AB2BB94A75BE8BAC6790BFBB2C0112A1622CD5F5F234468A196721",
+  "Reason": "Avoid duplicate JEI mod after fixing managed development classpath"
+}

@@ -1,0 +1,17 @@
+锁定数据与引用；这是静态 JAR 证据，不是本模组配方或游戏内验证。
+Minecraft 1.21.1 client JAR SHA-256: 499f6897d1837516680f3114072d8106e11c9adcd933fe5cf051b551089b0c99
+Create 6.0.10-280 slim JAR SHA-256: f0652bee27460f2d26a748f537cb5d687981441378d3a526d17ffaab5a1072bb
+
+Minecraft JAR:
+- data/minecraft/recipe/iron_ingot_from_smelting_raw_iron.json: raw_iron -> iron_ingot x1, cookingtime 200, experience 0.7
+- data/minecraft/recipe/iron_ingot_from_blasting_raw_iron.json: raw_iron -> iron_ingot x1, cookingtime 100, experience 0.7
+- data/minecraft/recipe/copper_ingot_from_smelting_raw_copper.json: raw_copper -> copper_ingot x1, cookingtime 200, experience 0.7
+- data/minecraft/recipe/copper_ingot_from_blasting_raw_copper.json: raw_copper -> copper_ingot x1, cookingtime 100, experience 0.7
+
+Create JAR:
+- data/create/recipe/pressing/iron_ingot.json: c:ingots/iron -> create:iron_sheet x1; no processing_time property
+- data/create/recipe/pressing/copper_ingot.json: c:ingots/copper -> create:copper_sheet x1; no processing_time property
+- data/create/recipe/pressing/gold_ingot.json: c:ingots/gold -> create:golden_sheet x1; no processing_time property
+- smelting and blasting recipes for create:crushed_raw_iron/copper/gold each output 1 ingot; smelting 200 ticks, blasting 100 ticks, experience 0.1. This route is explicitly excluded from the proposed lead/tin batch.
+
+The report's proposed lead/tin values are suggestions extrapolated from locked neighboring recipes. No new recipe was run or tested in Minecraft.
