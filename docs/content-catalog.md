@@ -7,7 +7,7 @@
 
 本文是策划案与代码注册之间的单一内容索引，记录需要新增的流体、物品、方块和多方块结构。注册 ID 一旦进入可游玩版本就视为存档兼容接口，后续只调整显示名、纹理、模型和数值，不随意改 ID。
 
-**2026-10-01 实现检查点：** 三矿获取与原有素材批已验收合入 main。铅锭 `lead_ingot`、锡锭 `tin_ingot`、铅板 `lead_plate`、锡板 `tin_plate` 已在 [EXT-A-MATERIAL-02 候选](./reviews/2026-10-01/material-02-client.md) 注册，人工验收前不合入 main；表中其余粒、粉、杆、线等仍是目标清单，不能据此认定已实现。
+**2026-10-01 实现检查点：** 三矿获取与原有素材批已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 已在 [02A整改候选](./reviews/2026-10-01/material-02-client.md) 注册，人工验收前不合入main；表中粉、杆、线等其余目标不能据此认定已实现。
 
 ## 1. 状态与命名规则
 

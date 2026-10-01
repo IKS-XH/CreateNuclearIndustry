@@ -11,7 +11,7 @@
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 青金石粉 EXT-A-MATERIAL-01A | 候选未合并；P1 交接前置已满足 | [任务卡](./superpowers/plans/2026-09-24-ext-a-material-01a.md)：完整 GameTest、纹理整改/评审和客户端检查 |
-| 铅锡基础加工 EXT-A-MATERIAL-02 / 板材 EXT-ART-03 | 用户反馈后需整改，未合入 | [02A/03A整改卡](./superpowers/plans/2026-10-01-material-02a-feedback.md)：沿用当前Create铅锡处理路线，板材更方正 |
+| 铅锡基础加工02A / 板材03A / 金属粒04 | 整改及自动审查完成，待客户端复测，未合入 | [复测入口](./reviews/2026-10-01/material-02-client.md)：直熔、水洗9粒、粒锭合拆、压板及新外观 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 下一阶段主线，尚未形成完整生存链 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
 | 热端、动力、具体事故与剩余 Ponder | 后续实施 | 先补接口探针、冻结对应合同；教学在具体事故验收后继续 |
@@ -36,9 +36,11 @@ P1 已交付固定 `5×5×5` 结构、逐列热工/燃耗/损伤、控制棒与 
 
 三矿高度、频次、规模、暴露比例、掉落、粗矿压缩及原生粉碎已按本轮推荐冻结；其他配方数量、时间、热级和吞吐继续按批确认。D-01 至 D-03d 已确认事项直接沿用，不重复索取授权。D-03e 未批准候选不构成全项目停止点，只限制依赖它的实现卡。
 
-**本批结果与下一卡（2026-10-01）：** 三矿生成/采集/粉碎、粗矿9:1、重载存档及全部最终素材已由用户确认。接续 [铅锡基础加工 EXT-A-MATERIAL-02](./superpowers/plans/2026-10-01-ext-a-material-02.md)：粗矿1:1熔锭（200/100ticks、0.7经验），锭1:1压板，参数已获用户批准。洗矿、制钢与设备不属于本卡；新加工链完成后仍有自己的客户端门。
+**本批结果与下一卡（2026-10-01）：** 三矿生成/采集/粉碎、粗矿9:1、重载存档及全部最终素材已由用户确认。铅锡首轮 [EXT-A-MATERIAL-02](./superpowers/plans/2026-10-01-ext-a-material-02.md) 完成粗矿直熔与锭压板后，用户要求补齐矿石/粉碎料熔炼，并完全沿用当前Create矿物路线。现在按 [02A整改卡](./superpowers/plans/2026-10-01-material-02a-feedback.md) 补熔炼、水洗9粒、9粒↔锭，方正化两板并增加粒素材；制钢与设备仍后置。本批完成后须客户端复测。
 
-该新卡现已完成实现与自动审查：265项JUnit/build成功，125项GameTest断言全过但保存挂起/退出1，隔离普通服实际标签重载三态通过。新增两张板材，旧51张贴图不变。已保存候选，自动推进暂停于上述客户端门；初次隔离配置未生效的过程偏差与备份/残留见 [候选证据](./reviews/2026-10-01/material-02/README.md)。
+首轮02证据为265项JUnit/build成功，125项GameTest断言全过但保存挂起/退出1，隔离普通服实际标签重载三态通过。这些记录不代表当前02A整改已通过；首轮隔离配置未生效的过程偏差与备份/残留见 [历史候选证据](./reviews/2026-10-01/material-02/README.md)。
+
+02A最新候选 `7b27a14` 的265项JUnit/build退出0，141项required GameTest断言全过但保存挂起/退出1；全部240项assets/data与JAR一致，含55张游戏PNG。本次默认开发目录及存档哈希未变，独立审查无功能阻塞，详见 [本轮证据](./reviews/2026-10-01/material-02a/README.md)。自动推进现暂停于客户端复测，不合入main、不派发钢材或设备。
 
 ## 3. 阶段与出口
 

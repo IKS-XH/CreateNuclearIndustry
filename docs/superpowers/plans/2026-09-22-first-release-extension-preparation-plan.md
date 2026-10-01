@@ -7,7 +7,7 @@
 
 已完成的过程记录见 [P1 历史计划](../../archive/2026-08-18-agent-developer-execution-plan.md)、[依赖审计](../../archive/EXT-A-DEPS-01.md)及 [D-03d 工序讨论归档](../../archive/2026-09-24-production-process-proposal.md)。[成本草案](./2026-09-24-first-production-cost-draft.md)继续维护已批准试验值与待评审候选。
 
-**当前整改（2026-10-01）：** 三矿与素材批次已验收并合入 main，见 [收尾记录](../../reviews/2026-10-01/ore-art-acceptance.md)。铅锡首轮候选收到客户端反馈，用户要求处理完全沿用当前Create原生路线、两板更方正，按 [02A/03A整改卡](./2026-10-01-material-02a-feedback.md) 接续；制钢和专用设备不在本批，整改后仍须客户端复测。
+**当前人工门（2026-10-01）：** 三矿与旧素材批次已验收合入main，见 [收尾记录](../../reviews/2026-10-01/ore-art-acceptance.md)。铅锡已按当前Create路线完成直熔、水洗9粒、粒锭合拆及方正板材/粒素材，02A自动验证与独立审查已收齐，现暂停等待 [客户端复测](../../reviews/2026-10-01/material-02-client.md)。新材料批未合入main，制钢与专用设备继续后置。
 
 ## 1. 当前门槛与证据
 

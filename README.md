@@ -22,7 +22,7 @@ P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，�
 
 客户端总验收由用户确认通过；本轮 261 项 JUnit、111 项 required GameTest 断言与 build 通过。GameTest 断言全过后保存挂起，强停导致 Gradle 退出 1，该限制未消除。详见[总验收](docs/archive/P1-VERIFY-02.md)和[最终交接](docs/archive/P1-VERIFY-03.md)。
 
-三矿自然生成、采集、粗矿压缩与 Create 粉碎入口，以及本轮素材重绘/冷却剂回退，已于2026-10-01验收并合入 main。铅锡粗矿熔炼与压板、两张板材素材已在同级工作树形成[客户端待验收候选](docs/reviews/2026-10-01/material-02-client.md)，本批尚未合入 main。通过后再推进钢材、零件和设备。完整生存生产和发电链尚未完成；当前任务见[实施路线图](docs/implementation-roadmap.md)。
+三矿自然生成、采集、粗矿压缩与Create粉碎入口，以及素材重绘/冷却剂回退，已于2026-10-01验收并合入main。铅锡加工已在同级工作树补齐矿石/粉碎料直熔、水洗9粒、粒锭合拆及压板，并将两板改得更方正；当前为[客户端待复测候选](docs/reviews/2026-10-01/material-02-client.md)，本批尚未合入main。通过后再推进钢材、零件和设备。完整生存生产和发电链尚未完成；当前任务见[实施路线图](docs/implementation-roadmap.md)。
 
 ## 设计方向
 

@@ -1,6 +1,6 @@
-# EXT-A-MATERIAL-02A / EXT-ART-03A：客户端反馈整改
+# EXT-A-MATERIAL-02A / EXT-ART-03A / EXT-ART-04：客户端反馈整改
 
-**状态：** 执行中。2026-10-01 用户反馈铅锡矿石、粉碎粗矿不能熔炼，且两张板材希望更方正。本批客户端验收未通过，不合入main。复用 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、`codex/ore-acquisition`，开工候选 `0d38c99`；主工程已有 `.vscode/launch.json` 改动保持原样。
+**状态：** 待客户端复测，自动推进暂停。2026-10-01 用户反馈铅锡矿石、粉碎粗矿不能熔炼，且两张板材希望更方正；本卡实现、自动验证和独立审查现已完成，人工门未通过，不合入main。复用 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、`codex/ore-acquisition`，开工候选 `0d38c99`，本轮功能提交 `7b27a14`；主工程已有 `.vscode/launch.json` 改动保持原样。
 
 ## 已确认方向
 
@@ -69,3 +69,16 @@ PM结合用户两次明确要求保留已批准粗矿直熔、补普通/深层�
 执行者必须读主工程最新AGENTS、治理、本卡及02卡，并实际使用 `C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`；B另读 `minecraft-resource-pack/SKILL.md`。必要手写注释用中文，禁止任何Git写、核心文档修改、任务状态变更和再派发。交付未提交改动与指定报告；PM负责审查、Git和文档。
 
 A与素材写集独立，B/C共用导出管线须先B后C，Gradle再串行。按 `dispatching-parallel-agents` 派发，高速模型优先；涉及真实风扇和测试隔离的A沿用有上下文的 `gpt-6-sol/high` 执行者。新增未决玩法暂停，不提前画未批准的其他素材。整合后须提供明确启动候选、当前制品与客户端复测项；未获用户确认不合入新材料批、不推进钢材或设备。
+
+## 本轮执行与独立审查
+
+- B/C均已交付并停止资源写入；PM已查看两板前后对照及粒/锭/粗矿/板对照。两板轮廓改为12×11外接框；C增加两粒后保留开工53图原字节，正式验证器在移开忽略目录中的历史快照后仍可独立运行。B最后仅清理SVG末尾空行，C最后仅修正文档命令和预览页数，未改像素。
+- A已获独占Gradle窗口；先用新init确认模型/任务gameDirectory均在02A报告目录，保存默认run与run/saves哈希清单。RED实际发现141测试，新16项均因缺注册/配方失败，随后运行器fastutil异常中断，不能声称形成完整RED汇总；继续补实现与最终验证。
+- 独立实现审查复用未参与功能或素材实现的 `native_lead_tin_audit` 高速执行者。该阶段唯一写集为候选 `build/reports/extension/EXT-A-MATERIAL-02A-REVIEW.md` 及同名目录；其余全部只读，禁止Gradle、游戏、素材导出或坏输入试验。先审B/C，再审A最终差异、真实机器证据、资源制品及隔离保护；发现问题交回原执行者，不代写代码。审查结论须区分可交人工复测与可合入main，后者仍受用户人工门约束。
+
+## 当前交付检查点
+
+- A最终265项JUnit与build退出0；141项required GameTest断言全过，包含本卡16项新增检查，保存阶段挂起并在有限等待后只结束精确PID，Gradle退出1。默认run的176文件及run/saves内68文件前后哈希相同，旧事故现场未改动。
+- B/C已交付方正两板和两粒，历史51图不变，游戏总55图。PM核对全部240项assets/data与最终JAR一致。独立审查未发现实现阻塞；其旧范围文档意见已由PM标明首轮历史合同及被02A取代的条款。
+- 素材提交 `fa94d67`，功能提交 `7b27a14`；所有执行者停止写入。原始证据、制品哈希及过程限制见 [归档索引](../../reviews/2026-10-01/material-02a/README.md)，具体启动及预期见 [客户端复测](../../reviews/2026-10-01/material-02-client.md)。后续只同步治理文档，不改已经验证的功能与资源。
+- 未验收人工项保留：两金属各形态熔炼/高炉、真实Create水洗与动力恢复、粒锭合拆、压板、JEI、六物品外观及保存重进。按用户授权在此暂停，不提前合入材料批或推进钢材/设备。

@@ -8,13 +8,15 @@
 **位置：** 复用 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、`codex/ore-acquisition`；PM 将本卡同步后记录精确基线。用户主工程 `.vscode/launch.json`、存档和现有手测世界不得改动。
 **技术栈：** Minecraft 1.21.1 / Java 21 / NeoForge 21.1.219 / Create 6.0.10-280 / Ponder 1.0.82 / Flywheel 1.0.6；保留 JEI 开发专用配置和 All Rights Reserved。
 
-## 合同
+## 首轮历史合同（当前执行已由02A扩展）
+
+本节只解释首轮六配方、四物品和53图的历史证据，不再是当前派发边界。当前已批准补矿石/粉碎料直熔、水洗9粒、9粒↔锭及两粒素材，详见 [02A卡](./2026-10-01-material-02a-feedback.md)；当前目标为六物品、55张游戏图。下列“粉碎料/粒不接收”只对原有粗矿直熔及压板那六条配方成立，不能解释为全局禁用这些输入。
 
 - 四个既定 ID：`lead_ingot`（铅锭）、`tin_ingot`（锡锭）、`lead_plate`（铅板）、`tin_plate`（锡板），各普通可堆叠物品。现有钢板、矿物、燃料和流体注册不改。
 - 铅、锡各两条原生 cooking 配方：输入各自 `c:raw_materials/<metal>` 标签 1 件，产本模组对应锭 1 件；熔炉 200 ticks、高炉 100 ticks，经验均 0.7，无其他产物。
 - 两条 Create `pressing`：各自 `c:ingots/<metal>` 标签 1 件产本模组板 1 件，无副产物，沿原生压片 JSON 不声明固定 `processing_time`。配方 ID 使用 `smelting/<metal>_ingot_from_raw_<metal>`、`blasting/<metal>_ingot_from_raw_<metal>`、`pressing/<metal>_plate`。
 - 物品加入 `c:ingots/lead,tin`、`c:plates/lead,tin`，汇总标签通过嵌套引用接入 `c:ingots` / `c:plates`，不覆盖其他提供者。输入接受对应等价标签成员，输出固定身份；默认标签下错误材料、粗矿块、粉碎粗矿、粒、铀不被本批新配方接收；不另建绕过通用标签的硬编码黑名单。
-- 不新增粉碎料直熔、洗矿、锭粒压缩、钢材、设备、反应堆配方；不修改 Create 原生配方或已批准矿物生成/粉碎/掉落。
+- 首轮未包含粉碎料直熔、洗矿、锭粒压缩；这三项已在02A扩展，原排除约束失效。钢材、设备、反应堆配方仍后置；不修改 Create 原生配方或已批准矿物生成/粉碎/掉落。
 - 现有 51 PNG（含8旧冷却剂）原字节保持；复用铅锡锭已批准 PNG，只新增两张板材 SVG 与导出 PNG，游戏总数增至53。不得调用生图模型。
 
 ## 必读、技能和写集
