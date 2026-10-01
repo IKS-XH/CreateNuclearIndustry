@@ -670,6 +670,66 @@
       "use": "本基线未引用素材；重绘不等于注册"
     },
     {
+      "game": "item/charcoal_dust.png",
+      "source": "item/charcoal_dust.svg",
+      "palette": "charcoal_dust",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-05 新增制钢木炭粉路径；无旧图基线"
+    },
+    {
+      "game": "item/coal_dust.png",
+      "source": "item/coal_dust.svg",
+      "palette": "coal_dust",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-05 新增制钢煤粉路径；无旧图基线"
+    },
+    {
+      "game": "item/iron_dust.png",
+      "source": "item/iron_dust.svg",
+      "palette": "iron_dust",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-05 新增制钢铁粉路径；无旧图基线"
+    },
+    {
+      "game": "item/steel_dust.png",
+      "source": "item/steel_dust.svg",
+      "palette": "steel_dust",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-05 新增制钢合金钢粉路径；无旧图基线"
+    },
+    {
+      "game": "item/steel_ingot.png",
+      "source": "item/steel_ingot.svg",
+      "palette": "steel_ingot",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-05 新增制钢合金钢锭路径；无旧图基线"
+    },
+    {
       "game": null,
       "source": "item/lapis_dust.svg",
       "palette": "lapis_dust",

@@ -116,5 +116,10 @@
   "item.create_nuclear_industry.lead_plate": "Lead Plate",
   "item.create_nuclear_industry.tin_plate": "Tin Plate",
   "item.create_nuclear_industry.lead_nugget": "Lead Nugget",
-  "item.create_nuclear_industry.tin_nugget": "Tin Nugget"
+  "item.create_nuclear_industry.tin_nugget": "Tin Nugget",
+  "item.create_nuclear_industry.iron_dust": "Iron Dust",
+  "item.create_nuclear_industry.coal_dust": "Coal Dust",
+  "item.create_nuclear_industry.charcoal_dust": "Charcoal Dust",
+  "item.create_nuclear_industry.steel_dust": "Alloy Steel Dust",
+  "item.create_nuclear_industry.steel_ingot": "Alloy Steel Ingot"
 }

@@ -116,5 +116,10 @@
   "item.create_nuclear_industry.lead_plate": "铅板",
   "item.create_nuclear_industry.tin_plate": "锡板",
   "item.create_nuclear_industry.lead_nugget": "铅粒",
-  "item.create_nuclear_industry.tin_nugget": "锡粒"
+  "item.create_nuclear_industry.tin_nugget": "锡粒",
+  "item.create_nuclear_industry.iron_dust": "铁粉",
+  "item.create_nuclear_industry.coal_dust": "煤粉",
+  "item.create_nuclear_industry.charcoal_dust": "木炭粉",
+  "item.create_nuclear_industry.steel_dust": "合金钢粉",
+  "item.create_nuclear_industry.steel_ingot": "合金钢锭"
 }

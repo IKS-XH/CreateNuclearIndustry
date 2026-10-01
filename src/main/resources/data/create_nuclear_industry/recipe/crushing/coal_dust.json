@@ -1,0 +1,10 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    { "item": "minecraft:coal" }
+  ],
+  "processing_time": 100,
+  "results": [
+    { "id": "create_nuclear_industry:coal_dust" }
+  ]
+}

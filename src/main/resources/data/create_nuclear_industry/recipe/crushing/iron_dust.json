@@ -1,0 +1,10 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    { "tag": "c:ingots/iron" }
+  ],
+  "processing_time": 100,
+  "results": [
+    { "id": "create_nuclear_industry:iron_dust" }
+  ]
+}

@@ -469,5 +469,45 @@
     "body": "#B9CED5",
     "light": "#E2E9DE",
     "glint": "#F2F1E6"
+  },
+  "iron_dust": {
+    "outline": "#343B40",
+    "shadow": "#58636A",
+    "side": "#78858A",
+    "body": "#A6B2B4",
+    "light": "#CFD7D4",
+    "glint": "#F0F2E9"
+  },
+  "coal_dust": {
+    "outline": "#222426",
+    "shadow": "#303537",
+    "side": "#454B4B",
+    "body": "#5B6160",
+    "light": "#777C76",
+    "glint": "#95968B"
+  },
+  "charcoal_dust": {
+    "outline": "#2F2A27",
+    "shadow": "#49413B",
+    "side": "#62564C",
+    "body": "#7C6C5B",
+    "light": "#988876",
+    "glint": "#B2A28A"
+  },
+  "steel_dust": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "side": "#5B7078",
+    "body": "#788E94",
+    "light": "#A3B7B8",
+    "glint": "#D1DFDA"
+  },
+  "steel_ingot": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "side": "#5B7078",
+    "body": "#788E94",
+    "light": "#A3B7B8",
+    "glint": "#D1DFDA"
   }
 }

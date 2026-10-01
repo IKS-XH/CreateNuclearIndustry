@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "#c:ingots/lead",
-    "#c:ingots/tin"
+    "#c:ingots/tin",
+    "#c:ingots/steel"
   ]
 }

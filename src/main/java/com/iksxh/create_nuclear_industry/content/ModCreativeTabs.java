@@ -53,6 +53,11 @@ public final class ModCreativeTabs {
                         output.accept(BasicMaterialContent.TIN_PLATE.get());
                         output.accept(BasicMaterialContent.LEAD_NUGGET.get());
                         output.accept(BasicMaterialContent.TIN_NUGGET.get());
+                        output.accept(BasicMaterialContent.IRON_DUST.get());
+                        output.accept(BasicMaterialContent.COAL_DUST.get());
+                        output.accept(BasicMaterialContent.CHARCOAL_DUST.get());
+                        output.accept(BasicMaterialContent.STEEL_DUST.get());
+                        output.accept(BasicMaterialContent.STEEL_INGOT.get());
                     })
                     .build()
     );

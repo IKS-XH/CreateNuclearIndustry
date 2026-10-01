@@ -1,0 +1,14 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    { "tag": "c:dusts/iron" },
+    { "tag": "c:dusts/iron" },
+    { "tag": "c:dusts/iron" },
+    { "tag": "c:dusts/iron" },
+    { "tag": "c:dusts/coal" }
+  ],
+  "processing_time": 100,
+  "results": [
+    { "id": "create_nuclear_industry:steel_dust", "count": 5 }
+  ]
+}
