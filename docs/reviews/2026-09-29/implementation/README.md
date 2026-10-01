@@ -14,7 +14,7 @@
 
 ## 2. 获取候选与启动
 
-**2026-10-01 开发环境更新：** 当前候选分支 HEAD 为 `39db2b4`，在玩法/资源候选 `b4d78d5` 上增加并修正 JEI `19.27.0.340` 的开发客户端依赖。初版 `9c4fb39` 把 JEI 放入 legacy 启动库清单，实际未注册为模组；本次改为仅加入三个客户端的实际 classpath。主工程已通过真实隔离启动的注册/资源加载验证，候选同步后实际 classpath 与启动准备复核通过。重新运行 `runClient` 后打开背包复验界面。JEI 不内嵌到下方测试 JAR，玩法及冷却剂人工验收状态不变。详见 [DEV-JEI-01A](../../../superpowers/plans/2026-10-01-dev-jei-01a.md)。
+**2026-10-01 开发环境更新：** 当前候选分支 HEAD 为 `39db2b4`，在玩法/资源候选 `b4d78d5` 上增加并修正 JEI `19.27.0.340` 的开发客户端依赖。初版 `9c4fb39` 把 JEI 放入 legacy 启动库清单，实际未注册为模组；本次改为仅加入三个客户端的实际 classpath。主工程已通过真实隔离启动的注册/资源加载验证，候选同步后实际 classpath 与启动准备复核通过。用户随后确认 JEI 界面出现，界面显示已通过实测，配方查询交互未单独确认。JEI 不内嵌到下方测试 JAR，玩法及冷却剂人工验收状态不变。详见 [DEV-JEI-01A](../../../superpowers/plans/2026-10-01-dev-jei-01a.md)。
 
 [下载/打开冷却剂恢复后的测试 JAR](../../../../build/reports/extension/client-candidate-2026-09-29/create_nuclear_industry-0.1.0-ore-svg-coolant-restored.jar)。它是内部版本仍为 `0.1.0` 的测试候选；在测试客户端 mods 目录替换本模组旧 JAR，同一模组保留一份，NeoForge/Create 等依赖维持本页列出的锁定版本。
 
