@@ -17,8 +17,10 @@
 
 ## 集成与后续门
 
-人工门已解除，待本次复核后在干净的候选工作树中合入最新 main 文档，核对合并结果，再将 main 快进到已验证结果。若代码冲突或验证失败，交执行者整改，不由 PM 编写代码。
+已完成：候选 `39db2b4` 的 JUnit/build 通过后，PM 保存构建生成的两条日志并定向恢复，在干净候选中合入最新 main，得到 `d165d8828cef223c488fde01ae272f82d6a1bc63`。合并无冲突，src/tools/构建相对候选没有差异；合并结果再次运行 `test build --rerun-tasks --max-workers=1`，265项JUnit全过、build退出0。PM随后将main快进到该已验证结果；用户IDE配置哈希仍为 `65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07`。
+
+制品仍为 `4BA7B0AA2A25C30D1FDDC29D7E4EA2F50B66101C6FFCA32A368A8E685EFC65F5`；旧51张PNG与生成输出/JAR匹配，8张冷却剂与历史原图相同。检查报告原样归档（仅统一末尾空行），本地构建日志和JUnit原始记录在证据包。见 [执行者复核](./ore-art-final/EXT-A-ORE-ART-ACCEPT-01.md)、[合并结果核对](./ore-art-final/merged-verification.json)、[原始证据包](./ore-art-final/evidence.zip)。保留同级工作树供后续候选复用，未推送或发布。
 
 历史 GameTest 的 116 项 required 断言通过、保存阶段挂起并退出 1 原样保留，不改写为正常退出，也不冒充本轮新运行。三矿 Java/数据未变时，复用既有真实设备、采样和 GameTest 证据，补充当前 JUnit/build 与制品验证。
 
-下一步仍是基础材料加工后再到设备；未批准的产率、经验、加工时间和配方比例须形成可审核方案交用户决定，到达该门后暂停。
+用户随后批准铅锡粗矿1:1熔锭、200/100ticks与0.7经验、锭1:1原生压板，见 [批准参数](../../superpowers/plans/2026-10-01-lead-tin-material-proposal.md)。本批已完成，接续 [EXT-A-MATERIAL-02](../../superpowers/plans/2026-10-01-ext-a-material-02.md)；其余未批准配比和设备参数不因此放行。

@@ -22,7 +22,7 @@ P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，�
 
 客户端总验收由用户确认通过；本轮 261 项 JUnit、111 项 required GameTest 断言与 build 通过。GameTest 断言全过后保存挂起，强停导致 Gradle 退出 1，该限制未消除。详见[总验收](docs/archive/P1-VERIFY-02.md)和[最终交接](docs/archive/P1-VERIFY-03.md)。
 
-下一阶段优先矿物获取、原材料与零件、设备及燃料制备。青金石粉与模拟器仍是未合并候选，完整生存生产和发电链尚未完成；当前任务与门槛统一见[实施路线图](docs/implementation-roadmap.md)。
+三矿自然生成、采集、粗矿压缩与 Create 粉碎入口，以及本轮素材重绘/冷却剂回退，已于2026-10-01验收并合入 main。下一批为铅锡粗矿熔炼与压板，随后推进钢材、零件和设备。完整生存生产和发电链尚未完成；当前任务见[实施路线图](docs/implementation-roadmap.md)。
 
 ## 设计方向
 
@@ -71,7 +71,7 @@ Linux / macOS：
 
 构建成功后，开发 JAR 位于 `build/libs/`。
 
-开发客户端 `runClient`、`runClientA`、`runClientB` 自动加载 JEI，版本固定在 `gradle.properties` 的 `jei_version`。JEI 仅用于开发时查看物品和配方，不进入服务端/GameTest/JUnit、发布依赖或模组 JAR。配置变更后需重启开发客户端。当前三矿与美术验收仍在 [整合候选工作树](docs/reviews/2026-09-29/implementation/README.md) 中进行。
+开发客户端 `runClient`、`runClientA`、`runClientB` 自动加载 JEI，版本固定在 `gradle.properties` 的 `jei_version`。JEI 仅用于开发时查看物品和配方，不进入服务端/GameTest/JUnit、发布依赖或模组 JAR。配置变更后需重启开发客户端。三矿与最终素材已在 main 生效；下一批未验收功能继续在同级隔离工作树测试，具体位置见任务卡。
 
 常用验证命令：
 

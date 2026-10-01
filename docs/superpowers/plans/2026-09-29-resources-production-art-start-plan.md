@@ -5,7 +5,7 @@
 **需求依据：** [扩展准备计划](./2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./2026-09-24-first-production-cost-draft.md)、[内容清单](../../content-catalog.md)、[配方关系](../../recipes.md)及本轮用户对四张样稿路线的执行授权。
 **架构 / 基线：** 不改 P1 核心状态和注册身份。游戏纹理仍为 PNG，SVG 留在开发资产目录。代码基线 `8af153f`；技术栈固定 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6，许可证 All Rights Reserved。
 
-**当前检查点：** 用户于 2026-09-29 批准 [样稿风格与三矿推荐方案](../../reviews/2026-09-29/README.md)，并授权将现有 51 张贴图全部按此风格重绘。[EXT-A-ORE-01](./2026-09-29-ext-a-ore-01.md) 与 [EXT-ART-02](./2026-09-29-ext-art-02.md) 已形成整合候选并完成技术审查/自动验证，现暂停于 [本批客户端测试](../../reviews/2026-09-29/implementation/README.md)。以下第 3、4 节保留已完成启动准备的原任务范围。
+**当前检查点：** 三矿与现有素材批次已通过技术和人工验收，并于2026-10-01合入 main（`d165d88`），见 [收尾记录](../../reviews/2026-10-01/ore-art-acceptance.md)。用户已批准铅锡基础加工首轮参数，接续 [EXT-A-MATERIAL-02](./2026-10-01-ext-a-material-02.md)。以下第3、4节保留已完成启动准备的原任务范围。
 
 ## 1. 实施顺序与停止条件
 
