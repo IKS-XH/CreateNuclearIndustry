@@ -7,7 +7,7 @@
 
 已完成的过程记录见 [P1 历史计划](../../archive/2026-08-18-agent-developer-execution-plan.md)、[依赖审计](../../archive/EXT-A-DEPS-01.md)及 [D-03d 工序讨论归档](../../archive/2026-09-24-production-process-proposal.md)。[成本草案](./2026-09-24-first-production-cost-draft.md)继续维护已批准试验值与待评审候选。
 
-**当前主线（2026-10-01）：** 三矿及铅锡加工/新素材两批均已人工验收并合入main，见 [铅锡收尾记录](../../reviews/2026-10-01/material-02-acceptance.md)。用户要求水洗副产物暂不处理，优先主线；[铁粉与碳粉—钢粉—钢锭—钢板](./2026-10-01-mainline-material-03-proposal.md)路线及首轮参数均已确认，按 [实施卡](./2026-10-01-ext-a-material-03.md) 自动推进至人工测试门。后接基础零件、耐热材料、设备与燃料/冷却剂，已确认工序和数值不重复设门。
+**当前主线（2026-10-01）：** 三矿及铅锡加工/新素材两批均已人工验收并合入main，见[铅锡收尾记录](../../reviews/2026-10-01/material-02-acceptance.md)。用户要求水洗副产物暂不处理，优先主线；[粉末制钢](./2026-10-01-mainline-material-03-proposal.md)及五项新素材已在同级候选实现，停在[人工验收门](../../reviews/2026-10-01/material-03-client.md)。265项JUnit/build、本批14项与实际重载通过，完整155项GameTest异常未完成，见[本批记录](../../reviews/2026-10-01/material-03/README.md)。本批未合入main，不提前推进后续基础零件、耐热材料、设备与燃料/冷却剂；已确认工序和数值不重复设门。
 
 ## 1. 当前门槛与证据
 
