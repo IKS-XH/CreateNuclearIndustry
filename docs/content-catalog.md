@@ -7,7 +7,7 @@
 
 本文是策划案与代码注册之间的单一内容索引，记录需要新增的流体、物品、方块和多方块结构。注册 ID 一旦进入可游玩版本就视为存档兼容接口，后续只调整显示名、纹理、模型和数值，不随意改 ID。
 
-**2026-10-01 实现检查点：** 三矿及铅锡加工/素材均已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 与配方/外观/保存重进获用户确认，见 [收尾记录](./reviews/2026-10-01/material-02-acceptance.md)。表中粉、杆、线等其余目标不能据此认定已实现。
+**2026-10-01 实现检查点：** 三矿及铅锡加工/素材均已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 与配方/外观/保存重进获用户确认，见 [铅锡收尾](./reviews/2026-10-01/material-02-acceptance.md)。铁粉、煤粉、木炭粉、钢粉、钢锭和钢板的[制钢路线](./reviews/2026-10-01/material-03b/README.md)，以及锡条、两种传感器和两种序列半成品的[材料04路线](./reviews/2026-10-01/material-04/ACCEPTANCE.md)也已通过完整人工清单并合入main；传感器此阶段仅为制造材料。表中其余目标仍须按对应任务判断，不能从策划阶段标记推断已经实现。
 
 ## 1. 状态与命名规则
 
