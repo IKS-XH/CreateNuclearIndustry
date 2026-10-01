@@ -1,0 +1,13 @@
+{
+  "head": "060aeaf5340d8b5545ccdf84f5c82c041276ad44",
+  "candidateTests": 265,
+  "candidateBuildExit": 0,
+  "mainTests": 265,
+  "mainBuildExit": 0,
+  "sourceResources": 240,
+  "byteMismatches": [],
+  "mainJarSha256": "18801D619ACCF80E0ADFFDB93C211849B509E35C92D2049591643416847DE4F4",
+  "candidateJarSha256": "A4382526AD6AF43A7A82A80992C2F33681D950F5DA1142AFC792108A66FD3A5A",
+  "launchSha256": "65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07",
+  "texturePngs": 55
+}

@@ -1,6 +1,6 @@
 # 铅锡加工与素材整改候选证据
 
-**PM结论：** 实现、自动验证、离线美术检查与独立审查已收齐，可交用户进行 [客户端复测](../material-02-client.md)。用户尚未确认本批人工门，功能未合入main，不自动推进钢材或设备。
+**后续收尾：** 用户于2026-10-01确认完整客户端清单全部通过，本批已验收合入main，见 [收尾记录](../material-02-acceptance.md)。下文保留提交人工复测时的证据与局限；当时的“人工待验收”不是当前状态。
 
 - 候选工作树：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支 `codex/ore-acquisition`。本轮基线 `0d38c99`，素材提交 `fa94d67`，功能提交 `7b27a14bfbd6992f0d3fb61f44dd058413826459`；后续仅同步main文档，不改已验证功能。
 - [原生路线审计](./EXT-A-MATERIAL-02A-NATIVE-AUDIT.md)、[A实现与测试](./EXT-A-MATERIAL-02A.md)、[独立整批审查](./EXT-A-MATERIAL-02A-REVIEW.md)。

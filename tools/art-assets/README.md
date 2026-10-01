@@ -39,7 +39,7 @@ block/fluid 八个冷却剂路径分别读取各自 baseline PNG，以管线中�
 
 ## 验证和当前边界
 
-EXT-ART-02A 的历史验证覆盖51条既有路径/尺寸、冷却剂原图字节保留、SVG像素一致性、四样稿回归、非法SVG与失败不写保护，以及重复导出和接入哈希。其历史证据保存在 `build/reports/extension/EXT-ART-02A/verification.json` 和 `build/reports/extension/EXT-ART-02A/commands.json`。EXT-ART-03 在此基础上增加两条板材路径；EXT-ART-04 再增加铅粒、锡粒两条路径。两批均保留51项历史基线，新增纹理不伪造旧图记录；EXT-ART-04 的证据保存在 `build/reports/extension/EXT-ART-04/verification.json` 和 `build/reports/extension/EXT-ART-04/commands.json`，另记录开工时53张游戏PNG的哈希。板材和金属粒仅完成离线像素与预览核对，Minecraft 客户端外观仍待用户验收。冷却剂预览的 BEFORE 为重绘前原图，RESTORED 为本次恢复结果；旧02A/03/03A报告保留各自历史语境。
+EXT-ART-02A 的历史验证覆盖51条既有路径/尺寸、冷却剂原图字节保留、SVG像素一致性、四样稿回归、非法SVG与失败不写保护，以及重复导出和接入哈希。其历史证据保存在 `build/reports/extension/EXT-ART-02A/verification.json` 和 `build/reports/extension/EXT-ART-02A/commands.json`。EXT-ART-03 在此基础上增加两条板材路径；EXT-ART-04 再增加铅粒、锡粒两条路径。两批均保留51项历史基线，新增纹理不伪造旧图记录；EXT-ART-04 的证据保存在 `build/reports/extension/EXT-ART-04/verification.json` 和 `build/reports/extension/EXT-ART-04/commands.json`，另记录开工时53张游戏PNG的哈希。用户于2026-10-01确认铅锡复测清单全部通过，方正板材和金属粒已完成客户端外观验收并合入main，见 `docs/reviews/2026-10-01/material-02-acceptance.md`。冷却剂预览的 BEFORE 为重绘前原图，RESTORED 为本次恢复结果；旧02A/03/03A报告保留各自历史语境。
 
 EXT-ART-02A、EXT-ART-03与EXT-ART-03A的历史报告分别记录了当时查看的预览范围及审查结果；本轮实际查看铅粒、锡粒与铅锡锭、粗矿、板材的放大对照图。未核验当前全部9页与总览的视觉细节，也未启动浏览器核验HTML；PNG查看不是Minecraft客户端验收。重复周期、游戏环境光、物品手持表现及流体UV最终需在客户端判断。跨Pillow版本的编码/预览字体字节不保证相同。
 
