@@ -7,11 +7,11 @@
 **需求：** [已确认路线与参数](./2026-10-01-mainline-material-03-proposal.md)、[配方5.4](../../recipes.md#54-钢材陶瓷与建筑材料)、内容清单3.2。用户已答复“采用这组推荐参数”。
 **工作区：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支 `codex/ore-acquisition`；功能基线 `27bf103`，PM同步本卡后记录开工提交。主工程既有 `.vscode/launch.json` 不动。
 **版本：** MC1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6；保留 JEI、许可证、构建和依赖版本。
-**状态：** A/B候选已实现，待人工验收；265项JUnit/build、本批14项及实际标签重载通过。完整155项GameTest因框架异常未完成，不据此最终验收或合入main。详见[本批记录](../../reviews/2026-10-01/material-03/README.md)及[客户端清单](../../reviews/2026-10-01/material-03-client.md)。开工提交为 `9097338`。
+**状态：** 用户于2026-10-01确认完整客户端清单通过，并要求普通“合金钢”简称“钢”；按[03A收尾卡](./2026-10-01-ext-a-material-03a.md)处理名称及剩余回归。此前265项JUnit/build、本批14项及实际标签重载通过，完整155项GameTest因框架异常未完成，不将人工通过作为自动回归豁免。详见[本批记录](../../reviews/2026-10-01/material-03/README.md)及[客户端清单](../../reviews/2026-10-01/material-03-client.md)。开工提交为`9097338`。
 
 ## 冻结合同与评审重点
 
-- 新增普通64堆叠物品 `iron_dust`（铁粉 / Iron Dust）、`coal_dust`（煤粉 / Coal Dust）、`charcoal_dust`（木炭粉 / Charcoal Dust）、`steel_dust`（合金钢粉 / Alloy Steel Dust）、`steel_ingot`（合金钢锭 / Alloy Steel Ingot）。复用 `ModItems.STEEL_PLATE`，不改原钢板ID、图或维修逻辑。
+- 新增普通64堆叠物品 `iron_dust`（铁粉 / Iron Dust）、`coal_dust`（煤粉 / Coal Dust）、`charcoal_dust`（木炭粉 / Charcoal Dust）、`steel_dust`（钢粉 / Steel Dust）、`steel_ingot`（钢锭 / Steel Ingot）。复用 `ModItems.STEEL_PLATE`，不改原钢板ID、图或维修逻辑。
 - 三条粉碎轮：1铁锭→1铁粉、1煤→1煤粉、1木炭→1木炭粉，`processing_time=100`。铁锭输入 `c:ingots/iron`；煤/木炭原料沿各自原版身份，不能用同时包含两者的宽标签。磨石保留原Create染料。
 - 两条 `create:mixing`：4项 `c:dusts/iron` 加1项 `c:dusts/coal` 或 `c:dusts/charcoal` →本模组5钢粉，`processing_time=100`，无热要求；重复4项 Ingredient 表示四份铁粉，不能用不生效的 ingredient count。
 - 两条 cooking：1份 `c:dusts/steel`→本模组1钢锭；`minecraft:smelting` 200 tick、`minecraft:blasting` 100 tick，经验均0.1。真实熔炉/高炉与 Create 熔岩风扇批量熔炼均应成功，风扇沿锁定Create规则，不新增自定义风扇配方或承诺炉子经验/时长等同风扇。
@@ -85,5 +85,5 @@ A、B资源与代码写集分离，B独占美术导出，A独占后续Gradle；�
 - B独立审查派给 `native_lead_tin_audit` 高速执行者；只读本卡B、EXT-ART-05报告、`build/reports/extension/EXT-ART-05-review-inputs.md`及最终文件。唯一写集为候选 `build/reports/extension/EXT-ART-05-REVIEW.md`；禁止运行Gradle、游戏、导出/verify、Git写或其他文件修改。须分别报告合同符合性和实现质量，读取并应用modding/testing/resource-pack技能。审查不代替客户端视觉验收。
 - A及整批独立审查：真实机器扣料、堵塞恢复、测试证据与原生配方接入交由独立高级模型复核。唯一写集为候选 `build/reports/extension/EXT-A-MATERIAL-03-REVIEW.md`；读取本卡、批准方案、`EXT-A-MATERIAL-03-review-inputs.md`、A/B报告及审查证据，应用modding/testing技能。只读最终文件，不运行测试/导出、改实现、Git写或派发。自动证据尚未完成时先报告静态结论及未决验证门，证据齐备后补最终结论，不先行宣告验收。
 - 全量GREEN及一次独立目录重试均在 `GameTestInfo.tickInternal` / fastutil iterator发生异常，未取得155项完成证据；未修改旧测试或生产机制绕过。普通服逐项新14项及真实重载通过，只作为本批专项证据，全量回归仍未完成。普通服无在线玩家时内置成功报告静默，执行者在新测试全部断言及 `helper.succeed()` 后添加明确标记，独立审查确认失败会抛出、不能继续输出成功。
-- 当前暂停自动推进，交用户按客户端清单测试；没有客户端通过证据，也未豁免完整回归，不派发下批零件或设备。
+- 首次交付时暂停在人工门；用户现已确认完整客户端清单通过。名称简称与剩余全量回归转03A收尾，在完成整合前不派发下批零件或设备。
 - A/B及最终独立审查已冻结，R1输入保留断言整改闭环；PM核对最终构建/制品、默认run保持及日志恢复后，将57个实现/素材文件保存为候选提交`a1353dd`。报告与原始证据归档到上述本批记录，未改main功能或既有启动配置。
