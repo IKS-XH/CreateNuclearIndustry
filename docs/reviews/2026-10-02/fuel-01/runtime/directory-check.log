@@ -1,0 +1,8 @@
+
+> Task :centrifugeRunDirectory
+CENTRIFUGE_SERVER_MODEL_DIR=E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\build\reports\extension\EXT-A-FUEL-01-runtime\isolated-server
+CENTRIFUGE_SERVER_TASK_DIR=E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\build\reports\extension\EXT-A-FUEL-01-runtime\isolated-server
+
+BUILD SUCCESSFUL in 829ms
+1 actionable task: 1 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

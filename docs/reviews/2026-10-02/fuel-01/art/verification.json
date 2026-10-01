@@ -1,0 +1,90 @@
+{
+  "task": "EXT-ART-08",
+  "export_command": "python tools/art-assets/export.py --install (bundled Python runtime)",
+  "export_result": "PASS: 83 generated PNG; 82 game targets; install=True",
+  "manifest_entries": 83,
+  "existing_png_preserved": 69,
+  "new_png_installed": 13,
+  "total_game_pngs": 82,
+  "baseline_path": "tools/art-assets/baselines/EXT-ART-08-existing-game-png-sha256.json",
+  "all_existing_png_hashes_match": true,
+  "new_textures": [
+    "block/enrichment_centrifuge_back.png",
+    "block/enrichment_centrifuge_bottom.png",
+    "block/enrichment_centrifuge_front.png",
+    "block/enrichment_centrifuge_slurry_port.png",
+    "block/enrichment_centrifuge_top.png",
+    "block/enrichment_centrifuge_water_port.png",
+    "block/uranium_tailings_brick.png",
+    "fluid/uranium_slurry_flow.png",
+    "fluid/uranium_slurry_still.png",
+    "item/depleted_uranium_dust.png",
+    "item/low_enriched_uranium_dust.png",
+    "item/uranium_slurry_bucket.png",
+    "item/uranium_tailings.png"
+  ],
+  "model_face_mapping": {
+    "north": "enrichment_centrifuge_front",
+    "south": "enrichment_centrifuge_back",
+    "east": "enrichment_centrifuge_slurry_port",
+    "west": "enrichment_centrifuge_water_port",
+    "up": "enrichment_centrifuge_top",
+    "down": "enrichment_centrifuge_bottom"
+  },
+  "blockstate_variants": [
+    "facing=east",
+    "facing=north",
+    "facing=south",
+    "facing=west"
+  ],
+  "new_texture_dimensions": "16x16; uranium_slurry_flow=16x64",
+  "model_face_preview": "build/reports/extension/EXT-ART-08/centrifuge-model-faces.png",
+  "client_visual_acceptance": "pending",
+  "new_png_sha256": {
+    "block/enrichment_centrifuge_back.png": "97d3bc6ac34be51d53988eb917fe66abb1dfbf5c11f9f06d9a0e88a6caa78f55",
+    "block/enrichment_centrifuge_bottom.png": "07607c5b7a3d45fcb3d41d610f1d5ea5dd93f3f420cf123ff0390e9b068063a0",
+    "block/enrichment_centrifuge_front.png": "8d469a783bf5ef3d2f100ac30757ad9cdd695ea2afc79ad1b22d5040b032c371",
+    "block/enrichment_centrifuge_slurry_port.png": "0e3030e85bb461acd5c1a5d0551e337c72ff47d053d2e5d04cbd428656738df3",
+    "block/enrichment_centrifuge_top.png": "62b0aa187bde95728db868828d56a74becd4142fb2b56a8830bb6e18522fa8e5",
+    "block/enrichment_centrifuge_water_port.png": "833b3ca89ad1db89cc305d156086f3b911a486a9067eb9bce78205647216566b",
+    "block/uranium_tailings_brick.png": "f6054b4755f193069b2e55937b4ba721371ebde538b600c7607fdbfbe871e9e0",
+    "fluid/uranium_slurry_flow.png": "76a2af5dd773015d3e30b8910b02e4fa46238bf2d2699e054aaf743508527b02",
+    "fluid/uranium_slurry_still.png": "a062ab0a596fab68f652309bdd36f2ed4cc981ce685761a696e46721b3320ca3",
+    "item/depleted_uranium_dust.png": "c08ea28d5984b6fe165e8ba3dca110242c0828c920c89658221c732e8644e3ed",
+    "item/low_enriched_uranium_dust.png": "9d2f137f101681c244a706b413a015f2465df532a96af73eae14284bef3d4ff6",
+    "item/uranium_slurry_bucket.png": "25b238b6766f0a95972277bc7cfc1e835fcc111b4aad1dda196d2f65f36e3429",
+    "item/uranium_tailings.png": "c19f835e3de7ce489d8e9e6c26ab90cda6c840f4113765db77599593ba11335f"
+  },
+  "reversible_svg_update": {
+    "source": "tools/art-assets/sources/item/uranium_tailings.svg",
+    "mutation": "将一个已用色值 #75614B 改为同一贴图色板内的 #C0A47B",
+    "changed_png_sha256": "d03ad575a4fca5a68640edad97e2a61d8fe077a6e70ae6afce5b3d40ea78ea85",
+    "original_png_restored": true,
+    "source_restored_byte_for_byte": true,
+    "existing_69_pngs_unchanged": true,
+    "commands": [
+      {
+        "stage": "合法SVG像素变更安装",
+        "command": [
+          "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+          "--install"
+        ],
+        "exit_code": 0,
+        "stdout": "PASS: 83 generated PNG; 82 game targets (51 historical + 31 new); install=True; 12 comparison pages + overview\nmanifest sha256=a3dd24b8bb4f3bd9116abec4cde669c216037c32e5f49b83d01b72123f59cb67\n",
+        "stderr": ""
+      },
+      {
+        "stage": "恢复SVG并还原安装贴图",
+        "command": [
+          "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+          "--install"
+        ],
+        "exit_code": 0,
+        "stdout": "PASS: 83 generated PNG; 82 game targets (51 historical + 31 new); install=True; 12 comparison pages + overview\nmanifest sha256=a3dd24b8bb4f3bd9116abec4cde669c216037c32e5f49b83d01b72123f59cb67\n",
+        "stderr": ""
+      }
+    ]
+  }
+}

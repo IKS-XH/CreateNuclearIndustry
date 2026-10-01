@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.production.CentrifugeStateTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-01T21:42:49.585Z" hostname="DESKTOP-4G1EOU9" time="0.032">
+  <properties/>
+  <testcase name="sealedBatchAndWearSurviveSaveWithoutLookingUpRecipeAgain()" classname="com.iksxh.create_nuclear_industry.production.CentrifugeStateTest" time="0.022"/>
+  <testcase name="actualCentrifugeRecipeJsonDecodesWithLockedCodec()" classname="com.iksxh.create_nuclear_industry.production.CentrifugeStateTest" time="0.005"/>
+  <testcase name="bearingExhaustsExactlyAndOnlyAtRestCanRepair()" classname="com.iksxh.create_nuclear_industry.production.CentrifugeStateTest" time="0.002"/>
+  <testcase name="speedStabilityAndFractionalWearFollowApprovedFormula()" classname="com.iksxh.create_nuclear_industry.production.CentrifugeStateTest" time="0.001"/>
+  <testcase name="blockedOutputNeverConsumesOrLosesAnyProduct()" classname="com.iksxh.create_nuclear_industry.production.CentrifugeStateTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

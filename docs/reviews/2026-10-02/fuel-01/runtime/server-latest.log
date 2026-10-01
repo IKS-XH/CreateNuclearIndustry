@@ -1,0 +1,73 @@
+[0210月2026 05:43:40.618] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.42, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.219, --fml.neoFormVersion, 20240808.144430, --nogui]
+[0210月2026 05:43:40.621] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 21.0.7+8-LTS-245
+[0210月2026 05:43:40.622] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.7 by Oracle Corporation; OS Windows 10 arch amd64 version 10.0
+[0210月2026 05:43:40.719] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[0210月2026 05:43:40.765] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[0210月2026 05:43:41.174] [main/INFO] [net.neoforged.fml.loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[0210月2026 05:43:41.177] [main/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Create 6.0.10 (create)
+		Create: Nuclear Industry 0.1.0 (create_nuclear_industry)
+		Flywheel 1.0.6 (flywheel)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.219 (neoforge)
+		Ponder 1.0.82+mc1.21.1 (ponder)
+[0210月2026 05:43:42.557] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
+[0210月2026 05:43:42.575] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, ., --nogui]
+[0210月2026 05:43:42.687] [main/WARN] [mixin/]: Reference map 'ponder.refmap.json' for ponder-common.mixins.json could not be read. If this is a development environment you can ignore this message
+[0210月2026 05:43:43.074] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval)
+[0210月2026 05:43:43.258] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
+[0210月2026 05:43:49.798] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[0210月2026 05:43:49.799] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[0210月2026 05:43:49.803] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[0210月2026 05:43:49.805] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[0210月2026 05:43:49.806] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[0210月2026 05:43:49.864] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.219, for MC 1.21.1
+[0210月2026 05:43:49.882] [modloading-worker-0/INFO] [com.simibubi.create.Create/]: Create 6.0.10 initializing! Commit hash: ac0c444d9828da3453ae8cc65338e8de063286fb
+[0210月2026 05:43:52.174] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[0210月2026 05:43:52.222] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/moddev/artifacts/neoforge-21.1.219.jar%23125!/assets/.mcassetsroot' uses unexpected schema
+[0210月2026 05:43:52.223] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/moddev/artifacts/neoforge-21.1.219.jar%23125!/data/.mcassetsroot' uses unexpected schema
+[0210月2026 05:43:52.228] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [create] Starting version check at https://api.modrinth.com/updates/create/forge_updates.json?neoforge=only
+[0210月2026 05:43:52.280] [main/INFO] [com.simibubi.create.Create/]: Created 157 recipes which will be injected into the game
+[0210月2026 05:43:52.285] [main/INFO] [com.simibubi.create.Create/]: Created 0 tags which will be injected into the game
+[0210月2026 05:43:52.348] [main/INFO] [net.minecraft.server.MinecraftServer/]: Found new data pack create:dynamic_data, loading it automatically
+[0210月2026 05:43:52.934] [main/INFO] [net.minecraft.server.Main/]: No existing world data, creating new world
+[0210月2026 05:43:52.986] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [create] Found status: OUTDATED Current: 6.0.10 Target: 6.0.10+mc1.21.1
+[0210月2026 05:43:53.681] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 2872 recipes
+[0210月2026 05:43:53.855] [main/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 2506 advancements
+[0210月2026 05:43:54.708] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting minecraft server version 1.21.1
+[0210月2026 05:43:54.708] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Loading properties
+[0210月2026 05:43:54.709] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Default game type: SURVIVAL
+[0210月2026 05:43:54.709] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
+[0210月2026 05:43:54.762] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting Minecraft server on *:0
+[0210月2026 05:43:54.829] [Server thread/INFO] [net.minecraft.server.network.ServerConnectionListener/]: Using default channel type
+[0210月2026 05:43:54.861] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[0210月2026 05:43:54.861] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: The server will make no attempt to authenticate usernames. Beware.
+[0210月2026 05:43:54.862] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[0210月2026 05:43:54.862] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: To change this, set "online-mode" to "true" in the server.properties file.
+[0210月2026 05:43:54.925] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Preparing level "centrifuge-isolated-world"
+[0210月2026 05:43:57.138] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[0210月2026 05:43:57.158] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[0210月2026 05:43:57.675] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[0210月2026 05:43:58.448] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 18%
+[0210月2026 05:43:58.645] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 18%
+[0210月2026 05:43:59.211] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 32%
+[0210月2026 05:43:59.641] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 51%
+[0210月2026 05:44:00.157] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 3017 ms
+[0210月2026 05:44:00.157] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Done (5.280s)! For help, type "help"
+[0210月2026 05:44:00.221] [Server thread/INFO] [net.neoforged.neoforge.gametest.GameTestHooks/]: Enabled Gametest Namespaces: [create_nuclear_industry]
+[0210月2026 05:44:00.302] [Server thread/INFO] [net.neoforged.neoforge.server.permission.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[0210月2026 05:44:01.673] [LanServerPinger #1/WARN] [net.minecraft.client.server.LanServerPinger/]: LanServerPinger: Network is unreachable: sendto
+[0210月2026 05:44:11.612] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping the server
+[0210月2026 05:44:11.656] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[0210月2026 05:44:11.657] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[0210月2026 05:44:11.657] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[0210月2026 05:44:12.247] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[centrifuge-isolated-world]'/minecraft:overworld
+[0210月2026 05:44:12.261] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[centrifuge-isolated-world]'/minecraft:the_end
+[0210月2026 05:44:12.267] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[centrifuge-isolated-world]'/minecraft:the_nether
+[0210月2026 05:44:12.279] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (centrifuge-isolated-world): All chunks are saved
+[0210月2026 05:44:12.279] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[0210月2026 05:44:12.279] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[0210月2026 05:44:12.279] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
