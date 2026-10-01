@@ -1,0 +1,38 @@
+{
+  "jarFile": "create_nuclear_industry-0.1.0.jar",
+  "jarSha256": "D23732ABBFF58C2742671BF7A57A541D1EC930DEAB791815EF14FF10B895B33B",
+  "testSourceSha256": "60F738C3BDC06BAC82F4176F3436E6C73F070A2E7589273C48379419F4439FCA",
+  "resourceSourceFiles": 264,
+  "resourceJarEntries": 264,
+  "resourceByteMismatches": [],
+  "texturePngInJar": 60,
+  "junit": {
+    "suites": 52,
+    "tests": 265,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "defaultRunManifestEqual": true,
+  "normalServerTestResultMarkers": 16,
+  "normalServerUniqueScenarios": [
+    "external-steel-powder-absent",
+    "external-steel-powder-furnace",
+    "lava-fan-single-steel-dust",
+    "loaded-steel-route",
+    "mixer-4iron-1charcoal-5steel",
+    "mixer-4iron-1coal-5steel",
+    "mixer-blocked-output-recovery",
+    "mixer-insufficient-iron-ingot-missing-carbon-recovery",
+    "mixer-power-interruption-recovery",
+    "mixer-wrong-powder-wrong-carbon-recovery",
+    "original-coal-charcoal-milling",
+    "press-existing-steel-plate",
+    "steel-dust-blast-furnace",
+    "steel-dust-furnace",
+    "three-crushing-wheel-inputs"
+  ],
+  "baselineTrackedPngCount": 55,
+  "baselineTrackedPngChanged": [],
+  "newTexturePngCount": 5
+}

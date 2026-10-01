@@ -92,7 +92,7 @@
 
 合金钢板的正式注册 ID 冻结为 `steel_plate`，显示名为“合金钢板”，并加入对应的 `c:plates/steel` 通用标签。`alloy_steel_plate` 是早期需求记录中使用过的描述性旧名，不注册为物品、别名或兼容转发 ID；燃料列和控制棒列维修统一消耗 `steel_plate`。
 
-用户于2026-10-01将制钢改为铁锭经粉碎轮制铁粉，4铁粉+1煤粉或木炭粉动力搅拌成5合金钢粉，再熔炼成合金钢锭。`iron_dust` 不复用 `create:crushed_raw_iron`，两者分别代表金属粉和粉碎粗矿；`steel_dust` 是熔炼前的独立中间物。原有 `steel_plate` 保持身份与维修语义，本批不新增钢材逆向拆粉路线。上述登记是已确认需求，尚未注册或接入游戏；实施与剩余参数见 [材料03方案](./superpowers/plans/2026-10-01-mainline-material-03-proposal.md)。
+用户于2026-10-01将制钢改为铁锭经粉碎轮制铁粉，4铁粉+1煤粉或木炭粉动力搅拌成5合金钢粉，再熔炼成合金钢锭。`iron_dust` 不复用 `create:crushed_raw_iron`，两者分别代表金属粉和粉碎粗矿；`steel_dust` 是熔炼前的独立中间物。原有 `steel_plate` 保持身份与维修语义，本批不新增钢材逆向拆粉路线。上述登记与首轮参数已确认，尚未验收；具体合同见 [材料03方案](./superpowers/plans/2026-10-01-mainline-material-03-proposal.md)。
 
 ### 3.3 燃料、乏燃料与废物
 
