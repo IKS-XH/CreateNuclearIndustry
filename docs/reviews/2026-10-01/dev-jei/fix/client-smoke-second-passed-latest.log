@@ -1,0 +1,88 @@
+[0110月2026 14:35:40.796] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientdev, --version, 21.1.219, --assetIndex, 17, --assetsDir, C:\\Users\\IKSXH\\.gradle\\caches\\neoformruntime\\assets, --gameDir, ., --fml.fmlVersion, 4.0.42, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.219, --fml.neoFormVersion, 20240808.144430]
+[0110月2026 14:35:40.800] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Oracle Corporation Java HotSpot(TM) 64-Bit Server VM 21.0.7+8-LTS-245
+[0110月2026 14:35:40.801] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.7 by Oracle Corporation; OS Windows 10 arch amd64 version 10.0
+[0110月2026 14:35:40.897] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[0110月2026 14:35:40.996] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[0110月2026 14:35:41.150] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[0110月2026 14:35:41.217] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%23138!/ Service=ModLauncher Env=CLIENT
+[0110月2026 14:35:41.434] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: NVIDIA GeForce RTX 3070 Laptop GPU/PCIe/SSE2 GL version 4.6.0 NVIDIA 581.80, NVIDIA Corporation
+[0110月2026 14:35:41.623] [main/INFO] [net.neoforged.fml.loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[0110月2026 14:35:41.625] [main/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Create 6.0.10 (create)
+		Create: Nuclear Industry 0.1.0 (create_nuclear_industry)
+		Flywheel 1.0.6 (flywheel)
+		Just Enough Items 19.27.0.340 (jei)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.219 (neoforge)
+		Ponder 1.0.82+mc1.21.1 (ponder)
+[0110月2026 14:35:42.884] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
+[0110月2026 14:35:42.899] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientdev' with arguments [--version, 21.1.219, --gameDir, ., --assetsDir, C:\Users\IKSXH\.gradle\caches\neoformruntime\assets, --assetIndex, 17]
+[0110月2026 14:35:42.976] [main/WARN] [mixin/]: Reference map 'ponder.refmap.json' for ponder-common.mixins.json could not be read. If this is a development environment you can ignore this message
+[0110月2026 14:35:43.528] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval)
+[0110月2026 14:35:43.578] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
+[0110月2026 14:35:45.305] [Datafixer Bootstrap/INFO] [com.mojang.datafixers.DataFixerBuilder/]: 229 Datafixer optimizations took 377 milliseconds
+[0110月2026 14:35:49.852] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[0110月2026 14:35:49.853] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[0110月2026 14:35:49.856] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[0110月2026 14:35:49.857] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[0110月2026 14:35:49.858] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[0110月2026 14:35:49.978] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MyMC/NewMod/Create_NuclearIndustry/build/moddev/artifacts/neoforge-21.1.219.jar%23189!/assets/.mcassetsroot' uses unexpected schema
+[0110月2026 14:35:49.979] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MyMC/NewMod/Create_NuclearIndustry/build/moddev/artifacts/neoforge-21.1.219.jar%23189!/data/.mcassetsroot' uses unexpected schema
+[0110月2026 14:35:50.006] [Render thread/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[0110月2026 14:35:50.013] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
+[0110月2026 14:35:50.084] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Backend library: LWJGL version 3.3.3+5
+[0110月2026 14:35:50.283] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.219, for MC 1.21.1
+[0110月2026 14:35:50.323] [modloading-worker-0/INFO] [com.simibubi.create.Create/]: Create 6.0.10 initializing! Commit hash: ac0c444d9828da3453ae8cc65338e8de063286fb
+[0110月2026 14:35:50.326] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[0110月2026 14:35:50.328] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 873.8 microseconds
+[0110月2026 14:35:52.917] [Render thread/INFO] [net.neoforged.neoforge.gametest.GameTestHooks/]: Enabled Gametest Namespaces: [create_nuclear_industry]
+[0110月2026 14:35:53.201] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources, mod/flywheel, mod/ponder, mod/create, mod/create_nuclear_industry, mod/neoforge, mod/jei
+[0110月2026 14:35:53.283] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [create] Starting version check at https://api.modrinth.com/updates/create/forge_updates.json?neoforge=only
+[0110月2026 14:35:53.294] [Worker-Main-13/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.1.05.hex, loading
+[0110月2026 14:35:53.363] [Worker-Main-2/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_jp_patch-15.1.05.hex, loading
+[0110月2026 14:35:54.237] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [create] Found status: OUTDATED Current: 6.0.10 Target: 6.0.10+mc1.21.1
+[0110月2026 14:35:54.682] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=8'
+[0110月2026 14:35:54.682] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=7'
+[0110月2026 14:35:54.682] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=6'
+[0110月2026 14:35:54.682] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=5'
+[0110月2026 14:35:54.683] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=4'
+[0110月2026 14:35:54.683] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=3'
+[0110月2026 14:35:54.683] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=2'
+[0110月2026 14:35:54.683] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=1'
+[0110月2026 14:35:54.684] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=0'
+[0110月2026 14:35:54.684] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=10'
+[0110月2026 14:35:54.684] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=11'
+[0110月2026 14:35:54.684] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=12'
+[0110月2026 14:35:54.684] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=13'
+[0110月2026 14:35:54.685] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=14'
+[0110月2026 14:35:54.685] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=15'
+[0110月2026 14:35:54.685] [Worker-Main-15/WARN] [net.minecraft.client.resources.model.BlockStateModelLoader/]: Exception loading blockstate definition: 'create_nuclear_industry:blockstates/compound_coolant.json' missing model for variant: 'create_nuclear_industry:compound_coolant#level=9'
+[0110月2026 14:35:55.672] [Worker-Main-15/INFO] [PonderIndex/]: Registering Ponder Scenes took 79.96 ms
+[0110月2026 14:35:55.678] [Worker-Main-15/INFO] [PonderIndex/]: Registering Ponder Tags took 4.629 ms
+[0110月2026 14:35:55.834] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:item.goat_horn.play
+[0110月2026 14:35:55.834] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
+[0110月2026 14:35:55.926] [Render thread/INFO] [com.mojang.blaze3d.audio.Library/]: OpenAL initialized on device OpenAL Soft on 耳机 (CX31993 HIFI AUDIO)
+[0110月2026 14:35:55.927] [Render thread/INFO] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Sound engine started
+[0110月2026 14:35:56.013] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 2048x1024x4 minecraft:textures/atlas/blocks.png-atlas
+[0110月2026 14:35:56.022] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
+[0110月2026 14:35:56.023] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[0110月2026 14:35:56.023] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[0110月2026 14:35:56.024] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 2048x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
+[0110月2026 14:35:56.029] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[0110月2026 14:35:56.029] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
+[0110月2026 14:35:56.030] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[0110月2026 14:35:56.030] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[0110月2026 14:35:56.094] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[0110月2026 14:35:56.096] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[0110月2026 14:35:56.096] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[0110月2026 14:35:56.096] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[0110月2026 14:35:56.096] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x0 minecraft:textures/atlas/gui.png-atlas
+[0110月2026 14:35:56.113] [Render thread/WARN] [net.minecraft.client.renderer.ShaderInstance/]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
+[0110月2026 14:35:56.174] [Render thread/INFO] [flywheel/backend/shaders/]: Loaded 77 shader sources in 17.554 ms
+[0110月2026 14:35:56.198] [Render thread/INFO] [com.simibubi.create.Create/]: Loaded 58 train hat configurations.
+[0110月2026 14:35:56.199] [Render thread/INFO] [net.neoforged.neoforge.client.entity.animation.json.AnimationLoader/]: Loaded 0 entity animations
+[0110月2026 14:35:56.199] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 jei:textures/atlas/gui.png-atlas
+[0110月2026 14:36:09.547] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Stopping!

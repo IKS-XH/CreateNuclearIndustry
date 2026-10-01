@@ -1,0 +1,48 @@
+{
+  "Date": "2026-10-01",
+  "RootProjectPath": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition",
+  "MainCommit": "8bf905fab553988894fe250d3656fef4adfb7f2c",
+  "CandidateCommit": "39db2b4ab47f5f1519f06c667e3351406b3a3f14",
+  "BuildGradleGitObject": "185467067d18a882eee3a8e9695328e37c1b7404",
+  "PreparationExitCode": 0,
+  "ActualTaskChecks": [
+    {
+      "Run": "runClient",
+      "JeiCount": 1
+    },
+    {
+      "Run": "runClientA",
+      "JeiCount": 1
+    },
+    {
+      "Run": "runClientB",
+      "JeiCount": 1
+    },
+    {
+      "Run": "runServer",
+      "JeiCount": 0
+    },
+    {
+      "Run": "runGameTestServer",
+      "JeiCount": 0
+    }
+  ],
+  "LegacyChecks": [
+    {
+      "Run": "client",
+      "JeiCount": 0
+    },
+    {
+      "Run": "clientA",
+      "JeiCount": 0
+    },
+    {
+      "Run": "clientB",
+      "JeiCount": 0
+    }
+  ],
+  "CandidateGuiLaunched": false,
+  "MainIsolatedStartupJeiRegistered": true,
+  "WorldUiAcceptance": "pending",
+  "VscodeSHA256": "65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07"
+}
