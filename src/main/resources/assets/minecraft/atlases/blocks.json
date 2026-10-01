@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/uranium_slurry_still"
+    },
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/uranium_slurry_flow"
+    }
+  ]
+}

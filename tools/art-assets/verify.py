@@ -1,4 +1,4 @@
-"""离线核对EXT-ART-07材料素材：旧图保留、SVG像素、复现性和失败不写出。
+"""离线核对EXT-ART-08素材：旧图保留、SVG像素、复现性和失败不写出。
 
 只在显式执行本脚本时做临时坏输入实验，finally 原样恢复源稿/清单。
 不调用游戏、Gradle 或 Git 写操作；结果保存在本任务证据目录。
@@ -18,9 +18,9 @@ import pipeline
 from export import render_svg, read_palette, ROOT
 
 REPO=ROOT.parents[1]
-EVIDENCE=REPO/'build/reports/extension/EXT-ART-07'
+EVIDENCE=REPO/'build/reports/extension/EXT-ART-08'
 EVIDENCE.mkdir(parents=True,exist_ok=True)
-PREEXISTING_SNAPSHOT=REPO/'docs/reviews/2026-10-02/material-05/art/preexisting-game-png-sha256.json'
+PREEXISTING_SNAPSHOT=ROOT/'baselines/EXT-ART-08-existing-game-png-sha256.json'
 ENV=dict(os.environ,PYTHONIOENCODING='utf-8',PYTHONDONTWRITEBYTECODE='1')
 log=[]
 # 用户只撤回两种冷却剂的八条路径；独立列举，避免随管线白名单错误一起放宽。
@@ -52,18 +52,20 @@ entries,images,before,retained=pipeline.prepare();palette=read_palette()
 baseline=json.loads((ROOT/'baseline.json').read_text(encoding='utf-8'))
 assert {r['game'] for r in baseline['records']}==pipeline.GAME_FILES
 assert len(baseline['records'])==51
-assert len(entries)==70
-assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):65,(16,64):4}
+assert len(entries)==83
+assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):77,(16,64):5}
 actual_before={p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}
 snapshot=json.loads(PREEXISTING_SNAPSHOT.read_text(encoding='utf-8'))
+snapshot={record['path']:record['sha256'] for record in snapshot['records']}
 plate_stage=pipeline.GAME_FILES|frozenset({'item/lead_plate.png','item/tin_plate.png'})
 nugget_stage=plate_stage|frozenset({'item/lead_nugget.png','item/tin_nugget.png'})
 previous_material_stage=nugget_stage
 steel_stage=previous_material_stage|frozenset({'item/iron_dust.png','item/coal_dust.png','item/charcoal_dust.png','item/steel_dust.png','item/steel_ingot.png'})
 sensor_stage=steel_stage|frozenset({'item/tin_wire.png','item/industrial_sensor.png','item/radiation_sensor.png','item/incomplete_industrial_sensor.png','item/incomplete_radiation_sensor.png'})
-assert actual_before in (pipeline.GAME_FILES,plate_stage,nugget_stage,steel_stage,sensor_stage,pipeline.ALLOWED_GAME_FILES),'开工时游戏PNG必须是已知历史/素材阶段的完整白名单'
+preserved_stage=pipeline.GAME_FILES|pipeline.PREVIOUS_NEW_GAME_FILES
+assert actual_before in (pipeline.GAME_FILES,plate_stage,nugget_stage,steel_stage,sensor_stage,preserved_stage,pipeline.ALLOWED_GAME_FILES),'开工时游戏PNG必须是已知历史/素材阶段的完整白名单'
 pre_existing_hashes={name:digest(pipeline.GAME_ROOT/name) for name in actual_before}
-results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'preexisting_snapshot':str(PREEXISTING_SNAPSHOT.relative_to(REPO).as_posix()),'historical_game_count':51,'pre_existing_game_count':len(snapshot),'game_count_at_verifier_start':len(pre_existing_hashes),'new_game_count':18,'current_batch_game_count':4,'final_game_count':69,'manifest_entry_count':70,'source_count':len({e['source'] for e in entries}),'records':[]}
+results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'preexisting_snapshot':str(PREEXISTING_SNAPSHOT.relative_to(REPO).as_posix()),'historical_game_count':51,'pre_existing_game_count':len(snapshot),'game_count_at_verifier_start':len(pre_existing_hashes),'new_game_count':31,'current_batch_game_count':13,'final_game_count':82,'manifest_entry_count':83,'source_count':len({e['source'] for e in entries}),'records':[]}
 for e in entries:
     name=e['game'] or 'item/lapis_dust.png'
     if name in RETAINED_COOLANTS:
@@ -154,16 +156,26 @@ for mutation in ('extra_path','wrong_size','wrong_mapping','unauthorized_preserv
     finally:manifest.write_bytes(saved)
 results['cli_failure_no_writes']=['unsupported_svg','extra_path','wrong_size','wrong_mapping','unauthorized_preserve','missing_preserve']
 
-# 四项新材料的轴孔透明且可区分；成品和半成品共用轴承金属色族。
+# EXT-ART-07 轴承视觉合同继续保留：孔洞透明、成品闭合、半成品留出装配缺口。
 for name in ('heavy_bearing','incomplete_heavy_bearing'):
     bearing=images[f'item/{name}.png']
     assert bearing.getpixel((8,8))[3]==0,f'{name}: 轴孔中心必须保持透明'
 assert images['item/heavy_bearing.png'].getpixel((12,4))[3]==255
 assert images['item/incomplete_heavy_bearing.png'].getpixel((12,5))[3]==0
 assert read_palette()['heavy_bearing']==read_palette()['incomplete_heavy_bearing']
-results['current_batch_visual_invariants']=['quartz_dust','refractory_brick','heavy_bearing','incomplete_heavy_bearing','transparent_bearing_bores','incomplete_open_frame','shared_bearing_palette']
+results['previous_batch_visual_invariants']=['transparent_bearing_bores','completed_bearing_frame','incomplete_open_frame','shared_bearing_palette']
 
-# 显式接入后逐条核对：开工65张图保持原字节，十八项无历史基线路径与导出候选一致。
+# 新粉末保持独立轮廓/颜色；料浆桶留透明外圈，液体流图保留完整长画布。
+powders=[images[f'item/{name}.png'] for name in ('uranium_tailings','low_enriched_uranium_dust','depleted_uranium_dust')]
+assert len({image.tobytes() for image in powders})==3
+assert all(image.getpixel((0,0))[3]==0 for image in powders)
+bucket=images['item/uranium_slurry_bucket.png']
+assert bucket.getpixel((0,0))[3]==0 and bucket.getbbox() is not None
+assert images['fluid/uranium_slurry_flow.png'].size==(16,64)
+assert len({images[name].tobytes() for name in ('block/enrichment_centrifuge_front.png','block/enrichment_centrifuge_back.png','block/enrichment_centrifuge_slurry_port.png','block/enrichment_centrifuge_water_port.png','block/enrichment_centrifuge_top.png','block/enrichment_centrifuge_bottom.png')})==6
+results['current_batch_visual_invariants']=['three_distinct_powders','bucket_transparent_outline','slurry_flow_16x64','six_distinct_centrifuge_faces','tailings_brick_texture']
+
+# 显式接入后逐条核对：开工69张图保持原字节，本批13项新增素材与导出候选一致。
 historical_before={name:digest(pipeline.GAME_ROOT/name) for name in pipeline.GAME_FILES}
 run('--install')
 assert {p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}==pipeline.ALLOWED_GAME_FILES
@@ -174,10 +186,10 @@ for e in entries:
             assert not (ROOT/'baseline'/e['game']).exists(),'新增图不得伪造旧基线'
         elif e['game'] in RETAINED_COOLANTS:
             assert (pipeline.GAME_ROOT/e['game']).read_bytes()==(ROOT/'baseline'/e['game']).read_bytes(),'旧冷却剂被再次覆盖'
-assert {name:digest(pipeline.GAME_ROOT/name) for name in pipeline.GAME_FILES}==historical_before,'原51张游戏PNG被改动'
+assert {name:digest(pipeline.GAME_ROOT/name) for name in pipeline.GAME_FILES}==historical_before,'历史51张游戏PNG被改动'
 assert all(digest(pipeline.GAME_ROOT/name)==value for name,value in pre_existing_hashes.items()),'两次安装改动了开工前已有的游戏PNG'
-assert set(snapshot)==pipeline.ALLOWED_GAME_FILES-pipeline.CURRENT_BATCH_GAME_FILES,'开工哈希快照必须精确覆盖原有65张PNG'
-assert {name:digest(pipeline.GAME_ROOT/name) for name in snapshot}==snapshot,'本批65张开工游戏PNG哈希变化'
+assert set(snapshot)==pipeline.ALLOWED_GAME_FILES-pipeline.CURRENT_BATCH_GAME_FILES,'开工哈希快照必须精确覆盖原有69张PNG'
+assert {name:digest(pipeline.GAME_ROOT/name) for name in snapshot}==snapshot,'本批69张开工游戏PNG哈希变化'
 after=state();run('--install');assert state()==after
 results['install_repeat_exports']=2
 results['historical_51_game_png_unchanged']=True

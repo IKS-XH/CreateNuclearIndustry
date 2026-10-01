@@ -6,6 +6,9 @@ import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
+import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
+import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import com.iksxh.create_nuclear_industry.worldgen.OreGenerationFilter;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
@@ -45,6 +48,10 @@ public final class CreateNuclearIndustry {
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
         BasicMaterialContent.register(modEventBus);
+        FuelProcessingContent.register(modEventBus);
+        BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
+                state.is(FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get())
+                        ? BlockMovementChecks.CheckResult.FAIL : BlockMovementChecks.CheckResult.PASS);
         OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);
         P1Blocks.register(modEventBus);
@@ -58,6 +65,7 @@ public final class CreateNuclearIndustry {
         modEventBus.addListener(CreateNuclearIndustry::registerPonder);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerP1Capabilities);
+        modEventBus.addListener(CreateNuclearIndustry::registerCentrifugeCapabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
         NeoForge.EVENT_BUS.register(ReactorStructureLifecycle.class);
         NeoForge.EVENT_BUS.register(ControlRodSliderNetwork.class);
@@ -98,5 +106,15 @@ public final class CreateNuclearIndustry {
                 P1BlockEntities.REACTOR_PORT.get(),
                 (blockEntity, side) -> ReactorCoolantFluidHandler.forPort(blockEntity)
         );
+    }
+
+    /** 将面向固定端口的能力绑定到同一方块实体；料浆桶使用标准整桶物品流体能力。 */
+    private static void registerCentrifugeCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, FuelProcessingContent.CENTRIFUGE_BE.get(),
+                (machine, side) -> machine.fluidPort(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FuelProcessingContent.CENTRIFUGE_BE.get(),
+                (machine, side) -> machine.itemPort(side));
+        event.registerItem(Capabilities.FluidHandler.ITEM,
+                (stack, context) -> new FluidBucketWrapper(stack), FuelProcessingContent.URANIUM_SLURRY_BUCKET.get());
     }
 }

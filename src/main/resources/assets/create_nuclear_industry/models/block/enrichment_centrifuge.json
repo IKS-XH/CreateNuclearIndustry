@@ -1,0 +1,25 @@
+{
+  "textures": {
+    "north": "create_nuclear_industry:block/enrichment_centrifuge_front",
+    "south": "create_nuclear_industry:block/enrichment_centrifuge_back",
+    "east": "create_nuclear_industry:block/enrichment_centrifuge_slurry_port",
+    "west": "create_nuclear_industry:block/enrichment_centrifuge_water_port",
+    "up": "create_nuclear_industry:block/enrichment_centrifuge_top",
+    "down": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "particle": "create_nuclear_industry:block/enrichment_centrifuge_back"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": {"texture": "#north", "cullface": "north"},
+        "south": {"texture": "#south", "cullface": "south"},
+        "east": {"texture": "#east", "cullface": "east"},
+        "west": {"texture": "#west", "cullface": "west"},
+        "up": {"texture": "#up", "cullface": "up"},
+        "down": {"texture": "#down", "cullface": "down"}
+      }
+    }
+  ]
+}

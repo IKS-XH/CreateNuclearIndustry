@@ -105,6 +105,7 @@ dependencies {
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
 
     developmentJei "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'

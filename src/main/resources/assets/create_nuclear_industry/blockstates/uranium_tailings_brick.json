@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": {"model": "create_nuclear_industry:block/uranium_tailings_brick"}
+  }
+}
