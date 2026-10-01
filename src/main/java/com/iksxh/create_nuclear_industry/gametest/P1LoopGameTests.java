@@ -244,39 +244,45 @@ public final class P1LoopGameTests {
     @GameTest(template = TEMPLATE, timeoutTicks = 120)
     public static void dynamicTelemetryPacketReachesClientWithinTenTicks(GameTestHelper helper) {
         buildCanonicalStructure(helper);
-        helper.runAfterDelay(5, () -> {
-            ReactorInstrumentPortBlockEntity instrument = instrument(helper);
-            ServerPlayer player = createUnloggedMockClient(helper);
-            BlockPos absoluteInstrument = helper.absolutePos(INSTRUMENT);
-            player.moveTo(absoluteInstrument.getX() + 0.5D,
-                    absoluteInstrument.getY() + 0.5D,
-                    absoluteInstrument.getZ() + 0.5D);
-            trackMockClient(helper, player);
-            ChunkPos instrumentChunk = new ChunkPos(absoluteInstrument);
-            player.setChunkTrackingView(ChunkTrackingView.of(instrumentChunk, 10));
-            player.connection.chunkSender.sendNextChunks(player);
-            require(helper, helper.getLevel().getChunkSource().chunkMap
-                            .getPlayers(instrumentChunk, false).contains(player),
-                    "embedded client was not tracking the instrument chunk: view="
-                            + player.getChunkTrackingView().contains(instrumentChunk)
-                            + ", pending=" + player.connection.chunkSender.isPending(instrumentChunk.toLong()));
-            EmbeddedChannel channel = (EmbeddedChannel) player.connection.getConnection().channel();
-            drainOutbound(channel);
+        // 序列在第 5 tick 的延迟任务表遍历之后执行，逐 tick 检查的批量注册不会改动活动迭代器。
+        helper.startSequence().thenExecuteAfter(5, () -> {
+            try {
+                ReactorInstrumentPortBlockEntity instrument = instrument(helper);
+                ServerPlayer player = createUnloggedMockClient(helper);
+                BlockPos absoluteInstrument = helper.absolutePos(INSTRUMENT);
+                player.moveTo(absoluteInstrument.getX() + 0.5D,
+                        absoluteInstrument.getY() + 0.5D,
+                        absoluteInstrument.getZ() + 0.5D);
+                trackMockClient(helper, player);
+                ChunkPos instrumentChunk = new ChunkPos(absoluteInstrument);
+                player.setChunkTrackingView(ChunkTrackingView.of(instrumentChunk, 10));
+                player.connection.chunkSender.sendNextChunks(player);
+                require(helper, helper.getLevel().getChunkSource().chunkMap
+                                .getPlayers(instrumentChunk, false).contains(player),
+                        "embedded client was not tracking the instrument chunk: view="
+                                + player.getChunkTrackingView().contains(instrumentChunk)
+                                + ", pending=" + player.connection.chunkSender.isPending(instrumentChunk.toLong()));
+                EmbeddedChannel channel = (EmbeddedChannel) player.connection.getConnection().channel();
+                drainOutbound(channel);
 
-            instrument.setSnapshot(snapshotWithFuelAndColdCoolant());
-            ReactorStructureLifecycle.rescanInstrumentPortNow(
-                    helper.getLevel(), instrument.getBlockPos());
-            drainOutbound(channel);
-            long startTick = helper.getTick();
-            helper.onEachTick(() -> {
-                if (hasAvailableTelemetryPacket(channel, absoluteInstrument)) {
-                    require(helper, helper.getTick() - startTick <= 10L,
-                            "client telemetry update exceeded the ten-tick visibility bound");
-                    helper.succeed();
-                } else if (helper.getTick() - startTick > 10L) {
-                    helper.fail("client telemetry update did not arrive within ten ticks");
-                }
-            });
+                instrument.setSnapshot(snapshotWithFuelAndColdCoolant());
+                ReactorStructureLifecycle.rescanInstrumentPortNow(
+                        helper.getLevel(), instrument.getBlockPos());
+                drainOutbound(channel);
+                long startTick = helper.getTick();
+                helper.onEachTick(() -> {
+                    if (hasAvailableTelemetryPacket(channel, absoluteInstrument)) {
+                        require(helper, helper.getTick() - startTick <= 10L,
+                                "client telemetry update exceeded the ten-tick visibility bound");
+                        helper.succeed();
+                    } else if (helper.getTick() - startTick > 10L) {
+                        helper.fail("client telemetry update did not arrive within ten ticks");
+                    }
+                });
+            } catch (Exception exception) {
+                // 与原延迟回调一致，初始化异常仍须记录为该 GameTest 失败。
+                helper.testInfo.fail(exception);
+            }
         });
     }
 
