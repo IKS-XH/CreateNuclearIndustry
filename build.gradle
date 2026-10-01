@@ -16,6 +16,10 @@ repositories {
     mavenCentral()
     maven { url = 'https://maven.createmod.net' }
     maven { url = 'https://maven.ithundxr.dev/snapshots' }
+    maven {
+        url = 'https://maven.blamejared.com/'
+        content { includeGroup 'mezz.jei' }
+    }
 }
 
 neoForge {
@@ -84,6 +88,11 @@ dependencies {
     compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}"
     runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
+
+    // JEI 仅加入三个开发客户端，不进入服务端、测试或发布依赖。
+    clientAdditionalRuntimeClasspath "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    clientAAdditionalRuntimeClasspath "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    clientBAdditionalRuntimeClasspath "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'
