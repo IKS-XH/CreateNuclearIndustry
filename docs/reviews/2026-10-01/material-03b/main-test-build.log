@@ -1,0 +1,91 @@
+
+> Task :createMinecraftArtifacts
+Loaded 145 artifacts from E:\MyMC\NewMod\Create_NuclearIndustry\build\tmp\createMinecraftArtifacts\nfrt_artifact_manifest.properties
+*** Started working on downloadJson
+ DONE  Completed downloadJson in 0.03s
+*** Started working on downloadServer
+*** Started working on downloadClientMappings
+*** Started working on downloadClient
+ DONE  Completed downloadClient in 0.04s
+ DONE  Completed downloadClientMappings in 0.04s
+ DONE  Completed downloadServer in 0.04s
+*** Started working on mergeMappings
+ REUSE Used cache of mergeMappings in 0.00s
+*** Started working on stripClient
+ REUSE Used cache of stripClient in 0.00s
+*** Started working on extractServer
+ REUSE Used cache of extractServer in 0.00s
+*** Started working on stripServer
+ REUSE Used cache of stripServer in 0.00s
+*** Started working on merge
+ REUSE Used cache of merge in 0.00s
+*** Started working on rename
+ REUSE Used cache of rename in 0.00s
+*** Started working on decompile
+ REUSE Used cache of decompile in 0.00s
+*** Started working on inject
+ REUSE Used cache of inject in 0.00s
+*** Started working on patch
+ REUSE Used cache of patch in 0.00s
+*** Started working on applyNeoforgePatches
+ REUSE Used cache of applyNeoforgePatches in 0.00s
+*** Started working on transformSources
+ REUSE Used cache of transformSources in 0.00s
+*** Started working on recompile
+ REUSE Used cache of recompile in 0.00s
+*** Started working on sourcesWithNeoForge
+ REUSE Used cache of sourcesWithNeoForge in 0.00s
+*** Started working on compiledWithNeoForge
+ REUSE Used cache of compiledWithNeoForge in 0.00s
+*** Started working on sourcesAndCompiledWithNeoForge
+ REUSE Used cache of sourcesAndCompiledWithNeoForge in 0.00s
+Total runtime: 1.47s
+
+
+> Task :compileJava
+E:\MyMC\NewMod\Create_NuclearIndustry\src\main\java\com\iksxh\create_nuclear_industry\content\ModFluids.java:113: 警告: [removal] FluidType 中的 initializeClient(Consumer<IClientFluidTypeExtensions>) 已过时, 且标记为待删除
+            public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                        ^
+E:\MyMC\NewMod\Create_NuclearIndustry\src\main\java\com\iksxh\create_nuclear_industry\control\ControlRodSliderClientEvents.java:15: 警告: [removal] EventBusSubscriber 中的 bus() 已过时, 且标记为待删除
+        bus = EventBusSubscriber.Bus.GAME
+        ^
+E:\MyMC\NewMod\Create_NuclearIndustry\src\main\java\com\iksxh\create_nuclear_industry\control\ControlRodSliderClientEvents.java:15: 警告: [removal] EventBusSubscriber 中的 Bus 已过时, 且标记为待删除
+        bus = EventBusSubscriber.Bus.GAME
+                                ^
+注: E:\MyMC\NewMod\Create_NuclearIndustry\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionOreGameTests.java使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+注: E:\MyMC\NewMod\Create_NuclearIndustry\src\main\java\com\iksxh\create_nuclear_industry\gametest\P1Coolant05CoverageGameTests.java使用了未经检查或不安全的操作。
+注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+3 个警告
+
+> Task :processResources
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :compileTestJava
+
+> Task :downloadAssets
+Loaded 145 artifacts from E:\MyMC\NewMod\Create_NuclearIndustry\build\tmp\downloadAssets\nfrt_artifact_manifest.properties
+Downloading asset index 17
+Using Minecraft asset root: C:\Users\IKSXH\.gradle\caches\neoformruntime\assets
+  DL    https://piston-meta.mojang.com/v1/packages/ae4f2779919ee343d3d98445f9a3ae1dc6542bc9/17.json
+
+> Task :writeNeoForgeTestClasspath
+> Task :prepareNeoForgeTestFiles
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+> Task :test
+> Task :assemble
+> Task :check
+> Task :build
+
+[Incubating] Problems report is available at: file:///E:/MyMC/NewMod/Create_NuclearIndustry/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 25s
+9 actionable tasks: 9 executed

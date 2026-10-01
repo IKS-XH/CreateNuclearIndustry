@@ -1,0 +1,14 @@
+{
+  "RepoRoot": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition",
+  "JarPath": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "JarSha256": "E48FA4129DC20E642AA62F8DEDD62809585EDE38C0F31CE8B00EBD959F89152B",
+  "SourceAssetsAndData": 264,
+  "JarAssetsAndData": 264,
+  "GamePng": 60,
+  "SteelNames": {
+    "SteelDust": "钢粉",
+    "SteelIngot": "钢锭",
+    "SteelPlate": "钢板"
+  },
+  "Differences": []
+}

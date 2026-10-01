@@ -1,6 +1,6 @@
 # EXT-A-MATERIAL-03A：钢材显示名与验收收尾
 
-**需求与状态：** 用户已确认材料03客户端手动测试全部通过，并要求游戏内“合金钢”改称“钢”。显示名修订已完成，候选提交`c860cf7`；只读回归诊断已交付，155项完整回归仍未完成。见[收尾记录](../../reviews/2026-10-01/material-03a/README.md)。不重复人工整链验收，不将人工通过写成自动回归通过。
+**需求与状态：已完成。** 用户已确认材料03客户端手动测试全部通过，并要求游戏内“合金钢”改称“钢”。显示名修订`c860cf7`及本卡只读诊断已交付，见[本卡记录](../../reviews/2026-10-01/material-03a/README.md)。剩余全量回归后由03B修复并取得155项断言通过，钢材随`e8ef02e`合入main，见[最终验收](../../reviews/2026-10-01/material-03b/README.md)。不重复人工整链验收，不将人工通过写成自动回归通过。
 
 **基线：** 候选 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition` / `codex/ore-acquisition` / `feb2cb3`干净；main `b36616e`仅保留用户既有`.vscode/launch.json`修改。MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6不变。
 

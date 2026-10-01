@@ -7,7 +7,7 @@
 **需求：** [已确认路线与参数](./2026-10-01-mainline-material-03-proposal.md)、[配方5.4](../../recipes.md#54-钢材陶瓷与建筑材料)、内容清单3.2。用户已答复“采用这组推荐参数”。
 **工作区：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支 `codex/ore-acquisition`；功能基线 `27bf103`，PM同步本卡后记录开工提交。主工程既有 `.vscode/launch.json` 不动。
 **版本：** MC1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6；保留 JEI、许可证、构建和依赖版本。
-**状态：** 用户于2026-10-01确认完整客户端清单通过，并要求普通“合金钢”简称“钢”；按[03A收尾卡](./2026-10-01-ext-a-material-03a.md)处理名称及剩余回归。此前265项JUnit/build、本批14项及实际标签重载通过，完整155项GameTest因框架异常未完成，不将人工通过作为自动回归豁免。详见[本批记录](../../reviews/2026-10-01/material-03/README.md)及[客户端清单](../../reviews/2026-10-01/material-03-client.md)。开工提交为`9097338`。
+**状态：已完成。** 用户于2026-10-01确认完整客户端清单通过，普通“合金钢”已简称“钢”；03B修复剩余测试运行异常后，155项required断言全过，候选及main各新跑265项JUnit/build通过，钢材随`e8ef02e`合入main。保存退出停滞仍单列，见[最终验收](../../reviews/2026-10-01/material-03b/README.md)。[初次候选证据](../../reviews/2026-10-01/material-03/README.md)保留原语境；开工提交为`9097338`。
 
 ## 冻结合同与评审重点
 

@@ -1,0 +1,14 @@
+{
+  "RepoRoot": "E:\\MyMC\\NewMod\\Create_NuclearIndustry",
+  "JarPath": "E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "JarSha256": "0722E25E2BC51E983AD67938A22D191D4B499F8F2FE23CB821C428748BE8AD23",
+  "SourceAssetsAndData": 264,
+  "JarAssetsAndData": 264,
+  "GamePng": 60,
+  "SteelNames": {
+    "SteelDust": "钢粉",
+    "SteelIngot": "钢锭",
+    "SteelPlate": "钢板"
+  },
+  "Differences": []
+}
