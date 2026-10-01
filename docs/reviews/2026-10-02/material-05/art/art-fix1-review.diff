@@ -1,0 +1,45 @@
+diff --git a/build/reports/extension/EXT-ART-07/pm-before-fix/pipeline.py b/tools/art-assets/pipeline.py
+index 41fcbaf..c4fbfc1 100644
+--- a/build/reports/extension/EXT-ART-07/pm-before-fix/pipeline.py
++++ b/tools/art-assets/pipeline.py
+@@ -251,8 +251,6 @@ def main():
+                 continue
+             with Image.open(target) as current:
+                 if list(current.size)!=e['size']:raise ValueError('游戏现有尺寸改变，拒绝覆盖')
+-            if target.read_bytes()!=game_outputs[e['game']]:
+-                raise ValueError('已有游戏PNG与导出结果不一致，拒绝覆盖已有素材')
+     for relative,data in outputs.items():
+         path=ROOT/relative
+         if path.exists() and path.read_bytes()==data:continue
+diff --git a/build/reports/extension/EXT-ART-07/pm-before-fix/report.md b/build/reports/extension/EXT-ART-07.md
+index bb5e762..de489f1 100644
+--- a/build/reports/extension/EXT-ART-07/pm-before-fix/report.md
++++ b/build/reports/extension/EXT-ART-07.md
+@@ -5,7 +5,7 @@
+ - 任务：`EXT-ART-07`，基准 Git HEAD：`53f4ebdd7b2f3bd580d96d85fb39b18e02fbb98d`。
+ - 按任务2精确写集新增四项16×16整数 `rect` SVG：`quartz_dust`、`refractory_brick`、`heavy_bearing`、`incomplete_heavy_bearing`。石英粉采用浅色晶粒；耐火砖以厚实方砖轮廓表现；轴承用金属厚框和透明轴孔；半成品沿用同族色板并缺少右上框段。
+ - 新增四个色板和清单记录；管线固定白名单由65个游戏PNG扩至69个，清单由66条扩至70条，青金石粉仍保留为 `game=null` 的工具候选。
+-- 更新 `pipeline.py` 与 `verify.py` 的本批白名单、计数、校验和说明。安装预检会拒绝覆盖任何与导出结果字节不一致的已有游戏PNG；输出字节相同则跳过写入。本次游戏贴图新增仅四个任务路径。
++- 更新 `pipeline.py` 与 `verify.py` 的本批白名单、计数、校验和说明。固定路径/集合、尺寸与冷却剂保护仍有效；对已有路径的合法SVG编辑可通过显式 `--install` 更新PNG，输出字节相同则跳过写入。本次游戏贴图新增仅四个任务路径。
+ - 使用现有管线生成四个 `generated/item/*.png`、总览和分组页。另提供每项独立的原尺寸、浅底9倍、深底9倍对照图，均已实际打开检查。
+ 
+ ## 文件与像素证据
+@@ -35,12 +35,18 @@ $py = 'C:\Users\IKSXH\.cache\codex-runtimes\codex-primary-runtime\dependencies\p
+ 
+ 完整验证记录见 `verification.json` 和 `commands.json`。为满足精确安装写集，验证第一次成功走到接入步骤后，后续因证据路径/统计断言修正而重跑；最终完整验证开始时四张本批PNG已存在（目录计69张），并确认先前保存的原65张哈希快照不变、再次接入幂等。早先的失败是校验脚本前置计数/路径断言，不是素材解析或旧图保护失败；最终报告仅采用最后一次通过结果。
+ 
++**Important整改：** PM补充复核发现上述版本的安装预检曾错误拒绝所有已有PNG的字节变化；原独立审查当时只提出砖边Minor。按批准范围，用临时、色板内的 `quartz_dust` 像素编辑（将一个 `#FFF9E8` 像素改为 `#F2EDD9`）验证修复：原行为先RED，`export.py --install` 返回1并拒绝合法更新，目标PNG保持原哈希；移除该字节不等条件后，对同一编辑GREEN，命令返回0并更新目标PNG。随后在 `finally` 中恢复原SVG、重新安装，并确认原目标PNG、生成PNG、全部预览/生成输出均与编辑前状态相同；原65张哈希快照全程未变。GREEN编辑期间的临时PNG SHA-256为 `0d37207539e4ba7998769ed261e04d6b4db1c91cd18a185f9e81808a0c4152fa`，恢复后回到 `85297409e459e942681dea8688c703abb43afc49fbf7adfd3fc5734a53aa6dbd`。逐步记录见 `update-regression-red.json`、`update-regression.json`。修复没有改变四项交付美术。
++
++修复后的完整 `verify.py` 再跑结果为 `PASS`：70条清单/66个不同来源/69张游戏PNG，默认导出与安装分别重复一致，六类CLI非法输入失败不写，51历史图、65张开工快照和8张冷却剂保留图均通过。
++
+ 未运行 Gradle、Minecraft 游戏或客户端。本报告证明的是离线素材、白名单和打包源文件层面的结果，不代表游戏内显示或材料流程的人工验收。
+ 
+ ## 实际使用技能
+ 
+ - `C:/Users/IKSXH/.codex/skills/minecraft-resource-pack/SKILL.md`：采用Minecraft资源的16×16 RGBA规格，并核对 alpha、资源ID映射和客户端人工视觉验收边界。
+ - `C:/Users/IKSXH/.codex/plugins/cache/openai-curated-remote/superpowers/6.4.2/skills/executing-plans/SKILL.md`：按实施卡精确范围执行、用交付报告记录验证证据。其通用Git步骤服从仓库执行者的Git禁令；本任务未执行Git写操作。
++- `C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`：原美术轮未读取；于2026-10-02（本次Important整改）补读。核对 `gradle.properties` 中 MC 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82 和 Flywheel 1.0.6；据其资源目录/16×16纹理边界确认本次只修美术导出工具，不触碰注册或游戏代码。
++- `C:/Users/IKSXH/.codex/skills/minecraft-testing/SKILL.md`：原美术轮未读取；于2026-10-02（本次Important整改）补读。将验证限定为色板合法编辑的CLI RED/GREEN/恢复，以及既有 `verify.py` 的导出/负例检查；本任务无运行时逻辑变更，按卡约束未运行GameTest、游戏或Gradle。
+ 
+ ## 交付文件
+ 

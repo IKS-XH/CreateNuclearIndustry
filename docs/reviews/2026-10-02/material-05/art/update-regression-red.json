@@ -1,0 +1,13 @@
+{
+  "command": [
+    "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+    "--install"
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 255, in main\n    raise ValueError('已有游戏PNG与导出结果不一致，拒绝覆盖已有素材')\nValueError: 已有游戏PNG与导出结果不一致，拒绝覆盖已有素材\n",
+  "edited_source_sha256": "466c4c9f74d0b799971665ac3321f4346cbf8430203b78c26433b465fc281cc4",
+  "texture_unchanged": true,
+  "result": "RED_REPRODUCED"
+}

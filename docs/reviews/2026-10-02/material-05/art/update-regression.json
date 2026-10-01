@@ -1,0 +1,45 @@
+{
+  "red": {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 255, in main\n    raise ValueError('已有游戏PNG与导出结果不一致，拒绝覆盖已有素材')\nValueError: 已有游戏PNG与导出结果不一致，拒绝覆盖已有素材\n",
+    "edited_source_sha256": "466c4c9f74d0b799971665ac3321f4346cbf8430203b78c26433b465fc281cc4",
+    "texture_unchanged": true,
+    "result": "RED_REPRODUCED"
+  },
+  "green": {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit_code": 0,
+    "stdout": "PASS: 70 generated PNG; 69 game targets (51 historical + 18 new); install=True; 10 comparison pages + overview\nmanifest sha256=734e6377ac358ddede0015df232138058c92d3dc033c0cc16c6caccd1c3e11af\n",
+    "stderr": "",
+    "edited_source_sha256": "466c4c9f74d0b799971665ac3321f4346cbf8430203b78c26433b465fc281cc4",
+    "edited_game_png_sha256": "0d37207539e4ba7998769ed261e04d6b4db1c91cd18a185f9e81808a0c4152fa",
+    "edited_generated_png_sha256": "0d37207539e4ba7998769ed261e04d6b4db1c91cd18a185f9e81808a0c4152fa",
+    "target_png_changed": true,
+    "result": "GREEN_UPDATED"
+  },
+  "restore": {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit_code": 0,
+    "stdout": "PASS: 70 generated PNG; 69 game targets (51 historical + 18 new); install=True; 10 comparison pages + overview\nmanifest sha256=734e6377ac358ddede0015df232138058c92d3dc033c0cc16c6caccd1c3e11af\n",
+    "stderr": "",
+    "source_restored": true,
+    "target_png_restored": true,
+    "art_outputs_restored": true,
+    "preexisting_65_png_unchanged": true,
+    "result": "RESTORED"
+  }
+}

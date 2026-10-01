@@ -1,0 +1,16 @@
+{
+  "command": [
+    "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\verify.py"
+  ],
+  "exit_code": 0,
+  "stdout": "{\n  \"python\": \"3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]\",\n  \"pillow\": \"12.3.0\",\n  \"baseline\": \"034406387bcd97c68f6a8d9affa6b2c04231a8e2\",\n  \"preexisting_snapshot\": \"docs/reviews/2026-10-02/material-05/art/preexisting-game-png-sha256.json\",\n  \"historical_game_count\": 51,\n  \"pre_existing_game_count\": 65,\n  \"game_count_at_verifier_start\": 69,\n  \"new_game_count\": 18,\n  \"current_batch_game_count\": 4,\n  \"final_game_count\": 69,\n  \"manifest_entry_count\": 70,\n  \"source_count\": 66,\n  \"approved_pilot_unchanged\": true,\n  \"default_repeat_exports\": 2,\n  \"cli_failure_no_writes\": [\n    \"unsupported_svg\",\n    \"extra_path\",\n    \"wrong_size\",\n    \"wrong_mapping\",\n    \"unauthorized_preserve\",\n    \"missing_preserve\"\n  ],\n  \"current_batch_visual_invariants\": [\n    \"quartz_dust\",\n    \"refractory_brick\",\n    \"heavy_bearing\",\n    \"incomplete_heavy_bearing\",\n    \"transparent_bearing_bores\",\n    \"incomplete_open_frame\",\n    \"shared_bearing_palette\"\n  ],\n  \"install_repeat_exports\": 2,\n  \"historical_51_game_png_unchanged\": true,\n  \"pre_existing_game_png_unchanged\": true,\n  \"preexisting_game_hash_snapshot_unchanged\": true,\n  \"preexisting_game_hash_snapshot_count\": 65,\n  \"svg_or_retained_original_generated_game_equal\": true,\n  \"result\": \"PASS\"\n}\n",
+  "stderr": "",
+  "snapshot_source": "docs/reviews/2026-10-02/material-05/art/preexisting-game-png-sha256.json",
+  "result": "GREEN_PASS",
+  "old_65_hashes_unchanged": true,
+  "four_delivery_pngs_unchanged": true,
+  "manifest_entry_count": 70,
+  "distinct_svg_sources": 66,
+  "final_game_png_count": 69
+}

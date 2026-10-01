@@ -1,0 +1,100 @@
+[
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py"
+    ],
+    "exit": 0,
+    "stdout": "PASS: 70 generated PNG; 69 game targets (51 historical + 18 new); install=False; 10 comparison pages + overview\nmanifest sha256=734e6377ac358ddede0015df232138058c92d3dc033c0cc16c6caccd1c3e11af\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py"
+    ],
+    "exit": 0,
+    "stdout": "PASS: 70 generated PNG; 69 game targets (51 historical + 18 new); install=False; 10 comparison pages + overview\nmanifest sha256=734e6377ac358ddede0015df232138058c92d3dc033c0cc16c6caccd1c3e11af\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 233, in main\n    entries,images,before,retained=prepare()\n                                   ^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 143, in prepare\n    image=render_svg((ROOT/'sources'/e['source']).read_text(encoding='utf-8'),allowed,tuple(e['size']))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 67, in render_svg\n    raise ValueError(\"只支持直属 rect 及 x/y/width/height/fill 五个属性\")\nValueError: 只支持直属 rect 及 x/y/width/height/fill 五个属性\n"
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 233, in main\n    entries,images,before,retained=prepare()\n                                   ^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 138, in prepare\n    entries=load_manifest();palette=read_palette();images={};before={};retained={}\n            ^^^^^^^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 98, in load_manifest\n    raise ValueError('游戏路径必须与固定51项白名单、十四项既有素材和本批四项素材完全一致')\nValueError: 游戏路径必须与固定51项白名单、十四项既有素材和本批四项素材完全一致\n"
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 233, in main\n    entries,images,before,retained=prepare()\n                                   ^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 138, in prepare\n    entries=load_manifest();palette=read_palette();images={};before={};retained={}\n            ^^^^^^^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 113, in load_manifest\n    raise ValueError(f'{name}: 源稿映射、尺寸、色板或透明语义不符')\nValueError: block/compound_coolant_flow.png: 源稿映射、尺寸、色板或透明语义不符\n"
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 233, in main\n    entries,images,before,retained=prepare()\n                                   ^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 138, in prepare\n    entries=load_manifest();palette=read_palette();images={};before={};retained={}\n            ^^^^^^^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 113, in load_manifest\n    raise ValueError(f'{name}: 源稿映射、尺寸、色板或透明语义不符')\nValueError: block/compound_coolant_flow.png: 源稿映射、尺寸、色板或透明语义不符\n"
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 233, in main\n    entries,images,before,retained=prepare()\n                                   ^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 138, in prepare\n    entries=load_manifest();palette=read_palette();images={};before={};retained={}\n            ^^^^^^^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 107, in load_manifest\n    raise ValueError('manifest 记录字段不匹配')\nValueError: manifest 记录字段不匹配\n"
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py\", line 93, in <module>\n    export_all()\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 233, in main\n    entries,images,before,retained=prepare()\n                                   ^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 138, in prepare\n    entries=load_manifest();palette=read_palette();images={};before={};retained={}\n            ^^^^^^^^^^^^^^^\n  File \"E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\pipeline.py\", line 105, in load_manifest\n    if e.get('preserve')!='baseline-original':raise ValueError('冷却剂必须保留已批准原图')\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: 冷却剂必须保留已批准原图\n"
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 0,
+    "stdout": "PASS: 70 generated PNG; 69 game targets (51 historical + 18 new); install=True; 10 comparison pages + overview\nmanifest sha256=734e6377ac358ddede0015df232138058c92d3dc033c0cc16c6caccd1c3e11af\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\tools\\art-assets\\export.py",
+      "--install"
+    ],
+    "exit": 0,
+    "stdout": "PASS: 70 generated PNG; 69 game targets (51 historical + 18 new); install=True; 10 comparison pages + overview\nmanifest sha256=734e6377ac358ddede0015df232138058c92d3dc033c0cc16c6caccd1c3e11af\n",
+    "stderr": ""
+  }
+]
