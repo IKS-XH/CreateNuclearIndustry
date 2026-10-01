@@ -11,7 +11,7 @@
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 青金石粉 EXT-A-MATERIAL-01A | 候选未合并；P1 交接前置已满足 | [任务卡](./superpowers/plans/2026-09-24-ext-a-material-01a.md)：完整 GameTest、纹理整改/评审和客户端检查 |
-| 铅锡基础加工 EXT-A-MATERIAL-02 / 板材 EXT-ART-03 | 待客户端验收，候选 `3a57a88` 未合入 | [验收清单](./reviews/2026-10-01/material-02-client.md)：熔炼、高炉、压片/动力恢复、JEI、外观与保存重进 |
+| 铅锡基础加工 EXT-A-MATERIAL-02 / 板材 EXT-ART-03 | 用户反馈后需整改，未合入 | [02A/03A整改卡](./superpowers/plans/2026-10-01-material-02a-feedback.md)：沿用当前Create铅锡处理路线，板材更方正 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 下一阶段主线，尚未形成完整生存链 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
 | 热端、动力、具体事故与剩余 Ponder | 后续实施 | 先补接口探针、冻结对应合同；教学在具体事故验收后继续 |

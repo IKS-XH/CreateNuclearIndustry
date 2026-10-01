@@ -2,7 +2,7 @@
 
 > 执行方式：PM 按 `superpowers:writing-plans` / `subagent-driven-development` 拆卡并审查；执行者禁止 Git 写、派发、核心文档修改和自行验收。用户已授权自动派发，已确认的参数不重复询问。
 
-**状态：** 待验收。A实现、B板材SVG、自动验证和独立审查已完成，候选实现提交 `3a57a88`；未合入main。用户已批准 [首轮参数](./2026-10-01-lead-tin-material-proposal.md)，现在按 [客户端清单](../../reviews/2026-10-01/material-02-client.md) 手测，通过前停止自动推进。
+**状态：** 需整改，未合入main。用户2026-10-01反馈矿石/粉碎料无法熔炼，要求铅锡处理完全沿用当前Create原生路线，并要求两板更方正；接续 [02A/03A整改卡](./2026-10-01-material-02a-feedback.md)。下文为首轮实现合同与证据，原“粉碎料不得直熔”限制已由本次用户方向取代，不可继续据此拒绝补齐路线。
 **目标：** 铅锡粗矿经熔炉/高炉产锭，Create 压片机产板；四个物品在同一候选中可见、可获取、支持通用标签。
 **架构：** 只增加注册、原生数据配方和资源；使用 Minecraft 与 Create 既有机器，不新增设备逻辑、JEI 插件或自定义配方类型。
 **位置：** 复用 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、`codex/ore-acquisition`；PM 将本卡同步后记录精确基线。用户主工程 `.vscode/launch.json`、存档和现有手测世界不得改动。
