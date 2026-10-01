@@ -1,0 +1,14 @@
+{
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "tag": "c:crushed_raw_materials/tin"
+    }
+  ],
+  "results": [
+    {
+      "count": 9,
+      "id": "create_nuclear_industry:tin_nugget"
+    }
+  ]
+}

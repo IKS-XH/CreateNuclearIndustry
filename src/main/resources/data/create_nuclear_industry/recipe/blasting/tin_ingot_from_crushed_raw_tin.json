@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "c:crushed_raw_materials/tin"
+  },
+  "result": {
+    "id": "create_nuclear_industry:tin_ingot"
+  }
+}

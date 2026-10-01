@@ -114,5 +114,7 @@
   "item.create_nuclear_industry.lead_ingot": "铅锭",
   "item.create_nuclear_industry.tin_ingot": "锡锭",
   "item.create_nuclear_industry.lead_plate": "铅板",
-  "item.create_nuclear_industry.tin_plate": "锡板"
+  "item.create_nuclear_industry.tin_plate": "锡板",
+  "item.create_nuclear_industry.lead_nugget": "铅粒",
+  "item.create_nuclear_industry.tin_nugget": "锡粒"
 }

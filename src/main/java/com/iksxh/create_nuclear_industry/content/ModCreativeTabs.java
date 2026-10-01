@@ -51,6 +51,8 @@ public final class ModCreativeTabs {
                         output.accept(BasicMaterialContent.TIN_INGOT.get());
                         output.accept(BasicMaterialContent.LEAD_PLATE.get());
                         output.accept(BasicMaterialContent.TIN_PLATE.get());
+                        output.accept(BasicMaterialContent.LEAD_NUGGET.get());
+                        output.accept(BasicMaterialContent.TIN_NUGGET.get());
                     })
                     .build()
     );

@@ -114,5 +114,7 @@
   "item.create_nuclear_industry.lead_ingot": "Lead Ingot",
   "item.create_nuclear_industry.tin_ingot": "Tin Ingot",
   "item.create_nuclear_industry.lead_plate": "Lead Plate",
-  "item.create_nuclear_industry.tin_plate": "Tin Plate"
+  "item.create_nuclear_industry.tin_plate": "Tin Plate",
+  "item.create_nuclear_industry.lead_nugget": "Lead Nugget",
+  "item.create_nuclear_industry.tin_nugget": "Tin Nugget"
 }
