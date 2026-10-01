@@ -47,6 +47,10 @@ public final class ModCreativeTabs {
                             output.accept(mineral.raw().get());
                             output.accept(mineral.rawBlock().get());
                         }
+                        output.accept(BasicMaterialContent.LEAD_INGOT.get());
+                        output.accept(BasicMaterialContent.TIN_INGOT.get());
+                        output.accept(BasicMaterialContent.LEAD_PLATE.get());
+                        output.accept(BasicMaterialContent.TIN_PLATE.get());
                     })
                     .build()
     );

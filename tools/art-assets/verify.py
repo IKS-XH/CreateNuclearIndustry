@@ -1,4 +1,4 @@
-"""离线核对51张既有贴图：原冷却剂保留、SVG像素、复现性和失败不写出。
+"""离线核对历史贴图及EXT-ART-03新增板材：原冷却剂保留、SVG像素、复现性和失败不写出。
 
 只在显式执行本脚本时做临时坏输入实验，finally 原样恢复源稿/清单。
 不调用游戏、Gradle 或 Git 写操作；结果保存在本任务证据目录。
@@ -18,7 +18,7 @@ import pipeline
 from export import render_svg, read_palette, ROOT
 
 REPO=ROOT.parents[1]
-EVIDENCE=REPO/'build/reports/extension/EXT-ART-02A'
+EVIDENCE=REPO/'build/reports/extension/EXT-ART-03'
 EVIDENCE.mkdir(parents=True,exist_ok=True)
 ENV=dict(os.environ,PYTHONIOENCODING='utf-8',PYTHONDONTWRITEBYTECODE='1')
 log=[]
@@ -50,9 +50,10 @@ def state():
 entries,images,before,retained=pipeline.prepare();palette=read_palette()
 baseline=json.loads((ROOT/'baseline.json').read_text(encoding='utf-8'))
 assert {r['game'] for r in baseline['records']}==pipeline.GAME_FILES
-assert len(entries)==52
-assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):47,(16,64):4}
-results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'game_count':51,'source_count':len({e['source'] for e in entries}),'records':[]}
+assert len(baseline['records'])==51
+assert len(entries)==54
+assert Counter(tuple(e['size']) for e in entries if e['game'])=={(16,16):49,(16,64):4}
+results={'python':sys.version,'pillow':pillow_version,'baseline':baseline['head'],'historical_game_count':51,'new_game_count':2,'source_count':len({e['source'] for e in entries}),'records':[]}
 for e in entries:
     name=e['game'] or 'item/lapis_dust.png'
     if name in RETAINED_COOLANTS:
@@ -77,9 +78,11 @@ for e in entries:
         allowed={tuple(int(c[i:i+2],16) for i in (1,3,5)) for c in palette[e['palette']].values()}
         assert colors<=allowed and len(colors)<=16
     results['records'].append({'game':e['game'],'source':e['source'],'size':e['size'],'colors':len(colors),'generated_sha256':digest(ROOT/'generated'/name),'use':e['use']})
-    if e['game']:
+    if e['game'] in pipeline.GAME_FILES:
         record=next(r for r in baseline['records'] if r['game']==name)
         assert digest(ROOT/'baseline'/name)==record['sha256'],'旧图证据改变'
+    elif e['game'] in pipeline.NEW_GAME_FILES:
+        results['records'][-1]['historical_baseline']='none; explicitly new candidate'
 
 # 已批准四样稿使用工具基线的原始字节作独立回归依据，不以新导出互相比较。
 for name in ('item/lapis_dust','item/lead_ingot','item/steel_plate','block/lead_ore'):
@@ -140,18 +143,21 @@ for mutation in ('extra_path','wrong_size','wrong_mapping','unauthorized_preserv
     finally:manifest.write_bytes(saved)
 results['cli_failure_no_writes']=['unsupported_svg','extra_path','wrong_size','wrong_mapping','unauthorized_preserve','missing_preserve']
 
-# 显式接入后逐条核对：八项冷却剂保留各自旧字节，其余43张保持重绘。
+# 显式接入后逐条核对：旧51张图保持当前字节，两张新路径与导出候选一致。
+historical_before={name:digest(pipeline.GAME_ROOT/name) for name in pipeline.GAME_FILES}
 run('--install')
-assert {p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}==pipeline.GAME_FILES
+assert {p.relative_to(pipeline.GAME_ROOT).as_posix() for p in pipeline.GAME_ROOT.rglob('*.png')}==pipeline.ALLOWED_GAME_FILES
 for e in entries:
     if e['game']:
         assert (pipeline.GAME_ROOT/e['game']).read_bytes()==(ROOT/'generated'/e['game']).read_bytes()
-        if e['game'] in RETAINED_COOLANTS:
+        if e['game'] in pipeline.NEW_GAME_FILES:
+            assert not (ROOT/'baseline'/e['game']).exists(),'新增图不得伪造旧基线'
+        elif e['game'] in RETAINED_COOLANTS:
             assert (pipeline.GAME_ROOT/e['game']).read_bytes()==(ROOT/'baseline'/e['game']).read_bytes(),'旧冷却剂被再次覆盖'
-        else:
-            assert (pipeline.GAME_ROOT/e['game']).read_bytes()!=(ROOT/'baseline'/e['game']).read_bytes(),'既有纹理未重绘'
+assert {name:digest(pipeline.GAME_ROOT/name) for name in pipeline.GAME_FILES}==historical_before,'原51张游戏PNG被改动'
 after=state();run('--install');assert state()==after
 results['install_repeat_exports']=2
+results['historical_51_game_png_unchanged']=True
 results['svg_or_retained_original_generated_game_equal']=True
 results['output_hashes']=after
 results['result']='PASS'

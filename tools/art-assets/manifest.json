@@ -538,6 +538,18 @@
       "use": "本基线未引用素材；重绘不等于注册"
     },
     {
+      "game": "item/lead_plate.png",
+      "source": "item/lead_plate.svg",
+      "palette": "lead_plate",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-03 新增路径；无旧图基线"
+    },
+    {
       "game": "item/lead_shielding_cask.png",
       "source": "item/lead_shielding_cask.svg",
       "palette": "lead_shielding_cask",
@@ -608,6 +620,18 @@
       "kind": "item",
       "group": "items",
       "use": "本基线未引用素材；重绘不等于注册"
+    },
+    {
+      "game": "item/tin_plate.png",
+      "source": "item/tin_plate.svg",
+      "palette": "tin_plate",
+      "size": [
+        16,
+        16
+      ],
+      "kind": "item",
+      "group": "items",
+      "use": "EXT-ART-03 新增路径；无旧图基线"
     },
     {
       "game": "item/uranium_concentrate.png",

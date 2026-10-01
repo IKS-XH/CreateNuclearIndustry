@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry;
 
 import com.iksxh.create_nuclear_industry.content.ModBlocks;
+import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
 import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.ModItems;
@@ -43,6 +44,7 @@ public final class CreateNuclearIndustry {
         ModFluids.register(modEventBus);
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
+        BasicMaterialContent.register(modEventBus);
         OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);
         P1Blocks.register(modEventBus);

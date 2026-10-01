@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "tag": "c:ingots/lead"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_nuclear_industry:lead_plate"
+    }
+  ]
+}

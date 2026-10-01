@@ -110,5 +110,9 @@
   "block.create_nuclear_industry.uranium_ore": "铀矿石",
   "block.create_nuclear_industry.deepslate_uranium_ore": "深层铀矿石",
   "block.create_nuclear_industry.raw_uranium_block": "粗铀块",
-  "item.create_nuclear_industry.raw_uranium": "粗铀"
+  "item.create_nuclear_industry.raw_uranium": "粗铀",
+  "item.create_nuclear_industry.lead_ingot": "铅锭",
+  "item.create_nuclear_industry.tin_ingot": "锡锭",
+  "item.create_nuclear_industry.lead_plate": "铅板",
+  "item.create_nuclear_industry.tin_plate": "锡板"
 }

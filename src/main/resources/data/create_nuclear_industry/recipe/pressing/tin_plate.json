@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "tag": "c:ingots/tin"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_nuclear_industry:tin_plate"
+    }
+  ]
+}

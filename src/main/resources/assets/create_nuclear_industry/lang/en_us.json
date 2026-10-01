@@ -110,5 +110,9 @@
   "block.create_nuclear_industry.uranium_ore": "Uranium Ore",
   "block.create_nuclear_industry.deepslate_uranium_ore": "Deepslate Uranium Ore",
   "block.create_nuclear_industry.raw_uranium_block": "Block of Raw Uranium",
-  "item.create_nuclear_industry.raw_uranium": "Raw Uranium"
+  "item.create_nuclear_industry.raw_uranium": "Raw Uranium",
+  "item.create_nuclear_industry.lead_ingot": "Lead Ingot",
+  "item.create_nuclear_industry.tin_ingot": "Tin Ingot",
+  "item.create_nuclear_industry.lead_plate": "Lead Plate",
+  "item.create_nuclear_industry.tin_plate": "Tin Plate"
 }
