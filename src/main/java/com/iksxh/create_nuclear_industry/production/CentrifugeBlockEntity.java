@@ -23,7 +23,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 /**
  * 离心机服务器状态所有者。轴网由 Create 提供；本实体独占两罐、两粉、密闭批次及磨损。
- * 上段没有方块实体；客户端只显示护目镜和转子，不参与加工和库存事务。
+ * 上段代理仅供外部能力发现，不持有状态；客户端只显示护目镜和转子，不参与加工和库存事务。
  */
 public final class CentrifugeBlockEntity extends KineticBlockEntity {
     private final CentrifugeState state = new CentrifugeState();

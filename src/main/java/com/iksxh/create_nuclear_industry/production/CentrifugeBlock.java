@@ -30,6 +30,7 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -68,9 +69,15 @@ public final class CentrifugeBlock extends HorizontalKineticBlock
         return defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING,
                 context.getHorizontalDirection().getOpposite());
     }
-    /** 上段不创建 Create 动力实体，避免额外应力、tick 和第二份持久化。 */
+    /** 上段代理仅供 Create 发现 capability；下段继续独占动力实体与持久化状态。 */
     @Override public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return state.getValue(HALF) == DoubleBlockHalf.LOWER ? IBE.super.newBlockEntity(pos, state) : null;
+        return state.getValue(HALF) == DoubleBlockHalf.LOWER ? IBE.super.newBlockEntity(pos, state)
+                : new CentrifugeUpperProxyBlockEntity(pos, state);
+    }
+    /** IBE 的默认实现会为动力实体返回 Smart ticker；上段代理必须始终保持静态。 */
+    @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level, BlockState state, BlockEntityType<T> type) {
+        return state.getValue(HALF) == DoubleBlockHalf.LOWER ? IBE.super.getTicker(level, state, type) : null;
     }
     @Override public Class<CentrifugeBlockEntity> getBlockEntityClass() { return CentrifugeBlockEntity.class; }
     @Override public BlockEntityType<? extends CentrifugeBlockEntity> getBlockEntityType() {
@@ -106,7 +113,7 @@ public final class CentrifugeBlock extends HorizontalKineticBlock
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof CentrifugeBlockEntity local) {
             machine = local;
         } else if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-            // 上段无实体；掉落查询发生在移除之前，必须当场读取下段。
+            // 上段只有无状态代理；掉落查询发生在移除之前，必须当场读取下段真实账本。
             var origin = builder.getOptionalParameter(LootContextParams.ORIGIN);
             if (origin != null) machine = owner(builder.getLevel(), BlockPos.containing(origin), state);
         }

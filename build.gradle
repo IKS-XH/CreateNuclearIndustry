@@ -49,7 +49,11 @@ neoForge {
         }
         gameTestServer {
             type = 'gameTestServer'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            // 默认仍运行模组原测试域；可用Gradle属性只启动隔离的定向测试域和目录。
+            systemProperty 'neoforge.enabledGameTestNamespaces',
+                    providers.gradleProperty('gameTestNamespace').getOrElse(project.mod_id)
+            if (providers.gradleProperty('gameTestDirectory').isPresent())
+                gameDirectory = project.file(providers.gradleProperty('gameTestDirectory').get())
         }
         data {
             data()

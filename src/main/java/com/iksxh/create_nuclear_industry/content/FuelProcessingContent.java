@@ -4,6 +4,7 @@ import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlockItem;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlockEntity;
+import com.iksxh.create_nuclear_industry.production.CentrifugeUpperProxyBlockEntity;
 import com.iksxh.create_nuclear_industry.production.CentrifugeRecipe;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -89,6 +90,10 @@ public final class FuelProcessingContent {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CentrifugeBlockEntity>> CENTRIFUGE_BE =
             BLOCK_ENTITIES.register("enrichment_centrifuge",
                     () -> BlockEntityType.Builder.of(CentrifugeBlockEntity::new, ENRICHMENT_CENTRIFUGE.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CentrifugeUpperProxyBlockEntity>> CENTRIFUGE_UPPER_PROXY_BE =
+            BLOCK_ENTITIES.register("enrichment_centrifuge_upper_proxy",
+                    () -> BlockEntityType.Builder.of(CentrifugeUpperProxyBlockEntity::new,
+                            ENRICHMENT_CENTRIFUGE.get()).build(null));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGING_TYPE =
             RECIPE_TYPES.register("centrifuging", () -> new RecipeType<>() {});
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CentrifugeRecipe>> CENTRIFUGING_SERIALIZER =

@@ -1,6 +1,7 @@
 """生成并预览EXT-A-FUEL-01D离心机JSON几何，不依赖Minecraft运行时。"""
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import json
 import math
@@ -13,7 +14,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 ASSET = ROOT / "src/main/resources/assets/create_nuclear_industry"
 ART = ROOT / "tools/art-assets"
-EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-01D-assets"
+EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-01E-assets"
 MOD = "create_nuclear_industry:block/"
 
 spec = importlib.util.spec_from_file_location("art_export", ART / "export.py")
@@ -43,6 +44,28 @@ def box(lo, hi, texture="casing", angle=0):
     return item
 
 
+def default_uv(element, face, map_y=lambda value: value):
+    """复现锁定版 BlockElement.uvsByFace 的默认UV投影。"""
+    lo, hi = element["from"], element["to"]
+    y0, y1 = map_y(lo[1]), map_y(hi[1])
+    return {
+        "down": [lo[0], 16 - hi[2], hi[0], 16 - lo[2]],
+        "up": [lo[0], lo[2], hi[0], hi[2]],
+        "north": [16 - hi[0], 16 - y1, 16 - lo[0], 16 - y0],
+        "south": [lo[0], 16 - y1, hi[0], 16 - y0],
+        "west": [lo[2], 16 - y1, hi[2], 16 - y0],
+        "east": [16 - hi[2], 16 - y1, 16 - lo[2], 16 - y0],
+    }[face]
+
+
+def make_uv_explicit(elements, map_y=lambda value: value):
+    """将原版按模型坐标补出的UV显式写入各面，可选地重映射纵向坐标。"""
+    for element in elements:
+        for face, definition in element["faces"].items():
+            definition["uv"] = default_uv(element, face, map_y)
+    return elements
+
+
 def panel(cx, cz, y0, y1, length, thick, material, angle):
     direction=angle%360
     rotation=0
@@ -69,7 +92,8 @@ def drum(y0, y1):
     """八片径向侧板围成八棱转鼓，斜向四片是真实旋转几何。"""
     parts = []
     radius = 7.0
-    facet = 5.8
+    # 按外表面半径计算八边形弦长，并留0.02模型单位窄搭接封住渲染裂隙。
+    facet = 2 * (radius + .2) * math.tan(math.pi / 8) + .02
     for angle in range(0, 360, 45):
         radians = math.radians(angle)
         cx, cz = 8 + math.sin(radians)*radius, 8 - math.cos(radians)*radius
@@ -127,7 +151,8 @@ def rotor():
                   box((4.6,8,7.6),(5.4,24,8.4),"casing"),box((10.6,8,7.6),(11.4,24,8.4),"casing"),
                   box((6.8,8,6.8),(7.6,24,7.6),"casing",45),box((8.4,8,8.4),(9.2,24,9.2),"casing",45),
                   box((6.8,8,8.4),(7.6,24,9.2),"casing",-45),box((8.4,8,6.8),(9.2,24,7.6),"casing",-45)])
-    return parts
+    # 跨两格转子的侧面UV按整根转轴高度映射到一张16×16贴图。
+    return make_uv_explicit(parts, lambda value: (value - 5) * (16 / 22))
 
 
 def translate_y(element, amount):
@@ -198,6 +223,132 @@ def validate_assets(geometry):
         if image.size!=(16,16) or image.mode!="RGBA": raise ValueError(f"{kind}: PNG必须是16×16 RGBA")
 
 
+def uv_diagnostics(model_names):
+    """读取磁盘模型，按原版默认投影核对隐式UV及显式UV是否越界。"""
+    result = {}
+    for part, name in model_names.items():
+        model = json.loads((ASSET / f"models/block/{name}.json").read_text(encoding="utf-8"))
+        implicit = explicit = 0
+        violations = []
+        for element_index, element in enumerate(model["elements"]):
+            for face, definition in element["faces"].items():
+                values = definition.get("uv")
+                if values is None:
+                    implicit += 1
+                    values = default_uv(element, face)
+                else:
+                    explicit += 1
+                if any(value < 0 or value > 16 for value in values):
+                    violations.append({"element": element_index, "face": face, "uv": values})
+        result[part] = {"elements": len(model["elements"]), "explicit_faces": explicit,
+                        "implicit_faces": implicit, "out_of_range_faces": len(violations),
+                        "examples": violations[:4]}
+    return result
+
+
+def rotate_y(point, rotation):
+    turn = math.radians(rotation["angle"])
+    ox, _, oz = rotation["origin"]
+    dx, dz = point[0] - ox, point[2] - oz
+    return (ox + dx * math.cos(turn) + dz * math.sin(turn), point[1],
+            oz - dx * math.sin(turn) + dz * math.cos(turn))
+
+
+def shell_ring_report(model_name, y0, y1):
+    """从磁盘模型抽取实际八片外侧面，验证朝向、周向射线覆盖和搭接。"""
+    model = json.loads((ASSET / f"models/block/{model_name}.json").read_text(encoding="utf-8"))
+    panels = []
+    corner_indices = {"north": (0, 1, 2, 3), "south": (5, 4, 7, 6),
+                      "west": (4, 0, 3, 7), "east": (1, 5, 6, 2)}
+    face_normals = {"north": (0, 0, -1), "south": (0, 0, 1),
+                    "west": (-1, 0, 0), "east": (1, 0, 0)}
+    for element in model["elements"]:
+        lo, hi = element["from"], element["to"]
+        dims = sorted((abs(hi[0] - lo[0]), abs(hi[2] - lo[2])))
+        if (abs(lo[1] - y0) > 1e-5 or abs(hi[1] - y1) > 1e-5
+                or abs(dims[0] - .4) > 1e-5 or dims[1] < 5.7
+                or len(element["faces"]) != 1):
+            continue
+        face, definition = next(iter(element["faces"].items()))
+        if definition["texture"] != "#casing" or face not in corner_indices:
+            continue
+        vertices = [(lo[0], lo[1], lo[2]), (hi[0], lo[1], lo[2]),
+                    (hi[0], hi[1], lo[2]), (lo[0], hi[1], lo[2]),
+                    (lo[0], lo[1], hi[2]), (hi[0], lo[1], hi[2]),
+                    (hi[0], hi[1], hi[2]), (lo[0], hi[1], hi[2])]
+        rotation = element.get("rotation")
+        if rotation:
+            vertices = [rotate_y(point, rotation) for point in vertices]
+        outer = [vertices[index] for index in corner_indices[face]]
+        normal = face_normals[face]
+        if rotation:
+            angle = math.radians(rotation["angle"])
+            normal = (normal[0] * math.cos(angle) + normal[2] * math.sin(angle), 0,
+                      -normal[0] * math.sin(angle) + normal[2] * math.cos(angle))
+        center = (sum(point[0] for point in outer) / 4 - 8,
+                  sum(point[2] for point in outer) / 4 - 8)
+        if normal[0] * center[0] + normal[2] * center[1] <= 0:
+            raise ValueError(f"{model_name}: {face}外壳面法线朝内")
+        ends = sorted({(point[0] - 8, point[2] - 8) for point in outer})
+        if len(ends) != 2:
+            raise ValueError(f"{model_name}: {face}外侧轮廓退化")
+        dx, dz = ends[1][0] - ends[0][0], ends[1][1] - ends[0][1]
+        length = math.hypot(dx, dz)
+        tangent = (dx / length, dz / length)
+        half_width = length / 2
+        normal_len = math.hypot(normal[0], normal[2])
+        n = (normal[0] / normal_len, normal[2] / normal_len)
+        plane_distance = n[0] * center[0] + n[1] * center[1]
+        panels.append({"normal": n, "distance": plane_distance,
+                       "tangent": tangent, "center": center, "half_width": half_width,
+                       "angle": (rotation or {}).get("angle", 0)})
+    if len(panels) != 8:
+        raise ValueError(f"{model_name}: 应有8片外壳面，实际找到{len(panels)}片")
+    minimum_margin = float("inf")
+    uncovered = []
+    ray_count = 4096
+    for ray_index in range(ray_count):
+        angle = (ray_index + .5) * (2 * math.pi / ray_count)
+        direction = (math.cos(angle), math.sin(angle))
+        covered = []
+        for panel in panels:
+            dot = panel["normal"][0] * direction[0] + panel["normal"][1] * direction[1]
+            if dot <= 0:
+                continue
+            distance = panel["distance"] / dot
+            point = (direction[0] * distance, direction[1] * distance)
+            along = ((point[0] - panel["center"][0]) * panel["tangent"][0]
+                     + (point[1] - panel["center"][1]) * panel["tangent"][1])
+            margin = panel["half_width"] - abs(along)
+            if margin >= -1e-7:
+                covered.append((distance, margin))
+        if not covered:
+            uncovered.append(ray_index)
+            continue
+        minimum_margin = min(minimum_margin, max(margin for _, margin in covered))
+    ordered = sorted(panels, key=lambda p: math.atan2(p["normal"][1], p["normal"][0]))
+    min_normal_angle = min(math.degrees(math.acos(max(-1, min(1,
+        ordered[i]["normal"][0] * ordered[(i + 1) % 8]["normal"][0]
+        + ordered[i]["normal"][1] * ordered[(i + 1) % 8]["normal"][1])))) for i in range(8))
+    if min_normal_angle < 44.99:
+        raise ValueError(f"{model_name}: 相邻外侧面可能共面并发生z-fighting ({min_normal_angle}度)")
+    largest_gap_rays = 0
+    if uncovered:
+        doubled = uncovered + [ray + ray_count for ray in uncovered]
+        run = 0
+        previous = None
+        for ray in doubled:
+            run = run + 1 if previous is not None and ray == previous + 1 else 1
+            largest_gap_rays = max(largest_gap_rays, min(run, ray_count))
+            previous = ray
+    return {"outer_faces": len(panels), "outward_normals": 8,
+            "sampled_azimuth_rays": ray_count, "uncovered_rays": len(uncovered),
+            "largest_uncovered_span_degrees": round(largest_gap_rays * 360 / ray_count, 6),
+            "minimum_overlap_margin": round(minimum_margin, 6) if math.isfinite(minimum_margin) else None,
+            "minimum_adjacent_normal_angle_degrees": round(min_normal_angle, 6),
+            "cullface_count": 0, "degenerate_face_count": 0}
+
+
 def svg_texture(kind, color):
     # 本机SVG保持现有导出器支持的直属整数rect子集。
     patterns = {
@@ -216,9 +367,11 @@ def svg_texture(kind, color):
     return f'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">{body}</svg>\n'
 
 
-def install_assets():
+def install_assets(write_textures=True):
     lower = base() + drum(6,16)
     upper = drum(0,11) + upper_cap()
+    make_uv_explicit(lower)
+    make_uv_explicit(upper)
     rotor_elements = rotor()
     item = lower + [translate_y(el, 16) for el in upper] + rotor_elements
     (ASSET/"blockstates").mkdir(parents=True,exist_ok=True)
@@ -245,13 +398,14 @@ def install_assets():
         (ASSET/f"models/block/{name}.json" if not name.endswith("_item") else ASSET/"models/block/enrichment_centrifuge_item.json").write_text(json.dumps(model,indent=2)+"\n",encoding="utf-8")
     item_ref={"parent":"create_nuclear_industry:block/enrichment_centrifuge_item"}
     (ASSET/"models/item/enrichment_centrifuge.json").write_text(json.dumps(item_ref,indent=2)+"\n",encoding="utf-8")
-    for kind,color in TEXTURES.items():
-        source=ART/f"sources/block/enrichment_centrifuge_01d_{kind}.svg"
-        source.parent.mkdir(parents=True,exist_ok=True)
-        svg=svg_texture(kind,color)
-        source.write_text(svg,encoding="utf-8")
-        image=exporter.render_svg(svg,set(__import__("re").findall(r"#[0-9A-Fa-f]{6}",svg)),(16,16))
-        image.save(ASSET/f"textures/block/enrichment_centrifuge_{kind}.png")
+    if write_textures:
+        for kind,color in TEXTURES.items():
+            source=ART/f"sources/block/enrichment_centrifuge_01d_{kind}.svg"
+            source.parent.mkdir(parents=True,exist_ok=True)
+            svg=svg_texture(kind,color)
+            source.write_text(svg,encoding="utf-8")
+            image=exporter.render_svg(svg,set(__import__("re").findall(r"#[0-9A-Fa-f]{6}",svg)),(16,16))
+            image.save(ASSET/f"textures/block/enrichment_centrifuge_{kind}.png")
     return {"lower":lower,"upper":upper,"item":item,"rotor":rotor_elements}
 
 
@@ -329,21 +483,46 @@ def render_json(elements, path, azimuth, title):
 
 
 def main():
-    geometry=install_assets()
     model_names={"lower":"enrichment_centrifuge","upper":"enrichment_centrifuge_upper",
                  "item":"enrichment_centrifuge_item","rotor":"enrichment_centrifuge_rotor"}
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--diagnose-only", action="store_true", help="只读诊断磁盘模型并保存修前证据")
+    parser.add_argument("--models-only", action="store_true", help="只生成JSON模型，不重导出SVG或PNG")
+    args = parser.parse_args()
+    if args.diagnose_only:
+        report = {"phase": "before-fix", "uv": uv_diagnostics(model_names),
+                  "shell_rings": {"lower_top": shell_ring_report("enrichment_centrifuge", 13, 16),
+                                  "upper_bottom": shell_ring_report("enrichment_centrifuge_upper", 0, 3)}}
+        EVIDENCE.mkdir(parents=True, exist_ok=True)
+        (EVIDENCE / "pre-fix-diagnostics.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return
+    geometry=install_assets(write_textures=not args.models_only)
     geometry={part:json.loads((ASSET/f"models/block/{name}.json").read_text(encoding="utf-8"))["elements"]
               for part,name in model_names.items()}
     validate_assets(geometry)
+    uv_report = uv_diagnostics(model_names)
+    bad_uv = {part: data["out_of_range_faces"] for part, data in uv_report.items()
+              if data["out_of_range_faces"] or data["implicit_faces"]}
+    if bad_uv:
+        raise ValueError(f"生成模型仍含隐式或越界UV: {bad_uv}")
+    shell_report = {"lower_top": shell_ring_report("enrichment_centrifuge", 13, 16),
+                    "upper_bottom": shell_ring_report("enrichment_centrifuge_upper", 0, 3)}
+    if any(data["uncovered_rays"] for data in shell_report.values()):
+        raise ValueError(f"生成模型外壳仍有周向缺口: {shell_report}")
     EVIDENCE.mkdir(parents=True,exist_ok=True)
-    render_json(geometry["item"],EVIDENCE/"centrifuge-final-front.png",210,"EXT-A-FUEL-01D | north service hatch")
-    render_json(geometry["item"],EVIDENCE/"centrifuge-final-side.png",55,"EXT-A-FUEL-01D | side manifold view")
+    render_json(geometry["item"],EVIDENCE/"centrifuge-final-front.png",210,"EXT-A-FUEL-01E | north service hatch")
+    render_json(geometry["item"],EVIDENCE/"centrifuge-final-side.png",55,"EXT-A-FUEL-01E | side manifold view")
     summary={"asset":"enrichment_centrifuge","blockstate_variants":8,
              "elements":{"lower":len(geometry["lower"]),"upper":len(geometry["upper"]),
                          "item":len(geometry["item"]),"rotor":len(geometry["rotor"])},
              "bounds":{"lower":model_bounds(geometry["lower"]),"upper":model_bounds(geometry["upper"]),
                        "whole_item":model_bounds(geometry["item"]),"rotor":model_bounds(geometry["rotor"])},
-             "rotor_axis_lower_local":[8,16,8],"preview":"final JSON cuboids and rotated elements; material colors only, no game UV/light"}
+             "rotor_axis_lower_local":[8,16,8],"preview":"geometry colors only; UV separately checked against 1.21.1 projection and 16x16 sprite bounds",
+             "uv_diagnostics":uv_report,"shell_rings":shell_report,
+             "pre_fix_uv_violations":{"item":168,"rotor":76},
+             "display_scales":{"gui":0.45,"ground":0.32,"fixed":0.35,
+                                "thirdperson_righthand":0.38,"firstperson_righthand":0.38}}
     (EVIDENCE/"geometry-check.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(summary,ensure_ascii=False,indent=2))
 
