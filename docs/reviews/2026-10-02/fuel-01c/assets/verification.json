@@ -1,0 +1,36 @@
+{
+  "candidate_head": "de2e0d150193cfce0664312ab4f80158c20923f1",
+  "minecraft": "1.21.1",
+  "neoforge": "21.1.219",
+  "create": "6.0.10-280",
+  "json_parse": "PASS",
+  "slurry_bucket_model": {
+    "loader": "neoforge:fluid_container",
+    "parent": "neoforge:item/bucket",
+    "fluid": "create_nuclear_industry:uranium_slurry",
+    "result": "PASS"
+  },
+  "centrifuge_block_textures": {
+    "north": "create_nuclear_industry:block/enrichment_centrifuge_front",
+    "south": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "east": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "west": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "up": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "down": "create_nuclear_industry:block/enrichment_centrifuge_back",
+    "particle": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "result": "PASS"
+  },
+  "unchanged": [
+    "centrifuge block model parent and element geometry",
+    "centrifuge item model parent and transforms",
+    "BucketItem and uranium_slurry registry identities",
+    "PNG, SVG, art pipeline, manifest, and palette"
+  ],
+  "build_or_game_run": false,
+  "skills_read": [
+    "minecraft-modding",
+    "minecraft-resource-pack",
+    "minecraft-testing"
+  ],
+  "testing_scope": "Static model/resource contract only; Gradle, tests, and game runs are excluded by the resource-line card."
+}
