@@ -1,0 +1,8 @@
+EXT-A-FUEL-01B 静态检查通过
+配方 JSON 可解析，type=create:compacting
+ingredients=4；每项均为 create_nuclear_industry:nuclear_materials/uranium_tailings
+results=1；结果 create_nuclear_industry:uranium_tailings_brick，默认数量为 1
+未设置加热或加工时间字段；配方无需加热
+旧 pressing/uranium_tailings_brick.json 已删除，未发现其他尾矿砖配方入口
+Create 6.0.10-280 本地原生 compacting 示例：ice.json 使用9份 snow_block 输入和1份输出，且无加热字段
+未运行测试或游戏
