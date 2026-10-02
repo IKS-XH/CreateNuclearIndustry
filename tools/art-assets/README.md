@@ -4,9 +4,9 @@ EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/
 
 ## 燃料02A/02B专用素材
 
-燃料02A新增两枚芯块及单格烧结炉，用户已确认原四组手测通过；02B将八棱炉体扩大到整格外包范围。继续使用独立`fuel_02a_assets.py`，不扩大旧manifest或修改共用导出器。当前候选与两项复测见[02B交付页](../../docs/reviews/2026-10-03/fuel-02b/README.md)。
+燃料02A新增两枚芯块及单格烧结炉；02B将八棱炉体扩大到整格外包范围。全部人工门已通过并合入main，见[最终验收](../../docs/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)。继续使用独立`fuel_02a_assets.py`，不扩大旧manifest或修改共用导出器。
 
-在候选仓库根目录运行：
+在仓库根目录运行：
 
 ```powershell
 & 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/fuel_02a_assets.py

@@ -1,17 +1,17 @@
 # 燃料02A：生芯块与燃料烧结炉
 
-**状态：2026-10-03用户确认候选`575400e`的四组手测全部通过。** 同时要求炉体放大及工作台/高炉配方，已按[02B任务](../../../superpowers/plans/2026-10-03-ext-a-fuel-02b.md)交付候选b1537c8。原运行验收保留，功能待两项新增复测后一起合入main；下文制造成本和原模型说明是02A历史交付。 已批准合同见[方案](../../../superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)和[任务卡](../../../superpowers/plans/2026-10-02-ext-a-fuel-02a.md)。本页只覆盖低浓缩铀粉→生燃料芯块→烧结燃料芯块，后续包壳、燃料棒和组件尚未实施。
+**状态：2026-10-03用户确认02A四组手测及02B两项复测全部通过，已一并合入main，见[最终验收](../../2026-10-03/fuel-02b/ACCEPTANCE.md)。** 原运行验收保留，制造及炉体尺寸以[02B任务](../../../superpowers/plans/2026-10-03-ext-a-fuel-02b.md)为准；下文制造成本和原模型说明是02A历史交付。已批准合同见[方案](../../../superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)和[任务卡](../../../superpowers/plans/2026-10-02-ext-a-fuel-02a.md)。本页只覆盖低浓缩铀粉→生燃料芯块→烧结燃料芯块，后续包壳、燃料棒和组件尚未实施。
 
 ## 启动与人工门
 
-功能放在同级候选工作树；主目录目前仍为已验收的离心机版本。完整退出旧客户端再运行：
+主目录已包含验收后的烧结炉及02B调整。完整退出旧客户端再运行：
 
 ```powershell
-Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
+Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry'
 .\gradlew.bat runClient
 ```
 
-[原四组手测清单](./CLIENT-CHECKLIST.md)已获用户确认通过，不再重复。当前只等待02B新配方与外观，不继续包壳或装配。
+[原四组手测清单](./CLIENT-CHECKLIST.md)与02B新配方/外观均已通过。后续包壳与装配按新任务卡确认配比后实施。
 
 ## 交付与证据
 

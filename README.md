@@ -22,7 +22,9 @@ P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，�
 
 客户端总验收由用户确认通过；本轮 261 项 JUnit、111 项 required GameTest 断言与 build 通过。GameTest 断言全过后保存挂起，强停导致 Gradle 退出 1，该限制未消除。详见[总验收](docs/archive/P1-VERIFY-02.md)和[最终交接](docs/archive/P1-VERIFY-03.md)。
 
-三矿获取、粉碎与素材批，以及铅锡直熔、水洗9粒、粒锭合拆、压板和新素材，均已于2026-10-01完成人工验收并合入main，见[铅锡收尾记录](docs/reviews/2026-10-01/material-02-acceptance.md)。铁粉与煤/木炭粉→4+1搅拌成5钢粉→熔炼钢锭→现有钢板也已[验收并合入main](docs/reviews/2026-10-01/material-03b/README.md)，物品名现简称“钢”；旧遥测测试调度异常已修复，GameTest断言通过后的保存停滞单列为环境限制。[锡条、两种传感器及五项素材](docs/reviews/2026-10-01/material-04/ACCEPTANCE.md)已通过完整人工清单并合入main。材料05的石英粉、耐火砖、重型轴承和4项SVG也已[完整手测通过并合入main](docs/reviews/2026-10-02/material-05/ACCEPTANCE.md)，从主目录runClient即可使用。后续按[改动范围选择验证](docs/project-governance.md#51-按改动范围验证2026-10-02起生效)，不在推进前后重复全量回归。铀原料加工与两格富集离心机也已[完成人工验收并合入main](docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)，主目录runClient即可使用；下一段为[生芯块与烧结炉方案](docs/superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)，[02A全部手测已通过](docs/reviews/2026-10-02/fuel-02a/README.md)，已交付[02B整格外观与工作台/高炉配方候选](docs/reviews/2026-10-03/fuel-02b/README.md)；只待这两项复测，本批暂只在同级候选目录启动。铅锡水洗副产物暂缓。完整生存生产和发电链尚未完成；当前任务见[实施路线图](docs/implementation-roadmap.md)。
+三矿获取、粉碎与素材批，以及铅锡直熔、水洗9粒、粒锭合拆、压板和新素材，均已于2026-10-01完成人工验收并合入main，见[铅锡收尾记录](docs/reviews/2026-10-01/material-02-acceptance.md)。铁粉与煤/木炭粉→4+1搅拌成5钢粉→熔炼钢锭→现有钢板也已[验收并合入main](docs/reviews/2026-10-01/material-03b/README.md)，物品名现简称“钢”；旧遥测测试调度异常已修复，GameTest断言通过后的保存停滞单列为环境限制。[锡条、两种传感器及五项素材](docs/reviews/2026-10-01/material-04/ACCEPTANCE.md)和[石英粉、耐火砖、重型轴承及4项SVG](docs/reviews/2026-10-02/material-05/ACCEPTANCE.md)均已完成人工验收并合入main。
+
+[铀原料加工与两格富集离心机](docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与整格燃料烧结炉](docs/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)也已全部手测通过并合入main，从主目录runClient即可使用；烧结炉采用工作台配方，中央为原版高炉。下一段为包壳/焊料/格架及两级燃料装配，具体参数另卡确认。后续按[改动范围选择验证](docs/project-governance.md#51-按改动范围验证2026-10-02起生效)，不重复全量回归。铅锡水洗副产物暂缓；完整生存生产和发电链尚未完成，见[实施路线图](docs/implementation-roadmap.md)。
 
 ## 设计方向
 
