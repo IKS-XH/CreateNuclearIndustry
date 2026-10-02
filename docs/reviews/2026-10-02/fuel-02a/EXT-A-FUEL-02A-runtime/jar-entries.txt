@@ -1,0 +1,8 @@
+assets/create_nuclear_industry/blockstates/fuel_sintering_furnace.json present=True
+assets/create_nuclear_industry/models/item/green_fuel_pellet.json present=True
+assets/create_nuclear_industry/models/item/sintered_fuel_pellet.json present=True
+assets/create_nuclear_industry/models/item/fuel_sintering_furnace.json present=True
+data/create_nuclear_industry/recipe/pressing/green_fuel_pellet.json present=True
+data/create_nuclear_industry/recipe/mechanical_crafting/fuel_sintering_furnace.json present=True
+data/create_nuclear_industry/recipe/sintering/sintered_fuel_pellet.json present=True
+data/create_nuclear_industry_02a/structure/p0_probe_empty.nbt present=True

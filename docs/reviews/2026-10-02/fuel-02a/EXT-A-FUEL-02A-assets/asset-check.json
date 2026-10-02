@@ -1,0 +1,204 @@
+{
+  "asset_ids": [
+    "green_fuel_pellet",
+    "sintered_fuel_pellet",
+    "fuel_sintering_furnace"
+  ],
+  "new_textures": 7,
+  "editable_svg_sources": 7,
+  "standard_export_reads_sources": true,
+  "item_textures": 2,
+  "block_textures": 5,
+  "blockstate_variants": 8,
+  "model_elements": {
+    "off": 58,
+    "on": 58,
+    "item": 58
+  },
+  "bounds": [
+    [
+      1.0,
+      0,
+      0.88
+    ],
+    [
+      15.0,
+      11.75,
+      15.0
+    ]
+  ],
+  "uv": {
+    "off": {
+      "elements": 58,
+      "explicit_faces": 338,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "on": {
+      "elements": 58,
+      "explicit_faces": 338,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "item": {
+      "elements": 58,
+      "explicit_faces": 338,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    }
+  },
+  "shell_design": {
+    "sampled_rays": 4096,
+    "uncovered_rays": 0,
+    "outer_apothem": 7.0,
+    "outer_bound": 15.000000000000002,
+    "minimum_face_angle_degrees": 45
+  },
+  "shell_json": {
+    "probes": [
+      {
+        "label": "steel_foot",
+        "sample_y": 0.6,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 12
+      },
+      {
+        "label": "steel_foot_mid_join",
+        "sample_y": 1.2,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 9
+      },
+      {
+        "label": "steel_foot_upper_edge",
+        "sample_y": 1.799,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 9
+      },
+      {
+        "label": "brass_lower_band_join",
+        "sample_y": 1.8,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 17
+      },
+      {
+        "label": "brass_lower_band_upper_edge",
+        "sample_y": 2.649,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 8
+      },
+      {
+        "label": "steel_shell_join",
+        "sample_y": 2.65,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 16
+      },
+      {
+        "label": "steel_shell",
+        "sample_y": 5.0,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 12
+      },
+      {
+        "label": "brass_upper_band_join",
+        "sample_y": 9.35,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 16
+      },
+      {
+        "label": "brass_upper_band_upper_edge",
+        "sample_y": 10.199,
+        "apothem": 7.0,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 8
+      },
+      {
+        "label": "refractory_cap_join",
+        "sample_y": 10.2,
+        "apothem": 6.4,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 17
+      },
+      {
+        "label": "refractory_cap",
+        "sample_y": 10.5,
+        "apothem": 6.4,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 9
+      },
+      {
+        "label": "top_interface_join",
+        "sample_y": 11.6,
+        "apothem": 6.4,
+        "sampled_rays": 4096,
+        "uncovered_rays": 0,
+        "elements": 14
+      }
+    ],
+    "uncovered_rays_total": 0
+  },
+  "window": {
+    "lit_false": "fuel_sintering_furnace_window_off",
+    "lit_true": "fuel_sintering_furnace_window_on"
+  },
+  "display_scale": {
+    "gui": [
+      0.95,
+      0.95,
+      0.95
+    ],
+    "ground": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "fixed": [
+      0.55,
+      0.55,
+      0.55
+    ],
+    "thirdperson_righthand": [
+      0.375,
+      0.375,
+      0.375
+    ],
+    "thirdperson_lefthand": [
+      0.375,
+      0.375,
+      0.375
+    ],
+    "firstperson_righthand": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "firstperson_lefthand": [
+      0.4,
+      0.4,
+      0.4
+    ]
+  },
+  "unchanged_centrifuge_textures": true,
+  "errors": []
+}
