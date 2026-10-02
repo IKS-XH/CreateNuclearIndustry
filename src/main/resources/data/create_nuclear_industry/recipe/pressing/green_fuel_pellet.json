@@ -1,0 +1,5 @@
+{
+  "type": "create:pressing",
+  "ingredients": [{ "item": "create_nuclear_industry:low_enriched_uranium_dust" }],
+  "results": [{ "id": "create_nuclear_industry:green_fuel_pellet" }]
+}

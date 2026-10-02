@@ -155,5 +155,21 @@
   "gui.create_nuclear_industry.centrifuge.pause.output_blocked": "Product or water output full",
   "gui.create_nuclear_industry.centrifuge.pause.bearing_worn": "Bearing worn; stop and repair with a Heavy Bearing",
   "gui.create_nuclear_industry.centrifuge.pause.structure_missing": "Upper section missing; processing paused",
-  "gui.create_nuclear_industry.centrifuge.legacy_replay": "Old single-block machine: wrench it up and place it again"
+  "gui.create_nuclear_industry.centrifuge.legacy_replay": "Old single-block machine: wrench it up and place it again",
+  "item.create_nuclear_industry.green_fuel_pellet": "Green Fuel Pellet",
+  "item.create_nuclear_industry.sintered_fuel_pellet": "Sintered Fuel Pellet",
+  "block.create_nuclear_industry.fuel_sintering_furnace": "Fuel Sintering Furnace",
+  "gui.create_nuclear_industry.sintering.input": "Green pellets: %s",
+  "gui.create_nuclear_industry.sintering.output": "Sintered pellets: %s",
+  "gui.create_nuclear_industry.sintering.heat": "Heat: %s",
+  "gui.create_nuclear_industry.sintering.heat.sufficient": "Sufficient",
+  "gui.create_nuclear_industry.sintering.heat.insufficient": "Insufficient",
+  "gui.create_nuclear_industry.sintering.progress": "Progress: %s/%s ticks",
+  "gui.create_nuclear_industry.sintering.wait.heat": "Waiting for heat",
+  "gui.create_nuclear_industry.sintering.wait.input": "Waiting for green pellets",
+  "gui.create_nuclear_industry.sintering.wait.output": "Output full",
+  "gui.create_nuclear_industry.sintering.wait.recipe": "No valid sintering recipe",
+  "gui.create_nuclear_industry.sintering.wait.running": "Sintering",
+  "gui.create_nuclear_industry.sintering.jei.heat": "Normal heat",
+  "gui.create_nuclear_industry.sintering.jei.time": "20 s / %s ticks"
 }

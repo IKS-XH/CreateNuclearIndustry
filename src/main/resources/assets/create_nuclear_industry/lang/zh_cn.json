@@ -155,5 +155,21 @@
   "gui.create_nuclear_industry.centrifuge.pause.output_blocked": "产物或水出口已满",
   "gui.create_nuclear_industry.centrifuge.pause.bearing_worn": "轴承耗尽，停机后用重型轴承维修",
   "gui.create_nuclear_industry.centrifuge.pause.structure_missing": "上段缺失，已暂停加工",
-  "gui.create_nuclear_industry.centrifuge.legacy_replay": "旧单格机器：用扳手收起后重新放置"
+  "gui.create_nuclear_industry.centrifuge.legacy_replay": "旧单格机器：用扳手收起后重新放置",
+  "item.create_nuclear_industry.green_fuel_pellet": "生燃料芯块",
+  "item.create_nuclear_industry.sintered_fuel_pellet": "烧结燃料芯块",
+  "block.create_nuclear_industry.fuel_sintering_furnace": "燃料烧结炉",
+  "gui.create_nuclear_industry.sintering.input": "生芯块：%s",
+  "gui.create_nuclear_industry.sintering.output": "烧结芯块：%s",
+  "gui.create_nuclear_industry.sintering.heat": "热源：%s",
+  "gui.create_nuclear_industry.sintering.heat.sufficient": "达标",
+  "gui.create_nuclear_industry.sintering.heat.insufficient": "不足",
+  "gui.create_nuclear_industry.sintering.progress": "进度：%s/%s tick",
+  "gui.create_nuclear_industry.sintering.wait.heat": "等待加热",
+  "gui.create_nuclear_industry.sintering.wait.input": "等待生芯块",
+  "gui.create_nuclear_industry.sintering.wait.output": "产物槽已满",
+  "gui.create_nuclear_industry.sintering.wait.recipe": "缺少有效烧结配方",
+  "gui.create_nuclear_industry.sintering.wait.running": "正在烧结",
+  "gui.create_nuclear_industry.sintering.jei.heat": "最低普通加热",
+  "gui.create_nuclear_industry.sintering.jei.time": "20秒 / %s tick"
 }

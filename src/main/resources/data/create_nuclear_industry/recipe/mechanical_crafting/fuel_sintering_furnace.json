@@ -1,0 +1,14 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "R": { "item": "create_nuclear_industry:refractory_brick" },
+    "S": { "tag": "c:plates/steel" },
+    "B": { "item": "create:blaze_burner" },
+    "I": { "item": "create_nuclear_industry:industrial_sensor" }
+  },
+  "pattern": ["RSR", "RBR", "SIS"],
+  "result": { "id": "create_nuclear_industry:fuel_sintering_furnace" },
+  "show_notification": false
+}

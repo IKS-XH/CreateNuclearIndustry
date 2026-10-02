@@ -6,6 +6,9 @@ import com.iksxh.create_nuclear_industry.production.CentrifugeBlockItem;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlockEntity;
 import com.iksxh.create_nuclear_industry.production.CentrifugeUpperProxyBlockEntity;
 import com.iksxh.create_nuclear_industry.production.CentrifugeRecipe;
+import com.iksxh.create_nuclear_industry.production.FuelSinteringBlock;
+import com.iksxh.create_nuclear_industry.production.FuelSinteringBlockEntity;
+import com.iksxh.create_nuclear_industry.production.FuelSinteringRecipe;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -49,6 +52,8 @@ public final class FuelProcessingContent {
     public static final DeferredItem<Item> URANIUM_TAILINGS = ITEMS.registerSimpleItem("uranium_tailings");
     public static final DeferredItem<Item> LOW_ENRICHED_URANIUM_DUST = ITEMS.registerSimpleItem("low_enriched_uranium_dust");
     public static final DeferredItem<Item> DEPLETED_URANIUM_DUST = ITEMS.registerSimpleItem("depleted_uranium_dust");
+    public static final DeferredItem<Item> GREEN_FUEL_PELLET = ITEMS.registerSimpleItem("green_fuel_pellet");
+    public static final DeferredItem<Item> SINTERED_FUEL_PELLET = ITEMS.registerSimpleItem("sintered_fuel_pellet");
     public static final DeferredBlock<Block> URANIUM_TAILINGS_BRICK = BLOCKS.register("uranium_tailings_brick",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS).requiresCorrectToolForDrops()));
     public static final DeferredItem<BlockItem> URANIUM_TAILINGS_BRICK_ITEM = ITEMS.register("uranium_tailings_brick",
@@ -58,6 +63,11 @@ public final class FuelProcessingContent {
                     .strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredItem<BlockItem> ENRICHMENT_CENTRIFUGE_ITEM = ITEMS.register("enrichment_centrifuge",
             () -> new CentrifugeBlockItem(ENRICHMENT_CENTRIFUGE.get(), new Item.Properties().stacksTo(1)));
+    public static final DeferredBlock<FuelSinteringBlock> FUEL_SINTERING_FURNACE = BLOCKS.register("fuel_sintering_furnace",
+            () -> new FuelSinteringBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                    .strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));
+    public static final DeferredItem<BlockItem> FUEL_SINTERING_FURNACE_ITEM = ITEMS.register("fuel_sintering_furnace",
+            () -> new BlockItem(FUEL_SINTERING_FURNACE.get(), new Item.Properties().stacksTo(1)));
 
     public static final DeferredHolder<FluidType, FluidType> URANIUM_SLURRY_TYPE = FLUID_TYPES.register("uranium_slurry",
             () -> new FluidType(FluidType.Properties.create().descriptionId("fluid_type.create_nuclear_industry.uranium_slurry")
@@ -94,10 +104,17 @@ public final class FuelProcessingContent {
             BLOCK_ENTITIES.register("enrichment_centrifuge_upper_proxy",
                     () -> BlockEntityType.Builder.of(CentrifugeUpperProxyBlockEntity::new,
                             ENRICHMENT_CENTRIFUGE.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FuelSinteringBlockEntity>> FUEL_SINTERING_BE =
+            BLOCK_ENTITIES.register("fuel_sintering_furnace",
+                    () -> BlockEntityType.Builder.of(FuelSinteringBlockEntity::new, FUEL_SINTERING_FURNACE.get()).build(null));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGING_TYPE =
             RECIPE_TYPES.register("centrifuging", () -> new RecipeType<>() {});
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CentrifugeRecipe>> CENTRIFUGING_SERIALIZER =
             RECIPE_SERIALIZERS.register("centrifuging", CentrifugeRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FuelSinteringRecipe>> SINTERING_TYPE =
+            RECIPE_TYPES.register("sintering", () -> new RecipeType<>() {});
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FuelSinteringRecipe>> SINTERING_SERIALIZER =
+            RECIPE_SERIALIZERS.register("sintering", FuelSinteringRecipe.Serializer::new);
 
     private FuelProcessingContent() {}
 

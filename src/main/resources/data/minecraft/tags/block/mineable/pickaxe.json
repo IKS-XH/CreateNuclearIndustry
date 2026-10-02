@@ -20,6 +20,7 @@
     "create_nuclear_industry:deepslate_uranium_ore",
     "create_nuclear_industry:raw_uranium_block",
     "create_nuclear_industry:enrichment_centrifuge",
-    "create_nuclear_industry:uranium_tailings_brick"
+    "create_nuclear_industry:uranium_tailings_brick",
+    "create_nuclear_industry:fuel_sintering_furnace"
   ]
 }

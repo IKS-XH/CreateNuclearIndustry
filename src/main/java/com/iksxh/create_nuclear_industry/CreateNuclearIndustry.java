@@ -67,6 +67,7 @@ public final class CreateNuclearIndustry {
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerP1Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerCentrifugeCapabilities);
+        modEventBus.addListener(CreateNuclearIndustry::registerFuelSinteringCapabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
         NeoForge.EVENT_BUS.register(ReactorStructureLifecycle.class);
         NeoForge.EVENT_BUS.register(ControlRodSliderNetwork.class);
@@ -121,5 +122,11 @@ public final class CreateNuclearIndustry {
             return machine == null ? null : machine.itemPort(side,
                     state.getValue(CentrifugeBlock.HALF) == DoubleBlockHalf.UPPER);
         }, FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get());
+    }
+
+    /** 炉体只开放顶面输入与四侧输出；底面留给 Create 燃烧室。 */
+    private static void registerFuelSinteringCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FuelProcessingContent.FUEL_SINTERING_BE.get(),
+                (machine, side) -> machine.itemPort(side));
     }
 }

@@ -1,0 +1,6 @@
+{
+  "type": "create_nuclear_industry:sintering",
+  "ingredient": { "item": "create_nuclear_industry:green_fuel_pellet" },
+  "result": { "id": "create_nuclear_industry:sintered_fuel_pellet" },
+  "work": 400
+}
