@@ -153,5 +153,7 @@
   "gui.create_nuclear_industry.centrifuge.pause.stabilizing": "Stabilizing speed",
   "gui.create_nuclear_industry.centrifuge.pause.need_slurry": "Waiting for slurry",
   "gui.create_nuclear_industry.centrifuge.pause.output_blocked": "Product or water output full",
-  "gui.create_nuclear_industry.centrifuge.pause.bearing_worn": "Bearing worn; stop and repair with a Heavy Bearing"
+  "gui.create_nuclear_industry.centrifuge.pause.bearing_worn": "Bearing worn; stop and repair with a Heavy Bearing",
+  "gui.create_nuclear_industry.centrifuge.pause.structure_missing": "Upper section missing; processing paused",
+  "gui.create_nuclear_industry.centrifuge.legacy_replay": "Old single-block machine: wrench it up and place it again"
 }

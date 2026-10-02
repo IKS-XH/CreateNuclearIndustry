@@ -7,6 +7,8 @@ import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
+import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.iksxh.create_nuclear_industry.worldgen.OreGenerationFilter;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
@@ -107,11 +109,17 @@ public final class CreateNuclearIndustry {
         );
     }
 
-    /** 将面向固定端口的能力绑定到同一方块实体；原生桶能力由 NeoForge 自动注册。 */
+    /** 上下两格按位置代理到唯一有效下段；每个返回的 handler 自身也逐次复核配对。 */
     private static void registerCentrifugeCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, FuelProcessingContent.CENTRIFUGE_BE.get(),
-                (machine, side) -> machine.fluidPort(side));
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FuelProcessingContent.CENTRIFUGE_BE.get(),
-                (machine, side) -> machine.itemPort(side));
+        event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
+            var machine = CentrifugeBlock.owner(level, pos, state);
+            return machine == null ? null : machine.fluidPort(side,
+                    state.getValue(CentrifugeBlock.HALF) == DoubleBlockHalf.UPPER);
+        }, FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get());
+        event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
+            var machine = CentrifugeBlock.owner(level, pos, state);
+            return machine == null ? null : machine.itemPort(side,
+                    state.getValue(CentrifugeBlock.HALF) == DoubleBlockHalf.UPPER);
+        }, FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get());
     }
 }

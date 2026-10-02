@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry.content;
 
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
+import com.iksxh.create_nuclear_industry.production.CentrifugeBlockItem;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlockEntity;
 import com.iksxh.create_nuclear_industry.production.CentrifugeRecipe;
 import java.util.function.Consumer;
@@ -53,9 +54,9 @@ public final class FuelProcessingContent {
             () -> new BlockItem(URANIUM_TAILINGS_BRICK.get(), new Item.Properties()));
     public static final DeferredBlock<CentrifugeBlock> ENRICHMENT_CENTRIFUGE = BLOCKS.register("enrichment_centrifuge",
             () -> new CentrifugeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
-                    .strength(4.0f).requiresCorrectToolForDrops()));
+                    .strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredItem<BlockItem> ENRICHMENT_CENTRIFUGE_ITEM = ITEMS.register("enrichment_centrifuge",
-            () -> new BlockItem(ENRICHMENT_CENTRIFUGE.get(), new Item.Properties().stacksTo(1)));
+            () -> new CentrifugeBlockItem(ENRICHMENT_CENTRIFUGE.get(), new Item.Properties().stacksTo(1)));
 
     public static final DeferredHolder<FluidType, FluidType> URANIUM_SLURRY_TYPE = FLUID_TYPES.register("uranium_slurry",
             () -> new FluidType(FluidType.Properties.create().descriptionId("fluid_type.create_nuclear_industry.uranium_slurry")

@@ -3,9 +3,6 @@ package com.iksxh.create_nuclear_industry.production;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.SidedFilteringBehaviour;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -26,11 +23,12 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 /**
  * 离心机服务器状态所有者。轴网由 Create 提供；本实体独占两罐、两粉、密闭批次及磨损。
- * 方向过滤由 Create 原生行为保存；客户端只显示过滤槽与护目镜信息，不参与加工和库存事务。
+ * 上段没有方块实体；客户端只显示护目镜和转子，不参与加工和库存事务。
  */
 public final class CentrifugeBlockEntity extends KineticBlockEntity {
     private final CentrifugeState state = new CentrifugeState();
-    private SidedFilteringBehaviour filtering;
+    private boolean paired;
+    private boolean removalHandled;
 
     public CentrifugeBlockEntity(BlockPos pos, BlockState blockState) {
         super(FuelProcessingContent.CENTRIFUGE_BE.get(), pos, blockState);
@@ -38,33 +36,19 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        filtering = new SidedFilteringBehaviour(this,
-                new CentrifugeFilterSlotTransform(),
-                this::createSideFilter, CentrifugeBlockEntity::isMaterialSide);
-        behaviours.add(filtering);
+        // 此设备没有 Create 值框行为；物流筛选交由外部黄铜漏斗处理。
     }
 
-    private FilteringBehaviour createSideFilter(Direction side, FilteringBehaviour filter) {
-        return filter;
+    public boolean isPaired() { return paired; }
+    public void setPaired(boolean value) {
+        paired = value;
+        setChanged();
+        sendData();
     }
 
-    private static boolean isMaterialSide(Direction side) {
-        return side != null && side != Direction.DOWN;
-    }
-
-    private boolean itemMatchesFilter(Direction side, ItemStack stack) {
-        return filtering == null || filtering.test(side, stack);
-    }
-
-    private boolean fluidMatchesFilter(Direction side, FluidStack stack) {
-        return filtering == null || filtering.get(side) == null || filtering.get(side).test(stack);
-    }
-
-    /** Create 原生值框命中优先于桶交易、维修和空手取料。 */
-    public boolean isFilterSlotHit(Direction side, BlockHitResult hit) {
-        return filtering != null && isMaterialSide(side) && level != null
-                && filtering.testHit(level, worldPosition, side, hit.getLocation());
-    }
+    /** 真实拆卸动作调用；纯掉落查询不得改变此标记，且它不写入 NBT。 */
+    public void markRemovalHandled() { removalHandled = true; }
+    public boolean isRemovalHandled() { return removalHandled; }
 
     /** 应力系数为每 RPM 8 SU，不因库存堵塞而消失。 */
     @Override
@@ -76,7 +60,7 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level == null || level.isClientSide) return;
+        if (level == null || level.isClientSide || !isCurrentMachine()) return;
         float speed = getSpeed();
         float oldSpeed = state.observedSpeed;
         int oldStable = state.stableTicks;
@@ -120,9 +104,10 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
         return null;
     }
 
-    public enum PauseReason { RUNNING, NO_POWER, OVERLOADED, STABILIZING, NEED_SLURRY, OUTPUT_BLOCKED, BEARING_WORN }
+    public enum PauseReason { RUNNING, NO_POWER, OVERLOADED, STABILIZING, NEED_SLURRY, OUTPUT_BLOCKED, BEARING_WORN, STRUCTURE_MISSING }
 
     public PauseReason pauseReason() {
+        if (!isCurrentMachine()) return PauseReason.STRUCTURE_MISSING;
         if (state.wearUnits >= CentrifugeState.WEAR_LIMIT) return PauseReason.BEARING_WORN;
         if (isOverStressed()) return PauseReason.OVERLOADED;
         if (getSpeed() == 0) return PauseReason.NO_POWER;
@@ -144,20 +129,21 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
         return true;
     }
 
-    public IFluidHandler fluidPort(Direction side) {
-        if (!isMaterialSide(side) || isRemoved()) return null;
-        return new PortFluidHandler(side);
+    public IFluidHandler fluidPort(Direction side, boolean upper) {
+        if (side == null || side == Direction.DOWN || upper && side == Direction.DOWN
+                || !upper && side == Direction.UP || isRemoved()) return null;
+        return new PortFluidHandler(side, upper);
     }
 
-    public IItemHandler itemPort(Direction side) {
-        if (!isMaterialSide(side) || isRemoved()) return null;
-        return new PortItemHandler(side);
+    public IItemHandler itemPort(Direction side, boolean upper) {
+        if (side == null || side.getAxis() == Direction.Axis.Y || isRemoved()) return null;
+        return new PortItemHandler(side, upper);
     }
 
     /** 手工桶事务先模拟两端，再提交单个整桶；失败时原手持栈和机器均不改变。 */
-    public void transferHeldBucket(Player player, InteractionHand hand, Direction side) {
+    public void transferHeldBucket(Player player, InteractionHand hand, Direction side, boolean upper) {
         if (level == null || level.isClientSide) return;
-        IFluidHandler port = fluidPort(side);
+        IFluidHandler port = fluidPort(side, upper);
         ItemStack held = player.getItemInHand(hand);
         if (port == null || held.isEmpty()) return;
         int extraSlot = held.getCount() > 1 ? player.getInventory().getFreeSlot() : -1;
@@ -180,9 +166,9 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
     }
 
     /** 空手从任一物料面收取该面当前允许的两种粉末；满背包时沿玩家原生返物路径处理。 */
-    public void extractOutputsToPlayer(Player player, Direction side) {
-        if (level == null || level.isClientSide || !isCurrentMaterialPort(side)) return;
-        IItemHandler port = new PortItemHandler(side);
+    public void extractOutputsToPlayer(Player player, Direction side, boolean upper) {
+        if (level == null || level.isClientSide || !isCurrentMaterialPort(side, upper)) return;
+        IItemHandler port = new PortItemHandler(side, upper);
         for (int slot = 0; slot < 2; slot++) {
             ItemStack extracted = port.extractItem(slot, Integer.MAX_VALUE, false);
             if (!extracted.isEmpty()) player.getInventory().placeItemBackInInventory(extracted);
@@ -194,27 +180,12 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
         CompoundTag tag = new CompoundTag();
         HolderLookup.Provider registries = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
         writeState(tag, registries);
-        if (filtering != null) {
-            CompoundTag filters = new CompoundTag();
-            filtering.write(filters, registries, false);
-            tag.put("CentrifugeFilters", filters);
-        }
         return tag;
-    }
-
-    void readPortableFilters(CompoundTag tag, HolderLookup.Provider registries) {
-        if (filtering == null) return;
-        for (Direction side : Direction.values()) {
-            if (isMaterialSide(side)) filtering.setFilter(side, ItemStack.EMPTY);
-        }
-        if (tag.contains("CentrifugeFilters"))
-            filtering.read(tag.getCompound("CentrifugeFilters"), registries, false);
     }
 
     public void loadPortableData(CompoundTag tag) {
         if (level != null && !level.isClientSide) {
             readState(tag, level.registryAccess());
-            readPortableFilters(tag, level.registryAccess());
             setChanged();
             sendData();
         }
@@ -223,11 +194,13 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
     @Override protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
         writeState(tag, registries);
+        tag.putBoolean("CentrifugePaired", paired);
     }
 
     @Override protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
         readState(tag, registries);
+        paired = tag.getBoolean("CentrifugePaired");
     }
 
     /** 版本化保存所有库存和密闭结果；Batch 字段不能只保存配方 ID。 */
@@ -240,10 +213,15 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
         state.read(tag, registries);
     }
 
-    private boolean isCurrentMaterialPort(Direction side) {
-        if (!isMaterialSide(side) || isRemoved()
-                || getBlockState().getBlock() != FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get()) return false;
-        return level == null || level.getBlockEntity(worldPosition) == this;
+    private boolean isCurrentMachine() {
+        return level != null && CentrifugeBlock.owner(level, worldPosition, getBlockState()) == this;
+    }
+
+    private boolean isCurrentMaterialPort(Direction side, boolean upper) {
+        if (side == null || side == Direction.DOWN || !upper && side == Direction.UP || isRemoved()) return false;
+        if (level == null) return false;
+        BlockPos queried = upper ? worldPosition.above() : worldPosition;
+        return CentrifugeBlock.owner(level, queried, level.getBlockState(queried)) == this;
     }
 
     private FluidStack storedFluid(int tank) {
@@ -268,6 +246,7 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
         tooltip.add(Component.translatable("gui.create_nuclear_industry.centrifuge.bearing",
                 (CentrifugeState.WEAR_LIMIT - state.wearUnits) * 100 / CentrifugeState.WEAR_LIMIT));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.centrifuge.pause." + pauseReason().name().toLowerCase()));
+        if (!paired) tooltip.add(Component.translatable("gui.create_nuclear_industry.centrifuge.legacy_replay"));
         return true;
     }
 
@@ -277,20 +256,19 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
 
     private final class PortFluidHandler implements IFluidHandler {
         private final Direction side;
-        private PortFluidHandler(Direction side) { this.side = side; }
-        private boolean valid() { return isCurrentMaterialPort(side); }
-        @Override public int getTanks() { return valid() ? 2 : 0; }
+        private final boolean upper;
+        private PortFluidHandler(Direction side, boolean upper) { this.side = side; this.upper = upper; }
+        private boolean valid() { return isCurrentMaterialPort(side, upper); }
+        @Override public int getTanks() { return valid() ? 1 : 0; }
         @Override public FluidStack getFluidInTank(int tank) {
-            if (!valid()) return FluidStack.EMPTY;
-            FluidStack stored = storedFluid(tank);
-            return stored.isEmpty() || !fluidMatchesFilter(side, stored) ? FluidStack.EMPTY : stored;
+            return valid() && tank == 0 ? storedFluid(side == Direction.UP ? 0 : 1) : FluidStack.EMPTY;
         }
         @Override public int getTankCapacity(int tank) {
-            return valid() && (tank == 0 || tank == 1) ? CentrifugeState.TANK_CAPACITY : 0;
+            return valid() && tank == 0 ? CentrifugeState.TANK_CAPACITY : 0;
         }
         @Override public boolean isFluidValid(int tank, FluidStack stack) {
-            return valid() && tank == 0 && stack.is(FuelProcessingContent.URANIUM_SLURRY.get())
-                    && fluidMatchesFilter(side, stack);
+            return valid() && side == Direction.UP && tank == 0
+                    && stack.is(FuelProcessingContent.URANIUM_SLURRY.get());
         }
         @Override public int fill(FluidStack resource, FluidAction action) {
             if (!valid() || !isFluidValid(0, resource) || resource.isEmpty()) return 0;
@@ -302,22 +280,20 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
             return accepted;
         }
         @Override public FluidStack drain(FluidStack resource, FluidAction action) {
-            if (!valid() || resource.isEmpty() || !fluidMatchesFilter(side, resource)) return FluidStack.EMPTY;
-            if (resource.is(Fluids.WATER)) return drainTank(1, resource.getAmount(), action);
-            if (resource.is(FuelProcessingContent.URANIUM_SLURRY.get())) return drainTank(0, resource.getAmount(), action);
+            if (!valid() || resource.isEmpty()) return FluidStack.EMPTY;
+            if (side == Direction.UP && resource.is(FuelProcessingContent.URANIUM_SLURRY.get()))
+                return drainTank(0, resource.getAmount(), action);
+            if (side.getAxis() != Direction.Axis.Y && resource.is(Fluids.WATER))
+                return drainTank(1, resource.getAmount(), action);
             return FluidStack.EMPTY;
         }
         @Override public FluidStack drain(int maxDrain, FluidAction action) {
             if (!valid() || maxDrain <= 0) return FluidStack.EMPTY;
-            FluidStack water = storedFluid(1);
-            if (!water.isEmpty() && fluidMatchesFilter(side, water)) return drainTank(1, maxDrain, action);
-            FluidStack slurry = storedFluid(0);
-            if (!slurry.isEmpty() && fluidMatchesFilter(side, slurry)) return drainTank(0, maxDrain, action);
-            return FluidStack.EMPTY;
+            return drainTank(side == Direction.UP ? 0 : 1, maxDrain, action);
         }
         private FluidStack drainTank(int tank, int maxDrain, FluidAction action) {
             FluidStack stored = storedFluid(tank);
-            if (maxDrain <= 0 || stored.isEmpty() || !fluidMatchesFilter(side, stored)) return FluidStack.EMPTY;
+            if (maxDrain <= 0 || stored.isEmpty()) return FluidStack.EMPTY;
             int amount = Math.min(maxDrain, stored.getAmount());
             if (action.execute()) {
                 if (tank == 0) state.slurryMb -= amount; else state.waterMb -= amount;
@@ -329,19 +305,20 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
 
     private final class PortItemHandler implements IItemHandler {
         private final Direction side;
-        private PortItemHandler(Direction side) { this.side = side; }
-        private boolean valid() { return isCurrentMaterialPort(side); }
+        private final boolean upper;
+        private PortItemHandler(Direction side, boolean upper) { this.side = side; this.upper = upper; }
+        private boolean valid() { return side.getAxis() != Direction.Axis.Y && isCurrentMaterialPort(side, upper); }
         @Override public int getSlots() { return valid() ? 2 : 0; }
         @Override public ItemStack getStackInSlot(int slot) {
             if (!valid() || slot < 0 || slot > 1) return ItemStack.EMPTY;
             ItemStack stored = slot == 0 ? state.enriched : state.depleted;
-            return stored.isEmpty() || !itemMatchesFilter(side, stored) ? ItemStack.EMPTY : stored.copy();
+            return stored.copy();
         }
         @Override public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) { return stack; }
         @Override public ItemStack extractItem(int slot, int amount, boolean simulate) {
             if (!valid() || slot < 0 || slot > 1 || amount <= 0) return ItemStack.EMPTY;
             ItemStack stored = slot == 0 ? state.enriched : state.depleted;
-            if (stored.isEmpty() || !itemMatchesFilter(side, stored)) return ItemStack.EMPTY;
+            if (stored.isEmpty()) return ItemStack.EMPTY;
             ItemStack result = stored.copyWithCount(Math.min(amount, stored.getCount()));
             if (!simulate) {
                 ItemStack remaining = stored.copy();

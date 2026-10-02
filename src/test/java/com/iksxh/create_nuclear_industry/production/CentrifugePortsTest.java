@@ -1,33 +1,22 @@
 package com.iksxh.create_nuclear_industry.production;
 
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.SidedFilteringBehaviour;
 import java.lang.reflect.Field;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/** 使用注册离心机实体和 Create 原生过滤行为验证各面共享端口及快照兼容。 */
+/** 只验证无世界状态可检查的端口入口与便携账本；真实配对在客户端人工门检查。 */
 final class CentrifugePortsTest {
     private static CentrifugeBlockEntity machine() {
-        BlockState state = FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get().defaultBlockState();
-        return new CentrifugeBlockEntity(BlockPos.ZERO, state);
-    }
-
-    private static SidedFilteringBehaviour filtering(CentrifugeBlockEntity machine) throws Exception {
-        Field field = CentrifugeBlockEntity.class.getDeclaredField("filtering");
-        field.setAccessible(true);
-        return (SidedFilteringBehaviour) field.get(machine);
+        BlockState block = FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get().defaultBlockState();
+        return new CentrifugeBlockEntity(BlockPos.ZERO, block);
     }
 
     private static CentrifugeState state(CentrifugeBlockEntity machine) throws Exception {
@@ -36,92 +25,55 @@ final class CentrifugePortsTest {
         return (CentrifugeState) field.get(machine);
     }
 
-    @Test
-    void fiveMaterialFacesSharePortsAndBottomHasNone() throws Exception {
+    @Test void upperOnlyAcceptsTopSlurryPortAndHorizontalOutputPorts() {
         CentrifugeBlockEntity machine = machine();
-        for (Direction side : Direction.values()) {
-            if (side == Direction.DOWN) {
-                assertNull(machine.fluidPort(side));
-                assertNull(machine.itemPort(side));
-            } else {
-                assertNotNull(filtering(machine).get(side));
-                assertEquals(2, machine.fluidPort(side).getTanks());
-                assertEquals(2, machine.itemPort(side).getSlots());
-            }
+        assertNotNull(machine.fluidPort(Direction.UP, true));
+        assertNull(machine.fluidPort(Direction.UP, false));
+        assertNull(machine.fluidPort(Direction.DOWN, true));
+        assertNull(machine.fluidPort(Direction.DOWN, false));
+        assertNull(machine.itemPort(Direction.UP, true));
+        assertNull(machine.itemPort(Direction.DOWN, false));
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            assertNotNull(machine.fluidPort(direction, true));
+            assertNotNull(machine.fluidPort(direction, false));
+            assertNotNull(machine.itemPort(direction, true));
+            assertNotNull(machine.itemPort(direction, false));
         }
-        assertNull(machine.fluidPort(null));
-        assertNull(machine.itemPort(null));
+        assertNull(machine.fluidPort(null, true));
+        assertNull(machine.itemPort(null, false));
+        assertEquals(0, machine.fluidPort(Direction.UP, true).getTanks(),
+                "Detached cached handlers must not expose material");
+        assertEquals(0, machine.itemPort(Direction.NORTH, false).getSlots());
     }
 
-    @Test
-    void nativeFilterSlotsStayAtFaceCornersOutsidePipeCrossSection() {
-        BlockState state = FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get().defaultBlockState();
-        CentrifugeFilterSlotTransform transform = new CentrifugeFilterSlotTransform();
-        for (Direction side : Direction.values()) {
-            transform.fromSide(side);
-            if (side == Direction.DOWN) {
-                assertFalse(transform.shouldRender(null, BlockPos.ZERO, state));
-                continue;
-            }
-            Vec3 position = transform.getLocalOffset(null, BlockPos.ZERO, state);
-            double[] tangent = switch (side.getAxis()) {
-                case X -> new double[] {position.y, position.z};
-                case Y -> new double[] {position.x, position.z};
-                case Z -> new double[] {position.x, position.y};
-            };
-            double gapA = tangentGapToPipe(tangent[0]);
-            double gapB = tangentGapToPipe(tangent[1]);
-            assertTrue(Math.hypot(gapA, gapB) > transform.getScale() / 2,
-                    "过滤值框命中范围需避开物流管道中央截面：" + side + " at " + position);
-            assertTrue(transform.shouldRender(null, BlockPos.ZERO, state));
-        }
-    }
-
-    private static double tangentGapToPipe(double coordinate) {
-        if (coordinate < 0.25) return 0.25 - coordinate;
-        if (coordinate > 0.75) return coordinate - 0.75;
-        return 0;
-    }
-
-    @Test
-    void cachedPortsReadNativeFilterChangesForBothItemAndFluid() throws Exception {
+    @Test void oldFilterSnapshotIsIgnoredWhileMaterialRemains() throws Exception {
         CentrifugeBlockEntity machine = machine();
-        Direction side = Direction.NORTH;
-        SidedFilteringBehaviour filters = filtering(machine);
-        IItemHandler items = machine.itemPort(side);
-        IFluidHandler fluids = machine.fluidPort(side);
         CentrifugeState state = state(machine);
-        state.enriched = new ItemStack(Items.IRON_INGOT, 2);
-        state.slurryMb = 1000;
-        state.waterMb = 1000;
-
-        assertEquals(2, items.getStackInSlot(0).getCount());
-        assertEquals(1000, fluids.getFluidInTank(0).getAmount());
-        filters.setFilter(side, new ItemStack(Items.GOLD_INGOT));
-        assertTrue(items.getStackInSlot(0).isEmpty());
-        assertTrue(items.extractItem(0, 1, false).isEmpty());
-
-        filters.setFilter(side, new ItemStack(Items.IRON_INGOT));
-        assertEquals(2, items.extractItem(0, 2, true).getCount());
-        assertEquals(2, items.extractItem(0, 2, false).getCount());
-        assertFalse(items.isItemValid(0, new ItemStack(Items.IRON_INGOT)));
+        state.slurryMb = 1200;
+        state.waterMb = 900;
+        state.enriched = new ItemStack(Items.IRON_INGOT, 3);
+        CompoundTag saved = machine.savePortableData();
+        assertEquals(1200, saved.getInt("SlurryMb"));
+        assertEquals(900, saved.getInt("WaterMb"));
+        assertFalse(saved.contains("CentrifugeFilters"));
+        saved.put("CentrifugeFilters", new CompoundTag());
+        CentrifugeState restored = new CentrifugeState();
+        restored.read(saved, net.minecraft.core.RegistryAccess.EMPTY);
+        assertEquals(1200, restored.slurryMb);
+        assertEquals(900, restored.waterMb);
+        assertEquals(3, restored.enriched.getCount());
     }
 
-    @Test
-    void portableFilterSnapshotRoundTripsAndLegacySnapshotClearsFilters() throws Exception {
+    @Test void repeatedPortableDropQueriesDoNotClaimRemoval() throws Exception {
         CentrifugeBlockEntity machine = machine();
-        SidedFilteringBehaviour filters = filtering(machine);
-        filters.setFilter(Direction.UP, new ItemStack(Items.IRON_INGOT));
-        CompoundTag portable = machine.savePortableData();
-        assertTrue(portable.contains("CentrifugeFilters"));
-
-        CentrifugeBlockEntity restored = machine();
-        restored.readPortableFilters(portable, RegistryAccess.EMPTY);
-        assertTrue(filtering(restored).get(Direction.UP).getFilter().is(Items.IRON_INGOT));
-
-        restored.readPortableFilters(new CompoundTag(), RegistryAccess.EMPTY);
-        for (Direction side : Direction.values()) {
-            if (side != Direction.DOWN) assertTrue(filtering(restored).get(side).getFilter().isEmpty());
-        }
+        CentrifugeState state = state(machine);
+        state.slurryMb = 750;
+        state.enriched = new ItemStack(Items.IRON_INGOT, 2);
+        CompoundTag first = CentrifugeBlock.portableTag(machine);
+        CompoundTag second = CentrifugeBlock.portableTag(machine);
+        assertEquals(first, second);
+        assertEquals(750, first.getCompound("CniCentrifuge").getInt("SlurryMb"));
+        assertEquals(2, state.enriched.getCount());
+        assertFalse(machine.isRemovalHandled(), "纯掉落快照不占用真实拆卸事务");
     }
 }

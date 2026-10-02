@@ -153,5 +153,7 @@
   "gui.create_nuclear_industry.centrifuge.pause.stabilizing": "转速稳定中",
   "gui.create_nuclear_industry.centrifuge.pause.need_slurry": "等待料浆",
   "gui.create_nuclear_industry.centrifuge.pause.output_blocked": "产物或水出口已满",
-  "gui.create_nuclear_industry.centrifuge.pause.bearing_worn": "轴承耗尽，停机后用重型轴承维修"
+  "gui.create_nuclear_industry.centrifuge.pause.bearing_worn": "轴承耗尽，停机后用重型轴承维修",
+  "gui.create_nuclear_industry.centrifuge.pause.structure_missing": "上段缺失，已暂停加工",
+  "gui.create_nuclear_industry.centrifuge.legacy_replay": "旧单格机器：用扳手收起后重新放置"
 }
