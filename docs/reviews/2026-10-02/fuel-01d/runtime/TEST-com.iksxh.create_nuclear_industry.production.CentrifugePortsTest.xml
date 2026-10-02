@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-02T10:37:39.521Z" hostname="DESKTOP-4G1EOU9" time="0.039">
+  <properties/>
+  <testcase name="upperOnlyAcceptsTopSlurryPortAndHorizontalOutputPorts()" classname="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" time="0.015"/>
+  <testcase name="repeatedPortableDropQueriesDoNotClaimRemoval()" classname="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" time="0.015"/>
+  <testcase name="oldFilterSnapshotIsIgnoredWhileMaterialRemains()" classname="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
