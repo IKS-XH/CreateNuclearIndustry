@@ -1,0 +1,42 @@
+以下为本轮工具返回的 Gradle 输出摘录，不是完整控制台日志。未为保存日志而重跑。
+
+初次定向：
+命令：.\gradlew.bat test --tests '*CentrifugePortsTest' --tests '*CentrifugeContainerTransactionTest' --tests '*CentrifugeSlurryBucketTest' --offline
+摘录：
+> Task :test
+BUILD SUCCESSFUL in 14s
+8 actionable tasks: 1 executed, 7 up-to-date
+对应 XML 当时为 Ports 2、ContainerTransaction 2、SlurryBucket 2，均 0 failure / 0 error。
+
+资源冻结后打包：
+命令：.\gradlew.bat assemble --offline
+摘录：
+> Task :compileJava
+> Task :processResources UP-TO-DATE
+> Task :jar
+> Task :assemble
+BUILD SUCCESSFUL in 2s
+4 actionable tasks: 2 executed, 2 up-to-date
+
+纯掉落查询整改后：
+命令：.\gradlew.bat test --tests '*CentrifugePortsTest' assemble --offline
+摘录：
+> Task :compileJava
+> Task :jar
+> Task :compileTestJava
+> Task :test
+> Task :assemble
+BUILD SUCCESSFUL in 16s
+9 actionable tasks: 4 executed, 5 up-to-date
+当前 Ports XML 为 3 项，0 failure / 0 error；另两份 XML 为先前通过且未在整改后重跑的复用证据。
+
+独立审查限定修正后：
+命令：.\gradlew.bat assemble --offline
+摘录：
+> Task :compileJava
+> Task :processResources UP-TO-DATE
+> Task :jar
+> Task :assemble
+BUILD SUCCESSFUL in 2s
+4 actionable tasks: 2 executed, 2 up-to-date
+最终 JAR SHA-256：D86D2CC3BB8446502F63443C26747CCBD0A49FE6193924E756C80A1AB1B72929

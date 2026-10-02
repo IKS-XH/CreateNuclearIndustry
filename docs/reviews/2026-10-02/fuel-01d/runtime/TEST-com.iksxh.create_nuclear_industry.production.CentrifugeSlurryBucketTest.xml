@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.production.CentrifugeSlurryBucketTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-02T10:27:39.868Z" hostname="DESKTOP-4G1EOU9" time="0.005">
+  <properties/>
+  <testcase name="registeredSlurryFillsNativeBucketThroughCreate()" classname="com.iksxh.create_nuclear_industry.production.CentrifugeSlurryBucketTest" time="0.003"/>
+  <testcase name="slurryTransactionRequiresWholeBucketAndValidContainer()" classname="com.iksxh.create_nuclear_industry.production.CentrifugeSlurryBucketTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

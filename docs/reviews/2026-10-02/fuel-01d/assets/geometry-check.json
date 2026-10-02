@@ -1,0 +1,66 @@
+{
+  "asset": "enrichment_centrifuge",
+  "blockstate_variants": 8,
+  "elements": {
+    "lower": 57,
+    "upper": 59,
+    "item": 139,
+    "rotor": 23
+  },
+  "bounds": {
+    "lower": [
+      [
+        0.8,
+        0,
+        0.38
+      ],
+      [
+        15.2,
+        16,
+        15.2
+      ]
+    ],
+    "upper": [
+      [
+        0.8,
+        0,
+        0.8
+      ],
+      [
+        15.2,
+        16,
+        15.2
+      ]
+    ],
+    "whole_item": [
+      [
+        0.8,
+        0,
+        0.38
+      ],
+      [
+        15.2,
+        32,
+        15.2
+      ]
+    ],
+    "rotor": [
+      [
+        4.22,
+        5,
+        4.22
+      ],
+      [
+        11.78,
+        27,
+        11.78
+      ]
+    ]
+  },
+  "rotor_axis_lower_local": [
+    8,
+    16,
+    8
+  ],
+  "preview": "final JSON cuboids and rotated elements; material colors only, no game UV/light"
+}
