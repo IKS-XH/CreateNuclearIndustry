@@ -1,0 +1,139 @@
+{
+  "phase": "before-fix",
+  "uv": {
+    "lower": {
+      "elements": 57,
+      "explicit_faces": 0,
+      "implicit_faces": 92,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "upper": {
+      "elements": 59,
+      "explicit_faces": 0,
+      "implicit_faces": 114,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "item": {
+      "elements": 139,
+      "explicit_faces": 0,
+      "implicit_faces": 344,
+      "out_of_range_faces": 168,
+      "examples": [
+        {
+          "element": 57,
+          "face": "north",
+          "uv": [
+            5.1,
+            -3,
+            10.9,
+            0
+          ]
+        },
+        {
+          "element": 58,
+          "face": "north",
+          "uv": [
+            5.1,
+            -11,
+            10.9,
+            -8
+          ]
+        },
+        {
+          "element": 59,
+          "face": "north",
+          "uv": [
+            8.375,
+            -8,
+            10.9,
+            -3
+          ]
+        },
+        {
+          "element": 60,
+          "face": "north",
+          "uv": [
+            5.100000000000001,
+            -8,
+            7.625,
+            -3
+          ]
+        }
+      ]
+    },
+    "rotor": {
+      "elements": 23,
+      "explicit_faces": 0,
+      "implicit_faces": 138,
+      "out_of_range_faces": 76,
+      "examples": [
+        {
+          "element": 0,
+          "face": "north",
+          "uv": [
+            7.35,
+            -11,
+            8.65,
+            11
+          ]
+        },
+        {
+          "element": 0,
+          "face": "south",
+          "uv": [
+            7.35,
+            -11,
+            8.65,
+            11
+          ]
+        },
+        {
+          "element": 0,
+          "face": "east",
+          "uv": [
+            7.35,
+            -11,
+            8.65,
+            11
+          ]
+        },
+        {
+          "element": 0,
+          "face": "west",
+          "uv": [
+            7.35,
+            -11,
+            8.65,
+            11
+          ]
+        }
+      ]
+    }
+  },
+  "shell_rings": {
+    "lower_top": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 96,
+      "largest_uncovered_span_degrees": 1.054688,
+      "minimum_overlap_margin": 0.001427,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    },
+    "upper_bottom": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 96,
+      "largest_uncovered_span_degrees": 1.054688,
+      "minimum_overlap_margin": 0.001427,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    }
+  }
+}
