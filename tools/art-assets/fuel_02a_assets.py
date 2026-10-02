@@ -14,8 +14,8 @@ sys.path.insert(0, str(ART))
 import export as strict_exporter
 
 ASSET = ROOT / "src/main/resources/assets/create_nuclear_industry"
-EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-02A-assets"
-REPORT = ROOT / "build/reports/extension/EXT-A-FUEL-02A-assets.md"
+EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-02B"
+REPORT = ROOT / "build/reports/extension/EXT-A-FUEL-02B.md"
 MOD = "create_nuclear_industry:"
 
 # 三种新纹理各自独立设色，避免改变已有全局色板和导出清单。
@@ -147,7 +147,7 @@ def box(lo: list[float], hi: list[float], texture: str, faces: dict | None = Non
     return {"from": lo, "to": hi, "faces": face_map}
 
 
-def octagonal_band(y0: float, y1: float, material: str, outer_apothem: float = 7.0,
+def octagonal_band(y0: float, y1: float, material: str, outer_apothem: float = 8.0,
                    thickness: float = 0.50) -> list[dict]:
     """八片相邻面板构成八棱带，外侧面相交于同一八棱顶点。"""
     half_width = outer_apothem * math.tan(math.pi / 8)
@@ -182,18 +182,33 @@ def octagonal_band(y0: float, y1: float, material: str, outer_apothem: float = 7
 
 def add_front_window(elements: list[dict], variant: str) -> None:
     win_tex = "window_on" if variant == "on" else "window_off"
-    # 正北八棱面位于Z约1，观察窗只向外微凸，保持与钢壳贴合。
-    elements.append(box([6.7, 3.8, 0.98], [9.3, 8.7, 1.08], "refractory",
-                        {"north": face("refractory", [6, 5, 10, 11])}))
-    elements.append(box([7.0, 4.1, 0.92], [9.0, 8.4, 1.0], win_tex,
-                        {"north": face(win_tex, [7, 5, 9, 11])}))
+    # 前壳已扩至Z=0；拆分中央北面，四周钢板、黄铜框和窗片无缝相接。
+    for element in elements:
+        if ("rotation" not in element
+                and element["from"][1] == 2.65 and element["to"][1] == 9.35
+                and element["from"][2] == 0 and element["to"][2] == 0.5
+                and element["from"][0] < 8 < element["to"][0]):
+            element["faces"].pop("north", None)
+            break
+    else:
+        raise ValueError("未找到正北中段钢壳面，无法嵌入观察窗")
+    panel_lo, panel_hi = 8 - 8 * math.tan(math.pi / 8), 8 + 8 * math.tan(math.pi / 8)
     for lo, hi in (
-        ([6.55, 3.6, 0.88], [9.45, 4.15, 1.12]),
-        ([6.55, 8.35, 0.88], [9.45, 8.9, 1.12]),
-        ([6.55, 4.15, 0.88], [7.05, 8.35, 1.12]),
-        ([8.95, 4.15, 0.88], [9.45, 8.35, 1.12]),
+        ([panel_lo, 2.65, 0], [5.55, 9.35, 0.08]),
+        ([10.45, 2.65, 0], [panel_hi, 9.35, 0.08]),
+        ([5.55, 2.65, 0], [10.45, 4.25, 0.08]),
+        ([5.55, 8.3, 0], [10.45, 9.35, 0.08]),
     ):
-        elements.append(box(lo, hi, "brass"))
+        elements.append(box(lo, hi, "steel", {"north": face("steel")}))
+    for lo, hi in (
+        ([5.55, 4.25, 0], [10.45, 4.8, 0.08]),
+        ([5.55, 7.75, 0], [10.45, 8.3, 0.08]),
+        ([5.55, 4.8, 0], [5.8, 7.75, 0.08]),
+        ([10.2, 4.8, 0], [10.45, 7.75, 0.08]),
+    ):
+        elements.append(box(lo, hi, "brass", {"north": face("brass")}))
+    elements.append(box([5.8, 4.8, 0], [10.2, 7.75, 0.08], win_tex,
+                        {"north": face(win_tex, [6, 5, 10, 11])}))
 
 
 def top_bottom_ports(elements: list[dict]) -> None:
@@ -228,17 +243,24 @@ def furnace_model(variant: str) -> dict:
         *octagonal_band(1.8, 2.65, "brass"),
         *octagonal_band(2.65, 9.35, "steel"),
         *octagonal_band(9.35, 10.2, "brass"),
-        *octagonal_band(10.2, 11.6, "refractory", outer_apothem=6.4, thickness=2.5),
+        *octagonal_band(10.2, 11.6, "refractory", outer_apothem=7.4, thickness=2.85),
         box([4, 10.2, 4], [12, 11.6, 12], "refractory"),
     ]
     top_bottom_ports(elements)
     add_front_window(elements, variant)
+    # 将原11.75单位高度统一映射到完整方块高度；横截面由八棱外切面精确到0..16。
+    height_scale = 16 / 11.75
+    for element in elements:
+        element["from"][1] = round(element["from"][1] * height_scale, 6)
+        element["to"][1] = round(element["to"][1] * height_scale, 6)
+        if "rotation" in element:
+            element["rotation"]["origin"][1] = round(element["rotation"]["origin"][1] * height_scale, 6)
     return {"parent": "minecraft:block/block", "ambientocclusion": True,
             "textures": textures, "elements": elements}
 
 
 DISPLAY = {
-    "gui": {"rotation": [25, 225, 0], "translation": [0, 0, 0], "scale": [0.95, 0.95, 0.95]},
+    "gui": {"rotation": [25, 225, 0], "translation": [0, 0, 0], "scale": [0.625, 0.625, 0.625]},
     "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.5, 0.5, 0.5]},
     "fixed": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [0.55, 0.55, 0.55]},
     "thirdperson_righthand": {"rotation": [75, 45, 0], "translation": [0, 1.5, 0], "scale": [0.375, 0.375, 0.375]},
@@ -290,6 +312,31 @@ def uv_report(model: dict) -> dict:
             "implicit_faces": implicit, "out_of_range_faces": len(bad), "examples": bad[:3]}
 
 
+def front_face_coverage_report(model: dict) -> dict:
+    """以北向可见面采样确认观察窗及其周围钢壳没有漏面。"""
+    scale = 16 / 11.75
+    x0, x1 = 8 - 8 * math.tan(math.pi / 8), 8 + 8 * math.tan(math.pi / 8)
+    y0, y1 = 2.65 * scale, 9.35 * scale
+    visible = [element for element in model["elements"]
+               if "rotation" not in element and "north" in element["faces"]
+               and element["from"][2] <= .000001]
+    nx = ny = 100
+    missing = overlap = 0
+    for ix in range(nx):
+        x = x0 + (ix + .5) * (x1 - x0) / nx
+        for iy in range(ny):
+            y = y0 + (iy + .5) * (y1 - y0) / ny
+            hits = sum(element["from"][0] <= x <= element["to"][0]
+                       and element["from"][1] <= y <= element["to"][1]
+                       for element in visible)
+            if not hits:
+                missing += 1
+            elif hits > 1:
+                overlap += 1
+    return {"sample_grid": [nx, ny], "uncovered_points": missing, "overlap_points": overlap,
+            "visible_north_faces": len(visible), "plane_z": 0.0}
+
+
 def transformed_panel(angle: float, apothem: float, half_width: float, thickness: float) -> tuple:
     rad = math.radians(angle)
     normal = (math.sin(rad), math.cos(rad))
@@ -304,7 +351,7 @@ def transformed_panel(angle: float, apothem: float, half_width: float, thickness
 
 
 def shell_report() -> dict:
-    apothem, thickness = 7.0, .5
+    apothem, thickness = 8.0, .5
     half_width = apothem * math.tan(math.pi / 8)
     panels = [transformed_panel(angle, apothem, half_width, thickness) for angle in range(0, 360, 45)]
     missing = 0
@@ -334,12 +381,14 @@ def shell_report() -> dict:
 
 def json_shell_report(model: dict) -> dict:
     """从写出的JSON几何反变换采样点，检查各接合高度的八棱外缘。"""
-    probes = ((0.6, 7.0, "steel_foot"), (1.2, 7.0, "steel_foot_mid_join"),
-              (1.799, 7.0, "steel_foot_upper_edge"), (1.8, 7.0, "brass_lower_band_join"),
-              (2.649, 7.0, "brass_lower_band_upper_edge"), (2.65, 7.0, "steel_shell_join"),
-              (5.0, 7.0, "steel_shell"), (9.35, 7.0, "brass_upper_band_join"),
-              (10.199, 7.0, "brass_upper_band_upper_edge"), (10.2, 6.4, "refractory_cap_join"),
-              (10.5, 6.4, "refractory_cap"), (11.6, 6.4, "top_interface_join"))
+    scale = 16 / 11.75
+    probes = tuple((round(y * scale, 6), apothem, label) for y, apothem, label in (
+        (0.6, 8.0, "steel_foot"), (1.2, 8.0, "steel_foot_mid_join"),
+        (1.799, 8.0, "steel_foot_upper_edge"), (1.8, 8.0, "brass_lower_band_join"),
+        (2.649, 8.0, "brass_lower_band_upper_edge"), (2.65, 8.0, "steel_shell_join"),
+        (5.0, 8.0, "steel_shell"), (9.35, 8.0, "brass_upper_band_join"),
+        (10.199, 8.0, "brass_upper_band_upper_edge"), (10.2, 7.4, "refractory_cap_join"),
+        (10.5, 7.4, "refractory_cap"), (11.6, 7.4, "top_interface_join")))
     rays = 4096
     reports = []
     for sample_y, apothem, label in probes:
@@ -501,12 +550,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--initialize-sources", action="store_true",
                         help="只创建缺失的本批SVG初稿，不覆盖已存在源稿")
+    parser.add_argument("--geometry-only", action="store_true",
+                        help="只重建本炉三种JSON模型，不导出PNG或重写其他资源")
     args = parser.parse_args()
     if args.initialize_sources:
         initialize_sources()
         return
-    for name in (*ITEM_PIXELS.keys(), *FURNACE_TEXTURES.keys()):
-        render_texture(name)
+    if not args.geometry_only:
+        for name in (*ITEM_PIXELS.keys(), *FURNACE_TEXTURES.keys()):
+            render_texture(name)
 
     off = furnace_model("off")
     on = furnace_model("on")
@@ -517,11 +569,12 @@ def main() -> None:
     write_json(ASSET / "models/block/fuel_sintering_furnace_item.json", item_model)
     write_json(ASSET / "models/item/fuel_sintering_furnace.json",
                {"parent": "create_nuclear_industry:block/fuel_sintering_furnace_item"})
-    for item_name in ITEM_PIXELS:
-        write_json(ASSET / f"models/item/{item_name}.json",
-                   {"parent": "minecraft:item/generated",
-                    "textures": {"layer0": MOD + "item/" + item_name}})
-    write_json(ASSET / "blockstates/fuel_sintering_furnace.json", variants())
+    if not args.geometry_only:
+        for item_name in ITEM_PIXELS:
+            write_json(ASSET / f"models/item/{item_name}.json",
+                       {"parent": "minecraft:item/generated",
+                        "textures": {"layer0": MOD + "item/" + item_name}})
+        write_json(ASSET / "blockstates/fuel_sintering_furnace.json", variants())
 
     # 预览与检查重新读取落盘JSON，避免只审查内存中的生成对象。
     off = json.loads((ASSET / "models/block/fuel_sintering_furnace_off.json").read_text(encoding="utf-8"))
@@ -536,8 +589,10 @@ def main() -> None:
     errors = []
     if len(variants()["variants"]) != 8:
         errors.append("方块状态不是8种 facing/lit 组合")
-    if any(value < 0 for value in model_bounds[0]) or any(value > 16 for value in model_bounds[1]):
-        errors.append(f"模型边界不在方块内: {model_bounds}")
+    if any(value < -1e-5 for value in model_bounds[0]) or any(value > 16 + 1e-5 for value in model_bounds[1]):
+        errors.append(f"模型边界超出方块: {model_bounds}")
+    if any(abs(value) > 1e-5 for value in model_bounds[0]) or any(abs(value - 16) > 1e-5 for value in model_bounds[1]):
+        errors.append(f"模型未完整占满0..16范围: {model_bounds}")
     if any(item["implicit_faces"] or item["out_of_range_faces"] for item in uv.values()):
         errors.append("模型存在隐式或越界UV")
     element_angles = {element["rotation"]["angle"] for element in off["elements"] if "rotation" in element}
@@ -546,6 +601,19 @@ def main() -> None:
     actual_shell = json_shell_report(off)
     if actual_shell["uncovered_rays_total"]:
         errors.append("八面钢壳存在周向缺口")
+    front_coverage = front_face_coverage_report(off)
+    if front_coverage["uncovered_points"]:
+        errors.append("正北观察窗或相邻钢壳存在未覆盖可见面")
+    if front_coverage["overlap_points"]:
+        errors.append("正北可见钢壳、窗框或窗片存在共面重叠")
+    pane_center = (8.0, 6.0 * 16 / 11.75)
+    if any("rotation" not in element and "north" in element["faces"]
+           and abs(element["from"][2]) < 1e-6
+           and element["from"][0] < pane_center[0] < element["to"][0]
+           and element["from"][1] < pane_center[1] < element["to"][1]
+           and element["faces"]["north"]["texture"] == "#steel"
+           for element in off["elements"]):
+        errors.append("观察窗中心仍被共面钢壳面遮挡")
     for key, value in ref_paths.items():
         if not (ASSET / "textures/block" / f"{value}.png").exists():
             errors.append(f"缺少模型材质PNG: {key}")
@@ -572,26 +640,29 @@ def main() -> None:
         for lit in (False, True)
     }:
         errors.append("方块状态未覆盖四向和lit两态的全部组合")
-    for state_variant, state_model in state_data["variants"].items():
-        model_id = state_model["model"]
-        namespace, model_path = model_id.split(":", 1)
-        resolved_model = ROOT / "src/main/resources/assets" / namespace / "models" / f"{model_path}.json"
-        if not resolved_model.is_file():
-            errors.append(f"方块状态{state_variant}引用模型不存在: {model_id}")
+    if not args.geometry_only:
+        for state_variant, state_model in state_data["variants"].items():
+            model_id = state_model["model"]
+            namespace, model_path = model_id.split(":", 1)
+            resolved_model = ROOT / "src/main/resources/assets" / namespace / "models" / f"{model_path}.json"
+            if not resolved_model.is_file():
+                errors.append(f"方块状态{state_variant}引用模型不存在: {model_id}")
     item_ref = json.loads((ASSET / "models/item/fuel_sintering_furnace.json").read_text(encoding="utf-8"))
     if item_ref.get("parent") != "create_nuclear_industry:block/fuel_sintering_furnace_item":
         errors.append("物品模型未指向完整三维炉体模型")
-    for item_name in ITEM_PIXELS:
-        item_data = json.loads((ASSET / f"models/item/{item_name}.json").read_text(encoding="utf-8"))
-        if item_data.get("parent") != "minecraft:item/generated" or item_data.get("textures", {}).get("layer0") != MOD + "item/" + item_name:
-            errors.append(f"{item_name}物品模型父级或贴图引用错误")
-        if not (ASSET / f"textures/item/{item_name}.png").is_file():
-            errors.append(f"{item_name}物品模型贴图缺失")
+    if not args.geometry_only:
+        for item_name in ITEM_PIXELS:
+            item_data = json.loads((ASSET / f"models/item/{item_name}.json").read_text(encoding="utf-8"))
+            if item_data.get("parent") != "minecraft:item/generated" or item_data.get("textures", {}).get("layer0") != MOD + "item/" + item_name:
+                errors.append(f"{item_name}物品模型父级或贴图引用错误")
+            if not (ASSET / f"textures/item/{item_name}.png").is_file():
+                errors.append(f"{item_name}物品模型贴图缺失")
     if set(ITEM_PIXELS) != {"green_fuel_pellet", "sintered_fuel_pellet"}:
         errors.append("本批芯块素材白名单不匹配")
 
-    render_item_preview(EVIDENCE / "fuel-pellet-preview.png")
-    render_model(off, EVIDENCE / "furnace-north-top-angle.png", 32, 32, "冷态 / 顶口 / 北向")
+    if not args.geometry_only:
+        render_item_preview(EVIDENCE / "fuel-pellet-preview.png")
+    render_model(off, EVIDENCE / "furnace-north-top-angle.png", 180, 20, "冷态 / 顶口 / 北向")
     render_model(on, EVIDENCE / "furnace-bottom-angle.png", 220, -38, "热态 / 底部供热口")
     summary = {
         "asset_ids": ["green_fuel_pellet", "sintered_fuel_pellet", "fuel_sintering_furnace"],
@@ -606,6 +677,7 @@ def main() -> None:
         "uv": uv,
         "shell_design": shell_report(),
         "shell_json": actual_shell,
+        "front_face_coverage": front_coverage,
         "window": {"lit_false": ref_paths["window_off"], "lit_true": ref_paths["window_on"]},
         "display_scale": {key: value["scale"] for key, value in DISPLAY.items()},
         "unchanged_centrifuge_textures": True,
