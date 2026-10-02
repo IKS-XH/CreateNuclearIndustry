@@ -1,0 +1,131 @@
+{
+  "asset": "enrichment_centrifuge",
+  "blockstate_variants": 8,
+  "elements": {
+    "lower": 57,
+    "upper": 59,
+    "item": 139,
+    "rotor": 23
+  },
+  "bounds": {
+    "lower": [
+      [
+        0.793,
+        0,
+        0.38
+      ],
+      [
+        15.207,
+        16,
+        15.207
+      ]
+    ],
+    "upper": [
+      [
+        0.793,
+        0,
+        0.793
+      ],
+      [
+        15.207,
+        16,
+        15.207
+      ]
+    ],
+    "whole_item": [
+      [
+        0.793,
+        0,
+        0.38
+      ],
+      [
+        15.207,
+        32,
+        15.207
+      ]
+    ],
+    "rotor": [
+      [
+        4.22,
+        5,
+        4.22
+      ],
+      [
+        11.78,
+        27,
+        11.78
+      ]
+    ]
+  },
+  "rotor_axis_lower_local": [
+    8,
+    16,
+    8
+  ],
+  "preview": "geometry colors only; UV separately checked against 1.21.1 projection and 16x16 sprite bounds",
+  "uv_diagnostics": {
+    "lower": {
+      "elements": 57,
+      "explicit_faces": 92,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "upper": {
+      "elements": 59,
+      "explicit_faces": 114,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "item": {
+      "elements": 139,
+      "explicit_faces": 344,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "rotor": {
+      "elements": 23,
+      "explicit_faces": 138,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    }
+  },
+  "shell_rings": {
+    "lower_top": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "largest_uncovered_span_degrees": 0.0,
+      "minimum_overlap_margin": 0.016468,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    },
+    "upper_bottom": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "largest_uncovered_span_degrees": 0.0,
+      "minimum_overlap_margin": 0.016468,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    }
+  },
+  "pre_fix_uv_violations": {
+    "item": 168,
+    "rotor": 76
+  },
+  "display_scales": {
+    "gui": 0.45,
+    "ground": 0.32,
+    "fixed": 0.35,
+    "thirdperson_righthand": 0.38,
+    "firstperson_righthand": 0.38
+  }
+}
