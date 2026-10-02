@@ -1,0 +1,16 @@
+{
+  "jar_sha256": "41ba1c74cd935b1e3ec05d70f695e5addfc5aec07cd76fbd082226c292787f15",
+  "compared_present_resources": 4,
+  "resource_mismatches": [],
+  "deleted_resources_absent": [
+    "src/main/resources/data/create_nuclear_industry/recipe/mechanical_crafting/fuel_sintering_furnace.json"
+  ],
+  "implementation_sha256": {
+    "src/main/resources/assets/create_nuclear_industry/models/block/fuel_sintering_furnace_item.json": "071c95033f003e838f8cdd1333f6d0c5529b08cc2dd8c3e7251e8ba0a54fd2c6",
+    "src/main/resources/assets/create_nuclear_industry/models/block/fuel_sintering_furnace_off.json": "1b484d195b0206e0229643a22a5898dd388b3de2626121cff6fb6e61d7cb39ee",
+    "src/main/resources/assets/create_nuclear_industry/models/block/fuel_sintering_furnace_on.json": "74b76c2a0a53e7e43136787744be2aa84260a2e19c9a837ccc1c5bc81a363bd9",
+    "src/main/resources/data/create_nuclear_industry/recipe/crafting/fuel_sintering_furnace.json": "582ea3df55bc585310e2fc3db47aa14a0ce71938b531afcce3a5f52ae69883e1",
+    "src/main/resources/data/create_nuclear_industry/recipe/mechanical_crafting/fuel_sintering_furnace.json": null,
+    "tools/art-assets/fuel_02a_assets.py": "b41e2050fe40f024bc04123d58e27bcac4e8e6ff8c06c0ff004b8770116df3a1"
+  }
+}

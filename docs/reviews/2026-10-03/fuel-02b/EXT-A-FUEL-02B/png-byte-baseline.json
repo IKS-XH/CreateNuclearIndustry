@@ -1,0 +1,9 @@
+{
+  "src\\main\\resources\\assets\\create_nuclear_industry\\textures\\item\\green_fuel_pellet.png": "b59687412d77173b3a832d688eaaca96feca249496f57806bd66da686dac2d4b",
+  "src\\main\\resources\\assets\\create_nuclear_industry\\textures\\item\\sintered_fuel_pellet.png": "baa52418ad47af6930a6773e55d15c179ddd85cf7e7c556ba7c695394b0bcb38",
+  "src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\fuel_sintering_furnace_steel.png": "6fbababaa149eac85a4a29e520526e12e72e3b7ca3fcdebb6060276f48c298cf",
+  "src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\fuel_sintering_furnace_brass.png": "06f80ba3373cbb0ca8d87a7d57ff2c8058c3826af77aa2d623f8dc584c7d4822",
+  "src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\fuel_sintering_furnace_refractory.png": "03ef79d4625e134f7e07f43a0de64892bdd1ab71146046eb917e214e4540b561",
+  "src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\fuel_sintering_furnace_window_off.png": "db2a538d6f5e4efb7f2ad24e77a4d6673f2ac0014d63a9088aa48789267e84c3",
+  "src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\fuel_sintering_furnace_window_on.png": "302f03752e25b4b751d4b64120ce6e728b3ebcc74665d47ea16129176bb00eb8"
+}

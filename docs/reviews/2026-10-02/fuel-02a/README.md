@@ -1,6 +1,6 @@
 # 燃料02A：生芯块与燃料烧结炉
 
-**状态：候选`575400e`已通过定向验证及独立审查，等待用户客户端手测，尚未合入main功能。** 已批准合同见[方案](../../../superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)和[任务卡](../../../superpowers/plans/2026-10-02-ext-a-fuel-02a.md)。本页只覆盖低浓缩铀粉→生燃料芯块→烧结燃料芯块，后续包壳、燃料棒和组件尚未实施。
+**状态：2026-10-03用户确认候选`575400e`的四组手测全部通过。** 同时要求炉体放大及工作台/高炉配方，已按[02B任务](../../../superpowers/plans/2026-10-03-ext-a-fuel-02b.md)交付候选b1537c8。原运行验收保留，功能待两项新增复测后一起合入main；下文制造成本和原模型说明是02A历史交付。 已批准合同见[方案](../../../superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)和[任务卡](../../../superpowers/plans/2026-10-02-ext-a-fuel-02a.md)。本页只覆盖低浓缩铀粉→生燃料芯块→烧结燃料芯块，后续包壳、燃料棒和组件尚未实施。
 
 ## 启动与人工门
 
@@ -11,7 +11,7 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 .\gradlew.bat runClient
 ```
 
-使用[一张四组手测清单](./CLIENT-CHECKLIST.md)。本批人工通过前不合入main功能、不继续包壳或装配；不重复旧矿物、材料和离心机验收。
+[原四组手测清单](./CLIENT-CHECKLIST.md)已获用户确认通过，不再重复。当前只等待02B新配方与外观，不继续包壳或装配。
 
 ## 交付与证据
 
@@ -24,7 +24,7 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 
 [运行交付](./EXT-A-FUEL-02A-runtime.md)、[美术交付](./EXT-A-FUEL-02A-assets.md)、[独立审查](./EXT-A-FUEL-02A-REVIEW.md)、[最终制品核对](./artifact-check.json)索引必要证据；原始JUnit XML、GameTest日志和构建控制台随报告同目录归档。美术报告UV计数的文字笔误由PM按检查JSON订正，未改资源。独立审查未发现P1/P2阻断。
 
-JEI、世界内护目镜/交互、玩家挖掘与扳手携物重放、实际压片/动力合成及新模型仍待人工。普通与超级加热同速是同一状态逻辑和Create热级源码支持的实现结论，本批没有逐档实测全部热级。不把构建或离线预览当作客户端验收。
+用户2026-10-03确认原四组人工项全部通过；不补写未提供的逐步操作、耗时或数量实测记录。炉体外观体积不符合用户后续审美要求，已转02B放大；旧动力合成成本也由02B取代。普通与超级加热同速是同一状态逻辑和Create热级源码支持的实现结论，本批没有逐档实测全部热级。不把构建或离线预览当作客户端验收。
 
 按治理5.1复用未变证据：未跑旧JUnit/GameTest全量、旧素材负例或客户端，也未使用clean/强制重跑。仅因审查定位的背包部分接收风险复验受影响GameTest。
 

@@ -2,17 +2,20 @@
 
 EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/流动料浆共13张游戏纹理，并提供机器与尾矿砖JSON模型。该历史导出清单含82张游戏纹理，复用已有铀精矿，开工前69张PNG保持原字节。后续原生桶、两格模型及端盖整改已完成人工验收并合入main；见[最终验收](../../docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)。历史清单数量不代表后续独立生成器的新增资源总数。
 
-## 燃料02A专用素材
+## 燃料02A/02B专用素材
 
-燃料02A在候选工作树新增两枚芯块及单格烧结炉，使用独立`fuel_02a_assets.py`，不扩大旧manifest或修改共用导出器。当前候选与人工门见[交付页](../../docs/reviews/2026-10-02/fuel-02a/README.md)。
+燃料02A新增两枚芯块及单格烧结炉，用户已确认原四组手测通过；02B将八棱炉体扩大到整格外包范围。继续使用独立`fuel_02a_assets.py`，不扩大旧manifest或修改共用导出器。当前候选与两项复测见[02B交付页](../../docs/reviews/2026-10-03/fuel-02b/README.md)。
 
 在候选仓库根目录运行：
 
 ```powershell
 & 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/fuel_02a_assets.py
+
+# 仅调整炉体几何时，跳过PNG和SVG相关资源导出。
+& 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/fuel_02a_assets.py --geometry-only
 ```
 
-命令读取`sources/fuel-02a/`中现有7张SVG，经既有严格SVG渲染函数导出本批7张PNG，并生成三项物品模型、冷热炉体与8种方块状态；不会默认覆盖SVG源稿。纹理修改编辑SVG，几何与变换修改本批生成器。预览及定向检查写入`build/reports/extension/EXT-A-FUEL-02A-assets/`，只处理本批路径，不运行Gradle。JSON几何预览不代表Minecraft光照、UV或客户端验收。
+默认命令读取`sources/fuel-02a/`中现有7张SVG，经既有严格SVG渲染函数导出7张PNG，并生成三项物品模型、冷热炉体与8种方块状态；不会默认覆盖SVG源稿。`--geometry-only`只重建炉体模型，不重新导出PNG、芯块模型和方块状态。纹理修改编辑SVG，几何与变换修改本批生成器。当前预览及定向检查写入`build/reports/extension/EXT-A-FUEL-02B/`，只处理本批路径，不运行Gradle。JSON几何预览不代表Minecraft光照、UV或客户端验收。
 
 EXT-ART-02 为历史51张游戏PNG建立可编辑SVG与确定性导出；EXT-ART-03新增铅板、锡板路径；EXT-ART-04新增铅粒、锡粒路径；EXT-ART-05新增铁粉、煤粉、木炭粉、钢粉和钢锭五条路径；EXT-ART-06新增锡条、工业传感器、辐射传感器及两种半成品；EXT-ART-07新增石英粉、耐火砖、重型轴承及其半成品。历史51项路径和基线规则保持不变。用户于2026-09-29在EXT-ART-02A中明确撤回两种冷却剂重绘：8个冷却剂路径逐字节恢复原PNG，其余43张保持重绘。另保留已批准的青金石粉工具候选，不新增该候选的游戏注册。此前批准的青金石粉、铅锭、铅矿石、钢板四张图形保持不变。
 
