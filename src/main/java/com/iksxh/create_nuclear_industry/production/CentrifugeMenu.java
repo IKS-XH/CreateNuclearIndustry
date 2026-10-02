@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 /** 前面板只暴露两格只取产物与只读状态；服务端每次操作仍验证方块和玩家距离。 */
@@ -29,9 +30,8 @@ public final class CentrifugeMenu extends AbstractContainerMenu {
         this.data = data;
         addDataSlots(data);
         for (int slot = 0; slot < 2; slot++) {
-            addSlot(new SlotItemHandler(machine.outputForMenu(), slot, 62 + slot * 36, 35) {
-                @Override public boolean mayPlace(ItemStack stack) { return false; }
-            });
+            addSlot(new OutputSlot(machine.outputForMenu(), slot, 62 + slot * 36, 35,
+                    playerInventory.player.level().isClientSide));
         }
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
@@ -71,5 +71,44 @@ public final class CentrifugeMenu extends AbstractContainerMenu {
         slot.remove(extracted);
         slot.setChanged();
         return original;
+    }
+
+    /**
+     * 菜单输出槽只在客户端保存服务器同步的显示副本；服务端取出始终调用只读输出端口。
+     * NeoForge 原槽位的 set 会强转 IItemHandlerModifiable，不能直接用于外部只读端口。
+     */
+    static final class OutputSlot extends SlotItemHandler {
+        private final boolean clientSide;
+        private ItemStack clientStack = ItemStack.EMPTY;
+
+        OutputSlot(IItemHandler output, int index, int x, int y, boolean clientSide) {
+            super(output, index, x, y);
+            this.clientSide = clientSide;
+        }
+
+        @Override public boolean mayPlace(ItemStack stack) { return false; }
+
+        @Override public ItemStack getItem() {
+            return clientSide ? clientStack : super.getItem();
+        }
+
+        @Override public void set(ItemStack stack) {
+            if (clientSide) clientStack = stack.copy();
+        }
+
+        @Override public void initialize(ItemStack stack) {
+            set(stack);
+        }
+
+        @Override public boolean mayPickup(Player player) {
+            return clientSide ? !clientStack.isEmpty() : super.mayPickup(player);
+        }
+
+        @Override public ItemStack remove(int amount) {
+            if (!clientSide) return super.remove(amount);
+            if (amount <= 0 || clientStack.isEmpty()) return ItemStack.EMPTY;
+            ItemStack taken = clientStack.split(amount);
+            return taken;
+        }
     }
 }

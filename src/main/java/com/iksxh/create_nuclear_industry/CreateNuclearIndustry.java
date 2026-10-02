@@ -8,7 +8,6 @@ import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
-import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import com.iksxh.create_nuclear_industry.worldgen.OreGenerationFilter;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
@@ -108,13 +107,11 @@ public final class CreateNuclearIndustry {
         );
     }
 
-    /** 将面向固定端口的能力绑定到同一方块实体；料浆桶使用标准整桶物品流体能力。 */
+    /** 将面向固定端口的能力绑定到同一方块实体；原生桶能力由 NeoForge 自动注册。 */
     private static void registerCentrifugeCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, FuelProcessingContent.CENTRIFUGE_BE.get(),
                 (machine, side) -> machine.fluidPort(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FuelProcessingContent.CENTRIFUGE_BE.get(),
                 (machine, side) -> machine.itemPort(side));
-        event.registerItem(Capabilities.FluidHandler.ITEM,
-                (stack, context) -> new FluidBucketWrapper(stack), FuelProcessingContent.URANIUM_SLURRY_BUCKET.get());
     }
 }

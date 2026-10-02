@@ -5,18 +5,18 @@ import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlockEntity;
 import com.iksxh.create_nuclear_industry.production.CentrifugeMenu;
 import com.iksxh.create_nuclear_industry.production.CentrifugeRecipe;
-import com.iksxh.create_nuclear_industry.production.SlurryBucketItem;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
@@ -85,8 +85,11 @@ public final class FuelProcessingContent {
             () -> new BaseFlowingFluid.Source(slurryProperties()));
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> URANIUM_SLURRY_FLOWING = FLUIDS.register("uranium_slurry_flowing",
             () -> new BaseFlowingFluid.Flowing(slurryProperties()));
-    public static final DeferredItem<SlurryBucketItem> URANIUM_SLURRY_BUCKET = ITEMS.register("uranium_slurry_bucket",
-            () -> new SlurryBucketItem(URANIUM_SLURRY.get(), new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
+    /** 与冷却剂相同的原生液体方块；桶、工作盆和管道共用同一个源流体身份。 */
+    public static final DeferredBlock<LiquidBlock> URANIUM_SLURRY_BLOCK = BLOCKS.register("uranium_slurry",
+            () -> new LiquidBlock(URANIUM_SLURRY.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)));
+    public static final DeferredItem<BucketItem> URANIUM_SLURRY_BUCKET = ITEMS.register("uranium_slurry_bucket",
+            () -> new BucketItem(URANIUM_SLURRY.get(), new Item.Properties().stacksTo(1)));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CentrifugeBlockEntity>> CENTRIFUGE_BE =
             BLOCK_ENTITIES.register("enrichment_centrifuge",
@@ -114,6 +117,7 @@ public final class FuelProcessingContent {
 
     private static BaseFlowingFluid.Properties slurryProperties() {
         return new BaseFlowingFluid.Properties(URANIUM_SLURRY_TYPE, URANIUM_SLURRY, URANIUM_SLURRY_FLOWING)
-                .bucket(URANIUM_SLURRY_BUCKET).slopeFindDistance(4).levelDecreasePerBlock(1).tickRate(5);
+                .bucket(URANIUM_SLURRY_BUCKET).block(URANIUM_SLURRY_BLOCK)
+                .slopeFindDistance(4).levelDecreasePerBlock(1).tickRate(5);
     }
 }
