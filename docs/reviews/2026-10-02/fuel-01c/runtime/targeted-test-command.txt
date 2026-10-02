@@ -1,0 +1,1 @@
+.\gradlew.bat test --tests com.iksxh.create_nuclear_industry.production.CentrifugePortsTest --tests com.iksxh.create_nuclear_industry.production.CentrifugeSlurryBucketTest --tests com.iksxh.create_nuclear_industry.production.CentrifugeContainerTransactionTest

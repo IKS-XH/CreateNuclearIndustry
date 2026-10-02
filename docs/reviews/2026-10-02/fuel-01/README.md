@@ -1,6 +1,6 @@
 # 铀原料加工与富集离心机候选记录
 
-**最新状态：首轮客户端未通过，五项缺陷的[01A修复候选](../fuel-01a/README.md)已交付，待复测。** 本页保留`6b2138a`交付时的审查及自动证据，不代表它覆盖了后来发现的缺陷。候选位于`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主工程仍保持材料05版本。
+**最新状态：用户追加[01C无GUI/底部动力/五面过滤改造](../../../superpowers/plans/2026-10-02-ext-a-fuel-01c.md)，候选`b7377fb`已交付，待客户端验收。** 本页保留首轮`6b2138a`交付时的证据；01A修复和01B尾矿4:1候选未获完整人工通过，新方向以[当前清单](./CLIENT-CHECKLIST.md)为准。候选位于`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主工程仍保持材料05功能。
 
 **追加尾矿比例：** 用户要求4尾矿压1砖，现已交付候选`53b0fad`，使用机械压力机＋工作盆，无需加热；原1:1入口已移除。见[交付与构建证据](./tailings-4to1-report.md)，人工检查追加在原清单第2项。此前原始数据报告和JAR哈希保留历史时点含义。
 

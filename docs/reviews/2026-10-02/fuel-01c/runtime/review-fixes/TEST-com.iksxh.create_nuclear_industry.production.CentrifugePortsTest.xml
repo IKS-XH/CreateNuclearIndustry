@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-02T08:44:23.817Z" hostname="DESKTOP-4G1EOU9" time="0.056">
+  <properties/>
+  <testcase name="portableFilterSnapshotRoundTripsAndLegacySnapshotClearsFilters()" classname="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" time="0.046"/>
+  <testcase name="fiveMaterialFacesSharePortsAndBottomHasNone()" classname="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" time="0.004"/>
+  <testcase name="cachedPortsReadNativeFilterChangesForBothItemAndFluid()" classname="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" time="0.001"/>
+  <testcase name="nativeFilterSlotsStayAtFaceCornersOutsidePipeCrossSection()" classname="com.iksxh.create_nuclear_industry.production.CentrifugePortsTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
