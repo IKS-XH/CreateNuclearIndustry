@@ -1,0 +1,110 @@
+{
+  "phase": "before-fix",
+  "uv": {
+    "lower": {
+      "elements": 57,
+      "explicit_faces": 92,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "upper": {
+      "elements": 59,
+      "explicit_faces": 114,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "item": {
+      "elements": 139,
+      "explicit_faces": 344,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "rotor": {
+      "elements": 23,
+      "explicit_faces": 138,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    }
+  },
+  "shell_rings": {
+    "lower_top": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "largest_uncovered_span_degrees": 0.0,
+      "minimum_overlap_margin": 0.016468,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    },
+    "upper_bottom": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "largest_uncovered_span_degrees": 0.0,
+      "minimum_overlap_margin": 0.016468,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    }
+  },
+  "cap_join_probes": {
+    "lower_base_to_shell": {
+      "end": "bottom",
+      "model": "enrichment_centrifuge",
+      "sample_y": 6.025,
+      "brass_solid_candidates": 0,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 4096,
+      "coverage_percent": 0.0,
+      "probe_apothem": 7.24,
+      "probe_note": "\u516b\u4e2a\u58f3\u9762\u6cd5\u7ebf\u4e4b\u95f4\u6309\u516b\u68f1\u622a\u9762\u91c7\u6837\uff0c\u63a2\u70b9\u7565\u5728\u5916\u58f3\u5916\u8868\u9762\u4e4b\u5916"
+    },
+    "upper_shell_to_cap": {
+      "end": "top",
+      "model": "enrichment_centrifuge_upper",
+      "sample_y": 10.975,
+      "brass_solid_candidates": 0,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 4096,
+      "coverage_percent": 0.0,
+      "probe_apothem": 7.24,
+      "probe_note": "\u516b\u4e2a\u58f3\u9762\u6cd5\u7ebf\u4e4b\u95f4\u6309\u516b\u68f1\u622a\u9762\u91c7\u6837\uff0c\u63a2\u70b9\u7565\u5728\u5916\u58f3\u5916\u8868\u9762\u4e4b\u5916"
+    }
+  },
+  "observed_join_heights": {
+    "lower_brass_cap_top": 5,
+    "lower_shell_bottom": 6,
+    "upper_shell_top": 11,
+    "upper_brass_cap_bottom": 11
+  },
+  "observed_cap_footprints": {
+    "lower_brass": {
+      "x": [
+        2,
+        14
+      ],
+      "z": [
+        2,
+        14
+      ]
+    },
+    "upper_brass": {
+      "x": [
+        2,
+        14
+      ],
+      "z": [
+        2,
+        14
+      ]
+    },
+    "shell_outer_apothem": 7.2
+  }
+}
