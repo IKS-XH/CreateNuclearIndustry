@@ -2,12 +2,12 @@
   "parent": "minecraft:block/block",
   "textures": {
     "north": "create_nuclear_industry:block/enrichment_centrifuge_front",
-    "south": "create_nuclear_industry:block/enrichment_centrifuge_back",
-    "east": "create_nuclear_industry:block/enrichment_centrifuge_slurry_port",
-    "west": "create_nuclear_industry:block/enrichment_centrifuge_water_port",
-    "up": "create_nuclear_industry:block/enrichment_centrifuge_top",
-    "down": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
-    "particle": "create_nuclear_industry:block/enrichment_centrifuge_back"
+    "south": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "east": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "west": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "up": "create_nuclear_industry:block/enrichment_centrifuge_bottom",
+    "down": "create_nuclear_industry:block/enrichment_centrifuge_back",
+    "particle": "create_nuclear_industry:block/enrichment_centrifuge_bottom"
   },
   "elements": [
     {

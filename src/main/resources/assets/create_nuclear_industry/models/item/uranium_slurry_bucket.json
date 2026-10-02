@@ -1,6 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "create_nuclear_industry:item/uranium_slurry_bucket"
-  }
+  "loader": "neoforge:fluid_container",
+  "parent": "neoforge:item/bucket",
+  "fluid": "create_nuclear_industry:uranium_slurry"
 }

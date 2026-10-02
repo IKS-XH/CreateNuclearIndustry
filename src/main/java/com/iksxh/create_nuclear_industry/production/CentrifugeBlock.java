@@ -16,6 +16,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -31,7 +32,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.item.component.CustomData;
 
-/** 水平单格机器；背面轴、正面面板、顺时针料浆、逆时针水、底部粉末。 */
+/** 前后朝向仅控制观察窗；机器转轴固定竖直向下，五个非底面用于过滤与物料交互。 */
 public final class CentrifugeBlock extends HorizontalKineticBlock implements IBE<CentrifugeBlockEntity>, IWrenchable {
     public CentrifugeBlock(Properties properties) {
         super(properties);
@@ -40,12 +41,12 @@ public final class CentrifugeBlock extends HorizontalKineticBlock implements IBE
 
     @Override
     public Direction.Axis getRotationAxis(BlockState state) {
-        return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis();
+        return Direction.Axis.Y;
     }
 
     @Override
     public boolean hasShaftTowards(LevelReader level, BlockPos pos, BlockState state, Direction face) {
-        return face == state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+        return face == Direction.DOWN;
     }
 
     @Override
@@ -112,32 +113,43 @@ public final class CentrifugeBlock extends HorizontalKineticBlock implements IBE
         if (!(level.getBlockEntity(pos) instanceof CentrifugeBlockEntity machine)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
+        Direction hitSide = hit.getDirection();
+        if (machine.isFilterSlotHit(hitSide, hit)) {
+            if (stack.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.ITEM) != null)
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (stack.isEmpty()) {
+            if (hitSide == Direction.DOWN) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            if (!level.isClientSide) machine.extractOutputsToPlayer(player, hitSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         Direction face = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        if (hit.getDirection() == face && stack.is(BasicMaterialContent.HEAVY_BEARING.get())) {
+        if (hitSide == face && stack.is(BasicMaterialContent.HEAVY_BEARING.get())) {
             if (!level.isClientSide && machine.repairBearing()) {
                 if (!player.getAbilities().instabuild) stack.shrink(1);
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
-        if (hit.getDirection() == face.getClockWise() || hit.getDirection() == face.getCounterClockWise()) {
-            if (!level.isClientSide) machine.transferHeldBucket(player, hand, hit.getDirection());
+        if (hitSide != Direction.DOWN && stack.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.ITEM) != null) {
+            if (!level.isClientSide) machine.transferHeldBucket(player, hand, hitSide);
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
-        if (hit.getDirection() == face) {
-            if (!level.isClientSide) machine.openMenu(player);
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        if (stack.getItem() instanceof BlockItem) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
                                                 BlockHitResult hit) {
-        if (hit.getDirection() == state.getValue(BlockStateProperties.HORIZONTAL_FACING)
-                && level.getBlockEntity(pos) instanceof CentrifugeBlockEntity machine) {
-            if (!level.isClientSide) machine.openMenu(player);
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        }
-        return InteractionResult.PASS;
+        Direction side = hit.getDirection();
+        if (!player.getMainHandItem().isEmpty() || side == Direction.DOWN
+                || !(level.getBlockEntity(pos) instanceof CentrifugeBlockEntity machine))
+            return InteractionResult.PASS;
+        if (machine.isFilterSlotHit(side, hit)) return InteractionResult.PASS;
+        if (!level.isClientSide) machine.extractOutputsToPlayer(player, side);
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 }

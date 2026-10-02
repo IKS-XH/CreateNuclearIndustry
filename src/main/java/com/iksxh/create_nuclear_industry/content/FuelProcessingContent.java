@@ -3,12 +3,10 @@ package com.iksxh.create_nuclear_industry.content;
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlockEntity;
-import com.iksxh.create_nuclear_industry.production.CentrifugeMenu;
 import com.iksxh.create_nuclear_industry.production.CentrifugeRecipe;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -24,8 +22,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.network.IContainerFactory;
-import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -42,8 +38,6 @@ public final class FuelProcessingContent {
             BuiltInRegistries.FLUID, CreateNuclearIndustry.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, CreateNuclearIndustry.MOD_ID);
-    private static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(
-            BuiltInRegistries.MENU, CreateNuclearIndustry.MOD_ID);
     private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(
             BuiltInRegistries.RECIPE_TYPE, CreateNuclearIndustry.MOD_ID);
     private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(
@@ -94,8 +88,6 @@ public final class FuelProcessingContent {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CentrifugeBlockEntity>> CENTRIFUGE_BE =
             BLOCK_ENTITIES.register("enrichment_centrifuge",
                     () -> BlockEntityType.Builder.of(CentrifugeBlockEntity::new, ENRICHMENT_CENTRIFUGE.get()).build(null));
-    public static final DeferredHolder<MenuType<?>, MenuType<CentrifugeMenu>> CENTRIFUGE_MENU = MENUS.register(
-            "enrichment_centrifuge", () -> IMenuTypeExtension.create(CentrifugeMenu::new));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGING_TYPE =
             RECIPE_TYPES.register("centrifuging", () -> new RecipeType<>() {});
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CentrifugeRecipe>> CENTRIFUGING_SERIALIZER =
@@ -110,7 +102,6 @@ public final class FuelProcessingContent {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         BLOCK_ENTITIES.register(bus);
-        MENUS.register(bus);
         RECIPE_TYPES.register(bus);
         RECIPE_SERIALIZERS.register(bus);
     }
