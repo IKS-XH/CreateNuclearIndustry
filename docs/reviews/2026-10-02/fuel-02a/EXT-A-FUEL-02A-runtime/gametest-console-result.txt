@@ -1,0 +1,8 @@
+Command: .\gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_02a -PgameTestDirectory=build/test-worlds/fuel-02a --console=plain
+Exit code: 0
+Final console lines observed:
+[22:59:53] [Server thread/INFO] [minecraft/GameTestServer]: ========= 1 GAME TESTS COMPLETE IN 819.7 ms ======================
+[22:59:53] [Server thread/INFO] [minecraft/GameTestServer]: All 1 required tests passed :)
+BUILD SUCCESSFUL in 24s
+7 actionable tasks: 3 executed, 4 up-to-date
+Full server log: gametest-latest.log
