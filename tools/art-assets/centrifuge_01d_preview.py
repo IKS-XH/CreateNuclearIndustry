@@ -14,7 +14,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 ASSET = ROOT / "src/main/resources/assets/create_nuclear_industry"
 ART = ROOT / "tools/art-assets"
-EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-01E-assets"
+EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-01F-assets"
 MOD = "create_nuclear_industry:block/"
 
 spec = importlib.util.spec_from_file_location("art_export", ART / "export.py")
@@ -110,11 +110,27 @@ def drum(y0, y1):
     return parts
 
 
+def octagonal_plate(y0, y1, material):
+    """用八条相交长板组成薄八棱盖，并错开极小高度以消除共面闪烁。"""
+    apothem = 7.30
+    tangent_length = 2 * apothem * math.tan(math.pi / 8) + .02
+    parts = []
+    # 0到135度的四条贯通板各自覆盖一对相对外缘，避免反向重复模型。
+    for index, angle in enumerate(range(0, 180, 45)):
+        # 0.002单位错层小于可见像素，并让八块重叠面不再严格共面。
+        piece = panel(8, 8, y0 + index * .002, y1 - index * .002,
+                      tangent_length, 2 * apothem, material, angle)
+        piece["faces"] = {face: {"texture": f"#{material}"}
+                          for face in ("north", "south", "east", "west", "up", "down")}
+        parts.append(piece)
+    return parts
+
+
 def base():
     return [
         box((1,0,1),(15,2,15),"dark"),
         box((2,2,2),(14,4,14),"casing"),
-        box((2,4,2),(14,5,14),"brass"),
+        *octagonal_plate(3.98,6.04,"brass"),
         box((5,0,5),(11,1,11),"brass"),
         box((6,1,6),(10,2,10),"casing"),
         # 北面独有的小检修盖标出轴承维修朝向，与物料出口位置无关。
@@ -126,7 +142,8 @@ def base():
 
 
 def upper_cap():
-    cap = [box((2,11,2),(14,12,14),"brass"), box((3,12,3),(13,14,13),"casing"),
+    cap = [*octagonal_plate(10.96,12.02,"brass"),
+           box((3,12,3),(13,14,13),"casing"),
            box((5,14,5),(11,15,11),"dark"),
            # 八边顶帽由正交与斜向压板围出，中央留有浆料进料孔。
            box((5,15,5),(7,16,11),"brass"), box((9,15,5),(11,16,11),"brass"),
@@ -349,6 +366,44 @@ def shell_ring_report(model_name, y0, y1):
             "cullface_count": 0, "degenerate_face_count": 0}
 
 
+def endcap_report(model_name, sample_y, label):
+    """在端盖与侧壳的实际搭接高度检查JSON实体是否覆盖八棱外缘。"""
+    model = json.loads((ASSET / f"models/block/{model_name}.json").read_text(encoding="utf-8"))
+    solids = []
+    for element in model["elements"]:
+        if (len(element["faces"]) != 6 or "#brass" not in
+                {face.get("texture") for face in element["faces"].values()}
+                or element["from"][1] > sample_y or element["to"][1] < sample_y):
+            continue
+        solids.append(element)
+    rays = 4096
+    uncovered = []
+    for ray_index in range(rays):
+        angle = (ray_index + .5) * 2 * math.pi / rays
+        delta = (angle + math.pi / 8) % (math.pi / 4) - math.pi / 8
+        radius = 7.24 / math.cos(delta)
+        x, z = 8 + math.sin(angle) * radius, 8 - math.cos(angle) * radius
+        covered = False
+        for element in solids:
+            point = (x, sample_y, z)
+            rotation = element.get("rotation")
+            if rotation:
+                rotation = {**rotation, "angle": -rotation["angle"]}
+                point = rotate_y(point, rotation)
+            if all(element["from"][axis] - 1e-6 <= point[axis] <= element["to"][axis] + 1e-6
+                   for axis in range(3)):
+                covered = True
+                break
+        if not covered:
+            uncovered.append(ray_index)
+    return {"end": label, "model": model_name, "sample_y": sample_y,
+            "brass_solid_candidates": len(solids), "sampled_azimuth_rays": rays,
+            "uncovered_rays": len(uncovered),
+            "coverage_percent": round(100 * (rays - len(uncovered)) / rays, 4),
+            "probe_apothem": 7.24,
+            "probe_note": "八个壳面法线之间按八棱截面采样，探点略在外壳外表面之外"}
+
+
 def svg_texture(kind, color):
     # 本机SVG保持现有导出器支持的直属整数rect子集。
     patterns = {
@@ -413,12 +468,12 @@ FACE_COLORS={"casing":"#59656A","brass":"#C4934B","glass":"#387780","dark":"#293
 FACES=(("north",(0,0,-1)),("south",(0,0,1)),("west",(-1,0,0)),("east",(1,0,0)),("up",(0,1,0)),("down",(0,-1,0)))
 
 
-def render_json(elements, path, azimuth, title):
+def render_json(elements, path, azimuth, title, elevation=25):
     width,height=560,560
     bg=np.empty((height,width,3),dtype=np.uint8); bg[:]=[235,237,235]
     depth_buffer=np.full((height,width),-np.inf,dtype=np.float32)
     color_buffer=bg.copy()
-    a=math.radians(azimuth); elev=math.radians(25)
+    a=math.radians(azimuth); elev=math.radians(elevation)
     ca,sa=math.cos(a),math.sin(a); ce,se=math.cos(elev),math.sin(elev)
     scale=10.5; cx,cy=width/2,height/2+28
     def transform(point):
@@ -492,7 +547,15 @@ def main():
     if args.diagnose_only:
         report = {"phase": "before-fix", "uv": uv_diagnostics(model_names),
                   "shell_rings": {"lower_top": shell_ring_report("enrichment_centrifuge", 13, 16),
-                                  "upper_bottom": shell_ring_report("enrichment_centrifuge_upper", 0, 3)}}
+                                  "upper_bottom": shell_ring_report("enrichment_centrifuge_upper", 0, 3)},
+                  "cap_join_probes": {
+                      "lower_base_to_shell": endcap_report("enrichment_centrifuge", 6.025, "bottom"),
+                      "upper_shell_to_cap": endcap_report("enrichment_centrifuge_upper", 10.975, "top")},
+                  "observed_join_heights": {"lower_brass_cap_top": 5, "lower_shell_bottom": 6,
+                                            "upper_shell_top": 11, "upper_brass_cap_bottom": 11},
+                  "observed_cap_footprints": {"lower_brass": {"x": [2, 14], "z": [2, 14]},
+                                              "upper_brass": {"x": [2, 14], "z": [2, 14]},
+                                              "shell_outer_apothem": 7.2}}
         EVIDENCE.mkdir(parents=True, exist_ok=True)
         (EVIDENCE / "pre-fix-diagnostics.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(report, ensure_ascii=False, indent=2))
@@ -510,17 +573,21 @@ def main():
                     "upper_bottom": shell_ring_report("enrichment_centrifuge_upper", 0, 3)}
     if any(data["uncovered_rays"] for data in shell_report.values()):
         raise ValueError(f"生成模型外壳仍有周向缺口: {shell_report}")
+    cap_report = {"lower_base_to_shell": endcap_report("enrichment_centrifuge", 6.025, "bottom"),
+                  "upper_shell_to_cap": endcap_report("enrichment_centrifuge_upper", 10.975, "top")}
+    if any(data["uncovered_rays"] for data in cap_report.values()):
+        raise ValueError(f"端盖与侧壳接合仍有周向缺口: {cap_report}")
     EVIDENCE.mkdir(parents=True,exist_ok=True)
-    render_json(geometry["item"],EVIDENCE/"centrifuge-final-front.png",210,"EXT-A-FUEL-01E | north service hatch")
-    render_json(geometry["item"],EVIDENCE/"centrifuge-final-side.png",55,"EXT-A-FUEL-01E | side manifold view")
+    render_json(geometry["item"],EVIDENCE/"centrifuge-endcap-angle.png",210,"EXT-A-FUEL-01F | angled endcap join")
+    render_json(geometry["item"],EVIDENCE/"centrifuge-endcap-bottom.png",210,"EXT-A-FUEL-01F | bottom endcap join",elevation=-55)
     summary={"asset":"enrichment_centrifuge","blockstate_variants":8,
              "elements":{"lower":len(geometry["lower"]),"upper":len(geometry["upper"]),
                          "item":len(geometry["item"]),"rotor":len(geometry["rotor"])},
              "bounds":{"lower":model_bounds(geometry["lower"]),"upper":model_bounds(geometry["upper"]),
                        "whole_item":model_bounds(geometry["item"]),"rotor":model_bounds(geometry["rotor"])},
              "rotor_axis_lower_local":[8,16,8],"preview":"geometry colors only; UV separately checked against 1.21.1 projection and 16x16 sprite bounds",
-             "uv_diagnostics":uv_report,"shell_rings":shell_report,
-             "pre_fix_uv_violations":{"item":168,"rotor":76},
+             "uv_diagnostics":uv_report,"shell_rings":shell_report,"cap_join_probes":cap_report,
+             "historic_01e_pre_fix_uv_violations":{"item":168,"rotor":76},
              "display_scales":{"gui":0.45,"ground":0.32,"fixed":0.35,
                                 "thirdperson_righthand":0.38,"firstperson_righthand":0.38}}
     (EVIDENCE/"geometry-check.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
