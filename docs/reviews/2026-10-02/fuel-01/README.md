@@ -1,6 +1,6 @@
 # 铀原料加工与富集离心机候选记录
 
-**状态：候选已通过整批审查及两项定点复查，待客户端验收。** 功能候选位于`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主工程仍保持材料05版本。用户已批准全部参数和截图制造布局；本页不是最终人工验收证明。
+**最新状态：首轮客户端未通过，五项缺陷的[01A修复候选](../fuel-01a/README.md)已交付，待复测。** 本页保留`6b2138a`交付时的审查及自动证据，不代表它覆盖了后来发现的缺陷。候选位于`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主工程仍保持材料05版本。
 
 - [实施任务卡](../../../superpowers/plans/2026-10-02-ext-a-fuel-01.md)与[批准设计](../../../superpowers/plans/2026-10-02-enrichment-centrifuge-proposal.md)
 - [一次客户端清单](./CLIENT-CHECKLIST.md)，包含测试目录、21格摆法和无需等待两小时的维修操作
