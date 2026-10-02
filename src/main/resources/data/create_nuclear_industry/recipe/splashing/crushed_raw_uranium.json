@@ -1,0 +1,16 @@
+{
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "tag": "c:crushed_raw_materials/uranium"
+    }
+  ],
+  "results": [
+    {
+      "id": "create_nuclear_industry:uranium_concentrate"
+    },
+    {
+      "id": "create_nuclear_industry:uranium_tailings"
+    }
+  ]
+}

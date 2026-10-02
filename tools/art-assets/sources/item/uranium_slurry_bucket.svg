@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- 密闭桶以铜色提环、钢灰桶沿和亮黄绿色料浆区分于原版水桶。 -->
+  <rect x="5" y="2" width="6" height="1" fill="#715035"/><rect x="4" y="3" width="1" height="2" fill="#D2A359"/><rect x="5" y="3" width="1" height="1" fill="#D2A359"/><rect x="10" y="3" width="1" height="1" fill="#D2A359"/><rect x="11" y="3" width="1" height="2" fill="#715035"/>
+  <rect x="4" y="5" width="8" height="1" fill="#28353A"/><rect x="5" y="6" width="6" height="1" fill="#788E94"/>
+  <rect x="5" y="7" width="1" height="5" fill="#3E5058"/><rect x="6" y="7" width="4" height="1" fill="#A9C66C"/><rect x="10" y="7" width="1" height="5" fill="#3E5058"/>
+  <rect x="6" y="8" width="4" height="1" fill="#71834A"/><rect x="6" y="9" width="1" height="1" fill="#DDE59A"/><rect x="7" y="9" width="3" height="1" fill="#A9C66C"/>
+  <rect x="5" y="12" width="1" height="1" fill="#28353A"/><rect x="6" y="12" width="4" height="1" fill="#788E94"/><rect x="10" y="12" width="1" height="1" fill="#28353A"/>
+  <rect x="6" y="13" width="4" height="1" fill="#3E5058"/>
+</svg>

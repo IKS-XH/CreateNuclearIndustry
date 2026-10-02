@@ -1,5 +1,7 @@
 # 原创像素 SVG 美术管线
 
+EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/流动料浆共13张游戏纹理，并提供机器与尾矿砖JSON模型。游戏纹理总数82，复用已有铀精矿，开工前69张PNG保持原字节。本批候选已通过实现审查，尚待客户端外观验收；见[本批记录](../../docs/reviews/2026-10-02/fuel-01/README.md)。
+
 EXT-ART-02 为历史51张游戏PNG建立可编辑SVG与确定性导出；EXT-ART-03新增铅板、锡板路径；EXT-ART-04新增铅粒、锡粒路径；EXT-ART-05新增铁粉、煤粉、木炭粉、钢粉和钢锭五条路径；EXT-ART-06新增锡条、工业传感器、辐射传感器及两种半成品；EXT-ART-07新增石英粉、耐火砖、重型轴承及其半成品。历史51项路径和基线规则保持不变。用户于2026-09-29在EXT-ART-02A中明确撤回两种冷却剂重绘：8个冷却剂路径逐字节恢复原PNG，其余43张保持重绘。另保留已批准的青金石粉工具候选，不新增该候选的游戏注册。此前批准的青金石粉、铅锭、铅矿石、钢板四张图形保持不变。
 
 ## 运行
@@ -10,24 +12,24 @@ EXT-ART-02 为历史51张游戏PNG建立可编辑SVG与确定性导出；EXT-ART
 # 默认仅更新 generated/、previews/、preview.png 和 preview.html。
 & 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/export.py
 
-# 显式接入原51张既有游戏PNG及18张新增材料、传感器和轴承素材。
+# 显式接入82张游戏PNG，包括本批13张离心机与铀处理素材。
 & 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/export.py --install
 
 # 自动核对并显式接入，包含短暂坏输入试验及finally恢复；不要与编辑源稿并行。
 & 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/verify.py
 ```
 
-其他机器可替换已有 Python/Pillow 解释器绝对路径。`verify.py` 的四样稿回归依赖仓库中 `49e6c86` 提交，冷却剂回归依赖重绘提交 `eddd097` 的父提交；只执行只读 `git show`。本批65张旧图保护使用版本管理内的`docs/reviews/2026-10-02/material-05/art/preexisting-game-png-sha256.json`固定快照，验证结果输出到`build/reports/extension/EXT-ART-07/`，不需要先恢复旧build报告。普通导出不依赖 Git、证据目录或首次绘图脚本。
+其他机器可替换已有 Python/Pillow 解释器绝对路径。`verify.py` 的四样稿回归依赖仓库中 `49e6c86` 提交，冷却剂回归依赖重绘提交 `eddd097` 的父提交；只执行只读 `git show`。本批69张旧图核对使用版本管理内的`baselines/EXT-ART-08-existing-game-png-sha256.json`固定快照，验证结果输出到`build/reports/extension/EXT-ART-08/`，不需要先恢复旧build报告。快照用于本批交付验收，不禁止后续经批准修改SVG再显式安装。普通导出不依赖 Git、证据目录或首次绘图脚本。
 
 ## 源、清单与输出
 
-- `sources/`：66张唯一SVG，其中4张冷却剂SVG仅存档、不再安装；62张用于43张历史游戏图重绘、两张板材、两种金属粒、五种制钢物品、五项锡条/传感器素材、四项石英粉/耐火砖/轴承素材和青金石粉候选。首次设计脚本仅在交付证据中记录，不作为正式导出步骤。
+- `sources/`：79张唯一SVG，其中4张冷却剂SVG仅存档、不再安装；75张供现有重绘、新增材料/机器/流体及青金石粉候选使用。首次设计脚本仅在交付证据中记录，不作为正式导出步骤。
 - `palette.json`：每张源稿有限色板，实际 4–11 色；导出允许每张最多16种实色。
-- `manifest.json`：70条显式记录，列出游戏相对路径、SVG、色板、尺寸、透明合同、分组与基线用途。69条对应游戏路径（历史51条加18条无历史基线的材料路径），lapis条目的game为null；仅8项冷却剂必须声明 `preserve: baseline-original`，其他项禁止此字段。
-- `pipeline.py`：独立硬编码原51路径白名单，并单独列出18项新增材料、传感器和轴承素材；不由manifest任意扩展写集。严格校验映射、尺寸后才准备输出；旧 `baseline/` 与 `baseline.json` 仍恰为51条。
-- `generated/`：70个导出候选；65个16×16游戏图、4个16×64游戏flow、1个16×16工具候选。无历史基线的新增路径在预览中标为NEW，不生成历史对照图或基线记录。
+- `manifest.json`：83条显式记录，列出游戏相对路径、SVG、色板、尺寸、透明合同、分组与基线用途。82条对应游戏路径（历史51条、已有18条、本批13条），lapis条目的game为null；仅8项冷却剂必须声明 `preserve: baseline-original`，其他项禁止此字段。
+- `pipeline.py`：独立硬编码原51路径白名单，并单独列出已有18项和本批13项素材；不由manifest任意扩展写集。严格校验映射、尺寸后才准备输出；旧 `baseline/` 与 `baseline.json` 仍恰为51条。
+- `generated/`：83个导出候选；77个16×16游戏图、5个16×64游戏flow、1个16×16工具候选。无历史基线的新增路径在预览中标为NEW，不生成历史对照图或基线记录。
 - `baseline/` 与 `baseline.json`：51张开工旧图及其路径、尺寸、哈希、引用，保持不变。除用户批准的8项冷却剂原字节保留外，只用于 before/after；不从旧纹理采样绘制新图。
-- `preview.png`：全量总览；`preview.html`：离线分组索引；`previews/`：10页前后对照，均含原尺寸、最近邻放大、明暗底与2×2平铺。文字使用 Pillow 内置字体，无外部字体文件。
+- `preview.png`：全量总览；`preview.html`：离线分组索引；`previews/`：12页前后对照，均含原尺寸、最近邻放大、明暗底与2×2平铺。文字使用 Pillow 内置字体，无外部字体文件。
 
 block/fluid 八个冷却剂路径分别读取各自 baseline PNG，以管线中冻结的 SHA-256 验证后原样输出，不重编码、不套用新色板。这是固定八项例外，不能通过清单指定任意位图。旧 SVG 仍经过严格语法校验，但不参与最终纹理生成。flow 保持完整16×64静态画布及原路径；本仓库没有相关 mcmeta，本工具不添加动画元数据或把长画布裁成16×16。运行时透明度、UV与流体渲染仍由原游戏代码处理。
 

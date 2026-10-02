@@ -1,0 +1,5 @@
+{
+  "loader": "neoforge:fluid_container",
+  "parent": "neoforge:item/bucket",
+  "fluid": "create_nuclear_industry:uranium_slurry"
+}

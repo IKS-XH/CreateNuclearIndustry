@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "create_nuclear_industry:block/uranium_tailings_brick"
+  }
+}

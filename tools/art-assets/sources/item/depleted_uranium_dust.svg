@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- 贫化铀粉使用冷灰与暗赭色，和黄绿低浓缩铀粉保持清晰区分。 -->
+  <rect x="6" y="3" width="2" height="1" fill="#30343A"/><rect x="8" y="3" width="1" height="1" fill="#68645A"/>
+  <rect x="5" y="4" width="2" height="1" fill="#30343A"/><rect x="7" y="4" width="3" height="1" fill="#8B8B80"/>
+  <rect x="4" y="5" width="2" height="1" fill="#30343A"/><rect x="6" y="5" width="3" height="1" fill="#C1B89D"/><rect x="9" y="5" width="2" height="1" fill="#68645A"/>
+  <rect x="3" y="6" width="2" height="1" fill="#30343A"/><rect x="5" y="6" width="2" height="1" fill="#8B8B80"/><rect x="7" y="6" width="2" height="1" fill="#D2A359"/><rect x="9" y="6" width="2" height="1" fill="#68645A"/><rect x="11" y="6" width="1" height="1" fill="#30343A"/>
+  <rect x="2" y="7" width="2" height="1" fill="#30343A"/><rect x="4" y="7" width="3" height="1" fill="#C1B89D"/><rect x="7" y="7" width="2" height="1" fill="#8B8B80"/><rect x="9" y="7" width="3" height="1" fill="#68645A"/><rect x="12" y="7" width="1" height="1" fill="#30343A"/>
+  <rect x="2" y="8" width="2" height="1" fill="#30343A"/><rect x="4" y="8" width="2" height="1" fill="#68645A"/><rect x="6" y="8" width="3" height="1" fill="#8B8B80"/><rect x="9" y="8" width="2" height="1" fill="#C1B89D"/><rect x="11" y="8" width="2" height="1" fill="#30343A"/>
+  <rect x="3" y="9" width="2" height="1" fill="#30343A"/><rect x="5" y="9" width="2" height="1" fill="#68645A"/><rect x="7" y="9" width="2" height="1" fill="#D2A359"/><rect x="9" y="9" width="3" height="1" fill="#8B8B80"/><rect x="12" y="9" width="1" height="1" fill="#30343A"/>
+  <rect x="4" y="10" width="2" height="1" fill="#30343A"/><rect x="6" y="10" width="3" height="1" fill="#68645A"/><rect x="9" y="10" width="2" height="1" fill="#8B8B80"/><rect x="11" y="10" width="1" height="1" fill="#30343A"/>
+  <rect x="5" y="11" width="2" height="1" fill="#30343A"/><rect x="7" y="11" width="2" height="1" fill="#68645A"/><rect x="9" y="11" width="1" height="1" fill="#30343A"/>
+</svg>

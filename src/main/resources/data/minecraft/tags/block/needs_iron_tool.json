@@ -15,6 +15,7 @@
     "create_nuclear_industry:raw_lead_block",
     "create_nuclear_industry:uranium_ore",
     "create_nuclear_industry:deepslate_uranium_ore",
-    "create_nuclear_industry:raw_uranium_block"
+    "create_nuclear_industry:raw_uranium_block",
+    "create_nuclear_industry:enrichment_centrifuge"
   ]
 }

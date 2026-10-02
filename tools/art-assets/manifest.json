@@ -848,6 +848,162 @@
       "kind": "item",
       "group": "items",
       "use": "已批准候选，本批不新增注册和游戏PNG"
+    },
+    {
+      "game": "item/uranium_tailings.png",
+      "source": "item/uranium_tailings.svg",
+      "palette": "uranium_tailings",
+      "group": "minerals",
+      "kind": "item",
+      "use": "EXT-ART-08 铀尾矿粉末图标",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "item/low_enriched_uranium_dust.png",
+      "source": "item/low_enriched_uranium_dust.svg",
+      "palette": "low_enriched_uranium_dust",
+      "group": "minerals",
+      "kind": "item",
+      "use": "EXT-ART-08 低浓缩铀粉图标",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "item/depleted_uranium_dust.png",
+      "source": "item/depleted_uranium_dust.svg",
+      "palette": "depleted_uranium_dust",
+      "group": "minerals",
+      "kind": "item",
+      "use": "EXT-ART-08 贫化铀粉图标",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "item/uranium_slurry_bucket.png",
+      "source": "item/uranium_slurry_bucket.svg",
+      "palette": "uranium_slurry_bucket",
+      "group": "items",
+      "kind": "item",
+      "use": "EXT-ART-08 密闭铀料浆桶图标",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "block/uranium_tailings_brick.png",
+      "source": "block/uranium_tailings_brick.svg",
+      "palette": "uranium_tailings_brick",
+      "group": "minerals",
+      "kind": "opaque",
+      "use": "EXT-ART-08 可放置铀尾矿砖纹理",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "block/enrichment_centrifuge_front.png",
+      "source": "block/enrichment_centrifuge_front.svg",
+      "palette": "enrichment_centrifuge_front",
+      "group": "centrifuge",
+      "kind": "opaque",
+      "use": "EXT-ART-08 北向正面状态窗和转子观察窗",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "block/enrichment_centrifuge_back.png",
+      "source": "block/enrichment_centrifuge_back.svg",
+      "palette": "enrichment_centrifuge_back",
+      "group": "centrifuge",
+      "kind": "opaque",
+      "use": "EXT-ART-08 背面动力轴纹理",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "block/enrichment_centrifuge_slurry_port.png",
+      "source": "block/enrichment_centrifuge_slurry_port.svg",
+      "palette": "enrichment_centrifuge_slurry_port",
+      "group": "centrifuge",
+      "kind": "opaque",
+      "use": "EXT-ART-08 北向模型东侧料浆接口",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "block/enrichment_centrifuge_water_port.png",
+      "source": "block/enrichment_centrifuge_water_port.svg",
+      "palette": "enrichment_centrifuge_water_port",
+      "group": "centrifuge",
+      "kind": "opaque",
+      "use": "EXT-ART-08 北向模型西侧水接口",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "block/enrichment_centrifuge_top.png",
+      "source": "block/enrichment_centrifuge_top.svg",
+      "palette": "enrichment_centrifuge_top",
+      "group": "centrifuge",
+      "kind": "opaque",
+      "use": "EXT-ART-08 封闭钢板顶面",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "block/enrichment_centrifuge_bottom.png",
+      "source": "block/enrichment_centrifuge_bottom.svg",
+      "palette": "enrichment_centrifuge_bottom",
+      "group": "centrifuge",
+      "kind": "opaque",
+      "use": "EXT-ART-08 双粉末出口底面",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "fluid/uranium_slurry_still.png",
+      "source": "fluid/uranium_slurry_still.svg",
+      "palette": "uranium_slurry_still",
+      "group": "fluids",
+      "kind": "opaque",
+      "use": "EXT-ART-08 铀料浆静止液面贴图",
+      "size": [
+        16,
+        16
+      ]
+    },
+    {
+      "game": "fluid/uranium_slurry_flow.png",
+      "source": "fluid/uranium_slurry_flow.svg",
+      "palette": "uranium_slurry_flow",
+      "group": "fluids",
+      "kind": "opaque",
+      "use": "EXT-ART-08 铀料浆流动贴图",
+      "size": [
+        16,
+        64
+      ]
     }
   ]
 }

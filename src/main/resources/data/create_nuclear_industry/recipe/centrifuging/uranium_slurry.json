@@ -1,0 +1,8 @@
+{
+  "type": "create_nuclear_industry:centrifuging",
+  "input": { "id": "create_nuclear_industry:uranium_slurry", "amount": 1000 },
+  "enriched": { "id": "create_nuclear_industry:low_enriched_uranium_dust", "count": 1 },
+  "depleted": { "id": "create_nuclear_industry:depleted_uranium_dust", "count": 7 },
+  "water": { "id": "minecraft:water", "amount": 1000 },
+  "work": 400
+}

@@ -584,5 +584,101 @@
     "body": "#788E94",
     "light": "#A3B7B8",
     "glint": "#D1DFDA"
+  },
+  "uranium_tailings": {
+    "outline": "#463C35",
+    "shadow": "#554A3D",
+    "body": "#75614B",
+    "facet": "#A58B67",
+    "light": "#C0A47B"
+  },
+  "low_enriched_uranium_dust": {
+    "outline": "#34402E",
+    "shadow": "#71834A",
+    "body": "#B3C778",
+    "light": "#DDE59A",
+    "glint": "#E4C36D"
+  },
+  "depleted_uranium_dust": {
+    "outline": "#30343A",
+    "shadow": "#68645A",
+    "body": "#8B8B80",
+    "light": "#C1B89D",
+    "glint": "#D2A359"
+  },
+  "uranium_slurry_bucket": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "body": "#788E94",
+    "light": "#D2A359",
+    "copper_shadow": "#715035",
+    "slurry": "#A9C66C",
+    "slurry_dark": "#71834A",
+    "slurry_light": "#DDE59A"
+  },
+  "uranium_tailings_brick": {
+    "outline": "#463C35",
+    "shadow": "#554A3D",
+    "body": "#75614B",
+    "facet": "#A58B67",
+    "light": "#C0A47B"
+  },
+  "uranium_slurry_still": {
+    "outline": "#40552F",
+    "shadow": "#536D39",
+    "body": "#71834A",
+    "light": "#A9C66C"
+  },
+  "uranium_slurry_flow": {
+    "outline": "#40552F",
+    "shadow": "#536D39",
+    "body": "#71834A",
+    "light": "#A9C66C"
+  },
+  "enrichment_centrifuge_front": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "steel": "#5B7078",
+    "copper": "#D2A359",
+    "copper_shadow": "#715035",
+    "status": "#A9C66C",
+    "window": "#52A2AD"
+  },
+  "enrichment_centrifuge_back": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "steel": "#5B7078",
+    "copper": "#D2A359",
+    "copper_shadow": "#715035"
+  },
+  "enrichment_centrifuge_slurry_port": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "steel": "#5B7078",
+    "copper": "#D2A359",
+    "port": "#A9C66C",
+    "port_dark": "#40552F",
+    "port_light": "#71834A"
+  },
+  "enrichment_centrifuge_water_port": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "steel": "#5B7078",
+    "copper": "#D2A359",
+    "port": "#52A2AD",
+    "port_dark": "#235C71",
+    "port_light": "#83C4C8"
+  },
+  "enrichment_centrifuge_top": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "steel": "#5B7078",
+    "copper": "#D2A359"
+  },
+  "enrichment_centrifuge_bottom": {
+    "outline": "#28353A",
+    "shadow": "#3E5058",
+    "steel": "#5B7078",
+    "copper": "#D2A359"
   }
 }

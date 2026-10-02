@@ -6,6 +6,10 @@ import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
+import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
+import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.iksxh.create_nuclear_industry.worldgen.OreGenerationFilter;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
@@ -45,6 +49,10 @@ public final class CreateNuclearIndustry {
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
         BasicMaterialContent.register(modEventBus);
+        FuelProcessingContent.register(modEventBus);
+        BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
+                state.is(FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get())
+                        ? BlockMovementChecks.CheckResult.FAIL : BlockMovementChecks.CheckResult.PASS);
         OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);
         P1Blocks.register(modEventBus);
@@ -58,6 +66,7 @@ public final class CreateNuclearIndustry {
         modEventBus.addListener(CreateNuclearIndustry::registerPonder);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerP1Capabilities);
+        modEventBus.addListener(CreateNuclearIndustry::registerCentrifugeCapabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
         NeoForge.EVENT_BUS.register(ReactorStructureLifecycle.class);
         NeoForge.EVENT_BUS.register(ControlRodSliderNetwork.class);
@@ -98,5 +107,19 @@ public final class CreateNuclearIndustry {
                 P1BlockEntities.REACTOR_PORT.get(),
                 (blockEntity, side) -> ReactorCoolantFluidHandler.forPort(blockEntity)
         );
+    }
+
+    /** 上下两格按位置代理到唯一有效下段；每个返回的 handler 自身也逐次复核配对。 */
+    private static void registerCentrifugeCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
+            var machine = CentrifugeBlock.owner(level, pos, state);
+            return machine == null ? null : machine.fluidPort(side,
+                    state.getValue(CentrifugeBlock.HALF) == DoubleBlockHalf.UPPER);
+        }, FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get());
+        event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
+            var machine = CentrifugeBlock.owner(level, pos, state);
+            return machine == null ? null : machine.itemPort(side,
+                    state.getValue(CentrifugeBlock.HALF) == DoubleBlockHalf.UPPER);
+        }, FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get());
     }
 }

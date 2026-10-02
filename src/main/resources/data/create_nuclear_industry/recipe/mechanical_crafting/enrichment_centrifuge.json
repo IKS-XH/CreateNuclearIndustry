@@ -1,0 +1,36 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "G": {
+      "tag": "c:plates/gold"
+    },
+    "B": {
+      "item": "create_nuclear_industry:heavy_bearing"
+    },
+    "I": {
+      "item": "create_nuclear_industry:industrial_sensor"
+    },
+    "W": {
+      "item": "create:whisk"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "pattern": [
+    " SBS ",
+    "SGIGS",
+    "SGWGS",
+    "SGPGS",
+    " SBS "
+  ],
+  "result": {
+    "id": "create_nuclear_industry:enrichment_centrifuge"
+  },
+  "show_notification": false
+}
