@@ -1,0 +1,5 @@
+JAR 检查通过
+制品：E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\build\libs\create_nuclear_industry-0.1.0.jar
+存在 data/create_nuclear_industry/recipe/compacting/uranium_tailings_brick.json
+不存在 data/create_nuclear_industry/recipe/pressing/uranium_tailings_brick.json
+新配方 JAR SHA-256 与 Gradle 处理资源一致：2AADF0FA50F9A7464BDA7875CCF269FB4A0326F2F48E20B21962E62C75DBD928
