@@ -1,6 +1,8 @@
 # 离心机01E缺陷修复候选
 
-**状态：候选功能提交`211cad5b0e99472c22e99a15262cca49e5915c7b`，待客户端三项定点复测。** 工作树为`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、分支`codex/ore-acquisition`。main只同步文档，未合入本轮功能，未推送或发布。
+**最新人工反馈（2026-10-02）：** 用户确认“模型的上盖和底盖跟四周一圈八棱柱仍有接缝，其他的都手动测试通过了”。其余人工项记为通过，只保留[01F端盖接合整改](../../../superpowers/plans/2026-10-02-ext-a-fuel-01f.md)与视觉门。下文为01E交付时的证据和复测步骤，未实测边界不追溯扩大。
+
+**01E交付记录：** 候选功能提交`211cad5b0e99472c22e99a15262cca49e5915c7b`。工作树为`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、分支`codex/ore-acquisition`。main只同步文档，未合入本轮功能，未推送或发布。
 
 用户在01D手测发现壳体接缝、手持模型上部纹理错乱及上段不能连接Create管道，依据[01E整改卡](../../../superpowers/plans/2026-10-02-ext-a-fuel-01e.md)完成以下修复：
 

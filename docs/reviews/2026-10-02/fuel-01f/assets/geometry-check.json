@@ -1,0 +1,155 @@
+{
+  "asset": "enrichment_centrifuge",
+  "blockstate_variants": 8,
+  "elements": {
+    "lower": 60,
+    "upper": 62,
+    "item": 145,
+    "rotor": 23
+  },
+  "bounds": {
+    "lower": [
+      [
+        0.693,
+        0,
+        0.38
+      ],
+      [
+        15.307,
+        16,
+        15.307
+      ]
+    ],
+    "upper": [
+      [
+        0.693,
+        0,
+        0.693
+      ],
+      [
+        15.307,
+        16,
+        15.307
+      ]
+    ],
+    "whole_item": [
+      [
+        0.693,
+        0,
+        0.38
+      ],
+      [
+        15.307,
+        32,
+        15.307
+      ]
+    ],
+    "rotor": [
+      [
+        4.22,
+        5,
+        4.22
+      ],
+      [
+        11.78,
+        27,
+        11.78
+      ]
+    ]
+  },
+  "rotor_axis_lower_local": [
+    8,
+    16,
+    8
+  ],
+  "preview": "geometry colors only; UV separately checked against 1.21.1 projection and 16x16 sprite bounds",
+  "uv_diagnostics": {
+    "lower": {
+      "elements": 60,
+      "explicit_faces": 110,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "upper": {
+      "elements": 62,
+      "explicit_faces": 132,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "item": {
+      "elements": 145,
+      "explicit_faces": 380,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    },
+    "rotor": {
+      "elements": 23,
+      "explicit_faces": 138,
+      "implicit_faces": 0,
+      "out_of_range_faces": 0,
+      "examples": []
+    }
+  },
+  "shell_rings": {
+    "lower_top": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "largest_uncovered_span_degrees": 0.0,
+      "minimum_overlap_margin": 0.016468,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    },
+    "upper_bottom": {
+      "outer_faces": 8,
+      "outward_normals": 8,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "largest_uncovered_span_degrees": 0.0,
+      "minimum_overlap_margin": 0.016468,
+      "minimum_adjacent_normal_angle_degrees": 45.0,
+      "cullface_count": 0,
+      "degenerate_face_count": 0
+    }
+  },
+  "cap_join_probes": {
+    "lower_base_to_shell": {
+      "end": "bottom",
+      "model": "enrichment_centrifuge",
+      "sample_y": 6.025,
+      "brass_solid_candidates": 4,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "coverage_percent": 100.0,
+      "probe_apothem": 7.24,
+      "probe_note": "\u516b\u4e2a\u58f3\u9762\u6cd5\u7ebf\u4e4b\u95f4\u6309\u516b\u68f1\u622a\u9762\u91c7\u6837\uff0c\u63a2\u70b9\u7565\u5728\u5916\u58f3\u5916\u8868\u9762\u4e4b\u5916"
+    },
+    "upper_shell_to_cap": {
+      "end": "top",
+      "model": "enrichment_centrifuge_upper",
+      "sample_y": 10.975,
+      "brass_solid_candidates": 4,
+      "sampled_azimuth_rays": 4096,
+      "uncovered_rays": 0,
+      "coverage_percent": 100.0,
+      "probe_apothem": 7.24,
+      "probe_note": "\u516b\u4e2a\u58f3\u9762\u6cd5\u7ebf\u4e4b\u95f4\u6309\u516b\u68f1\u622a\u9762\u91c7\u6837\uff0c\u63a2\u70b9\u7565\u5728\u5916\u58f3\u5916\u8868\u9762\u4e4b\u5916"
+    }
+  },
+  "display_scales": {
+    "gui": 0.45,
+    "ground": 0.32,
+    "fixed": 0.35,
+    "thirdperson_righthand": 0.38,
+    "firstperson_righthand": 0.38
+  },
+  "historic_01e_pre_fix_uv_violations": {
+    "item": 168,
+    "rotor": 76
+  }
+}
