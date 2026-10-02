@@ -4,7 +4,7 @@
 
 ## 当前工作
 
-**当前主线：** 离心机最后端盖视觉复测已获用户确认，[铀原料加工与离心机已验收合入main](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)。下一步为[生芯块与专用烧结炉02A](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)，[02A候选](./reviews/2026-10-02/fuel-02a/README.md)已实现并通过定向验证/审查，等待[四组客户端手测](./reviews/2026-10-02/fuel-02a/CLIENT-CHECKLIST.md)，功能暂未合入main。
+**当前主线：** 离心机最后端盖视觉复测已获用户确认，[铀原料加工与离心机已验收合入main](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)。下一步为[生芯块与专用烧结炉02A](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)，[02A全部手测已通过](./reviews/2026-10-02/fuel-02a/README.md)，[02B整格外观与工作台/高炉配方候选b1537c8](./reviews/2026-10-03/fuel-02b/README.md)已交付，只待这两项复测，功能暂未合入main。
 
 **推进方式（2026-10-02）：** 按用户要求启用[按改动范围验证](./project-governance.md#51-按改动范围验证2026-10-02起生效)：默认增量构建和定向测试，未变实现复用已审证据，普通批次一轮合并审查，全量仅在明确风险触发时运行。
 
@@ -18,7 +18,7 @@
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
 | [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 全部人工门通过、已合入main，见[最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |
-| [燃料02A：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 候选575400e已交付，4项JUnit/1项GameTest与增量构建、独立审查通过；等待人工门 |
+| [燃料02A：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 02A全部手测通过；02B候选b1537c8已交付，只待新配方与视觉两项复测，运行证据复用 |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |
 | [材料05：石英粉、耐火砖与重型轴承实施](./superpowers/plans/2026-10-02-ext-a-material-05.md) | 完整人工清单通过，已合入main；[最终验收](./reviews/2026-10-02/material-05/ACCEPTANCE.md)，后续离心机见当前实施卡 |
 | [青金石粉 01A](./superpowers/plans/2026-09-24-ext-a-material-01a.md) | 未合并候选：GameTest、纹理整改/评审和客户端验收仍待完成 |

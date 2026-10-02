@@ -1,0 +1,34 @@
+{
+  "jar": "build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "sha256": "41ba1c74cd935b1e3ec05d70f695e5addfc5aec07cd76fbd082226c292787f15",
+  "bytes": 953005,
+  "new_recipe_present": true,
+  "old_mechanical_recipe_absent": true,
+  "packaged_recipe": {
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+      "R": {
+        "item": "create_nuclear_industry:refractory_brick"
+      },
+      "S": {
+        "tag": "c:plates/steel"
+      },
+      "B": {
+        "item": "minecraft:blast_furnace"
+      },
+      "I": {
+        "item": "create_nuclear_industry:industrial_sensor"
+      }
+    },
+    "pattern": [
+      "RSR",
+      "RBR",
+      "SIS"
+    ],
+    "result": {
+      "id": "create_nuclear_industry:fuel_sintering_furnace",
+      "count": 1
+    }
+  }
+}
