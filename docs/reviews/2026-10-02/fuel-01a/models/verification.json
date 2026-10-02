@@ -1,0 +1,172 @@
+{
+  "task": "EXT-A-FUEL-01A model correction",
+  "candidate_head": "6b2138a4dd7c54954e4dc0a42e8d3a4e637687ec",
+  "files": {
+    "concentrate_item": {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/uranium_concentrate.json",
+      "sha256": "ec24c4cfb6fa1d8147b56415a3b8002e603783de1c85b71c5d9c03be34b1d312"
+    },
+    "centrifuge_item": {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/enrichment_centrifuge.json",
+      "sha256": "35e331553f382d3ff8a14983e3bafd9901bb98259994d868e7431aefcbdbf48d"
+    },
+    "centrifuge_block": {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge.json",
+      "sha256": "cc64ff2df299958fa24b26410084acc2bfa4091c7df0a5b55239fca9a5c50676"
+    },
+    "centrifuge_states": {
+      "path": "src/main/resources/assets/create_nuclear_industry/blockstates/enrichment_centrifuge.json",
+      "sha256": "d1c883eb55785d241c3a526818548f25211900f3e395b2426d1851449da49004"
+    },
+    "concentrate_png": {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/uranium_concentrate.png",
+      "sha256": "1c0bfc02189cf38475aa2f958eed73063af20dc9d2965ff050a27d3f20ad52ba"
+    }
+  },
+  "concentrate_model": "PASS: item/generated layer0 resolves to the existing PNG",
+  "centrifuge_model_chain": [
+    "create_nuclear_industry:item/enrichment_centrifuge",
+    "create_nuclear_industry:block/enrichment_centrifuge",
+    "minecraft:block/block"
+  ],
+  "reference_chains": {
+    "vanilla_block_cube": [
+      "minecraft:block/cube_all",
+      "minecraft:block/cube",
+      "minecraft:block/block"
+    ],
+    "create_andesite_casing": [
+      "create:block/andesite_casing",
+      "minecraft:block/cube_all",
+      "minecraft:block/cube",
+      "minecraft:block/block"
+    ]
+  },
+  "inherited_locked_1_21_1_display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    }
+  },
+  "centrifuge_dimensions": [
+    0,
+    0,
+    0,
+    16,
+    16,
+    16
+  ],
+  "six_face_texture_references": {
+    "north": "enrichment_centrifuge_front",
+    "south": "enrichment_centrifuge_back",
+    "east": "enrichment_centrifuge_slurry_port",
+    "west": "enrichment_centrifuge_water_port",
+    "up": "enrichment_centrifuge_top",
+    "down": "enrichment_centrifuge_bottom"
+  },
+  "facing_variants": [
+    "facing=east",
+    "facing=north",
+    "facing=south",
+    "facing=west"
+  ],
+  "result": "PASS"
+}

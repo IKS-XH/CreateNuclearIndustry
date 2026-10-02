@@ -1,0 +1,39 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :createMinecraftArtifacts UP-TO-DATE
+
+> Task :compileJava
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\content\FuelProcessingContent.java:70: 警告: [removal] FluidType 中的 initializeClient(Consumer<IClientFluidTypeExtensions>) 已过时, 且标记为待删除
+                public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                            ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\content\ModFluids.java:113: 警告: [removal] FluidType 中的 initializeClient(Consumer<IClientFluidTypeExtensions>) 已过时, 且标记为待删除
+            public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                        ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\production\CentrifugeScreen.java:66: 警告: [removal] EventBusSubscriber 中的 bus() 已过时, 且标记为待删除
+    @EventBusSubscriber(modid = CreateNuclearIndustry.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+                                                                                   ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\production\CentrifugeScreen.java:66: 警告: [removal] EventBusSubscriber 中的 Bus 已过时, 且标记为待删除
+    @EventBusSubscriber(modid = CreateNuclearIndustry.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+                                                                                                           ^
+4 个警告
+
+> Task :processResources
+> Task :classes
+> Task :compileTestJava
+> Task :downloadAssets UP-TO-DATE
+> Task :writeNeoForgeTestClasspath UP-TO-DATE
+> Task :prepareNeoForgeTestFiles UP-TO-DATE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+> Task :test
+
+[Incubating] Problems report is available at: file:///E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 28s
+8 actionable tasks: 4 executed, 4 up-to-date
