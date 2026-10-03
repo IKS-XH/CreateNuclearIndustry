@@ -1,0 +1,20 @@
+Compiled from "ShieldedAssemblyClientEvents.java"
+public final class com.iksxh.create_nuclear_industry.production.ShieldedAssemblyClientEvents {
+  private com.iksxh.create_nuclear_industry.production.ShieldedAssemblyClientEvents();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void registerRenderers(net.neoforged.neoforge.client.event.EntityRenderersEvent$RegisterRenderers);
+    Code:
+       0: getstatic     #7                  // Field com/iksxh/create_nuclear_industry/production/ShieldedAssemblyRenderer.PARTIAL_MODELS:Ljava/util/List;
+       3: astore_1
+       4: aload_0
+       5: getstatic     #13                 // Field com/iksxh/create_nuclear_industry/content/FuelProcessingContent.SHIELDED_ASSEMBLY_BE:Lnet/neoforged/neoforge/registries/DeferredHolder;
+       8: invokevirtual #19                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+      11: checkcast     #25                 // class net/minecraft/world/level/block/entity/BlockEntityType
+      14: invokedynamic #27,  0             // InvokeDynamic #0:create:()Lnet/minecraft/client/renderer/blockentity/BlockEntityRendererProvider;
+      19: invokevirtual #31                 // Method net/neoforged/neoforge/client/event/EntityRenderersEvent$RegisterRenderers.registerBlockEntityRenderer:(Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/client/renderer/blockentity/BlockEntityRendererProvider;)V
+      22: return
+}

@@ -1,0 +1,23 @@
+Starting a Gradle Daemon, 3 busy and 1 stopped Daemons could not be reused, use --status for details
+> Task :createMinecraftArtifacts UP-TO-DATE
+
+> Task :compileJava
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\production\ShieldedAssemblyClientEvents.java:11: 警告: [removal] EventBusSubscriber 中的 bus() 已过时, 且标记为待删除
+@EventBusSubscriber(modid = CreateNuclearIndustry.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+                                                                               ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\production\ShieldedAssemblyClientEvents.java:11: 警告: [removal] EventBusSubscriber 中的 Bus 已过时, 且标记为待删除
+@EventBusSubscriber(modid = CreateNuclearIndustry.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+                                                                                                       ^
+2 个警告
+
+> Task :processResources UP-TO-DATE
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+
+[Incubating] Problems report is available at: file:///E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 11s
+4 actionable tasks: 2 executed, 2 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

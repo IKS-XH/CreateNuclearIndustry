@@ -1,0 +1,4 @@
+PM截图观察（转述，不是本执行者直接观察）：机壳完整；三个机位均在主控角显示同一紫黑missing立方体，内部左/右臂和夹具不可见。
+PM读取的候选客户端日志：2026-10-03 16:18加载未出现shielded partial模型/纹理解析报错。
+本地候选run/logs/latest.log中的shielded_assembly相关行见client-log-shielded-matches.txt；缺少路径报错不能证明partial已加入首次烘焙。
+本次未启动、操作或关闭客户端/存档；修复效果仍需用户完整重启候选客户端人工确认。
