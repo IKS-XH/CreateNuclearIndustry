@@ -5,7 +5,7 @@
         "facing": "north"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/base",
         "y": 0
       }
     },
@@ -14,7 +14,7 @@
         "facing": "north"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins",
         "y": 0
       }
     },
@@ -24,7 +24,7 @@
         "lit": "true"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins_lit",
         "y": 0
       }
     },
@@ -33,7 +33,7 @@
         "facing": "east"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/base",
         "y": 90
       }
     },
@@ -42,7 +42,7 @@
         "facing": "east"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins",
         "y": 90
       }
     },
@@ -52,7 +52,7 @@
         "lit": "true"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins_lit",
         "y": 90
       }
     },
@@ -61,7 +61,7 @@
         "facing": "south"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/base",
         "y": 180
       }
     },
@@ -70,7 +70,7 @@
         "facing": "south"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins",
         "y": 180
       }
     },
@@ -80,7 +80,7 @@
         "lit": "true"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins_lit",
         "y": 180
       }
     },
@@ -89,7 +89,7 @@
         "facing": "west"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/base",
         "y": 270
       }
     },
@@ -98,7 +98,7 @@
         "facing": "west"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins",
         "y": 270
       }
     },
@@ -108,7 +108,7 @@
         "lit": "true"
       },
       "apply": {
-        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/fins_lit",
         "y": 270
       }
     }

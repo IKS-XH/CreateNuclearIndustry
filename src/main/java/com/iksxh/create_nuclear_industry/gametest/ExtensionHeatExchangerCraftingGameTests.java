@@ -4,9 +4,7 @@ import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlock;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
-import com.simibubi.create.content.kinetics.crafter.MechanicalCraftingInput;
 import com.simibubi.create.content.kinetics.crafter.MechanicalCraftingRecipe;
-import com.simibubi.create.content.kinetics.crafter.RecipeGridHandler;
 import com.simibubi.create.content.kinetics.saw.SawBlock;
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.content.logistics.depot.DepotBlockEntity;
@@ -17,8 +15,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -30,13 +26,13 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /** 核换热器材料配方的原生匹配、实际取料和精确产量合同。 */
@@ -184,69 +180,28 @@ public final class ExtensionHeatExchangerCraftingGameTests {
         helper.succeed();
     }
 
-    /** 21格Create机械合成匹配指定形状、12钢板及两份管束，并且仅产一台整机。 */
+    /** 核换热器使用用户指定的3×3工作台布局，核对原生类型、材料匹配与单件产量。 */
     @GameTest(template = TEMPLATE)
-    public static void mechanicalCraftingMatchesTwentyOneSlotsAndOneOutput(GameTestHelper helper) {
+    public static void nuclearHeatExchangerMatchesThreeByThreeWorkbenchRecipe(GameTestHelper helper) {
         var holder = helper.getLevel().getRecipeManager().byKey(id("heat_exchanger/nuclear_heat_exchanger"))
                 .orElseThrow();
-        require(helper, holder.value() instanceof MechanicalCraftingRecipe,
-                "整机不是Create原生机械合成配方");
-        MechanicalCraftingRecipe recipe = (MechanicalCraftingRecipe) holder.value();
+        require(helper, holder.value() instanceof CraftingRecipe
+                        && holder.value().getType() == RecipeType.CRAFTING
+                        && !(holder.value() instanceof MechanicalCraftingRecipe),
+                "整机没有替换为原版有序工作台配方");
         Item steel = taggedItem("c:plates/steel");
         Item copper = taggedItem("c:plates/copper");
-        Item fitting = registered(helper, "pressure_fitting");
         Item bundle = registered(helper, "nuclear_heat_exchange_bundle");
-        Item sensor = registered(helper, "industrial_sensor");
-        List<ItemStack> inputs = mechanicalInputs(steel, copper, fitting, bundle, sensor);
-        RecipeGridHandler.GroupedItems grouped = groupedItems(helper, inputs);
-        grouped.calcStats();
-        CraftingInput craftingInput = MechanicalCraftingInput.of(grouped);
-        ItemStack output = recipe.getResultItem(helper.getLevel().registryAccess());
-        require(helper, recipe.getWidth() == 5 && recipe.getHeight() == 5 && !recipe.acceptsMirrored()
-                        && recipe.matches(craftingInput, helper.getLevel())
-                        && output.is(registered(helper, "nuclear_heat_exchanger"))
-                        && output.getCount() == 1,
-                "整机机械合成尺寸、方向、材料数或结果数量不符");
-        require(helper, recipe.assemble(craftingInput, helper.getLevel().registryAccess())
-                        .is(registered(helper, "nuclear_heat_exchanger")),
-                "Create原生21格输入匹配后未组装出核换热器");
-        require(helper, inputs.stream().filter(stack -> stack.is(steel)).mapToInt(ItemStack::getCount).sum() == 12
-                        && inputs.stream().filter(stack -> stack.is(copper)).mapToInt(ItemStack::getCount).sum() == 4
-                        && inputs.stream().filter(stack -> stack.is(fitting)).mapToInt(ItemStack::getCount).sum() == 2
-                        && inputs.stream().filter(stack -> stack.is(bundle)).mapToInt(ItemStack::getCount).sum() == 2
-                        && inputs.stream().filter(stack -> stack.is(sensor)).mapToInt(ItemStack::getCount).sum() == 1,
-                "整机21格配方各材料数量错误");
+        assertCraft(helper, "heat_exchanger/nuclear_heat_exchanger", 3, 3, List.of(
+                new ItemStack(copper), new ItemStack(copper), new ItemStack(copper),
+                new ItemStack(steel), new ItemStack(bundle), new ItemStack(steel),
+                new ItemStack(steel), new ItemStack(steel), new ItemStack(steel)),
+                registered(helper, "nuclear_heat_exchanger"), 1);
         helper.succeed();
-    }
-
-    private static RecipeGridHandler.GroupedItems groupedItems(GameTestHelper helper, List<ItemStack> inputs) {
-        CompoundTag nbt = new CompoundTag();
-        ListTag grid = new ListTag();
-        for (int index = 0; index < inputs.size(); index++) {
-            ItemStack stack = inputs.get(index);
-            if (stack.isEmpty()) continue;
-            CompoundTag entry = new CompoundTag();
-            entry.putInt("x", index % 5);
-            entry.putInt("y", 4 - index / 5);
-            entry.put("item", stack.saveOptional(helper.getLevel().registryAccess()));
-            grid.add(entry);
-        }
-        nbt.put("Grid", grid);
-        // Create原生read只恢复格子；匹配前的尺寸统计由tryToApplyRecipe负责。
-        return RecipeGridHandler.GroupedItems.read(nbt, helper.getLevel().registryAccess());
     }
 
     private static DepotBlockEntity depot(GameTestHelper helper) {
         return (DepotBlockEntity) helper.getBlockEntity(SAW_OUTPUT);
-    }
-
-    private static List<ItemStack> mechanicalInputs(Item steel, Item copper, Item fitting, Item bundle, Item sensor) {
-        return new ArrayList<>(List.of(
-                ItemStack.EMPTY, new ItemStack(steel), new ItemStack(steel), new ItemStack(steel), ItemStack.EMPTY,
-                new ItemStack(steel), new ItemStack(copper), new ItemStack(fitting), new ItemStack(copper), new ItemStack(steel),
-                new ItemStack(steel), new ItemStack(bundle), new ItemStack(sensor), new ItemStack(bundle), new ItemStack(steel),
-                new ItemStack(steel), new ItemStack(copper), new ItemStack(fitting), new ItemStack(copper), new ItemStack(steel),
-                ItemStack.EMPTY, new ItemStack(steel), new ItemStack(steel), new ItemStack(steel), ItemStack.EMPTY));
     }
 
     private static void assertCraft(GameTestHelper helper, String path, int width, int height,
