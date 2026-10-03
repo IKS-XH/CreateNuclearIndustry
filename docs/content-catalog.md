@@ -9,7 +9,7 @@
 
 **2026-10-01 实现检查点：** 三矿及铅锡加工/素材均已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 与配方/外观/保存重进获用户确认，见 [铅锡收尾](./reviews/2026-10-01/material-02-acceptance.md)。铁粉、煤粉、木炭粉、钢粉、钢锭和钢板的[制钢路线](./reviews/2026-10-01/material-03b/README.md)，以及锡条、两种传感器和两种序列半成品的[材料04路线](./reviews/2026-10-01/material-04/ACCEPTANCE.md)也已通过完整人工清单并合入main；传感器此阶段仅为制造材料。表中其余目标仍须按对应任务判断，不能从策划阶段标记推断已经实现。
 
-**2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及原生序列半成品`incomplete_steel_grate`已注册，配方与五项素材全部手测通过并合入main，见[02C最终验收](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料直接装配燃料组件及屏蔽装配台已在[02D候选](./reviews/2026-10-03/fuel-02d/README.md)实现，等待四组人工验收，尚未合入main。
+**2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及原生序列半成品`incomplete_steel_grate`已注册，配方与五项素材全部手测通过并合入main，见[02C最终验收](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料装配组件及屏蔽装配台已在[02D候选](./reviews/2026-10-03/fuel-02d/README.md)实现，尚未合入main；用户提出[02E结构修订](./superpowers/plans/2026-10-03-shielded-assembly-multiblock-proposal.md)，受影响人工项暂缓。
 
 ## 1. 状态与命名规则
 
@@ -176,7 +176,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | :--- | :--- | :--- | :--- | :--- |
 | `P1` | `enrichment_centrifuge` | 富集离心机 | 铀料浆 → 低浓缩铀粉 + 贫化铀粉 + 工艺水 | 消耗稳定 Create 转速和应力完成铀富集；转速不稳降低效率 |
 | `P1` | `fuel_sintering_furnace` | 燃料烧结炉 | 生燃料芯块 → 烧结燃料芯块 | 单格无GUI、底部普通热源、顶进四侧出，1件烧结400有效tick；整格八棱外观、工作台/高炉制造；02A/02B全部手测通过并合入main，见[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md) |
-| `P1` | `shielded_assembly_station` | 屏蔽装配台 | 芯块/包壳/焊料/格架8/4/2/1 → 1新组件；封存与再生燃料另批 | [02D候选已实现、待手测](./reviews/2026-10-03/fuel-02d/README.md)：一格无GUI、底部动力、顶进四侧出；本批新燃料用原生物流/机械臂接力，屏蔽机械臂仍后置 |
+| `P1` | `shielded_assembly_station` | 屏蔽装配台 | 芯块/包壳/焊料/格架8/4/2/1 → 1新组件；封存与再生燃料另批 | [02D候选未验收](./reviews/2026-10-03/fuel-02d/README.md)；用户要求改2×2×2、四周漏斗输入、21格制造与动画预留，[02E细节待确认](./superpowers/plans/2026-10-03-shielded-assembly-multiblock-proposal.md)，不提前实现屏蔽机械臂 |
 | `P1` | `nuclear_heat_exchanger` | 换热器 | 热复合冷却剂→复合冷却剂；超临界蒸汽→蒸汽；蒸汽+冷源→水 | 按输入选择唯一模式；核热/蒸汽供热默认返回 18/9 锅炉热值；冷凝缺少冷源时安全停机 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体端口 | 水、循环能力和热乏燃料 → 冷却状态 | 后置玩法；首发不实现热/冷转换、乏燃料池冷却或相关流体路线 |
 | `P1` | `dry_storage_rack` | 干式贮存架 | 已封装乏燃料桶 → 安全贮存状态 | 检查封装完整性并提供稳定堆放，不消除辐射物质 |
