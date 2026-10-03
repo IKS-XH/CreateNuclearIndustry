@@ -1,0 +1,2 @@
+JAR_SHA256=2648CEA5401A470FB056E0AEEED7D7E8B7A67B8736C224255477D6F1D16EEC29
+JAR_PATH=E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\build\libs\create_nuclear_industry-0.1.0.jar
