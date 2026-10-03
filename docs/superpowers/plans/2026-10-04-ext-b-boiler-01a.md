@@ -1,10 +1,10 @@
 # EXT-B-BOILER-01A：紧凑高压锅炉实施
 
-**状态：2026-10-04整套方案获用户批准，自动派发；等待实现/定向验证，尚未人工验收。** 批准合同：[完整方案](./2026-10-04-high-pressure-boiler-proposal.md)。本卡只细化执行分工，不新增玩法或再索取已获授权。
+**状态：2026-10-04整套方案获用户批准，候选`af106ab`完成实现、定向验证与独立审查，暂停于[人工验收门](../../reviews/2026-10-04/boiler-01a/CLIENT-CHECKLIST.md)，尚未合入main。** 批准合同：[完整方案](./2026-10-04-high-pressure-boiler-proposal.md)。本卡只细化执行分工，不新增玩法或再索取已获授权。
 
 ## 全局合同与基线
 
-- 候选：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，起点`8bf423d`，`codex/ore-acquisition`。功能人工通过前不合入main。主目录用户`.vscode/launch.json`、两处客户端/存档均不操作；候选原有`logs/debug.log`、`logs/latest.log`、`tools/art-assets/__pycache__/`保留。
+- 候选：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，`codex/ore-acquisition`。准备起点`8bf423d`，批准与派发文档已在`891f73e`冻结，本批功能审查以`891f73e`为基线。功能人工通过前不合入main。主目录用户`.vscode/launch.json`、两处客户端/存档均不操作；候选原有`logs/debug.log`、`logs/latest.log`、`tools/art-assets/__pycache__/`保留。
 - MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82；不升级依赖、许可证或发布方式。沿用现有E盘隔离工作树，不新建C盘目录。
 - 执行者须读AGENTS、治理5.1、本卡、完整方案和对应技能。角色为执行者，禁止Git写、核心文档、转派；中文注释合同适用。只有PM维护文档、验收和版本。
 - 无GUI、固定3×3×4手搭结构；34壳位、内部两空气格；底中心外壳、外围1～8热段；侧下排1控制器＋1～3水口、侧上排1～4汽口；顶中心1安全阀。控制器唯一持有库存，端口只代理；禁止共享结构认领或重复热量所有者。
@@ -24,6 +24,7 @@
 - 复用`compat/create/SharedFluidReceiver.java`等共享接收机制。若确需修改该包或`mixin/FluidNetworkSharedFillMixin.java`，先报告原因和限定范围，不重写无关管网；新锅炉水口必须直接实现共享库存/整炉配额身份，防止上批已修复的模拟过度承诺重现。
 - `src/test/java/.../boiler/`及受影响`heat/HeatExchangerStateTest.java`；新`gametest/ExtensionBoilerGameTests.java`及本批必要的结构测试资源。实际类路径均以包前缀`com/iksxh/create_nuclear_industry`为准。
 - `assets/create_nuclear_industry/lang/zh_cn.json`、`en_us.json`的本批名称/遥测键；必要的蒸汽流体兼容标签，限`data/create/tags/fluid/`内已验证用途的新增或追加，不删除旧成员。
+- 固定设备移动限制可在`data/create/tags/block/non_movable.json`中仅追加本批七块，保留旧成员；不得借此扩大到其他设备或改写Create运动规则。
 - 交付`build/reports/extension/EXT-B-BOILER-01A-DEVICE.md`及同名证据目录；构建输出。默认不改Gradle/依赖/测试框架，筛选已有`-PgameTestNamespace`与`-PgameTestDirectory`入口。
 
 **实施顺序：**
@@ -44,6 +45,8 @@
 
 工具只写新增`tools/art-assets/boiler_01a_assets.py`、`tools/art-assets/svg/block/high_pressure_boiler/`及对应蒸汽SVG、生成输出/预览和`build/reports/extension/EXT-B-BOILER-01A-ASSETS.md`。不改全局导出器/manifest/README/美术基线，不使用生图模型；使用SVG/JSON可复现导出PNG。
 
+蒸汽纹理位于`textures/fluid/`，A可在`assets/minecraft/atlases/blocks.json`仅追加两张超临界蒸汽的single图集源并核对引用，保留已验收浆料条目；不得覆盖或移除旧图集内容。
+
 按完整方案第5节精确制作：外壳9宫格产8、五种部件无序工作台各1（窗、水口、汽口、安全阀、换热段）、控制器21格产1；材料ID/标签读取已实现配方，不凭中文名猜ID。21格关闭镜像。不注册序列半成品。
 
 外观主体占满结构格、衔接面无共面重复；窗口可透明但框架完整，控制器与两口朝向可辨。安全阀/换热件分模型命名预留动画，当前静态模型无需额外渲染器。物品继承正确块模型和原版缩放，不做平面图标、不超大、不漏上盖/端盖。所有纹理有实际PNG且UV在有效范围。
@@ -62,7 +65,7 @@
 
 ## 派发记录
 
-- BOILER-DEVICE：已派发并接单，`/root/boiler_device`，gpt-6-sol/high；复杂共享事务使用高级模型，开始纯账本测试与接口核查。
-- BOILER-ASSETS：已派发并接单，`/root/boiler_assets`，gpt-6-luna/high；独立资源/配方写集并行。
-- 定向验证/合并审查：待实现。
-- 人工验收：未进行。
+- BOILER-DEVICE：`/root/boiler_device`，gpt-6-sol/high；设备、唯一热账本和真实Create接入已交付，27项定向JUnit、7项锅炉GameTest、11项受影响原生回归及assemble通过。
+- BOILER-ASSETS：`/root/boiler_assets`，gpt-6-luna/high；七套资源/配方已交付。观察窗共面重复及无方向窗口仅单面可视已在同范围整改，重导出静态检查0错误；客户端视觉仍待人工门。
+- 合并审查：`/root/boiler_review`，gpt-6-sol/high；复杂跨设备守恒和生命周期使用高级模型，合并规格/质量一次审查，无须修问题，可进入人工门。审查直接复用自动证据，未重复运行。
+- [候选交付与归档证据](../../reviews/2026-10-04/boiler-01a/CANDIDATE.md)已保存。人工验收未进行，后续汽轮机暂停派发。

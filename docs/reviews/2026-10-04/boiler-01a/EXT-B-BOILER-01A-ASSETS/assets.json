@@ -1,0 +1,74 @@
+{
+  "textures": [
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/casing_side.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/casing_side.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/casing_top.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/casing_top.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/window_frame.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/window_frame.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/water_port_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/water_port_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/steam_port_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/steam_port_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/controller_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/controller_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/valve_body.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/valve_body.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/exchanger_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/exchanger_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/exchanger_top.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/exchanger_top.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/safety_badge.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/safety_badge.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/fluid/supercritical_steam_still.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/fluid/supercritical_steam_still.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/fluid/supercritical_steam_flow.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/fluid/supercritical_steam_flow.png",
+      "size": "16x16 RGBA"
+    }
+  ],
+  "preview": "build/reports/extension/EXT-B-BOILER-01A-ASSETS/boiler-block-assets-preview.png",
+  "blocks": [
+    "high_pressure_boiler_casing",
+    "high_pressure_boiler_window",
+    "high_pressure_boiler_water_port",
+    "high_pressure_boiler_steam_port",
+    "high_pressure_boiler_controller",
+    "boiler_safety_valve",
+    "boiler_heat_exchange_section"
+  ]
+}

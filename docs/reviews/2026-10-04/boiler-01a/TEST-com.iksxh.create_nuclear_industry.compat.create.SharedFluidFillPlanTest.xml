@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-03T23:31:54.658Z" hostname="DESKTOP-4G1EOU9" time="0.006">
+  <properties/>
+  <testcase name="threePortsCannotPromiseTheSameNearFullSpaceThreeTimes()" classname="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" time="0.002"/>
+  <testcase name="equalButDistinctOwnersBudgetsAndHandlersRemainIndependent()" classname="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" time="0.001"/>
+  <testcase name="nextNetworkInvocationStartsWithoutReservations()" classname="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" time="0.001"/>
+  <testcase name="multipleFacesOfOnePhysicalPortShareItsRemainingBudget()" classname="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" time="0.0"/>
+  <testcase name="cumulativeRedistributionReplacesTheHandlersPreviousShare()" classname="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" time="0.0"/>
+  <testcase name="exchangerFacesShareHotSpaceWithoutIncreasingTheOriginalResult()" classname="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" time="0.001"/>
+  <testcase name="differentPhysicalPortsCanTogetherAcceptMoreThan128()" classname="com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
