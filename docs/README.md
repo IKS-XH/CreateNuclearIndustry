@@ -24,7 +24,7 @@
 
 **验证方式：** 沿用治理5.1，同一实现的已审定向测试不重复执行；制造批次历史证据见[冷却剂与实验堆验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)，换热器本次集成证据单列。
 
-**当前优先级（2026-10-04用户调整）：** 先推进专用高压锅炉→超临界汽轮机→冷凝回水链，再补乏燃料基础封存；首台3×3×4已确认，[完整锅炉建议](./superpowers/plans/2026-10-04-high-pressure-boiler-proposal.md)中的接口、产汽、制造及暂用Create输送建议待确认。工作盆加热明确后移，[原准备卡](./superpowers/plans/2026-10-04-heat-exchanger-basin-preparation.md)停止派发，不再作为主线前置。当前换热器人工门已解除，完整EXT-B-API-01及专用蒸汽链未记完成；02E动画仍后置。
+**当前优先级（2026-10-04用户调整）：** 先推进专用高压锅炉→超临界汽轮机→冷凝回水链，再补乏燃料基础封存；[完整锅炉方案](./superpowers/plans/2026-10-04-high-pressure-boiler-proposal.md)已全部确认，[01A](./superpowers/plans/2026-10-04-ext-b-boiler-01a.md)在候选实施。首期仅核热、外围1～8段、3×3×4、Create原生管网输送超临界蒸汽；辅助热和二级耐压限制延期，功能尚未手测/合入main。工作盆加热明确后移，[原准备卡](./superpowers/plans/2026-10-04-heat-exchanger-basin-preparation.md)停止派发，不再作为主线前置。完整EXT-B-API-01及专用蒸汽链未记完成；02E动画仍后置。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
