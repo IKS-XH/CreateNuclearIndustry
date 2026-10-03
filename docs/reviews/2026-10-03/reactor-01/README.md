@@ -1,6 +1,6 @@
 # 冷却剂01B与实验堆制造01：合并客户端交接
 
-**当前状态：[配方01A修订](../../../superpowers/plans/2026-10-03-ext-a-reactor-01a.md)、[仪表端口21格01B](../../../superpowers/plans/2026-10-03-ext-a-reactor-01b.md)及[控制棒组件工作台01C](../../../superpowers/plans/2026-10-03-ext-a-reactor-01c.md)均已完成实现、定向验证与独立复审，仍等待合并人工验收。** 用户授权两批连续推进，数值与设定先用推荐值，睡醒后一起手测。01B先前自动证据保留，两个批次都未人工验收、运行内容尚未合入main。反应堆制造初版实现提交为`a6b32e784b0b8c40dc4873ab8d28ba12a5b47e74`；下列初版自动证据保留历史语境，修订证据另列。
+**当前状态：冷却剂01B、实验堆制造01及01A/01B/01C修订全部获用户确认手测通过，已合入main。** 详见[合并验收](./ACCEPTANCE.md)。本页保留配方说明、历次自动证据与原手测步骤；下方旧交付时点的待验文字不代表现状。
 
 ## 本批结果与边界
 
@@ -13,11 +13,11 @@
 
 **控制棒组件01C：** 工作台竖排放入黄铜片、中子吸收陶瓷、钢杆各1，从上到下依次排列，产1控制棒组件。保留原用料，删除旧序列路线；控制棒驱动器仍用下表动力合成配方。
 
-01C实现提交`cdb7f39eb3b4fb5ddc0845ae9c71324ab50b36ae`；[执行报告](./01c/EXT-A-REACTOR-01C.md)、[独立复审](./01c/EXT-A-REACTOR-01C-REVIEW.md)、[原始命令输出](./01c/EXT-A-REACTOR-01C/verification.log)与[JAR配方清单](./01c/EXT-A-REACTOR-01C/jar-resource-check.txt)已归档。只运行一轮现有6项隔离测试与增量assemble，全部通过，包含新工作台配方实际匹配/产量及旧序列缺失；无JUnit或全量重跑。当前JAR SHA-256为`D8612836BA034D3454C998E144C68342728198C328C9D2513C152FE4D75282B8`。客户端仍待验；下列旧哈希与自动记录保留历史语境。
+01C实现提交`cdb7f39eb3b4fb5ddc0845ae9c71324ab50b36ae`；[执行报告](./01c/EXT-A-REACTOR-01C.md)、[独立复审](./01c/EXT-A-REACTOR-01C-REVIEW.md)、[原始命令输出](./01c/EXT-A-REACTOR-01C/verification.log)与[JAR配方清单](./01c/EXT-A-REACTOR-01C/jar-resource-check.txt)已归档。只运行一轮现有6项隔离测试与增量assemble，全部通过，包含新工作台配方实际匹配/产量及旧序列缺失；无JUnit或全量重跑。01C候选交付时JAR SHA-256为`D8612836BA034D3454C998E144C68342728198C328C9D2513C152FE4D75282B8`。客户端本次已由用户确认通过；下列旧哈希与自动记录保留历史语境。
 
 **仪表端口01B：** 用户要求提高至离心机同级，现按[21格方案](../../../superpowers/plans/2026-10-03-ext-a-reactor-01b.md)增加10钢板、6金板和2精密构件，原有三项材料各1保留。此配方取代01A三格横排，运行行为不变。
 
-01B实现提交`70b55c403441891d91b22dc87d55bfc900a8f4a9`；[执行报告](./01b/EXT-A-REACTOR-01B.md)、[独立复审](./01b/EXT-A-REACTOR-01B-REVIEW.md)、[原始命令输出](./01b/EXT-A-REACTOR-01B/verification.log)与[JAR证据](./01b/EXT-A-REACTOR-01B/jar-evidence.txt)已归档。仅运行一次现有6项隔离组和增量assemble并通过，未重复JUnit/全量；实际21格连线、JEI和出料待手测。01B交付时JAR SHA-256为`2648CEA5401A470FB056E0AEEED7D7E8B7A67B8736C224255477D6F1D16EEC29`，下方01A/初版哈希保留作历史记录。
+01B实现提交`70b55c403441891d91b22dc87d55bfc900a8f4a9`；[执行报告](./01b/EXT-A-REACTOR-01B.md)、[独立复审](./01b/EXT-A-REACTOR-01B-REVIEW.md)、[原始命令输出](./01b/EXT-A-REACTOR-01B/verification.log)与[JAR证据](./01b/EXT-A-REACTOR-01B/jar-evidence.txt)已归档。仅运行一次现有6项隔离组和增量assemble并通过，未重复JUnit/全量；当时实际21格连线、JEI和出料待手测，本次已确认通过。01B交付时JAR SHA-256为`2648CEA5401A470FB056E0AEEED7D7E8B7A67B8736C224255477D6F1D16EEC29`，下方01A/初版哈希保留作历史记录。
 
 实现提交`3f8fd477007df31ad640293d17ce35559eef858c`；[独立复审报告](./01a/EXT-A-REACTOR-01A-REVIEW.md)未发现本次配方或运行逻辑问题。
 
@@ -47,14 +47,14 @@
 
 ## 启动
 
-完全退出旧客户端，再使用同级候选目录：
+完全退出旧客户端，再使用已合入的主目录：
 
 ```powershell
-Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
+Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry'
 .\gradlew.bat runClient
 ```
 
-主目录此时仅有已验收02E及模型闪烁修复；两批新配方在上述候选。原有用户启动配置和存档未改。
+主目录现已包含两批及最终配方修订；同级工作树继续保留。原有用户启动配置和存档未改。
 
 ## 合并人工清单
 
@@ -67,4 +67,4 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 
 Ponder完整结构用料：81外壳、3观察窗、1仪表、2冷端、2热端、8换料端口、24燃料柱结构块、1驱动器，共122块。配方升级还需消耗16个外壳，总制造25批得到100外壳，用97余3。原始98外层结构与24内部柱体保持既有尺寸；详见任务卡成本账。
 
-以上项目按实际测试范围反馈即可。01B先前通过的自动测试不视为本次新运行，且不替代上述人工体验。
+以上清单已于2026-10-03获用户确认全部通过，保留作为回归参考。旧自动测试与本次用户人工确认分别记录。

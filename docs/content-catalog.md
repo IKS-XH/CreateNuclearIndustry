@@ -9,9 +9,9 @@
 
 **2026-10-01 实现检查点：** 三矿及铅锡加工/素材均已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 与配方/外观/保存重进获用户确认，见 [铅锡收尾](./reviews/2026-10-01/material-02-acceptance.md)。铁粉、煤粉、木炭粉、钢粉、钢锭和钢板的[制钢路线](./reviews/2026-10-01/material-03b/README.md)，以及锡条、两种传感器和两种序列半成品的[材料04路线](./reviews/2026-10-01/material-04/ACCEPTANCE.md)也已通过完整人工清单并合入main；传感器此阶段仅为制造材料。表中其余目标仍须按对应任务判断，不能从策划阶段标记推断已经实现。
 
-**2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及`incomplete_steel_grate`配方/素材已[验收合入main](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料装配组件及八格屏蔽装配台功能手测全部通过，连同模型R2共面修复已[合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)；修后画面未追记人工通过。青金石粉`lapis_dust`与无热冷却剂制备已在[01B候选](./reviews/2026-10-03/material-01b/README.md)实现，定向验证通过、客户端待验，尚未合入main。
+**2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及`incomplete_steel_grate`配方/素材已[验收合入main](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料装配组件及八格屏蔽装配台功能手测全部通过，连同模型R2共面修复已[合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)；修后画面未追记人工通过。青金石粉`lapis_dust`与无热冷却剂制备已在[01B候选](./reviews/2026-10-03/material-01b/README.md)实现，现已[验收合入main](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)。
 
-**2026-10-03反应堆制造候选：** [REACTOR-01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md)接续六种普通材料`steel_rod`、`seal_ring`、`pressure_fitting`、`industrial_ceramic`、`neutron_absorbing_ceramic`、`shielded_glass`，一个普通方块`shielding_concrete`以及五个Create原生序列半成品。它们支撑正式八种实验堆部件的生存制造；屏蔽名称不表示辐射系统已实现。新内容未合入main，人工验收按最新授权与01B合并。
+**2026-10-03反应堆制造候选：** [REACTOR-01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md)接续六种普通材料`steel_rod`、`seal_ring`、`pressure_fitting`、`industrial_ceramic`、`neutron_absorbing_ceramic`、`shielded_glass`，一个普通方块`shielding_concrete`以及五个Create原生序列半成品。它们支撑正式八种实验堆部件的生存制造；屏蔽名称不表示辐射系统已实现。新内容及01A/01B/01C配方修订已与冷却剂01B完成合并人工验收，并合入main。
 
 **01A制造修订：** 铅玻璃改铅锭加玻璃普通加热搅拌，燃料柱每次1件；仪表/换料端口和驱动器改动力合成。控制棒组件再按[01C](./superpowers/plans/2026-10-03-ext-a-reactor-01c.md)改工作台合成；原5半成品身份均仅保留作旧存档兼容，不再用于新加工；不改注册、模型或运行逻辑。见[01A卡](./superpowers/plans/2026-10-03-ext-a-reactor-01a.md)。
 

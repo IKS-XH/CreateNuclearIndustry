@@ -1,0 +1,18 @@
+Main source integration: ad0c749; verified implementation: cdb7f39
+Command: ./gradlew.bat assemble --console=plain
+BUILD SUCCESSFUL in 10s
+JAR SHA-256: 93014DA01B19189DB313EA80F9E966F26755B1B95995727EF222D277EAA839F0
+PRESENT data/create_nuclear_industry/recipe/crushing/lapis_dust.json
+PRESENT data/create_nuclear_industry/recipe/mixing/compound_coolant.json
+PRESENT data/create_nuclear_industry/recipe/crafting/reactor/control_rod.json
+PRESENT data/create_nuclear_industry/recipe/crafting/reactor/reactor_fuel_rod.json
+PRESENT data/create_nuclear_industry/recipe/mixing/shielded_glass.json
+PRESENT data/create_nuclear_industry/recipe/mechanical_crafting/reactor_instrument_port.json
+PRESENT data/create_nuclear_industry/recipe/mechanical_crafting/reactor_refueling_port.json
+PRESENT data/create_nuclear_industry/recipe/mechanical_crafting/control_rod_drive.json
+ABSENT data/create_nuclear_industry/recipe/sequenced_assembly/shielded_glass.json
+ABSENT data/create_nuclear_industry/recipe/sequenced_assembly/reactor_instrument_port.json
+ABSENT data/create_nuclear_industry/recipe/sequenced_assembly/reactor_refueling_port.json
+ABSENT data/create_nuclear_industry/recipe/sequenced_assembly/control_rod_drive.json
+ABSENT data/create_nuclear_industry/recipe/sequenced_assembly/control_rod.json
+Compared main JAR with accepted candidate: 277 text entries differ only in CRLF/LF; zero other content differences; class/binary entries identical.

@@ -1,8 +1,8 @@
 # EXT-A-MATERIAL-01B：候选交付与三项客户端验收
 
-**状态：实现、定向验证与审查通过，等待人工验收，运行内容尚未合入main。** 用户于2026-10-03确认“不需要加热，其他参数按推荐的来”。[任务卡](../../../superpowers/plans/2026-10-03-ext-a-material-01b.md)与[完整方案](../../../superpowers/plans/2026-10-03-coolant-production-proposal.md)记录最终合同。
+**状态：2026-10-03全部人工验收通过，已与实验堆制造01合入main。** 见[合并验收](../reactor-01/ACCEPTANCE.md)；以下自动证据保留原执行语境。
 
-**后续授权：** 用户随后要求睡醒后一起手测，数值设定先采用推荐方案。01B仍未人工验收；接续的固定实验堆制造01已完成候选交付，本页三项清单保留并并入[两批交接](../reactor-01/README.md)，不再将其作为该批实施前的暂停点。
+**后续授权与结果：** 用户先要求两批一起手测，现已确认全部通过，配方查询与实际合成正常。
 
 ## 玩家可用内容
 
@@ -12,20 +12,20 @@
 
 ## 启动与人工清单
 
-完全退出旧客户端，再从同级候选目录启动：
+完全退出旧客户端，再从已合入的主目录启动：
 
 ```powershell
-Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
+Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry'
 .\gradlew.bat runClient
 ```
 
-| 待验项目 | 操作与预期 |
+| 已验项目 | 操作与预期 |
 | :--- | :--- |
 | 1. JEI和显示 | 查询青金石粉及冷却剂配方；名称、粉末图标正常，两道配方数量正确，搅拌无加热要求。 |
 | 2. 青金石加工 | 1青金石经过粉碎轮得到1粉；磨石仍产蓝色染料。 |
 | 3. 无热制液与取液 | 不放燃烧室，将三粉各1和1000mB水投入有动力的搅拌器/工作盆；产出1000mB冷却剂，用现有桶或管道正常取走。 |
 
-当前仅等待这三项，不重复02E功能清单，不提前推进反应堆制造、热端或封存。主目录`runClient`已有02E及模型R2修复，但尚无本批新物品和配方。
+三项人工门已解除，主目录runClient现已包含青金石粉与无热冷却剂配方；不因本次制造验收直接推进未冻结的热端或封存实现。
 
 ## 实现、审查与证据
 
@@ -38,7 +38,7 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 - 临时外部标签探针只模拟`minecraft:flint`加入`c:dusts/lapis`，不是第三方模组实测。复跑该GameTest前将[两文件数据包](./evidence/simulated-external-datapack/pack.mcmeta)放入`build/gametest-coolant-production/world/datapacks/coolant-compat-pack/`；完整相对路径与内容见实施报告。测试依次禁用、启用、禁用并重载，最后确认成员移除。fixture未进入发布资源或用户存档。
 - 测试追加的根目录两份受跟踪日志已由PM保存到候选`build/reports/extension/EXT-A-MATERIAL-01B/evidence/root-logs/`后恢复，未夹带提交。主工程用户`.vscode/launch.json`保持原改动。
 
-JAR：候选`build/libs/create_nuclear_industry-0.1.0.jar`，SHA-256：
+01B交付时JAR：候选`build/libs/create_nuclear_industry-0.1.0.jar`，SHA-256：
 
 ```text
 67A2F0F39278DCD5B27F88ECC4A1B61FEF20CFF7BFCCCEDD3C921E272F6D1880
