@@ -1,0 +1,149 @@
+{
+  "task": "EXT-A-FUEL-02E",
+  "units": "16 model units = 1 block",
+  "origin": "north-facing controller minimum corner (0,0,0)",
+  "axes": {
+    "x": "east",
+    "y": "up",
+    "z": "south"
+  },
+  "part_formula": "part=x+2*z+4*y, each of x/y/z in {0,1}",
+  "machine_bounds": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      32,
+      32,
+      32
+    ]
+  ],
+  "world_rotation_pivot": [
+    8,
+    8
+  ],
+  "world_rotation_rule": "all blocks and partials rotate by facing around the controller block center x=8,z=8; preview may translate the result only to center the canvas",
+  "shaft": {
+    "center": [
+      8,
+      0,
+      8
+    ],
+    "axis": "Y",
+    "source": "Create native shaft"
+  },
+  "parts": {
+    "left_arm": {
+      "pivot": [
+        9,
+        21,
+        15
+      ],
+      "axis": "+X",
+      "travel": [
+        0,
+        1
+      ],
+      "idle_bounds": [
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          13,
+          23,
+          22
+        ]
+      ],
+      "swept_bounds": [
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          14,
+          23,
+          22
+        ]
+      ]
+    },
+    "right_arm": {
+      "pivot": [
+        23,
+        21,
+        15
+      ],
+      "axis": "-X",
+      "travel": [
+        0,
+        1
+      ],
+      "idle_bounds": [
+        [
+          19,
+          13,
+          10
+        ],
+        [
+          25,
+          23,
+          22
+        ]
+      ],
+      "swept_bounds": [
+        [
+          18,
+          13,
+          10
+        ],
+        [
+          25,
+          23,
+          22
+        ]
+      ]
+    },
+    "fixture": {
+      "pivot": [
+        16,
+        13,
+        16
+      ],
+      "axis": "+Y",
+      "travel": [
+        0,
+        3
+      ],
+      "idle_bounds": [
+        [
+          13,
+          11,
+          12
+        ],
+        [
+          19,
+          18,
+          20
+        ]
+      ],
+      "swept_bounds": [
+        [
+          13,
+          11,
+          12
+        ],
+        [
+          19,
+          21,
+          20
+        ]
+      ]
+    }
+  },
+  "static_clearance": "moving x=7..25,y=11..23,z=10..22; inner rails stop at x<=6 or x>=26, top frame y>=26, floor/plinth y<=11; contact at fixture base y=11 is intended",
+  "render_contract": "controller renders all three partials once at idle in controller-origin coordinates; proxies render static shell only"
+}

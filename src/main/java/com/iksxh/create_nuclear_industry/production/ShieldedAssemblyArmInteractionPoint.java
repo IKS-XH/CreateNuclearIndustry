@@ -15,15 +15,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-/**
- * Create机械臂只向机顶投四料。成品必须经水平面漏斗接外置置物台；
- * 禁止将顶部四槽误识别为机械臂可取出的产物槽。
- */
+    /** Create机械臂只向有效外表面投四料；成品继续经侧面漏斗接外置置物台。 */
 public final class ShieldedAssemblyArmInteractionPoint extends ArmInteractionPoint {
     public static final ArmInteractionPointType TYPE = new ArmInteractionPointType() {
         @Override public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
-            return level != null && state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())
-                    && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity;
+            return level != null && ShieldedAssemblyStructure.master(level, pos, state) != null;
         }
         @Override public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
             return new ShieldedAssemblyArmInteractionPoint(this, level, pos, state);
@@ -49,8 +45,19 @@ public final class ShieldedAssemblyArmInteractionPoint extends ArmInteractionPoi
         mode = Mode.DEPOSIT;
     }
     @Override public ItemStack insert(ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate) {
-        if (!isValid() || !(level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine)) return stack.copy();
-        var port = machine.itemPort(net.minecraft.core.Direction.UP);
+        if (!isValid()) return stack.copy();
+        ShieldedAssemblyBlockEntity machine = ShieldedAssemblyStructure.master(level, pos, level.getBlockState(pos));
+        if (machine == null) return stack.copy();
+        int part = ShieldedAssemblyLayout.partAt(machine.getBlockPos(),
+                machine.getBlockState().getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING), pos);
+        net.minecraft.core.Direction side = part >= 4 ? net.minecraft.core.Direction.UP : null;
+        if (side == null) for (net.minecraft.core.Direction candidate : net.minecraft.core.Direction.Plane.HORIZONTAL)
+            if (ShieldedAssemblyLayout.exterior(part, machine.getBlockState().getValue(
+                    net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING), candidate)) {
+                side = candidate;
+                break;
+            }
+        var port = machine.itemPort(pos, side);
         if (port == null) return stack.copy();
         return net.neoforged.neoforge.items.ItemHandlerHelper.insertItem(port, stack, simulate);
     }

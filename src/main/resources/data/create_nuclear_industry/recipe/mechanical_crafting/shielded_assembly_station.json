@@ -1,0 +1,14 @@
+{
+  "type": "create:mechanical_crafting",
+  "category": "misc",
+  "accept_mirrored": false,
+  "key": {
+    "L": { "tag": "c:plates/lead" },
+    "S": { "tag": "c:plates/steel" },
+    "D": { "item": "create:deployer" },
+    "R": { "item": "create_nuclear_industry:radiation_sensor" }
+  },
+  "pattern": [" LLL ", "LSSSL", "LDRDL", "LSSSL", " LLL "],
+  "result": { "id": "create_nuclear_industry:shielded_assembly_station", "count": 1 },
+  "show_notification": false
+}

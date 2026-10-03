@@ -11,6 +11,8 @@ import com.iksxh.create_nuclear_industry.production.FuelSinteringBlockEntity;
 import com.iksxh.create_nuclear_industry.production.FuelSinteringRecipe;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlock;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyPartBlock;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyPartBlockEntity;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyRecipe;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -77,6 +79,10 @@ public final class FuelProcessingContent {
     public static final DeferredItem<BlockItem> SHIELDED_ASSEMBLY_STATION_ITEM = ITEMS.register(
             "shielded_assembly_station", () -> new BlockItem(SHIELDED_ASSEMBLY_STATION.get(),
                     new Item.Properties().stacksTo(1)));
+    /** 七个代理只随主控一件物品生成，因此仅注册方块而不注册可得物品。 */
+    public static final DeferredBlock<ShieldedAssemblyPartBlock> SHIELDED_ASSEMBLY_PART = BLOCKS.register(
+            "shielded_assembly_part", () -> new ShieldedAssemblyPartBlock(BlockBehaviour.Properties
+                    .ofFullCopy(Blocks.IRON_BLOCK).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));
 
     public static final DeferredHolder<FluidType, FluidType> URANIUM_SLURRY_TYPE = FLUID_TYPES.register("uranium_slurry",
             () -> new FluidType(FluidType.Properties.create().descriptionId("fluid_type.create_nuclear_industry.uranium_slurry")
@@ -119,6 +125,9 @@ public final class FuelProcessingContent {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShieldedAssemblyBlockEntity>> SHIELDED_ASSEMBLY_BE =
             BLOCK_ENTITIES.register("shielded_assembly_station", () -> BlockEntityType.Builder.of(
                     ShieldedAssemblyBlockEntity::new, SHIELDED_ASSEMBLY_STATION.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShieldedAssemblyPartBlockEntity>> SHIELDED_ASSEMBLY_PART_BE =
+            BLOCK_ENTITIES.register("shielded_assembly_part", () -> BlockEntityType.Builder.of(
+                    ShieldedAssemblyPartBlockEntity::new, SHIELDED_ASSEMBLY_PART.get()).build(null));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGING_TYPE =
             RECIPE_TYPES.register("centrifuging", () -> new RecipeType<>() {});
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CentrifugeRecipe>> CENTRIFUGING_SERIALIZER =

@@ -1,0 +1,284 @@
+{
+  "variants": {
+    "facing=north,part=1,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_off",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=2,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_off",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=3,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_off",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=4,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_off",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=5,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_off",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=6,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_off",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=7,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_off",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=1,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_on",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=2,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_on",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=3,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_on",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=4,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_on",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=5,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_on",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=6,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_on",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,part=7,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_on",
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=east,part=1,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_off",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=2,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_off",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=3,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_off",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=4,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_off",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=5,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_off",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=6,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_off",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=7,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_off",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=1,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=2,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=3,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=4,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=5,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=6,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,part=7,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,part=1,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_off",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=2,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_off",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=3,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_off",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=4,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_off",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=5,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_off",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=6,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_off",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=7,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_off",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=1,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=2,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=3,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=4,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=5,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=6,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,part=7,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,part=1,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_off",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=2,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_off",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=3,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_off",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=4,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_off",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=5,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_off",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=6,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_off",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=7,working=false": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_off",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=1,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_1_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=2,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_2_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=3,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_3_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=4,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_4_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=5,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_5_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=6,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_6_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,part=7,working=true": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/parts/part_7_on",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

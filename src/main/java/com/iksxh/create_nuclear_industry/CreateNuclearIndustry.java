@@ -9,6 +9,8 @@ import com.iksxh.create_nuclear_industry.content.OreContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyArmInteractionPoint;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyStructure;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.iksxh.create_nuclear_industry.worldgen.OreGenerationFilter;
@@ -51,8 +53,11 @@ public final class CreateNuclearIndustry {
         OreContent.register(modEventBus);
         BasicMaterialContent.register(modEventBus);
         FuelProcessingContent.register(modEventBus);
+        // 八格任一分块均不可被Create构造单独搬移，搬迁必须走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
                 state.is(FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get())
+                        || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())
+                        || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get())
                         ? BlockMovementChecks.CheckResult.FAIL : BlockMovementChecks.CheckResult.PASS);
         OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);
@@ -64,6 +69,7 @@ public final class CreateNuclearIndustry {
         P0ProbeBlockEntities.register(modEventBus);
         FuelRefuelingArmInteractionPoint.register(modEventBus);
         ShieldedAssemblyArmInteractionPoint.register(modEventBus);
+        NeoForge.EVENT_BUS.addListener(ShieldedAssemblyBlock::guardBreak);
         modEventBus.addListener(ControlRodSliderNetwork::registerPayloads);
         modEventBus.addListener(CreateNuclearIndustry::registerPonder);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
@@ -133,9 +139,13 @@ public final class CreateNuclearIndustry {
                 (machine, side) -> machine.itemPort(side));
     }
 
-    /** 装配台顶面只收四料，水平四面共享唯一成品槽，底部轴和未指定面无物料能力。 */
+    /** 八格外露侧面共享五槽，顶面仅投料；代理逐次核验唯一主控与完整性。 */
     private static void registerShieldedAssemblyCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FuelProcessingContent.SHIELDED_ASSEMBLY_BE.get(),
                 (machine, side) -> machine.itemPort(side));
+        event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
+            var master = ShieldedAssemblyStructure.master(level, pos, state);
+            return master == null ? null : master.itemPort(pos, side);
+        }, FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get());
     }
 }

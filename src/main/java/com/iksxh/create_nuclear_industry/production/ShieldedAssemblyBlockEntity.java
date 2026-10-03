@@ -8,6 +8,7 @@ import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import java.util.List;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -22,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 
 /**
- * 单格装配台的服务端状态所有者。Create轴网只提供速度与过载判定；四料、成品和工时
+ * 八格装配台主控的服务端状态所有者。Create轴网只提供速度与过载判定；四料、成品和工时
  * 只写在同一个账本，客户端同步仅供渲染与护目镜展示，任何物料事务均在服务端完成。
  */
 public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implements IHaveGoggleInformation {
@@ -32,6 +33,7 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
             CreateNuclearIndustry.MOD_ID, "shielded_assembly/fresh_fuel_assembly");
     private final ShieldedAssemblyState state = new ShieldedAssemblyState();
     private boolean removalHandled;
+    private UUID ownerId;
 
     public ShieldedAssemblyBlockEntity(BlockPos pos, BlockState blockState) {
         super(FuelProcessingContent.SHIELDED_ASSEMBLY_BE.get(), pos, blockState);
@@ -47,6 +49,11 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     public ShieldedAssemblyState state() { return state; }
     public boolean isRemovalHandled() { return removalHandled; }
     public void markRemovalHandled() { removalHandled = true; }
+    public UUID ownerId() { return ownerId; }
+    public boolean matchesOwner(UUID id) { return ownerId != null && ownerId.equals(id); }
+    public void setOwnerId(UUID id) { ownerId = id; changed(); }
+    public boolean expanded() { return getBlockState().getValue(ShieldedAssemblyBlock.EXPANDED); }
+    public boolean complete() { return ShieldedAssemblyStructure.complete(this); }
     public boolean current() {
         return level != null && !isRemoved() && level.getBlockEntity(worldPosition) == this
                 && level.getBlockState(worldPosition).is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get());
@@ -56,17 +63,19 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     @Override public void tick() {
         super.tick();
         if (level == null || level.isClientSide || !current()) return;
-        boolean recipe = recipeReady();
+        boolean structure = complete();
+        boolean recipe = structure && recipeReady();
         int oldProgress = state.progress();
-        if (!recipe && oldProgress > 0) {
+        if (structure && !recipe && oldProgress > 0) {
             state.invalidateProgress();
             changed();
         }
-        boolean working = recipe && state.ready() && state.outputEmpty()
+        boolean working = structure && recipe && state.ready() && state.outputEmpty()
                 && !isOverStressed() && Math.abs(getSpeed()) >= 32;
         BlockState blockState = getBlockState();
         if (blockState.getValue(ShieldedAssemblyBlock.WORKING) != working)
             level.setBlock(worldPosition, blockState.setValue(ShieldedAssemblyBlock.WORKING, working), 3);
+        ShieldedAssemblyStructure.syncWorking(this, working);
         if (working && state.advance(getSpeed(), new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get()))) {
             setChanged();
             if (state.progress() == 0 || oldProgress / 256 != state.progress() / 256) sendData();
@@ -112,11 +121,17 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
         };
     }
 
-    public IItemHandler itemPort(Direction side) {
-        return side == null || side == Direction.DOWN ? null : new Port(side);
+    public IItemHandler itemPort(BlockPos portPos, Direction side) {
+        if (side == null || side == Direction.DOWN || !complete()) return null;
+        int part = ShieldedAssemblyLayout.partAt(worldPosition,
+                getBlockState().getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING), portPos);
+        if (part < 0 || !ShieldedAssemblyLayout.exterior(part,
+                getBlockState().getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING), side)) return null;
+        return new Port(portPos, part, side);
     }
+    public IItemHandler itemPort(Direction side) { return itemPort(worldPosition, side); }
     public ItemStack insert(ItemStack stack) {
-        if (!current()) return stack.copy();
+        if (!complete()) return stack.copy();
         for (int slot = 0; slot < 4; slot++) if (accepts(slot, stack)) {
             ItemStack remainder = state.insert(slot, stack, false);
             if (remainder.getCount() != stack.getCount()) changed();
@@ -158,13 +173,17 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     @Override protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
         tag.put("ShieldedAssembly", state.save(registries));
+        if (ownerId != null) tag.putUUID("ShieldedAssemblyOwner", ownerId);
     }
     @Override protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
         state.load(tag.getCompound("ShieldedAssembly"), registries);
+        ownerId = tag.hasUUID("ShieldedAssemblyOwner") ? tag.getUUID("ShieldedAssemblyOwner") : null;
     }
 
     private String waitReason() {
+        if (!expanded()) return "legacy";
+        if (!complete()) return "structure";
         if (!recipeReady()) return "recipe";
         if (!state.ready()) return "input";
         if (!state.outputEmpty()) return "output";
@@ -192,32 +211,43 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     }
 
     private final class Port implements IItemHandler {
+        private final BlockPos portPos;
+        private final int part;
         private final Direction side;
-        private Port(Direction side) { this.side = side; }
-        private boolean valid() { return current(); }
-        @Override public int getSlots() { return !valid() ? 0 : side == Direction.UP ? 4 : 1; }
+        private Port(BlockPos portPos, int part, Direction side) {
+            this.portPos = portPos.immutable(); this.part = part; this.side = side;
+        }
+        private boolean valid() {
+            if (!complete() || level == null || !level.hasChunkAt(portPos)) return false;
+            BlockState portState = level.getBlockState(portPos);
+            return ShieldedAssemblyStructure.master(level, portPos, portState) == ShieldedAssemblyBlockEntity.this
+                    && ShieldedAssemblyLayout.exterior(part,
+                    getBlockState().getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING), side);
+        }
+        @Override public int getSlots() { return !valid() ? 0 : side == Direction.UP ? 4 : 5; }
         @Override public ItemStack getStackInSlot(int slot) {
             if (!valid()) return ItemStack.EMPTY;
-            return side == Direction.UP ? state.input(slot) : slot == 0 ? state.output() : ItemStack.EMPTY;
+            return slot >= 0 && slot < 4 ? state.input(slot)
+                    : side != Direction.UP && slot == 4 ? state.output() : ItemStack.EMPTY;
         }
         @Override public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (!valid() || side != Direction.UP || !isItemValid(slot, stack)) return stack.copy();
+            if (!valid() || !isItemValid(slot, stack)) return stack.copy();
             ItemStack remainder = state.insert(slot, stack, simulate);
             if (!simulate && remainder.getCount() != stack.getCount()) changed();
             return remainder;
         }
         @Override public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (!valid() || side == Direction.UP || slot != 0) return ItemStack.EMPTY;
+            if (!valid() || side == Direction.UP || slot != 4) return ItemStack.EMPTY;
             ItemStack extracted = state.extractOutput(amount, simulate);
             if (!simulate && !extracted.isEmpty()) changed();
             return extracted;
         }
         @Override public int getSlotLimit(int slot) {
-            return !valid() ? 0 : side == Direction.UP && slot >= 0 && slot < 4 ? 64
-                    : side != Direction.UP && slot == 0 ? 1 : 0;
+            return !valid() ? 0 : slot >= 0 && slot < 4 ? 64
+                    : side != Direction.UP && slot == 4 ? 1 : 0;
         }
         @Override public boolean isItemValid(int slot, ItemStack stack) {
-            return valid() && side == Direction.UP && accepts(slot, stack);
+            return valid() && accepts(slot, stack);
         }
     }
 }

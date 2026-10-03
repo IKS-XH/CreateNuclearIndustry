@@ -6,6 +6,8 @@ import com.simibubi.create.content.equipment.wrench.WrenchItem;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -24,8 +26,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,28 +41,38 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
-/** 单格无GUI动力机器，水平朝向只影响外观；底部轴、顶部投料和水平出料始终固定。 */
+/** 八格机器的唯一动力主控；expanded=false 只标识旧世界中的单格机器。 */
 public final class ShieldedAssemblyBlock extends HorizontalKineticBlock
         implements IBE<ShieldedAssemblyBlockEntity>, IWrenchable {
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
+    public static final BooleanProperty EXPANDED = BooleanProperty.create("expanded");
     private static final String PORTABLE_KEY = "CniShieldedAssembly";
 
     public ShieldedAssemblyBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-                .setValue(WORKING, false));
+                .setValue(WORKING, false).setValue(EXPANDED, false));
     }
     @Override public Direction.Axis getRotationAxis(BlockState state) { return Direction.Axis.Y; }
     @Override public boolean hasShaftTowards(LevelReader level, BlockPos pos, BlockState state, Direction face) {
-        return face == Direction.DOWN;
+        return state.getValue(EXPANDED) && face == Direction.DOWN;
     }
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(WORKING);
+        builder.add(WORKING, EXPANDED);
     }
+    /** 放置前检查全部八格及玩家权限；原版在返回null时不消耗物品。 */
     @Override public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING,
-                context.getHorizontalDirection().getOpposite());
+        Direction facing = context.getHorizontalDirection().getOpposite();
+        Level level = context.getLevel();
+        for (int part = 0; part < 8; part++) {
+            BlockPos at = ShieldedAssemblyLayout.position(context.getClickedPos(), facing, part);
+            if (!level.hasChunkAt(at) || !level.getBlockState(at).canBeReplaced(context)
+                    || context.getPlayer() != null && (!level.mayInteract(context.getPlayer(), at)
+                    || !context.getPlayer().mayUseItemAt(at, context.getClickedFace(), context.getItemInHand())))
+                return null;
+        }
+        return defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facing).setValue(EXPANDED, true);
     }
     @Override public Class<ShieldedAssemblyBlockEntity> getBlockEntityClass() { return ShieldedAssemblyBlockEntity.class; }
     @Override public BlockEntityType<? extends ShieldedAssemblyBlockEntity> getBlockEntityType() {
@@ -68,34 +80,58 @@ public final class ShieldedAssemblyBlock extends HorizontalKineticBlock
     }
     @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
 
-    /** 掉落查询仅给机器物品附加账本快照；实际移除回调负责恰好一次回收。 */
-    @Override public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-        List<ItemStack> drops = super.getDrops(state, builder);
-        if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ShieldedAssemblyBlockEntity machine)
-            for (ItemStack drop : drops) if (drop.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get()))
-                drop.set(DataComponents.CUSTOM_DATA, CustomData.of(portableTag(machine)));
-        return drops;
-    }
-    private static CompoundTag portableTag(ShieldedAssemblyBlockEntity machine) {
-        CompoundTag tag = new CompoundTag();
-        tag.put(PORTABLE_KEY, machine.savePortableData());
-        return tag;
-    }
+    /** 载入旧便携账本后建立七个无库存代理；异常放置失败时清理已放代理和主控。 */
     @Override public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine) {
-            CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-            if (data != null && data.copyTag().contains(PORTABLE_KEY))
-                machine.loadPortableData(data.copyTag().getCompound(PORTABLE_KEY));
+        if (level.isClientSide || !state.getValue(EXPANDED)
+                || !(level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine)) return;
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        if (data != null && data.copyTag().contains(PORTABLE_KEY))
+            machine.loadPortableData(data.copyTag().getCompound(PORTABLE_KEY));
+        UUID owner = UUID.randomUUID();
+        machine.setOwnerId(owner);
+        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        List<BlockPos> placedParts = new ArrayList<>();
+        for (int part = 1; part < 8; part++) {
+            BlockPos at = ShieldedAssemblyLayout.position(pos, facing, part);
+            BlockState proxy = FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get().defaultBlockState()
+                    .setValue(BlockStateProperties.HORIZONTAL_FACING, facing)
+                    .setValue(ShieldedAssemblyPartBlock.PART, part);
+            boolean placed = level.hasChunkAt(at) && level.getBlockState(at).canBeReplaced()
+                    && level.setBlock(at, proxy, 3);
+            if (placed) placedParts.add(at);
+            if (!placed || !(level.getBlockEntity(at) instanceof ShieldedAssemblyPartBlockEntity proxyEntity)) {
+                machine.markRemovalHandled();
+                for (BlockPos made : placedParts)
+                    if (level.getBlockState(made).is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get()))
+                        level.setBlock(made, Blocks.AIR.defaultBlockState(), 35);
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 35);
+                if (placer instanceof Player player && !player.getAbilities().instabuild)
+                    player.getInventory().placeItemBackInInventory(stack.copyWithCount(1));
+                return;
+            }
+            proxyEntity.bind(pos, owner);
+            level.invalidateCapabilities(at);
         }
+        level.invalidateCapabilities(pos);
     }
 
-    /** 原版销毁回调在实体移除后才运行，先保存完整机器物品并阻止重复掉落。 */
+    /** 主控与代理的普通挖掘、扳手和异常替换共享这一份携带快照。 */
+    public static ItemStack portable(ShieldedAssemblyBlockEntity machine) {
+        ItemStack stack = new ItemStack(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get());
+        CompoundTag wrapper = new CompoundTag();
+        wrapper.put(PORTABLE_KEY, machine.savePortableData());
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(wrapper));
+        return stack;
+    }
+    /** 通用掉落查询不产物；玩家预拆或onRemove负责唯一携物，避免destroyBlock(true)双掉。 */
+    @Override public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) { return List.of(); }
     @Override public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine) {
-            if (!player.isCreative() && state.canHarvestBlock(level, pos, player))
-                Block.dropResources(state, level, pos, machine, player, player.getMainHandItem());
+            if (!player.isCreative())
+                Block.popResource(level, pos, portable(machine));
             machine.markRemovalHandled();
+            ShieldedAssemblyStructure.removeParts(machine);
         }
         return super.playerWillDestroy(level, pos, state, player);
     }
@@ -106,66 +142,106 @@ public final class ShieldedAssemblyBlock extends HorizontalKineticBlock
     }
     @Override public void onRemove(BlockState state, Level level, BlockPos pos, BlockState next, boolean moving) {
         if (!state.is(next.getBlock()) && !level.isClientSide && !level.restoringBlockSnapshots
-                && !level.captureBlockSnapshots && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine
-                && !machine.isRemovalHandled()) {
-            ItemStack portable = new ItemStack(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get());
-            portable.set(DataComponents.CUSTOM_DATA, CustomData.of(portableTag(machine)));
-            machine.markRemovalHandled();
-            Block.popResource(level, pos, portable);
+                && !level.captureBlockSnapshots && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine) {
+            if (!machine.isRemovalHandled()) {
+                Block.popResource(level, pos, portable(machine));
+                machine.markRemovalHandled();
+            }
+            ShieldedAssemblyStructure.removeParts(machine);
         }
         super.onRemove(state, level, pos, next, moving);
         if (!state.is(next.getBlock()) && !level.isClientSide) level.invalidateCapabilities(pos);
     }
-    @Override public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
-        if (level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine) machine.markRemovalHandled();
-        super.onBlockExploded(state, level, pos, explosion);
-    }
     @Override public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-        BlockState rotated = getRotatedBlockState(state, context.getClickedFace());
-        if (rotated == state) return InteractionResult.PASS;
-        if (!context.getLevel().isClientSide) context.getLevel().setBlock(context.getClickedPos(), rotated, 3);
-        IWrenchable.playRotateSound(context.getLevel(), context.getClickedPos());
+        if (!context.getLevel().isClientSide && context.getPlayer() != null)
+            context.getPlayer().displayClientMessage(Component.translatable(
+                    "gui.create_nuclear_industry.shielded_assembly.relocate"), true);
         return InteractionResult.SUCCESS;
     }
-    /** 潜行扳手经破坏事件门后收回单件携物机器，普通移除不再掉第二份。 */
     @Override public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
+        return wrenchPickup(context, context.getClickedPos(), state);
+    }
+    /** 普通挖掘在跨区块未加载时拒绝，避免代理先消失而主控账本无法封存。 */
+    public static void guardBreak(BlockEvent.BreakEvent event) {
+        if (!(event.getLevel() instanceof Level level)) return;
+        BlockPos pos = event.getPos();
+        BlockState state = event.getState();
+        if (state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())
+                && state.getValue(EXPANDED)
+                && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity master
+                && !ShieldedAssemblyStructure.allLoaded(master)) rejectUnloaded(event);
+        if (state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get())
+                && level.getBlockEntity(pos) instanceof ShieldedAssemblyPartBlockEntity proxy) {
+            BlockPos masterPos = proxy.masterPos();
+            if (masterPos != null && !level.hasChunkAt(masterPos)) { rejectUnloaded(event); return; }
+            ShieldedAssemblyBlockEntity master = ShieldedAssemblyStructure.master(level, pos, state);
+            if (master != null && !ShieldedAssemblyStructure.allLoaded(master)) rejectUnloaded(event);
+        }
+    }
+    private static void rejectUnloaded(BlockEvent.BreakEvent event) {
+        event.setCanceled(true);
+        if (event.getPlayer() != null) event.getPlayer().displayClientMessage(Component.translatable(
+                "gui.create_nuclear_industry.shielded_assembly.wait.structure"), true);
+    }
+    static InteractionResult wrenchPickup(UseOnContext context, BlockPos pos, BlockState state) {
         Level level = context.getLevel();
-        if (!(level instanceof ServerLevel server)) return InteractionResult.SUCCESS;
-        BlockPos pos = context.getClickedPos();
+        if (!(level instanceof ServerLevel)) return InteractionResult.SUCCESS;
+        ShieldedAssemblyBlockEntity machine = state.getBlock() instanceof ShieldedAssemblyBlock
+                ? level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity found ? found : null
+                : ShieldedAssemblyStructure.master(level, pos, state);
         Player player = context.getPlayer();
-        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(level, pos, state, player);
-        NeoForge.EVENT_BUS.post(event);
-        if (event.isCanceled()) return InteractionResult.SUCCESS;
-        if (player != null && !player.isCreative())
-            Block.getDrops(state, server, pos, level.getBlockEntity(pos), player, context.getItemInHand())
-                    .forEach(drop -> player.getInventory().placeItemBackInInventory(drop));
-        if (level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine) machine.markRemovalHandled();
-        state.spawnAfterBreak(server, pos, ItemStack.EMPTY, true);
+        if (machine == null || machine.expanded() && !ShieldedAssemblyStructure.allLoaded(machine)) {
+            if (player != null) player.displayClientMessage(Component.translatable(
+                    "gui.create_nuclear_industry.shielded_assembly.wait.structure"), true);
+            return InteractionResult.SUCCESS;
+        }
+        if (NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player)).isCanceled())
+            return InteractionResult.SUCCESS;
+        if (player != null && !player.isCreative()) player.getInventory().placeItemBackInInventory(portable(machine));
+        machine.markRemovalHandled();
+        ShieldedAssemblyStructure.removeParts(machine, pos);
+        if (!pos.equals(machine.getBlockPos())) level.setBlock(machine.getBlockPos(), Blocks.AIR.defaultBlockState(), 35);
         level.destroyBlock(pos, false);
         IWrenchable.playRemoveSound(level, pos);
         return InteractionResult.SUCCESS;
     }
-    @Override protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                                         Player player, InteractionHand hand, BlockHitResult hit) {
+    static ItemInteractionResult useItem(ItemStack stack, Level level, BlockPos pos, BlockState state, Player player) {
         if (stack.getItem() instanceof WrenchItem) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         boolean material = false;
         for (int slot = 0; slot < 4; slot++) if (ShieldedAssemblyBlockEntity.accepts(slot, stack)) material = true;
         if (!material) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine) {
-            ItemStack remainder = machine.insert(stack);
-            if (!player.getAbilities().instabuild) stack.shrink(stack.getCount() - remainder.getCount());
+        if (!level.isClientSide) {
+            ShieldedAssemblyBlockEntity machine = state.getBlock() instanceof ShieldedAssemblyBlock
+                    ? level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity found ? found : null
+                    : ShieldedAssemblyStructure.master(level, pos, state);
+            if (machine != null) {
+                ItemStack remainder = machine.insert(stack);
+                if (!player.getAbilities().instabuild) stack.shrink(stack.getCount() - remainder.getCount());
+            }
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
-    @Override protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
-                                                          BlockHitResult hit) {
+    static InteractionResult useEmpty(Level level, BlockPos pos, BlockState state, Player player) {
         if (!player.getMainHandItem().isEmpty()) return InteractionResult.PASS;
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity machine) {
-            int taken = machine.takeToPlayer(player, player.isShiftKeyDown());
-            if (taken == 0) player.displayClientMessage(Component.translatable(
-                    "gui.create_nuclear_industry.shielded_assembly.status", machine.waitStatus(), machine.state().progress(),
-                    ShieldedAssemblyState.WORK, Math.round(machine.getSpeed())), true);
+        if (!level.isClientSide) {
+            ShieldedAssemblyBlockEntity machine = state.getBlock() instanceof ShieldedAssemblyBlock
+                    ? level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity found ? found : null
+                    : ShieldedAssemblyStructure.master(level, pos, state);
+            if (machine != null) {
+                int taken = machine.takeToPlayer(player, player.isShiftKeyDown());
+                if (taken == 0) player.displayClientMessage(Component.translatable(
+                        "gui.create_nuclear_industry.shielded_assembly.status", machine.waitStatus(),
+                        machine.state().progress(), ShieldedAssemblyState.WORK, Math.round(machine.getSpeed())), true);
+            }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+    @Override protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                         Player player, InteractionHand hand, BlockHitResult hit) {
+        return useItem(stack, level, pos, state, player);
+    }
+    @Override protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
+                                                          BlockHitResult hit) {
+        return useEmpty(level, pos, state, player);
     }
 }
