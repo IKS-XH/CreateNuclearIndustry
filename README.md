@@ -24,7 +24,7 @@ P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，�
 
 三矿获取、粉碎与素材批，以及铅锡直熔、水洗9粒、粒锭合拆、压板和新素材，均已于2026-10-01完成人工验收并合入main，见[铅锡收尾记录](docs/reviews/2026-10-01/material-02-acceptance.md)。铁粉与煤/木炭粉→4+1搅拌成5钢粉→熔炼钢锭→现有钢板也已[验收并合入main](docs/reviews/2026-10-01/material-03b/README.md)，物品名现简称“钢”；旧遥测测试调度异常已修复，GameTest断言通过后的保存停滞单列为环境限制。[锡条、两种传感器及五项素材](docs/reviews/2026-10-01/material-04/ACCEPTANCE.md)和[石英粉、耐火砖、重型轴承及4项SVG](docs/reviews/2026-10-02/material-05/ACCEPTANCE.md)均已完成人工验收并合入main。
 
-[铀原料加工与两格富集离心机](docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与整格燃料烧结炉](docs/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[装配材料02C](docs/reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)及[八格屏蔽装配台02E](docs/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)功能手测均通过并合入main，从主目录runClient即可使用。02E模型共面闪烁已修复并通过几何/打包核对，修后画面未再次人工确认；[青金石粉与无热冷却剂制备01B](docs/reviews/2026-10-03/material-01b/README.md)已在同级候选工作树实现，6项定向GameTest与5项合同测试通过，待三项客户端验收，尚未合入main。模型活动件已拆分，动画另批；按[改动范围验证](docs/project-governance.md#51-按改动范围验证2026-10-02起生效)，不重复全量回归。铅锡水洗副产物暂缓，完整生存生产和发电链尚未完成，见[实施路线图](docs/implementation-roadmap.md)。
+[铀原料加工与两格富集离心机](docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与整格燃料烧结炉](docs/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[装配材料02C](docs/reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)及[八格屏蔽装配台02E](docs/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)功能手测均通过并合入main，从主目录runClient即可使用。02E模型共面闪烁已修复并通过几何/打包核对，修后画面未再次人工确认；[青金石粉与无热冷却剂01B、固定实验堆生存制造01](docs/reviews/2026-10-03/reactor-01/README.md)已在同级候选工作树实现并通过定向验证与复审，按用户要求合并等待客户端验收，尚未合入main；本批补齐7种材料与16条反应堆制造配方。模型活动件已拆分，动画另批；按[改动范围验证](docs/project-governance.md#51-按改动范围验证2026-10-02起生效)，不重复全量回归。铅锡水洗副产物暂缓，完整生存生产和发电链尚未完成，见[实施路线图](docs/implementation-roadmap.md)。
 
 ## 设计方向
 

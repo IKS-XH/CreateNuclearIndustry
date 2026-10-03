@@ -1,0 +1,58 @@
+{
+  "task": "EXT-A-REACTOR-01",
+  "baseCommit": "5353152867a6c4b6ecb4f1ec0f74c20849ae24d5",
+  "candidateHeadAtReport": "3d43df9e229e711c6bb1b3cc6aceb37eda5ee7c5",
+  "gameTestNamespace": "create_nuclear_industry_reactor_crafting",
+  "gameTestDirectory": "build/gametest-reactor-crafting",
+  "executions": [
+    {
+      "command": ".\\gradlew.bat test --tests com.iksxh.create_nuclear_industry.P1DataContractTest runGameTestServer -PgameTestNamespace=create_nuclear_industry_reactor_crafting -PgameTestDirectory=build/gametest-reactor-crafting assemble --console=plain",
+      "result": "compileJava and compileTestJava succeeded; P1DataContractTest passed 5/5; GameTest setup failed before tests because the template was fully qualified and NeoForge prefixed its namespace again"
+    },
+    {
+      "command": ".\\gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_reactor_crafting -PgameTestDirectory=build/gametest-reactor-crafting assemble --console=plain",
+      "result": "BUILD SUCCESSFUL; all 7 required GameTests passed; assemble passed"
+    },
+    {
+      "command": "C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe tools/art-assets/reactor_01_assets.py",
+      "result": "exit code 0; 24 game/generated target PNG SHA-256 values unchanged; prior non-target game PNG SHA-256 comparison passed"
+    }
+  ],
+  "unitTest": {
+    "suite": "com.iksxh.create_nuclear_industry.P1DataContractTest",
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "gameTests": {
+    "required": 7,
+    "passed": 7,
+    "failed": 0,
+    "names": [
+      "workbenchRecipesMatchTheFixedReactorParts",
+      "ceramicAndConcreteMixingUseTheirDeclaredHeatAndInputs",
+      "realHeatedMixerProducesIndustrialCeramicOnlyAfterFuel",
+      "realUnheatedMixerProducesOneShieldingConcrete",
+      "nativeAssemblyRecipesIncludeTheLongestPortSequence",
+      "craftedOutputsRemainLegalFormalStructureBlocks",
+      "realDeployerAndPressCompleteRefuelingPortAssembly"
+    ]
+  },
+  "recipes": 16,
+  "newLanguageKeys": {
+    "en_us": 12,
+    "zh_cn": 12
+  },
+  "targetPngHashesUnchanged": 24,
+  "jar": "build/libs/create_nuclear_industry-0.1.0.jar",
+  "jarSha256": "E457541CAA5691454D592BA5825D86A7098B7D6129F5FCD2AE44976655A61942",
+  "rawEvidence": {
+    "p1DataContractJUnitXml": "build/test-results/test/TEST-com.iksxh.create_nuclear_industry.P1DataContractTest.xml",
+    "successfulGameTestServerLog": "build/gametest-reactor-crafting/logs/latest.log",
+    "firstGameTestCrashReport": "build/gametest-reactor-crafting/crash-reports/crash-2026-10-03_18.06.00-server.txt",
+    "jarFile": "build/libs/create_nuclear_industry-0.1.0.jar",
+    "artResourceCheck": "build/reports/extension/EXT-A-REACTOR-01-ART/resource-check.json"
+  },
+  "manualClientAcceptance": "pending"
+}

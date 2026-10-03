@@ -14,7 +14,9 @@
 
 **剩余主线：** 青金石粉与冷却剂制备 → 反应堆/管网生存制造与后续机组闭环。四材料直接装配组件已完成；后续只确认新增取舍，无GUI原则与已批准工序直接沿用。
 
-**当前任务：** [02E功能验收与模型R2修复](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)已合入main，不重复功能清单。[材料01B候选](./reviews/2026-10-03/material-01b/README.md)已完成实现和定向验证：青金石1:1、两道加工参数100、冷却剂无需加热。停在该批三项人工验收门，新配方仅在同级候选工作树。R2新画面不追记为已人工复看，动画另批。
+**本次连续推进结果：** 按用户委托的推荐参数，01B及[固定实验堆生存制造01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md)均已实现、定向验证和复审通过，等待睡醒后的[合并手测](./reviews/2026-10-03/reactor-01/README.md)；新内容均保留在同级候选工作树。
+
+**当前任务：** [02E功能验收与模型R2修复](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)已合入main，不重复功能清单。[材料01B候选](./reviews/2026-10-03/material-01b/README.md)已完成实现和定向验证：青金石1:1、两道加工参数100、冷却剂无需加热。该批三项人工验收按最新授权与反应堆制造一起进行，新配方仅在同级候选工作树。R2新画面不追记为已人工复看，动画另批。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
@@ -24,6 +26,7 @@
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |
 | [材料05：石英粉、耐火砖与重型轴承实施](./superpowers/plans/2026-10-02-ext-a-material-05.md) | 完整人工清单通过，已合入main；[最终验收](./reviews/2026-10-02/material-05/ACCEPTANCE.md)，后续离心机见当前实施卡 |
 | [青金石粉与冷却剂01B](./superpowers/plans/2026-10-03-ext-a-material-01b.md) | 候选实现与审查通过，待[三项手测](./reviews/2026-10-03/material-01b/README.md)；未合入main，不整体合并旧01A |
+| [固定实验堆生存制造01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md) | 7种材料、16条配方已实现；7项定向GameTest与5项合同测试通过，待[两批合并手测](./reviews/2026-10-03/reactor-01/README.md) |
 | [首套生产线成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) | 已批准试验配比与未批准候选分开记录；不是完整配方冻结表 |
 | [损伤倍率专项](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) | 游戏端 02A 已完成；模拟器 02B 仍待离线浏览器验收，未合并 |
 
