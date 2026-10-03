@@ -1,0 +1,13 @@
+命令：$env:JAVA_HOME='C:\Program Files\Java\jdk-21'; .\gradlew assemble --console=plain
+来源：本对话 2026-10-03 16:09 后 exec_command 返回文本；退出码 0。
+> Task :createMinecraftArtifacts UP-TO-DATE
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+
+BUILD SUCCESSFUL in 1s
+4 actionable tasks: 1 executed, 3 up-to-date
+

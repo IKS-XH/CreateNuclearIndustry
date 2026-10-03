@@ -1,0 +1,12 @@
+part_models=16
+partials=3
+multiblock_png=10
+recipe_type=create:mechanical_crafting
+recipe_pattern= LLL /LSSSL/LDRDL/LSSSL/ LLL 
+recipe_counts=L:12,S:6,D:2,R:1
+legacy_workbench_recipe=False
+master_blockstate=True
+part_blockstate=True
+zh_cn=True
+en_us=True
+fixture=True
