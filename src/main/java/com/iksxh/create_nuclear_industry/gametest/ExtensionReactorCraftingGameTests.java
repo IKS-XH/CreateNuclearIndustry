@@ -6,22 +6,17 @@ import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition.ColumnType;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition.LocalPosition;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
-import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
-import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
+import com.simibubi.create.content.kinetics.crafter.MechanicalCraftingRecipe;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlock;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
-import com.simibubi.create.content.logistics.depot.DepotBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
-import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,14 +25,12 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -55,9 +48,6 @@ public final class ExtensionReactorCraftingGameTests {
     private static final BlockPos COG = MIXER.west();
     private static final BlockPos MOTOR = COG.above();
     private static final BlockPos BURNER = BASIN.below();
-    private static final BlockPos DEPOT = BASIN;
-    private static final BlockPos DEPLOYER = DEPOT.above(2);
-    private static final BlockPos DEPLOYER_MOTOR = DEPLOYER.west();
 
     private ExtensionReactorCraftingGameTests() {}
 
@@ -90,11 +80,11 @@ public final class ExtensionReactorCraftingGameTests {
                 List.of(new ItemStack(casing), new ItemStack(fitting), new ItemStack(ring), new ItemStack(Items.RED_DYE)),
                 "reactor_hot_port", 1);
         assertCraft(helper, "crafting/reactor/reactor_fuel_rod", 1, 3,
-                List.of(new ItemStack(steel), new ItemStack(grille), new ItemStack(steel)), "reactor_fuel_rod", 3);
+                List.of(new ItemStack(steel), new ItemStack(grille), new ItemStack(steel)), "reactor_fuel_rod", 1);
         helper.succeed();
     }
 
-    /** 确认两种陶瓷搅拌需要普通加热，屏蔽混凝土为无热搅拌且仅接受硬化混凝土标签。 */
+    /** 确认陶瓷与铅玻璃需要普通加热，屏蔽混凝土为无热搅拌且仅接受硬化混凝土标签。 */
     @GameTest(template = TEMPLATE)
     public static void ceramicAndConcreteMixingUseTheirDeclaredHeatAndInputs(GameTestHelper helper) {
         MixingRecipe industrial = mixing(helper, "industrial_ceramic");
@@ -125,21 +115,32 @@ public final class ExtensionReactorCraftingGameTests {
                         && concrete.getIngredients().get(1).test(new ItemStack(registered(helper, "lead_nugget")))
                         && result(helper, concrete.getRollableResults(), "shielding_concrete", 1),
                 "屏蔽混凝土搅拌输入、无热要求或结果错误");
+
+        MixingRecipe glass = mixing(helper, "shielded_glass");
+        require(helper, glass.getProcessingDuration() == 100
+                        && glass.getRequiredHeat() == HeatCondition.HEATED
+                        && glass.getIngredients().size() == 2
+                        && glass.getIngredients().get(0).test(new ItemStack(registered(helper, "lead_ingot")))
+                        && !glass.getIngredients().get(0).test(new ItemStack(registered(helper, "lead_plate")))
+                        && glass.getIngredients().get(1).test(new ItemStack(Items.GLASS))
+                        && result(helper, glass.getRollableResults(), "shielded_glass", 1),
+                "铅玻璃搅拌输入、热级或结果错误");
         helper.succeed();
     }
 
-    /** 真实搅拌机无热时保留陶瓷原料，加入普通燃料后只产两份工业陶瓷。 */
+    /** 真实搅拌机无热时保留铅锭与玻璃，加入普通燃料后只产一块铅玻璃。 */
     @GameTest(template = TEMPLATE, timeoutTicks = 430)
-    public static void realHeatedMixerProducesIndustrialCeramicOnlyAfterFuel(GameTestHelper helper) {
+    public static void realHeatedMixerProducesShieldedGlassOnlyAfterFuel(GameTestHelper helper) {
         setupMixer(helper);
         BasinBlockEntity basin = basin(helper);
-        putMixInputs(helper, Items.QUARTZ, Items.CLAY_BALL);
+        Item lead = registered(helper, "lead_ingot");
+        putMixInputs(helper, lead, Items.GLASS);
         powerMixer(helper, 256);
         helper.runAfterDelay(80, () -> {
-            require(helper, count(basin.getInputInventory(), Items.QUARTZ) == 1
-                            && count(basin.getInputInventory(), Items.CLAY_BALL) == 1
+            require(helper, count(basin.getInputInventory(), lead) == 1
+                            && count(basin.getInputInventory(), Items.GLASS) == 1
                             && countAll(basin.getOutputInventory()) == 0,
-                    "无热时搅拌机消费了陶瓷输入");
+                    "无热时搅拌机消费了铅玻璃输入");
             helper.setBlock(BURNER, AllBlocks.BLAZE_BURNER.getDefaultState()
                     .setValue(BlazeBurnerBlock.HEAT_LEVEL, HeatLevel.SMOULDERING));
             consumeBurnerFuel(helper, Items.COAL);
@@ -148,9 +149,9 @@ public final class ExtensionReactorCraftingGameTests {
             require(helper, helper.getBlockState(BURNER).getValue(BlazeBurnerBlock.HEAT_LEVEL) == HeatLevel.KINDLED
                             && ((MechanicalMixerBlockEntity) helper.getBlockEntity(MIXER)).getSpeed() != 0
                             && countAll(basin.getInputInventory()) == 0
-                            && countAll(basin.getOutputInventory()) == 2
-                            && count(basin.getOutputInventory(), registered(helper, "industrial_ceramic")) == 2,
-                    "真实普通加热搅拌没有精确消耗一批并产两份陶瓷");
+                            && countAll(basin.getOutputInventory()) == 1
+                            && count(basin.getOutputInventory(), registered(helper, "shielded_glass")) == 1,
+                    "真实普通加热搅拌没有精确消耗一批并产一块铅玻璃");
             helper.succeed();
         });
     }
@@ -173,71 +174,50 @@ public final class ExtensionReactorCraftingGameTests {
         });
     }
 
-    /** 五条序列配方均已加载；重点核对四步换料端口序列及 Create 原生半成品进度身份。 */
+    /** 控制棒原生序列保留，四条被替换的序列身份已移除，三条机械合成配方保持原生类型。 */
     @GameTest(template = TEMPLATE)
-    public static void nativeAssemblyRecipesIncludeTheLongestPortSequence(GameTestHelper helper) {
+    public static void replacedRecipePathsAndNativeMechanicalRecipesAreCorrect(GameTestHelper helper) {
+        require(helper, recipe(helper, "sequenced_assembly/control_rod").value() instanceof SequencedAssemblyRecipe,
+                "原生控制棒序列配方未保留");
         for (String path : List.of("shielded_glass", "reactor_instrument_port", "reactor_refueling_port",
-                "control_rod", "control_rod_drive")) {
-            var holder = recipe(helper, "sequenced_assembly/" + path);
-            require(helper, holder.value() instanceof SequencedAssemblyRecipe,
-                    "缺少 Create 序列装配配方: " + path);
+                "control_rod_drive")) {
+            require(helper, helper.getLevel().getRecipeManager().byKey(id("sequenced_assembly/" + path)).isEmpty(),
+                    "旧序列配方仍加载: " + path);
         }
-
-        SequencedAssemblyRecipe refueling = assembly(helper, "reactor_refueling_port");
-        require(helper, refueling.getLoops() == 1 && refueling.getSequence().size() == 4
-                        && refueling.getIngredient().test(new ItemStack(registered(helper, "reactor_casing")))
-                        && refueling.getTransitionalItem().is(registered(helper, "incomplete_reactor_refueling_port"))
-                        && refueling.getResultItem(helper.getLevel().registryAccess())
-                        .is(registered(helper, "reactor_refueling_port"))
-                        && refueling.getResultItem(helper.getLevel().registryAccess()).getCount() == 1
-                        && refueling.getOutputChance() == 1f,
-                "换料端口的基底、轮数、半成品或必成结果错误");
-        List<Item> orderedInputs = List.of(
-                createItem(helper, "deployer"),
-                registered(helper, "industrial_sensor"),
-                registered(helper, "seal_ring"));
-        for (int i = 0; i < orderedInputs.size(); i++) {
-            var step = refueling.getSequence().get(i).getRecipe();
-            require(helper, step instanceof DeployerApplicationRecipe && step.getIngredients().size() == 2
-                            && step.getIngredients().get(1).test(new ItemStack(orderedInputs.get(i))),
-                    "换料端口机械手顺序错误，步骤=" + i);
-        }
-        require(helper, refueling.getSequence().getLast().getRecipe() instanceof PressingRecipe,
-                "换料端口末步不是原生压片");
+        assertMechanicalRecipe(helper, "reactor_instrument_port", 3, 1, List.of(
+                new ItemStack(registered(helper, "reactor_casing")),
+                new ItemStack(registered(helper, "industrial_sensor")),
+                new ItemStack(createItem(helper, "electron_tube"))));
+        assertMechanicalRecipe(helper, "reactor_refueling_port", 2, 2, List.of(
+                new ItemStack(createItem(helper, "deployer")),
+                new ItemStack(registered(helper, "industrial_sensor")),
+                new ItemStack(registered(helper, "reactor_casing")),
+                new ItemStack(registered(helper, "seal_ring"))));
+        assertMechanicalRecipe(helper, "control_rod_drive", 2, 2, List.of(
+                new ItemStack(createItem(helper, "mechanical_piston")),
+                new ItemStack(createItem(helper, "piston_extension_pole")),
+                new ItemStack(registered(helper, "control_rod")),
+                new ItemStack(createItem(helper, "precision_mechanism"))));
         helper.succeed();
     }
 
-    /** 真实机械手与压片机逐步完成最长的四步换料端口序列并各消耗一份投入。 */
-    @GameTest(template = TEMPLATE, timeoutTicks = 540)
-    public static void realDeployerAndPressCompleteRefuelingPortAssembly(GameTestHelper helper) {
-        setupDeployer(helper);
-        helper.runAfterDelay(5, () -> {
-            putOnDepot(helper, new ItemStack(registered(helper, "reactor_casing")));
-            hand(helper, new ItemStack(createItem(helper, "deployer")));
-            powerDeployer(helper, 256);
-        });
-        helper.runAfterDelay(115, () -> {
-            assertAssemblyProgress(helper, 1, .25f);
-            require(helper, handCount(helper) == 0, "第一步没有消耗一件完整机械手");
-            hand(helper, new ItemStack(registered(helper, "industrial_sensor")));
-        });
-        helper.runAfterDelay(225, () -> {
-            assertAssemblyProgress(helper, 2, .5f);
-            require(helper, handCount(helper) == 0, "第二步没有消耗一只工业传感器");
-            hand(helper, new ItemStack(registered(helper, "seal_ring")));
-        });
-        helper.runAfterDelay(335, () -> {
-            assertAssemblyProgress(helper, 3, .75f);
-            require(helper, handCount(helper) == 0, "第三步没有消耗一只密封环");
-            setupPress(helper);
-        });
-        helper.runAfterDelay(495, () -> {
-            ItemStack result = depot(helper).getHeldItem();
-            require(helper, result.is(registered(helper, "reactor_refueling_port"))
-                            && result.getCount() == 1,
-                    "真实序列装配未精确得到一只换料端口");
-            helper.succeed();
-        });
+    /** 核对每条机械合成只输出一个目标方块，且普通工作台配方输入不能触发 Create 专用配方。 */
+    private static void assertMechanicalRecipe(GameTestHelper helper, String path, int width, int height,
+                                               List<ItemStack> inputs) {
+        var holder = recipe(helper, "mechanical_crafting/" + path);
+        require(helper, holder.value() instanceof MechanicalCraftingRecipe,
+                "不是 Create 原生机械合成配方: " + path);
+        MechanicalCraftingRecipe mechanical = (MechanicalCraftingRecipe) holder.value();
+        boolean ingredientsMatch = mechanical.getIngredients().size() == inputs.size();
+        for (int i = 0; ingredientsMatch && i < inputs.size(); i++)
+            ingredientsMatch = mechanical.getIngredients().get(i).test(inputs.get(i));
+        require(helper, ingredientsMatch
+                        && mechanical.getWidth() == width && mechanical.getHeight() == height
+                        && !mechanical.acceptsMirrored()
+                        && mechanical.getResultItem(helper.getLevel().registryAccess()).is(registered(helper, path))
+                        && mechanical.getResultItem(helper.getLevel().registryAccess()).getCount() == 1
+                        && !mechanical.matches(CraftingInput.of(width, height, inputs), helper.getLevel()),
+                "机械合成尺寸、结果数量或工作台隔离错误: " + path);
     }
 
     /** 确认标准合法布局仍由原八种正式结构方块组成，控制棒柱保持空位且不混入燃料物品。 */
@@ -289,12 +269,6 @@ public final class ExtensionReactorCraftingGameTests {
         var holder = recipe(helper, "mixing/" + path);
         require(helper, holder.value() instanceof MixingRecipe, "不是 Create 原生搅拌配方: " + path);
         return (MixingRecipe) holder.value();
-    }
-
-    private static SequencedAssemblyRecipe assembly(GameTestHelper helper, String path) {
-        var holder = recipe(helper, "sequenced_assembly/" + path);
-        require(helper, holder.value() instanceof SequencedAssemblyRecipe, "不是 Create 序列装配配方: " + path);
-        return (SequencedAssemblyRecipe) holder.value();
     }
 
     private static net.minecraft.world.item.crafting.RecipeHolder<?> recipe(GameTestHelper helper, String path) {
@@ -363,54 +337,6 @@ public final class ExtensionReactorCraftingGameTests {
 
     private static BasinBlockEntity basin(GameTestHelper helper) {
         return (BasinBlockEntity) helper.getBlockEntity(BASIN);
-    }
-
-    private static void setupDeployer(GameTestHelper helper) {
-        helper.setBlock(DEPOT, AllBlocks.DEPOT.get());
-        helper.setBlock(DEPLOYER, AllBlocks.DEPLOYER.getDefaultState()
-                .setValue(DirectionalKineticBlock.FACING, Direction.DOWN));
-        helper.setBlock(DEPLOYER_MOTOR, AllBlocks.CREATIVE_MOTOR.getDefaultState()
-                .setValue(CreativeMotorBlock.FACING, Direction.EAST));
-    }
-
-    private static void setupPress(GameTestHelper helper) {
-        helper.setBlock(DEPLOYER, AllBlocks.MECHANICAL_PRESS.getDefaultState()
-                .setValue(HorizontalKineticBlock.HORIZONTAL_FACING, Direction.EAST));
-        powerDeployer(helper, 256);
-    }
-
-    private static void putOnDepot(GameTestHelper helper, ItemStack stack) {
-        var handler = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK,
-                helper.absolutePos(DEPOT), Direction.UP);
-        require(helper, handler != null && handler.insertItem(0, stack, false).isEmpty(),
-                "置物台拒收序列装配基底");
-    }
-
-    private static DepotBlockEntity depot(GameTestHelper helper) {
-        return (DepotBlockEntity) helper.getBlockEntity(DEPOT);
-    }
-
-    private static void hand(GameTestHelper helper, ItemStack stack) {
-        ((DeployerBlockEntity) helper.getBlockEntity(DEPLOYER)).getPlayer()
-                .setItemInHand(InteractionHand.MAIN_HAND, stack);
-    }
-
-    private static int handCount(GameTestHelper helper) {
-        return ((DeployerBlockEntity) helper.getBlockEntity(DEPLOYER)).getPlayer().getMainHandItem().getCount();
-    }
-
-    private static void powerDeployer(GameTestHelper helper, int speed) {
-        ((CreativeMotorBlockEntity) helper.getBlockEntity(DEPLOYER_MOTOR)).generatedSpeed.setValue(speed);
-    }
-
-    private static void assertAssemblyProgress(GameTestHelper helper, int step, float progress) {
-        ItemStack stack = depot(helper).getHeldItem();
-        var component = stack.get(com.simibubi.create.AllDataComponents.SEQUENCED_ASSEMBLY);
-        require(helper, stack.is(registered(helper, "incomplete_reactor_refueling_port"))
-                        && stack.getCount() == 1 && component != null
-                        && component.id().equals(id("sequenced_assembly/reactor_refueling_port"))
-                        && component.step() == step && Math.abs(component.progress() - progress) < .001f,
-                "换料端口半成品或原生进度不符，步骤=" + step);
     }
 
     private static int count(net.neoforged.neoforge.items.IItemHandler inventory, Item item) {

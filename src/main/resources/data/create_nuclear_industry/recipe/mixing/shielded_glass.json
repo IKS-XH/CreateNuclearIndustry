@@ -1,0 +1,12 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    { "tag": "c:ingots/lead" },
+    { "item": "minecraft:glass" }
+  ],
+  "results": [
+    { "id": "create_nuclear_industry:shielded_glass" }
+  ],
+  "heat_requirement": "heated",
+  "processing_time": 100
+}

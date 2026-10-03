@@ -1,0 +1,14 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "D": { "item": "create:deployer" },
+    "S": { "item": "create_nuclear_industry:industrial_sensor" },
+    "C": { "item": "create_nuclear_industry:reactor_casing" },
+    "R": { "item": "create_nuclear_industry:seal_ring" }
+  },
+  "pattern": ["DS", "CR"],
+  "result": { "id": "create_nuclear_industry:reactor_refueling_port" },
+  "show_notification": false
+}

@@ -1,0 +1,14 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "P": { "item": "create:mechanical_piston" },
+    "E": { "item": "create:piston_extension_pole" },
+    "C": { "item": "create_nuclear_industry:control_rod" },
+    "M": { "item": "create:precision_mechanism" }
+  },
+  "pattern": ["PE", "CM"],
+  "result": { "id": "create_nuclear_industry:control_rod_drive" },
+  "show_notification": false
+}

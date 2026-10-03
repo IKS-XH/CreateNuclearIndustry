@@ -1,0 +1,13 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "C": { "item": "create_nuclear_industry:reactor_casing" },
+    "S": { "item": "create_nuclear_industry:industrial_sensor" },
+    "T": { "item": "create:electron_tube" }
+  },
+  "pattern": ["CST"],
+  "result": { "id": "create_nuclear_industry:reactor_instrument_port" },
+  "show_notification": false
+}
