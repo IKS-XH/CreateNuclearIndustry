@@ -1,0 +1,20 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    { "tag": "c:dusts/lapis" },
+    { "tag": "c:dusts/redstone" },
+    { "tag": "c:dusts/glowstone" },
+    {
+      "type": "neoforge:single",
+      "amount": 1000,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "amount": 1000,
+      "id": "create_nuclear_industry:compound_coolant"
+    }
+  ]
+}

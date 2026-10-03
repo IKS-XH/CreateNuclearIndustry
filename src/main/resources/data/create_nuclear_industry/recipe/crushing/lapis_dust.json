@@ -1,0 +1,10 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    { "tag": "c:gems/lapis" }
+  ],
+  "processing_time": 100,
+  "results": [
+    { "id": "create_nuclear_industry:lapis_dust" }
+  ]
+}

@@ -22,6 +22,7 @@
   "item.create_nuclear_industry.cooled_spent_fuel_assembly": "Cooled Spent Fuel Assembly",
   "item.create_nuclear_industry.control_rod": "Control Rod",
   "item.create_nuclear_industry.steel_plate": "Steel Plate",
+  "item.create_nuclear_industry.lapis_dust": "Lapis Dust",
   "item.create_nuclear_industry.compound_coolant_bucket": "Compound Coolant Bucket",
   "fluid_type.create_nuclear_industry.compound_coolant": "Compound Coolant",
   "fluid_type.create_nuclear_industry.hot_compound_coolant": "Hot Compound Coolant",
