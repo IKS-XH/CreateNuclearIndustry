@@ -1,112 +1,236 @@
 package com.iksxh.create_nuclear_industry.heat;
 
 import static org.junit.jupiter.api.Assertions.*;
+import net.minecraft.nbt.CompoundTag;
 import org.junit.jupiter.api.Test;
 
-/** 以真实支付量验证热账本；世界、能力及原生锅炉接线另由 GameTest 覆盖。 */
+/** 按外部供液、排液与实际发布热量验证账本；真实锅炉及生命周期另由 GameTest 覆盖。 */
 final class HeatExchangerStateTest {
     private static final HeatExchangerState.Settings DEFAULT = new HeatExchangerState.Settings(18, 1, 40, .5);
 
-    @Test void fortyTicksMustBePaidBeforePublishingAndResidualEndsExactly() {
-        var s = new HeatExchangerState();
-        s.fillHot(1440, false);
-        for (int t = 0; t < 40; t++) {
-            s.tick(t, true, DEFAULT);
-            assertEquals(-1, s.heat());
+    @Test void sustainedInputsConserveMassAndEnergyAndSettleAtNineAndEighteen() {
+        for (int input : new int[]{18, 36}) {
+            var s = new HeatExchangerState();
+            long accepted = 0, returned = 0;
+            double emitted = 0;
+            for (int t = 0; t < 400; t++) {
+                accepted += s.fillHot(input, false);
+                s.tick(t, true, DEFAULT);
+                returned += s.drainCold(4000, false);
+                emitted += Math.max(0, s.heat());
+                assertEquals(accepted, returned + s.hot() + s.cold());
+                assertEquals((accepted - s.hot()) * .5, emitted + s.reserve(), 1e-9);
+                if (t >= 250) {
+                    assertEquals(input / 2, s.heat());
+                    assertEquals(input, s.converted());
+                    assertEquals("running", s.status());
+                }
+            }
+            assertEquals(input == 18 ? 360 : 720, s.reserve());
         }
-        assertEquals(720, s.reserve());
-        assertEquals(1440, s.cold());
-        for (int t = 40; t < 80; t++) {
-            s.tick(t, true, DEFAULT);
-            assertEquals(18, s.heat());
-        }
-        s.tick(80, true, DEFAULT);
-        assertEquals(-1, s.heat());
-        assertEquals(0, s.reserve());
     }
 
-    @Test void steadyStateAndRepeatedReadsConserveFluidAndHeat() {
+    @Test void publishingUsesPreviouslyPaidHeatAndRepeatedQueriesOrTicksArePure() {
         var s = new HeatExchangerState();
         s.fillHot(4000, false);
-        for (int t = 0; t < 65; t++) s.tick(t, true, DEFAULT);
-        assertEquals(2340, s.cold());
-        assertEquals(1660, s.hot());
-        assertEquals(720, s.reserve());
+        for (int t = 0; t < 3; t++) {
+            s.tick(t, true, DEFAULT);
+            assertEquals(-1, s.heat());
+            assertEquals(36, s.converted());
+        }
+        assertEquals(54, s.reserve());
+        s.tick(3, true, DEFAULT);
+        assertEquals(1, s.heat());
+        assertEquals(71, s.reserve());
+        assertEquals(144, s.cold());
         var before = s.save();
         for (int i = 0; i < 100; i++) {
-            assertEquals(18, s.heat());
             s.fillHot(4000, true);
             s.drainCold(4000, true);
+            s.remainingTicks();
+            s.tick(3, true, DEFAULT);
         }
         assertEquals(before, s.save());
     }
 
-    @Test void unloadedTimeAndPortableRoundTripCannotRefreshPaidHeat() {
-        var s = new HeatExchangerState();
-        s.fillHot(1440, false);
-        for (int t = 0; t < 50; t++) s.tick(t, true, DEFAULT);
-        var restored = new HeatExchangerState();
-        restored.load(s.save());
-        assertEquals(-1, restored.heat());
-        restored.tick(69, true, DEFAULT);
-        assertEquals(180, restored.reserve());
-        for (int t = 70; t < 80; t++) restored.tick(t, true, DEFAULT);
-        restored.tick(80, true, DEFAULT);
-        assertEquals(-1, restored.heat());
+    @Test void fractionalInputOscillatesOnlyBetweenAdjacentSupportedLevels() {
+        for (int input : new int[]{1, 19}) {
+            var s = new HeatExchangerState();
+            int minimum = 18, maximum = 0;
+            for (int t = 0; t < 500; t++) {
+                assertEquals(input, s.fillHot(input, false));
+                s.tick(t, true, DEFAULT);
+                s.drainCold(4000, false);
+                if (t >= 300) {
+                    minimum = Math.min(minimum, Math.max(0, s.heat()));
+                    maximum = Math.max(maximum, Math.max(0, s.heat()));
+                }
+            }
+            assertEquals(input / 2, minimum);
+            assertEquals(input / 2 + 1, maximum);
+        }
     }
 
-    @Test void absentLoadBlockedReturnAndTrickleNeverRefillForFree() {
+    @Test void pulsedInputAndMidRunSaveRestoreKeepPaidHeatAndEventuallyExpire() {
         var s = new HeatExchangerState();
-        s.fillHot(4000, false);
-        for (int t = 0; t < 100; t++) s.tick(t, false, DEFAULT);
-        assertEquals(4000, s.hot());
-        for (int t = 100; t < 140; t++) s.tick(t, true, DEFAULT);
-        for (int t = 140; t < 180; t++) s.tick(t, false, DEFAULT);
-        assertEquals(0, s.reserve());
-        assertEquals(2560, s.hot());
-        var tag = s.save();
-        tag.putInt("Cold", 4000);
-        s.load(tag);
-        s.tick(180, true, DEFAULT);
-        assertEquals(2560, s.hot());
+        long accepted = 0, returned = 0;
+        double emitted = 0;
+        for (int t = 0; t < 200; t++) {
+            if (t % 10 == 0) accepted += s.fillHot(180, false);
+            s.tick(t, true, DEFAULT);
+            returned += s.drainCold(4000, false);
+            emitted += Math.max(0, s.heat());
+            assertEquals(accepted, returned + s.hot() + s.cold());
+            assertEquals((accepted - s.hot()) * .5, emitted + s.reserve(), 1e-9);
+            if (t >= 180) assertTrue(s.heat() > 0 && s.heat() < 18);
+            if (t == 55) {
+                var saved = s.save();
+                s = new HeatExchangerState();
+                s.load(saved);
+                assertEquals(saved, s.save());
+            }
+        }
+        for (int t = 200; t <= 250; t++) {
+            s.tick(t, true, DEFAULT);
+            returned += s.drainCold(4000, false);
+        }
+        assertEquals(accepted, returned + s.hot() + s.cold());
         assertEquals(-1, s.heat());
+        assertEquals(0, s.reserve());
+        assertEquals(0, s.remainingTicks());
+    }
+
+    @Test void blockedReturnExpiresWithinFortyTicksAndRetainsUnconvertedHotFluid() {
+        var s = warmedAtFullInput();
+        var blocked = s.save();
+        blocked.putInt("Hot", 1000);
+        blocked.putInt("Cold", 4000);
+        s.load(blocked);
+        for (int t = 400; t <= 439; t++) {
+            s.tick(t, true, DEFAULT);
+            assertEquals(0, s.converted());
+            assertEquals(1000, s.hot());
+            assertEquals(4000, s.cold());
+            if (s.heat() > 0) assertEquals("residual", s.status());
+        }
+        assertEquals(-1, s.heat());
+        assertEquals(0, s.reserve());
+        assertEquals(0, s.remainingTicks());
         s.drainCold(1, false);
-        s.tick(181, true, DEFAULT);
+        s.tick(440, true, DEFAULT);
+        assertEquals(1, s.converted());
         assertEquals(.5, s.reserve());
         assertEquals(-1, s.heat());
     }
 
-    @Test void fractionalFlowIsFiniteAndPaidAndInvalidConfigurationStops() {
+    @Test void unloadingAndPortableRoundTripsPreserveTheAbsoluteExpiry() {
+        var s = warmedAtFullInput();
+        for (int t = 400; t <= 404; t++) s.tick(t, true, DEFAULT);
+        assertEquals(35, s.remainingTicks());
+        var restored = new HeatExchangerState();
+        restored.load(s.save());
+        assertEquals(-1, restored.heat());
+        assertEquals(s.save(), restored.save());
+        var again = new HeatExchangerState();
+        again.load(restored.save());
+        again.tick(440, true, DEFAULT);
+        assertEquals(0, again.reserve());
+        assertEquals(0, again.remainingTicks());
+        assertEquals(-1, again.heat());
+    }
+
+    @Test void freshConversionAfterSkippedDeadlineCannotSpendOrReviveExpiredHeat() {
+        var s = warmedAtFullInput();
+        for (int t = 400; t <= 437; t++) s.tick(t, true, DEFAULT);
+        assertTrue(s.reserve() > 40);
+        var restored = new HeatExchangerState();
+        restored.load(s.save());
+        restored.fillHot(1, false);
+        restored.tick(440, true, DEFAULT);
+        assertEquals(-1, restored.heat());
+        assertEquals(1, restored.converted());
+        assertEquals(.5, restored.reserve());
+        assertEquals(40, restored.remainingTicks());
+    }
+
+    @Test void legacyMigrationSurvivesSavingBeforeFirstTickAndDoesNotRefreshFromLoadTime() {
+        var legacy = new CompoundTag();
+        legacy.putDouble("ReserveHu", 720);
+        legacy.putDouble("LastRate", 18);
+        legacy.putLong("LastTick", 10);
+        var first = new HeatExchangerState();
+        first.load(legacy);
+        assertFalse(first.save().contains("NoFlowDeadlineTick"));
+        var restored = new HeatExchangerState();
+        restored.load(first.save());
+        restored.tick(11, false, DEFAULT);
+        assertEquals(702, restored.reserve());
+        assertEquals(39, restored.remainingTicks());
+        assertEquals(50, restored.save().getLong("NoFlowDeadlineTick"));
+        restored.tick(50, true, DEFAULT);
+        assertEquals(0, restored.reserve());
+        assertEquals(-1, restored.heat());
+
+        legacy.putDouble("ReserveHu", 20);
+        restored.load(legacy);
+        restored.fillHot(36, false);
+        restored.tick(13, true, DEFAULT);
+        assertEquals(-1, restored.heat());
+        assertEquals(18, restored.reserve());
+        assertEquals(36, restored.converted());
+    }
+
+    @Test void absentLoadDoesNotConvertAndInvalidConfigurationCannotChangeFluidAmounts() {
         var s = new HeatExchangerState();
-        var fraction = new HeatExchangerState.Settings(1, 1, 40, .3);
         s.fillHot(4000, false);
-        for (int t = 0; t < 300; t++) {
-            s.tick(t, true, fraction);
-            s.drainCold(4000, false);
-            assertTrue(Double.isFinite(s.reserve()));
-            assertTrue(s.reserve() >= 0 && s.reserve() <= 40);
-        }
-        assertEquals(300, (4000 - s.hot()) * .3, .31);
-        s.tick(300, true, new HeatExchangerState.Settings(18, 1, 40, 0));
-        assertEquals(-1, s.heat());
+        for (int t = 0; t < 100; t++) s.tick(t, false, DEFAULT);
+        assertEquals(4000, s.hot());
+        assertEquals(0, s.cold());
+        s.tick(100, true, DEFAULT);
+        assertEquals(36, s.converted());
+        s.tick(101, false, DEFAULT);
         assertEquals(0, s.reserve());
+        s.tick(102, true, new HeatExchangerState.Settings(18, 1, 40, 0));
+        assertEquals(-1, s.heat());
+        assertEquals(3964, s.hot());
+        assertEquals(36, s.cold());
         assertFalse(new HeatExchangerState.Settings(18, Double.NaN, 40, .5).valid());
     }
 
-    @Test void highDensityRoundingAndPartialReturnSpaceNeverCreditUnconvertedFluid() {
+    @Test void fractionalDensityCanReachItsThresholdWithoutEmittingUnpaidHeat() {
         var s = new HeatExchangerState();
-        s.fillHot(1, false);
-        var dense = new HeatExchangerState.Settings(1, 1, 40, 100);
-        for (int t = 0; t < 100; t++) s.tick(t, true, dense);
-        assertEquals(1, s.cold());
-        assertEquals(40, s.reserve());
-        int emitted = 0;
-        for (int t = 100; t < 141; t++) {
-            s.tick(t, true, dense);
-            if (s.heat() > 0) emitted++;
+        var cfg = new HeatExchangerState.Settings(1, 1, 40, .3);
+        s.fillHot(4000, false);
+        double emitted = 0;
+        for (int t = 0; t < 300; t++) {
+            s.tick(t, true, cfg);
+            s.drainCold(4000, false);
+            emitted += Math.max(0, s.heat());
+            assertTrue(Double.isFinite(s.reserve()) && s.reserve() >= 0 && s.reserve() <= 40);
+            assertTrue(emitted + s.reserve() <= (4000 - s.hot()) * .3 + 1e-8);
         }
-        assertEquals(40, emitted);
+        assertTrue(emitted > 100, "非整除密度不能永远停留在阈值以下");
+    }
+
+    @Test void veryDenseSingleMillibucketIsBoundedAndPartialReturnSpaceIsConserved() {
+        var s = new HeatExchangerState();
+        var dense = new HeatExchangerState.Settings(1, 1, 40, 100);
+        s.fillHot(1, false);
+        int convertedAt = -1;
+        for (int t = 0; t < 110; t++) {
+            s.tick(t, true, dense);
+            if (s.converted() == 1) { convertedAt = t; break; }
+        }
+        assertTrue(convertedAt >= 0);
+        assertEquals(1, s.cold());
+        assertEquals(0, s.hot());
+        assertEquals(40, s.reserve());
+        s.tick(convertedAt + 1, true, dense);
+        assertEquals(1, s.heat());
+        for (int t = convertedAt + 2; t <= convertedAt + 40; t++) s.tick(t, true, dense);
         assertEquals(0, s.reserve());
+        assertEquals(-1, s.heat());
+
         var partial = new HeatExchangerState();
         var tag = partial.save();
         tag.putInt("Hot", 50);
@@ -118,19 +242,39 @@ final class HeatExchangerStateTest {
         assertEquals(3.5, partial.reserve());
     }
 
-    @Test void smallerConfigurationAndDuplicateTickCannotCreateOrExtendHeat() {
+    @Test void customSettingsScaleOutputAndConfigurationChangesNeverCreateHeat() {
+        var custom = new HeatExchangerState.Settings(6, 2, 20, .5);
         var s = new HeatExchangerState();
-        s.fillHot(1440, false);
-        for (int t = 0; t < 40; t++) s.tick(t, true, DEFAULT);
-        s.tick(40, true, new HeatExchangerState.Settings(1, 1, 40, .5));
-        assertEquals(39, s.reserve());
+        for (int t = 0; t < 200; t++) {
+            s.fillHot(8, false);
+            s.tick(t, true, custom);
+            s.drainCold(4000, false);
+        }
+        assertEquals(2, s.heat());
+        assertEquals(80, s.reserve());
+        s = warmedAtFullInput();
+        s.tick(400, true, custom);
+        assertEquals(6, s.heat());
+        assertEquals(228, s.reserve());
+        assertTrue(s.remainingTicks() <= 20);
         var before = s.save();
-        for (int i = 0; i < 10; i++) s.tick(40, true, DEFAULT);
+        s.tick(400, true, DEFAULT);
         assertEquals(before, s.save());
-        var restored = new HeatExchangerState();
-        restored.load(s.save());
-        restored.tick(100, true, DEFAULT);
-        assertEquals(-1, restored.heat());
-        assertEquals(0, restored.reserve());
+        s.tick(399, true, DEFAULT);
+        assertEquals(-1, s.heat());
+        assertEquals(0, s.reserve());
+    }
+
+    /** 实际逐tick注入36mB并排出冷液，避免以预灌储备代替有偿升温。 */
+    private static HeatExchangerState warmedAtFullInput() {
+        var s = new HeatExchangerState();
+        for (int t = 0; t < 400; t++) {
+            assertEquals(36, s.fillHot(36, false));
+            s.tick(t, true, DEFAULT);
+            s.drainCold(4000, false);
+        }
+        assertEquals(18, s.heat());
+        assertEquals(720, s.reserve());
+        return s;
     }
 }

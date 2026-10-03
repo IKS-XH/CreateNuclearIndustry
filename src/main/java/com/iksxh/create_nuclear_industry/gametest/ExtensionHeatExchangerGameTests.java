@@ -33,12 +33,12 @@ public final class ExtensionHeatExchangerGameTests {
     private static final BlockPos BASE = new BlockPos(2, 2, 2);
     private ExtensionHeatExchangerGameTests() {}
 
-    @GameTest(template = "boiler_empty", timeoutTicks = 240)
+    @GameTest(template = "boiler_empty", timeoutTicks = 320)
     public static void smallNativeBoilerUsesRatedFlowAndQueriesArePure(GameTestHelper helper) {
         buildBoiler(helper, BASE, 2, 1, true);
         var machine = machine(helper, BASE.below());
         feed(helper, BASE, 10, machine, true);
-        helper.runAfterDelay(105, () -> {
+        helper.runAfterDelay(260, () -> {
             var controller = controller(helper, BASE);
             require(helper, controller.getTotalTankSize() == 4 && controller.boiler.attachedEngines == 1,
                     "原生四储罐锅炉/引擎未形成");
@@ -66,13 +66,47 @@ public final class ExtensionHeatExchangerGameTests {
         });
     }
 
-    @GameTest(template = "boiler_empty", timeoutTicks = 260)
+    @GameTest(template = "boiler_empty", timeoutTicks = 400)
+    public static void nativeBoilerAtEighteenMillibucketsPerTickConvergesToNine(GameTestHelper helper) {
+        buildBoiler(helper, BASE, 3, 8, true);
+        var machine = machine(helper, BASE.below());
+        boolean[] settled = {false};
+        helper.onEachTick(() -> {
+            supply(helper, BASE, 90, machine, false);
+            boolean ready = machine.current() && HeatExchangerBoilerBridge.qualified(controller(helper, BASE));
+            if (settled[0]) require(helper, ready, "低流量稳态期间真实锅炉负载中断");
+            if (!ready) return;
+            // 负载成立后才逐tick注入，避免预热前囤积热液把18mB/t夹具变成短期满流量。
+            var port = machine.fluidPort(Direction.EAST);
+            require(helper, port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 18),
+                    IFluidHandler.FluidAction.EXECUTE) == 18, "稳定供给未实际接收18mB");
+            port.drain(4000, IFluidHandler.FluidAction.EXECUTE);
+            if (settled[0]) {
+                require(helper, machine.ledger().heat() == 9 && controller(helper, BASE).boiler.activeHeat == 9,
+                        "真实18mB/t稳态在连续40tick内偏离9级");
+                require(helper, machine.ledger().converted() == 18 && machine.ledger().reserve() == 360
+                        && machine.ledger().status().equals("running"), "低流量稳态账本或护目镜状态不符");
+            }
+        });
+        helper.runAfterDelay(300, () -> {
+            var controller = controller(helper, BASE);
+            require(helper, controller.getTotalTankSize() == 72, "原生72储罐连通未完成");
+            require(helper, machine.ledger().heat() == 9 && controller.boiler.activeHeat == 9,
+                    "真实18mB/t热液输入未收敛到9级供热");
+            require(helper, machine.ledger().converted() == 18 && machine.ledger().reserve() == 360,
+                    "18mB/t稳定账本未保持等体积转换和360HU储备");
+            settled[0] = true;
+        });
+        helper.runAfterDelay(340, helper::succeed);
+    }
+
+    @GameTest(template = "boiler_empty", timeoutTicks = 430)
     public static void fullNativeBoilerReachesEighteenAndWaterCapsOutput(GameTestHelper helper) {
         buildBoiler(helper, BASE, 3, 8, true);
         var machine = machine(helper, BASE.below());
         int[] water = {180};
         helper.onEachTick(() -> supply(helper, BASE, water[0], machine, true));
-        helper.runAfterDelay(110, () -> {
+        helper.runAfterDelay(260, () -> {
             var controller = controller(helper, BASE);
             require(helper, controller.getTotalTankSize() == 72, "原生72储罐连通未完成");
             require(helper, controller.boiler.activeHeat == 18
@@ -82,7 +116,7 @@ public final class ExtensionHeatExchangerGameTests {
             require(helper, controller.boiler.getEngineEfficiency(72) == 1, "原生引擎效率未达满值");
             water[0] = 10;
         });
-        helper.runAfterDelay(225, () -> {
+        helper.runAfterDelay(375, () -> {
             var controller = controller(helper, BASE);
             require(helper, controller.boiler.activeHeat == 18
                     && controller.boiler.getMaxHeatLevelForWaterSupply() == 1,
@@ -108,7 +142,7 @@ public final class ExtensionHeatExchangerGameTests {
         helper.onEachTick(() -> supply(helper, BASE, 10, machine, false));
         helper.runAfterDelay(115, () -> {
             var controller = controller(helper, BASE);
-            require(helper, controller.boiler.activeHeat == 18, "移除前未真实供热");
+            require(helper, controller.boiler.activeHeat > 0, "移除前未真实供热");
             var saved = machine.savePortableData();
             var absolute = helper.absolutePos(BASE.below());
             var player = net.neoforged.neoforge.common.util.FakePlayerFactory.getMinecraft(helper.getLevel());
@@ -135,7 +169,7 @@ public final class ExtensionHeatExchangerGameTests {
         });
     }
 
-    @GameTest(template = "boiler_empty", timeoutTicks = 220)
+    @GameTest(template = "boiler_empty", timeoutTicks = 320)
     public static void lifecycleUnloadClearsControllerAcrossChunkBoundary(GameTestHelper helper) {
         // 选择模板内跨 X 区块边界的位置，控制器与右下角换热器必定在不同区块。
         int x = 15 - Math.floorMod(helper.absolutePos(new BlockPos(0, 0, 0)).getX(), 16);
@@ -146,7 +180,7 @@ public final class ExtensionHeatExchangerGameTests {
         helper.setBlock(source, HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get());
         var machine = machine(helper, source);
         feed(helper, base, 10, machine, true);
-        helper.runAfterDelay(105, () -> {
+        helper.runAfterDelay(260, () -> {
             var controller = controller(helper, base);
             require(helper, controller.boiler.activeHeat == 18, "跨区块锅炉供热未建立");
             require(helper, (controller.getBlockPos().getX() >> 4) != (machine.getBlockPos().getX() >> 4),
@@ -168,7 +202,7 @@ public final class ExtensionHeatExchangerGameTests {
         });
     }
 
-    @GameTest(template = "boiler_empty", timeoutTicks = 240, batch = "heat_liveness")
+    @GameTest(template = "boiler_empty", timeoutTicks = 560, batch = "heat_liveness")
     public static void fullButNonTickingSourceRevokesHeatAndCapabilityCacheRecovers(GameTestHelper helper) {
         int x = 15 - Math.floorMod(helper.absolutePos(new BlockPos(0, 0, 0)).getX(), 16);
         BlockPos base = new BlockPos(x, 2, 2);
@@ -195,7 +229,7 @@ public final class ExtensionHeatExchangerGameTests {
                 }
             }
         });
-        helper.runAfterDelay(105, () -> {
+        helper.runAfterDelay(260, () -> {
             require(helper, controller(helper, base).boiler.activeHeat == 18 && machine.canTick(), "停tick前真实供热未建立");
             oldPort[0] = cache.getCapability();
             beforePause[0] = machine.savePortableData();
@@ -204,7 +238,7 @@ public final class ExtensionHeatExchangerGameTests {
             sourceChunk.setFullStatus(() -> net.minecraft.server.level.FullChunkStatus.FULL);
             paused[0] = true;
         });
-        helper.runAfterDelay(155, () -> {
+        helper.runAfterDelay(310, () -> {
             try {
                 require(helper, level.hasChunkAt(machine.getBlockPos()) && level.getBlockEntity(machine.getBlockPos()) == machine,
                         "测试源已卸载，未覆盖FULL但不tick的缺口");
@@ -222,15 +256,15 @@ public final class ExtensionHeatExchangerGameTests {
                 paused[0] = false;
             }
         });
-        helper.runAfterDelay(160, () -> {
-            require(helper, machine.canTick() && machine.publishedHeat() == -1 && machine.ledger().reserve() < 720,
+        helper.runAfterDelay(315, () -> {
+            require(helper, machine.canTick() && machine.publishedHeat() < 18 && machine.ledger().reserve() < 720,
                     "恢复后未扣停tick期间热量或免费恢复完整余热");
             var port = cache.getCapability();
             require(helper, port != oldPort[0] && port != null && port.getTanks() == 2,
                     "恢复后真实BlockCapabilityCache未刷新可用端口");
             require(helper, oldPort[0].drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "恢复后旧epoch句柄复活");
         });
-        helper.runAfterDelay(215, () -> {
+        helper.runAfterDelay(510, () -> {
             require(helper, machine.publishedHeat() == 18 && controller(helper, base).boiler.activeHeat == 18,
                     "恢复后缓存端口未重新提供热液并完成有偿预热");
             helper.succeed();

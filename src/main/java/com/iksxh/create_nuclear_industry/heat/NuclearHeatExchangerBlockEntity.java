@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.heat;
 
 import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
+import com.iksxh.create_nuclear_industry.compat.create.SharedFluidReceiver;
 import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -189,10 +190,16 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         return true;
     }
 
-    private final class Port implements IFluidHandler {
+    private final class Port implements IFluidHandler, SharedFluidReceiver {
         // 同一实体经历卸载/恢复时，先前缓存的句柄也永久失效，不能随 onLoad 重新复活。
         private final int epoch = capabilityEpoch;
         private boolean valid() { return epoch == capabilityEpoch && current() && canTick() && !level.isClientSide; }
+        /** 五面共用热罐空位；只读返回同一账本身份，不使模拟填充预约真实空间。 */
+        @Override public SharedFluidReceiver.Limits sharedFluidLimits() {
+            if (!valid()) return null;
+            int space = HeatExchangerState.CAPACITY - ledger.hot();
+            return new SharedFluidReceiver.Limits(ledger, space, ledger, space);
+        }
         @Override public int getTanks() { return valid() ? 2 : 0; }
         @Override public FluidStack getFluidInTank(int tank) {
             if (!valid() || tank < 0 || tank > 1) return FluidStack.EMPTY;
