@@ -9,6 +9,8 @@
 
 **2026-10-01 实现检查点：** 三矿及铅锡加工/素材均已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 与配方/外观/保存重进获用户确认，见 [铅锡收尾](./reviews/2026-10-01/material-02-acceptance.md)。铁粉、煤粉、木炭粉、钢粉、钢锭和钢板的[制钢路线](./reviews/2026-10-01/material-03b/README.md)，以及锡条、两种传感器和两种序列半成品的[材料04路线](./reviews/2026-10-01/material-04/ACCEPTANCE.md)也已通过完整人工清单并合入main；传感器此阶段仅为制造材料。表中其余目标仍须按对应任务判断，不能从策划阶段标记推断已经实现。
 
+**2026-10-03燃料02C检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及原生序列半成品`incomplete_steel_grate`已注册，配方与五项素材全部手测通过并合入main，见[最终验收](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料直接装配燃料组件及屏蔽装配台仍未实施。
+
 ## 1. 状态与命名规则
 
 | 标记 | 含义 |

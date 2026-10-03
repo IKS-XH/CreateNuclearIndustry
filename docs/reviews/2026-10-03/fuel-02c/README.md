@@ -1,13 +1,13 @@
 # 燃料02C：焊料、包壳与格架材料
 
-**状态：候选已就绪，待四项人工验收。** 2026-10-03用户批准[方案](../../../superpowers/plans/2026-10-03-fuel-assembly-materials-proposal.md)，其中焊料已改为3锡锭＋1铅锭→4件。候选实现提交`956bfbb`，实施与范围见[02C任务卡](../../../superpowers/plans/2026-10-03-ext-a-fuel-02c.md)。本批只补齐装配材料，屏蔽装配台和四材料直接装配燃料组件随后另卡。
+**状态：四项手测通过，已验收合入main。** 用户2026-10-03确认本页手动测试全部通过，见[最终验收](./ACCEPTANCE.md)。已批准[方案](../../../superpowers/plans/2026-10-03-fuel-assembly-materials-proposal.md)中的焊料为3锡锭＋1铅锭→4件；实现提交`956bfbb`，实施与范围见[02C任务卡](../../../superpowers/plans/2026-10-03-ext-a-fuel-02c.md)。本批只补齐装配材料，屏蔽装配台和四材料直接装配燃料组件随后另卡。
 
 ## 客户端启动与验收
 
-完整退出旧客户端，从同级候选目录启动；本批功能在人工门通过前不合入main，主目录启动暂不包含02C材料：
+完整退出旧客户端后，从主目录启动即可使用本批材料。下表保留已通过的四项清单，不要求重复测试：
 
 ```powershell
-Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
+Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry'
 .\gradlew.bat runClient
 ```
 
@@ -27,4 +27,4 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 - [独立规格与质量审查](./EXT-A-FUEL-02C-REVIEW.md)：未发现P1/P2或有效小问题，无需整改；按治理5.1复用已有证据，没有重复构建或测试。
 - [制品核对](./EXT-A-FUEL-02C/artifact-check.txt)：21个预期入口齐全，五PNG打包哈希一致。候选JAR为`build/libs/create_nuclear_industry-0.1.0.jar`，SHA-256为`ee3aff122df6e634d465723698001d275c23b802776291b24febbbc2d37c3a5d`。
 
-上述证据覆盖实现与打包，不代表客户端实际加工、热级边界、机械锯过滤或JEI/游戏内外观已通过。人工结果待用户确认；在此暂停自动推进，不运行无关全量测试。
+上述自动检查覆盖实现与打包；客户端实际加工、热级边界、机械锯过滤及JEI/游戏内外观由用户本次手测确认。两类证据分别记录，收尾仅增加主目录增量打包，详见[最终验收](./ACCEPTANCE.md)。
