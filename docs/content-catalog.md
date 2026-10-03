@@ -73,10 +73,11 @@
 | 阶段 | 注册 ID | 中文名 | 主要用途 |
 | :--- | :--- | :--- | :--- |
 | `P1` | `steel_ingot`、`steel_plate`、`steel_rod` | 钢锭/板/杆 | 机器、管道和结构基础；兼容 `c:* /steel` 标签 |
-| `P1` | `reinforced_steel_plate` | 强化合金钢板 | 高压锅炉、汽轮机和高温设备 |
+| `P1` | `reinforced_steel_plate` | 强化钢板 | 高压锅炉、汽轮机和高温设备 |
 | `P1` | `solder_ingot` | 锡合金焊料 | 密封、仪表和燃料棒封端 |
 | `P1` | `steel_mesh`、`steel_grate`、`steel_frame` | 钢网/格架/框架 | 燃料组件、热室网格和多方块骨架 |
-| `P1` | `steel_pipe_blank` | 钢管坯 | 耐压管段和燃料包壳 |
+| `P1` | `steel_pipe_blank` | 钢管坯 | 01A核换热管束；未来耐压管段，本期不改既有燃料包壳路线 |
+| `01A实施中` | `nuclear_heat_exchange_bundle` | 核换热管束 | 整机制造专用部件，工作台制造，无序列装配 |
 | `P1` | `seal_ring`、`pressure_fitting` | 密封环、耐压接头 | 流体与蒸汽接口 |
 | `P1` | `industrial_sensor`、`radiation_sensor` | 工业传感器、辐射传感器 | 仪表、联锁和危险检测 |
 | 材料04中间态 | `incomplete_industrial_sensor`、`incomplete_radiation_sensor` | 工业传感器半成品、辐射传感器半成品 | Create原生序列装配进度；非独立成品，不加入模组创造页；不赋予检测功能 |
@@ -213,6 +214,8 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | `P2` | `variable_reactor` | 可变尺寸反应堆 | 5×5×5 至 11×11×15 | 从固定实验堆扩展；有效燃料长度受限 | 结构自由度和规模化产热 |
 | `P2` | `segmented_supercritical_steam_turbine` | 分段式超临界汽轮机 | 可变长度高压/低压段和多个主轴端 | 每段类型、转子和轴承合法 | 可变流量与多端口应力分配 |
 | `P3` | `shielded_hot_cell` | 屏蔽热室 | 屏蔽外壳、观察窗、机械臂、物品/流体端口 | 屏蔽完整，危险物料不能从非端口穿过 | 高放废物灌封与处理 |
+
+**首期实施边界（2026-10-03已确认）：** `nuclear_heat_exchanger`首批仅核热→Create锅炉，显示名“核换热器”；双4000mB，顶供热、其余五面输入热液/排冷液，无GUI，材料身份与具体合同见[01A卡](./superpowers/plans/2026-10-03-ext-b-exchanger-01a.md)。下述完整三模式与盆接入仍是后续规划。
 
 Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`nuclear_heat_exchanger` 对锅炉注册 `BoilerHeater`：核热模式默认热值 18，蒸汽供热模式默认热值 9；盆式加工分别暴露超级加热与普通加热。多个换热器可累加锅炉数值热量，但普通热源品质绝不能通过数量提升为核级。
 
