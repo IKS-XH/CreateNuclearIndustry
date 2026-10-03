@@ -1,0 +1,21 @@
+{
+  "pre_repair_axis_aligned_duplicate_pairs": 70,
+  "pre_repair_rotated_chamfer_cap_pairs": 46,
+  "post_repair_world_idle_duplicate_pairs": 0,
+  "post_repair_motion_endpoints_duplicate_pairs": 0,
+  "post_repair_item_duplicate_pairs": 0,
+  "chamfer_cap_inset_model_units": 0.03125,
+  "chamfer_cap_inset_block_units": 0.001953125,
+  "inset_world_y_planes": [
+    0,
+    4,
+    28,
+    32
+  ],
+  "baseline_geometry_elements": 354,
+  "repaired_geometry_elements": 1056,
+  "png_files": 113,
+  "png_sha256_all_identical": true,
+  "jar_sha256": "136752f67df5f4f283eb5a9cf22c8d305c02823e11a01ec1275c3ba010df22e0",
+  "jar_model_byte_matches": 20
+}
