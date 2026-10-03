@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C",
+    "P",
+    "S"
+  ],
+  "key": {
+    "C": {
+      "item": "create:sturdy_sheet"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "S": {
+      "tag": "c:plates/steel"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:reinforced_steel_plate",
+    "count": 1
+  }
+}

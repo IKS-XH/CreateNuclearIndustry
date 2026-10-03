@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P P",
+    "CRC",
+    "P P"
+  ],
+  "key": {
+    "P": {
+      "tag": "c:tubes/steel"
+    },
+    "C": {
+      "tag": "c:plates/copper"
+    },
+    "R": {
+      "tag": "c:plates/reinforced_steel"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:nuclear_heat_exchange_bundle",
+    "count": 1
+  }
+}

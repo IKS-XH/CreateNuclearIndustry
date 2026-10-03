@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300">
+<rect width="720" height="300" fill="#202a33"/><g fill="#536777" stroke="#111a20" stroke-width="3"><path d="M170 75h180v150H170z"/><path d="M170 75l80-45 180 0-80 45z"/><path d="M350 75l80-45v150l-80 45z"/></g>
+<path d="M208 158h96" stroke="#c06b43" stroke-width="14"/><path d="M208 190h96" stroke="#e79756" stroke-width="14"/><path d="M255 110v-44" stroke="#ffd370" stroke-width="11"/>
+<g fill="#e0e8ec" font-family="sans-serif" font-size="17"><text x="32" y="35">坐标原点：方块西北下角 (0,0,0)</text><text x="460" y="85">X→东，Y→上，Z→南</text><text x="460" y="118">外壳：静态承力层</text><text x="460" y="150">热芯：铜盘管独立模型</text><text x="460" y="182">热面：Y=14..16</text><text x="460" y="214">旋转枢轴：方块中心 (8,8,8)</text><text x="460" y="246">旋转只绕Y轴；坐标与UV均在0..16</text></g></svg>

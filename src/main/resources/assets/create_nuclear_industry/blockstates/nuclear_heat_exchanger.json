@@ -1,0 +1,116 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/shell",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/nuclear_heat_exchanger/core_lit",
+        "y": 270
+      }
+    }
+  ]
+}

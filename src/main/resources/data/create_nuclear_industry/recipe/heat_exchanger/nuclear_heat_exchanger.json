@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "C": {
+      "tag": "c:plates/copper"
+    },
+    "P": {
+      "tag": "create_nuclear_industry:pressure_fittings"
+    },
+    "H": {
+      "tag": "create_nuclear_industry:nuclear_heat_exchange_bundles"
+    },
+    "I": {
+      "tag": "create_nuclear_industry:industrial_sensors"
+    }
+  },
+  "pattern": [
+    " SSS ",
+    "SCPCS",
+    "SHIHS",
+    "SCPCS",
+    " SSS "
+  ],
+  "result": {
+    "id": "create_nuclear_industry:nuclear_heat_exchanger",
+    "count": 1
+  },
+  "show_notification": false
+}

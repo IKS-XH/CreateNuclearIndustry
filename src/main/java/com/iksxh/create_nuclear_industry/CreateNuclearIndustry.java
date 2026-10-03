@@ -5,6 +5,10 @@ import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
 import com.iksxh.create_nuclear_industry.content.ReactorCraftingContent;
 import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
+import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
+import com.iksxh.create_nuclear_industry.content.HeatMaterialsContent;
+import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
+import com.iksxh.create_nuclear_industry.heat.HeatExchangerBoilerBridge;
 import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
@@ -49,17 +53,22 @@ public final class CreateNuclearIndustry {
     /** 在模组事件总线上完成配置、注册对象、网络协议和能力入口的装配。 */
     public CreateNuclearIndustry(IEventBus modEventBus, ModContainer modContainer) {
         P1ServerConfig.register(modContainer);
+        HeatExchangerConfig.register(modContainer);
         ModFluids.register(modEventBus);
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
         BasicMaterialContent.register(modEventBus);
         ReactorCraftingContent.register(modEventBus);
         FuelProcessingContent.register(modEventBus);
-        // 八格任一分块均不可被Create构造单独搬移，搬迁必须走整机携物入口。
+        HeatMaterialsContent.register(modEventBus);
+        HeatExchangeContent.register(modEventBus);
+        NeoForge.EVENT_BUS.register(HeatExchangerBoilerBridge.class);
+        // 持有库存的整机及其分块均禁止 Create 构造搬移；搬迁统一走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
                 state.is(FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get())
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get())
+                        || state.is(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get())
                         ? BlockMovementChecks.CheckResult.FAIL : BlockMovementChecks.CheckResult.PASS);
         OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);
