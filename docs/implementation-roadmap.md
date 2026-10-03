@@ -18,7 +18,7 @@
 | 首台富集离心机及配套铀原料加工 | 全部人工门通过，已合入main | [最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)：main与最终候选实现一致，复用已审证据，新跑一次增量assemble通过 |
 | 生芯块与专用燃料烧结炉02A/02B | 全部人工门通过，已合入main | [最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)：整格八棱、工作台九宫格中央高炉；后续包壳/焊料/格架与组件直接装配另卡确认 |
 | 燃料装配材料02C | 四项手测通过，已合入main | [最终验收](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)：锡铅焊料、包壳、钢网和格架；后续专用装配台与组件直接装配另卡确认用量及运行参数 |
-| 燃料组件直接装配02D | 候选已实现，等待四组手测 | [候选交付](./reviews/2026-10-03/fuel-02d/README.md)：一格无GUI、四料8/4/2/1产1组件；3定向JUnit、2独立GameTest和最终assemble通过，集中审查通过；`3f7b207`尚未合入main |
+| 燃料组件直接装配02D/02E | 02D未验收；02E整套方案已批准 | [02D候选](./reviews/2026-10-03/fuel-02d/README.md)自动证据保留；用户要求2×2×2、四周漏斗输入、21格制造、动画预留，见[02E方案](./superpowers/plans/2026-10-03-shielded-assembly-multiblock-proposal.md)。按[02E实施卡](./superpowers/plans/2026-10-03-ext-a-fuel-02e.md)派发，暂缓旧受影响手测 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 下一阶段主线，尚未形成完整生存链 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
 | 热端、动力、具体事故与剩余 Ponder | 后续实施 | 先补接口探针、冻结对应合同；教学在具体事故验收后继续 |
