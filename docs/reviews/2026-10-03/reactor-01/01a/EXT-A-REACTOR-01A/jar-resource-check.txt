@@ -1,0 +1,10 @@
+JAR resource checks (True means present):
+True	data/create_nuclear_industry/recipe/mixing/shielded_glass.json
+True	data/create_nuclear_industry/recipe/crafting/reactor/reactor_fuel_rod.json
+True	data/create_nuclear_industry/recipe/mechanical_crafting/reactor_instrument_port.json
+True	data/create_nuclear_industry/recipe/mechanical_crafting/reactor_refueling_port.json
+True	data/create_nuclear_industry/recipe/mechanical_crafting/control_rod_drive.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/shielded_glass.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/reactor_instrument_port.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/reactor_refueling_port.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/control_rod_drive.json

@@ -13,6 +13,8 @@
 
 **2026-10-03反应堆制造候选：** [REACTOR-01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md)接续六种普通材料`steel_rod`、`seal_ring`、`pressure_fitting`、`industrial_ceramic`、`neutron_absorbing_ceramic`、`shielded_glass`，一个普通方块`shielding_concrete`以及五个Create原生序列半成品。它们支撑正式八种实验堆部件的生存制造；屏蔽名称不表示辐射系统已实现。新内容未合入main，人工验收按最新授权与01B合并。
 
+**01A制造修订：** 铅玻璃改铅锭加玻璃普通加热搅拌，燃料柱每次1件；仪表/换料端口和驱动器改动力合成。原5半成品身份均保留，4个停用路线半成品仅作旧存档兼容，控制棒半成品继续使用；不改注册、模型或运行逻辑。见[01A卡](./superpowers/plans/2026-10-03-ext-a-reactor-01a.md)。
+
 ## 1. 状态与命名规则
 
 | 标记 | 含义 |

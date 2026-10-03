@@ -1,0 +1,1 @@
+SHA256 8DC7E6447A3D210C6063BF1781EFF57A86DDDA0D89928A91FC9DF34DD55D0082  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\build\libs\create_nuclear_industry-0.1.0.jar

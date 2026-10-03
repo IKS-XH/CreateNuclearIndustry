@@ -1,6 +1,6 @@
 # EXT-A-REACTOR-01：固定实验堆的生存制造
 
-**状态：候选实现、定向验证和独立复审通过；01B与本批合并等待人工验收。** 用户于2026-10-03明确要求冷却剂做完后继续下一项，睡醒一起手测，数值和设定先采用PM推荐。因此本批直接细化并实施，不重复请求数值/方案确认；未测仍记待验，候选不提前合入main。交付及证据见[合并客户端交接](../../reviews/2026-10-03/reactor-01/README.md)。此授权仅用于本次接续批次，不表示热端整条机组自动验收。
+**状态：原候选实现与复审通过；最新配方按[01A修订卡](./2026-10-03-ext-a-reactor-01a.md)完成候选修订，人工仍待验。** 用户于2026-10-03明确要求冷却剂做完后继续下一项，睡醒一起手测，数值和设定先采用PM推荐。因此本批直接细化并实施，不重复请求数值/方案确认；未测仍记待验，候选不提前合入main。交付及证据见[合并客户端交接](../../reviews/2026-10-03/reactor-01/README.md)。此授权仅用于本次接续批次，不表示热端整条机组自动验收。
 
 **Goal：** 使用已有材料和Create工序制造固定实验堆的全部正式组成块，补齐最小前置材料。
 
@@ -12,7 +12,7 @@
 
 ## 1. 推荐值与玩家流程
 
-材料投入适中，工序与布线构成挑战。凡不超过3×3的有序结构配方均使用工作台；Create动力合成器沿原生兼容处理，不人为要求小配方只能动力合成。所有序列均1轮、100%成功、无副产物，沿Create原生加工速度；搅拌`processing_time=100`，不是固定5秒。
+用户随后明确三种端口/驱动器使用动力合成，具体紧凑布局见01A卡；其余外壳、窗口、冷热端和燃料柱仍使用工作台。所有序列均1轮、100%成功、无副产物，沿Create原生加工速度；搅拌`processing_time=100`，不是固定5秒。
 
 | 配方ID末段 / 输出 | 输入与数量 | 工序与参数 |
 | :--- | :--- | :--- |
@@ -21,23 +21,23 @@
 | `deploying/pressure_fitting` →1耐压接头 | 1 `c:plates/steel`基底＋1锡合金焊料 | 原生机械手加工 |
 | `mixing/industrial_ceramic` →2工业陶瓷 | 1 `c:gems/quartz`＋1黏土球 | 最低普通加热，100 |
 | `mixing/neutron_absorbing_ceramic` →1中子吸收陶瓷 | 1工业陶瓷＋1 `c:nuggets/lead`＋1 `c:dusts/redstone` | 最低普通加热，100 |
-| `sequenced_assembly/shielded_glass` →1铅屏蔽玻璃材料 | 原版无色玻璃块为基底，机械手加1 `c:plates/lead`后压片 | 1轮100%，无热；材料物品，不新增透明方块 |
+| `mixing/shielded_glass` →1铅屏蔽玻璃材料 | 1原版无色玻璃块＋1 `c:ingots/lead` | 普通加热搅拌100，无副产物；材料物品 |
 | `mixing/shielding_concrete` →1屏蔽混凝土方块 | 1任意颜色已硬化原版混凝土＋1 `c:nuggets/lead` | 无热，100；混凝土粉末不接受；屏蔽尾矿替代路线后置 |
 | `crafting/reactor/reactor_casing` →4正式反应堆外壳 | 2钢板＋2铅板＋1屏蔽混凝土 | 3×3 ` S /LCL/ S `；S钢、L铅、C混凝土 |
 | `crafting/reactor/reactor_window` →1反应堆观察窗 | 1正式外壳＋1铅屏蔽玻璃 | 工作台无序 |
 | `crafting/reactor/reactor_cold_port` →1冷端 | 1正式外壳＋1耐压接头＋1密封环＋1蓝色染料 | 工作台无序；颜色区分冷热配方 |
 | `crafting/reactor/reactor_hot_port` →1热端 | 同上，蓝色染料换红色染料 | 工作台无序 |
-| `sequenced_assembly/reactor_instrument_port` →1仪表端口 | 外壳基底，机械手依次加1工业传感器、1电子管，再压片 | 1轮100%，无热 |
-| `sequenced_assembly/reactor_refueling_port` →1换料端口 | 外壳基底，依次加1完整Create机械手`create:deployer`、1工业传感器、1密封环，再压片 | 1轮100%，无热 |
+| `mechanical_crafting/reactor_instrument_port` →1仪表端口 | 1外壳＋1工业传感器＋1电子管 | 三格横排动力合成 |
+| `mechanical_crafting/reactor_refueling_port` →1换料端口 | 1外壳＋1完整`create:deployer`＋1工业传感器＋1密封环 | 2×2动力合成 |
 | `sequenced_assembly/control_rod` →1现有控制棒组件 | 1钢杆基底，依次加1中子吸收陶瓷、1 `c:plates/brass`，再压片 | 1轮100%，无热；不可放置材料 |
-| `sequenced_assembly/control_rod_drive` →1控制棒驱动器 | 控制棒组件基底，依次加1 `create:mechanical_piston`、1 `create:piston_extension_pole`、1精密构件，再压片 | 1轮100%，无热 |
-| `crafting/reactor/reactor_fuel_rod` →3燃料柱结构块 | 2钢板＋1钢格架 | 工作台竖列`S/G/S`；无燃料、无耐久，实际燃料仍装入顶部换料端口 |
+| `mechanical_crafting/control_rod_drive` →1控制棒驱动器 | 1控制棒组件＋1机械活塞＋1活塞杆＋1精密构件 | 2×2动力合成 |
+| `crafting/reactor/reactor_fuel_rod` →1燃料柱结构块 | 2钢板＋1钢格架 | 工作台竖列`S/G/S`；无燃料、无耐久，实际燃料仍装入顶部换料端口 |
 
 通用钢、铅等输入读取已有细分标签。新钢杆加入`c:rods/steel`及父`c:rods`，材料语义不明确的陶瓷等保留本模组身份。混凝土使用`create_nuclear_industry:concrete_blocks`明确枚举16色原版硬化混凝土，不污染通用标签。蓝/红染料使用锁定版本已有`c:dyes/blue`、`c:dyes/red`（实施者先核对存在）。不增加拆解配方，不从状态设备/燃料组件回收材料。
 
-屏蔽混凝土为普通静态建筑块，硬度3、爆炸抗性6、石材音效、镐采掘且至少铁镐、掉自身；名称不承诺尚未实现的辐射防护。其余新增材料堆叠64。5个`incomplete_*`使用原生`SequencedAssemblyItem`，不加创造页、不自建进度或库存。
+屏蔽混凝土为普通静态建筑块，硬度3、爆炸抗性6、石材音效、镐采掘且至少铁镐、掉自身；名称不承诺尚未实现的辐射防护。其余新增材料堆叠64。原5个`incomplete_*`保留身份兼容；01A后仅控制棒组件半成品用于新加工，其余4种旧路线停用。不加创造页、不自建进度或库存。
 
-## 2. 范围、资源与精简验证
+## 2. 初版范围、资源与验证记录（修订差异按01A卡）
 
 - 使用已有8个P1方块、`control_rod`及其素材，禁止给旧`experimental_reactor_casing`样例添加配方或改变其身份。实际新燃料仍来自已验收屏蔽装配台；本批结构块不能包含或生成燃料组件。
 - 新素材由SVG确定性导出16×16，沿已认可蓝灰钢、黄铜和陶瓷风格；共6种新材料、1张混凝土方块纹理和5种半成品。保留现有114张游戏PNG（含01B青金石粉），不修改旧共用manifest/pipeline。
@@ -49,13 +49,13 @@
 
 PM核对实际Ponder场景：基础模板加中心驱动器后，场景还增加第二对冷热端口，因此完整样本为81外壳、3窗、1仪表、2冷端、2热端、8换料端口、24燃料柱结构块和1驱动器，共122个可放置方块（98外层＋24内层）。该八列样本用于复核已存在的教学结构，不建议直接满燃料点火；配方验收仅空堆成型。
 
-升级窗和端口还要消耗16外壳，故总需97外壳：制造25批产100，余3。25块屏蔽混凝土需25块任意硬化混凝土＋25铅粒；3铅屏蔽玻璃需3原版玻璃＋3铅板。
+升级窗和端口还要消耗16外壳，故总需97外壳：制造25批产100，余3。25块屏蔽混凝土需25块任意硬化混凝土＋25铅粒；3铅屏蔽玻璃需3原版玻璃＋3铅锭。以下成本已按01A每次1柱修订。
 
 | 本模组直接材料账（结构本体） | 总量与批次余量 |
 | :--- | :--- |
-| 钢板 | 76：外壳50、密封环6、耐压接头4、24燃料柱16；另需8钢格架，其上游额外消耗16钢板 |
-| 钢锭（杆材） | 1→2钢杆，用1余1；合并格架后的钢材总需求93钢锭当量，Create零件内含成本另计 |
-| 铅板 | 53：外壳50、铅玻璃3 |
+| 钢板 | 108：外壳50、密封环6、耐压接头4、24燃料柱48；另需24钢格架，其上游额外消耗48钢板 |
+| 钢锭（杆材） | 1→2钢杆，用1余1；合并格架后的钢材总需求157钢锭当量，Create零件内含成本另计 |
+| 铅板 / 铅锭 | 50板制外壳；另3锭制铅玻璃 |
 | 铅粒 | 26：混凝土25、吸收陶瓷1；三铅锭拆27粒余1 |
 | 焊料 | 使用4；按已有3锡＋1铅生产一批4件，无余量 |
 | 工业陶瓷 | 1石英＋1黏土球产2，用1制吸收陶瓷余1；另消耗1红石粉 |
@@ -66,7 +66,7 @@ PM核对实际Ponder场景：基础模板加中心驱动器后，场景还增加
 
 此表不把8个燃料组件、首次冷却剂、Create工厂与外部管路算免费，它们不属于结构本体账。若后续选择填满该布局默认3000mB堆内容量，01B需三粉各3＋3000mB水；回路持液另计，不将满罐设为启动门槛。新配方没有自建转速或固定秒数，吞吐由原生设备与物流决定。
 
-## 3. 精确写集与分工
+## 3. 初版精确写集与分工（01A不沿用此写集）
 
 候选：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支`codex/ore-acquisition`，实现基线`5353152`。既有01B不动，主工程用户`.vscode/launch.json`不动。PM独占核心docs和Git；执行者不得Git写、派发或验收。
 
@@ -88,7 +88,7 @@ PM核对实际Ponder场景：基础模板加中心驱动器后，场景还增加
 2. 游戏`assets/create_nuclear_industry/textures/item/`下上述6材料＋5半成品PNG及同名`models/item/*.json`；`textures/block/shielding_concrete.png`、`models/block/shielding_concrete.json`、`models/item/shielding_concrete.json`、`blockstates/shielding_concrete.json`。普通cube_all和继承方块item，现有8种反应堆模型不动。
 3. 报告`build/reports/extension/EXT-A-REACTOR-01-ART.md`和证据目录。只做本批资源校验与明暗底预览、旧PNG未改核对；不运行Gradle/客户端，不写语言/数据/核心docs。
 
-## 4. 执行步骤与验收
+## 4. 初版执行步骤与验收记录
 
 必读AGENTS、治理5.1、本卡；实际应用`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`与`minecraft-testing/SKILL.md`，美术另读`minecraft-resource-pack/SKILL.md`。手写代码注释/Javadoc中文。PM使用方案梳理、任务计划和子代理执行技能；用户本次委托覆盖通用技能的重复设计审批，治理5.1覆盖多层重复审查/全量验证，执行者Git禁令覆盖通用提交步骤。
 
