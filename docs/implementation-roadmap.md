@@ -17,6 +17,7 @@
 | 主线材料05 / 素材07：石英粉、耐火砖、重型轴承 | 2026-10-02完整人工清单通过，已合入main | [最终验收](./reviews/2026-10-02/material-05/ACCEPTANCE.md)：复用已审候选265JUnit/180required证据，主工程增量assemble及制品检查通过，不重复全量 |
 | 首台富集离心机及配套铀原料加工 | 全部人工门通过，已合入main | [最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)：main与最终候选实现一致，复用已审证据，新跑一次增量assemble通过 |
 | 生芯块与专用燃料烧结炉02A/02B | 全部人工门通过，已合入main | [最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)：整格八棱、工作台九宫格中央高炉；后续包壳/焊料/格架与两级装配另卡确认 |
+| 燃料装配材料02C | 方案待确认，未实施 | [推荐方案](./superpowers/plans/2026-10-03-fuel-assembly-materials-proposal.md)：焊料、包壳、钢网和格架；后续专用装配台与棒/组件另卡 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 下一阶段主线，尚未形成完整生存链 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
 | 热端、动力、具体事故与剩余 Ponder | 后续实施 | 先补接口探针、冻结对应合同；教学在具体事故验收后继续 |
