@@ -9,7 +9,7 @@
 
 **2026-10-01 实现检查点：** 三矿及铅锡加工/素材均已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 与配方/外观/保存重进获用户确认，见 [铅锡收尾](./reviews/2026-10-01/material-02-acceptance.md)。铁粉、煤粉、木炭粉、钢粉、钢锭和钢板的[制钢路线](./reviews/2026-10-01/material-03b/README.md)，以及锡条、两种传感器和两种序列半成品的[材料04路线](./reviews/2026-10-01/material-04/ACCEPTANCE.md)也已通过完整人工清单并合入main；传感器此阶段仅为制造材料。表中其余目标仍须按对应任务判断，不能从策划阶段标记推断已经实现。
 
-**2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及`incomplete_steel_grate`配方/素材已[验收合入main](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料装配组件及八格屏蔽装配台功能手测全部通过，连同模型R2共面修复已[合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)；修后画面未追记人工通过。下一批青金石粉和冷却剂见[01B](./superpowers/plans/2026-10-03-ext-a-material-01b.md)。
+**2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及`incomplete_steel_grate`配方/素材已[验收合入main](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料装配组件及八格屏蔽装配台功能手测全部通过，连同模型R2共面修复已[合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)；修后画面未追记人工通过。青金石粉`lapis_dust`与无热冷却剂制备已在[01B候选](./reviews/2026-10-03/material-01b/README.md)实现，定向验证通过、客户端待验，尚未合入main。
 
 ## 1. 状态与命名规则
 
@@ -90,7 +90,7 @@
 
 复合冷却剂直接使用原版下界资源 `minecraft:glowstone_dust`（中文名“荧石粉”）。本模组不新增荧石矿物或荧石粉，也不为原版荧石复制注册项和素材。
 
-用户于 2026-09-23 确认保留青金石制粉工序并对接 NeoForge 通用材料标签。青金石粉正式身份为 `create_nuclear_industry:lapis_dust`，不依赖第三方模组提供基础产物；`c:dusts/lapis` 是按通用约定补充的标签，并非 NeoForge 21.1.219 已内置的粉末。原料读取 `c:gems/lapis`，粉末用途读取 `c:dusts/lapis`，不能把整颗青金石或蓝色染料加入粉末标签绕过工序。D-02a 已确认粉碎轮承担制粉、磨石保留 Create 原有染料配方，并接受本模组制粉路线的粉碎轮门槛；本次只登记需求，不表示已实现。
+用户于 2026-09-23 确认保留青金石制粉工序并对接 NeoForge 通用材料标签。青金石粉正式身份为 `create_nuclear_industry:lapis_dust`，不依赖第三方模组提供基础产物；`c:dusts/lapis` 是按通用约定补充的标签，并非 NeoForge 21.1.219 已内置的粉末。原料读取 `c:gems/lapis`，粉末用途读取 `c:dusts/lapis`，不能把整颗青金石或蓝色染料加入粉末标签绕过工序。D-02a 已确认粉碎轮承担制粉、磨石保留 Create 原有染料配方，并接受本模组制粉路线的粉碎轮门槛；该需求已在01B候选实现，当前客户端与合入状态见[交付清单](./reviews/2026-10-03/material-01b/README.md)。
 
 用户于 2026-09-23 确认先完成基础材料、设备与燃料生产，再完成机组运行闭环和乏燃料基础封存，复杂再处理后置。上述两种材料的 `P1` 标记表示后续首发扩展，不加入当前固定实验堆核心切片；本次只调整阶段，不表示已经注册或实现，不提前引入 P3 辐射、污染或高放处理系统。
 

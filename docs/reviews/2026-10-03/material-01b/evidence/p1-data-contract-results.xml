@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.P1DataContractTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-03T09:26:44.843Z" hostname="DESKTOP-4G1EOU9" time="0.048">
+  <properties/>
+  <testcase name="everyFormalItemAndFluidHasItsApplicableResourceAndLanguageContract()" classname="com.iksxh.create_nuclear_industry.P1DataContractTest" time="0.018"/>
+  <testcase name="everyFormalBlockHasTheCompleteResourceChain()" classname="com.iksxh.create_nuclear_industry.P1DataContractTest" time="0.012"/>
+  <testcase name="coldCoolantHasTheOnlyBucketAndLiquidBlockUsesTheFluidId()" classname="com.iksxh.create_nuclear_industry.P1DataContractTest" time="0.002"/>
+  <testcase name="applicableTagsCoverBlocksAndSteelPlate()" classname="com.iksxh.create_nuclear_industry.P1DataContractTest" time="0.001"/>
+  <testcase name="noP1SurvivalRecipesOrPollutedCoolantRouteWereAdded()" classname="com.iksxh.create_nuclear_industry.P1DataContractTest" time="0.013"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
