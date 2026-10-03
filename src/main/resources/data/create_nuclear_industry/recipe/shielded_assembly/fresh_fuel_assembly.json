@@ -1,0 +1,9 @@
+{
+  "type": "create_nuclear_industry:shielded_assembly",
+  "pellet": { "ingredient": { "item": "create_nuclear_industry:sintered_fuel_pellet" }, "count": 8 },
+  "cladding": { "ingredient": { "item": "create_nuclear_industry:fuel_cladding_tube" }, "count": 4 },
+  "solder": { "ingredient": { "tag": "c:ingots/solder" }, "count": 2 },
+  "grate": { "ingredient": { "item": "create_nuclear_industry:steel_grate" }, "count": 1 },
+  "result": { "id": "create_nuclear_industry:fresh_fuel_assembly", "count": 1 },
+  "work": 25600
+}

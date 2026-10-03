@@ -78,6 +78,7 @@ public final class ModCreativeTabs {
                         output.accept(FuelProcessingContent.GREEN_FUEL_PELLET.get());
                         output.accept(FuelProcessingContent.SINTERED_FUEL_PELLET.get());
                         output.accept(FuelProcessingContent.FUEL_SINTERING_FURNACE_ITEM.get());
+                        output.accept(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get());
                     })
                     .build()
     );

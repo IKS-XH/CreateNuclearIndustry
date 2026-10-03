@@ -8,6 +8,7 @@ import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyArmInteractionPoint;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.iksxh.create_nuclear_industry.worldgen.OreGenerationFilter;
@@ -62,12 +63,14 @@ public final class CreateNuclearIndustry {
         P0ProbeFluids.register(modEventBus);
         P0ProbeBlockEntities.register(modEventBus);
         FuelRefuelingArmInteractionPoint.register(modEventBus);
+        ShieldedAssemblyArmInteractionPoint.register(modEventBus);
         modEventBus.addListener(ControlRodSliderNetwork::registerPayloads);
         modEventBus.addListener(CreateNuclearIndustry::registerPonder);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerP1Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerCentrifugeCapabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerFuelSinteringCapabilities);
+        modEventBus.addListener(CreateNuclearIndustry::registerShieldedAssemblyCapabilities);
         NeoForge.EVENT_BUS.register(P0ProbeEvents.class);
         NeoForge.EVENT_BUS.register(ReactorStructureLifecycle.class);
         NeoForge.EVENT_BUS.register(ControlRodSliderNetwork.class);
@@ -127,6 +130,12 @@ public final class CreateNuclearIndustry {
     /** 炉体只开放顶面输入与四侧输出；底面留给 Create 燃烧室。 */
     private static void registerFuelSinteringCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FuelProcessingContent.FUEL_SINTERING_BE.get(),
+                (machine, side) -> machine.itemPort(side));
+    }
+
+    /** 装配台顶面只收四料，水平四面共享唯一成品槽，底部轴和未指定面无物料能力。 */
+    private static void registerShieldedAssemblyCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FuelProcessingContent.SHIELDED_ASSEMBLY_BE.get(),
                 (machine, side) -> machine.itemPort(side));
     }
 }

@@ -9,6 +9,9 @@ import com.iksxh.create_nuclear_industry.production.CentrifugeRecipe;
 import com.iksxh.create_nuclear_industry.production.FuelSinteringBlock;
 import com.iksxh.create_nuclear_industry.production.FuelSinteringBlockEntity;
 import com.iksxh.create_nuclear_industry.production.FuelSinteringRecipe;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlock;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyRecipe;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +36,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/** 铀原料和首台离心机的独立注册入口；只装配身份，不缓存机器运行状态。 */
+/** 铀原料、富集、烧结与屏蔽装配的独立注册入口；只装配身份，不缓存机器运行状态。 */
 public final class FuelProcessingContent {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreateNuclearIndustry.MOD_ID);
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CreateNuclearIndustry.MOD_ID);
@@ -68,6 +71,12 @@ public final class FuelProcessingContent {
                     .strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));
     public static final DeferredItem<BlockItem> FUEL_SINTERING_FURNACE_ITEM = ITEMS.register("fuel_sintering_furnace",
             () -> new BlockItem(FUEL_SINTERING_FURNACE.get(), new Item.Properties().stacksTo(1)));
+    public static final DeferredBlock<ShieldedAssemblyBlock> SHIELDED_ASSEMBLY_STATION = BLOCKS.register(
+            "shielded_assembly_station", () -> new ShieldedAssemblyBlock(BlockBehaviour.Properties
+                    .ofFullCopy(Blocks.IRON_BLOCK).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));
+    public static final DeferredItem<BlockItem> SHIELDED_ASSEMBLY_STATION_ITEM = ITEMS.register(
+            "shielded_assembly_station", () -> new BlockItem(SHIELDED_ASSEMBLY_STATION.get(),
+                    new Item.Properties().stacksTo(1)));
 
     public static final DeferredHolder<FluidType, FluidType> URANIUM_SLURRY_TYPE = FLUID_TYPES.register("uranium_slurry",
             () -> new FluidType(FluidType.Properties.create().descriptionId("fluid_type.create_nuclear_industry.uranium_slurry")
@@ -107,6 +116,9 @@ public final class FuelProcessingContent {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FuelSinteringBlockEntity>> FUEL_SINTERING_BE =
             BLOCK_ENTITIES.register("fuel_sintering_furnace",
                     () -> BlockEntityType.Builder.of(FuelSinteringBlockEntity::new, FUEL_SINTERING_FURNACE.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShieldedAssemblyBlockEntity>> SHIELDED_ASSEMBLY_BE =
+            BLOCK_ENTITIES.register("shielded_assembly_station", () -> BlockEntityType.Builder.of(
+                    ShieldedAssemblyBlockEntity::new, SHIELDED_ASSEMBLY_STATION.get()).build(null));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGING_TYPE =
             RECIPE_TYPES.register("centrifuging", () -> new RecipeType<>() {});
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CentrifugeRecipe>> CENTRIFUGING_SERIALIZER =
@@ -115,6 +127,10 @@ public final class FuelProcessingContent {
             RECIPE_TYPES.register("sintering", () -> new RecipeType<>() {});
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FuelSinteringRecipe>> SINTERING_SERIALIZER =
             RECIPE_SERIALIZERS.register("sintering", FuelSinteringRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ShieldedAssemblyRecipe>> SHIELDED_ASSEMBLY_TYPE =
+            RECIPE_TYPES.register("shielded_assembly", () -> new RecipeType<>() {});
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShieldedAssemblyRecipe>> SHIELDED_ASSEMBLY_SERIALIZER =
+            RECIPE_SERIALIZERS.register("shielded_assembly", ShieldedAssemblyRecipe.Serializer::new);
 
     private FuelProcessingContent() {}
 

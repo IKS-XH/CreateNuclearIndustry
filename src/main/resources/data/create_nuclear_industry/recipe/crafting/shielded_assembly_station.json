@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": { "tag": "c:plates/lead" },
+    "S": { "tag": "c:plates/steel" },
+    "D": { "item": "create:deployer" },
+    "R": { "item": "create_nuclear_industry:radiation_sensor" }
+  },
+  "pattern": ["LSL", "SDS", "LRL"],
+  "result": { "id": "create_nuclear_industry:shielded_assembly_station", "count": 1 }
+}
