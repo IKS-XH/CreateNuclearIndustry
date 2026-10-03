@@ -24,8 +24,8 @@
 1. `content/ModItems.java`仅新增`LAPIS_DUST`、`content/ModCreativeTabs.java`仅加入该项；不挪动其余注册。参考旧提交`8996fa78e76fd0ce4227763db7da9b103d32a518`的小改动，禁止整体checkout/cherry-pick旧分支。
 2. `assets/create_nuclear_industry/models/item/lapis_dust.json`、`textures/item/lapis_dust.png`；双语言JSON只追加该物品键。
 3. `data/c/tags/item/dusts/lapis.json`及`dusts.json`仅追加；两配方`data/create_nuclear_industry/recipe/crushing/lapis_dust.json`与`mixing/compound_coolant.json`。
-4. `tools/art-assets/manifest.json`仅将已有lapis条目的`game:null`改为该物品贴图路径，保留SVG和已认可生成PNG；不运行全量install、不改共用导出器。该映射变动若触发既有专用检查的历史数量假设，报告PM，禁止顺手重写全管线。
-5. 新`src/main/java/.../gametest/ExtensionCoolantProductionGameTests.java`、隔离模板`data/create_nuclear_industry_coolant/structure/p0_probe_empty.nbt`（复制现有空模板）。必要时新`src/test/java/.../CoolantProductionDataContractTest.java`。`P1DataContractTest.java`只在旧生存禁令中精确放行已批准的`mixing/compound_coolant.json`冷态产物，并更新相关中文解释；热态/污染/净化器禁令不放宽。
+4. `tools/art-assets/manifest.json`仅将已有lapis条目的`game:null`改为该物品贴图路径，并同步该条目的`use`说明；保留SVG和已认可生成PNG，不运行全量install、不改共用导出器。映射若触发历史数量假设，报告PM，禁止顺手重写全管线。
+5. 新`src/main/java/.../gametest/ExtensionCoolantProductionGameTests.java`、隔离模板`data/create_nuclear_industry_coolant/structure/p0_probe_empty.nbt`（复制现有空模板）。不保留逐字镜像JSON的新合同测试，离线资源核对记入报告，必要行为由真实机器场景验证。`P1DataContractTest.java`在旧生存禁令中精确放行已批准的`mixing/compound_coolant.json`冷态产物；本次实际运行暴露旧02E的`shielded_assembly/fresh_fuel_assembly.json`仍被旧禁令错误拦截，PM另授权仅对该精确路径放行已批准的`FRESH_FUEL_ASSEMBLY_ID`。同步中文解释，热态/污染/净化器及其他路径禁令不放宽，不改已验收配方或生产代码。
 6. 测试专用等价标签成员：只允许隔离GameTest运行目录`build/gametest-coolant-production`内数据包，不把伪等价物写进发布资源。沿用现有框架，确实需要新的装载接入先报告，勿增建框架。
 7. 报告`build/reports/extension/EXT-A-MATERIAL-01B.md`及同名证据目录，隔离运行目录`build/gametest-coolant-production`。不得修改Build/依赖、ModFluids/P1ContentIds、原生桶、任何其他PNG、旧设备或反应堆算法。
 
