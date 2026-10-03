@@ -4,7 +4,7 @@
 
 ## 当前工作
 
-**当前主线：** [铀原料加工与离心机](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与专用烧结炉02A/02B](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[02C包壳/焊料/钢网/格架材料](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)均已全部手测通过并合入main，焊料为3锡锭＋1铅锭→4件。[02D屏蔽装配台](./superpowers/plans/2026-10-03-ext-a-fuel-02d.md)按已批准数量和运行参数实施，四材料直接装配燃料组件，取消新燃料棒中间步骤。
+**当前主线：** [铀原料加工与离心机](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与专用烧结炉02A/02B](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[02C包壳/焊料/钢网/格架材料](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)均已全部手测通过并合入main，焊料为3锡锭＋1铅锭→4件。[02D/02E屏蔽装配台](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)已完成功能手测并合入main，四材料直接装配燃料组件，取消新燃料棒中间步骤。
 
 **推进方式（2026-10-02）：** 按用户要求启用[按改动范围验证](./project-governance.md#51-按改动范围验证2026-10-02起生效)：默认增量构建和定向测试，未变实现复用已审证据，普通批次一轮合并审查，全量仅在明确风险触发时运行。
 
@@ -14,7 +14,7 @@
 
 **剩余主线：** 青金石粉与冷却剂制备 → 反应堆/管网生存制造与后续机组闭环。四材料直接装配组件已完成；后续只确认新增取舍，无GUI原则与已批准工序直接沿用。
 
-**当前任务：** [02E功能验收与模型R2修复](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)已合入main，不重复功能清单。按用户“修复后直接下一步”指示执行[材料01B](./superpowers/plans/2026-10-03-ext-a-material-01b.md)：青金石1:1、两道加工参数100、冷却剂无需加热；实现后只交付该批三项人工清单。R2新画面不追记为已人工复看，动画另批。
+**当前任务：** [02E功能验收与模型R2修复](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)已合入main，不重复功能清单。[材料01B候选](./reviews/2026-10-03/material-01b/README.md)已完成实现和定向验证：青金石1:1、两道加工参数100、冷却剂无需加热。停在该批三项人工验收门，新配方仅在同级候选工作树。R2新画面不追记为已人工复看，动画另批。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
@@ -23,7 +23,7 @@
 | [燃料02A/02B：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 全部手测通过并合入main；[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)，运行证据复用 |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |
 | [材料05：石英粉、耐火砖与重型轴承实施](./superpowers/plans/2026-10-02-ext-a-material-05.md) | 完整人工清单通过，已合入main；[最终验收](./reviews/2026-10-02/material-05/ACCEPTANCE.md)，后续离心机见当前实施卡 |
-| [青金石粉与冷却剂01B](./superpowers/plans/2026-10-03-ext-a-material-01b.md) | 参数已确认，候选实施；恢复旧01A适用注册/标签并接入已认可SVG，不整体合并旧候选 |
+| [青金石粉与冷却剂01B](./superpowers/plans/2026-10-03-ext-a-material-01b.md) | 候选实现与审查通过，待[三项手测](./reviews/2026-10-03/material-01b/README.md)；未合入main，不整体合并旧01A |
 | [首套生产线成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) | 已批准试验配比与未批准候选分开记录；不是完整配方冻结表 |
 | [损伤倍率专项](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) | 游戏端 02A 已完成；模拟器 02B 仍待离线浏览器验收，未合并 |
 
