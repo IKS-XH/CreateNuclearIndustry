@@ -2,6 +2,18 @@
 
 EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/流动料浆共13张游戏纹理，并提供机器与尾矿砖JSON模型。该历史导出清单含82张游戏纹理，复用已有铀精矿，开工前69张PNG保持原字节。后续原生桶、两格模型及端盖整改已完成人工验收并合入main；见[最终验收](../../docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)。历史清单数量不代表后续独立生成器的新增资源总数。
 
+## 燃料02C装配材料素材
+
+本批新增锡铅焊料、包壳管、钢网、钢格架和格架半成品五项16×16像素SVG，候选交付和人工状态见[02C交付页](../../docs/reviews/2026-10-03/fuel-02c/README.md)。使用独立`fuel_02c_assets.py`复用严格SVG渲染器，不扩写共用manifest，不重新导出旧素材。93张已有游戏PNG保留原字节。
+
+在包含本批实现的仓库根目录运行：
+
+```powershell
+& 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/fuel_02c_assets.py
+```
+
+默认读取`sources/fuel-02c/`下五份可编辑SVG，生成本批PNG、`item/generated`物品模型及`build/reports/extension/EXT-A-FUEL-02C-assets/`预览；不覆盖源稿。仅缺少初始源稿时使用`--initialize-sources`建立缺失文件。五项之外的素材不在该工具写集内，命令不运行Gradle。
+
 ## 燃料02A/02B专用素材
 
 燃料02A新增两枚芯块及单格烧结炉；02B将八棱炉体扩大到整格外包范围。全部人工门已通过并合入main，见[最终验收](../../docs/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)。继续使用独立`fuel_02a_assets.py`，不扩大旧manifest或修改共用导出器。
