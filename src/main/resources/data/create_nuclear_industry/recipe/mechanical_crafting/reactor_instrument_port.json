@@ -3,11 +3,14 @@
   "accept_mirrored": false,
   "category": "misc",
   "key": {
-    "C": { "item": "create_nuclear_industry:reactor_casing" },
-    "S": { "item": "create_nuclear_industry:industrial_sensor" },
-    "T": { "item": "create:electron_tube" }
+    "S": { "tag": "c:plates/steel" },
+    "G": { "tag": "c:plates/gold" },
+    "P": { "item": "create:precision_mechanism" },
+    "I": { "item": "create_nuclear_industry:industrial_sensor" },
+    "T": { "item": "create:electron_tube" },
+    "C": { "item": "create_nuclear_industry:reactor_casing" }
   },
-  "pattern": ["CST"],
-  "result": { "id": "create_nuclear_industry:reactor_instrument_port" },
+  "pattern": [" SPS ", "SGIGS", "SGCGS", "SGTGS", " SPS "],
+  "result": { "count": 1, "id": "create_nuclear_industry:reactor_instrument_port" },
   "show_notification": false
 }

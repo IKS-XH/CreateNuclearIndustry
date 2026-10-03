@@ -184,10 +184,18 @@ public final class ExtensionReactorCraftingGameTests {
             require(helper, helper.getLevel().getRecipeManager().byKey(id("sequenced_assembly/" + path)).isEmpty(),
                     "旧序列配方仍加载: " + path);
         }
-        assertMechanicalRecipe(helper, "reactor_instrument_port", 3, 1, List.of(
-                new ItemStack(registered(helper, "reactor_casing")),
-                new ItemStack(registered(helper, "industrial_sensor")),
-                new ItemStack(createItem(helper, "electron_tube"))));
+        Item steelPlate = registered(helper, "steel_plate");
+        Item goldPlate = createItem(helper, "golden_sheet");
+        Item precisionMechanism = createItem(helper, "precision_mechanism");
+        Item sensor = registered(helper, "industrial_sensor");
+        Item electronTube = createItem(helper, "electron_tube");
+        Item casing = registered(helper, "reactor_casing");
+        assertMechanicalRecipe(helper, "reactor_instrument_port", 5, 5, List.of(
+                ItemStack.EMPTY, new ItemStack(steelPlate), new ItemStack(precisionMechanism), new ItemStack(steelPlate), ItemStack.EMPTY,
+                new ItemStack(steelPlate), new ItemStack(goldPlate), new ItemStack(sensor), new ItemStack(goldPlate), new ItemStack(steelPlate),
+                new ItemStack(steelPlate), new ItemStack(goldPlate), new ItemStack(casing), new ItemStack(goldPlate), new ItemStack(steelPlate),
+                new ItemStack(steelPlate), new ItemStack(goldPlate), new ItemStack(electronTube), new ItemStack(goldPlate), new ItemStack(steelPlate),
+                ItemStack.EMPTY, new ItemStack(steelPlate), new ItemStack(precisionMechanism), new ItemStack(steelPlate), ItemStack.EMPTY));
         assertMechanicalRecipe(helper, "reactor_refueling_port", 2, 2, List.of(
                 new ItemStack(createItem(helper, "deployer")),
                 new ItemStack(registered(helper, "industrial_sensor")),
