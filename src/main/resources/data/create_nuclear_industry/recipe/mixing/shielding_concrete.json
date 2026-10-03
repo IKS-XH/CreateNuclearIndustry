@@ -1,0 +1,9 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    { "tag": "create_nuclear_industry:concrete_blocks" },
+    { "tag": "c:nuggets/lead" }
+  ],
+  "processing_time": 100,
+  "results": [{ "id": "create_nuclear_industry:shielding_concrete" }]
+}

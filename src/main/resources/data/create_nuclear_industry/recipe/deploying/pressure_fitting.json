@@ -1,0 +1,8 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    { "tag": "c:plates/steel" },
+    { "tag": "c:ingots/solder" }
+  ],
+  "results": [{ "id": "create_nuclear_industry:pressure_fitting" }]
+}

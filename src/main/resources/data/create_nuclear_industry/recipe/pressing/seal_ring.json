@@ -1,0 +1,5 @@
+{
+  "type": "create:pressing",
+  "ingredients": [{ "tag": "c:plates/steel" }],
+  "results": [{ "id": "create_nuclear_industry:seal_ring", "count": 2 }]
+}

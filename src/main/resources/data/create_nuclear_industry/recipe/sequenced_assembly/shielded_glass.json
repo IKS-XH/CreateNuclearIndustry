@@ -1,0 +1,11 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": { "item": "minecraft:glass" },
+  "transitional_item": { "id": "create_nuclear_industry:incomplete_shielded_glass" },
+  "sequence": [
+    { "type": "create:deploying", "ingredients": [{ "item": "create_nuclear_industry:incomplete_shielded_glass" }, { "tag": "c:plates/lead" }], "results": [{ "id": "create_nuclear_industry:incomplete_shielded_glass" }] },
+    { "type": "create:pressing", "ingredients": [{ "item": "create_nuclear_industry:incomplete_shielded_glass" }], "results": [{ "id": "create_nuclear_industry:incomplete_shielded_glass" }] }
+  ],
+  "results": [{ "id": "create_nuclear_industry:shielded_glass" }],
+  "loops": 1
+}

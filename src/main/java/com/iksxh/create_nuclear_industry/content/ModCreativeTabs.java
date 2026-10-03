@@ -36,6 +36,13 @@ public final class ModCreativeTabs {
                         output.accept(P1Blocks.REACTOR_REFUELING_PORT_ITEM.get());
                         output.accept(P1Blocks.REACTOR_FUEL_ROD_ITEM.get());
                         output.accept(P1Blocks.CONTROL_ROD_DRIVE_ITEM.get());
+                        output.accept(ReactorCraftingContent.STEEL_ROD.get());
+                        output.accept(ReactorCraftingContent.SEAL_RING.get());
+                        output.accept(ReactorCraftingContent.PRESSURE_FITTING.get());
+                        output.accept(ReactorCraftingContent.INDUSTRIAL_CERAMIC.get());
+                        output.accept(ReactorCraftingContent.NEUTRON_ABSORBING_CERAMIC.get());
+                        output.accept(ReactorCraftingContent.SHIELDED_GLASS.get());
+                        output.accept(ReactorCraftingContent.SHIELDING_CONCRETE_ITEM.get());
                         output.accept(ModItems.FRESH_FUEL_ASSEMBLY.get());
                         output.accept(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
                         output.accept(ModItems.CONTROL_ROD.get());

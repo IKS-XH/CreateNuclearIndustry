@@ -1,0 +1,11 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    { "item": "create_nuclear_industry:industrial_ceramic" },
+    { "tag": "c:nuggets/lead" },
+    { "tag": "c:dusts/redstone" }
+  ],
+  "processing_time": 100,
+  "heat_requirement": "heated",
+  "results": [{ "id": "create_nuclear_industry:neutron_absorbing_ceramic" }]
+}

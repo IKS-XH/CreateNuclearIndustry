@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": { "tag": "c:plates/steel" },
+    "L": { "tag": "c:plates/lead" },
+    "C": { "item": "create_nuclear_industry:shielding_concrete" }
+  },
+  "pattern": [" S ", "LCL", " S "],
+  "result": { "count": 4, "id": "create_nuclear_industry:reactor_casing" }
+}

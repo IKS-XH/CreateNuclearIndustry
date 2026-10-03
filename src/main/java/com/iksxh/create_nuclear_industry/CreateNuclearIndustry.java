@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry;
 
 import com.iksxh.create_nuclear_industry.content.ModBlocks;
 import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
+import com.iksxh.create_nuclear_industry.content.ReactorCraftingContent;
 import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.ModItems;
@@ -52,6 +53,7 @@ public final class CreateNuclearIndustry {
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
         BasicMaterialContent.register(modEventBus);
+        ReactorCraftingContent.register(modEventBus);
         FuelProcessingContent.register(modEventBus);
         // 八格任一分块均不可被Create构造单独搬移，搬迁必须走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->

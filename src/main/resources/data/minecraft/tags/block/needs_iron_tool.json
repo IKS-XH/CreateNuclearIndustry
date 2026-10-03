@@ -18,6 +18,7 @@
     "create_nuclear_industry:raw_uranium_block",
     "create_nuclear_industry:enrichment_centrifuge",
     "create_nuclear_industry:shielded_assembly_station",
-    "create_nuclear_industry:shielded_assembly_part"
+    "create_nuclear_industry:shielded_assembly_part",
+    "create_nuclear_industry:shielding_concrete"
   ]
 }

@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": { "tag": "c:ingots/steel" },
+  "result": { "id": "create_nuclear_industry:steel_rod", "count": 2 }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "create_nuclear_industry:reactor_casing" },
+    { "item": "create_nuclear_industry:pressure_fitting" },
+    { "item": "create_nuclear_industry:seal_ring" },
+    { "tag": "c:dyes/red" }
+  ],
+  "result": { "id": "create_nuclear_industry:reactor_hot_port" }
+}

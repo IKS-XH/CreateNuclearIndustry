@@ -1,0 +1,12 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": { "item": "create_nuclear_industry:reactor_casing" },
+  "transitional_item": { "id": "create_nuclear_industry:incomplete_reactor_instrument_port" },
+  "sequence": [
+    { "type": "create:deploying", "ingredients": [{ "item": "create_nuclear_industry:incomplete_reactor_instrument_port" }, { "item": "create_nuclear_industry:industrial_sensor" }], "results": [{ "id": "create_nuclear_industry:incomplete_reactor_instrument_port" }] },
+    { "type": "create:deploying", "ingredients": [{ "item": "create_nuclear_industry:incomplete_reactor_instrument_port" }, { "item": "create:electron_tube" }], "results": [{ "id": "create_nuclear_industry:incomplete_reactor_instrument_port" }] },
+    { "type": "create:pressing", "ingredients": [{ "item": "create_nuclear_industry:incomplete_reactor_instrument_port" }], "results": [{ "id": "create_nuclear_industry:incomplete_reactor_instrument_port" }] }
+  ],
+  "results": [{ "id": "create_nuclear_industry:reactor_instrument_port" }],
+  "loops": 1
+}
