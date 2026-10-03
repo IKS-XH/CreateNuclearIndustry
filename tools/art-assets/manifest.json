@@ -838,7 +838,7 @@
       "use": "EXT-ART-07 新增重型轴承半成品素材；无旧图基线"
     },
     {
-      "game": "item/lapis_dust.png",
+      "game": null,
       "source": "item/lapis_dust.svg",
       "palette": "lapis_dust",
       "size": [
@@ -847,7 +847,7 @@
       ],
       "kind": "item",
       "group": "items",
-      "use": "EXT-A-MATERIAL-01B 接入已认可素材"
+      "use": "已批准候选，本批不新增注册和游戏PNG"
     },
     {
       "game": "item/uranium_tailings.png",
