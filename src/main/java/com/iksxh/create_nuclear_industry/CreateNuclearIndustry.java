@@ -6,6 +6,7 @@ import com.iksxh.create_nuclear_industry.content.ReactorCraftingContent;
 import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
+import com.iksxh.create_nuclear_industry.content.BoilerContent;
 import com.iksxh.create_nuclear_industry.content.HeatMaterialsContent;
 import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
 import com.iksxh.create_nuclear_industry.heat.HeatExchangerBoilerBridge;
@@ -62,6 +63,7 @@ public final class CreateNuclearIndustry {
         FuelProcessingContent.register(modEventBus);
         HeatMaterialsContent.register(modEventBus);
         HeatExchangeContent.register(modEventBus);
+        BoilerContent.register(modEventBus);
         NeoForge.EVENT_BUS.register(HeatExchangerBoilerBridge.class);
         // 持有库存的整机及其分块均禁止 Create 构造搬移；搬迁统一走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
@@ -69,6 +71,10 @@ public final class CreateNuclearIndustry {
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get())
                         || state.is(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get())
+                        || state.is(BoilerContent.CASING.get()) || state.is(BoilerContent.WINDOW.get())
+                        || state.is(BoilerContent.WATER_PORT.get()) || state.is(BoilerContent.STEAM_PORT.get())
+                        || state.is(BoilerContent.CONTROLLER.get()) || state.is(BoilerContent.SAFETY_VALVE.get())
+                        || state.is(BoilerContent.HEAT_SECTION.get())
                         ? BlockMovementChecks.CheckResult.FAIL : BlockMovementChecks.CheckResult.PASS);
         OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);

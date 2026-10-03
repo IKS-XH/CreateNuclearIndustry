@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "R": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "I": {
+      "item": "create_nuclear_industry:industrial_sensor"
+    },
+    "C": {
+      "item": "create_nuclear_industry:high_pressure_boiler_casing"
+    }
+  },
+  "pattern": [
+    " SSS ",
+    "SRPRS",
+    "SICIS",
+    "SRPRS",
+    " SSS "
+  ],
+  "result": {
+    "id": "create_nuclear_industry:high_pressure_boiler_controller",
+    "count": 1
+  },
+  "show_notification": false
+}

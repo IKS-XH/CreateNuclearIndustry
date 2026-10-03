@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "create_nuclear_industry:block/high_pressure_boiler_casing"
+    }
+  }
+}

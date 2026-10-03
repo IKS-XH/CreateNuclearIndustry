@@ -20,6 +20,13 @@
     "create_nuclear_industry:enrichment_centrifuge",
     "create_nuclear_industry:shielded_assembly_station",
     "create_nuclear_industry:shielded_assembly_part",
-    "create_nuclear_industry:shielding_concrete"
+    "create_nuclear_industry:shielding_concrete",
+    "create_nuclear_industry:high_pressure_boiler_casing",
+    "create_nuclear_industry:high_pressure_boiler_window",
+    "create_nuclear_industry:high_pressure_boiler_water_port",
+    "create_nuclear_industry:high_pressure_boiler_steam_port",
+    "create_nuclear_industry:high_pressure_boiler_controller",
+    "create_nuclear_industry:boiler_safety_valve",
+    "create_nuclear_industry:boiler_heat_exchange_section"
   ]
 }

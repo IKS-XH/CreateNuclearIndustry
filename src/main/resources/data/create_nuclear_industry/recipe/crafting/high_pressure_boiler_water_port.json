@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create_nuclear_industry:high_pressure_boiler_casing"
+    },
+    {
+      "item": "create:fluid_pipe"
+    },
+    {
+      "item": "create_nuclear_industry:pressure_fitting"
+    }
+  ],
+  "result": {
+    "id": "create_nuclear_industry:high_pressure_boiler_water_port",
+    "count": 1
+  }
+}

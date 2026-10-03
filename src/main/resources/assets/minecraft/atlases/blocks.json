@@ -7,6 +7,14 @@
     {
       "type": "single",
       "resource": "create_nuclear_industry:fluid/uranium_slurry_flow"
+    },
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/supercritical_steam_still"
+    },
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/supercritical_steam_flow"
     }
   ]
 }

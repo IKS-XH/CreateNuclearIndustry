@@ -91,6 +91,13 @@ public final class ModCreativeTabs {
                         output.accept(HeatMaterialsContent.REINFORCED_STEEL_PLATE.get());
                         output.accept(HeatMaterialsContent.NUCLEAR_HEAT_EXCHANGE_BUNDLE.get());
                         output.accept(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER_ITEM.get());
+                        output.accept(BoilerContent.CASING_ITEM.get());
+                        output.accept(BoilerContent.WINDOW_ITEM.get());
+                        output.accept(BoilerContent.WATER_PORT_ITEM.get());
+                        output.accept(BoilerContent.STEAM_PORT_ITEM.get());
+                        output.accept(BoilerContent.CONTROLLER_ITEM.get());
+                        output.accept(BoilerContent.SAFETY_VALVE_ITEM.get());
+                        output.accept(BoilerContent.HEAT_SECTION_ITEM.get());
                     })
                     .build()
     );

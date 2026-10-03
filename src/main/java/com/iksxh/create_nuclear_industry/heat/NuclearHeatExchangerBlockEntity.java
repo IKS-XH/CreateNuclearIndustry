@@ -1,6 +1,8 @@
 package com.iksxh.create_nuclear_industry.heat;
 
 import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
+import com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity;
+import com.iksxh.create_nuclear_industry.boiler.BoilerStructure;
 import com.iksxh.create_nuclear_industry.compat.create.SharedFluidReceiver;
 import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
@@ -63,6 +65,21 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
                 HeatExchangerBoilerBridge.controller(level, worldPosition))) ? viewHeat : -1;
     }
 
+    /** 锅炉热段对正且源仍可 tick 才领取实付 HU；其他查询与同 tick 重复申请返回零。 */
+    public double claimBoilerHeat(BoilerControllerBlockEntity owner, double requestHu) {
+        if (!current() || !canTick() || level.isClientSide || requestHu <= 0
+                || BoilerStructure.ownerOfSection(level, worldPosition.above()) != owner) return 0;
+        double paid = ledger.claimDedicated(level.getGameTime(), requestHu, HeatExchangerConfig.settings());
+        viewHeat = -1;
+        viewFlow = ledger.converted();
+        viewStatus = ledger.status();
+        if (paid > 0 || viewFlow > 0) {
+            setChanged();
+            syncView();
+        }
+        return paid;
+    }
+
     /** 先记账、再同步外观、最后通知锅炉；回调能见到的热始终已支付。 */
     public static void serverTick(Level level, BlockPos pos, BlockState state, NuclearHeatExchangerBlockEntity machine) {
         if (level.isClientSide || !machine.current()) return;
@@ -71,6 +88,12 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
             machine.tickPaused = false;
             machine.capabilityEpoch++;
             level.invalidateCapabilities(pos);
+        }
+        // 专用热段由控制器按需求结算；源先 tick 时不能抢先走原生锅炉账本。
+        if (BoilerStructure.ownerOfSection(level, pos.above()) != null) {
+            machine.viewHeat = -1;
+            HeatExchangerBoilerBridge.track(machine, false);
+            return;
         }
         var controller = HeatExchangerBoilerBridge.controller(level, pos);
         BlockPos nextController = controller == null ? null : controller.getBlockPos();

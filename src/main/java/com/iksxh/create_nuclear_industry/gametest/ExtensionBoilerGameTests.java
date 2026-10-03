@@ -1,0 +1,427 @@
+package com.iksxh.create_nuclear_industry.gametest;
+
+import com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity;
+import com.iksxh.create_nuclear_industry.boiler.BoilerPartBlock;
+import com.iksxh.create_nuclear_industry.boiler.BoilerState;
+import com.iksxh.create_nuclear_industry.boiler.BoilerStructure;
+import com.iksxh.create_nuclear_industry.content.BoilerContent;
+import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
+import com.iksxh.create_nuclear_industry.content.HeatMaterialsContent;
+import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
+import com.iksxh.create_nuclear_industry.content.ModFluids;
+import com.iksxh.create_nuclear_industry.heat.NuclearHeatExchangerBlockEntity;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
+import com.simibubi.create.content.fluids.FluidPropagator;
+import com.simibubi.create.content.fluids.FluidTransportBehaviour;
+import com.simibubi.create.content.fluids.pump.PumpBlock;
+import com.simibubi.create.content.fluids.pump.PumpBlockEntity;
+import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlock;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
+import com.simibubi.create.content.kinetics.crafter.MechanicalCraftingRecipe;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+
+/** 固定结构、真实能力和付费核热的独立服务端场景。 */
+@GameTestHolder("create_nuclear_industry_boiler")
+@PrefixGameTestTemplate(false)
+public final class ExtensionBoilerGameTests {
+    private static final BlockPos CENTER = new BlockPos(10, 2, 3);
+    private static final BlockPos CONTROL = CENTER.offset(0, 1, -1);
+    private static final BlockPos WATER_EAST = CENTER.offset(1, 1, 0);
+    private static final BlockPos WATER_SOUTH = CENTER.offset(0, 1, 1);
+    private static final BlockPos STEAM_WEST = CENTER.offset(-1, 2, 0);
+    private static final BlockPos SECTION = CENTER.offset(1, 0, 0);
+    private static final BlockPos SOURCE = SECTION.below();
+    private static final BlockPos WATER_TANK = new BlockPos(17, 3, 3);
+    private static final BlockPos WATER_PUMP = new BlockPos(15, 3, 3);
+    private static final BlockPos STEAM_TANK = new BlockPos(10, 4, 8);
+    private static final BlockPos STEAM_PUMP = new BlockPos(10, 4, 6);
+    private ExtensionBoilerGameTests() {}
+
+    @GameTest(template = "boiler_empty", timeoutTicks = 80)
+    public static void fixedShellAndSharedWaterQuotaInvalidateOnBreak(GameTestHelper helper) {
+        build(helper, true);
+        helper.runAfterDelay(3, () -> {
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) != null,
+                    "3×3×4结构未成型");
+            for (BlockPos part : new BlockPos[]{CENTER, CONTROL, WATER_EAST, WATER_SOUTH, STEAM_WEST,
+                    SECTION, CENTER.above(3)})
+                require(helper, !BlockMovementChecks.isMovementAllowed(helper.getBlockState(part),
+                        helper.getLevel(), helper.absolutePos(part)), "锅炉部件可被Create搬运：" + part);
+            var east = handler(helper, WATER_EAST, Direction.EAST);
+            var south = handler(helper, WATER_SOUTH, Direction.SOUTH);
+            require(helper, east != null && south != null, "两个真实水口能力缺失");
+            require(helper, east.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.SIMULATE) == 256
+                    && south.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.SIMULATE) == 256,
+                    "模拟查询错误修改额度");
+            int first = east.fill(new FluidStack(Fluids.WATER, 200), IFluidHandler.FluidAction.EXECUTE);
+            int second = south.fill(new FluidStack(Fluids.WATER, 200), IFluidHandler.FluidAction.EXECUTE);
+            require(helper, first + second == 256 && owner(helper).ledger().water() == 256,
+                    "两个口突破共享256mB/t额度");
+            helper.setBlock(CENTER.above(3).offset(1, 0, 0), Blocks.AIR);
+            var issue = BoilerStructure.issue(helper.getLevel(), helper.absolutePos(CONTROL));
+            require(helper, issue.reason().equals("top_shell")
+                    && issue.pos().equals(helper.absolutePos(CENTER.above(3).east())),
+                    "扳手诊断没有指向损坏的顶面格");
+            require(helper, east.fill(new FluidStack(Fluids.WATER, 1), IFluidHandler.FluidAction.EXECUTE) == 0,
+                    "拆壳后缓存能力仍吞水");
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = "boiler_empty", timeoutTicks = 280)
+    public static void realExchangerPaysWarmingThenSteam(GameTestHelper helper) {
+        build(helper, false);
+        helper.onEachTick(() -> {
+            var machine = source(helper);
+            if (!machine.current() || !machine.canTick()) return;
+            var port = machine.fluidPort(Direction.EAST);
+            port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 36), IFluidHandler.FluidAction.EXECUTE);
+            port.drain(4000, IFluidHandler.FluidAction.EXECUTE);
+        });
+        helper.runAfterDelay(3, () -> {
+            var water = handler(helper, WATER_EAST, Direction.EAST);
+            require(helper, water != null && water.fill(new FluidStack(Fluids.WATER, 256),
+                    IFluidHandler.FluidAction.EXECUTE) > 0, "给水能力不可用");
+        });
+        helper.runAfterDelay(215, () -> {
+            var owner = owner(helper);
+            require(helper, owner.ledger().ready() && owner.ledger().warmHu() == 3600,
+                    "核热未把一段炉体暖满");
+            require(helper, owner.ledger().steam() > 0, "暖炉完成后未真实产汽");
+            var steam = handler(helper, STEAM_WEST, Direction.WEST);
+            require(helper, steam != null && BoilerContent.isSteam(steam.getFluidInTank(0)),
+                    "真实汽口未公开超临界蒸汽");
+            require(helper, source(helper).ledger().hot() + source(helper).ledger().cold() >= 36,
+                    "源端未真实转换冷热液");
+            helper.succeed();
+        });
+    }
+
+    /** 真实Create泵把同一源罐水分流到两个物理给水口，逐tick总入量不能突破整炉额度。 */
+    @GameTest(template = "boiler_empty", timeoutTicks = 180)
+    public static void realCreatePumpSplitsWaterWithoutOverpromise(GameTestHelper helper) {
+        build(helper, true);
+        helper.runAfterDelay(4, () -> {
+            var nearFull = new net.minecraft.nbt.CompoundTag();
+            nearFull.putInt("Water", 15900);
+            owner(helper).ledger().load(nearFull);
+            buildWaterNetwork(helper);
+        });
+        boolean[] flowed = {false, false};
+        helper.onEachTick(() -> {
+            flowed[0] |= activeFlow(helper, new BlockPos(12, 3, 3), Direction.WEST);
+            flowed[1] |= activeFlow(helper, new BlockPos(10, 3, 5), Direction.NORTH);
+        });
+        helper.runAfterDelay(55, () -> {
+            int water = owner(helper).ledger().water();
+            var sourceTank = handler(helper, WATER_TANK, Direction.EAST);
+            require(helper, sourceTank != null && sourceTank.getFluidInTank(0).getAmount() < 4000,
+                    "真实Create源储罐未向锅炉送水：水=" + water + " 泵="
+                            + ((PumpBlockEntity) helper.getBlockEntity(WATER_PUMP)).getSpeed()
+                            + " 管=" + pipeInfo(helper, new BlockPos(12, 3, 3))
+                            + " 入=" + pipeInfo(helper, new BlockPos(16, 3, 3)));
+            require(helper, sourceTank.getFluidInTank(0).getAmount() + water == 19900,
+                    "多口泵管分流发生水量漂移：源=" + sourceTank.getFluidInTank(0).getAmount() + " 炉=" + water);
+            require(helper, water == BoilerState.CAPACITY && sourceTank.getFluidInTank(0).getAmount() == 3900,
+                    "多口泵管未进入共享给水账本");
+            require(helper, flowed[0] && flowed[1], "两个真实Create分支未同时触达物理给水口");
+            require(helper, ((PumpBlockEntity) helper.getBlockEntity(WATER_PUMP)).getSpeed() != 0,
+                    "真实Create给水泵没有动力");
+            helper.succeed();
+        });
+    }
+
+    /** 暖炉后真实Create汽泵将本模组超临界蒸汽抽入原生储罐。 */
+    @GameTest(template = "boiler_empty", timeoutTicks = 290)
+    public static void realCreateSteamPumpFillsNativeTank(GameTestHelper helper) {
+        build(helper, false);
+        helper.setBlock(STEAM_WEST, BoilerContent.CASING.get());
+        BlockPos southSteam = CENTER.offset(0, 2, 1);
+        helper.setBlock(southSteam, BoilerContent.STEAM_PORT.get().defaultBlockState()
+                .setValue(BoilerPartBlock.FACING, Direction.SOUTH));
+        helper.onEachTick(() -> {
+            var machine = source(helper);
+            if (!machine.current() || !machine.canTick()) return;
+            var hot = machine.fluidPort(Direction.EAST);
+            hot.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 36), IFluidHandler.FluidAction.EXECUTE);
+            hot.drain(4000, IFluidHandler.FluidAction.EXECUTE);
+        });
+        helper.runAfterDelay(4, () -> {
+            var water = handler(helper, WATER_EAST, Direction.EAST);
+            require(helper, water.fill(new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE) > 0,
+                    "蒸汽管网场景无法给水");
+            buildSteamNetwork(helper);
+        });
+        helper.runAfterDelay(240, () -> {
+            IFluidHandler tank = handler(helper, STEAM_TANK, Direction.SOUTH);
+            require(helper, tank != null && BoilerContent.isSteam(tank.getFluidInTank(0))
+                    && tank.getFluidInTank(0).getAmount() > 0,
+                    "真实Create汽泵未把超临界蒸汽送入储罐：炉=" + owner(helper).ledger().steam()
+                            + " 罐=" + (tank == null ? -1 : tank.getFluidInTank(0).getAmount())
+                            + " 泵速=" + ((PumpBlockEntity) helper.getBlockEntity(STEAM_PUMP)).getSpeed()
+                            + " 汽口=" + handler(helper, southSteam, Direction.SOUTH)
+                            + " 入=" + pipeInfo(helper, new BlockPos(10, 4, 5))
+                            + " 出=" + pipeInfo(helper, new BlockPos(10, 4, 7)));
+            require(helper, ((PumpBlockEntity) helper.getBlockEntity(STEAM_PUMP)).getSpeed() != 0,
+                    "真实Create汽泵没有动力");
+            helper.succeed();
+        });
+    }
+
+    /** 非世界流体面对Create真实开放管口时，源储罐不得被抽空并删除蒸汽。 */
+    @GameTest(template = "boiler_empty", timeoutTicks = 100)
+    public static void openCreatePipeRefusesStorageOnlySteam(GameTestHelper helper) {
+        BlockPos tankPos = new BlockPos(10, 2, 6);
+        BlockPos pumpPos = new BlockPos(10, 2, 5);
+        BlockPos pipePos = new BlockPos(10, 2, 4);
+        helper.setBlock(tankPos, AllBlocks.FLUID_TANK.get());
+        IFluidHandler tank = handler(helper, tankPos, Direction.SOUTH);
+        require(helper, tank != null && tank.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 1000),
+                IFluidHandler.FluidAction.EXECUTE) == 1000, "开放管测试蒸汽预装失败");
+        helper.setBlock(pipePos, AllBlocks.FLUID_PIPE.get());
+        helper.setBlock(pumpPos, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, Direction.NORTH));
+        helper.setBlock(new BlockPos(11, 2, 5), AllBlocks.COGWHEEL.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
+        helper.setBlock(new BlockPos(11, 2, 6), AllBlocks.SHAFT.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
+        helper.setBlock(new BlockPos(11, 2, 7), AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.NORTH));
+        ((CreativeMotorBlockEntity) helper.getBlockEntity(new BlockPos(11, 2, 7))).generatedSpeed.setValue(256);
+        propagate(helper, new BlockPos[]{pipePos});
+        helper.runAfterDelay(50, () -> {
+            require(helper, FluidPropagator.isOpenEnd(helper.getLevel(), helper.absolutePos(pipePos), Direction.NORTH),
+                    "测试管口并非真实开放端");
+            require(helper, ((PumpBlockEntity) helper.getBlockEntity(pumpPos)).getSpeed() != 0,
+                    "开放管场景泵没有动力");
+            require(helper, handler(helper, tankPos, Direction.SOUTH).getFluidInTank(0).getAmount() == 1000,
+                    "开放Create管口无声删除了超临界蒸汽");
+            helper.succeed();
+        });
+    }
+
+    /** 生存破坏只掉一件携物控制器；缺壳拆放期间库存与非零炉体余温不复制、不清零。 */
+    @GameTest(template = "boiler_empty", timeoutTicks = 100)
+    public static void controllerBreakAndPortableRestoreKeepSingleInventory(GameTestHelper helper) {
+        build(helper, false);
+        helper.onEachTick(() -> {
+            var machine = source(helper);
+            if (!machine.current() || !machine.canTick()) return;
+            var port = machine.fluidPort(Direction.EAST);
+            port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 36), IFluidHandler.FluidAction.EXECUTE);
+            port.drain(4000, IFluidHandler.FluidAction.EXECUTE);
+        });
+        helper.runAfterDelay(3, () -> handler(helper, WATER_EAST, Direction.EAST).fill(
+                new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE));
+        final double[] warmBefore = {0};
+        final int[] waterBefore = {0};
+        IFluidHandler[] cached = {null};
+        helper.runAfterDelay(55, () -> {
+            warmBefore[0] = owner(helper).ledger().warmHu();
+            waterBefore[0] = owner(helper).ledger().water();
+            require(helper, warmBefore[0] > 0, "破坏前炉体没有真实余温");
+            cached[0] = handler(helper, WATER_EAST, Direction.EAST);
+            var player = net.neoforged.neoforge.common.util.FakePlayerFactory.getMinecraft(helper.getLevel());
+            player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE));
+            require(helper, player.gameMode.destroyBlock(helper.absolutePos(CONTROL)), "控制器生存破坏失败");
+            require(helper, cached[0].fill(new FluidStack(Fluids.WATER, 1), IFluidHandler.FluidAction.EXECUTE) == 0,
+                    "破坏后的旧端口句柄仍有效");
+            var drops = helper.getLevel().getEntitiesOfClass(ItemEntity.class,
+                    new AABB(helper.absolutePos(CONTROL)).inflate(1),
+                    e -> e.getItem().is(BoilerContent.CONTROLLER_ITEM.get()));
+            require(helper, drops.size() == 1 && drops.getFirst().getItem().getCount() == 1,
+                    "控制器破坏没有恰好掉一件");
+            ItemStack carried = drops.getFirst().getItem().copy();
+            require(helper, carried.get(DataComponents.CUSTOM_DATA) != null, "控制器掉落缺少携物数据");
+            drops.getFirst().discard();
+            helper.setBlock(CENTER.above(3).east(), Blocks.AIR);
+            helper.setBlock(CONTROL, BoilerContent.CONTROLLER.get().defaultBlockState()
+                    .setValue(BoilerPartBlock.FACING, Direction.NORTH));
+            helper.getBlockState(CONTROL).getBlock().setPlacedBy(helper.getLevel(), helper.absolutePos(CONTROL),
+                    helper.getBlockState(CONTROL), null, carried);
+        });
+        helper.runAfterDelay(59, () -> {
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) == null,
+                    "缺壳状态错误成型");
+            require(helper, owner(helper).ledger().water() == waterBefore[0], "携物重放复制或删除给水");
+            require(helper, owner(helper).ledger().warmHu() > 0
+                    && owner(helper).ledger().warmHu() <= warmBefore[0], "未成型拆放清空或增加炉体余热");
+            require(helper, cached[0].fill(new FluidStack(Fluids.WATER, 1), IFluidHandler.FluidAction.EXECUTE) == 0,
+                    "旧端口句柄在重放后复活");
+            helper.succeed();
+        });
+    }
+
+    /** 原生工作台与Create动力合成在真实配方管理器中匹配输入并给出约定件数。 */
+    @GameTest(template = "boiler_empty")
+    public static void casingAndControllerRecipesLoadAndMatch(GameTestHelper helper) {
+        Item steel = BuiltInRegistries.ITEM.stream().filter(item -> new ItemStack(item).is(TagKey.create(
+                Registries.ITEM, ResourceLocation.parse("c:plates/steel")))).findFirst().orElseThrow();
+        var casingHolder = helper.getLevel().getRecipeManager().byKey(ResourceLocation.fromNamespaceAndPath(
+                "create_nuclear_industry", "crafting/high_pressure_boiler_casing")).orElseThrow();
+        require(helper, casingHolder.value() instanceof CraftingRecipe
+                && !(casingHolder.value() instanceof MechanicalCraftingRecipe), "外壳不是原生工作台配方");
+        var casing = (CraftingRecipe) casingHolder.value();
+        List<ItemStack> casingGrid = new ArrayList<>();
+        for (String row : new String[]{"SBS", "BRB", "SBS"}) for (char symbol : row.toCharArray())
+            casingGrid.add(switch (symbol) {
+                case 'S' -> new ItemStack(steel);
+                case 'B' -> new ItemStack(BasicMaterialContent.REFRACTORY_BRICK.get());
+                default -> new ItemStack(HeatMaterialsContent.REINFORCED_STEEL_PLATE.get());
+            });
+        CraftingInput casingInput = CraftingInput.of(3, 3, casingGrid);
+        ItemStack casingOutput = casing.assemble(casingInput, helper.getLevel().registryAccess());
+        require(helper, casing.matches(casingInput, helper.getLevel())
+                && casingOutput.is(BoilerContent.CASING_ITEM.get()) && casingOutput.getCount() == 8,
+                "八个外壳配方未真实匹配或数量错误");
+
+        var controllerHolder = helper.getLevel().getRecipeManager().byKey(ResourceLocation.fromNamespaceAndPath(
+                "create_nuclear_industry", "mechanical_crafting/high_pressure_boiler_controller")).orElseThrow();
+        require(helper, controllerHolder.value() instanceof MechanicalCraftingRecipe, "控制器不是Create动力合成配方");
+        var controller = (MechanicalCraftingRecipe) controllerHolder.value();
+        Item precision = BuiltInRegistries.ITEM.get(ResourceLocation.parse("create:precision_mechanism"));
+        List<ItemStack> controllerGrid = new ArrayList<>();
+        for (String row : new String[]{" SSS ", "SRPRS", "SICIS", "SRPRS", " SSS "})
+            for (char symbol : row.toCharArray()) controllerGrid.add(switch (symbol) {
+                case 'S' -> new ItemStack(steel);
+                case 'R' -> new ItemStack(HeatMaterialsContent.REINFORCED_STEEL_PLATE.get());
+                case 'P' -> new ItemStack(precision);
+                case 'I' -> new ItemStack(BasicMaterialContent.INDUSTRIAL_SENSOR.get());
+                case 'C' -> new ItemStack(BoilerContent.CASING_ITEM.get());
+                default -> ItemStack.EMPTY;
+            });
+        boolean ingredientsMatch = controller.getIngredients().size() == controllerGrid.size();
+        for (int i = 0; ingredientsMatch && i < controllerGrid.size(); i++)
+            ingredientsMatch = controller.getIngredients().get(i).test(controllerGrid.get(i));
+        ItemStack output = controller.getResultItem(helper.getLevel().registryAccess());
+        require(helper, ingredientsMatch && controller.getWidth() == 5 && controller.getHeight() == 5
+                && !controller.acceptsMirrored()
+                && output.is(BoilerContent.CONTROLLER_ITEM.get()) && output.getCount() == 1,
+                "21格控制器配方未真实匹配或数量错误");
+        helper.succeed();
+    }
+
+    private static void buildWaterNetwork(GameTestHelper helper) {
+        helper.setBlock(WATER_TANK, AllBlocks.FLUID_TANK.get());
+        var source = handler(helper, WATER_TANK, Direction.EAST);
+        require(helper, source != null && source.fill(new FluidStack(Fluids.WATER, 4000),
+                IFluidHandler.FluidAction.EXECUTE) == 4000, "Create给水源罐预装失败");
+        BlockPos[] pipes = {new BlockPos(16, 3, 3), new BlockPos(14, 3, 3), new BlockPos(13, 3, 3),
+                new BlockPos(12, 3, 3), new BlockPos(13, 3, 4), new BlockPos(13, 3, 5),
+                new BlockPos(12, 3, 5), new BlockPos(11, 3, 5), new BlockPos(10, 3, 5)};
+        for (BlockPos pipe : pipes) helper.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
+        helper.setBlock(WATER_PUMP, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, Direction.WEST));
+        helper.setBlock(new BlockPos(15, 3, 4), AllBlocks.COGWHEEL.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.X));
+        helper.setBlock(new BlockPos(16, 3, 4), AllBlocks.SHAFT.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.X));
+        helper.setBlock(new BlockPos(17, 3, 4), AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.WEST));
+        ((CreativeMotorBlockEntity) helper.getBlockEntity(new BlockPos(17, 3, 4))).generatedSpeed.setValue(256);
+        sealOpenEnds(helper, pipes);
+    }
+
+    private static void buildSteamNetwork(GameTestHelper helper) {
+        helper.setBlock(STEAM_TANK, AllBlocks.FLUID_TANK.get());
+        BlockPos[] pipes = {new BlockPos(10, 4, 5), new BlockPos(10, 4, 7)};
+        for (BlockPos pipe : pipes) helper.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
+        helper.setBlock(STEAM_PUMP, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, Direction.SOUTH));
+        helper.setBlock(new BlockPos(11, 4, 6), AllBlocks.COGWHEEL.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
+        helper.setBlock(new BlockPos(11, 4, 7), AllBlocks.SHAFT.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
+        helper.setBlock(new BlockPos(11, 4, 8), AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.NORTH));
+        ((CreativeMotorBlockEntity) helper.getBlockEntity(new BlockPos(11, 4, 8))).generatedSpeed.setValue(256);
+        sealOpenEnds(helper, pipes);
+    }
+    private static void propagate(GameTestHelper helper, BlockPos[] pipes) {
+        for (BlockPos pipe : pipes) FluidPropagator.propagateChangedPipe(helper.getLevel(), helper.absolutePos(pipe),
+                helper.getBlockState(pipe));
+    }
+    private static String pipeInfo(GameTestHelper helper, BlockPos pipe) {
+        FluidTransportBehaviour behaviour = com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour.get(
+                helper.getLevel(), helper.absolutePos(pipe), FluidTransportBehaviour.TYPE);
+        if (behaviour == null) return "无行为";
+        StringBuilder result = new StringBuilder();
+        for (Direction direction : Direction.values()) {
+            var connection = behaviour.getConnection(direction);
+            if (connection != null) result.append(direction).append(':').append(connection.getPressure()).append('/');
+        }
+        return result.toString();
+    }
+    private static boolean activeFlow(GameTestHelper helper, BlockPos pipe, Direction side) {
+        FluidTransportBehaviour behaviour = com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour.get(
+                helper.getLevel(), helper.absolutePos(pipe), FluidTransportBehaviour.TYPE);
+        var flow = behaviour == null ? null : behaviour.getFlow(side);
+        return flow != null && !flow.fluid.isEmpty();
+    }
+    private static void sealOpenEnds(GameTestHelper helper, BlockPos[] pipes) {
+        propagate(helper, pipes);
+        for (BlockPos pipe : pipes) {
+            FluidTransportBehaviour behaviour = com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour.get(
+                    helper.getLevel(), helper.absolutePos(pipe), FluidTransportBehaviour.TYPE);
+            require(helper, behaviour != null, "Create流体管缺少行为：" + pipe);
+            for (Direction direction : Direction.values()) {
+                if (behaviour.getConnection(direction) != null
+                        && helper.getBlockState(pipe.relative(direction)).isAir()
+                        && FluidPropagator.isOpenEnd(helper.getLevel(), helper.absolutePos(pipe), direction))
+                    helper.setBlock(pipe.relative(direction), Blocks.IRON_BLOCK);
+            }
+        }
+        propagate(helper, pipes);
+    }
+
+    private static void build(GameTestHelper helper, boolean twoWater) {
+        for (int y = 0; y < 4; y++) for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
+            if (x == 0 && z == 0 && (y == 1 || y == 2)) continue;
+            helper.setBlock(CENTER.offset(x, y, z), BoilerContent.CASING.get());
+        }
+        helper.setBlock(CONTROL, BoilerContent.CONTROLLER.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.NORTH));
+        helper.setBlock(WATER_EAST, BoilerContent.WATER_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.EAST));
+        if (twoWater) helper.setBlock(WATER_SOUTH, BoilerContent.WATER_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.SOUTH));
+        helper.setBlock(STEAM_WEST, BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.WEST));
+        helper.setBlock(CENTER.above(3), BoilerContent.SAFETY_VALVE.get());
+        helper.setBlock(SECTION, BoilerContent.HEAT_SECTION.get());
+        helper.setBlock(SOURCE, HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get());
+    }
+    private static BoilerControllerBlockEntity owner(GameTestHelper helper) {
+        return (BoilerControllerBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(CONTROL));
+    }
+    private static NuclearHeatExchangerBlockEntity source(GameTestHelper helper) {
+        return (NuclearHeatExchangerBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(SOURCE));
+    }
+    private static IFluidHandler handler(GameTestHelper helper, BlockPos pos, Direction side) {
+        return helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(pos), side);
+    }
+    private static void require(GameTestHelper helper, boolean condition, String message) {
+        if (!condition) helper.fail(message);
+    }
+}

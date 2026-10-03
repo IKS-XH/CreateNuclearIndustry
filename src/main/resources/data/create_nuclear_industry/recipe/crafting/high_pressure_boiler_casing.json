@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SBS",
+    "BRB",
+    "SBS"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "B": {
+      "item": "create_nuclear_industry:refractory_brick"
+    },
+    "R": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:high_pressure_boiler_casing",
+    "count": 8
+  }
+}

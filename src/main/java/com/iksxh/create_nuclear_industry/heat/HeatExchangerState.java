@@ -123,6 +123,40 @@ public final class HeatExchangerState {
                 : cold == CAPACITY ? "blocked" : hot == 0 ? "empty" : "warming";
     }
 
+    /**
+     * 专用锅炉按真实需求从既有余热领取 HU；每源每 tick 仅一次，返回值恰为储备扣量。
+     * 转换在领取后发生并仍占用冷罐等量空间，不发布原生 Create 锅炉热级。
+     */
+    public double claimDedicated(long now, double requestHu, Settings cfg) {
+        if (now == lastTick || !cfg.valid() || !Double.isFinite(requestHu) || requestHu <= 0) return 0;
+        if (legacyDeadlinePending) restoreLegacyDeadline(cfg);
+        if (lastTick >= 0 && now < lastTick) {
+            reserve = 0;
+            noFlowDeadlineTick = now;
+        }
+        if (lastTick >= 0 && now > lastTick && now - lastTick > 1 && lastRate > 0)
+            reserve = Math.max(0, reserve - (now - lastTick - 1) * lastRate);
+        lastTick = now;
+        lastRate = cfg.rate();
+        reserve = Math.min(reserve, cfg.capacity());
+        if (noFlowDeadlineTick < 0 || now >= noFlowDeadlineTick) reserve = 0;
+        double paid = Math.min(Math.min(requestHu, Math.min(18, cfg.rate())), reserve);
+        reserve -= paid;
+        heat = -1;
+        // 专用负载只为本次可完成事务转冷；已有储备先付款，补储不超出实际申请。
+        double requested = Math.min(requestHu, Math.min(18, cfg.rate())) / cfg.density() + flowFraction;
+        flowFraction = requested - Math.floor(requested);
+        int budget = (int) Math.min(CAPACITY, Math.floor(requested));
+        int headroom = (int) Math.min(CAPACITY, Math.ceil((cfg.capacity() - reserve) / cfg.density()));
+        converted = Math.min(budget, Math.min(Math.min(hot, CAPACITY - cold), headroom));
+        hot -= converted;
+        cold += converted;
+        reserve = Math.min(cfg.capacity(), reserve + converted * cfg.density());
+        if (converted > 0) noFlowDeadlineTick = safeAdd(now, cfg.bufferTicks());
+        status = converted > 0 ? "dedicated" : paid > 0 ? "residual" : cold == CAPACITY ? "blocked" : "empty";
+        return paid;
+    }
+
     /** 旧格式只存最后tick、额定耗热与储备；据此保守推断期限，绝不从加载时刻重新计时。 */
     private void restoreLegacyDeadline(Settings cfg) {
         legacyDeadlinePending = false;

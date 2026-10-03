@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create_nuclear_industry:high_pressure_boiler_casing"
+    },
+    {
+      "item": "create:fluid_valve"
+    },
+    {
+      "item": "create_nuclear_industry:seal_ring"
+    },
+    {
+      "item": "create_nuclear_industry:industrial_sensor"
+    }
+  ],
+  "result": {
+    "id": "create_nuclear_industry:boiler_safety_valve",
+    "count": 1
+  }
+}
