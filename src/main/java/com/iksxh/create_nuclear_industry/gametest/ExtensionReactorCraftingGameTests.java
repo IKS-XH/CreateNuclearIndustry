@@ -16,7 +16,6 @@ import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -51,7 +50,7 @@ public final class ExtensionReactorCraftingGameTests {
 
     private ExtensionReactorCraftingGameTests() {}
 
-    /** 在真实配方管理器中匹配五种工作台配方并核对成品身份与数量。 */
+    /** 在真实配方管理器中匹配六种工作台配方并核对成品身份与数量。 */
     @GameTest(template = TEMPLATE)
     public static void workbenchRecipesMatchTheFixedReactorParts(GameTestHelper helper) {
         Item steel = registered(helper, "steel_plate");
@@ -81,6 +80,10 @@ public final class ExtensionReactorCraftingGameTests {
                 "reactor_hot_port", 1);
         assertCraft(helper, "crafting/reactor/reactor_fuel_rod", 1, 3,
                 List.of(new ItemStack(steel), new ItemStack(grille), new ItemStack(steel)), "reactor_fuel_rod", 1);
+        assertCraft(helper, "crafting/reactor/control_rod", 1, 3,
+                List.of(new ItemStack(createItem(helper, "brass_sheet")),
+                        new ItemStack(registered(helper, "neutron_absorbing_ceramic")),
+                        new ItemStack(steelRod)), "control_rod", 1);
         helper.succeed();
     }
 
@@ -174,13 +177,11 @@ public final class ExtensionReactorCraftingGameTests {
         });
     }
 
-    /** 控制棒原生序列保留，四条被替换的序列身份已移除，三条机械合成配方保持原生类型。 */
+    /** 五条被替换的序列身份已移除，三条机械合成配方保持原生类型。 */
     @GameTest(template = TEMPLATE)
     public static void replacedRecipePathsAndNativeMechanicalRecipesAreCorrect(GameTestHelper helper) {
-        require(helper, recipe(helper, "sequenced_assembly/control_rod").value() instanceof SequencedAssemblyRecipe,
-                "原生控制棒序列配方未保留");
         for (String path : List.of("shielded_glass", "reactor_instrument_port", "reactor_refueling_port",
-                "control_rod_drive")) {
+                "control_rod_drive", "control_rod")) {
             require(helper, helper.getLevel().getRecipeManager().byKey(id("sequenced_assembly/" + path)).isEmpty(),
                     "旧序列配方仍加载: " + path);
         }

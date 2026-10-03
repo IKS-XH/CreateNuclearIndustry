@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": { "tag": "c:plates/brass" },
+    "N": { "item": "create_nuclear_industry:neutron_absorbing_ceramic" },
+    "S": { "item": "create_nuclear_industry:steel_rod" }
+  },
+  "pattern": ["B", "N", "S"],
+  "result": { "count": 1, "id": "create_nuclear_industry:control_rod" }
+}
