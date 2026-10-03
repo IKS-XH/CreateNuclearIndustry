@@ -1,0 +1,220 @@
+Compiled from "ShieldedAssemblyRenderer.java"
+public final class com.iksxh.create_nuclear_industry.production.ShieldedAssemblyRenderer extends com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer<com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity> {
+  static final java.util.List<dev.engine_room.flywheel.lib.model.baked.PartialModel> PARTIAL_MODELS;
+
+  private static dev.engine_room.flywheel.lib.model.baked.PartialModel partial(java.lang.String);
+    Code:
+       0: ldc           #3                  // String create_nuclear_industry
+       2: aload_0
+       3: invokedynamic #5,  0              // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+       8: invokestatic  #9                  // Method net/minecraft/resources/ResourceLocation.fromNamespaceAndPath:(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+      11: invokestatic  #15                 // Method dev/engine_room/flywheel/lib/model/baked/PartialModel.of:(Lnet/minecraft/resources/ResourceLocation;)Ldev/engine_room/flywheel/lib/model/baked/PartialModel;
+      14: areturn
+
+  public com.iksxh.create_nuclear_industry.production.ShieldedAssemblyRenderer(net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider$Context);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokespecial #21                 // Method com/simibubi/create/content/kinetics/base/KineticBlockEntityRenderer."<init>":(Lnet/minecraft/client/renderer/blockentity/BlockEntityRendererProvider$Context;)V
+       5: return
+
+  public net.minecraft.world.phys.AABB getRenderBoundingBox(com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity);
+    Code:
+       0: aload_1
+       1: invokevirtual #27                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.getBlockPos:()Lnet/minecraft/core/BlockPos;
+       4: astore_2
+       5: aload_1
+       6: invokevirtual #33                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.getBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+       9: getstatic     #37                 // Field net/minecraft/world/level/block/state/properties/BlockStateProperties.HORIZONTAL_FACING:Lnet/minecraft/world/level/block/state/properties/DirectionProperty;
+      12: invokevirtual #43                 // Method net/minecraft/world/level/block/state/BlockState.getValue:(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;
+      15: checkcast     #49                 // class net/minecraft/core/Direction
+      18: astore_3
+      19: aload_2
+      20: invokevirtual #51                 // Method net/minecraft/core/BlockPos.getX:()I
+      23: istore        4
+      25: aload_2
+      26: invokevirtual #57                 // Method net/minecraft/core/BlockPos.getZ:()I
+      29: istore        5
+      31: iload         4
+      33: istore        6
+      35: iload         5
+      37: istore        7
+      39: iconst_1
+      40: istore        8
+      42: iload         8
+      44: bipush        8
+      46: if_icmpge     112
+      49: aload_2
+      50: aload_3
+      51: iload         8
+      53: invokestatic  #60                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyLayout.position:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;I)Lnet/minecraft/core/BlockPos;
+      56: astore        9
+      58: iload         4
+      60: aload         9
+      62: invokevirtual #51                 // Method net/minecraft/core/BlockPos.getX:()I
+      65: invokestatic  #66                 // Method java/lang/Math.min:(II)I
+      68: istore        4
+      70: iload         6
+      72: aload         9
+      74: invokevirtual #51                 // Method net/minecraft/core/BlockPos.getX:()I
+      77: invokestatic  #72                 // Method java/lang/Math.max:(II)I
+      80: istore        6
+      82: iload         5
+      84: aload         9
+      86: invokevirtual #57                 // Method net/minecraft/core/BlockPos.getZ:()I
+      89: invokestatic  #66                 // Method java/lang/Math.min:(II)I
+      92: istore        5
+      94: iload         7
+      96: aload         9
+      98: invokevirtual #57                 // Method net/minecraft/core/BlockPos.getZ:()I
+     101: invokestatic  #72                 // Method java/lang/Math.max:(II)I
+     104: istore        7
+     106: iinc          8, 1
+     109: goto          42
+     112: new           #75                 // class net/minecraft/world/phys/AABB
+     115: dup
+     116: iload         4
+     118: i2d
+     119: aload_2
+     120: invokevirtual #77                 // Method net/minecraft/core/BlockPos.getY:()I
+     123: i2d
+     124: iload         5
+     126: i2d
+     127: iload         6
+     129: iconst_1
+     130: iadd
+     131: i2d
+     132: aload_2
+     133: invokevirtual #77                 // Method net/minecraft/core/BlockPos.getY:()I
+     136: iconst_2
+     137: iadd
+     138: i2d
+     139: iload         7
+     141: iconst_1
+     142: iadd
+     143: i2d
+     144: invokespecial #80                 // Method net/minecraft/world/phys/AABB."<init>":(DDDDDD)V
+     147: areturn
+
+  protected void renderSafe(com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, int, int);
+    Code:
+       0: aload_1
+       1: invokevirtual #83                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.current:()Z
+       4: ifne          8
+       7: return
+       8: aload_1
+       9: invokevirtual #87                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.expanded:()Z
+      12: ifeq          194
+      15: aload_1
+      16: getstatic     #90                 // Field com/simibubi/create/AllPartialModels.SHAFT_HALF:Ldev/engine_room/flywheel/lib/model/baked/PartialModel;
+      19: aload_1
+      20: invokevirtual #33                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.getBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+      23: getstatic     #96                 // Field net/minecraft/core/Direction.DOWN:Lnet/minecraft/core/Direction;
+      26: invokestatic  #100                // Method net/createmod/catnip/render/CachedBuffers.partialFacing:(Ldev/engine_room/flywheel/lib/model/baked/PartialModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;)Lnet/createmod/catnip/render/SuperByteBuffer;
+      29: aload_3
+      30: aload         4
+      32: invokestatic  #106                // Method net/minecraft/client/renderer/RenderType.solid:()Lnet/minecraft/client/renderer/RenderType;
+      35: invokeinterface #112,  2          // InterfaceMethod net/minecraft/client/renderer/MultiBufferSource.getBuffer:(Lnet/minecraft/client/renderer/RenderType;)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+      40: iload         5
+      42: invokestatic  #118                // Method renderRotatingBuffer:(Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;Lnet/createmod/catnip/render/SuperByteBuffer;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;I)V
+      45: aload_1
+      46: invokevirtual #33                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.getBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+      49: getstatic     #37                 // Field net/minecraft/world/level/block/state/properties/BlockStateProperties.HORIZONTAL_FACING:Lnet/minecraft/world/level/block/state/properties/DirectionProperty;
+      52: invokevirtual #43                 // Method net/minecraft/world/level/block/state/BlockState.getValue:(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;
+      55: checkcast     #49                 // class net/minecraft/core/Direction
+      58: astore        7
+      60: getstatic     #124                // Field com/iksxh/create_nuclear_industry/production/ShieldedAssemblyRenderer$1.$SwitchMap$net$minecraft$core$Direction:[I
+      63: aload         7
+      65: invokevirtual #130                // Method net/minecraft/core/Direction.ordinal:()I
+      68: iaload
+      69: tableswitch   { // 1 to 3
+
+                     1: 96
+
+                     2: 101
+
+                     3: 106
+               default: 111
+          }
+      96: ldc           #133                // float -1.5707964f
+      98: goto          112
+     101: ldc           #134                // float 3.1415927f
+     103: goto          112
+     106: ldc           #135                // float 1.5707964f
+     108: goto          112
+     111: fconst_0
+     112: fstore        8
+     114: getstatic     #136                // Field PARTIAL_MODELS:Ljava/util/List;
+     117: invokeinterface #140,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+     122: astore        9
+     124: aload         9
+     126: invokeinterface #146,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     131: ifeq          194
+     134: aload         9
+     136: invokeinterface #151,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     141: checkcast     #16                 // class dev/engine_room/flywheel/lib/model/baked/PartialModel
+     144: astore        10
+     146: aload         10
+     148: aload_1
+     149: invokevirtual #33                 // Method com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.getBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+     152: invokestatic  #155                // Method net/createmod/catnip/render/CachedBuffers.partial:(Ldev/engine_room/flywheel/lib/model/baked/PartialModel;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/createmod/catnip/render/SuperByteBuffer;
+     155: fload         8
+     157: getstatic     #159                // Field net/minecraft/core/Direction.UP:Lnet/minecraft/core/Direction;
+     160: invokeinterface #162,  3          // InterfaceMethod net/createmod/catnip/render/SuperByteBuffer.rotateCentered:(FLnet/minecraft/core/Direction;)Ldev/engine_room/flywheel/lib/transform/Affine;
+     165: checkcast     #163                // class net/createmod/catnip/render/SuperByteBuffer
+     168: iload         5
+     170: invokeinterface #168,  2          // InterfaceMethod net/createmod/catnip/render/SuperByteBuffer.light:(I)Lnet/createmod/catnip/render/SuperByteBuffer;
+     175: aload_3
+     176: aload         4
+     178: invokestatic  #172                // Method net/minecraft/client/renderer/RenderType.cutoutMipped:()Lnet/minecraft/client/renderer/RenderType;
+     181: invokeinterface #112,  2          // InterfaceMethod net/minecraft/client/renderer/MultiBufferSource.getBuffer:(Lnet/minecraft/client/renderer/RenderType;)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+     186: invokeinterface #175,  3          // InterfaceMethod net/createmod/catnip/render/SuperByteBuffer.renderInto:(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V
+     191: goto          124
+     194: return
+
+  protected void renderSafe(com.simibubi.create.content.kinetics.base.KineticBlockEntity, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, int, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: checkcast     #28                 // class com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity
+       5: fload_2
+       6: aload_3
+       7: aload         4
+       9: iload         5
+      11: iload         6
+      13: invokevirtual #179                // Method renderSafe:(Lcom/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V
+      16: return
+
+  public net.minecraft.world.phys.AABB getRenderBoundingBox(net.minecraft.world.level.block.entity.BlockEntity);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: checkcast     #28                 // class com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity
+       5: invokevirtual #183                // Method getRenderBoundingBox:(Lcom/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity;)Lnet/minecraft/world/phys/AABB;
+       8: areturn
+
+  protected void renderSafe(net.minecraft.world.level.block.entity.BlockEntity, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, int, int);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: checkcast     #28                 // class com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity
+       5: fload_2
+       6: aload_3
+       7: aload         4
+       9: iload         5
+      11: iload         6
+      13: invokevirtual #179                // Method renderSafe:(Lcom/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V
+      16: return
+
+  static {};
+    Code:
+       0: ldc           #187                // String left_arm
+       2: invokestatic  #189                // Method partial:(Ljava/lang/String;)Ldev/engine_room/flywheel/lib/model/baked/PartialModel;
+       5: ldc           #192                // String right_arm
+       7: invokestatic  #189                // Method partial:(Ljava/lang/String;)Ldev/engine_room/flywheel/lib/model/baked/PartialModel;
+      10: ldc           #194                // String fixture
+      12: invokestatic  #189                // Method partial:(Ljava/lang/String;)Ldev/engine_room/flywheel/lib/model/baked/PartialModel;
+      15: invokestatic  #196                // InterfaceMethod java/util/List.of:(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;
+      18: putstatic     #136                // Field PARTIAL_MODELS:Ljava/util/List;
+      21: return
+}

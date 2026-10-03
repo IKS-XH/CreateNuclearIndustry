@@ -1,0 +1,4 @@
+Flywheel sources: C:\Users\IKSXH\.gradle\caches\modules-2\files-2.1\dev.engine-room.flywheel\flywheel-neoforge-1.21.1\1.0.6\96ef4be9418078e9fed957efde22d7fbc431fb87\flywheel-neoforge-1.21.1-1.0.6-sources.jar
+SHA256: C251479DEA729A568BEDEE28BB68021276F4B49BE0A5B6A9603501729D5DFBFE
+NeoForge sources: C:\Users\IKSXH\.gradle\caches\modules-2\files-2.1\net.neoforged\neoforge\21.1.219\eefeb66da85d5ced69c1d0bc86b8140ddff77c1\neoforge-21.1.219-sources.jar
+SHA256: 814983FF6C233935F176A99B10A495CFA37971FFE1A73A6F8B097E893553CA8C

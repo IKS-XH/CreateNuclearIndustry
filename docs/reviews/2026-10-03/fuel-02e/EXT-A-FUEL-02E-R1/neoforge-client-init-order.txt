@@ -1,0 +1,30 @@
+    }
+
+    // Make sure the below method is only ever called once (by forge).
+    private static boolean initializedClientHooks = false;
+
+    // Runs during Minecraft construction, before initial resource loading.
+    @ApiStatus.Internal
+    public static void initClientHooks(Minecraft mc, ReloadableResourceManager resourceManager) {
+        if (initializedClientHooks) {
+            throw new IllegalStateException("Client hooks initialized more than once");
+        }
+        initializedClientHooks = true;
+
+        ClientExtensionsManager.init();
+        GameTestHooks.registerGametests();
+        registerSpriteSourceTypes();
+        MenuScreens.init();
+        ModLoader.postEvent(new RegisterClientReloadListenersEvent(resourceManager));
+        ModLoader.postEvent(new EntityRenderersEvent.RegisterLayerDefinitions());
+        ModLoader.postEvent(new EntityRenderersEvent.RegisterRenderers());
+        ClientTooltipComponentManager.init();
+        EntitySpectatorShaderManager.init();
+        ClientHooks.onRegisterKeyMappings(mc.options);
+        RecipeBookManager.init();
+        mc.gui.initModdedOverlays();
+        DimensionSpecialEffectsManager.init();
+        NamedRenderTypeManager.init();
+        ColorResolverManager.init();
+        ItemDecoratorHandler.init();
+        PresetEditorManager.init();

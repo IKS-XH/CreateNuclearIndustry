@@ -1,0 +1,1 @@
+No shielded_assembly lines in candidate latest.log.
