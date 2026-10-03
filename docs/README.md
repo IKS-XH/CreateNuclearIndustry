@@ -4,6 +4,8 @@
 
 ## 当前工作
 
+**控制棒组件01C：** 已按用户要求改为工作台竖排合成，原用料各1、产量1不变；定向验证与独立复审通过，客户端待验，见[01C卡](./superpowers/plans/2026-10-03-ext-a-reactor-01c.md)。
+
 **仪表端口21格修订：** 按用户要求提升到离心机同级，[REACTOR-01B](./superpowers/plans/2026-10-03-ext-a-reactor-01b.md)已实现并通过定向验证和复审，实际动力合成待[合并手测](./reviews/2026-10-03/reactor-01/README.md)。
 
 **当前主线：** [铀原料加工与离心机](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与专用烧结炉02A/02B](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[02C包壳/焊料/钢网/格架材料](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)均已全部手测通过并合入main，焊料为3锡锭＋1铅锭→4件。[02D/02E屏蔽装配台](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)已完成功能手测并合入main，四材料直接装配燃料组件，取消新燃料棒中间步骤。

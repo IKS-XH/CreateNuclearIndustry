@@ -1,0 +1,19 @@
+JAR resource presence (True/False):
+True	data/create_nuclear_industry/recipe/crafting/reactor/control_rod.json
+--- packaged control rod recipe ---
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": { "tag": "c:plates/brass" },
+    "N": { "item": "create_nuclear_industry:neutron_absorbing_ceramic" },
+    "S": { "item": "create_nuclear_industry:steel_rod" }
+  },
+  "pattern": ["B", "N", "S"],
+  "result": { "count": 1, "id": "create_nuclear_industry:control_rod" }
+}
+False	data/create_nuclear_industry/recipe/sequenced_assembly/control_rod.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/shielded_glass.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/reactor_instrument_port.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/reactor_refueling_port.json
+False	data/create_nuclear_industry/recipe/sequenced_assembly/control_rod_drive.json
