@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "SHS",
+    "SSS"
+  ],
+  "key": {
+    "C": {
+      "tag": "c:plates/copper"
+    },
+    "H": {
+      "tag": "create_nuclear_industry:nuclear_heat_exchange_bundles"
+    },
+    "S": {
+      "tag": "c:plates/steel"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:nuclear_heat_exchanger",
+    "count": 1
+  }
+}

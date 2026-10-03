@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry.reactor;
 
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
+import com.iksxh.create_nuclear_industry.compat.create.SharedFluidReceiver;
 import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
@@ -18,7 +19,7 @@ import java.util.WeakHashMap;
  * <p>处理器不拥有独立 tank；所有读写都经过仪表端口的共享权威快照，因此多个
  * 端口不能产生彼此独立的冷却剂库存。流量限制按物理端口、按服务端 tick 计。</p>
  */
-public final class ReactorCoolantFluidHandler implements IFluidHandler {
+public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFluidReceiver {
     private static final Map<ReactorPortBlockEntity, ReactorCoolantPortFlowBudget> PORT_BUDGETS =
             Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -91,6 +92,20 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler {
 
     public boolean coldInput() {
         return coldInput;
+    }
+
+    /**
+     * 向同一次 Create 模拟提供共享库存与逐物理口预算，单位为 mB；不预留任何数量。
+     * 多个物理口共用 owner，但保留不同 flowBudget；同口不同面使用同一预算身份。
+     */
+    @Override
+    public SharedFluidReceiver.Limits sharedFluidLimits() {
+        if (!coldInput || !isCapabilityAvailable()) {
+            return null;
+        }
+        return new SharedFluidReceiver.Limits(owner,
+                sharedRemainingCapacityMb(owner.snapshot(), configuredCapacityMb()), flowBudget,
+                flowBudget.available(currentServerTick(), configuredFlowLimitMbPerTick()));
     }
 
     @Override

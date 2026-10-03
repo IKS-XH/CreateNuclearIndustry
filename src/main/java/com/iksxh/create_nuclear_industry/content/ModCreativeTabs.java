@@ -87,6 +87,10 @@ public final class ModCreativeTabs {
                         output.accept(FuelProcessingContent.SINTERED_FUEL_PELLET.get());
                         output.accept(FuelProcessingContent.FUEL_SINTERING_FURNACE_ITEM.get());
                         output.accept(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get());
+                        output.accept(HeatMaterialsContent.STEEL_PIPE_BLANK.get());
+                        output.accept(HeatMaterialsContent.REINFORCED_STEEL_PLATE.get());
+                        output.accept(HeatMaterialsContent.NUCLEAR_HEAT_EXCHANGE_BUNDLE.get());
+                        output.accept(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER_ITEM.get());
                     })
                     .build()
     );

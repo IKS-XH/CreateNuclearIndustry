@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420">
+<rect width="760" height="420" fill="#202a33"/>
+<g transform="translate(70 70)" stroke="#11191d" stroke-width="4"><path d="M80 95h150v110H80z" fill="#4d5659"/><path d="M80 95l55-32h150l-55 32z" fill="#7d898b"/><path d="M230 95l55-32v110l-55 32z" fill="#263032"/><rect x="144" y="125" width="22" height="20" fill="#151b1d" stroke="#d5a945"/><text x="76" y="240" fill="#e0e8ec" stroke="none" font-size="18">完整深灰基座 / Y=0..12 / 四侧凹入管口</text></g>
+<g transform="translate(380 70)" stroke="#11191d" stroke-width="3"><path d="M0 95l65-38v90L0 185z" fill="#c06b39"/><path d="M35 95l65-38v90l-65 38z" fill="#e79756"/><path d="M70 95l65-38v90L70 185z" fill="#c06b39"/><path d="M105 95l65-38v90l-65 38z" fill="#e79756"/><path d="M140 95l65-38v90l-65 38z" fill="#c06b39"/><path d="M175 95l65-38v90l-65 38z" fill="#e79756"/><path d="M210 95l65-38v90l-65 38z" fill="#c06b39"/><text x="15" y="240" fill="#e0e8ec" stroke="none" font-size="18">七条独立铜鳍片 / Y=12..16 / 槽口贯通</text></g>
+<text x="38" y="375" fill="#aebfca" font-size="16">热态提示条位于鳍片槽内；冷热层不互相覆盖。模型坐标范围0..16。</text></svg>

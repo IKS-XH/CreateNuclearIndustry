@@ -1,0 +1,223 @@
+{
+  "credit": "Create: Nuclear Industry 美术团队",
+  "ambientocclusion": true,
+  "textures": {
+    "particle": "create_nuclear_industry:block/nuclear_heat_exchanger/steel",
+    "steel": "create_nuclear_industry:block/nuclear_heat_exchanger/steel",
+    "steel_light": "create_nuclear_industry:block/nuclear_heat_exchanger/steel_light",
+    "steel_dark": "create_nuclear_industry:block/nuclear_heat_exchanger/steel_dark",
+    "panel": "create_nuclear_industry:block/nuclear_heat_exchanger/panel",
+    "copper": "create_nuclear_industry:block/nuclear_heat_exchanger/copper",
+    "copper_light": "create_nuclear_industry:block/nuclear_heat_exchanger/copper_light",
+    "brass": "create_nuclear_industry:block/nuclear_heat_exchanger/brass",
+    "brass_dark": "create_nuclear_industry:block/nuclear_heat_exchanger/brass_dark",
+    "hot": "create_nuclear_industry:block/nuclear_heat_exchanger/hot",
+    "hot_light": "create_nuclear_industry:block/nuclear_heat_exchanger/hot_light"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        14,
+        4
+      ],
+      "to": [
+        6,
+        16,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        14,
+        4
+      ],
+      "to": [
+        10,
+        16,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hot_light",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#hot_light",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#hot_light",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#hot_light",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#hot_light",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#hot_light",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        14,
+        4
+      ],
+      "to": [
+        14,
+        16,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#hot",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}
