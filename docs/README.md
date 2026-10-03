@@ -22,7 +22,7 @@
 
 **验证方式：** 两批复用已审定向测试，本次主工程仅一次增量assemble通过；没有重复全量。人工证据来自用户本次全部通过的反馈。
 
-**当前整改与决策门：** 用户要求[核换热器降低成本并改为鳍片格栅＋方形基座](./superpowers/plans/2026-10-04-heat-exchanger-cost-model-revision.md)，新配方已指定为工作台3铜板＋1管束＋5钢板。[01A候选](./reviews/2026-10-03/exchanger-01a/README.md)原7项账本JUnit、10项定向GameTest、增量构建及独立复审证据保留，但不代表人工验收。运行代码在同级`Create_NuclearIndustry-ore-acquisition`，尚未合入main；完成本次整改后继续合并人工检查。工作盆、蒸汽/冷凝与专用锅炉后置，完整EXT-B-API-01不记完成；02E动画仍后置。
+**当前人工门：** [核换热器01B](./reviews/2026-10-04/exchanger-01b/README.md)已改为工作台3铜板＋1管束＋5钢板，并完成顶部鳍片格栅＋方形基座模型；本轮10项GameTest、增量构建、资源打包核对及独立审查通过。[01A候选](./reviews/2026-10-03/exchanger-01a/README.md)原7项账本JUnit、10项定向GameTest、增量构建及独立复审证据保留，但不代表人工验收。运行代码在同级`Create_NuclearIndustry-ore-acquisition`，尚未合入main；按01B交付页继续合并人工检查。工作盆、蒸汽/冷凝与专用锅炉后置，完整EXT-B-API-01不记完成；02E动画仍后置。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |

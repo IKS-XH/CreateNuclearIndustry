@@ -1,6 +1,6 @@
 # 首台核换热器：客户端候选与验收
 
-**当前状态：候选实现及定向自动验证通过，等待客户端人工验收。** 合同见[01A实施卡](../../../superpowers/plans/2026-10-03-ext-b-exchanger-01a.md)及[已确认方案](../../../superpowers/plans/2026-10-03-nuclear-heat-exchanger-proposal.md)。本批仅核热供Create储罐锅炉，盆加热、蒸汽/冷凝模式、专用锅炉和汽轮机仍后置。
+**01A初版交付记录：自动验证通过，未获客户端人工验收。** 用户于2026-10-04要求降低成本并重绘模型；当前按[01B修订](../../../superpowers/plans/2026-10-04-heat-exchanger-cost-model-revision.md)实施工作台9格与顶部鳍片/底部基座。下文原21格制造、模型与证据保留历史语境，不作为新外观/配方验收目标。未变运行合同见[01A实施卡](../../../superpowers/plans/2026-10-03-ext-b-exchanger-01a.md)及[确认方案](../../../superpowers/plans/2026-10-03-nuclear-heat-exchanger-proposal.md)，仍只供Create储罐锅炉。
 
 ## 制造与接口
 

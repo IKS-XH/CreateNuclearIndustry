@@ -1,0 +1,15 @@
+Static source recipe validation: passed.
+The recipe JSON parsed and matched frozen shape, tags, output item, and count.
+
+Gradle command (single invocation, Java 21.0.7):
+./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_heat_exchanger -PgameTestDirectory=build/gametest-heat-exchanger-01b assemble --console=plain
+Result: BUILD SUCCESSFUL; 10 required GameTests passed (1 heat_liveness + 9 default batch).
+No JUnit, clean, rerun, or full regression was run.
+
+JAR parity: passed.
+7 key JSON resources byte-match workspace source.
+10 exchanger texture PNGs byte-match workspace source.
+5 models and blockstate model references resolve in the JAR.
+Recipe inside JAR has pattern CCC / SHS / SSS and result count 1.
+JAR SHA-256: 961F5005D60CBDD4BD3DEF119DA5AB79D84B8B7837FADCA7A46666548C794F65
+Full command log: validation.log

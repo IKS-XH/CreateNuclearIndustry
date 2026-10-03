@@ -1,0 +1,53 @@
+{
+  "model_element_count_checked": 121,
+  "blockstate_models_resolved": [
+    "block/nuclear_heat_exchanger/base",
+    "block/nuclear_heat_exchanger/fins",
+    "block/nuclear_heat_exchanger/fins_lit",
+    "block/nuclear_heat_exchanger/item_static"
+  ],
+  "textures_resolved": [
+    "create_nuclear_industry:block/nuclear_heat_exchanger/brass",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/brass_dark",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/copper",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/copper_light",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/hot",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/hot_light",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/panel",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/steel",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/steel_dark",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/steel_light"
+  ],
+  "texture_dimensions": "10 RGBA PNG, 16x16, fully opaque",
+  "coordinate_and_explicit_uv_bounds": [
+    0,
+    16
+  ],
+  "base_y": [
+    0,
+    12
+  ],
+  "fin_y": [
+    12,
+    16
+  ],
+  "fin_count": 7,
+  "true_fin_grooves": true,
+  "lit_channels_inside_grooves": 3,
+  "intersecting_component_voxels": 0,
+  "same_facing_coplanar_face_overlaps": 0,
+  "face_port_recess_depth": 1,
+  "four_side_ports": 4,
+  "facing_rotations": {
+    "north": 0,
+    "east": 90,
+    "south": 180,
+    "west": 270
+  },
+  "handheld_scale": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "gradle_or_runtime_checks": "not run; art-only task"
+}
