@@ -11,6 +11,8 @@
 
 **2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及`incomplete_steel_grate`配方/素材已[验收合入main](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料装配组件及八格屏蔽装配台功能手测全部通过，连同模型R2共面修复已[合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)；修后画面未追记人工通过。青金石粉`lapis_dust`与无热冷却剂制备已在[01B候选](./reviews/2026-10-03/material-01b/README.md)实现，定向验证通过、客户端待验，尚未合入main。
 
+**2026-10-03反应堆制造候选：** [REACTOR-01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md)接续六种普通材料`steel_rod`、`seal_ring`、`pressure_fitting`、`industrial_ceramic`、`neutron_absorbing_ceramic`、`shielded_glass`，一个普通方块`shielding_concrete`以及五个Create原生序列半成品。它们支撑正式八种实验堆部件的生存制造；屏蔽名称不表示辐射系统已实现。新内容未合入main，人工验收按最新授权与01B合并。
+
 ## 1. 状态与命名规则
 
 | 标记 | 含义 |

@@ -10,6 +10,7 @@
 | :--- | :--- | :--- |
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
+| 固定实验堆生存制造 EXT-A-REACTOR-01 | 候选实现与独立复审通过，与01B合并待手测；未合入main | [交付与清单](./reviews/2026-10-03/reactor-01/README.md)：7种材料、16条原生配方；7项定向GameTest、5项合同测试及增量assemble通过；推荐数值与成本见任务卡 |
 | 青金石粉与冷却剂 EXT-A-MATERIAL-01B | 候选实现与审查通过，待三项手测，未合入main | [交付与清单](./reviews/2026-10-03/material-01b/README.md)：1:1制粉、两道100、搅拌无需加热；6项定向GameTest、5项合同测试及增量assemble通过 |
 | 铅锡基础加工02A / 板材03A / 金属粒04 | 全部人工门通过，已合入main | [收尾记录](./reviews/2026-10-01/material-02-acceptance.md)：直熔、水洗9粒、粒锭合拆、压板及新外观 |
 | 主线材料03 / 素材05：铁粉、碳粉、钢粉、钢锭与钢板 | 已验收并合入main，名称简称钢 | [最终验收](./reviews/2026-10-01/material-03b/README.md)：155项required断言全过，候选与main各新跑265项JUnit/build通过，264项资源和60图打包一致；保存退出停滞单列 |

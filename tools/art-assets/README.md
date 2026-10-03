@@ -1,5 +1,16 @@
 # 原创像素 SVG 美术管线
 
+## 反应堆制造01素材
+
+本批独立入口`reactor_01_assets.py`管理`sources/reactor-01/`下12份可编辑SVG：6种材料、5种序列半成品和屏蔽混凝土纹理。当前脚本与素材仅在同级候选工作树，main先同步说明；待人工验收后再合入。仅生成本批16×16 PNG及对应物品/普通方块模型，不重绘已有反应堆模型、不修改共用manifest；运行状态与人工边界见[两批交接](../../docs/reviews/2026-10-03/reactor-01/README.md)。
+
+```powershell
+Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
+& 'C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' -B tools/art-assets/reactor_01_assets.py
+```
+
+已有SVG保留编辑，缺失时才建立初始源稿。专用脚本按精确12条输出路径工作，对其它现有PNG做前后字节核对；114张是本次基线数量，不能变成后续增加素材后的运行限制。明暗底原尺寸/最近邻预览和本次核对写入`build/reports/extension/EXT-A-REACTOR-01-ART/`，不运行Gradle或客户端。
+
 EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/流动料浆共13张游戏纹理，并提供机器与尾矿砖JSON模型。该历史导出清单含82张游戏纹理，复用已有铀精矿，开工前69张PNG保持原字节。后续原生桶、两格模型及端盖整改已完成人工验收并合入main；见[最终验收](../../docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)。历史清单数量不代表后续独立生成器的新增资源总数。
 
 ## 材料01B青金石粉接入
