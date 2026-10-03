@@ -1,0 +1,32 @@
+{
+  "zh_cn": {
+    "block.create_nuclear_industry.nuclear_heat_exchanger": "核换热器",
+    "gui.create_nuclear_industry.heat_exchanger.tanks": "热液：%s / %3$s mB；冷液：%2$s / %3$s mB",
+    "gui.create_nuclear_industry.heat_exchanger.flow": "实际换热：%s mB/t；额定：%s mB/t",
+    "gui.create_nuclear_industry.heat_exchanger.heat": "锅炉热等级：%s；已付储备：%s tick",
+    "gui.create_nuclear_industry.heat_exchanger.limits": "锅炉尺寸支持：%s 级；供水支持：%s 级",
+    "gui.create_nuclear_industry.heat_exchanger.rated": "按额定流量耗液；小锅炉和供水限制不会降低耗液",
+    "gui.create_nuclear_industry.heat_exchanger.state.no_load": "无有效锅炉负载（需要引擎/汽笛、尺寸及供水）",
+    "gui.create_nuclear_industry.heat_exchanger.state.invalid": "配置无效：已安全停机",
+    "gui.create_nuclear_industry.heat_exchanger.state.warming": "正在预热：先支付完整热储备",
+    "gui.create_nuclear_industry.heat_exchanger.state.running": "正常供热",
+    "gui.create_nuclear_industry.heat_exchanger.state.residual": "使用已付余热：热液不足或回液受阻",
+    "gui.create_nuclear_industry.heat_exchanger.state.empty": "热液不足",
+    "gui.create_nuclear_industry.heat_exchanger.state.blocked": "冷液回流堵塞"
+  },
+  "en_us": {
+    "block.create_nuclear_industry.nuclear_heat_exchanger": "Nuclear Heat Exchanger",
+    "gui.create_nuclear_industry.heat_exchanger.tanks": "Hot: %s / %3$s mB; Cold: %2$s / %3$s mB",
+    "gui.create_nuclear_industry.heat_exchanger.flow": "Actual flow: %s mB/t; Rated: %s mB/t",
+    "gui.create_nuclear_industry.heat_exchanger.heat": "Boiler heat level: %s; Paid reserve: %s ticks",
+    "gui.create_nuclear_industry.heat_exchanger.limits": "Boiler size limit: %s levels; Water limit: %s levels",
+    "gui.create_nuclear_industry.heat_exchanger.rated": "Uses rated flow even when boiler size or water supply limits output",
+    "gui.create_nuclear_industry.heat_exchanger.state.no_load": "No valid boiler load (requires engine/whistle, size and water)",
+    "gui.create_nuclear_industry.heat_exchanger.state.invalid": "Invalid configuration: safely stopped",
+    "gui.create_nuclear_industry.heat_exchanger.state.warming": "Warming up: paying the complete heat reserve",
+    "gui.create_nuclear_industry.heat_exchanger.state.running": "Supplying heat",
+    "gui.create_nuclear_industry.heat_exchanger.state.residual": "Using paid residual heat: low hot coolant or blocked return",
+    "gui.create_nuclear_industry.heat_exchanger.state.empty": "Insufficient hot coolant",
+    "gui.create_nuclear_industry.heat_exchanger.state.blocked": "Cold coolant return blocked"
+  }
+}

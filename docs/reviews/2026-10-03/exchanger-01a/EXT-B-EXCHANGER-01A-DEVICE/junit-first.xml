@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-03T16:09:38.771Z" hostname="DESKTOP-4G1EOU9" time="0.03">
+  <properties/>
+  <testcase name="fractionalFlowIsFiniteAndPaidAndInvalidConfigurationStops()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.019"/>
+  <testcase name="unloadedTimeAndPortableRoundTripCannotRefreshPaidHeat()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.008"/>
+  <testcase name="steadyStateAndRepeatedReadsConserveFluidAndHeat()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.0"/>
+  <testcase name="absentLoadBlockedReturnAndTrickleNeverRefillForFree()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.0"/>
+  <testcase name="fortyTicksMustBePaidBeforePublishingAndResidualEndsExactly()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

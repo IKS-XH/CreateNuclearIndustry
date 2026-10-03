@@ -1,0 +1,17 @@
+{
+  "checked_resources": 40,
+  "byte_matches": 40,
+  "required_classes": [
+    "config/HeatExchangerConfig",
+    "content/HeatExchangeContent",
+    "content/HeatMaterialsContent",
+    "heat/HeatExchangerState",
+    "heat/HeatExchangerBoilerBridge",
+    "heat/NuclearHeatExchangerBlock",
+    "heat/NuclearHeatExchangerBlockEntity"
+  ],
+  "jar_sha256": "ED6AF677555C0EC86ED8AC71F57A3D582D34801F10B3DAB21F1D5E29A3FC50C8",
+  "jar": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-ore-acquisition\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "manual_acceptance": "pending",
+  "production_base": "3f64678263151f418112a5a7cb6d0c6d03a74743"
+}

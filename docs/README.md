@@ -22,7 +22,7 @@
 
 **验证方式：** 两批复用已审定向测试，本次主工程仅一次增量assemble通过；没有重复全量。人工证据来自用户本次全部通过的反馈。
 
-**当前下一项：** [首台核换热器方案](./superpowers/plans/2026-10-03-nuclear-heat-exchanger-proposal.md)已获整套确认，正按[01A实施卡](./superpowers/plans/2026-10-03-ext-b-exchanger-01a.md)并行实现材料、设备与模型；[API只读核查](./reviews/2026-10-03/heat-api-01a/EXT-B-API-01A.md)完成，不代表运行测试通过。建议先通Create储罐锅炉，盆加热与完整蒸汽链另批；02E动画仍后置。
+**当前人工门：** [首台核换热器01A](./reviews/2026-10-03/exchanger-01a/README.md)候选已实现：7项账本JUnit、10项定向GameTest、增量构建及一次独立复审通过。运行代码在同级`Create_NuclearIndustry-ore-acquisition`，按交付页启动并完成三组手测；未合入main运行实现。工作盆、蒸汽/冷凝与专用锅炉后置，完整EXT-B-API-01不记完成；02E动画仍后置。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |

@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "item": "steel_pipe_blank",
+      "source": "tools/art-assets/heat-exchanger-materials/sources/steel_pipe_blank.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/item/steel_pipe_blank.png",
+      "model": "src/main/resources/assets/create_nuclear_industry/models/item/steel_pipe_blank.json",
+      "size": [
+        16,
+        16
+      ],
+      "transparent_pixels": 169,
+      "sha256": "2a8d2d2767d27eca09bba1ff83bcc287f059b21e81648f68dd8cf2027115cb11"
+    },
+    {
+      "item": "reinforced_steel_plate",
+      "source": "tools/art-assets/heat-exchanger-materials/sources/reinforced_steel_plate.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/item/reinforced_steel_plate.png",
+      "model": "src/main/resources/assets/create_nuclear_industry/models/item/reinforced_steel_plate.json",
+      "size": [
+        16,
+        16
+      ],
+      "transparent_pixels": 134,
+      "sha256": "38d68f67f6937be33188edf32d5f9b0e916f479299c7178089cecf223a770aca"
+    },
+    {
+      "item": "nuclear_heat_exchange_bundle",
+      "source": "tools/art-assets/heat-exchanger-materials/sources/nuclear_heat_exchange_bundle.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/item/nuclear_heat_exchange_bundle.png",
+      "model": "src/main/resources/assets/create_nuclear_industry/models/item/nuclear_heat_exchange_bundle.json",
+      "size": [
+        16,
+        16
+      ],
+      "transparent_pixels": 165,
+      "sha256": "546fb6709e1efd165c3f04254ab74f00a2e4d23684466aae9d5959e7f66db9c1"
+    }
+  ],
+  "preview": "build/reports/extension/EXT-B-EXCHANGER-01A-MATERIAL/heat-exchanger-materials-preview.png"
+}

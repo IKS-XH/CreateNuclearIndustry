@@ -9,7 +9,7 @@
 | 工作 | 状态 | 依据或下一门 |
 | :--- | :--- | :--- |
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
-| 核换热器首期 / EXT-B-API-01A | 源码核查完成，01A实施中 | [整套方案](./superpowers/plans/2026-10-03-nuclear-heat-exchanger-proposal.md)已确认，按[实施卡](./superpowers/plans/2026-10-03-ext-b-exchanger-01a.md)推进；优先Create原生锅炉核热支线，明确18级热值和盆匹配循环 |
+| 核换热器首期 / EXT-B-EXCHANGER-01A | 定向自动检查及独立复审通过，待人工验收 | [交付与三组手测](./reviews/2026-10-03/exchanger-01a/README.md)；同级候选实现18级核热供Create锅炉及三材料/21格制造，运行未合main，工作盆与完整蒸汽链另批 |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 实验堆制造配方修订 EXT-A-REACTOR-01A/01B/01C | 全部手测通过并合入main | [最终验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：铅玻璃热搅拌、燃料柱1件、三类动力合成、仪表21格及控制棒组件工作台制造 |
 | 固定实验堆生存制造 EXT-A-REACTOR-01 | 全部手测通过并合入main | [合并验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：7种材料与16条现行配方；本次复用已审证据，main增量assemble通过 |

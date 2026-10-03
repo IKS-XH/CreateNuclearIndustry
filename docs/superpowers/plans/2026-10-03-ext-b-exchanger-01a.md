@@ -1,6 +1,6 @@
 # EXT-B-EXCHANGER-01A：首台核热换热器
 
-**状态：执行中。** 用户于2026-10-03确认[整套方案](./2026-10-03-nuclear-heat-exchanger-proposal.md)，本卡冻结实施边界；PM负责文档/Git/审核，执行者负责实现。完整三模式、工作盆与专用蒸汽链仍后置。
+**状态：自动验证与一次合并独立复审通过，待客户端人工验收。** 用户于2026-10-03确认[整套方案](./2026-10-03-nuclear-heat-exchanger-proposal.md)，本卡冻结实施边界；PM负责文档/Git/审核，执行者负责实现。完整三模式、工作盆与专用蒸汽链仍后置。
 
 ## 目标与基线
 
@@ -38,7 +38,7 @@
 
 - 材料类`content/HeatMaterialsContent.java`注册`STEEL_PIPE_BLANK`=`steel_pipe_blank`、`REINFORCED_STEEL_PLATE`=`reinforced_steel_plate`、`NUCLEAR_HEAT_EXCHANGE_BUNDLE`=`nuclear_heat_exchange_bundle`。中文：钢管坯、强化钢板、核换热管束。
 - 设备类`content/HeatExchangeContent.java`注册`NUCLEAR_HEAT_EXCHANGER`方块、`NUCLEAR_HEAT_EXCHANGER_ITEM`及BE；设备Java集中`heat/`包，配置独立`config/HeatExchangerConfig.java`。
-- 钢管坯通用标签`c:tubes/steel`（本批新增约定，非声称NeoForge内置），父`c:tubes`；强化板`c:plates/reinforced_steel`汇入`c:plates`但不进入`c:plates/steel`；管束专用`create_nuclear_industry:nuclear_heat_exchange_bundles`。普通钢/铜、坚固板、精密构件优先对应具体通用/Create标签，既有耐压接头/工业传感器复用现有专用标签。
+- 钢管坯通用标签`c:tubes/steel`（本批新增约定，非声称NeoForge内置），父`c:tubes`；强化板`c:plates/reinforced_steel`汇入`c:plates`但不进入`c:plates/steel`；管束专用`create_nuclear_industry:nuclear_heat_exchange_bundles`。普通钢/铜、坚固板、精密构件优先对应具体通用/Create标签，核查未发现既有耐压接头/工业传感器专用标签，因此本批新增`create_nuclear_industry:pressure_fittings`与`industrial_sensors`，各仅包含既有同名物品，不更改旧配方。
 - 钢锭切石1→2管坯，沿Create锯原生切石回退；强化板工作台竖排坚固板/精密构件/钢板1→1；管束工作台`P P / CRC / P P`（4管坯+2铜片+1强化板）→1；整机21格` SSS / SCPCS / SHIHS / SCPCS / SSS `→1，含12钢板、4铜片、2耐压接头、2管束、1工业传感器，`accept_mirrored:false`。无序列装配、额外工时、副产物。
 
 ## 分工与精确写集
@@ -49,7 +49,7 @@
 
 - `src/main/java/com/iksxh/create_nuclear_industry/content/HeatMaterialsContent.java`
 - `src/main/java/com/iksxh/create_nuclear_industry/gametest/ExtensionHeatExchangerCraftingGameTests.java`
-- `src/main/resources/data/create_nuclear_industry/recipe/heat_exchanger/`四配方；`data/c/tags/item/tubes.json`、`tubes/steel.json`、`plates/reinforced_steel.json`和既有`plates.json`仅新增引用；`data/create_nuclear_industry/tags/item/nuclear_heat_exchange_bundles.json`。
+- `src/main/resources/data/create_nuclear_industry/recipe/heat_exchanger/`四配方；`data/c/tags/item/tubes.json`、`tubes/steel.json`、`plates/reinforced_steel.json`和既有`plates.json`仅新增引用；`data/create_nuclear_industry/tags/item/nuclear_heat_exchange_bundles.json`、`pressure_fittings.json`、`industrial_sensors.json`（PM按实际资源核查补充写集，不新增物品/玩法）。
 - 三材料同名`assets/create_nuclear_industry/models/item/*.json`、`textures/item/*.png`；`assets/.../lang/zh_cn.json`及`en_us.json`仅新增本批键，保留其他内容。
 - 独立源稿/生成脚本`tools/art-assets/heat-exchanger-materials/`；报告`build/reports/extension/EXT-B-EXCHANGER-01A-MATERIAL.md`及同名证据目录。禁止改旧生成器/清单。
 - 定向配方GameTest放统一命名空间`create_nuclear_industry_heat_exchanger`；模板由设备执行者唯一负责，不单独启动Gradle。材料负责代表性切石/原生锯兼容、工作台与21格匹配和数量；不重复旧材料矩阵。
@@ -65,7 +65,7 @@
 
 ### ART（高速代理）
 
-- `assets/create_nuclear_industry/blockstates/nuclear_heat_exchanger.json`；`models/block/nuclear_heat_exchanger*.json`或`models/block/nuclear_heat_exchanger/`；`models/item/nuclear_heat_exchanger.json`；`textures/block/nuclear_heat_exchanger*.png`。
+- `assets/create_nuclear_industry/blockstates/nuclear_heat_exchanger.json`；`models/block/nuclear_heat_exchanger*.json`或`models/block/nuclear_heat_exchanger/`；`models/item/nuclear_heat_exchanger.json`；`textures/block/nuclear_heat_exchanger*.png`或`textures/block/nuclear_heat_exchanger/`（独立纹理目录，PM确认）。
 - `tools/art-assets/heat-exchanger-device/`独立SVG、生成器及部件/枢轴说明；报告`build/reports/extension/EXT-B-EXCHANGER-01A-ART.md`及同名目录。
 - 外壳与热芯分层可拆、预留动画；本轮静态完整模型，无动态渲染。模型限定0～16，避免共面重叠、透明漏缝、默认越界UV和过大手持显示。临时约定`facing=north/east/south/west`、`lit=false/true`，lit仅本机视觉不是Create热级；与设备执行者经PM协调。
 - 不改Java、配方、语言、旧素材。生成预览供PM查看；检查资源引用及打包由合并检查复用。
@@ -86,3 +86,7 @@ $env:JAVA_HOME='C:/Program Files/Java/jdk-21'
 交付包含实际技能、文件列表、关键实现说明、命令与原始证据、风险和未验收客户端项。三报告齐后进行一次合并规格/质量独立复审，读证据不重跑同套测试。PM保存候选提交及合并人工清单：①制造/JEI/模型/护目镜；②反应堆热液→Create锅炉发电→冷液回流；③堵塞/断供/恢复/拆放重载。人工未过不记完成、不合入main运行代码、不派发后续盆/蒸汽功能。
 
 所有执行者仅可只读Git，不暂存/提交/切分支/回退/清理；不得动运行客户端及用户存档。
+
+## 2026-10-04交付记录
+
+候选实现采用上述写集；7个不同账本JUnit分两次通过，最终10/10定向GameTest及增量assemble通过。首轮测试准备错误及独立复审发现的FULL但非ticking缓存热缺陷均已定位整改；失败与成功原始证据保留于[交付页](../../reviews/2026-10-03/exchanger-01a/README.md)。新增边界验证使用真实区块上的受控原生FullStatus门；不冒称自然票据迁移或磁盘重载已通过。测试运行生成的两份已跟踪根日志由PM备份后恢复，原用户配置及pycache保持。运行候选不合入main，按交付页三组清单等人工验收。

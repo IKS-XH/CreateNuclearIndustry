@@ -1,0 +1,34 @@
+{
+  "coordinate_bounds": [
+    0,
+    16
+  ],
+  "uv_bounds": [
+    0,
+    16
+  ],
+  "model_element_count_checked": 162,
+  "blockstate_models_resolved": [
+    "block/nuclear_heat_exchanger/core",
+    "block/nuclear_heat_exchanger/core_lit",
+    "block/nuclear_heat_exchanger/item_static",
+    "block/nuclear_heat_exchanger/shell"
+  ],
+  "textures_resolved": [
+    "create_nuclear_industry:block/nuclear_heat_exchanger/brass",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/brass_dark",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/copper",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/copper_light",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/hot",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/hot_light",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/panel",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/steel",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/steel_dark",
+    "create_nuclear_industry:block/nuclear_heat_exchanger/steel_light"
+  ],
+  "texture_dimensions": "10 RGBA PNG, 16x16, fully opaque",
+  "overlapping_component_volumes": 0,
+  "axis_lines_checked": 768,
+  "all_axis_lines_intersect_solid": true,
+  "runtime_or_gradle_checks": "not run; art-only task"
+}
