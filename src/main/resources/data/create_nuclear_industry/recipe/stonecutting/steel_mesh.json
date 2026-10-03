@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {"tag": "c:plates/steel"},
+  "result": {"id": "create_nuclear_industry:steel_mesh", "count": 1}
+}

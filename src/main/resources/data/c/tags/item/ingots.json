@@ -3,6 +3,7 @@
   "values": [
     "#c:ingots/lead",
     "#c:ingots/tin",
-    "#c:ingots/steel"
+    "#c:ingots/steel",
+    "#c:ingots/solder"
   ]
 }

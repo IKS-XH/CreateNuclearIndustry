@@ -1,0 +1,11 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {"item": "create_nuclear_industry:steel_mesh"},
+  "transitional_item": {"id": "create_nuclear_industry:incomplete_steel_grate"},
+  "sequence": [
+    {"type": "create:deploying", "ingredients": [{"item": "create_nuclear_industry:incomplete_steel_grate"}, {"tag": "c:plates/steel"}], "results": [{"id": "create_nuclear_industry:incomplete_steel_grate"}]},
+    {"type": "create:pressing", "ingredients": [{"item": "create_nuclear_industry:incomplete_steel_grate"}], "results": [{"id": "create_nuclear_industry:incomplete_steel_grate"}]}
+  ],
+  "results": [{"id": "create_nuclear_industry:steel_grate"}],
+  "loops": 1
+}

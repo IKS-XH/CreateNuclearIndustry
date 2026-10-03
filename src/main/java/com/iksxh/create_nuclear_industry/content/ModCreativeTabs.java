@@ -64,6 +64,10 @@ public final class ModCreativeTabs {
                         output.accept(BasicMaterialContent.QUARTZ_DUST.get());
                         output.accept(BasicMaterialContent.REFRACTORY_BRICK.get());
                         output.accept(BasicMaterialContent.HEAVY_BEARING.get());
+                        output.accept(BasicMaterialContent.SOLDER_INGOT.get());
+                        output.accept(BasicMaterialContent.FUEL_CLADDING_TUBE.get());
+                        output.accept(BasicMaterialContent.STEEL_MESH.get());
+                        output.accept(BasicMaterialContent.STEEL_GRATE.get());
                         output.accept(FuelProcessingContent.URANIUM_CONCENTRATE.get());
                         output.accept(FuelProcessingContent.URANIUM_TAILINGS.get());
                         output.accept(FuelProcessingContent.URANIUM_TAILINGS_BRICK_ITEM.get());

@@ -8,8 +8,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * 基础材料、锡条、传感器及轴承的物品注册入口；服务端加工由数据配方和原生机器执行。
- * 序列装配半成品使用 Create 的单件物品及组件进度，不保存反应堆状态。
+ * 基础材料、传感器、轴承及燃料组件装配材料的物品注册入口；服务端加工由数据配方和原生机器执行。
+ * 序列装配半成品使用 Create 的单件物品及加工进度，不保存反应堆状态。
  */
 public final class BasicMaterialContent {
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreateNuclearIndustry.MOD_ID);
@@ -37,10 +37,16 @@ public final class BasicMaterialContent {
             ITEMS.registerItem("incomplete_radiation_sensor", SequencedAssemblyItem::new);
     public static final DeferredItem<SequencedAssemblyItem> INCOMPLETE_HEAVY_BEARING =
             ITEMS.registerItem("incomplete_heavy_bearing", SequencedAssemblyItem::new);
+    public static final DeferredItem<Item> SOLDER_INGOT = ITEMS.registerSimpleItem("solder_ingot");
+    public static final DeferredItem<Item> FUEL_CLADDING_TUBE = ITEMS.registerSimpleItem("fuel_cladding_tube");
+    public static final DeferredItem<Item> STEEL_MESH = ITEMS.registerSimpleItem("steel_mesh");
+    public static final DeferredItem<Item> STEEL_GRATE = ITEMS.registerSimpleItem("steel_grate");
+    public static final DeferredItem<SequencedAssemblyItem> INCOMPLETE_STEEL_GRATE =
+            ITEMS.registerItem("incomplete_steel_grate", SequencedAssemblyItem::new);
 
     private BasicMaterialContent() {}
 
-    /** 在模组注册事件总线提交普通材料和三个序列装配半成品。 */
+    /** 在模组注册事件总线提交普通材料和四个序列装配半成品。 */
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
     }

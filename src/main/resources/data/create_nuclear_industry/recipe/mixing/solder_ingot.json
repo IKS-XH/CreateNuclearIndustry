@@ -1,0 +1,12 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {"tag": "c:ingots/tin"},
+    {"tag": "c:ingots/tin"},
+    {"tag": "c:ingots/tin"},
+    {"tag": "c:ingots/lead"}
+  ],
+  "processing_time": 100,
+  "heat_requirement": "heated",
+  "results": [{"id": "create_nuclear_industry:solder_ingot", "count": 4}]
+}
