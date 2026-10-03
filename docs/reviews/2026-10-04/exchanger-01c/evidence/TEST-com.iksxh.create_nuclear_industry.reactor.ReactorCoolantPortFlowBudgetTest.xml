@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortFlowBudgetTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-03T19:02:11.363Z" hostname="DESKTOP-4G1EOU9" time="0.002">
+  <properties/>
+  <testcase name="aServerConfigOverrideChangesTheLimitWithoutChangingTheBudgetContract()" classname="com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortFlowBudgetTest" time="0.001"/>
+  <testcase name="quotaResetsOnNextServerTick()" classname="com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortFlowBudgetTest" time="0.0"/>
+  <testcase name="simulateDoesNotConsumeTheCurrentTickQuota()" classname="com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortFlowBudgetTest" time="0.0"/>
+  <testcase name="invalidBudgetInputsAreRejected()" classname="com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortFlowBudgetTest" time="0.001"/>
+  <testcase name="repeatedExecuteCallsShareOnePhysicalPortQuota()" classname="com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortFlowBudgetTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

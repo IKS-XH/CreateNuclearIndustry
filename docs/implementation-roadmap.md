@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**更新日期：2026-10-03。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是 `0.1.0` Alpha，完整生存/发电链和稳定发布尚未完成。
+**更新日期：2026-10-04。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是 `0.1.0` Alpha，完整生存/发电链和稳定发布尚未完成。
 
 本文维护阶段、进度与验收门。玩法、公式、注册、配方和治理按[文档入口](./README.md)列出的权威文档维护；已完成任务细节进入[归档](./archive/README.md)。
 
@@ -9,7 +9,7 @@
 | 工作 | 状态 | 依据或下一门 |
 | :--- | :--- | :--- |
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
-| 核换热器首期 / EXT-B-EXCHANGER-01A | 01B候选整改与自动验证通过，待人工验收 | [01B九格制造与鳍片模型交付](./reviews/2026-10-04/exchanger-01b/README.md)；同级候选原定向自动证据保留，尚未手测验收/合入main；工作盆与完整蒸汽链另批 |
+| 核换热器首期 / EXT-B-EXCHANGER-01A～01C | 01C丢液修复与自适应供热已实现，定向测试通过，待人工复测 | [01C交付](./reviews/2026-10-04/exchanger-01c/README.md)：30项JUnit、15项真实GameTest；运行候选尚未合入main，工作盆与完整蒸汽链另批 |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 实验堆制造配方修订 EXT-A-REACTOR-01A/01B/01C | 全部手测通过并合入main | [最终验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：铅玻璃热搅拌、燃料柱1件、三类动力合成、仪表21格及控制棒组件工作台制造 |
 | 固定实验堆生存制造 EXT-A-REACTOR-01 | 全部手测通过并合入main | [合并验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：7种材料与16条现行配方；本次复用已审证据，main增量assemble通过 |
