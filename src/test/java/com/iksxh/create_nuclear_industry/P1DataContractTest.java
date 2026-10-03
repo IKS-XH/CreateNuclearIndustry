@@ -132,8 +132,10 @@ class P1DataContractTest {
             files.filter(path -> path.toString().endsWith(".json")).forEach(path -> {
                 try {
                     String source = Files.readString(path);
-                    // 只允许本批明确批准的钢锭压片配方复用旧钢板身份，其余 P1 生存路线仍受保护。
+                    // 只放行已批准的钢板压片、组件装配和冷态冷却剂配方；其他P1路线仍受保护。
                     boolean approvedSteelPress = path.equals(recipeDirectory.resolve("pressing/steel_plate.json"));
+                    boolean approvedFuelAssembly = path.equals(recipeDirectory.resolve("shielded_assembly/fresh_fuel_assembly.json"));
+                    boolean approvedColdCoolant = path.equals(recipeDirectory.resolve("mixing/compound_coolant.json"));
                     for (String id : List.of(
                             P1ContentIds.FRESH_FUEL_ASSEMBLY_ID,
                             P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID,
@@ -144,6 +146,8 @@ class P1DataContractTest {
                             "coolant_purifier"
                     )) {
                         if (approvedSteelPress && P1ContentIds.STEEL_PLATE_ID.equals(id)) continue;
+                        if (approvedFuelAssembly && P1ContentIds.FRESH_FUEL_ASSEMBLY_ID.equals(id)) continue;
+                        if (approvedColdCoolant && P1ContentIds.COMPOUND_COOLANT_ID.equals(id)) continue;
                         assertFalse(source.contains(id), "P1 recipe route was added for " + id + " in " + path);
                     }
                 } catch (IOException exception) {
