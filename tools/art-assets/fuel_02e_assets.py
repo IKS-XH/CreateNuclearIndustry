@@ -18,7 +18,7 @@ import export as strict_exporter
 ASSET = ROOT / "src/main/resources/assets/create_nuclear_industry"
 SOURCE = ART / "sources/fuel-02e"
 GENERATED = ART / "generated/block"
-EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-02E-assets"
+EVIDENCE = ROOT / "build/reports/extension/EXT-A-FUEL-02E-R2"
 PREFIX = "shielded_assembly_multiblock"
 MODEL_PREFIX = "create_nuclear_industry:block/shielded_assembly_station"
 TEXTURE_PREFIX = f"create_nuclear_industry:block/{PREFIX}"
@@ -182,7 +182,7 @@ def design() -> None:
     box((12, 14, 28), (20, 22, 29), "window")
     box((0, 8, 4), (3, 27, 28), "lead")
     box((29, 8, 4), (32, 27, 28), "lead")
-    # 侧板上以凸起的接口板标记连续可接触面，不编码料槽身份。
+    # 侧板以齐平的材质分区标记连续可接触面，不编码料槽身份。
     for z in (6, 22):
         for y in (10, 20):
             box((0, y, z), (1, y + 6, z + 6), "port")
@@ -214,49 +214,100 @@ def chamfer_elements(part: int) -> list[dict]:
     ):
         if not (16 * y <= low and high <= 16 * (y + 1)):
             continue
+        # 四个外端水平盖面与底台/顶台共面；仅在这些封闭接触端内缩
+        # 1/512格，打断深度冲突且不改变可见削角轮廓或分块边界。
+        inset = 1 / 32
+        render_low = low + inset if low in (0, 28) else low
+        render_high = high - inset if high in (4, 28, 32) else high
         cx = distance if x == 0 else 32 - distance
         cz = distance if z == 0 else 32 - distance
-        a = (cx - radius - ox, low - 16 * y, cz - half_width - oz)
-        b = (cx + radius - ox, high - 16 * y, cz + half_width - oz)
+        a = (cx - radius - ox, render_low - 16 * y, cz - half_width - oz)
+        b = (cx + radius - ox, render_high - 16 * y, cz + half_width - oz)
         edge = element(a, b, material)
-        edge["rotation"] = {"origin": [cx - ox, low - 16 * y, cz - oz],
+        edge["rotation"] = {"origin": [cx - ox, render_low - 16 * y, cz - oz],
                             "axis": "y", "angle": angle, "rescale": False}
         result.append(edge)
     return result
 
 
 def static_parts(working: bool) -> dict[int, dict]:
-    """切到八个局部0..16模型，切面不渲染，避免内面闪烁。"""
+    """切成八个局部模型，并让重合外表面只由后定义盒体绘制。"""
     design()
+    sides = (("west", 0, 0), ("east", 0, 1), ("down", 1, 0),
+             ("up", 1, 1), ("north", 2, 0), ("south", 2, 1))
+    axes_by_face = {face: tuple(axis for axis in range(3) if axis != normal_axis)
+                    for face, normal_axis, _ in sides}
+    grouped: dict[tuple[str, float], list[tuple[int, tuple[float, float], tuple[float, float]]]] = {}
+    for index, (a, b, _) in enumerate(STATIC):
+        for face, axis, high in sides:
+            plane = (b if high else a)[axis]
+            uv_axes = axes_by_face[face]
+            grouped.setdefault((face, plane), []).append((index,
+                tuple(a[uv_axis] for uv_axis in uv_axes), tuple(b[uv_axis] for uv_axis in uv_axes)))
+    # 每块仅切开与同向、同平面外表面重叠的区域；重复区由后定义盒体负责。
+    # 其余几何仍沿用原盒体，避免全模型细分造成不必要的元素膨胀。
+    duplicate_losers: dict[int, list[tuple[str, float, tuple[float, float], tuple[float, float]]]] = {}
+    for (face, plane), candidates in grouped.items():
+        for pos, (first, first_lo, first_hi) in enumerate(candidates):
+            for second, second_lo, second_hi in candidates[pos + 1:]:
+                overlap_lo = tuple(max(first_lo[k], second_lo[k]) for k in range(2))
+                overlap_hi = tuple(min(first_hi[k], second_hi[k]) for k in range(2))
+                if all(overlap_hi[k] - overlap_lo[k] > 1e-7 for k in range(2)):
+                    loser = min(first, second)
+                    duplicate_losers.setdefault(loser, []).append((face, plane, overlap_lo, overlap_hi))
     output: dict[int, dict] = {}
     for part in range(8):
         x, z, y = part % 2, (part // 2) % 2, part // 4
         offset = (16 * x, 16 * y, 16 * z)
         pieces: list[dict] = []
-        for a, b, material in STATIC:
-            lo = tuple(max(a[i], offset[i]) for i in range(3))
-            hi = tuple(min(b[i], offset[i] + 16) for i in range(3))
-            if any(lo[i] >= hi[i] for i in range(3)):
+        for box_index, (a, b, material) in enumerate(STATIC):
+            clipped_a = tuple(max(a[axis], offset[axis]) for axis in range(3))
+            clipped_b = tuple(min(b[axis], offset[axis] + 16) for axis in range(3))
+            if any(clipped_a[axis] >= clipped_b[axis] for axis in range(3)):
                 continue
-            local_a = tuple(lo[i] - offset[i] for i in range(3))
-            local_b = tuple(hi[i] - offset[i] for i in range(3))
-            shown = tuple(f for f, axis, edge in (("west", 0, 0), ("east", 0, 1), ("down", 1, 0), ("up", 1, 1), ("north", 2, 0), ("south", 2, 1))
-                          if (lo if edge == 0 else hi)[axis] == (a if edge == 0 else b)[axis])
-            if shown:
-                mat = "lamp_on" if working and material == "lamp_off" else material
-                piece = element(local_a, local_b, mat, shown)
-                if mat == "port":
-                    for face in ("west", "east", "south"):
-                        if face in piece["faces"]:
-                            piece["faces"][face]["uv"] = [0, 0, 16, 16]
-                if mat == "window" and "north" in piece["faces"]:
-                    piece["faces"]["north"]["uv"] = [
-                        16 * (lo[0] - a[0]) / (b[0] - a[0]), 16 * (b[1] - hi[1]) / (b[1] - a[1]),
-                        16 * (hi[0] - a[0]) / (b[0] - a[0]), 16 * (b[1] - lo[1]) / (b[1] - a[1]),
-                    ]
-                if part == 0 and a == (2, 0, 0) and b == (30, 4, 32) and "down" in piece["faces"]:
-                    piece["faces"]["down"]["texture"] = "#bottom"
-                pieces.append(piece)
+            cuts = [{clipped_a[axis], clipped_b[axis]} for axis in range(3)]
+            for face, plane, overlap_a, overlap_b in duplicate_losers.get(box_index, ()):
+                axis = next(axis for name, axis, _ in sides if name == face)
+                if (a if next(high for name, _, high in sides if name == face) == 0 else b)[axis] != plane:
+                    continue
+                for projected_index, projected_axis in enumerate(axes_by_face[face]):
+                    for value in (overlap_a[projected_index], overlap_b[projected_index]):
+                        if clipped_a[projected_axis] < value < clipped_b[projected_axis]:
+                            cuts[projected_axis].add(value)
+            segments = [sorted(values) for values in cuts]
+            for x0, x1 in zip(segments[0], segments[0][1:]):
+                for y0, y1 in zip(segments[1], segments[1][1:]):
+                    for z0, z1 in zip(segments[2], segments[2][1:]):
+                        lo, hi = (x0, y0, z0), (x1, y1, z1)
+                        shown = []
+                        for face, axis, high in sides:
+                            if (lo if not high else hi)[axis] != (a if not high else b)[axis]:
+                                continue
+                            projected = axes_by_face[face]
+                            center = tuple((lo[index] + hi[index]) / 2 for index in projected)
+                            if any(target_face == face and target_plane == (b if high else a)[axis]
+                                   and all(target_lo[k] <= center[k] < target_hi[k] for k in range(2))
+                                   for target_face, target_plane, target_lo, target_hi in duplicate_losers.get(box_index, ())):
+                                continue
+                            shown.append(face)
+                        if not shown:
+                            continue
+                        local_a = tuple(lo[i] - offset[i] for i in range(3))
+                        local_b = tuple(hi[i] - offset[i] for i in range(3))
+                        mat = "lamp_on" if working and material == "lamp_off" else material
+                        piece = element(local_a, local_b, mat, tuple(shown))
+                        if mat == "port":
+                            for face in ("west", "east", "south"):
+                                if face in piece["faces"]:
+                                    piece["faces"][face]["uv"] = [0, 0, 16, 16]
+                        if mat == "window" and "north" in piece["faces"]:
+                            piece["faces"]["north"]["uv"] = [
+                                16 * (lo[0] - a[0]) / (b[0] - a[0]), 16 * (b[1] - hi[1]) / (b[1] - a[1]),
+                                16 * (hi[0] - a[0]) / (b[0] - a[0]), 16 * (b[1] - lo[1]) / (b[1] - a[1]),
+                            ]
+                        if part == 0 and a == (2, 0, 0) and b == (30, 4, 32) and "down" in piece["faces"]:
+                            piece["faces"]["down"]["texture"] = "#bottom"
+                        pieces.append(piece)
         pieces.extend(chamfer_elements(part))
         output[part] = {"credit": "EXT-A-FUEL-02E", "ambientocclusion": True, "textures": textures(), "elements": pieces}
     return output
@@ -499,6 +550,85 @@ def motion_diagram(folder: Path) -> None:
     overlay.convert("RGB").save(folder / "motion-envelope.png")
 
 
+def coincident_face_pairs(models: list[tuple[dict, tuple[float, float, float], float]]) -> list[dict]:
+    """以旋转后的真实顶点检查同向、同平面且有正面积交集的面。"""
+    def cross(a: tuple[float, ...], b: tuple[float, ...]) -> tuple[float, float, float]:
+        return (a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0])
+
+    def dot(a: tuple[float, ...], b: tuple[float, ...]) -> float:
+        return sum(a[i] * b[i] for i in range(3))
+
+    def normalized(vector: tuple[float, ...]) -> tuple[float, float, float]:
+        length = math.sqrt(dot(vector, vector))
+        return tuple(value / length for value in vector)
+
+    def signed_area(poly: list[tuple[float, float]]) -> float:
+        return sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1]
+                   for i in range(len(poly))) / 2
+
+    def intersection_area(first: list[tuple[float, float, float]], second: list[tuple[float, float, float]],
+                          normal: tuple[float, float, float]) -> float:
+        dropped = max(range(3), key=lambda axis: abs(normal[axis]))
+        kept = [axis for axis in range(3) if axis != dropped]
+        subject = [tuple(point[axis] for axis in kept) for point in first]
+        clip = [tuple(point[axis] for axis in kept) for point in second]
+        winding = 1 if signed_area(clip) >= 0 else -1
+        for index in range(len(clip)):
+            edge_a, edge_b = clip[index], clip[(index + 1) % len(clip)]
+            output: list[tuple[float, float]] = []
+
+            def side(point: tuple[float, float]) -> float:
+                return winding * ((edge_b[0] - edge_a[0]) * (point[1] - edge_a[1]) -
+                                  (edge_b[1] - edge_a[1]) * (point[0] - edge_a[0]))
+
+            for point_index, point in enumerate(subject):
+                following = subject[(point_index + 1) % len(subject)]
+                distance, next_distance = side(point), side(following)
+                inside, next_inside = distance >= -1e-7, next_distance >= -1e-7
+                if inside and next_inside:
+                    output.append(following)
+                elif inside and not next_inside:
+                    ratio = distance / (distance - next_distance)
+                    output.append(tuple(point[axis] + ratio * (following[axis] - point[axis]) for axis in range(2)))
+                elif not inside and next_inside:
+                    ratio = distance / (distance - next_distance)
+                    output.extend((tuple(point[axis] + ratio * (following[axis] - point[axis]) for axis in range(2)), following))
+            subject = output
+            if not subject:
+                return 0.0
+        return abs(signed_area(subject)) if len(subject) >= 3 else 0.0
+
+    groups: dict[tuple[tuple[int, int, int], int], list[tuple[list[tuple[float, float, float]], tuple[float, float, float], str]]] = {}
+    for model, offset, scale in models:
+        for index, el in enumerate(model["elements"]):
+            for face in el["faces"]:
+                rotation = el.get("rotation")
+                rotation_scaled = ({**rotation, "origin": [value * scale for value in rotation["origin"]]} if rotation else None)
+                points = []
+                for point in FACE_VERTICES[face](el["from"], el["to"]):
+                    scaled = tuple(point[axis] * scale + offset[axis] for axis in range(3))
+                    if rotation_scaled:
+                        scaled = element_rotated(scaled, rotation_scaled, offset)
+                    points.append(scaled)
+                if rotation:
+                    normal = element_rotated(NORMAL[face], {**rotation, "origin": [0, 0, 0]}, (0, 0, 0))
+                else:
+                    normal = NORMAL[face]
+                normal = normalized(normal)
+                plane = round(dot(normal, points[0]) * 100000)
+                normal_key = tuple(round(value * 1000000) for value in normal)
+                groups.setdefault((normal_key, plane), []).append((points, normal, f"{model.get('credit', 'model')}:{index}:{face}"))
+    pairs = []
+    for (_, plane), candidates in groups.items():
+        for index, (first, normal, first_name) in enumerate(candidates):
+            for second, _, second_name in candidates[index + 1:]:
+                area = intersection_area(first, second, normal)
+                if area > 1e-7:
+                    pairs.append({"plane_dot_scaled": plane, "overlap_area": area,
+                                  "elements": [first_name, second_name]})
+    return pairs
+
+
 def check(parts: dict[int, dict], moving: dict[str, dict], item: dict) -> dict:
     """验证本任务引用、局部界与旧贴图字节，绝不修改HEAD内旧PNG。"""
     all_models = list(parts.values()) + list(moving.values()) + [item]
@@ -553,8 +683,28 @@ def check(parts: dict[int, dict], moving: dict[str, dict], item: dict) -> dict:
     old = sorted((ASSET / "textures").rglob("*.png"))
     old = [p for p in old if not p.name.startswith(PREFIX)]
     digest = {p.relative_to(ASSET / "textures").as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in old}
+    placed_parts = [(model, (16 * (part % 2), 16 * (part // 4), 16 * ((part // 2) % 2)), 1)
+                    for part, model in parts.items()]
+    world_scene = placed_parts + [(model, (0, 0, 0), 1) for model in moving.values()]
+    duplicate_faces = coincident_face_pairs(world_scene)
+    assert not duplicate_faces, duplicate_faces[:3]
+    travel = {"left_arm": (1, 0, 0), "right_arm": (-1, 0, 0), "fixture": (0, 3, 0)}
+    motion_face_pair_count = 0
+    for moving_name, delta in travel.items():
+        motion_scene = placed_parts + [
+            (model, delta if name == moving_name else (0, 0, 0), 1)
+            for name, model in moving.items()
+        ]
+        pairs_at_travel = coincident_face_pairs(motion_scene)
+        assert not pairs_at_travel, {"part": moving_name, "pairs": pairs_at_travel[:3]}
+        motion_face_pair_count += len(pairs_at_travel)
+    item_duplicates = coincident_face_pairs([(item, (0, 0, 0), 1)])
+    assert not item_duplicates, item_duplicates[:3]
     return {"static_models": 16, "partials": 3, "element_count": count, "main_state_variants": len(states_main),
             "proxy_state_variants": len(states_proxy), "static_collision_count": len(static_collisions),
+            "world_scene_coincident_face_pair_count": len(duplicate_faces),
+            "motion_endpoint_coincident_face_pair_count": motion_face_pair_count,
+            "item_coincident_face_pair_count": len(item_duplicates),
             "existing_game_png_count": len(old), "existing_game_png_sha256": digest}
 
 
