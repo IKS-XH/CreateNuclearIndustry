@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.production.ShieldedAssemblyStateTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-03T03:14:16.099Z" hostname="DESKTOP-4G1EOU9" time="0.053">
+  <properties/>
+  <testcase name="simulationPauseAndWithdrawalDoNotDuplicate()" classname="com.iksxh.create_nuclear_industry.production.ShieldedAssemblyStateTest" time="0.014"/>
+  <testcase name="fullStackSaveAndReloadPreservesComponentsAndProgress()" classname="com.iksxh.create_nuclear_industry.production.ShieldedAssemblyStateTest" time="0.036"/>
+  <testcase name="exactBatchAndSpeedBoundaries()" classname="com.iksxh.create_nuclear_industry.production.ShieldedAssemblyStateTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
