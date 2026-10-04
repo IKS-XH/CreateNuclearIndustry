@@ -279,7 +279,7 @@
   "fluid_type.create_nuclear_industry.steam": "Steam",
   "gui.create_nuclear_industry.turbine.state.running": "Running",
   "gui.create_nuclear_industry.turbine.state.no_steam": "Waiting for inlet steam",
-  "gui.create_nuclear_industry.turbine.state.exhaust_full": "Exhaust stock is full",
+  "gui.create_nuclear_industry.turbine.state.exhaust_full": "Exhaust steam stock is full",
   "gui.create_nuclear_industry.turbine.state.stock_over_capacity": "Stock exceeds configured capacity",
   "gui.create_nuclear_industry.turbine.state.redstone": "Paused by redstone",
   "gui.create_nuclear_industry.turbine.state.unformed": "Structure is unformed",
@@ -300,7 +300,7 @@
   "gui.create_nuclear_industry.turbine.hint": "Consumes steam while idle; redstone stops the turbine",
   "gui.create_nuclear_industry.turbine.rotors_rpm": "Rotors: %s; Speed: %s RPM",
   "gui.create_nuclear_industry.turbine.flow": "Processed %s / rated %s mB/tick",
-  "gui.create_nuclear_industry.turbine.tanks": "Inlet %s/%s mB; exhaust %s/%s mB",
+  "gui.create_nuclear_industry.turbine.tanks": "Inlet %s/%s mB; exhaust steam %s/%s mB",
   "gui.create_nuclear_industry.turbine.su": "Total %s SU (front %s; rear %s)",
   "gui.create_nuclear_industry.turbine.state.overlap": "Turbine overlaps another formed turbine",
   "gui.create_nuclear_industry.turbine.issue.overlap": "This part belongs to another turbine"
