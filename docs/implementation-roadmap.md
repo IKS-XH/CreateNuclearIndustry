@@ -11,6 +11,7 @@
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
 | 核换热器首期 / EXT-B-EXCHANGER-01A～01C | 当前手测通过并合入main，闭环守恒与自适应供热已验收 | [最终验收](./reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)：复用候选30项JUnit、15项真实GameTest，本次main增量assemble通过；工作盆与完整蒸汽链另批 |
 | 首台高压锅炉 / EXT-B-BOILER-01A | 候选`af106ab`完成实现与审查，待人工验收、未合main | [交付与证据](./reviews/2026-10-04/boiler-01a/CANDIDATE.md)：27项JUnit、7项锅炉GameTest、11项原生回归及assemble通过；[四层搭建与三组手测](./reviews/2026-10-04/boiler-01a/CLIENT-CHECKLIST.md) |
+| 强化钢板 / EXT-B-REINFORCED-PLATE-01 | 候选实现与审查通过，待人工验收、未合main | [实施卡与证据](./superpowers/plans/2026-10-04-reinforced-plate-assembly.md)：原耗材改序列装配，13项定向GameTest及增量assemble通过，与锅炉合并手测 |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 实验堆制造配方修订 EXT-A-REACTOR-01A/01B/01C | 全部手测通过并合入main | [最终验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：铅玻璃热搅拌、燃料柱1件、三类动力合成、仪表21格及控制棒组件工作台制造 |
 | 固定实验堆生存制造 EXT-A-REACTOR-01 | 全部手测通过并合入main | [合并验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：7种材料与16条现行配方；本次复用已审证据，main增量assemble通过 |

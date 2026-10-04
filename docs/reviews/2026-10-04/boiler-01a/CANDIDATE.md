@@ -1,6 +1,6 @@
 # 高压锅炉01A候选交付
 
-**状态：实现及独立审查通过，等待人工验收，未合入main。** 功能提交`af106ab`，基线`891f73e`；候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支`codex/ore-acquisition`。后续仅文档归档，不改变已测实现。
+**状态：实现及独立审查通过，等待人工验收，未合入main。** 锅炉功能提交`af106ab`，基线`891f73e`；候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支`codex/ore-acquisition`。锅炉实现保持该基线；后续[强化钢板序列装配增量](../../../superpowers/plans/2026-10-04-reinforced-plate-assembly.md)已通过独立定向验证和审查，追加至本批手测，原锅炉证据继续复用。
 
 本批落实已批准的3×3×4手搭锅炉：七部件制造、1～8段核热输入、独立暖炉账本、原生Create水汽管网、无GUI交互、泄压与保存/携物恢复。超临界蒸汽不提供桶或世界流体方块，开放管口拒收。配方与数值见[完整合同](../../../superpowers/plans/2026-10-04-high-pressure-boiler-proposal.md)，不在交付中另定参数。
 

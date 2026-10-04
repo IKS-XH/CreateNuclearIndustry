@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.content;
 
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -12,13 +13,15 @@ public final class HeatMaterialsContent {
 
     public static final DeferredItem<Item> STEEL_PIPE_BLANK = ITEMS.registerSimpleItem("steel_pipe_blank");
     public static final DeferredItem<Item> REINFORCED_STEEL_PLATE = ITEMS.registerSimpleItem("reinforced_steel_plate");
+    public static final DeferredItem<SequencedAssemblyItem> INCOMPLETE_REINFORCED_STEEL_PLATE =
+            ITEMS.registerItem("incomplete_reinforced_steel_plate", SequencedAssemblyItem::new);
     public static final DeferredItem<Item> NUCLEAR_HEAT_EXCHANGE_BUNDLE = ITEMS.registerSimpleItem(
             "nuclear_heat_exchange_bundle");
 
     private HeatMaterialsContent() {
     }
 
-    /** 将本批三种材料接入模组物品注册总线。 */
+    /** 将本批换热器材料和 Create 序列装配半成品接入模组物品注册总线。 */
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
     }

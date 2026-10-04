@@ -29,6 +29,7 @@
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
+| [强化钢板序列装配](./superpowers/plans/2026-10-04-reinforced-plate-assembly.md) | 候选实现、13项定向GameTest、增量构建与独立审查通过；与锅炉合并手测，未合main |
 | [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 全部人工门通过、已合入main，见[最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |
 | [燃料02A/02B：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 全部手测通过并合入main；[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)，运行证据复用 |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |

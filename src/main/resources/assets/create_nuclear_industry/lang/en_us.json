@@ -35,6 +35,7 @@
   "item.create_nuclear_industry.steel_rod": "Steel Rod",
   "item.create_nuclear_industry.steel_pipe_blank": "Steel Pipe Blank",
   "item.create_nuclear_industry.reinforced_steel_plate": "Reinforced Steel Plate",
+  "item.create_nuclear_industry.incomplete_reinforced_steel_plate": "Incomplete Reinforced Steel Plate",
   "item.create_nuclear_industry.nuclear_heat_exchange_bundle": "Nuclear Heat Exchange Bundle",
   "item.create_nuclear_industry.seal_ring": "Seal Ring",
   "item.create_nuclear_industry.pressure_fitting": "Pressure Fitting",

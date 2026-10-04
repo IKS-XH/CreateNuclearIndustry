@@ -1,24 +1,30 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "pattern": [
-    "C",
-    "P",
-    "S"
-  ],
-  "key": {
-    "C": {
-      "item": "create:sturdy_sheet"
+  "type": "create:sequenced_assembly",
+  "ingredient": { "tag": "c:plates/steel" },
+  "transitional_item": { "id": "create_nuclear_industry:incomplete_reinforced_steel_plate" },
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "create_nuclear_industry:incomplete_reinforced_steel_plate" },
+        { "item": "create:sturdy_sheet" }
+      ],
+      "results": [{ "id": "create_nuclear_industry:incomplete_reinforced_steel_plate" }]
     },
-    "P": {
-      "item": "create:precision_mechanism"
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "create_nuclear_industry:incomplete_reinforced_steel_plate" },
+        { "item": "create:precision_mechanism" }
+      ],
+      "results": [{ "id": "create_nuclear_industry:incomplete_reinforced_steel_plate" }]
     },
-    "S": {
-      "tag": "c:plates/steel"
+    {
+      "type": "create:pressing",
+      "ingredients": [{ "item": "create_nuclear_industry:incomplete_reinforced_steel_plate" }],
+      "results": [{ "id": "create_nuclear_industry:incomplete_reinforced_steel_plate" }]
     }
-  },
-  "result": {
-    "id": "create_nuclear_industry:reinforced_steel_plate",
-    "count": 1
-  }
+  ],
+  "results": [{ "id": "create_nuclear_industry:reinforced_steel_plate" }],
+  "loops": 1
 }
