@@ -1,0 +1,16 @@
+{
+  "baseline": "9159155",
+  "artifact": "build/libs/create_nuclear_industry-0.1.0.jar",
+  "sha256": "E7DF087F57915B33CA2CABB56E34056FBBA88A968BA4B1CB7295B9FE990B852C",
+  "junit": {
+    "evidence": "reused in this task; state algorithm unchanged",
+    "failures": 0,
+    "tests": 9,
+    "errors": 0
+  },
+  "machineGameTests": 11,
+  "kineticGameTests": 4,
+  "clientManual": "pending",
+  "legacyCompatibility": "out of scope until first releasable version",
+  "verification": "PM checked final logs and XML; command exit codes and assemble result recorded in implementation report; final review passed"
+}
