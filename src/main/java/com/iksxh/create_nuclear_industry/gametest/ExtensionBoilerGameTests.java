@@ -99,6 +99,100 @@ public final class ExtensionBoilerGameTests {
         });
     }
 
+    /** 面内偏移口可完整反查归属，且11个水口与12个汽口各自限额并共用控制器库存。 */
+    @GameTest(template = "boiler_empty", timeoutTicks = 80)
+    public static void allSideSlotsFormWithOffsetOwnershipAndIndependentQuotas(GameTestHelper helper) {
+        build(helper, false);
+        var waterPorts = new ArrayList<BlockPos>();
+        var steamPorts = new ArrayList<BlockPos>();
+        IFluidHandler[] staleOffset = {null};
+        helper.runAfterDelay(4, () -> {
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) != null,
+                    "原始中央口结构没有先成型");
+            for (Direction side : Direction.Plane.HORIZONTAL) for (int offset = -1; offset <= 1; offset++) {
+                BlockPos water = faceSlot(CENTER, 1, side, offset);
+                if (!water.equals(CONTROL)) {
+                    if (helper.getBlockState(water).is(BoilerContent.CASING.get()))
+                        require(helper, handler(helper, water, side) == null, "未放端口的候选格提前公开了能力");
+                    helper.setBlock(water, BoilerContent.WATER_PORT.get().defaultBlockState()
+                            .setValue(BoilerPartBlock.FACING, side));
+                    waterPorts.add(water);
+                }
+                BlockPos steam = faceSlot(CENTER, 3, side, offset);
+                if (helper.getBlockState(steam).is(BoilerContent.CASING.get()))
+                    require(helper, handler(helper, steam, side) == null, "未放端口的候选格提前公开了能力");
+                helper.setBlock(steam, BoilerContent.STEAM_PORT.get().defaultBlockState()
+                        .setValue(BoilerPartBlock.FACING, side));
+                steamPorts.add(steam);
+            }
+        });
+        helper.runAfterDelay(8, () -> {
+            var form = BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL));
+            require(helper, form != null && form.waterPorts().size() == 11 && form.steamPorts().size() == 12,
+                    "完整三格侧排未按11水口、12汽口成型");
+            BlockPos reverseProbe = faceSlot(CENTER, 1, Direction.SOUTH, 1);
+            owner(helper).invalidateForm();
+            require(helper, BoilerStructure.owner(helper.getLevel(), helper.absolutePos(reverseProbe), true) == owner(helper),
+                    "清空缓存后无法从南面非中央给水口反查控制器");
+            for (BlockPos port : waterPorts) {
+                Direction facing = helper.getBlockState(port).getValue(BoilerPartBlock.FACING);
+                require(helper, BoilerStructure.owner(helper.getLevel(), helper.absolutePos(port), true) == owner(helper),
+                        "偏移给水口反查不到唯一控制器：" + port);
+                IFluidHandler handler = handler(helper, port, facing);
+                require(helper, handler != null && handler.fill(new FluidStack(Fluids.WATER, 256),
+                        IFluidHandler.FluidAction.EXECUTE) == 256, "合法给水口没有独立接收256mB：" + port);
+            }
+            require(helper, owner(helper).ledger().water() == 11 * 256, "11口共享给水库存数量不符");
+            seedSteam(helper, 12 * 256);
+            for (BlockPos port : steamPorts) {
+                Direction facing = helper.getBlockState(port).getValue(BoilerPartBlock.FACING);
+                require(helper, BoilerStructure.owner(helper.getLevel(), helper.absolutePos(port), false) == owner(helper),
+                        "偏移汽口反查不到唯一控制器：" + port);
+                IFluidHandler handler = handler(helper, port, facing);
+                require(helper, handler != null && handler.drain(256, IFluidHandler.FluidAction.EXECUTE)
+                        .getAmount() == 256, "合法汽口没有独立抽取256mB：" + port);
+            }
+            require(helper, owner(helper).ledger().steam() == 0, "12口共享蒸汽库存未守恒抽空");
+            BlockPos offsetSteam = faceSlot(CENTER, 3, Direction.SOUTH, 1);
+            IFluidHandler cached = handler(helper, offsetSteam, Direction.SOUTH);
+            staleOffset[0] = cached;
+            require(helper, cached != null && cached.getTanks() == 1, "偏移汽口能力失效检查的原始句柄无效");
+            helper.setBlock(offsetSteam, BoilerContent.STEAM_PORT.get().defaultBlockState()
+                    .setValue(BoilerPartBlock.FACING, Direction.WEST));
+            var issue = BoilerStructure.issue(helper.getLevel(), helper.absolutePos(CONTROL));
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) == null
+                    && issue.reason().equals("side") && issue.pos().equals(helper.absolutePos(offsetSteam))
+                    && cached.getTanks() == 0,
+                    "偏移口朝向错误、诊断坐标错误或旧缓存能力未失效");
+            helper.setBlock(offsetSteam, BoilerContent.STEAM_PORT.get().defaultBlockState()
+                    .setValue(BoilerPartBlock.FACING, Direction.SOUTH));
+            BlockPos wrongLayer = faceSlot(CENTER, 2, Direction.SOUTH, 1);
+            helper.setBlock(wrongLayer, BoilerContent.WATER_PORT.get().defaultBlockState()
+                    .setValue(BoilerPartBlock.FACING, Direction.SOUTH));
+            issue = BoilerStructure.issue(helper.getLevel(), helper.absolutePos(CONTROL));
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) == null
+                    && issue.reason().equals("side") && issue.pos().equals(helper.absolutePos(wrongLayer)),
+                    "错层偏移给水口没有被拒绝或定位");
+            helper.setBlock(wrongLayer, BoilerContent.CASING.get());
+            BlockPos edgePort = CENTER.offset(2, 1, 2);
+            helper.setBlock(edgePort, BoilerContent.WATER_PORT.get().defaultBlockState()
+                    .setValue(BoilerPartBlock.FACING, Direction.EAST));
+            issue = BoilerStructure.issue(helper.getLevel(), helper.absolutePos(CONTROL));
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) == null
+                    && issue.reason().equals("edge") && issue.pos().equals(helper.absolutePos(edgePort)),
+                    "棱边给水口没有被拒绝或定位");
+            helper.setBlock(edgePort, BoilerContent.CASING.get());
+        });
+        helper.runAfterDelay(11, () -> {
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) != null,
+                    "恢复偏移汽口方向后锅炉未重新成型");
+            require(helper, staleOffset[0] != null && staleOffset[0].getTanks() == 0
+                    && handler(helper, faceSlot(CENTER, 3, Direction.SOUTH, 1), Direction.SOUTH) != null,
+                    "旧面内偏移能力在合法恢复后复活或新能力未刷新");
+            helper.succeed();
+        });
+    }
+
     /** 棱边窗口必须拒绝；旧3×3×4停机保存账本，原控制器扩建后恢复。 */
     @GameTest(template = "boiler_empty", timeoutTicks = 90)
     public static void edgeWindowAndLegacyShellRebuildKeepInventory(GameTestHelper helper) {
@@ -203,20 +297,27 @@ public final class ExtensionBoilerGameTests {
         });
     }
 
-    /** 真实Create泵把同一源罐水分流到两个物理给水口，逐tick总入量不能突破整炉额度。 */
+    /** 真实Create泵给中央与南面偏移口供水，近满共享库存与源罐数量保持守恒。 */
     @GameTest(template = "boiler_empty", timeoutTicks = 180)
     public static void realCreatePumpSplitsWaterWithoutOverpromise(GameTestHelper helper) {
-        build(helper, true);
+        build(helper, false);
+        BlockPos offsetSouthWater = CENTER.offset(1, 1, 2);
         helper.runAfterDelay(4, () -> {
+            require(helper, BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) != null
+                    && handler(helper, offsetSouthWater, Direction.SOUTH) == null,
+                    "偏移候选给水口加入前基线结构或能力不正确");
             var nearFull = new net.minecraft.nbt.CompoundTag();
             nearFull.putInt("Water", 15900);
             owner(helper).ledger().load(nearFull);
             buildWaterNetwork(helper);
         });
+        helper.runAfterDelay(6, () -> helper.setBlock(offsetSouthWater,
+                BoilerContent.WATER_PORT.get().defaultBlockState()
+                        .setValue(BoilerPartBlock.FACING, Direction.SOUTH)));
         boolean[] flowed = {false, false};
         helper.onEachTick(() -> {
             flowed[0] |= activeFlow(helper, new BlockPos(13, 3, 3), Direction.WEST);
-            flowed[1] |= activeFlow(helper, new BlockPos(10, 3, 6), Direction.NORTH);
+            flowed[1] |= activeFlow(helper, new BlockPos(11, 3, 6), Direction.NORTH);
         });
         helper.runAfterDelay(55, () -> {
             int water = owner(helper).ledger().water();
@@ -242,7 +343,7 @@ public final class ExtensionBoilerGameTests {
     public static void realCreateSteamPumpFillsNativeTank(GameTestHelper helper) {
         build(helper, false);
         helper.setBlock(STEAM_WEST, BoilerContent.CASING.get());
-        BlockPos southSteam = CENTER.offset(0, 3, 2);
+        BlockPos southSteam = CENTER.offset(1, 3, 2);
         helper.setBlock(southSteam, BoilerContent.STEAM_PORT.get().defaultBlockState()
                 .setValue(BoilerPartBlock.FACING, Direction.SOUTH));
         helper.onEachTick(() -> {
@@ -256,19 +357,21 @@ public final class ExtensionBoilerGameTests {
             var water = handler(helper, WATER_EAST, Direction.EAST);
             require(helper, water.fill(new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE) > 0,
                     "蒸汽管网场景无法给水");
-            buildSteamNetwork(helper);
+            buildSteamNetwork(helper, 1);
         });
         helper.runAfterDelay(240, () -> {
-            IFluidHandler tank = handler(helper, STEAM_TANK, Direction.SOUTH);
+            BlockPos steamTank = STEAM_TANK.offset(1, 0, 0);
+            BlockPos steamPump = STEAM_PUMP.offset(1, 0, 0);
+            IFluidHandler tank = handler(helper, steamTank, Direction.SOUTH);
             require(helper, tank != null && BoilerContent.isSteam(tank.getFluidInTank(0))
                     && tank.getFluidInTank(0).getAmount() > 0,
                     "真实Create汽泵未把超临界蒸汽送入储罐：炉=" + owner(helper).ledger().steam()
                             + " 罐=" + (tank == null ? -1 : tank.getFluidInTank(0).getAmount())
-                            + " 泵速=" + ((PumpBlockEntity) helper.getBlockEntity(STEAM_PUMP)).getSpeed()
+                            + " 泵速=" + ((PumpBlockEntity) helper.getBlockEntity(steamPump)).getSpeed()
                             + " 汽口=" + handler(helper, southSteam, Direction.SOUTH)
-                            + " 入=" + pipeInfo(helper, new BlockPos(10, 5, 6))
-                            + " 出=" + pipeInfo(helper, new BlockPos(10, 5, 8)));
-            require(helper, ((PumpBlockEntity) helper.getBlockEntity(STEAM_PUMP)).getSpeed() != 0,
+                            + " 入=" + pipeInfo(helper, new BlockPos(11, 5, 6))
+                            + " 出=" + pipeInfo(helper, new BlockPos(11, 5, 8)));
+            require(helper, ((PumpBlockEntity) helper.getBlockEntity(steamPump)).getSpeed() != 0,
                     "真实Create汽泵没有动力");
             helper.succeed();
         });
@@ -347,11 +450,12 @@ public final class ExtensionBoilerGameTests {
         BlockPos shell = CENTER.above(4).east().south();
         helper.setBlock(shell, Blocks.AIR);
         BlockPos westTankPos = new BlockPos(4, 5, 3);
-        BlockPos eastTankPos = new BlockPos(16, 5, 3);
+        BlockPos eastPort = CENTER.offset(2, 3, 1);
+        BlockPos eastTankPos = new BlockPos(16, 5, 4);
         // 分支使首管已有两条有效接面，不会被Create的直管自动补开朝向汽口的一面。
         BlockPos[] westPipes = {new BlockPos(7, 5, 3), new BlockPos(6, 5, 3),
                 new BlockPos(5, 5, 3), new BlockPos(7, 5, 4)};
-        BlockPos[] eastPipes = {new BlockPos(13, 5, 3), new BlockPos(14, 5, 3), new BlockPos(15, 5, 3)};
+        BlockPos[] eastPipes = {new BlockPos(13, 5, 4), new BlockPos(14, 5, 4), new BlockPos(15, 5, 4)};
         helper.setBlock(westTankPos, AllBlocks.FLUID_TANK.get());
         helper.setBlock(eastTankPos, AllBlocks.FLUID_TANK.get());
         for (BlockPos pipe : westPipes) helper.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
@@ -366,11 +470,12 @@ public final class ExtensionBoilerGameTests {
             helper.setBlock(shell, BoilerContent.CASING.get());
         });
         int[] beforePortRemoval = {0};
+        int[] afterPortRemoval = {0};
         int[] beforeBreak = {0, 0};
         int[] beforeRebuild = {0, 0, 0};
         IFluidHandler[] removedPortHandle = {null};
         IFluidHandler[] formedPortHandles = {null, null};
-        helper.runAfterDelay(20, () -> helper.setBlock(CENTER.offset(2, 3, 0),
+        helper.runAfterDelay(20, () -> helper.setBlock(eastPort,
                 BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.EAST)));
         helper.runAfterDelay(30, () -> {
             var west = handler(helper, westTankPos, Direction.EAST);
@@ -387,20 +492,24 @@ public final class ExtensionBoilerGameTests {
             require(helper, beforeBreak[0] + beforeBreak[1] + owner(helper).ledger().steam() == 8000,
                     "双汽口成型后蒸汽不守恒");
             beforePortRemoval[0] = beforeBreak[1];
-            removedPortHandle[0] = handler(helper, CENTER.offset(2, 3, 0), Direction.EAST);
-            helper.setBlock(CENTER.offset(2, 3, 0), BoilerContent.CASING.get());
+            removedPortHandle[0] = handler(helper, eastPort, Direction.EAST);
+            helper.setBlock(eastPort, BoilerContent.CASING.get());
         });
         helper.runAfterDelay(34, () -> {
             var entry = FluidPropagator.getPipe(helper.getLevel(), helper.absolutePos(eastPipes[0]));
             var connection = entry == null ? null : entry.getConnection(Direction.WEST);
+            var tank = handler(helper, eastTankPos, Direction.WEST);
+            afterPortRemoval[0] = tank == null ? 0 : tank.getFluidInTank(0).getAmount();
             require(helper, pressureReleased(connection),
                     "拆除新增汽口后东侧Create连接仍保留锅炉压力：连接=" + pressureInfo(connection)
                             + " 成型=" + (BoilerStructure.inspect(helper.getLevel(), helper.absolutePos(CONTROL)) != null));
-            require(helper, handler(helper, CENTER.offset(2, 3, 0), Direction.EAST) == null
+            require(helper, !activeFlow(helper, eastPipes[0], Direction.WEST),
+                    "拆口后东侧偏移管路仍在传输蒸汽");
+            require(helper, handler(helper, eastPort, Direction.EAST) == null
                             && removedPortHandle[0] != null
-                            && removedPortHandle[0].drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(),
+                    && removedPortHandle[0].drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(),
                     "拆口后端口能力或拆除前缓存句柄仍可使用");
-            helper.setBlock(CENTER.offset(2, 3, 0), BoilerContent.STEAM_PORT.get().defaultBlockState()
+            helper.setBlock(eastPort, BoilerContent.STEAM_PORT.get().defaultBlockState()
                     .setValue(BoilerPartBlock.FACING, Direction.EAST));
         });
         helper.runAfterDelay(47, () -> {
@@ -408,10 +517,11 @@ public final class ExtensionBoilerGameTests {
             int received = tank == null ? 0 : tank.getFluidInTank(0).getAmount();
             var entry = FluidPropagator.getPipe(helper.getLevel(), helper.absolutePos(eastPipes[0]));
             require(helper, entry != null && entry.getConnection(Direction.WEST) != null
-                            && received > beforePortRemoval[0],
-                    "东侧汽口重新放回后未恢复管路和出汽");
+                            && received > afterPortRemoval[0],
+                    "东侧面内偏移汽口重新放回后未恢复管路和实流：拆口后=" + afterPortRemoval[0]
+                            + " 重连后=" + received + " 拆口前=" + beforePortRemoval[0]);
             formedPortHandles[0] = handler(helper, STEAM_WEST, Direction.WEST);
-            formedPortHandles[1] = handler(helper, CENTER.offset(2, 3, 0), Direction.EAST);
+            formedPortHandles[1] = handler(helper, eastPort, Direction.EAST);
             require(helper, formedPortHandles[0] != null && formedPortHandles[1] != null
                             && formedPortHandles[0].getTanks() == 1 && formedPortHandles[1].getTanks() == 1,
                     "拆壳前无法重新取得两个有效汽口句柄");
@@ -739,7 +849,7 @@ public final class ExtensionBoilerGameTests {
                 IFluidHandler.FluidAction.EXECUTE) == 4000, "Create给水源罐预装失败");
         BlockPos[] pipes = {new BlockPos(16, 3, 3), new BlockPos(14, 3, 3), new BlockPos(13, 3, 3),
                 new BlockPos(13, 3, 4), new BlockPos(13, 3, 5), new BlockPos(13, 3, 6),
-                new BlockPos(12, 3, 6), new BlockPos(11, 3, 6), new BlockPos(10, 3, 6)};
+                new BlockPos(12, 3, 6), new BlockPos(11, 3, 6)};
         for (BlockPos pipe : pipes) helper.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
         helper.setBlock(WATER_PUMP, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, Direction.WEST));
         helper.setBlock(new BlockPos(15, 3, 4), AllBlocks.COGWHEEL.getDefaultState()
@@ -752,19 +862,28 @@ public final class ExtensionBoilerGameTests {
         sealOpenEnds(helper, pipes);
     }
 
-    private static void buildSteamNetwork(GameTestHelper helper) {
-        helper.setBlock(STEAM_TANK, AllBlocks.FLUID_TANK.get());
-        BlockPos[] pipes = {new BlockPos(10, 5, 6), new BlockPos(10, 5, 8)};
+    private static void buildSteamNetwork(GameTestHelper helper) { buildSteamNetwork(helper, 0); }
+
+    private static void buildSteamNetwork(GameTestHelper helper, int faceOffset) {
+        BlockPos steamTank = STEAM_TANK.offset(faceOffset, 0, 0);
+        BlockPos steamPump = STEAM_PUMP.offset(faceOffset, 0, 0);
+        BlockPos[] pipes = {new BlockPos(10 + faceOffset, 5, 6), new BlockPos(10 + faceOffset, 5, 8)};
+        helper.setBlock(steamTank, AllBlocks.FLUID_TANK.get());
         for (BlockPos pipe : pipes) helper.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
-        helper.setBlock(STEAM_PUMP, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, Direction.SOUTH));
-        helper.setBlock(new BlockPos(11, 5, 7), AllBlocks.COGWHEEL.getDefaultState()
+        helper.setBlock(steamPump, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, Direction.SOUTH));
+        helper.setBlock(new BlockPos(11 + faceOffset, 5, 7), AllBlocks.COGWHEEL.getDefaultState()
                 .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
-        helper.setBlock(new BlockPos(11, 5, 8), AllBlocks.SHAFT.getDefaultState()
+        helper.setBlock(new BlockPos(11 + faceOffset, 5, 8), AllBlocks.SHAFT.getDefaultState()
                 .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
-        helper.setBlock(new BlockPos(11, 5, 9), AllBlocks.CREATIVE_MOTOR.getDefaultState()
+        helper.setBlock(new BlockPos(11 + faceOffset, 5, 9), AllBlocks.CREATIVE_MOTOR.getDefaultState()
                 .setValue(CreativeMotorBlock.FACING, Direction.NORTH));
-        ((CreativeMotorBlockEntity) helper.getBlockEntity(new BlockPos(11, 5, 9))).generatedSpeed.setValue(256);
+        ((CreativeMotorBlockEntity) helper.getBlockEntity(new BlockPos(11 + faceOffset, 5, 9))).generatedSpeed.setValue(256);
         sealOpenEnds(helper, pipes);
+    }
+
+    private static BlockPos faceSlot(BlockPos center, int y, Direction side, int offset) {
+        Direction tangent = side.getAxis() == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
+        return center.above(y).relative(side, 2).relative(tangent, offset);
     }
     private static void propagate(GameTestHelper helper, BlockPos[] pipes) {
         for (BlockPos pipe : pipes) FluidPropagator.propagateChangedPipe(helper.getLevel(), helper.absolutePos(pipe),

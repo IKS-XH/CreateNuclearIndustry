@@ -41,9 +41,9 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
     private int epoch, sectionCount, paidView;
     private boolean available, formed, stopped;
     private boolean formDirty = true;
-    private boolean steamPipeDirty = true;
+    private boolean portPipeDirty = true;
     private BoilerStructure.Form cachedForm;
-    private final Set<BlockPos> pendingSteamPipeCenters = new HashSet<>();
+    private final Set<BlockPos> pendingPortPipeCenters = new HashSet<>();
     private final Map<Long, Object> portFlowIdentities = new HashMap<>();
     private String status = "unformed";
 
@@ -70,8 +70,8 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
     public void invalidateForm() {
         BoilerStructure.Form old = cachedForm;
         steamPressure.release();
-        steamPipeDirty = true;
-        if (old != null) pendingSteamPipeCenters.add(old.center());
+        portPipeDirty = true;
+        if (old != null) pendingPortPipeCenters.add(old.center());
         formDirty = true;
         cachedForm = null;
         epoch++;
@@ -86,8 +86,11 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
             if (level.hasChunkAt(worldPosition) && getBlockState().hasProperty(BoilerPartBlock.FACING)) {
                 BlockPos center = worldPosition.relative(getBlockState().getValue(BoilerPartBlock.FACING).getOpposite(), 2);
                 for (int y : new int[]{0, 2}) for (Direction side : Direction.Plane.HORIZONTAL) {
-                    BlockPos port = center.above(y).relative(side, 2);
-                    if (level.hasChunkAt(port)) level.invalidateCapabilities(port);
+                    Direction tangent = side.getAxis() == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
+                    for (int offset = -1; offset <= 1; offset++) {
+                        BlockPos port = center.above(y).relative(side, 2).relative(tangent, offset);
+                        if (level.hasChunkAt(port)) level.invalidateCapabilities(port);
+                    }
                 }
             }
         }
@@ -125,12 +128,12 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         if (level.isClientSide || !owner.current()) return;
         long now = level.getGameTime();
         BoilerStructure.Form form = owner.currentForm();
-        if (owner.steamPipeDirty) {
-            owner.steamPipeDirty = false;
-            if (form != null) owner.pendingSteamPipeCenters.add(form.center());
-            else if (state.hasProperty(BoilerPartBlock.FACING)) owner.pendingSteamPipeCenters.add(
+        if (owner.portPipeDirty) {
+            owner.portPipeDirty = false;
+            if (form != null) owner.pendingPortPipeCenters.add(form.center());
+            else if (state.hasProperty(BoilerPartBlock.FACING)) owner.pendingPortPipeCenters.add(
                     pos.relative(state.getValue(BoilerPartBlock.FACING).getOpposite(), 2).below());
-            owner.refreshSteamPipeConnections();
+            owner.refreshPortPipeConnections();
         }
         owner.formed = form != null;
         if (form != null && owner.sectionCount != form.sections().size()) {
@@ -168,21 +171,27 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         if (now % 5 == 0 || owner.ledger.produced() > 0 || owner.ledger.vented() > 0) owner.sync();
     }
 
-    /** 能力随成型切换时重算相邻 Create 管方块状态；仅传播流量不会重开先铺管的封闭面。 */
-    private void refreshSteamPipeConnections() {
-        for (BlockPos center : pendingSteamPipeCenters) for (Direction side : Direction.Plane.HORIZONTAL) {
-            BlockPos pipePos = center.above(3).relative(side, 3);
-            if (!level.hasChunkAt(pipePos)) continue;
-            BlockState pipeState = level.getBlockState(pipePos);
-            if (pipeState.getBlock() instanceof FluidPipeBlock pipe) {
-                BlockState refreshed = pipe.updateBlockState(pipeState, side.getOpposite(), null, level, pipePos);
-                if (refreshed != pipeState) level.setBlock(pipePos, refreshed, 3);
-                pipeState = refreshed;
+    /** 两层端口成型或拆除后重算相邻 Create 管面，避免先铺管在能力失效后保持封闭。 */
+    private void refreshPortPipeConnections() {
+        for (BlockPos center : pendingPortPipeCenters) {
+            for (int layer : new int[]{1, 3}) for (Direction side : Direction.Plane.HORIZONTAL) {
+                // 先取外法线，再沿面内切线枚举三格，南北面偏移不能用x坐标推法线。
+                Direction tangent = side.getAxis() == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
+                for (int offset = -1; offset <= 1; offset++) {
+                    BlockPos pipePos = center.above(layer).relative(side, 3).relative(tangent, offset);
+                    if (!level.hasChunkAt(pipePos)) continue;
+                    BlockState pipeState = level.getBlockState(pipePos);
+                    if (pipeState.getBlock() instanceof FluidPipeBlock pipe) {
+                        BlockState refreshed = pipe.updateBlockState(pipeState, side.getOpposite(), null, level, pipePos);
+                        if (refreshed != pipeState) level.setBlock(pipePos, refreshed, 3);
+                        pipeState = refreshed;
+                    }
+                    if (BlockEntityBehaviour.get(level, pipePos, FluidTransportBehaviour.TYPE) != null)
+                        FluidPropagator.propagateChangedPipe(level, pipePos, pipeState);
+                }
             }
-            if (BlockEntityBehaviour.get(level, pipePos, FluidTransportBehaviour.TYPE) != null)
-                FluidPropagator.propagateChangedPipe(level, pipePos, pipeState);
         }
-        pendingSteamPipeCenters.clear();
+        pendingPortPipeCenters.clear();
     }
 
     /**

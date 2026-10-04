@@ -71,11 +71,17 @@ public final class BoilerStructure {
 
     private static boolean portMatches(Level level, BlockPos center, BlockPos port, boolean input) {
         BlockState state = level.getBlockState(port);
-        Direction outward = port.getX() < center.getX() ? Direction.WEST
-                : port.getX() > center.getX() ? Direction.EAST
-                : port.getZ() < center.getZ() ? Direction.NORTH : Direction.SOUTH;
+        Direction outward = outwardFacing(center, port);
         return state.is(input ? BoilerContent.WATER_PORT.get() : BoilerContent.STEAM_PORT.get())
                 && state.getValue(BoilerPartBlock.FACING) == outward;
+    }
+
+    /** 先按外表面坐标确定法线，面内偏移不参与朝向判定。 */
+    static Direction outwardFacing(BlockPos center, BlockPos part) {
+        if (part.getX() == center.getX() - 2) return Direction.WEST;
+        if (part.getX() == center.getX() + 2) return Direction.EAST;
+        if (part.getZ() == center.getZ() - 2) return Direction.NORTH;
+        return Direction.SOUTH;
     }
 
     private static BoilerControllerBlockEntity cached(Level level, BlockPos pos) {
@@ -119,8 +125,8 @@ public final class BoilerStructure {
             // 棱边含四角只能为外壳；窗口仅占侧面非棱边三层。
             boolean facePanel = (Math.abs(x) == 2) != (Math.abs(z) == 2);
             boolean faceCenter = facePanel && (x == 0 || z == 0);
-            Direction face = x < 0 ? Direction.WEST : x > 0 ? Direction.EAST
-                    : z < 0 ? Direction.NORTH : Direction.SOUTH;
+            Direction face = x == -2 ? Direction.WEST : x == 2 ? Direction.EAST
+                    : z == -2 ? Direction.NORTH : Direction.SOUTH;
             if (facePanel && y >= 1 && y <= 3 && state.is(BoilerContent.WINDOW.get())) continue;
             if (faceCenter && y == 1 && state.is(BoilerContent.CONTROLLER.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) {
@@ -128,12 +134,12 @@ public final class BoilerStructure {
                 controls++;
                 continue;
             }
-            if (faceCenter && y == 1 && state.is(BoilerContent.WATER_PORT.get())
+            if (facePanel && y == 1 && state.is(BoilerContent.WATER_PORT.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) {
                 water.add(pos.immutable());
                 continue;
             }
-            if (faceCenter && y == 3 && state.is(BoilerContent.STEAM_PORT.get())
+            if (facePanel && y == 3 && state.is(BoilerContent.STEAM_PORT.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) {
                 steam.add(pos.immutable());
                 continue;
@@ -170,13 +176,13 @@ public final class BoilerStructure {
             boolean facePanel = (Math.abs(x) == 2) != (Math.abs(z) == 2);
             boolean faceCenter = facePanel && (x == 0 || z == 0);
             if (facePanel && y >= 1 && y <= 3 && state.is(BoilerContent.WINDOW.get())) continue;
-            Direction face = x < 0 ? Direction.WEST : x > 0 ? Direction.EAST
-                    : z < 0 ? Direction.NORTH : Direction.SOUTH;
+            Direction face = x == -2 ? Direction.WEST : x == 2 ? Direction.EAST
+                    : z == -2 ? Direction.NORTH : Direction.SOUTH;
             if (faceCenter && y == 1 && state.is(BoilerContent.CONTROLLER.get())
                     && pos.equals(controllerPos) && state.getValue(BoilerPartBlock.FACING) == face) continue;
-            if (faceCenter && y == 1 && state.is(BoilerContent.WATER_PORT.get())
+            if (facePanel && y == 1 && state.is(BoilerContent.WATER_PORT.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) { water++; continue; }
-            if (faceCenter && y == 3 && state.is(BoilerContent.STEAM_PORT.get())
+            if (facePanel && y == 3 && state.is(BoilerContent.STEAM_PORT.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) { steam++; continue; }
             return new Issue(y == 0 ? "base_shell" : y == 4 ? "top_shell"
                     : !facePanel ? "edge" : "side", pos);
@@ -195,14 +201,20 @@ public final class BoilerStructure {
                 : hit.currentForm().steamPorts()).contains(port)) return hit;
         BoilerControllerBlockEntity found = null;
         for (Direction side : Direction.Plane.HORIZONTAL) {
-            BlockPos center = port.relative(side.getOpposite(), 2).below(input ? 1 : 3);
-            for (Direction controlSide : Direction.Plane.HORIZONTAL) {
-                BlockPos candidate = center.above().relative(controlSide, 2);
-                if (!level.hasChunkAt(candidate) || !(level.getBlockEntity(candidate) instanceof BoilerControllerBlockEntity owner)) continue;
-                Form form = owner.currentForm();
-                if (form != null && (input ? form.waterPorts() : form.steamPorts()).contains(port)) {
-                    if (found != null && found != owner) return null;
-                    found = owner;
+            // 先还原端口所在外表面，再沿切线移回最多一格，覆盖同一排三种合法位置。
+            Direction tangent = side.getAxis() == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
+            BlockPos faceCenter = port.relative(side.getOpposite(), 2).below(input ? 1 : 3);
+            for (int offset = -1; offset <= 1; offset++) {
+                BlockPos center = faceCenter.relative(tangent, -offset);
+                for (Direction controlSide : Direction.Plane.HORIZONTAL) {
+                    BlockPos candidate = center.above().relative(controlSide, 2);
+                    if (!level.hasChunkAt(candidate)
+                            || !(level.getBlockEntity(candidate) instanceof BoilerControllerBlockEntity owner)) continue;
+                    Form form = owner.currentForm();
+                    if (form != null && (input ? form.waterPorts() : form.steamPorts()).contains(port)) {
+                        if (found != null && found != owner) return null;
+                        found = owner;
+                    }
                 }
             }
         }

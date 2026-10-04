@@ -24,12 +24,12 @@
 
 **验证方式：** 沿用治理5.1，同一实现的已审定向测试不重复执行；制造批次历史证据见[冷却剂与实验堆验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)，换热器本次集成证据单列。
 
-**当前优先级（2026-10-04）：** 锅炉01A基本手测通过，已完成候选[01B整改](./superpowers/plans/2026-10-04-ext-b-boiler-01b.md)：5×5×5、底部中央最多9段、棱边全外壳、透明窗/统一素材、主动出汽、强化板去精密构件。用户同时确认[换热器01D](./superpowers/plans/2026-10-04-ext-b-exchanger-01d.md)定向接口及最多16台首尾共享库存，支撑三排九台换热器；均在同级候选完成22项JUnit、40项GameTest、增量打包与独立审查，用户已确认[联合手测通过](./reviews/2026-10-04/boiler-01b/MANUAL-ACCEPTANCE.md)，新增[锅炉01C](./reviews/2026-10-04/boiler-01c/README.md)每口独立限流候选及审查通过，待本轮复测，尚未合入main。后续为汽轮机→冷凝回水→基础封存；工作盆加热、辅助热、二级耐压限制和02E动画继续后置。
+**当前优先级（2026-10-04）：** [锅炉01B与换热器01D联合手测通过](./reviews/2026-10-04/boiler-01b/MANUAL-ACCEPTANCE.md)：锅炉5×5×5、底部最多9段、全外壳棱边、透明窗/统一素材、主动出汽、强化板减料；换热器定向直列最多16台共享库存。后续[锅炉01C](./reviews/2026-10-04/boiler-01c/README.md)每口独立256mB/t候选及审查通过，当前[锅炉01D](./superpowers/plans/2026-10-04-ext-b-boiler-01d.md)按层三格端口实现及独立审查通过，合并本轮人工复测，尚未合入main。后续为汽轮机→冷凝回水→基础封存；工作盆加热、辅助热、完整温压/蒸汽品质机制、二级耐压限制和02E动画继续后置。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
-| [锅炉01B与换热器01D](./superpowers/plans/2026-10-04-ext-b-boiler-01b.md) | 联合手测通过；新增[锅炉01C](./reviews/2026-10-04/boiler-01c/README.md)每口独立限流候选及审查通过，待本轮复测，尚未合main |
+| [锅炉01D按层三格端口](./superpowers/plans/2026-10-04-ext-b-boiler-01d.md) | 实现及独立审查通过，待手测；保留给水第2层/汽口第4层，扩展到同面三个非棱边格，与已通过自动门的01C每口独立限流合并手测，尚未合main |
 | [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 全部人工门通过、已合入main，见[最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |
 | [燃料02A/02B：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 全部手测通过并合入main；[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)，运行证据复用 |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |
