@@ -1,6 +1,6 @@
 # 汽轮机01D：外观、端口方向与碰撞修复候选
 
-**状态：候选修复与定向验证完成，等待六项人工复测。** 对应[01D任务卡](../../../superpowers/plans/2026-10-05-ext-b-turbine-01d.md)，基线9ac94ae。本页只记录本轮六项反馈；01C人工外观未通过，旧自动证据不改写。功能位于 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录仅同步文档，未合main。
+**状态：01D六项候选已交付，用户随后反馈成型端口未密封；R1修复候选已完成，等待端口复测。** 对应[01D任务卡](../../../superpowers/plans/2026-10-05-ext-b-turbine-01d.md)，基线9ac94ae。本页只记录本轮六项反馈；01C人工外观未通过，旧自动证据不改写。功能位于 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录仅同步文档，未合main。
 
 ## 用户反馈与处理范围
 
@@ -33,3 +33,15 @@
 - [最终素材报告](./evidence/EXT-B-TURBINE-01D-FINAL-ART-REPORT.md)、[静态检查结果](./evidence/EXT-B-TURBINE-01D-FINAL-ART-checks.json)、[12视角离线预览](./evidence/EXT-B-TURBINE-01D-FINAL-ART-preview.png)。离线图不是游戏截图。
 - [GameTest原始成功日志](./evidence/EXT-B-TURBINE-01D-RUNTIME-gametest-final.log)、[冻结后构建](./evidence/EXT-B-TURBINE-01D-RUNTIME-assemble-FINAL-C.log)、[制品资源核对](./evidence/EXT-B-TURBINE-01D-RUNTIME-jar-resources-FINAL-C.txt)、[最终客户端加载日志](./evidence/EXT-B-TURBINE-01D-RUNTIME-client-probe-FINAL-C.log)。对应退出码和哈希清单一并留存。
 - [原缺材质日志片段](./evidence/before-rotor-model-error.log)、[旧基线五项负例](./evidence/EXT-B-TURBINE-01D-ASSETS-baseline-negative-checks.json)、[早期资源诊断](./evidence/EXT-B-TURBINE-01D-ASSETS-diagnosis.md)。失败编译、两轮MockPlayer方向测试失败和首次探针原始记录亦保留；B的中间预览/检查JSON曾被覆盖，未伪称保留原图。报告中的build路径保持执行时语境，本目录为精选证据副本。
+
+## R1：成型端口密封与内外朝向
+
+用户在 `b0b3693` 复测时发现进/排汽口周围仍透空，并明确要求方形面朝外、圆柱朝内。原始反馈见[截图](./r1/feedback.png)。原模型的圆管朝外、安装板朝内；之前检查覆盖了材质和内盖，遗漏整机外侧的连续密封面。本次按用户明确方向纠正模型，Java接口方向、尺寸和加工参数不改；旧自动证据不作新的人工通过证据。
+
+**R1候选已完成：** 外侧方形安装面与薄壳平齐，厚3/16格；圆柱向机内伸入，最深距外面9/32格，对三档叶轮均留1/32格净空。橙/蓝中心标识独立映射，外围机壳纹理连续；不翻转Java的OUTWARD或流体能力。模型更新不要求重造已有机器。
+
+旧模型负例：289条外向采样中24条真透空，另168条要深入机内才遇到可见面；新22个方向模型每个289条采样均在外侧遮挡。资源审计与方向检查通过，PM已查看真实相邻薄壳与进/排汽口的内外组合预览。无Java变更，复用01D运行证据，未重跑GameTest或启动客户端。
+
+`processResources assemble`退出0；24个变更OBJ源前后无漂移，与JAR内容逐字节一致。新JAR SHA-256为`3edb84512f3d42566af1274638e7e301b9ec45e3e8c8ca2fefdf315c73b1d8ef`，取代本页上方原01D包作为当前候选。[模型报告](./r1/R1-port-seal-report.md)、[定向检查](./r1/R1-port-seal-checks.json)、[组合预览](./r1/R1-adjacent-shell-port-preview.png)、[复审](./r1/review.md)、[构建记录](./r1/assemble.log)及[制品核对](./r1/artifact.json)已留存。复审指出的UV报告措辞已由执行者更正并经PM核对；仅修改文字，没有再次安装或改变模型资源。
+
+请按[清单R1节](./manual-checklist.md#r1本次只补端口检查)在原机器上复测。其他五项及整体搭建体验仍保留原人工待验状态，不因本次单项反馈推定通过；主目录只同步文档，功能仍在同级候选，未合main。

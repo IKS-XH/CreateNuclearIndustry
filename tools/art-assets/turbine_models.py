@@ -382,37 +382,81 @@ def square_hole_plate(mesh: Mesh, axis: str, start: float, end: float, half: flo
         quad(mesh, points, wall_material, axis_normal(vector_axis, sign))
 
 
+def square_circle_port_face(mesh: Mesh, axis: str, plane: float, radius: float,
+                            face_material: str, ring_material: str, outward_sign: int):
+    """在完整方形安装面内拼接圆形端面，圆周与方框之间不留视线缝隙。"""
+    segments = 32
+    inner = []
+    outer = []
+    for index in range(segments):
+        angle = 2 * math.pi * index / segments
+        cosine, sine = math.cos(angle), math.sin(angle)
+        inner.append((0.5 + radius * cosine, 0.5 + radius * sine))
+        extent = 0.5 / max(abs(cosine), abs(sine))
+        outer.append((0.5 + extent * cosine, 0.5 + extent * sine))
+    for index in range(segments):
+        next_index = (index + 1) % segments
+        ring_points = [point_on_plane(axis, plane, *inner[index]),
+                       point_on_plane(axis, plane, *outer[index]),
+                       point_on_plane(axis, plane, *outer[next_index]),
+                       point_on_plane(axis, plane, *inner[next_index])]
+        ring_uvs = [inner[index], outer[index], outer[next_index], inner[next_index]]
+        mesh.face(ring_points, ring_material, axis_normal(axis, outward_sign),
+                  uv_axis={"x": (1, 2), "y": (0, 2), "z": (0, 1)}[axis],
+                  uv_coords=ring_uvs)
+    center_points = [point_on_plane(axis, plane, *point) for point in inner]
+    uv_axis = {"x": (1, 2), "y": (0, 2), "z": (0, 1)}[axis]
+    mesh.face(center_points, face_material, axis_normal(axis, outward_sign), uv_axis=uv_axis)
+
+
+def square_port_plate(mesh: Mesh, axis: str, start: float, end: float,
+                      face_material: str, wall_material: str, outward_sign: int,
+                      radius: float = 0.32):
+    """绘制朝外的完整方板和内侧圆口，板厚与汽轮机薄壳同为3/16格。"""
+    outside, inside = (start, end) if outward_sign < 0 else (end, start)
+    square_circle_port_face(mesh, axis, outside, radius, face_material, wall_material, outward_sign)
+    square_circle_port_face(mesh, axis, inside, radius, "inside", wall_material, -outward_sign)
+    low, high = 0.0, 1.0
+    for fixed, is_u, sign in ((low, True, -1), (high, True, 1),
+                              (low, False, -1), (high, False, 1)):
+        if is_u:
+            points = [point_on_plane(axis, start, fixed, 0), point_on_plane(axis, end, fixed, 0),
+                      point_on_plane(axis, end, fixed, 1), point_on_plane(axis, start, fixed, 1)]
+            vector_axis = "y" if axis == "x" else "x"
+        else:
+            points = [point_on_plane(axis, start, 0, fixed), point_on_plane(axis, start, 1, fixed),
+                      point_on_plane(axis, end, 1, fixed), point_on_plane(axis, end, 0, fixed)]
+            vector_axis = "y" if axis == "z" else "z"
+        quad(mesh, points, wall_material, axis_normal(vector_axis, sign))
+
+
 def port_mesh(kind: str, role: str, name: str) -> Mesh:
     mesh = Mesh(name)
     if role == "left":
         axis, center, start, end = "x", (0.5, 0.5), 0.0, 1.0
-        band_start, band_end, inboard = 0.0, 0.11, (0.92, 1.0)
+        band_start, band_end, plate = 0.1875, 0.25, (0.0, 0.1875)
         end_sign = -1
     elif role == "right":
         axis, center, start, end = "x", (0.5, 0.5), 0.0, 1.0
-        band_start, band_end, inboard = 0.89, 1.0, (0.0, 0.08)
+        band_start, band_end, plate = 0.75, 0.8125, (0.8125, 1.0)
         end_sign = 1
     else:
         axis, center, start, end = "y", (0.5, 0.5), 0.0, 1.0
-        band_start, band_end, inboard = 0.89, 1.0, (0.0, 0.08)
+        band_start, band_end, plate = 0.75, 0.8125, (0.8125, 1.0)
         end_sign = 1
     cap = "inlet" if kind == "inlet" else "exhaust"
     side_material = f"{cap}_side"
-    # 钢管主体分成标识环与管身两个不重叠区间，端面颜色表示介质方向。
+    # 外侧3/16方板贴合薄壳，圆管从壳外表面最多伸入9/32格，给最小转子留1/32净空。
     if role == "left":
-        cylinder(mesh, axis, center, 0.32, band_end, end, "casing", sides=16, caps=False)
-        cylinder(mesh, axis, center, 0.32, start, band_end, side_material, sides=16, caps=False)
-        disk(mesh, axis, center, 0.32, start, cap, end_sign)
+        cylinder(mesh, axis, center, 0.32, band_end, 0.28125, "casing", sides=16, caps=False)
+        cylinder(mesh, axis, center, 0.32, plate[1], band_end, side_material, sides=16, caps=False)
     else:
-        cylinder(mesh, axis, center, 0.32, start, band_start, "casing", sides=16, caps=False)
-        cylinder(mesh, axis, center, 0.32, band_start, end, side_material, sides=16, caps=False)
-        disk(mesh, axis, center, 0.32, end, cap, end_sign)
-    square_hole_plate(mesh, axis, inboard[0], inboard[1], 0.35, "endcap", "casing")
-    # 方孔内侧以独立平面封口；其范围恰落在薄板开孔内，不与四条端板共面重叠。
-    inner_plane = inboard[0] if end_sign < 0 else inboard[1]
-    inner_square = [(0.15, 0.15), (0.85, 0.15), (0.85, 0.85), (0.15, 0.85)]
-    mesh.face([point_on_plane(axis, inner_plane, u, v) for u, v in inner_square],
-              "inside", axis_normal(axis, -end_sign))
+        cylinder(mesh, axis, center, 0.32, 0.71875, band_start, "casing", sides=16, caps=False)
+        cylinder(mesh, axis, center, 0.32, band_start, plate[0], side_material, sides=16, caps=False)
+    square_port_plate(mesh, axis, plate[0], plate[1], cap, "casing", end_sign)
+    # 内向短管口用暗色端面表达孔腔，方向朝向机内，不会反向漏掉外表面。
+    tip = 0.28125 if role == "left" else 0.71875
+    disk(mesh, axis, center, 0.32, tip, "inside", -end_sign)
     return mesh
 
 

@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
 ASSETS = REPO / "src/main/resources/assets/create_nuclear_industry"
-REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01D-FINAL-ART"
+REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01D-R1"
 
 
 def read_obj(path: Path):
@@ -157,14 +157,16 @@ def audit_resources() -> dict:
     for kind in ("inlet", "exhaust"):
         path = obj_root / f"{kind}_loose_west.obj"
         _, faces = read_obj(path)
-        sealed = [points for material, points, _, normals in faces if material == "inside"
-                  and len(points) == 4 and all(abs(p[0] - 0.92) < 1e-6 for p in points)
-                  and all(normal[0] > 0.99 for normal in normals)]
-        assert len(sealed) == 1, (path, "普通端口背侧方孔未封闭")
+        inward_caps = [points for material, points, _, normals in faces if material == "inside"
+                       and len(points) == 3 and all(abs(p[0] - 0.28125) < 1e-6 for p in points)
+                       and all(normal[0] > 0.99 for normal in normals)]
+        assert len(inward_caps) == 14, (path, "普通端口朝机内的圆形短管封面缺失或重复", len(inward_caps))
+        assert all(abs(math.hypot(point[1] - 0.5, point[2] - 0.5) - 0.32) < 1e-5
+                   for triangle in inward_caps for point in triangle), (path, "内向端盖与圆管边缘半径不一致")
     return {"model_json": len(model_json), "obj_meshes": len(obj_paths),
             "wrapper_references": len(referenced_objs), "java_partial_models": sorted(partial_refs),
             "faces_with_winding_normal_check": face_count, "opaque_solid_faces": opaque_face_count,
-            "bearing_shaft_radial_clearance": "PASS", "port_inboard_seal": "PASS",
+            "bearing_shaft_radial_clearance": "PASS", "port_inward_round_cap": "PASS",
             "circular_cap_shared_uv": "PASS",
             "material_textures": len(texture_refs),
             "mtl_material_references": "PASS", "texture_resource_paths": "PASS",

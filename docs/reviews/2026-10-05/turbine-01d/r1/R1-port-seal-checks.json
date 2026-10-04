@@ -1,0 +1,280 @@
+{
+  "baseline": "b0b369345bfed1bfcbe91d5fab86f6f11703ef77",
+  "old_negative": {
+    "sampled_rays": 289,
+    "uncovered_rays": 24,
+    "late_surface_rays": 168
+  },
+  "new_covered_models": [
+    {
+      "model": "exhaust_down",
+      "outward_axis": 1,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_left",
+      "outward_axis": 0,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_loose_down",
+      "outward_axis": 1,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_loose_east",
+      "outward_axis": 0,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_loose_north",
+      "outward_axis": 2,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_loose_south",
+      "outward_axis": 2,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_loose_up",
+      "outward_axis": 1,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_loose_west",
+      "outward_axis": 0,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_right",
+      "outward_axis": 0,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_top",
+      "outward_axis": 1,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "exhaust_up",
+      "outward_axis": 1,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_down",
+      "outward_axis": 1,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_left",
+      "outward_axis": 0,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_loose_down",
+      "outward_axis": 1,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_loose_east",
+      "outward_axis": 0,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_loose_north",
+      "outward_axis": 2,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_loose_south",
+      "outward_axis": 2,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_loose_up",
+      "outward_axis": 1,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_loose_west",
+      "outward_axis": 0,
+      "plane": 0.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_right",
+      "outward_axis": 0,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_top",
+      "outward_axis": 1,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    },
+    {
+      "model": "inlet_up",
+      "outward_axis": 1,
+      "plane": 1.0,
+      "samples": 289,
+      "uncovered_rays": 0,
+      "late_surface_rays": 0
+    }
+  ],
+  "model_count": 22,
+  "existing_generator_orientation_check": {
+    "result": "PASS",
+    "formed_four_side_and_ordinary_six_direction_variants": {
+      "turbine_inlet": 384,
+      "turbine_exhaust": 384
+    }
+  },
+  "uv_mapping": {
+    "result": "PASS",
+    "ring": "方环使用连续全局UV",
+    "center_icon": "中央箭头独立完整映射"
+  },
+  "resource_audit": {
+    "command": "& 'C:\\Users\\IKSXH\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe' -B -c \"import importlib.util,json; p='tools/art-assets/turbine_01d_checks.py'; s=importlib.util.spec_from_file_location('checks',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); print(json.dumps(m.audit_resources(),ensure_ascii=False,indent=2))\"",
+    "exit_code": 0,
+    "model_json": 294,
+    "obj_meshes": 294,
+    "wrapper_references": 294,
+    "faces_with_winding_normal_check": 8739,
+    "opaque_solid_faces": 8631,
+    "material_textures": 12,
+    "bearing_shaft_radial_clearance": "PASS",
+    "port_inward_round_cap": "PASS",
+    "circular_cap_shared_uv": "PASS",
+    "mtl_material_references": "PASS",
+    "texture_resource_paths": "PASS",
+    "explicit_normal_winding": "PASS"
+  },
+  "skills_used": [
+    "minecraft-modding",
+    "minecraft-testing",
+    "minecraft-resource-pack",
+    "systematic-debugging"
+  ],
+  "automated_runtime_checks": {
+    "junit": "NOT RUN",
+    "gametest": "NOT RUN",
+    "gradle": "NOT RUN",
+    "minecraft_client": "NOT RUN; user visual check pending"
+  },
+  "installed_resource_count": 46,
+  "rotor_clearance_blocks": {
+    "outer_surface_to_sweep": 0.3125,
+    "pipe_inward_depth": 0.28125,
+    "remaining_by_tier": {
+      "D3": 0.03125,
+      "D5": 0.03125,
+      "D7": 0.03125
+    }
+  },
+  "assembly_preview": {
+    "path": "build/reports/extension/EXT-B-TURBINE-01D-R1/R1-adjacent-shell-port-preview.png",
+    "views": [
+      {
+        "port": "FORMED INLET",
+        "view": "OUTSIDE",
+        "camera": [
+          -3.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "port": "FORMED INLET",
+        "view": "INSIDE",
+        "camera": [
+          3.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "port": "FORMED EXHAUST",
+        "view": "OUTSIDE",
+        "camera": [
+          -3.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "port": "FORMED EXHAUST",
+        "view": "INSIDE",
+        "camera": [
+          3.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "rendering": "OBJ UV + MTL texture sampling with triangle backface culling"
+  },
+  "client_rendering": "NOT VERIFIED; requires the user's Minecraft client visual check"
+}
