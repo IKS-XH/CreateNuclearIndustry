@@ -2,7 +2,7 @@
 
 > PM使用 `superpowers:subagent-driven-development` 自动派发；执行者按 `superpowers:executing-plans` 完成自己的写集。角色、Git禁令、人工门和精简验证以AGENTS及治理5.1为准，优先于技能通用步骤。
 
-**状态：需整改。** 用户本轮仅确认功能部分通过；前端出力、蒸汽材质及整体模型未通过，并提出结构改版。后续以[01B整改方案](./2026-10-04-turbine-structure-revision-proposal.md)区分已确认方向与待确认细节。本卡下文保留01A的实施和自动验证历史，不代表旧布局继续有效或人工已通过。基线 `6017ff2`，交付候选 `01c816f`；功能只在 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，保留既有日志、pycache及主目录 `.vscode/launch.json`。
+**状态：由01B接续整改。** 用户仅确认01A功能部分通过；后续已确认三档新尺寸和256RPM，按[01B实施卡](./2026-10-04-ext-b-turbine-01b.md)推进。本卡下文保留01A的实施和自动验证历史，不代表旧布局继续有效或人工已通过。基线 `6017ff2`，交付候选 `01c816f`；功能只在 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，保留既有日志、pycache及主目录 `.vscode/launch.json`。
 
 **Goal：** 将既有锅炉/换热器及新汽轮机平衡值配置化，交付默认三档、多边形成型、无GUI的超临界汽轮机候选。
 

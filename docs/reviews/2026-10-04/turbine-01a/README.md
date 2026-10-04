@@ -2,7 +2,7 @@
 
 状态：**需整改，人工仅部分通过。** 用户本轮报告前端无法出力、蒸汽紫黑和模型不理想，并要求粗细分档、侧置控制器与独立双轴、薄壳叶片和透明窗。详见[01B整改方案](../../../superpowers/plans/2026-10-04-turbine-structure-revision-proposal.md)。原自动证据保留其覆盖边界，不证明现场与视觉通过；功能不合入main，不开始冷凝回水。
 
-先行资源整改：已补齐蒸汽两张sprite的图集来源，将游戏显示名改为“蒸汽”；JSON/PNG/资源复制及一次processResources通过，实际客户端效果待复测。详见[修复报告](./evidence/steam-fix/EXT-B-TURBINE-STEAM-FIX.md)。尺寸、接口细化、观察窗配方和旧机迁移仍待确认，不把文档方案当作已实现。
+先行资源整改：已补齐蒸汽两张sprite的图集来源，将游戏显示名改为“蒸汽”；JSON/PNG/资源复制及一次processResources通过，实际客户端效果待复测。详见[修复报告](./evidence/steam-fix/EXT-B-TURBINE-STEAM-FIX.md)。用户随后确认三档新尺寸并将转速改为256RPM，后续进度及新搭建清单统一见[01B交付页](../turbine-01b/README.md)，下文保留01A历史。
 
 ## 本批交付
 

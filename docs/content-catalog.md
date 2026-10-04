@@ -204,7 +204,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | 阶段 | 所属结构 | 可放置组成方块（注册 ID） | 各类部件作用 |
 | :--- | :--- | :--- | :--- |
 | `P1` | 专用高压锅炉 | `high_pressure_boiler_casing`、`high_pressure_boiler_window`、`high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port`、`boiler_safety_valve`、`boiler_blaze_heater_port`、`boiler_heat_exchange_section`、`high_pressure_boiler_controller` | 外壳/观察窗封闭锅炉；水口输入给水；蒸汽口输出超临界蒸汽；安全阀泄压；辅助加热口连接烈焰人燃烧室；换热段接收核热；控制器组装并保存锅炉状态 |
-| `P1` | 超临界汽轮机 | 首批六件：`turbine_casing`、`turbine_rotor`、`turbine_inlet`、`turbine_exhaust`、`turbine_output_shaft`、`turbine_controller`；后续保留 `turbine_window`、`turbine_governor`、`turbine_brake` | 01A候选已实现六件及普通蒸汽，待人工复测；控制器兼前轴，两端分配总SU。观察窗、调速器与制动器尚未注册，仍属后续规划 |
+| `P1` | 超临界汽轮机 | 七件：`turbine_casing`、`turbine_rotor`、`turbine_inlet`、`turbine_exhaust`、`turbine_output_shaft`、`turbine_controller`、`turbine_window`；后续保留 `turbine_governor`、`turbine_brake` | 01B候选自动门通过：侧控制器、双端独立输出轴、透明窗和薄壳叶片；未通过新结构人工门。调速器、制动器仍属后续规划 |
 | `P3` | 屏蔽热室 | `hot_cell_casing`、`hot_cell_window`、`hot_cell_item_port`、`hot_cell_fluid_port`、`hot_cell_controller` | 外壳/观察窗提供辐射屏蔽；物品口和流体口限定危险物流；控制器检查屏蔽完整性并允许内部机械臂工作 |
 
 ## 5. 多方块结构
@@ -213,7 +213,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `P1` | `experimental_reactor` | 实验反应堆 | 固定 `5×5×5`；外壳、观察窗、燃料列、控制棒驱动器列、逐列换料端口、冷/热端口和仪表端口 | 完整长方体、冷/热端口和唯一仪表端口齐全、燃料与控制棒布局合法；控制端口不参与 P1 成型；燃料列顶面使用换料端口，控制棒驱动器下方全为空气 | 产热、燃耗、余热、逐列完整度与热负荷、控制棒列卡死、四向损伤传播、20% 融毁计时、SCRAM、冷却剂转化、关键合成物品维修与停机重置 |
 | `P1` | `high_pressure_boiler` | 专用高压锅炉 | 当前固定尺寸；后期限定范围内可变长宽高，水/汽容量随规模变化；含水接口、换热段、蒸汽接口和安全阀 | 密闭结构、至少一个合格核换热段 | 将一回路热量转成超临界蒸汽 |
-| `P1` | `supercritical_steam_turbine` | 超临界汽轮机 | 首批默认宽3×长5/8/11×高3；仅接受服务端配置中的三档规格，成型后显示匹配的整体多边形模型 | 匹配某个预设规格，转子及端部完整；不接受任意尺寸 | 规模决定额定流量与总SU上限等性能；消耗超临界蒸汽并输出SU、产生普通 `steam` |
+| `P1` | `supercritical_steam_turbine` | 超临界汽轮机 | 默认宽×轴长×高为3×5×3、5×8×5、7×11×7，256RPM；仅接受服务端配置中的三档规格，成型后显示匹配的薄壳多边形模型 | 匹配某个预设规格，转子、空腔及双端完整；不接受任意尺寸 | 规模决定额定流量与总SU上限等性能；消耗超临界蒸汽并输出SU、产生 `steam` |
 | `暂缓` | `spent_fuel_pool` | 乏燃料冷却池 | 水池内衬、循环端口、储存格 | 后置玩法；首发不实现热/冷转换或乏燃料池冷却 |
 | `P2` | `variable_reactor` | 可变尺寸反应堆 | 5×5×5 至 11×11×15 | 从固定实验堆扩展；有效燃料长度受限 | 结构自由度和规模化产热 |
 | `P3` | `shielded_hot_cell` | 屏蔽热室 | 屏蔽外壳、观察窗、机械臂、物品/流体端口 | 屏蔽完整，危险物料不能从非端口穿过 | 高放废物灌封与处理 |
