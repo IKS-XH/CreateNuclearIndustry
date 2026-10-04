@@ -1,6 +1,6 @@
 # EXT-B-EXCHANGER-01E：高压锅炉供热状态翻译
 
-状态：语言资源修复、增量打包及PM独立资源审查通过，待客户端确认；候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，基线`dd3df15`。不据本次反馈将锅炉01C/01D人工门记为通过。
+状态：语言资源修复、增量打包、PM独立资源审查及用户客户端确认均通过，已合入main；候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，基线`dd3df15`。该单项反馈原未解除锅炉人工门；用户随后确认本轮全部手测通过，合并验收见[记录](../../reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。
 
 ## 范围与根因
 
@@ -18,4 +18,4 @@
 
 执行者`/root/exchanger01e_lang`使用高速模型，仅在两份语言JSON各补一行。中英文全部9个换热器状态键覆盖、JSON解析/重复键检查通过，一次增量assemble成功；未跑JUnit/GameTest。PM独立查看两行差异并读取JAR及`build/resources/main`确认新键和值已打包。[交付与验证记录](../../reviews/2026-10-04/exchanger-01e/EXT-B-EXCHANGER-01E.md)已归档。
 
-客户端仅需在候选工程运行的游戏内按F3＋T重载资源（或关闭后从候选目录重新runClient），再次观察给高压锅炉供热的换热器护目镜提示，应显示“向高压锅炉供热”。此前锅炉端口人工门仍待确认。
+客户端仅需在候选工程运行的游戏内按F3＋T重载资源（或关闭后从候选目录重新runClient），再次观察给高压锅炉供热的换热器护目镜提示，应显示“向高压锅炉供热”。上述客户端显示与锅炉端口人工门现已获用户确认。

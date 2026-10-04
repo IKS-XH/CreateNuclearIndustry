@@ -1,6 +1,6 @@
 # EXT-B-BOILER-01D：按层开放三格端口
 
-**状态：实现、18项锅炉GameTest、增量assemble与独立审查通过，待本轮人工验收。** 基线`a95d497`（01C每口独立限流），候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、`codex/ore-acquisition`。本轮接续用户手测优化，不将01C新行为另记人工通过，也不再要求先测01C才实施本次明确要求。
+**状态：实现、定向自动门与独立审查通过；2026-10-04用户确认全部手测通过，已合入main。** 基线`a95d497`（01C每口独立限流），候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、`codex/ore-acquisition`。本轮接续用户手测优化，不将01C新行为另记人工通过，也不再要求先测01C才实施本次明确要求。
 
 ## 已确认合同
 
@@ -26,4 +26,4 @@
 
 ## 交付与人工门
 
-执行者`/root/boiler01d_impl`、审查者`/root/boiler01d_review`均使用高速模型。功能写集为锅炉结构/控制器与GameTest三份文件；18项最终定向GameTest、增量assemble及补强后的独立审查通过，复用01C的12项账本JUnit。原始证据、执行过程和仅两项人工操作见[候选验收说明](../../reviews/2026-10-04/boiler-01d/README.md)。未记录用户人工通过，不合main。
+执行者`/root/boiler01d_impl`、审查者`/root/boiler01d_review`均使用高速模型。功能写集为锅炉结构/控制器与GameTest三份文件；18项最终定向GameTest、增量assemble及补强后的独立审查通过，复用01C的12项账本JUnit。原始证据、执行过程和仅两项人工操作见[候选验收说明](../../reviews/2026-10-04/boiler-01d/README.md)。用户后续已确认人工通过，已合入main，见[最终验收](../../reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。
