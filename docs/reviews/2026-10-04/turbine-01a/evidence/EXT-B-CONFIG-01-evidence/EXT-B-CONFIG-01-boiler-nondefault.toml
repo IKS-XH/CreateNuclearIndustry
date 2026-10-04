@@ -1,0 +1,44 @@
+#水罐容量，单位 mB；降低容量不删除既存水。
+# Default: 16000
+# Range: 1 ~ 1000000
+waterCapacityMb = 400
+#超临界汽罐容量，单位 mB；降低容量不删除既存汽。
+# Default: 16000
+# Range: 1 ~ 1000000
+steamCapacityMb = 500
+#每个物理水口及汽口流量上限，单位 mB/t。
+# Default: 256
+# Range: 1 ~ 1000000
+portFlowMbPerTick = 128
+#每个热段每 tick 最多接收的热，单位 HU/t。
+# Default: 18.0
+# Range: 1.0E-6 ~ 1000000.0
+sectionHeatHuPerTick = 36.0
+#生产 1 mB 超临界汽消耗的热，单位 HU/mB。
+# Default: 1.0
+# Range: 1.0E-6 ~ 1000000.0
+steamHuPerMb = 2.0
+#每段暖炉所需热量，单位 HU。
+# Default: 3600.0
+# Range: 1.0E-6 ~ 1.0E9
+warmHuPerSection = 72.0
+#未收热时每段每 tick 散热，单位 HU/t。
+# Default: 0.9
+# Range: 0.0 ~ 1000000.0
+coolingHuPerSectionPerTick = 0.9
+#暖炉热量低于此比例时重新预热，范围 0 到 1。
+# Default: 0.25
+# Range: 0.0 ~ 1.0
+reheatFraction = 0.25
+#汽罐达到此容量比例时开启安全阀，必须高于关闭比例。
+# Default: 0.9
+# Range: 0.0 ~ 1.0
+valveOpenFraction = 0.9
+#汽罐降到此容量比例时关闭安全阀，必须低于开启比例。
+# Default: 0.8
+# Range: 0.0 ~ 1.0
+valveCloseFraction = 0.8
+#安全阀每 tick 最多排汽量，单位 mB/t。
+# Default: 256
+# Range: 1 ~ 1000000
+valveFlowMbPerTick = 64

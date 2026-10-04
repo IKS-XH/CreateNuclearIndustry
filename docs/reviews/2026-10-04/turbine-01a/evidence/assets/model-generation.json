@@ -1,0 +1,22 @@
+{
+  "json_model_count": 39,
+  "obj_mesh_count": 39,
+  "blockstate_count": 6,
+  "item_model_count": 6,
+  "variants_per_block": {
+    "turbine_casing": 192,
+    "turbine_rotor": 8,
+    "turbine_controller": 8,
+    "turbine_output_shaft": 8,
+    "turbine_inlet": 320,
+    "turbine_exhaust": 320
+  },
+  "obj_vertex_bounds": "0..1 block units",
+  "casing_meshes": 24,
+  "endcap_axial_faces": "front z=0; rear z=1; middle has none",
+  "install": true,
+  "staged_root": "build/reports/extension/EXT-B-TURBINE-ASSETS-01/generated_resources",
+  "runtime_root": "src/main/resources",
+  "mesh_preview": "build/reports/extension/EXT-B-TURBINE-ASSETS-01/turbine-model-mesh-preview.png",
+  "status": "PASS"
+}

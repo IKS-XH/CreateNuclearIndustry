@@ -1,0 +1,72 @@
+#short 档转子数；轴向长度由此值加两端面派生，单位 节。
+# Default: 3
+# Range: 1 ~ 16
+shortRotorCount = 4
+#short 档额定最大耗汽量，单位 mB/t；实际处理仍受两库存空位约束。
+# Default: 54
+# Range: 1 ~ 10000
+shortRateMbPerTick = 60
+#short 档超临界进汽罐容量，单位 mB；降低后保留既存液量。
+# Default: 4000
+# Range: 1 ~ 1000000
+shortInputCapacityMb = 5000
+#short 档普通排汽罐容量，单位 mB；降低后保留既存液量。
+# Default: 4000
+# Range: 1 ~ 1000000
+shortExhaustCapacityMb = 6000
+#medium 档转子数；轴向长度由此值加两端面派生，单位 节。
+# Default: 6
+# Range: 1 ~ 16
+mediumRotorCount = 7
+#medium 档额定最大耗汽量，单位 mB/t；实际处理仍受两库存空位约束。
+# Default: 108
+# Range: 1 ~ 10000
+mediumRateMbPerTick = 120
+#medium 档超临界进汽罐容量，单位 mB；降低后保留既存液量。
+# Default: 8000
+# Range: 1 ~ 1000000
+mediumInputCapacityMb = 9000
+#medium 档普通排汽罐容量，单位 mB；降低后保留既存液量。
+# Default: 8000
+# Range: 1 ~ 1000000
+mediumExhaustCapacityMb = 10000
+#long 档转子数；轴向长度由此值加两端面派生，单位 节。
+# Default: 9
+# Range: 1 ~ 16
+longRotorCount = 9
+#long 档额定最大耗汽量，单位 mB/t；实际处理仍受两库存空位约束。
+# Default: 162
+# Range: 1 ~ 10000
+longRateMbPerTick = 180
+#long 档超临界进汽罐容量，单位 mB；降低后保留既存液量。
+# Default: 12000
+# Range: 1 ~ 1000000
+longInputCapacityMb = 13000
+#long 档普通排汽罐容量，单位 mB；降低后保留既存液量。
+# Default: 12000
+# Range: 1 ~ 1000000
+longExhaustCapacityMb = 14000
+#汽轮机两轴固定工作转速，单位 RPM；运行时还必须不超过当前 Create 服务端上限。
+# Default: 128
+# Range: 1 ~ 65536
+rpm = 96
+#实际平均每 1mB/t 蒸汽流量换算的总应力容量，单位 SU/(mB/t)。
+# Default: 32768.0
+# Range: 1.0E-6 ~ 1000000.0
+suPerMbPerTick = 16384.0
+#实际处理蒸汽的滑动平均窗口，单位服务端 tick；缺失历史按零。
+# Default: 40
+# Range: 1 ~ 1200
+smoothingTicks = 20
+#每个物理进汽口每 tick 最多接收量，单位 mB/t。
+# Default: 256
+# Range: 1 ~ 1000000
+inletPortFlowMbPerTick = 300
+#每个物理排汽口每 tick 最多排出量，单位 mB/t。主动与被动共用。
+# Default: 256
+# Range: 1 ~ 1000000
+exhaustPortFlowMbPerTick = 192
+#前轴领取本机总 SU 的比例，范围 0 到 1；后轴取剩余比例。
+# Default: 0.5
+# Range: 0.0 ~ 1.0
+frontShare = 0.25

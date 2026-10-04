@@ -1,0 +1,19 @@
+# EXT-B-TURBINE-DEVICE-01 独立 GameTest 的非默认 SERVER 配置快照。
+shortRotorCount = 4
+shortRateMbPerTick = 60
+shortInputCapacityMb = 5000
+shortExhaustCapacityMb = 6000
+mediumRotorCount = 7
+mediumRateMbPerTick = 120
+mediumInputCapacityMb = 9000
+mediumExhaustCapacityMb = 10000
+longRotorCount = 9
+longRateMbPerTick = 180
+longInputCapacityMb = 13000
+longExhaustCapacityMb = 14000
+rpm = 96
+suPerMbPerTick = 16384.0
+smoothingTicks = 20
+inletPortFlowMbPerTick = 300
+exhaustPortFlowMbPerTick = 192
+frontShare = 0.25

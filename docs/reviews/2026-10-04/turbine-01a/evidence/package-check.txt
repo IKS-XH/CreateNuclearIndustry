@@ -1,0 +1,4 @@
+Changed/new resource byte comparison: 121/121 PASS
+BoilerConfig, TurbineConfig, TurbinePortBlockEntity classes: PRESENT
+JAR SHA256: 25B1640BA9126941F034EB51336EA9C3B36437F30FE2F69CB5118EDF90F6DDC6
+This checks packaging only, not client model baking or visual appearance.

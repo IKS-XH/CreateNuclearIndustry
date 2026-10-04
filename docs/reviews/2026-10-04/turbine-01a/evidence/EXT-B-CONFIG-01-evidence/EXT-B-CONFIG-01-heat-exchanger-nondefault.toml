@@ -1,0 +1,24 @@
+#Create 整数锅炉热等级；18 等效 9 个超级燃烧室。
+# Default: 18
+# Range: 1 ~ 18
+heatLevel = 18
+#每个热等级每 tick 支付 HU。
+# Default: 1.0
+# Range: 1.0E-6 ~ 1000000.0
+huPerLevel = 2.0
+#预热储备及余热上限，单位 tick。
+# Default: 40
+# Range: 1 ~ 1200
+bufferTicks = 20
+#每台热液罐容量，单位 mB；下降时保留既存液量。
+# Default: 4000
+# Range: 1 ~ 1000000
+hotCapacityMb = 2000
+#每台冷液罐容量，单位 mB；下降时保留既存液量。
+# Default: 4000
+# Range: 1 ~ 1000000
+coldCapacityMb = 3000
+#水平直列最多允许的换热器台数，单位 台。
+# Default: 16
+# Range: 1 ~ 64
+maxLineLength = 8
