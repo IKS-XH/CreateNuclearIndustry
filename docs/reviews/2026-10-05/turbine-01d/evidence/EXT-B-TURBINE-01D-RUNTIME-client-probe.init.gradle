@@ -1,0 +1,27 @@
+import org.gradle.api.tasks.JavaExec
+
+// RunGameTask.exec 会从 gameDirectory 重设 workingDir；两者均须指向本次隔离目录。
+gradle.projectsEvaluated {
+    def workspace = gradle.rootProject
+    def probeDirectory = new File(workspace.buildDir, 'runtime-01d-client').canonicalFile
+    workspace.tasks.named('runClient', JavaExec).configure { JavaExec task ->
+        task.gameDirectory.set(probeDirectory)
+        task.workingDir = probeDirectory
+        task.jvmArgs '-Dcni.01d.probe=EXT-B-TURBINE-01D'
+        task.args '--username', 'CNI01DProbe'
+        task.doFirst {
+            def argumentsFile = new File(workspace.buildDir, 'moddev/clientRunProgramArgs.txt')
+            def lines = argumentsFile.readLines('UTF-8')
+            def gameDirectoryIndex = lines.indexOf('--gameDir')
+            if (gameDirectoryIndex < 0 || gameDirectoryIndex + 1 >= lines.size()
+                    || lines[gameDirectoryIndex + 1].trim() != '.')
+                throw new GradleException('隔离客户端拒绝启动：--gameDir 不是相对 .')
+            if (task.gameDirectory.get().asFile.canonicalFile != probeDirectory
+                    || task.workingDir.canonicalFile != probeDirectory
+                    || probeDirectory == workspace.file('run').canonicalFile)
+                throw new GradleException('隔离客户端拒绝启动：工作目录未指向 build/runtime-01d-client')
+            probeDirectory.mkdirs()
+            println "CNI01D_PROBE_DIR=${probeDirectory}"
+        }
+    }
+}

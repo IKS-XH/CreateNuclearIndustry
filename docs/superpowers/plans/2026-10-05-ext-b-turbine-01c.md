@@ -1,5 +1,7 @@
 # EXT-B-TURBINE-01C：核心先行、逐块包壳与搭建过程外观
 
+**后续状态：用户六项外观/放置反馈未通过，转[01D](./2026-10-05-ext-b-turbine-01d.md)定向整改。** 本卡保留原实现与自动结果，人工出口未完成。
+
 > PM用writing-plans、subagent-driven-development拆解和派发；执行者用executing-plans完成自己的写集，不派发、不改核心文档、不做任何Git写操作。用户自动执行授权和治理5.1精简验证规则优先于通用技能的重复确认、提交及多轮形式审查。
 
 **状态：2026-10-05候选实现、定向自动验证及独立复审完成，等待客户端手测；未合main。** 工作树 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，代码基线 `441ec68`。主目录只同步文档；保留用户 `.vscode/launch.json`、候选日志/pycache和所有存档，不启动用户客户端或打开其世界。

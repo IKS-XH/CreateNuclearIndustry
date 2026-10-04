@@ -1,0 +1,7 @@
+jar=E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\build\libs\create_nuclear_industry-0.1.0.jar
+jar_sha256=657AC1D35CE532DA93D49FB79E038F90C5310159DA3F5C0A761890C2267E14D0
+changed_or_new=126
+new_png=8
+source_drift=0
+jar_missing=0
+jar_byte_mismatch=0

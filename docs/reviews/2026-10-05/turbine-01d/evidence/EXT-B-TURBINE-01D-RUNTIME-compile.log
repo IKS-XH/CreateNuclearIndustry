@@ -1,0 +1,70 @@
+> Task :createMinecraftArtifacts UP-TO-DATE
+
+> Task :compileJava FAILED
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\content\TurbineContent.java:83: 警告: [removal] FluidType 中的 initializeClient(Consumer<IClientFluidTypeExtensions>) 已过时, 且标记为待删除
+            @Override public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                                  ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:78: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+            require(helper, !containsLocal(ordinary, facing, .05, .05, .2)
+                                           ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:79: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+                    && containsLocal(ordinary, facing, .5, .5, .2),
+                                     ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:106: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+                require(helper, !containsLocal(shape, facing, edge[0], edge[1], edge[2])
+                                               ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:107: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+                        && containsLocal(shape, facing, body[0], body[1], body[2]),
+                                         ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\turbine\client\TurbineClientEvents.java:12: 警告: [removal] EventBusSubscriber 中的 bus() 已过时, 且标记为待删除
+        bus = EventBusSubscriber.Bus.MOD)
+        ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\turbine\client\TurbineClientEvents.java:12: 警告: [removal] EventBusSubscriber 中的 Bus 已过时, 且标记为待删除
+        bus = EventBusSubscriber.Bus.MOD)
+                                ^
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+注: 某些消息已经过简化; 请使用 -Xdiags:verbose 重新编译以获得完整输出
+4 个错误
+3 个警告
+
+[Incubating] Problems report is available at: file:///E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:78: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+              require(helper, !containsLocal(ordinary, facing, .05, .05, .2)
+                                             ^
+  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:79: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+                      && containsLocal(ordinary, facing, .5, .5, .2),
+                                       ^
+  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:106: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+                  require(helper, !containsLocal(shape, facing, edge[0], edge[1], edge[2])
+                                                 ^
+  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\gametest\ExtensionTurbineAssemblyGameTests.java:107: 错误: 不兼容的类型: AABB无法转换为VoxelShape
+                          && containsLocal(shape, facing, body[0], body[1], body[2]),
+                                           ^
+  注: 某些输入文件使用或覆盖了已过时的 API。
+  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\content\TurbineContent.java:83: 警告: [removal] FluidType 中的 initializeClient(Consumer<IClientFluidTypeExtensions>) 已过时, 且标记为待删除
+              @Override public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                                    ^
+  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\turbine\client\TurbineClientEvents.java:12: 警告: [removal] EventBusSubscriber 中的 bus() 已过时, 且标记为待删除
+          bus = EventBusSubscriber.Bus.MOD)
+          ^
+  E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\turbine\client\TurbineClientEvents.java:12: 警告: [removal] EventBusSubscriber 中的 Bus 已过时, 且标记为待删除
+          bus = EventBusSubscriber.Bus.MOD)
+                                  ^
+  注: 某些消息已经过简化; 请使用 -Xdiags:verbose 重新编译以获得完整输出
+  4 个错误
+  3 个警告
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 2s
+2 actionable tasks: 1 executed, 1 up-to-date

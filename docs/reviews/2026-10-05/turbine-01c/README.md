@@ -1,5 +1,7 @@
 # 汽轮机01C候选：核心先行与辅助包壳
 
+**后续反馈：** 用户报告端口/轴乱纹缺面、转子紫黑、独立板/控制器碰撞与显示不符、轴承闪烁及名称问题。本候选人工外观门未通过，现由[01D](../../../superpowers/plans/2026-10-05-ext-b-turbine-01d.md)整改；下文保留9ac94ae原交付证据，不要求继续重测旧候选。
+
 **状态：2026-10-05候选实现、定向验证及独立复审完成，等待客户端手测。** [任务卡](../../../superpowers/plans/2026-10-05-ext-b-turbine-01c.md)与[已批准方案](../../../superpowers/plans/2026-10-05-turbine-assembly-experience-proposal.md)记录本轮范围。代码只在同级候选 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录只同步文档，尚未合入main。
 
 01B的自动通过未覆盖玩家逐块搭建体验，用户已指出散乱横板。只读调查还确认未成型模型/碰撞上下相反及独立板扳手合同遗漏；[AeroEngine调查](../turbine-assembly-study/REFERENCE.md)说明本轮借鉴的实际交互。
