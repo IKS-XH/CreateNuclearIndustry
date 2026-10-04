@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.heat;
 
+import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -8,10 +9,9 @@ import net.minecraft.world.level.Level;
 
 /**
  * 服务端已加载水平直列的瞬时视图；每机仍拥有自己的库存和 HU，视图不持久化。
- * 任一成员无法确认可 tick、边界区块未知或长度超过十六台时，整列拒绝交易与供热。
+ * 任一成员无法确认可 tick、边界区块未知或长度超过服务端配置上限时，整列拒绝交易与供热。
  */
 final class HeatExchangerLine implements HeatExchangerState.Exchange {
-    static final int MAX_LENGTH = 16;
     private final List<NuclearHeatExchangerBlockEntity> members;
     private final Direction facing;
     private final Object identity;
@@ -31,20 +31,21 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
         Direction facing = origin.getBlockState().getValue(NuclearHeatExchangerBlock.FACING);
         List<NuclearHeatExchangerBlockEntity> members = new ArrayList<>();
         BlockPos cursor = origin.getBlockPos();
-        for (int distance = 0; distance <= MAX_LENGTH; distance++) {
+        int maxLength = HeatExchangerConfig.settings().maxLineLength();
+        for (int distance = 0; distance <= maxLength; distance++) {
             BlockPos prior = cursor.relative(facing.getOpposite());
             if (!level.hasChunkAt(prior)) return null;
             if (!matches(level, prior, facing)) break;
             cursor = prior;
-            if (distance == MAX_LENGTH) return null;
+            if (distance == maxLength) return null;
         }
-        for (int distance = 0; distance <= MAX_LENGTH; distance++) {
+        for (int distance = 0; distance <= maxLength; distance++) {
             if (!level.hasChunkAt(cursor)) return null;
             if (!matches(level, cursor, facing)) break;
             if (!(level.getBlockEntity(cursor) instanceof NuclearHeatExchangerBlockEntity member)
                     || !member.current() || !member.canTick()) return null;
             members.add(member);
-            if (members.size() > MAX_LENGTH) return null;
+            if (members.size() > maxLength) return null;
             cursor = cursor.relative(facing);
         }
         if (!level.hasChunkAt(cursor) || members.isEmpty()) return null;
@@ -59,7 +60,8 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
 
     boolean contains(NuclearHeatExchangerBlockEntity machine) { return members.contains(machine); }
     int count() { return members.size(); }
-    int capacity() { return members.size() * HeatExchangerState.CAPACITY; }
+    int hotCapacity() { return members.size() * members.getFirst().ledger().settings().hotCapacityMb(); }
+    int coldCapacity() { return members.size() * members.getFirst().ledger().settings().coldCapacityMb(); }
     boolean inlet(NuclearHeatExchangerBlockEntity machine, Direction side) {
         return side == facing.getOpposite() && members.getFirst() == machine;
     }
@@ -77,11 +79,11 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
     int totalHot() { return members.stream().mapToInt(m -> m.ledger().hot()).sum(); }
     int totalCold() { return members.stream().mapToInt(m -> m.ledger().cold()).sum(); }
     @Override public int hot() { return totalHot(); }
-    @Override public int coldSpace() { return capacity() - totalCold(); }
+    @Override public int coldSpace() { return Math.max(0, coldCapacity() - totalCold()); }
 
     /** 执行期重新读取各台空位；模拟只返回可接收量，不预约真实库存。 */
     int fillHot(int amount, boolean simulate) {
-        int accepted = Math.min(Math.max(0, amount), capacity() - totalHot());
+        int accepted = Math.min(Math.max(0, amount), Math.max(0, hotCapacity() - totalHot()));
         if (simulate) return accepted;
         int remaining = accepted;
         for (var member : members) {

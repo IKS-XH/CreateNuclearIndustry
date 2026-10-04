@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 
 /**
  * 服务端把已成型汽口作为 Create 原生管路的压力源，不保存流体或改写外部泵。
- * 每个已接管汽口提供512压力，对应Create实测的256mB/t；单口内部的分支按拓扑均分压力。
+ * 每个已接管汽口提供配置流量两倍的压力；单口内部的分支按拓扑均分压力。
  */
 final class BoilerSteamPressure {
     private record Node(BlockPos pos, Direction entry, int distance, float pressure) {}
@@ -27,7 +27,7 @@ final class BoilerSteamPressure {
     BoilerSteamPressure(BlockPos controller) { owner = controller.asLong(); }
 
     /** 每 tick 按现有拓扑设置自有贡献；Create wipe 后记录清零，下个 tick 自动补上。 */
-    void refresh(Level level, BoilerStructure.Form form, boolean hasSteam) {
+    void refresh(Level level, BoilerStructure.Form form, boolean hasSteam, int portFlowMbPerTick) {
         if (level == null || level.isClientSide || form == null || !hasSteam) {
             release();
             return;
@@ -44,7 +44,7 @@ final class BoilerSteamPressure {
         Map<PipeConnection, float[]> next = new IdentityHashMap<>();
         for (BlockPos port : connected) {
             Direction outward = level.getBlockState(port).getValue(BoilerPartBlock.FACING);
-            spread(level, port.relative(outward), outward.getOpposite(), BoilerState.FLOW_LIMIT * 2f, next);
+            spread(level, port.relative(outward), outward.getOpposite(), portFlowMbPerTick * 2f, next);
         }
         for (PipeConnection old : applied.keySet()) if (!next.containsKey(old)) set(old, 0, 0);
         for (Map.Entry<PipeConnection, float[]> entry : next.entrySet()) {

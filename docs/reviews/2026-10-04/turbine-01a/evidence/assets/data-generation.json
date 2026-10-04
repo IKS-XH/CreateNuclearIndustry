@@ -1,0 +1,13 @@
+{
+  "resource_files": 18,
+  "recipe_count": 6,
+  "loot_tables": 6,
+  "language_files": 2,
+  "tag_files": 2,
+  "fluid_textures": 2,
+  "json_parse": "PASS",
+  "install": true,
+  "staged_root": "build/reports/extension/EXT-B-TURBINE-ASSETS-01/data_resources",
+  "new_svg_sources": [],
+  "status": "PASS"
+}

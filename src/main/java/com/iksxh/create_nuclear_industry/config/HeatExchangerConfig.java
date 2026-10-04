@@ -11,11 +11,18 @@ public final class HeatExchangerConfig {
     public static final ModConfigSpec.IntValue HEAT_LEVEL;
     public static final ModConfigSpec.DoubleValue HU_PER_LEVEL;
     public static final ModConfigSpec.IntValue BUFFER_TICKS;
+    public static final ModConfigSpec.IntValue HOT_CAPACITY_MB, COLD_CAPACITY_MB, MAX_LINE_LENGTH;
     static {
         var b = new ModConfigSpec.Builder();
         HEAT_LEVEL = b.comment("Create 整数锅炉热等级；18 等效 9 个超级燃烧室。").defineInRange("heatLevel", 18, 1, 18);
         HU_PER_LEVEL = b.comment("每个热等级每 tick 支付 HU。").defineInRange("huPerLevel", 1D, .000001D, 1_000_000D);
         BUFFER_TICKS = b.comment("预热储备及余热上限，单位 tick。").defineInRange("bufferTicks", 40, 1, 1200);
+        HOT_CAPACITY_MB = b.comment("每台热液罐容量，单位 mB；下降时保留既存液量。")
+                .defineInRange("hotCapacityMb", 4000, 1, 1_000_000);
+        COLD_CAPACITY_MB = b.comment("每台冷液罐容量，单位 mB；下降时保留既存液量。")
+                .defineInRange("coldCapacityMb", 4000, 1, 1_000_000);
+        MAX_LINE_LENGTH = b.comment("水平直列最多允许的换热器台数，单位 台。")
+                .defineInRange("maxLineLength", 16, 1, 64);
         SPEC = b.build();
     }
     private HeatExchangerConfig() {}
@@ -26,6 +33,7 @@ public final class HeatExchangerConfig {
     /** 仅服务端 tick 读取；坏配置仍由账本二次防御，NaN 和零密度不运行。 */
     public static HeatExchangerState.Settings settings() {
         return new HeatExchangerState.Settings(HEAT_LEVEL.get(), HU_PER_LEVEL.get(), BUFFER_TICKS.get(),
-                P1ServerConfig.VALUES.coolantAbsorptionHuPerMb.get());
+                P1ServerConfig.VALUES.coolantAbsorptionHuPerMb.get(), HOT_CAPACITY_MB.get(),
+                COLD_CAPACITY_MB.get(), MAX_LINE_LENGTH.get());
     }
 }

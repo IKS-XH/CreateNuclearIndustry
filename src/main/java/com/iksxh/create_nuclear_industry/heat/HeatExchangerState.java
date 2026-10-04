@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
  */
 public final class HeatExchangerState {
     public static final int CAPACITY = 4000;
+    private Settings settings = new Settings(18, 1, 40, .5);
     private int hot, cold, heat = -1, converted;
     private double reserve, flowFraction, lastRate;
     private long lastTick = -1;
@@ -24,9 +25,9 @@ public final class HeatExchangerState {
 
     private final Exchange localExchange = new Exchange() {
         @Override public int hot() { return hot; }
-        @Override public int coldSpace() { return CAPACITY - cold; }
+        @Override public int coldSpace() { return Math.max(0, settings.coldCapacityMb() - cold); }
         @Override public int convert(int amount) {
-            int moved = Math.min(amount, Math.min(hot, CAPACITY - cold));
+            int moved = Math.min(amount, Math.min(hot, Math.max(0, settings.coldCapacityMb() - cold)));
             hot -= moved;
             cold += moved;
             return moved;
@@ -34,7 +35,11 @@ public final class HeatExchangerState {
     };
 
     /** 有界配置快照；密度复用 P1 的 HU/mB，不把 Create 数值热等级当作物理单位。 */
-    public record Settings(int heatLevel, double huPerLevel, int bufferTicks, double density) {
+    public record Settings(int heatLevel, double huPerLevel, int bufferTicks, double density,
+                           int hotCapacityMb, int coldCapacityMb, int maxLineLength) {
+        public Settings(int heatLevel, double huPerLevel, int bufferTicks, double density) {
+            this(heatLevel, huPerLevel, bufferTicks, density, CAPACITY, CAPACITY, 16);
+        }
         public double rate() { return heatLevel * huPerLevel; }
         public double capacity() { return rate() * bufferTicks; }
         public double levelReserve() { return huPerLevel * bufferTicks; }
@@ -42,6 +47,9 @@ public final class HeatExchangerState {
             return heatLevel >= 1 && heatLevel <= 18 && Double.isFinite(huPerLevel)
                     && huPerLevel > 0 && huPerLevel <= 1_000_000 && bufferTicks >= 1 && bufferTicks <= 1200
                     && Double.isFinite(density) && density > 0 && density <= 1_000_000
+                    && hotCapacityMb >= 1 && hotCapacityMb <= 1_000_000
+                    && coldCapacityMb >= 1 && coldCapacityMb <= 1_000_000
+                    && maxLineLength >= 1 && maxLineLength <= 64
                     && Double.isFinite(rate() / density) && Double.isFinite(capacity());
         }
     }
@@ -52,6 +60,23 @@ public final class HeatExchangerState {
     public int converted() { return converted; }
     public double reserve() { return reserve; }
     public String status() { return status; }
+    public Settings settings() { return settings; }
+
+    /** 服务端库存能力与热账本共用此快照；密度或窗口变动后丢弃无法复用的尾差及余热历史。 */
+    public void setSettings(Settings next) {
+        if (!next.valid()) { settings = next; heat = -1; status = "invalid"; return; }
+        if (Double.compare(settings.density(), next.density()) != 0
+                || settings.bufferTicks() != next.bufferTicks()) {
+            flowFraction = 0;
+            reserve = 0;
+            lastRate = 0;
+            converted = 0;
+            noFlowDeadlineTick = -1;
+            legacyDeadlinePending = false;
+            heat = -1;
+        }
+        settings = next;
+    }
 
     /** 返回最长剩余余热窗口；不将储备除以额定耗热冒充精确运行时间。 */
     public int remainingTicks() {
@@ -61,7 +86,8 @@ public final class HeatExchangerState {
 
     /** 只返回实际容量内的接收量；simulate 不修改数量及时间。 */
     public int fillHot(int amount, boolean simulate) {
-        int accepted = Math.min(Math.max(0, amount), CAPACITY - hot);
+        int accepted = settings.valid() ? Math.min(Math.max(0, amount),
+                Math.max(0, settings.hotCapacityMb() - hot)) : 0;
         if (!simulate) hot += accepted;
         return accepted;
     }
@@ -82,7 +108,8 @@ public final class HeatExchangerState {
 
     /** 仅供同一次换热事务使用；热液扣量须与全列新增冷液等量。 */
     int putColdFromConversion(int amount) {
-        int added = Math.min(Math.max(0, amount), CAPACITY - cold);
+        int added = settings.valid() ? Math.min(Math.max(0, amount),
+                Math.max(0, settings.coldCapacityMb() - cold)) : 0;
         cold += added;
         return added;
     }
@@ -99,6 +126,7 @@ public final class HeatExchangerState {
     /** 保持本机已付热与期限，只有热液转冷借用传入的整列库存事务。 */
     public void tick(long now, boolean load, Settings cfg, Exchange exchange) {
         if (now == lastTick) return;
+        setSettings(cfg);
         heat = -1;
         converted = 0;
         if (!cfg.valid()) {
@@ -144,11 +172,11 @@ public final class HeatExchangerState {
 
         double requested = cfg.rate() / cfg.density() + flowFraction;
         flowFraction = requested - Math.floor(requested);
-        int budget = (int) Math.min(CAPACITY, Math.floor(requested));
+        int budget = (int) Math.min(settings.hotCapacityMb(), Math.floor(requested));
         int available = Math.min(exchange.hot(), exchange.coldSpace());
         // 最后不足1mB的空间允许一个整mB完成充热，尾差有界散失；向下取整会让
         // 0.3HU/mB等密度永远充不到最高档阈值。空间已满时仍不转换，热液留在热罐。
-        int headroomBudget = (int) Math.min(CAPACITY,
+        int headroomBudget = (int) Math.min(settings.coldCapacityMb(),
                 Math.ceil(Math.max(0, cfg.capacity() - reserve) / cfg.density()));
         converted = exchange.convert(Math.min(budget, Math.min(available, headroomBudget)));
         reserve = Math.min(cfg.capacity(), reserve + converted * cfg.density());
@@ -168,7 +196,9 @@ public final class HeatExchangerState {
 
     /** 专用锅炉仍只领取本机储备，补储使用整列可用热液和冷罐空位。 */
     public double claimDedicated(long now, double requestHu, Settings cfg, Exchange exchange) {
-        if (now == lastTick || !cfg.valid() || !Double.isFinite(requestHu) || requestHu <= 0) return 0;
+        if (now == lastTick) return 0;
+        setSettings(cfg);
+        if (!cfg.valid() || !Double.isFinite(requestHu) || requestHu <= 0) return 0;
         if (legacyDeadlinePending) restoreLegacyDeadline(cfg);
         if (lastTick >= 0 && now < lastTick) {
             reserve = 0;
@@ -180,14 +210,14 @@ public final class HeatExchangerState {
         lastRate = cfg.rate();
         reserve = Math.min(reserve, cfg.capacity());
         if (noFlowDeadlineTick < 0 || now >= noFlowDeadlineTick) reserve = 0;
-        double paid = Math.min(Math.min(requestHu, Math.min(18, cfg.rate())), reserve);
+        double paid = Math.min(Math.min(requestHu, cfg.rate()), reserve);
         reserve -= paid;
         heat = -1;
         // 专用负载只为本次可完成事务转冷；已有储备先付款，补储不超出实际申请。
-        double requested = Math.min(requestHu, Math.min(18, cfg.rate())) / cfg.density() + flowFraction;
+        double requested = Math.min(requestHu, cfg.rate()) / cfg.density() + flowFraction;
         flowFraction = requested - Math.floor(requested);
-        int budget = (int) Math.min(CAPACITY, Math.floor(requested));
-        int headroom = (int) Math.min(CAPACITY, Math.ceil((cfg.capacity() - reserve) / cfg.density()));
+        int budget = (int) Math.min(settings.hotCapacityMb(), Math.floor(requested));
+        int headroom = (int) Math.min(settings.coldCapacityMb(), Math.ceil((cfg.capacity() - reserve) / cfg.density()));
         converted = exchange.convert(Math.min(budget, Math.min(Math.min(exchange.hot(), exchange.coldSpace()), headroom)));
         reserve = Math.min(cfg.capacity(), reserve + converted * cfg.density());
         if (converted > 0) noFlowDeadlineTick = safeAdd(now, cfg.bufferTicks());
@@ -220,6 +250,8 @@ public final class HeatExchangerState {
         tag.putDouble("ReserveHu", reserve);
         tag.putDouble("FlowFraction", flowFraction);
         tag.putDouble("LastRate", lastRate);
+        tag.putDouble("SettingsDensity", settings.density());
+        tag.putInt("SettingsBufferTicks", settings.bufferTicks());
         tag.putLong("LastTick", lastTick);
         // 旧NBT在首次tick前可能再次携物/保存；继续保留缺字段标记，不能丢失待迁移状态。
         if (!legacyDeadlinePending) tag.putLong("NoFlowDeadlineTick", noFlowDeadlineTick);
@@ -228,11 +260,16 @@ public final class HeatExchangerState {
 
     /** NBT数值收敛到有限范围；恢复后仍须服务端tick重新验证负载再发热。 */
     public void load(CompoundTag tag) {
-        hot = Math.clamp(tag.getInt("Hot"), 0, CAPACITY);
-        cold = Math.clamp(tag.getInt("Cold"), 0, CAPACITY);
+        hot = Math.max(0, tag.getInt("Hot"));
+        cold = Math.max(0, tag.getInt("Cold"));
         reserve = finite(tag.getDouble("ReserveHu"), 21_600_000_000D);
         flowFraction = finite(tag.getDouble("FlowFraction"), Math.nextDown(1D));
         lastRate = finite(tag.getDouble("LastRate"), 18_000_000D);
+        double savedDensity = tag.contains("SettingsDensity") ? tag.getDouble("SettingsDensity") : settings.density();
+        int savedBuffer = tag.contains("SettingsBufferTicks") ? tag.getInt("SettingsBufferTicks") : settings.bufferTicks();
+        if (Double.isFinite(savedDensity) && savedDensity > 0 && savedBuffer > 0)
+            settings = new Settings(settings.heatLevel(), settings.huPerLevel(), savedBuffer,
+                    savedDensity, settings.hotCapacityMb(), settings.coldCapacityMb(), settings.maxLineLength());
         lastTick = tag.contains("LastTick") ? Math.max(-1, tag.getLong("LastTick")) : -1;
         legacyDeadlinePending = !tag.contains("NoFlowDeadlineTick");
         noFlowDeadlineTick = legacyDeadlinePending ? -1 : Math.max(-1, tag.getLong("NoFlowDeadlineTick"));

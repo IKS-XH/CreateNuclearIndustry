@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "R": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "I": {
+      "item": "create_nuclear_industry:industrial_sensor"
+    },
+    "A": {
+      "item": "create:shaft"
+    }
+  },
+  "pattern": [
+    " SRS ",
+    "SPIPS",
+    "RSASR",
+    "SSISS",
+    " SRS "
+  ],
+  "result": {
+    "id": "create_nuclear_industry:turbine_controller",
+    "count": 1
+  },
+  "show_notification": false
+}

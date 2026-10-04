@@ -1,0 +1,964 @@
+{
+  "variants": {
+    "formed=false,machine_facing=north,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/turbine_casing_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_top",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_top",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_top",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_bottom",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_bottom",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_bottom",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_top",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_top",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_top",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_bottom",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_bottom",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_bottom",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_top",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_top",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_top",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_bottom",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_bottom",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_bottom",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=top,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_top",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=top,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_top",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=top,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_top",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=upper_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=upper_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=upper_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=upper_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_upper_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=upper_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_upper_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=upper_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_upper_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=lower_left,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=lower_left,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=lower_left,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=lower_right,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_lower_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=lower_right,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_lower_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=lower_right,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_lower_right",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=bottom,axial_role=front": {
+      "model": "create_nuclear_industry:block/turbine/casing_front_bottom",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=bottom,axial_role=middle": {
+      "model": "create_nuclear_industry:block/turbine/casing_middle_bottom",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=bottom,axial_role=rear": {
+      "model": "create_nuclear_industry:block/turbine/casing_rear_bottom",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

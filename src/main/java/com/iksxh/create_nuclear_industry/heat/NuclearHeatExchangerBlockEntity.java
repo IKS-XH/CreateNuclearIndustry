@@ -43,6 +43,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     private int sizeLimit, waterLimit, viewHeat = -1, viewFlow;
     private double nominalFlow;
     private int viewLineCount = 1, viewLineHot, viewLineCold;
+    private int viewHotCapacity = HeatExchangerState.CAPACITY, viewColdCapacity = HeatExchangerState.CAPACITY;
     private String viewStatus = "no_load";
 
     public NuclearHeatExchangerBlockEntity(BlockPos pos, BlockState state) {
@@ -71,7 +72,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         if (level == null || level.isClientSide) return;
         var affected = new java.util.HashSet<NuclearHeatExchangerBlockEntity>();
         for (Direction direction : Direction.Plane.HORIZONTAL) {
-            for (int distance = 0; distance <= HeatExchangerLine.MAX_LENGTH + 1; distance++) {
+            for (int distance = 0; distance <= HeatExchangerConfig.settings().maxLineLength() + 1; distance++) {
                 BlockPos cursor = changed.relative(direction, distance);
                 // 卸载通知时本机区块可能已从查询表移除；继续扫描可触及另一侧仍加载的端点。
                 if (!level.hasChunkAt(cursor)) continue;
@@ -147,6 +148,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     /** 先记账、再同步外观、最后通知锅炉；回调能见到的热始终已支付。 */
     public static void serverTick(Level level, BlockPos pos, BlockState state, NuclearHeatExchangerBlockEntity machine) {
         if (level.isClientSide || !machine.current()) return;
+        machine.ledger.setSettings(HeatExchangerConfig.settings());
         if (!machine.canTick()) { machine.pauseHeat(); return; }
         HeatExchangerLine line = HeatExchangerLine.find(machine);
         if (line == null) { machine.pauseHeat(); return; }
@@ -197,6 +199,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     @Override public void onLoad() {
         super.onLoad();
         available = true;
+        if (level != null && !level.isClientSide) ledger.setSettings(HeatExchangerConfig.settings());
         topologyReady = false;
         viewHeat = -1;
         HeatExchangerBoilerBridge.registerLoaded(this);
@@ -241,6 +244,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     /** 仅背面列尾输入热液、正面列首输出冷液；内部相接面没有外部流体口。 */
     public IFluidHandler fluidPort(Direction side) {
         if (side == null || !side.getAxis().isHorizontal()) return null;
+        if (level != null && !level.isClientSide) ledger.setSettings(HeatExchangerConfig.settings());
         HeatExchangerLine line = HeatExchangerLine.find(this);
         return line != null && (line.inlet(this, side) || line.outlet(this, side)) ? new Port(side, line) : null;
     }
@@ -255,6 +259,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     public CompoundTag savePortableData() { return ledger.save(); }
     public void loadPortableData(CompoundTag tag) {
         ledger.load(tag);
+        if (level != null && !level.isClientSide) ledger.setSettings(HeatExchangerConfig.settings());
         viewHeat = -1;
         changed();
         HeatExchangerBoilerBridge.refresh(level, lastController);
@@ -287,6 +292,8 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         view.putInt("LineCount", viewLineCount);
         view.putInt("LineHot", viewLineHot);
         view.putInt("LineCold", viewLineCold);
+        view.putInt("HotCapacity", ledger.settings().hotCapacityMb());
+        view.putInt("ColdCapacity", ledger.settings().coldCapacityMb());
         tag.put("View", view);
         return tag;
     }
@@ -295,6 +302,8 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         sizeLimit = tag.getInt("Size"); waterLimit = tag.getInt("Water"); viewStatus = tag.getString("Status");
         viewLineCount = Math.max(1, tag.getInt("LineCount"));
         viewLineHot = tag.getInt("LineHot"); viewLineCold = tag.getInt("LineCold");
+        viewHotCapacity = tag.contains("HotCapacity") ? tag.getInt("HotCapacity") : HeatExchangerState.CAPACITY;
+        viewColdCapacity = tag.contains("ColdCapacity") ? tag.getInt("ColdCapacity") : HeatExchangerState.CAPACITY;
     }
     @Override public ClientboundBlockEntityDataPacket getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
     @Override public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
@@ -307,9 +316,9 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         tooltip.add(Component.translatable("block.create_nuclear_industry.nuclear_heat_exchanger"));
         if (viewStatus.equals("line_unavailable"))
             tooltip.add(Component.translatable(prefix + "local_tanks", ledger.hot(), ledger.cold(),
-                    HeatExchangerState.CAPACITY));
+                    viewHotCapacity, viewColdCapacity));
         else tooltip.add(Component.translatable(prefix + "line_tanks", viewLineCount, viewLineHot, viewLineCold,
-                viewLineCount * HeatExchangerState.CAPACITY));
+                viewLineCount * viewHotCapacity, viewLineCount * viewColdCapacity));
         tooltip.add(Component.translatable(prefix + "state." + viewStatus));
         tooltip.add(Component.translatable(prefix + "flow", viewFlow, String.format(java.util.Locale.ROOT, "%.2f", nominalFlow)));
         tooltip.add(Component.translatable(prefix + "heat", Math.max(0, viewHeat), ledger.remainingTicks()));
@@ -334,7 +343,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         @Override public SharedFluidReceiver.Limits sharedFluidLimits() {
             HeatExchangerLine now = line();
             if (now == null || !now.inlet(NuclearHeatExchangerBlockEntity.this, side)) return null;
-            int space = now.capacity() - now.totalHot();
+            int space = Math.max(0, now.hotCapacity() - now.totalHot());
             return new SharedFluidReceiver.Limits(now.identity(), space, now.identity(), space);
         }
         @Override public int getTanks() { return line() == null ? 0 : 1; }
@@ -348,7 +357,8 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         }
         @Override public int getTankCapacity(int tank) {
             HeatExchangerLine now = line();
-            return now != null && tank == 0 ? now.capacity() : 0;
+            return now != null && tank == 0 ? (now.inlet(NuclearHeatExchangerBlockEntity.this, side)
+                    ? now.hotCapacity() : now.coldCapacity()) : 0;
         }
         @Override public boolean isFluidValid(int tank, FluidStack stack) {
             HeatExchangerLine now = line();

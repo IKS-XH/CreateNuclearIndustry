@@ -11,6 +11,51 @@ class BoilerStateTest {
     private static final BlockPos STEAM_WEST = new BlockPos(-2, 3, 0);
     private static final BlockPos STEAM_EAST = new BlockPos(2, 3, 0);
 
+    @Test void configuredCapacitiesFlowAndHeatCostApplyWithoutDeletingStoredFluid() {
+        var state = new BoilerState();
+        var old = new net.minecraft.nbt.CompoundTag();
+        old.putInt("Water", 500);
+        old.putInt("Steam", 700);
+        state.load(old);
+        var configured = new BoilerState.Settings(400, 600, 64, 20, 2,
+                20, 0, .25, .9, .8, 32);
+        assertTrue(configured.valid());
+        state.setSettings(configured);
+        assertEquals(500, state.water());
+        assertEquals(700, state.steam());
+        assertEquals(0, state.fillWater(WATER_EAST, 64, false, 1));
+        assertEquals(64, state.drainSteam(STEAM_WEST, 64, false, 1));
+        var restored = new BoilerState();
+        restored.load(state.save());
+        restored.setSettings(configured);
+        assertEquals(500, restored.water());
+        assertEquals(636, restored.steam());
+        restored.tick(2, 1, 0, true, true);
+        assertEquals(32, restored.vented());
+        assertEquals(64, restored.drainSteam(STEAM_WEST, 64, false, 2));
+    }
+
+    @Test void invalidThresholdStopsConversionAndCoefficientChangeDiscardsOldTail() {
+        var state = new BoilerState();
+        var old = new net.minecraft.nbt.CompoundTag();
+        old.putInt("Water", 100);
+        old.putDouble("WarmHu", 20);
+        old.putDouble("ProcessHu", .75);
+        old.putBoolean("Ready", true);
+        state.load(old);
+        var invalid = new BoilerState.Settings(100, 100, 64, 20, 1, 20, 0,
+                .25, .8, .9, 32);
+        assertFalse(invalid.valid());
+        state.setSettings(invalid);
+        state.tick(1, 1, 20, true, false);
+        assertEquals(0, state.steam());
+        assertEquals(100, state.water());
+        var valid = new BoilerState.Settings(100, 100, 64, 20, 2, 20, 0,
+                .25, .9, .8, 32);
+        state.setSettings(valid);
+        assertEquals(0, state.processHu());
+    }
+
     @Test void warmingHeatCannotBecomeSteamTwice() {
         var state = new BoilerState();
         state.fillWater(WATER_EAST, 1000, false, 1);

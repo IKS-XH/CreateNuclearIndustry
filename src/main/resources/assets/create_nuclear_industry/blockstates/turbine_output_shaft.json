@@ -1,0 +1,44 @@
+{
+  "variants": {
+    "formed=false,machine_facing=north": {
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east": {
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south": {
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west": {
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north": {
+      "model": "create_nuclear_industry:block/turbine/output_shaft_rear",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east": {
+      "model": "create_nuclear_industry:block/turbine/output_shaft_rear",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south": {
+      "model": "create_nuclear_industry:block/turbine/output_shaft_rear",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west": {
+      "model": "create_nuclear_industry:block/turbine/output_shaft_rear",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

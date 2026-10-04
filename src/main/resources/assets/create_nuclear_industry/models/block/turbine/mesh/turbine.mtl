@@ -1,0 +1,39 @@
+newmtl casing
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing
+
+newmtl rotor
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_rotor
+
+newmtl controller
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_controller
+
+newmtl shaft
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_output_shaft
+
+newmtl support
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_bearing_support
+
+newmtl endcap
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_endcap
+
+newmtl inlet
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_inlet
+
+newmtl exhaust
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_exhaust
