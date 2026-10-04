@@ -1,0 +1,10 @@
+{
+  "status": "textures-installed",
+  "sources_created": [],
+  "source_count": 13,
+  "texture_size": "16x16 RGBA",
+  "preview": "build/reports/extension/EXT-B-TURBINE-01B-ASSETS/turbine-01b-texture-sheet-3x3.png",
+  "runtime_texture_dir": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine",
+  "textures_installed": true,
+  "note": "01B网格与状态接口已冻结；纹理图板取自九张运行时PNG，几何预览见turbine-assets-preview.png。"
+}

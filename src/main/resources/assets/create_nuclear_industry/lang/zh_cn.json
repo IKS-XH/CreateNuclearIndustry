@@ -303,5 +303,11 @@
   "gui.create_nuclear_industry.turbine.tanks": "入口 %s/%s mB；排出蒸汽 %s/%s mB",
   "gui.create_nuclear_industry.turbine.su": "总 %s SU（前 %s；后 %s）",
   "gui.create_nuclear_industry.turbine.state.overlap": "机组构件与另一台已成型汽轮机重叠",
-  "gui.create_nuclear_industry.turbine.issue.overlap": "此构件已属于另一台汽轮机"
+  "gui.create_nuclear_industry.turbine.issue.overlap": "此构件已属于另一台汽轮机",
+  "block.create_nuclear_industry.turbine_window": "汽轮机观察窗",
+  "gui.create_nuclear_industry.turbine.issue.cavity": "机壳内部空间错误",
+  "gui.create_nuclear_industry.turbine.issue.inlet_position": "进汽口位置错误",
+  "gui.create_nuclear_industry.turbine.issue.exhaust_position": "排汽口位置错误",
+  "gui.create_nuclear_industry.turbine.issue.window": "观察窗位置错误",
+  "gui.create_nuclear_industry.turbine.issue.port": "进排汽口位置错误"
 }

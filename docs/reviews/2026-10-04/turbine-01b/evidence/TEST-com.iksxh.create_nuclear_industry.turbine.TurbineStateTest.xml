@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-04T15:41:33.195Z" hostname="DESKTOP-4G1EOU9" time="0.01">
+  <properties/>
+  <testcase name="coefficientChangeClearsOldPowerAndCustomFrontShareOnlySplitsNewTotal()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.001"/>
+  <testcase name="lowerCapacityKeepsOldInventoryAndExistingMachineCanProcessAfterDrain()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.004"/>
+  <testcase name="portableRestoreCannotProcessTwiceInSameWorldTick()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.001"/>
+  <testcase name="fullFortyTickWindowMatchesActualFlowAndSingleMillibucketBudget()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.001"/>
+  <testcase name="fullExhaustBlocksConversionWithoutConsumingInput()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.0"/>
+  <testcase name="eachPortHasIndependentBudgetSimulationIsPureAndExhaustPathsShareIt()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.0"/>
+  <testcase name="exactlyThreeDistinctBoundedTiersAndRuntimeCreateLimit()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.0"/>
+  <testcase name="stopAndTimeJumpClearHistoryWithoutMakingOfflinePower()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.001"/>
+  <testcase name="tankSmallerThanRatedFlowStillProcessesAvailableVolume()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

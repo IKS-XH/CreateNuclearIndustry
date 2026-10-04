@@ -2,9 +2,9 @@
   "loader": "neoforge:obj",
   "model": "create_nuclear_industry:models/block/turbine/mesh/turbine_rotor_unformed.obj",
   "textures": {
-    "particle": "create_nuclear_industry:block/turbine/turbine_rotor"
+    "particle": "create_nuclear_industry:block/turbine/turbine_rotor_blade"
   },
-  "automatic_culling": true,
+  "automatic_culling": false,
   "shade_quads": true,
   "flip_v": false,
   "emissive_ambient": false

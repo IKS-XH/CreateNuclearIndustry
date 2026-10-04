@@ -15,11 +15,11 @@ public final class TurbineConfig {
 
     static {
         var b = new ModConfigSpec.Builder();
-        SHORT = tier(b, "short", 3, 54, 4000);
-        MEDIUM = tier(b, "medium", 6, 108, 8000);
-        LONG = tier(b, "long", 9, 162, 12000);
+        SHORT = tier(b, "short", 3, 3, 54, 4000);
+        MEDIUM = tier(b, "medium", 6, 5, 108, 8000);
+        LONG = tier(b, "long", 9, 7, 162, 12000);
         RPM = b.comment("汽轮机两轴固定工作转速，单位 RPM；运行时还必须不超过当前 Create 服务端上限。")
-                .defineInRange("rpm", 128, 1, 65_536);
+                .defineInRange("rpm", 256, 1, 65_536);
         SU_PER_MB_PER_TICK = b.comment("实际平均每 1mB/t 蒸汽流量换算的总应力容量，单位 SU/(mB/t)。")
                 .defineInRange("suPerMbPerTick", 32768D, .000001D, 1_000_000D);
         SMOOTHING_TICKS = b.comment("实际处理蒸汽的滑动平均窗口，单位服务端 tick；缺失历史按零。")
@@ -35,11 +35,14 @@ public final class TurbineConfig {
 
     private TurbineConfig() {}
 
-    /** 每档四键平铺在同一 TOML，三档数量固定且转子数须互异。 */
-    private static TierValues tier(ModConfigSpec.Builder b, String prefix, int rotors, int flow, int capacity) {
+    /** 每档五键平铺在同一 TOML；直径须属于已建模的 3/5/7，转子数须互异。 */
+    private static TierValues tier(ModConfigSpec.Builder b, String prefix, int rotors, int diameter,
+                                   int flow, int capacity) {
         return new TierValues(
                 b.comment(prefix + " 档转子数；轴向长度由此值加两端面派生，单位 节。")
-                        .defineInRange(prefix + "RotorCount", rotors, 1, 16),
+                        .defineInRange(prefix + "RotorCount", rotors, 3, 16),
+                b.comment(prefix + " 档外径，只支持已建模的 3、5、7 格；不符合时整机安全停机。")
+                        .defineInRange(prefix + "Diameter", diameter, 3, 7),
                 b.comment(prefix + " 档额定最大耗汽量，单位 mB/t；实际处理仍受两库存空位约束。")
                         .defineInRange(prefix + "RateMbPerTick", flow, 1, 10_000),
                 b.comment(prefix + " 档超临界进汽罐容量，单位 mB；降低后保留既存液量。")
@@ -60,10 +63,12 @@ public final class TurbineConfig {
                 EXHAUST_PORT_FLOW_MB_PER_TICK.get(), FRONT_SHARE.get());
     }
 
-    private record TierValues(ModConfigSpec.IntValue rotors, ModConfigSpec.IntValue rate,
+    private record TierValues(ModConfigSpec.IntValue rotors, ModConfigSpec.IntValue diameter,
+                              ModConfigSpec.IntValue rate,
                               ModConfigSpec.IntValue inputCapacity, ModConfigSpec.IntValue exhaustCapacity) {
         TurbineState.Tier snapshot() {
-            return new TurbineState.Tier(rotors.get(), rate.get(), inputCapacity.get(), exhaustCapacity.get());
+            return new TurbineState.Tier(rotors.get(), rate.get(), inputCapacity.get(), exhaustCapacity.get(),
+                    diameter.get());
         }
     }
 }

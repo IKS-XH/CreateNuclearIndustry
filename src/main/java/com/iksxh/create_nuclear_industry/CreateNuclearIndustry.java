@@ -81,7 +81,8 @@ public final class CreateNuclearIndustry {
                         || state.is(BoilerContent.WATER_PORT.get()) || state.is(BoilerContent.STEAM_PORT.get())
                         || state.is(BoilerContent.CONTROLLER.get()) || state.is(BoilerContent.SAFETY_VALVE.get())
                         || state.is(BoilerContent.HEAT_SECTION.get())
-                        || state.is(TurbineContent.CASING.get()) || state.is(TurbineContent.ROTOR.get())
+                        || state.is(TurbineContent.CASING.get()) || state.is(TurbineContent.WINDOW.get())
+                        || state.is(TurbineContent.ROTOR.get())
                         || state.is(TurbineContent.CONTROLLER.get()) || state.is(TurbineContent.OUTPUT_SHAFT.get())
                         || state.is(TurbineContent.INLET.get()) || state.is(TurbineContent.EXHAUST.get())
                         ? BlockMovementChecks.CheckResult.FAIL : BlockMovementChecks.CheckResult.PASS);

@@ -12,15 +12,21 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
-REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-ASSETS-01"
+REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01B-ASSETS"
 STAGING = REPORT / "generated_resources"
 ASSETS = REPO / "src/main/resources/assets/create_nuclear_industry"
 BLOCKS = ("turbine_casing", "turbine_rotor", "turbine_controller", "turbine_output_shaft", "turbine_inlet", "turbine_exhaust")
 FACING = ("north", "east", "south", "west")
 RING_ROLES = ("top", "upper_left", "upper_right", "left", "right", "lower_left", "lower_right", "bottom")
 AXIAL = ("front", "middle", "rear")
-OUTWARD = ("north", "east", "south", "west", "up")
+OUTWARD = ("north", "east", "south", "west", "up", "down")
 ROTATION = {"north": 0, "east": 90, "south": 180, "west": 270}
+SIDE_WORLD = {
+    "north": {"left": "west", "right": "east"},
+    "east": {"left": "north", "right": "south"},
+    "south": {"left": "east", "right": "west"},
+    "west": {"left": "south", "right": "north"},
+}
 MODEL_ROOT = "create_nuclear_industry:block/turbine"
 OBJ_ROOT = "create_nuclear_industry:models/block/turbine/mesh"
 
@@ -45,8 +51,9 @@ def cross(a, b):
 class Mesh:
     """本格OBJ网格；顶点单位为方块，限制在0..1。"""
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, bounds: bool = True):
         self.name = name
+        self.bounds = bounds
         self.vertices: list[tuple[float, float, float]] = []
         self.uvs: list[tuple[float, float]] = []
         self.normals: list[tuple[float, float, float]] = []
@@ -56,7 +63,7 @@ class Mesh:
         points = [tuple(map(float, p)) for p in points]
         if len(points) < 3:
             raise ValueError("OBJ面至少需要三个顶点")
-        if any(any(c < -1e-8 or c > 1.00000001 for c in p) for p in points):
+        if self.bounds and any(any(c < -1e-8 or c > 1.00000001 for c in p) for p in points):
             raise ValueError(f"{self.name}: 顶点越出单格0..1范围: {points}")
         if len(points) > 4:
             for i in range(1, len(points) - 1):
@@ -359,6 +366,252 @@ def port_mesh(kind: str, role: str, name: str) -> Mesh:
     return mesh
 
 
+TIER_DIAMETERS = (3, 5, 7)
+SHELL_THICKNESS = 3.0 / 16.0
+ROTOR_RADII = {3: 1.1875, 5: 2.1875, 7: 3.1875}
+
+
+def polygon_area(points):
+    return abs(sum(points[i][0] * points[(i + 1) % len(points)][1] -
+                   points[(i + 1) % len(points)][0] * points[i][1]
+                   for i in range(len(points))) / 2) if len(points) >= 3 else 0.0
+
+
+def clip_polygon(points, axis, bound, keep_greater):
+    """用Sutherland-Hodgman将多边形裁切到一个轴向半平面。"""
+    if not points:
+        return []
+    out = []
+    previous = points[-1]
+    previous_inside = previous[axis] >= bound - 1e-9 if keep_greater else previous[axis] <= bound + 1e-9
+    for current in points:
+        current_inside = current[axis] >= bound - 1e-9 if keep_greater else current[axis] <= bound + 1e-9
+        if current_inside != previous_inside:
+            delta = current[axis] - previous[axis]
+            if abs(delta) > 1e-12:
+                t = (bound - previous[axis]) / delta
+                out.append((previous[0] + t * (current[0] - previous[0]),
+                            previous[1] + t * (current[1] - previous[1])))
+        if current_inside:
+            out.append(current)
+        previous, previous_inside = current, current_inside
+    return out
+
+
+def clip_to_cell(points, x, y):
+    polygon = list(points)
+    for axis, bound, greater in ((0, x - 0.5, True), (0, x + 0.5, False),
+                                 (1, y - 0.5, True), (1, y + 0.5, False)):
+        polygon = clip_polygon(polygon, axis, bound, greater)
+    return polygon
+
+
+def offset_convex_polygon(points, distance):
+    """沿每条外法线平移固定距离，求八边形等法向厚度的内轮廓。"""
+    lines = []
+    count = len(points)
+    signed_area = sum(points[i][0] * points[(i + 1) % count][1] -
+                      points[(i + 1) % count][0] * points[i][1] for i in range(count)) / 2
+    orientation = 1 if signed_area > 0 else -1
+    for i, p in enumerate(points):
+        q = points[(i + 1) % count]
+        dx, dy = q[0] - p[0], q[1] - p[1]
+        length = math.hypot(dx, dy)
+        nx, ny = orientation * dy / length, -orientation * dx / length
+        lines.append(((p[0] - nx * distance, p[1] - ny * distance), (dx, dy)))
+    result = []
+    for i in range(count):
+        (p1, v1), (p2, v2) = lines[i - 1], lines[i]
+        det = v1[0] * v2[1] - v1[1] * v2[0]
+        t = ((p2[0] - p1[0]) * v2[1] - (p2[1] - p1[1]) * v2[0]) / det
+        result.append((p1[0] + t * v1[0], p1[1] + t * v1[1]))
+    return result
+
+
+def octagon(diameter):
+    half = diameter / 2
+    cut = diameter / (2 + math.sqrt(2))
+    return [(-half + cut, -half), (half - cut, -half), (half, -half + cut),
+            (half, half - cut), (half - cut, half), (-half + cut, half),
+            (-half, half - cut), (-half, -half + cut)]
+
+
+def shell_cells(diameter):
+    """返回外表面与按3/16法向内缩轮廓之间有正面积的壳格。"""
+    outer = octagon(diameter)
+    inner = offset_convex_polygon(outer, SHELL_THICKNESS)
+    r = (diameter - 1) // 2
+    cells = []
+    for y in range(-r, r + 1):
+        for x in range(-r, r + 1):
+            out_area = polygon_area(clip_to_cell(outer, x, y))
+            in_area = polygon_area(clip_to_cell(inner, x, y))
+            if out_area - in_area > 1e-8:
+                cells.append((x, y))
+    return cells
+
+
+def casing_cell_mesh(diameter, section, x, y):
+    """生成单格连续壳壁；端层同时带3/16封闭端盖和接续侧壳。"""
+    name = f"d{diameter}_{section}_x{x}_y{y}"
+    mesh = Mesh(name)
+    outer = octagon(diameter)
+    inner = offset_convex_polygon(outer, SHELL_THICKNESS)
+    band_z0 = SHELL_THICKNESS if section == "front" else 0.0
+    band_z1 = 1 - SHELL_THICKNESS if section == "rear" else 1.0
+    _append_shell_band(mesh, diameter, x, y, band_z0, band_z1)
+    if section in ("front", "rear"):
+        # 端盖厚3/16格并覆盖完整八棱截面；侧壳从盖内缘接续到下一段。
+        clipped = clip_to_cell(outer, x, y)
+        local = [(px - x + 0.5, py - y + 0.5) for px, py in clipped]
+        z0, z1 = (0.0, SHELL_THICKNESS) if section == "front" else (1 - SHELL_THICKNESS, 1.0)
+        mesh.face([(px, py, z0) for px, py in local], "endcap", (0, 0, -1), uv_axis=(0, 1))
+        mesh.face([(px, py, z1) for px, py in local], "endcap", (0, 0, 1), uv_axis=(0, 1))
+        for i in range(len(local)):
+            p0, p1 = local[i], local[(i + 1) % len(local)]
+            mid = ((p0[0] + p1[0]) / 2 + x - 0.5, (p0[1] + p1[1]) / 2 + y - 0.5)
+            dx, dy = p1[0] - p0[0], p1[1] - p0[1]
+            mesh.face([(p0[0], p0[1], z0), (p1[0], p1[1], z0),
+                       (p1[0], p1[1], z1), (p0[0], p0[1], z1)],
+                      "casing", (dy, -dx, 0))
+    return mesh
+
+
+def _append_shell_band(mesh, diameter, x, y, z0, z1):
+    """把裁切后的等法向厚度壳带追加到指定单格OBJ，保持边界面朝外。"""
+    outer = octagon(diameter)
+    inner = offset_convex_polygon(outer, SHELL_THICKNESS)
+    for i in range(8):
+        band = [outer[i], outer[(i + 1) % 8], inner[(i + 1) % 8], inner[i]]
+        clipped = clip_to_cell(band, x, y)
+        if polygon_area(clipped) <= 1e-9:
+            continue
+        local = [(px - x + 0.5, py - y + 0.5) for px, py in clipped]
+        for j in range(len(local)):
+            p0, p1 = local[j], local[(j + 1) % len(local)]
+            gp0, gp1 = clipped[j], clipped[(j + 1) % len(clipped)]
+            midpoint = ((gp0[0] + gp1[0]) / 2, (gp0[1] + gp1[1]) / 2)
+            material = "edge"
+            for k in range(8):
+                if _point_segment_distance(midpoint, outer[k], outer[(k + 1) % 8]) < 1e-6:
+                    material = "casing"
+                    break
+                if _point_segment_distance(midpoint, inner[k], inner[(k + 1) % 8]) < 1e-6:
+                    material = "inside"
+                    break
+            if any(_point_segment_distance(gp0, outer[k], inner[k]) < 1e-6 and
+                   _point_segment_distance(gp1, outer[k], inner[k]) < 1e-6 for k in range(8)):
+                # 扇区共用的径向接边只保留一处，不输出相互重叠的内部面。
+                continue
+            dx, dy = gp1[0] - gp0[0], gp1[1] - gp0[1]
+            target = (dy, -dx, 0)
+            mesh.face([(p0[0], p0[1], z0), (p1[0], p1[1], z0),
+                       (p1[0], p1[1], z1), (p0[0], p0[1], z1)], material, target)
+
+
+def _point_segment_distance(point, a, b):
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    denom = dx * dx + dy * dy
+    if denom < 1e-12:
+        return math.hypot(point[0] - a[0], point[1] - a[1])
+    t = max(0.0, min(1.0, ((point[0] - a[0]) * dx + (point[1] - a[1]) * dy) / denom))
+    return math.hypot(point[0] - (a[0] + t * dx), point[1] - (a[1] + t * dy))
+
+
+def turbine_window_mesh(side):
+    """生成带薄钢框、透明玻璃层和独立内外框边的观察窗格。"""
+    mesh = Mesh(f"turbine_window_{side}")
+    axis = {"up": "y", "down": "y", "left": "x", "right": "x"}[side]
+    sign = {"up": 1, "down": -1, "left": -1, "right": 1}[side]
+    plane = 1.0 if sign > 0 else 0.0
+    inset = 0.14
+    # 框在机壳外侧形成稳定金属边，玻璃片退入框后1/16格，避免共面闪烁。
+    glass_plane = plane - sign * 0.04
+    if axis == "y":
+        strips = [((0, 0), (1, inset)), ((0, 1 - inset), (1, 1)),
+                  ((0, inset), (inset, 1 - inset)), ((1 - inset, inset), (1, 1 - inset))]
+        def point(u, v, depth): return (u, depth, v)
+        normal = (0, sign, 0)
+    else:
+        strips = [((0, 0), (1, inset)), ((0, 1 - inset), (1, 1)),
+                  ((0, inset), (inset, 1 - inset)), ((1 - inset, inset), (1, 1 - inset))]
+        def point(u, v, depth): return (depth, v, u)
+        normal = (sign, 0, 0)
+    for (u0, v0), (u1, v1) in strips:
+        corners = [point(u0, v0, plane), point(u1, v0, plane),
+                   point(u1, v1, plane), point(u0, v1, plane)]
+        mesh.face(corners, "casing", normal)
+        inner_plane = plane - sign * SHELL_THICKNESS
+        back = [point(u, v, inner_plane) for u, v in
+                ((u0, v0), (u1, v0), (u1, v1), (u0, v1))]
+        mesh.face(back, "inside", tuple(-n for n in normal))
+        for i in range(4):
+            j = (i + 1) % 4
+            mesh.face([corners[i], corners[j], back[j], back[i]], "edge", normal)
+    glass = [point(inset, inset, glass_plane), point(1 - inset, inset, glass_plane),
+             point(1 - inset, 1 - inset, glass_plane), point(inset, 1 - inset, glass_plane)]
+    mesh.face(glass, "glass", normal)
+    glass_back_plane = glass_plane - sign * 0.04
+    back_glass = [point(inset, inset, glass_back_plane), point(1 - inset, inset, glass_back_plane),
+                  point(1 - inset, 1 - inset, glass_back_plane), point(inset, 1 - inset, glass_back_plane)]
+    mesh.face(back_glass, "glass", tuple(-n for n in normal))
+    for i in range(4):
+        p0, p1 = glass[i], glass[(i + 1) % 4]
+        q0, q1 = back_glass[i], back_glass[(i + 1) % 4]
+        mesh.face([p0, p1, q1, q0], "glass_edge", normal)
+    return mesh
+
+
+def annular_sleeve(mesh, center, outer_radius, inner_radius, start, end, sides=24):
+    """生成中空轮毂套筒，内孔给独立转子轴留出净空。"""
+    outer0, outer1, inner0, inner1 = [], [], [], []
+    for i in range(sides):
+        angle = 2 * math.pi * i / sides
+        co, si = math.cos(angle), math.sin(angle)
+        outer0.append((center[0] + outer_radius * co, center[1] + outer_radius * si, start))
+        outer1.append((center[0] + outer_radius * co, center[1] + outer_radius * si, end))
+        inner0.append((center[0] + inner_radius * co, center[1] + inner_radius * si, start))
+        inner1.append((center[0] + inner_radius * co, center[1] + inner_radius * si, end))
+    for i in range(sides):
+        j = (i + 1) % sides
+        mid = ((outer0[i][0] + outer0[j][0]) / 2 - center[0],
+               (outer0[i][1] + outer0[j][1]) / 2 - center[1], 0)
+        mesh.face([outer0[i], outer0[j], outer1[j], outer1[i]], "rotor_hub", mid)
+        mesh.face([inner0[j], inner0[i], inner1[i], inner1[j]], "inside", (-mid[0], -mid[1], 0))
+        mesh.face([outer1[i], outer1[j], inner1[j], inner1[i]], "rotor_hub", (0, 0, 1))
+        mesh.face([outer0[j], outer0[i], inner0[i], inner0[j]], "rotor_hub", (0, 0, -1))
+
+
+def rotor_blades_mesh(diameter):
+    """生成不含独立轴的空心轮毂与12片宽弦斜叶轮。"""
+    radius = ROTOR_RADII[diameter]
+    mesh = Mesh(f"rotor_blades_d{diameter}", bounds=False)
+    annular_sleeve(mesh, (0.5, 0.5), 0.33, 0.19, 0.22, 0.78, sides=24)
+    annular_sleeve(mesh, (0.5, 0.5), 0.29, 0.19, 0.13, 0.22, sides=24)
+    annular_sleeve(mesh, (0.5, 0.5), 0.29, 0.19, 0.78, 0.87, sides=24)
+    for blade in range(12):
+        base = 2 * math.pi * blade / 12
+        r0, r1 = 0.28, radius
+        a0, a1 = base - 0.16, base + 0.12
+        twist, width0, width1 = 0.20, 0.31, 0.27
+        r1 = math.sqrt(radius * radius - width1 * width1)
+        pts = [
+            (0.5 + r0 * math.cos(a0) - width0 * math.sin(a0), 0.5 + r0 * math.sin(a0) + width0 * math.cos(a0)),
+            (0.5 + r1 * math.cos(a1) - width1 * math.sin(a1), 0.5 + r1 * math.sin(a1) + width1 * math.cos(a1)),
+            (0.5 + r1 * math.cos(a1) + width1 * math.sin(a1), 0.5 + r1 * math.sin(a1) - width1 * math.cos(a1)),
+            (0.5 + r0 * math.cos(a0) + width0 * math.sin(a0), 0.5 + r0 * math.sin(a0) - width0 * math.cos(a0)),
+        ]
+        zbase = 0.5 + twist * ((blade % 2) - 0.5)
+        top = [(px, py, zbase + dz) for (px, py), dz in zip(pts, (0.045, -0.045, -0.045, 0.045))]
+        bottom = [(px, py, z - 0.075) for px, py, z in top]
+        mesh.face(top, "blade", (0, 0, 1))
+        mesh.face(bottom, "blade", (0, 0, -1))
+        for i in range(4):
+            mesh.face([top[i], top[(i + 1) % 4], bottom[(i + 1) % 4], bottom[i]],
+                      "blade_edge", (0, 0, 1))
+    return mesh
+
+
 def cube_mesh(name: str, side="casing", front="endcap", back="endcap") -> Mesh:
     mesh = Mesh(name)
     mesh.quads_for_box((0, 0, 0), (1, 1, 1), side, cap_front=front, cap_back=back)
@@ -489,10 +742,275 @@ def item_models() -> dict[str, bytes]:
 
 
 def all_files() -> dict[str, bytes]:
-    result = mesh_files()
-    result.update(blockstates())
-    result.update(item_models())
+    return all_files_01b()
+
+
+def transform_mesh(source: Mesh, name: str, transform) -> Mesh:
+    """将标准侧向构件按局部坐标变换，保留闭合面和外法线。"""
+    target = Mesh(name, bounds=False)
+    for material, indexes in source.faces:
+        points = [source.vertices[v - 1] for v, _, _ in indexes]
+        normal = source.normals[indexes[0][2] - 1]
+        transformed = [transform(point) for point in points]
+        transformed_normal = transform(normal, vector=True)
+        target.face(transformed, material, transformed_normal)
+    return target
+
+
+def controller_side_mesh(side):
+    """把仪表控制器从本地前向基准旋转到指定四侧平面。"""
+    transforms = {
+        "right": lambda p: (1 - p[2], p[1], p[0]),
+        "left": lambda p: (p[2], p[1], 1 - p[0]),
+        "up": lambda p: (p[0], 1 - p[2], p[1]),
+        "down": lambda p: (p[0], p[2], 1 - p[1]),
+    }
+    def do_transform(p, vector=False):
+        if vector:
+            return tuple(transforms[side](p)[i] - transforms[side]((0, 0, 0))[i] for i in range(3))
+        return transforms[side](p)
+    return transform_mesh(controller_mesh(f"controller_{side}"), f"controller_{side}", do_transform)
+
+
+def output_shaft_mesh(end):
+    """生成端部承轴板、轴承座与0..1格内的轴身，端面平接相邻动力轴。"""
+    mesh = Mesh(f"output_shaft_{end}", bounds=False)
+    if end == "front":
+        plate_start, plate_end = 0.0, SHELL_THICKNESS
+        square_hole_plate(mesh, "z", plate_start, plate_end, 0.19, "endcap", "casing")
+        annular_sleeve(mesh, (0.5, 0.5), 0.27, 0.14, plate_start, plate_end, sides=24)
+        cylinder(mesh, "z", (0.5, 0.5), 0.14, 0.0, 1.0, "shaft", sides=20)
+        disk(mesh, "z", (0.5, 0.5), 0.14, 0.0, "shaft", -1, sides=20)
+    else:
+        plate_start, plate_end = 1.0 - SHELL_THICKNESS, 1.0
+        square_hole_plate(mesh, "z", plate_start, plate_end, 0.19, "endcap", "casing")
+        annular_sleeve(mesh, (0.5, 0.5), 0.27, 0.14, plate_start, plate_end, sides=24)
+        cylinder(mesh, "z", (0.5, 0.5), 0.14, 0.0, 1.0, "shaft", sides=20)
+        disk(mesh, "z", (0.5, 0.5), 0.14, 1.0, "shaft", 1, sides=20)
+    return mesh
+
+
+def axle_mesh():
+    """单格转子轴心；范围在0..1且不包含叶片或空心轮毂。"""
+    mesh = Mesh("rotor_axle")
+    cylinder(mesh, "z", (0.5, 0.5), 0.14, 0.0, 1.0, "shaft", sides=16)
+    return mesh
+
+
+def small_item_rotor():
+    """把单档完整叶轮缩放成未成型/物品展示模型，不改变正式扫掠半径。"""
+    source = rotor_blades_mesh(3)
+    scale = 0.42 / ROTOR_RADII[3]
+    target = Mesh("turbine_rotor_unformed", bounds=False)
+    for material, indexes in source.faces:
+        points = [source.vertices[v - 1] for v, _, _ in indexes]
+        normal = source.normals[indexes[0][2] - 1]
+        target.face([(0.5 + (p[0] - 0.5) * scale,
+                      0.5 + (p[1] - 0.5) * scale, p[2]) for p in points], material, normal)
+    return target
+
+
+def canonical_piece_cells():
+    """按接口规定D/section/y/x稳定顺序生成1..206 piece映射。"""
+    result = {}
+    number = 0
+    for diameter in TIER_DIAMETERS:
+        r = (diameter - 1) // 2
+        outer = octagon(diameter)
+        for section in ("front", "middle", "rear"):
+            candidates = shell_cells(diameter) if section == "middle" else [
+                (x, y) for y in range(-r, r + 1) for x in range(-r, r + 1)
+                if polygon_area(clip_to_cell(outer, x, y)) > 1e-8
+            ]
+            allowed = set(candidates)
+            for y in range(-r, r + 1):
+                for x in range(-r, r + 1):
+                    if (x, y) in allowed:
+                        number += 1
+                        result[number] = (diameter, section, x, y)
     return result
+
+
+def obj_resource_files(meshes):
+    """将静态网格与NeoForge OBJ包装JSON写到候选暂存树。"""
+    out = {}
+    particle_by_material = {
+        "casing": "turbine_casing_panel", "inside": "turbine_casing_panel",
+        "edge": "turbine_casing_panel", "endcap": "turbine_casing_panel",
+        "glass": "turbine_window_glass", "glass_edge": "turbine_window_glass",
+        "rotor_hub": "turbine_rotor_metal", "blade": "turbine_rotor_blade",
+        "blade_edge": "turbine_rotor_metal", "shaft": "turbine_output_shaft",
+        "brass": "turbine_casing_endcap", "controller": "turbine_controller",
+        "inlet": "turbine_inlet", "exhaust": "turbine_exhaust", "support": "turbine_bearing_support",
+    }
+    for name, mesh in meshes.items():
+        name = name.replace("/", "_")
+        obj_path = f"assets/create_nuclear_industry/models/block/turbine/mesh/{name}.obj"
+        out[obj_path] = mesh.text().encode("utf-8")
+    materials = {
+        "casing": "turbine_casing_panel", "inside": "turbine_casing_panel",
+        "edge": "turbine_casing_panel", "endcap": "turbine_casing_panel",
+        "glass": "turbine_window_glass", "glass_edge": "turbine_window_glass",
+        "rotor_hub": "turbine_rotor_metal", "blade": "turbine_rotor_blade",
+        "blade_edge": "turbine_rotor_metal", "shaft": "turbine_output_shaft",
+        "brass": "turbine_casing_endcap", "controller": "turbine_controller",
+        "inlet": "turbine_inlet", "exhaust": "turbine_exhaust", "support": "turbine_bearing_support",
+    }
+    mtl = []
+    for material, texture in materials.items():
+        mtl.extend([f"newmtl {material}", "Ka 0.25 0.25 0.25", "Kd 1 1 1",
+                    f"map_Kd create_nuclear_industry:block/turbine/{texture}"])
+        if material in ("glass", "glass_edge"):
+            mtl.append("d 0.53")
+        mtl.append("")
+    out["assets/create_nuclear_industry/models/block/turbine/mesh/turbine.mtl"] = "\n".join(mtl).encode("utf-8")
+    return out
+
+
+def model_wrapper(name, particle, culling=True, render_type=None):
+    result = {
+        "loader": "neoforge:obj",
+        "model": f"create_nuclear_industry:models/block/turbine/mesh/{name}.obj",
+        "textures": {"particle": f"create_nuclear_industry:block/turbine/{particle}"},
+        "automatic_culling": culling, "shade_quads": True, "flip_v": False,
+        "emissive_ambient": False,
+    }
+    if render_type is not None:
+        result["render_type"] = render_type
+    return result
+
+
+def write_model_wrapper(out, path, mesh, particle, culling=True, render_type=None):
+    out[f"assets/create_nuclear_industry/models/block/turbine/{path}.json"] = write_json(
+        Path(path), model_wrapper(mesh, particle, culling, render_type))
+
+
+def model_and_state_files():
+    """生成与A冻结接口一致的206段壳/窗状态、转子、轴和侧接口模型。"""
+    files, meshes = {}, {}
+    piece_map = canonical_piece_cells()
+    for number, (diameter, section, x, y) in piece_map.items():
+        name = f"d{diameter}_{section}_x{x}_y{y}"
+        meshes[f"casing/{name}"] = casing_cell_mesh(diameter, section, x, y)
+        particle = "turbine_casing_panel"
+        write_model_wrapper(files, f"casing/{name}", f"casing_{name}", particle)
+        r = (diameter - 1) // 2
+        if section == "middle" and ((x == 0 and abs(y) == r) or (y == 0 and abs(x) == r)):
+            side = "up" if y == r else "down" if y == -r else "right" if x == r else "left"
+            window_mesh = turbine_window_mesh(side)
+            meshes[f"window/{name}"] = window_mesh
+            write_model_wrapper(files, f"window/{name}", f"window_{name}", "turbine_window_glass",
+                                render_type="translucent")
+
+    for diameter in TIER_DIAMETERS:
+        blades = rotor_blades_mesh(diameter)
+        meshes[f"rotor_blades_d{diameter}"] = blades
+        write_model_wrapper(files, f"rotor_blades_d{diameter}", f"rotor_blades_d{diameter}",
+                            "turbine_rotor_blade", culling=False)
+    meshes["rotor_axle"] = axle_mesh()
+    write_model_wrapper(files, "rotor_axle", "rotor_axle", "turbine_output_shaft")
+    for end in ("front", "rear"):
+        meshes[f"output_shaft_{end}"] = output_shaft_mesh(end)
+        write_model_wrapper(files, f"output_shaft_{end}", f"output_shaft_{end}", "turbine_output_shaft", False)
+    for side in ("up", "down", "left", "right"):
+        meshes[f"controller_{side}"] = controller_side_mesh(side)
+        write_model_wrapper(files, f"controller_{side}", f"controller_{side}", "turbine_controller")
+        for kind in ("inlet", "exhaust"):
+            source = port_mesh(kind, "top" if side in ("up", "down") else side, f"{kind}_{side}")
+            if side == "down":
+                source = transform_mesh(source, f"{kind}_down", lambda p, vector=False: (
+                    (p[0], 1 - p[1], p[2]) if not vector else (p[0], -p[1], p[2])))
+            meshes[f"{kind}_{side}"] = source
+            write_model_wrapper(files, f"{kind}_{side}", f"{kind}_{side}", f"turbine_{kind}")
+
+    # 各方块的独立放置模型均为真实三维单件，而机身壳块保持薄板几何。
+    d3_top = casing_cell_mesh(3, "middle", 0, 1)
+    meshes["turbine_casing_unformed"] = d3_top
+    write_model_wrapper(files, "turbine_casing_unformed", "turbine_casing_unformed", "turbine_casing_panel")
+    meshes["turbine_window_unformed"] = turbine_window_mesh("up")
+    write_model_wrapper(files, "turbine_window_unformed", "turbine_window_unformed", "turbine_window_glass",
+                        render_type="translucent")
+    meshes["turbine_rotor_unformed"] = small_item_rotor()
+    write_model_wrapper(files, "turbine_rotor_unformed", "turbine_rotor_unformed", "turbine_rotor_blade", False)
+    meshes["turbine_controller_unformed"] = controller_mesh("turbine_controller_unformed")
+    write_model_wrapper(files, "turbine_controller_unformed", "turbine_controller_unformed", "turbine_controller")
+    meshes["turbine_output_shaft_unformed"] = output_shaft_mesh("rear")
+    write_model_wrapper(files, "turbine_output_shaft_unformed", "turbine_output_shaft_unformed", "turbine_output_shaft", False)
+    for kind in ("inlet", "exhaust"):
+        meshes[f"turbine_{kind}_unformed"] = port_mesh(kind, "left", f"turbine_{kind}_unformed")
+        write_model_wrapper(files, f"turbine_{kind}_unformed", f"turbine_{kind}_unformed", f"turbine_{kind}")
+
+    files.update(obj_resource_files(meshes))
+    files.update(blockstates_01b(piece_map))
+    display = {
+        "thirdperson_righthand": {"rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.375, 0.375, 0.375]},
+        "thirdperson_lefthand": {"rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.375, 0.375, 0.375]},
+        "firstperson_righthand": {"rotation": [0, 45, 0], "translation": [0, 0, 0], "scale": [0.4, 0.4, 0.4]},
+        "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, 0, 0], "scale": [0.4, 0.4, 0.4]},
+        "gui": {"rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [0.625, 0.625, 0.625]},
+        "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0], "scale": [0.25, 0.25, 0.25]},
+        "fixed": {"rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [0.5, 0.5, 0.5]},
+        "head": {"rotation": [0, 0, 0], "translation": [0, 13, 7], "scale": [1, 1, 1]},
+    }
+    for block in (*BLOCKS, "turbine_window"):
+        parent = "turbine_rotor_unformed" if block == "turbine_rotor" else f"{block}_unformed"
+        files[f"assets/create_nuclear_industry/models/item/{block}.json"] = write_json(
+            Path(block), {"parent": f"create_nuclear_industry:block/turbine/{parent}", "display": display})
+    return files
+
+
+def blockstates_01b(piece_map):
+    """为完整属性笛卡尔积生成JSON，并将非法旧组合路由至安全回退。"""
+    out = {}
+    model = lambda name: f"create_nuclear_industry:block/turbine/{name}"
+    for block in ("turbine_casing", "turbine_window"):
+        variants = {}
+        for formed, facing, piece in itertools.product((False, True), FACING, range(207)):
+            key = f"formed={str(formed).lower()},machine_facing={facing},piece={piece}"
+            if block == "turbine_window":
+                candidate = piece_map.get(piece)
+                valid = candidate and candidate[1] == "middle" and (
+                    (candidate[2] == 0 and abs(candidate[3]) == (candidate[0] - 1) // 2) or
+                    (candidate[3] == 0 and abs(candidate[2]) == (candidate[0] - 1) // 2))
+                selected = f"window/{'d' + str(candidate[0]) + '_' + candidate[1] + '_x' + str(candidate[2]) + '_y' + str(candidate[3])}" if formed and valid else "turbine_window_unformed"
+            else:
+                candidate = piece_map.get(piece)
+                selected = f"casing/d{candidate[0]}_{candidate[1]}_x{candidate[2]}_y{candidate[3]}" if formed and candidate else "turbine_casing_unformed"
+            variants[key] = variant(model(selected), facing)
+        out[f"assets/create_nuclear_industry/blockstates/{block}.json"] = write_json(Path(block), {"variants": variants})
+
+    variants = {}
+    for formed, facing, diameter in itertools.product((False, True), FACING, ("d3", "d5", "d7")):
+        key = f"diameter={diameter},formed={str(formed).lower()},machine_facing={facing}"
+        variants[key] = variant(model("rotor_axle" if formed else "turbine_rotor_unformed"), facing)
+    out["assets/create_nuclear_industry/blockstates/turbine_rotor.json"] = write_json(Path("turbine_rotor"), {"variants": variants})
+
+    variants = {}
+    for formed, facing, end in itertools.product((False, True), FACING, ("front", "rear")):
+        key = f"end={end},formed={str(formed).lower()},machine_facing={facing}"
+        variants[key] = variant(model(f"output_shaft_{end}" if formed else "turbine_output_shaft_unformed"), facing)
+    out["assets/create_nuclear_industry/blockstates/turbine_output_shaft.json"] = write_json(Path("turbine_output_shaft"), {"variants": variants})
+
+    variants = {}
+    for formed, facing, side in itertools.product((False, True), FACING, ("up", "down", "left", "right")):
+        key = f"formed={str(formed).lower()},machine_facing={facing},side={side}"
+        variants[key] = variant(model(f"controller_{side}" if formed else "turbine_controller_unformed"), facing)
+    out["assets/create_nuclear_industry/blockstates/turbine_controller.json"] = write_json(Path("turbine_controller"), {"variants": variants})
+
+    for block, kind in (("turbine_inlet", "inlet"), ("turbine_exhaust", "exhaust")):
+        variants = {}
+        for formed, facing, role, outward in itertools.product((False, True), FACING, RING_ROLES, OUTWARD):
+            key = f"formed={str(formed).lower()},machine_facing={facing},ring_role={role},outward={outward}"
+            side = {"top": "up", "bottom": "down", "left": "left", "right": "right"}.get(role)
+            expected = side if side in ("up", "down") else SIDE_WORLD[facing].get(side)
+            selected = f"{kind}_{side}" if formed and side and outward == expected else f"{block}_unformed"
+            variants[key] = variant(model(selected), facing)
+        out[f"assets/create_nuclear_industry/blockstates/{block}.json"] = write_json(Path(block), {"variants": variants})
+    return out
+
+
+def all_files_01b():
+    return model_and_state_files()
 
 
 def verify(files: dict[str, bytes]) -> dict:
@@ -539,6 +1057,97 @@ def verify(files: dict[str, bytes]) -> dict:
             "item_model_count": len(items), "variants_per_block": state_counts,
             "obj_vertex_bounds": "0..1 block units", "casing_meshes": 24,
             "endcap_axial_faces": "front z=0; rear z=1; middle has none"}
+
+
+def verify_01b(files: dict[str, bytes]) -> dict:
+    """校验汽轮机01B模型引用、状态覆盖、206格映射和转子局部坐标。"""
+    json_files = {path: json.loads(data.decode("utf-8")) for path, data in files.items()
+                  if path.endswith(".json")}
+    model_files = {path for path in json_files if "/models/block/turbine/" in path}
+    obj_files = {path for path in files if path.endswith(".obj")}
+    state_files = {path for path in json_files if "/blockstates/" in path}
+    item_files = {path for path in json_files if "/models/item/turbine_" in path}
+    assert len(canonical_piece_cells()) == 206
+    tier_counts = {d: {section: sum(1 for entry in canonical_piece_cells().values()
+                                     if entry[0] == d and entry[1] == section)
+                       for section in AXIAL} for d in TIER_DIAMETERS}
+    assert tier_counts == {3: {"front": 9, "middle": 8, "rear": 9},
+                           5: {"front": 25, "middle": 16, "rear": 25},
+                           7: {"front": 45, "middle": 24, "rear": 45}}
+    assert len(model_files) == 243 and len(obj_files) == 243
+    assert len(state_files) == 7 and len(item_files) == 7
+    path_set = set(files)
+    for path in model_files:
+        value = json_files[path]
+        assert value.get("loader") == "neoforge:obj", path
+        obj_ref = value.get("model", "").split(":", 1)[-1]
+        assert f"assets/create_nuclear_industry/{obj_ref}" in path_set, (path, obj_ref)
+        particle = value.get("textures", {}).get("particle", "").split(":", 1)[-1]
+        assert f"assets/{particle}.png" in path_set or (ASSETS / "textures" / f"{particle}.png").is_file(), (path, particle)
+    state_counts = {}
+    for path in state_files:
+        variants = json_files[path].get("variants", {})
+        state_counts[Path(path).stem] = len(variants)
+        for entry in variants.values():
+            model_path = entry["model"].split(":", 1)[-1]
+            assert f"assets/create_nuclear_industry/models/{model_path}.json" in path_set, (path, model_path)
+    expected_counts = {"turbine_casing": 1656, "turbine_window": 1656,
+                       "turbine_rotor": 24, "turbine_output_shaft": 16,
+                       "turbine_controller": 32, "turbine_inlet": 384,
+                       "turbine_exhaust": 384}
+    assert state_counts == expected_counts, state_counts
+    for block, port in (("turbine_inlet", "inlet"), ("turbine_exhaust", "exhaust")):
+        variants = json_files[f"assets/create_nuclear_industry/blockstates/{block}.json"]["variants"]
+        for facing, side in itertools.product(FACING, ("top", "bottom", "left", "right")):
+            local = {"top": "up", "bottom": "down", "left": "left", "right": "right"}[side]
+            expected = local if local in ("up", "down") else SIDE_WORLD[facing][local]
+            good = f"formed=true,machine_facing={facing},ring_role={side},outward={expected}"
+            assert variants[good]["model"].endswith(f"/{port}_{local}")
+            wrong = next(direction for direction in OUTWARD if direction != expected)
+            bad = f"formed=true,machine_facing={facing},ring_role={side},outward={wrong}"
+            assert variants[bad]["model"].endswith(f"/{block}_unformed")
+    window_models = [path for path in model_files if "/window/" in path]
+    assert len(window_models) == 12
+    assert all(json_files[path].get("render_type") == "translucent" for path in window_models)
+    unformed_window = "assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed.json"
+    assert json_files[unformed_window].get("render_type") == "translucent"
+    rotor_data = {}
+    for diameter in TIER_DIAMETERS:
+        path = f"assets/create_nuclear_industry/models/block/turbine/mesh/rotor_blades_d{diameter}.obj"
+        text = files[path].decode("utf-8")
+        vertices = [tuple(float(v) for v in row.split()[1:4]) for row in text.splitlines() if row.startswith("v ")]
+        materials = {row.split()[1] for row in text.splitlines() if row.startswith("usemtl ")}
+        assert vertices and "shaft" not in materials and materials <= {"rotor_hub", "inside", "blade", "blade_edge"}
+        center = (0.5, 0.5)
+        radius = max(math.hypot(v[0] - center[0], v[1] - center[1]) for v in vertices)
+        expected_radius = diameter / 2 - SHELL_THICKNESS - 1 / 8
+        assert abs(radius - expected_radius) < 1e-5, (diameter, radius, expected_radius)
+        assert min(v[2] for v in vertices) >= 0.12 and max(v[2] for v in vertices) <= 0.88
+        rotor_data[f"d{diameter}"] = {"origin": [0.5, 0.5, 0.5], "max_sweep_radius": round(radius, 5),
+                                       "vertex_z_range": [round(min(v[2] for v in vertices), 5),
+                                                          round(max(v[2] for v in vertices), 5)],
+                                       "materials": sorted(materials)}
+    for end in ("front", "rear"):
+        path = f"assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_{end}.obj"
+        vertices = [tuple(float(v) for v in row.split()[1:4]) for row in files[path].decode("utf-8").splitlines()
+                    if row.startswith("v ")]
+        assert all(all(-1e-8 <= c <= 1.00000001 for c in point) for point in vertices), path
+    for path, data in files.items():
+        if path.endswith(".obj") and "/rotor_blades_" not in path and "output_shaft" not in path:
+            vertices = [tuple(float(v) for v in row.split()[1:4]) for row in data.decode("utf-8").splitlines()
+                        if row.startswith("v ")]
+            assert all(all(-1e-8 <= c <= 1.00000001 for c in point) for point in vertices), path
+    required_display = {"thirdperson_righthand", "thirdperson_lefthand", "firstperson_righthand",
+                        "firstperson_lefthand", "head", "gui", "ground", "fixed"}
+    for path in item_files:
+        assert required_display <= set(json_files[path].get("display", {})), path
+    return {"blockstate_variants": state_counts, "model_json_count": len(model_files),
+            "obj_mesh_count": len(obj_files), "item_model_count": len(item_files),
+            "piece_mapping": {"total": 206, "tier_sections": tier_counts},
+            "valid_window_models": len(window_models), "rotor_geometry": rotor_data,
+            "rotor_axis_and_center": "+Z axis, block-local (0.5,0.5,0.5); partial has no shaft",
+            "output_shaft_extent": "front/rear axes and 3/16 bearing plates remain within local z=0..1",
+            "model_obj_particle_references": "PASS", "regular_mesh_bounds": "0..1 per block"}
 
 
 def parse_obj(data: bytes):
@@ -634,17 +1243,23 @@ def write_files(files: dict[str, bytes], target_root: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="生成汽轮机静态分格OBJ、JSON模型和blockstates")
+    parser = argparse.ArgumentParser(description="生成汽轮机01B真实薄壳OBJ模型与NeoForge资源")
     parser.add_argument("--install", action="store_true", help="将已校验资源写入src/main/resources")
     args = parser.parse_args()
     files = all_files()
-    summary = verify(files)
-    preview_path = mesh_preview(files)
+    summary = verify_01b(files)
     write_files(files, STAGING)
     if args.install:
-        write_files(files, REPO / "src/main/resources")
+        # 安装范围仅是本批汽轮机模型、方块状态和物品模型。
+        target = REPO / "src/main/resources"
+        for relative, data in files.items():
+            if ("/models/block/turbine/" in relative or "/blockstates/turbine_" in relative or
+                    "/models/item/turbine_" in relative):
+                path = target / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
     summary.update({"install": bool(args.install), "staged_root": STAGING.relative_to(REPO).as_posix(),
-                    "runtime_root": "src/main/resources", "mesh_preview": preview_path.relative_to(REPO).as_posix(),
+                    "runtime_root": "src/main/resources", "rotor_origin": "block-local (0.5,0.5,0.5)",
                     "status": "PASS"})
     REPORT.mkdir(parents=True, exist_ok=True)
     (REPORT / "model-generation.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

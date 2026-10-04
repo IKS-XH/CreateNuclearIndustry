@@ -6,7 +6,7 @@
 
 **本批已收尾：** 高压锅炉首期与01B～01D整改、强化钢板配方、换热器定向共享直列及01E翻译全部人工通过并合入main，见[最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。主目录runClient可直接使用；候选测试世界仍在原目录。
 
-**当前整改门：** 汽轮机01A用户仅确认功能部分通过，报告前端出力、蒸汽紫黑及模型问题，并要求粗细随档位变化、侧置控制器、独立双端轴、薄壳叶片转子和透明窗。已记录[01B结构整改方案](./superpowers/plans/2026-10-04-turbine-structure-revision-proposal.md)，具体尺寸、位置细化、窗配方和旧机迁移待确认；[蒸汽图集与名称修复](./superpowers/plans/2026-10-04-ext-b-turbine-steam-fix.md)已完成资源验证。功能仍仅在同级候选，未整体人工验收、不合入main、不推进冷凝回水。配置说明见[服务端配置指南](./server-config.md)。
+**当前整改：** 汽轮机01A仅功能部分通过。用户已确认3×5×3、5×8×5、7×11×7三档尺寸，并指定默认输出256RPM；侧控、双端轴、薄壳叶片和透明窗按[01B方案](./superpowers/plans/2026-10-04-turbine-structure-revision-proposal.md)完成候选实现，定向自动验证通过，现停在[01B合并手测门](./reviews/2026-10-04/turbine-01b/README.md)。蒸汽图集/名称修复已完成资源验证。功能仍仅在同级候选，未整体人工验收、不合入main、不推进冷凝回水。配置说明见[服务端配置指南](./server-config.md)。
 
 **配方设计规则：** 后续除确需大批量生产的基础零件外，默认不用序列装配；单一功能零件优先工作台、动力合成或单步加工，见[通用规则](./recipes.md#22-标签与替代材料)。
 
@@ -50,7 +50,7 @@
 | [项目策划](./project.md) | 产品目标、首发范围与玩法规则 |
 | [反应堆局部控制](./reactor-local-control-revision-design.md) | 状态归属、热工/控制公式与运行不变量 |
 | [内容清单](./content-catalog.md) | 注册身份、内容阶段、资源与 Ponder 矩阵 |
-| [热端与汽轮机配置](./server-config.md) | 本批候选的SERVER文件位置、锅炉/换热器/汽轮机参数、世界覆盖与存量规则；当前随01A验证 |
+| [热端与汽轮机配置](./server-config.md) | 本批候选的SERVER文件位置、锅炉/换热器/汽轮机参数、世界覆盖与存量规则；已按01B验证，待人工复测 |
 | [配方关系](./recipes.md) | 材料来源、设备工序、标签与守恒 |
 | [彩蛋与进度](./easter-eggs-and-advancements.md) | 非主线趣味内容 |
 | [实施路线图](./implementation-roadmap.md) | 当前状态、阶段顺序、出口与阻塞项 |

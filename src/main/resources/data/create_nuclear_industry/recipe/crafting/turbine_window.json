@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create_nuclear_industry:turbine_casing"
+    },
+    {
+      "item": "create_nuclear_industry:shielded_glass"
+    }
+  ],
+  "result": {
+    "id": "create_nuclear_industry:turbine_window",
+    "count": 1
+  }
+}

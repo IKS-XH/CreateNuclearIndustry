@@ -32,7 +32,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/** 六件汽轮机构件、两轴方块实体和仅用于管网的普通蒸汽。 */
+/** 七件汽轮机构件、唯一侧控库存、两端轴和仅用于管网的普通蒸汽。 */
 public final class TurbineContent {
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CreateNuclearIndustry.MOD_ID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreateNuclearIndustry.MOD_ID);
@@ -44,12 +44,14 @@ public final class TurbineContent {
     }
 
     public static final DeferredBlock<TurbinePartBlock.Casing> CASING = BLOCKS.register("turbine_casing", () -> new TurbinePartBlock.Casing(metal()));
+    public static final DeferredBlock<TurbinePartBlock.Window> WINDOW = BLOCKS.register("turbine_window", () -> new TurbinePartBlock.Window(metal().noOcclusion()));
     public static final DeferredBlock<TurbinePartBlock.Rotor> ROTOR = BLOCKS.register("turbine_rotor", () -> new TurbinePartBlock.Rotor(metal()));
     public static final DeferredBlock<TurbineShaftBlock.Controller> CONTROLLER = BLOCKS.register("turbine_controller", () -> new TurbineShaftBlock.Controller(metal()));
     public static final DeferredBlock<TurbineShaftBlock.Output> OUTPUT_SHAFT = BLOCKS.register("turbine_output_shaft", () -> new TurbineShaftBlock.Output(metal()));
     public static final DeferredBlock<TurbinePartBlock.Inlet> INLET = BLOCKS.register("turbine_inlet", () -> new TurbinePartBlock.Inlet(metal()));
     public static final DeferredBlock<TurbinePartBlock.Exhaust> EXHAUST = BLOCKS.register("turbine_exhaust", () -> new TurbinePartBlock.Exhaust(metal()));
     public static final DeferredItem<BlockItem> CASING_ITEM = item("turbine_casing", CASING, false);
+    public static final DeferredItem<BlockItem> WINDOW_ITEM = item("turbine_window", WINDOW, false);
     public static final DeferredItem<BlockItem> ROTOR_ITEM = item("turbine_rotor", ROTOR, false);
     public static final DeferredItem<BlockItem> CONTROLLER_ITEM = item("turbine_controller", CONTROLLER, true);
     public static final DeferredItem<BlockItem> OUTPUT_SHAFT_ITEM = item("turbine_output_shaft", OUTPUT_SHAFT, false);
@@ -68,6 +70,9 @@ public final class TurbineContent {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TurbinePortBlockEntity>> PORT_BE =
             ENTITIES.register("turbine_port", () -> BlockEntityType.Builder.of(
                     TurbinePortBlockEntity::new, INLET.get(), EXHAUST.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.iksxh.create_nuclear_industry.turbine.TurbineRotorBlockEntity>> ROTOR_BE =
+            ENTITIES.register("turbine_rotor", () -> BlockEntityType.Builder.of(
+                    com.iksxh.create_nuclear_industry.turbine.TurbineRotorBlockEntity::new, ROTOR.get()).build(null));
 
     public static final DeferredHolder<FluidType, FluidType> STEAM_TYPE = TYPES.register("steam", () -> {
         ResourceLocation still = ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "fluid/steam_still");

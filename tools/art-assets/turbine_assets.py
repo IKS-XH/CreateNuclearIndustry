@@ -15,34 +15,35 @@ ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
 SOURCE_DIR = ROOT / "svg" / "block" / "turbine"
 TEXTURE_DIR = REPO / "src/main/resources/assets/create_nuclear_industry/textures/block/turbine"
-EVIDENCE_DIR = REPO / "build/reports/extension/EXT-B-TURBINE-ASSETS-01"
+EVIDENCE_DIR = REPO / "build/reports/extension/EXT-B-TURBINE-01B-ASSETS"
 NS = "{http://www.w3.org/2000/svg}"
 PALETTE = {
-    "#28353A": "外轮廓", "#3E5058": "钢影", "#5B7078": "钢灰", "#788E94": "钢身",
+    "#28353A": "细窄阴影", "#3E5058": "钢影", "#5B7078": "深钢灰", "#788E94": "钢灰",
     "#A3B7B8": "钢亮面", "#D1DFDA": "钢高光", "#715035": "铜影", "#A87942": "铜色",
     "#D2A359": "黄铜亮面", "#F08A36": "入口橙", "#A94F27": "橙影",
     "#85CDE0": "排汽浅蓝", "#397E99": "蓝影", "#202A30": "暗孔",
+    "#74C6D088": "观察玻璃阴影", "#B7E5E888": "观察玻璃高光",
 }
 
 # 六件构建物品使用专属面纹；其余两张为机身端盖和轴承支座的复用贴片。
 PAINT = {
     "turbine_casing": [
-        "................", ".MMMMMMMMMMMMMM.", ".MCCCCMMMMCCCCM.", ".MccccMMMMccccM.",
-        ".MMMMMMMMMMMMMM.", ".MLLLLLLLLLLLLM.", ".MDDDDDDDDDDDMM.", ".MMMMMMMMMMMMMM.",
-        ".MMMMMMMMMMMMMM.", ".MDDDDDDDDDDDMM.", ".MLLLLLLLLLLLLM.", ".MMMMMMMMMMMMMM.",
-        ".MCCCCMMMMCCCCM.", ".MccccMMMMccccM.", ".MMMMMMMMMMMMMM.", "................",
+        "................", "..dddddddddddd..", ".dMMMMMMMMMMMMd.", ".dMLLLLMMMMMLLd.",
+        ".dMLLLLMMMMMLLd.", ".dMMMMMMMMMMMMd.", ".dMMMMMMMMMMMMd.", ".dMMMMMMCCMMMMd.",
+        ".dMMMMMMCCMMMMd.", ".dMMMMMMMMMMMMd.", ".dMMMMMMMMMMMMd.", ".dMLLLLMMMMMLLd.",
+        ".dMLLLLMMMMMLLd.", ".dMMMMMMMMMMMMd.", "..dddddddddddd..", "................",
     ],
     "turbine_rotor": [
-        "................", "....DDDDDD......", "...DLLLLLDD.....", "..DLLLLMLLLD....",
-        ".DLLLDDDDLLLD...", ".DLLD....DLLLD..", ".DLLD.MMMM.DLLD.", ".DLLD.MHHM.DLLD.",
-        ".DLLD.MHHM.DLLD.", ".DLLD.MMMM.DLLD.", ".DLLD....DLLLD..", ".DLLLDDDDLLLD...",
-        "..DLLLLMLLLD....", "...DLLLLLDD.....", "....DDDDDD......", "................",
+        "................", "....ddDDdd......", "...dDMLLLDd.....", "..dMLLLLMMMLd...",
+        ".dMLLLLddLLMLd..", ".dMLLd..dLLMLd..", "dMLLd.MMM.dLLMd.", "dMLLd.MLHM.dLLMd",
+        "dMLLd.MHLM.dLLMd", "dMLLd.MMM.dLLMd.", ".dMLLd..dLLMLd..", ".dMLLLLddLLMLd..",
+        "..dMLLLLMMMLd...", "...dDMLLLDd.....", "....ddDDdd......", "................",
     ],
     "turbine_controller": [
-        "................", ".MMMMMMMMMMMMMM.", ".MCCCCMMMMCCCCM.", ".MDDDDDDDDDDDMM.",
-        ".MDDDDDDDDDDDMM.", ".MDD...HHH...DMM", ".MDD..HLLLH..DMM", ".MDD..HLLLH..DMM",
-        ".MDD...HHH...DMM", ".MDDDDDDDDDDDMM.", ".MDD.LLL.LLL.DMM", ".MDD.LLL.LLL.DMM",
-        ".MDDDDDDDDDDDMM.", ".MCCCCMMMMCCCCM.", ".MMMMMMMMMMMMMM.", "................",
+        "................", "..dddddddddddd..", ".dMMMMMMMMMMMMd.", ".dMLLLLCCCCLLMd.",
+        ".dM..........Md.", ".dM...HHHHH..Md.", ".dM..HLLLLLH.Md.", ".dM..HLLLLLH.Md.",
+        ".dM..HLLLLLH.Md.", ".dM...HHHHH..Md.", ".dM...D...D..Md.", ".dM...D...D..Md.",
+        ".dMLLLLCCCCLLMd.", ".dMMMMMMMMMMMMd.", "..dddddddddddd..", "................",
     ],
     "turbine_output_shaft": [
         "................", ".......DD.......", "......DMLD......", "......DMLD......",
@@ -74,12 +75,43 @@ PAINT = {
         ".DMLDDDDDDMLD...", ".DMLLLLLLLLLMLD.", ".DMLCCCCCCCLMLD.", ".DMLcccccccLMLD.",
         ".DMLLLLLLLLLMLD.", "..DDDDDDDDDDDD..", "....MMMMMMMM....", "................",
     ],
+    "turbine_window": [
+        "................", "..CCCCCCCCCCCC..", ".CMMMMMMMMMMMMC.", ".CM..........MC.",
+        ".CM..GGGGGG..MC.", ".CM.GggggggG.MC.", ".CM.GggggggG.MC.", ".CM.GggggggG.MC.",
+        ".CM.GggggggG.MC.", ".CM..GGGGGG..MC.", ".CM..........MC.", ".CMMMMMMMMMMMMC.",
+        "..CCCCCCCCCCCC..", "................", "................", "................",
+    ],
+    "turbine_window_glass": [
+        "................", "................", "................", "....gggggggg....",
+        "....gGGGGGGg....", "....gGGGGGGg....", "....gGGGGGGg....", "....gGGGGGGg....",
+        "....gGGGGGGg....", "....gGGGGGGg....", "....gGGGGGGg....", "....gggggggg....",
+        "................", "................", "................", "................",
+    ],
+    "turbine_casing_panel": [
+        "mmmmmmmmmmmmmmmm", "mLLLLLLLLLLLLLLm", "mLMMMMMMMMMMMMmL", "mLMMMMMMMMMMMMmL",
+        "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm",
+        "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm",
+        "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm", "mddddddddddddddm", "mmmmmmmmmmmmmmmm",
+    ],
+    "turbine_rotor_blade": [
+        "mmmmmmmmmmmmmmmm", "mLLLLLLLLLLLLLLm", "mLMMMMMMMMMMMMmL", "mLMMMMMMMMMMMMmL",
+        "mLMMMMMMMMMMMMmL", "mLMMMMMMMMMMMMmL", "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm",
+        "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm", "mMMMMMMMMMMMMMMm", "mLMMMMMMMMMMMMmL",
+        "mLMMMMMMMMMMMMmL", "mLMMMMMMMMMMMMmL", "mddddddddddddddm", "mmmmmmmmmmmmmmmm",
+    ],
+    "turbine_rotor_metal": [
+        "MMMMMMMMMMMMMMMM", "MMLLLLLLLLLLLLMM", "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM",
+        "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM",
+        "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM",
+        "MLMMMMMMMMMMMMMM", "MLMMMMMMMMMMMMMM", "MMdddddddddddddM", "MMMMMMMMMMMMMMMM",
+    ],
 }
 
 INK = {
     ".": None, "D": "#28353A", "d": "#3E5058", "M": "#5B7078", "m": "#788E94",
     "L": "#A3B7B8", "H": "#D1DFDA", "C": "#A87942", "c": "#715035",
     "O": "#F08A36", "o": "#A94F27", "B": "#85CDE0", "b": "#397E99",
+    "G": "#74C6D088", "g": "#B7E5E888",
 }
 
 
@@ -128,10 +160,12 @@ def render_svg(path: Path) -> Image.Image:
         color = node.get("fill", "").upper()
         if color not in PALETTE or x < 0 or y < 0 or width < 1 or height < 1 or x + width > 16 or y + height > 16:
             raise ValueError(f"{path.name}: 像素越界或颜色不在汽轮机色板中")
-        rgb = tuple(int(color[i:i + 2], 16) for i in (1, 3, 5)) + (255,)
+        rgba = tuple(int(color[i:i + 2], 16) for i in (1, 3, 5))
+        alpha = int(color[7:9], 16) if len(color) == 9 else 255
+        rgba += (alpha,)
         for py in range(y, y + height):
             for px in range(x, x + width):
-                pixels[px, py] = rgb
+                pixels[px, py] = rgba
     if not list(root):
         raise ValueError(f"{path.name}: 源稿为空")
     return image
@@ -147,59 +181,45 @@ def octagon(draw: ImageDraw.ImageDraw, x: int, y: int, width: int, height: int, 
 
 
 def preview(images: dict[str, Image.Image]) -> Image.Image:
-    """生成纹理样张与5/8/11节机身比例草图的离线总览。"""
-    canvas = Image.new("RGBA", (1180, 930), "#17212A")
+    """生成独立纹理样张；真实机身外观由同源OBJ预览器绘制。"""
+    canvas = Image.new("RGBA", (1180, 420), "#17212A")
     draw = ImageDraw.Draw(canvas)
     font = ImageFont.load_default(size=17)
     small = ImageFont.load_default(size=13)
-    draw.text((28, 22), "EXT-B-TURBINE-ASSETS-01 / OFFLINE ART PREVIEW", font=font, fill="#E3ECE8")
-    draw.text((28, 52), "SVG texture candidates; turbine views below are schematic proportions, not final Minecraft models", font=small, fill="#A6B9C2")
+    draw.text((28, 22), "EXT-B-TURBINE-01B / PIXEL MATERIAL SHEET", font=font, fill="#E3ECE8")
+    draw.text((28, 52), "16x16 RGBA textures from editable SVG sources; machine geometry is shown in the true-mesh preview.", font=small, fill="#A6B9C2")
 
     names = list(images)
     for index, name in enumerate(names):
-        col, row = index % 4, index // 4
-        x, y = 28 + col * 285, 92 + row * 112
+        col, row = index % 5, index // 5
+        x, y = 28 + col * 224, 96 + row * 108
         draw.rectangle((x, y, x + 74, y + 74), fill="#34414A", outline="#6A7B82")
         tile = images[name].resize((64, 64), Image.Resampling.NEAREST)
         canvas.alpha_composite(tile, (x + 5, y + 5))
         draw.text((x + 86, y + 18), name, font=small, fill="#E3ECE8")
         draw.text((x + 86, y + 42), "16x16 RGBA / SVG", font=small, fill="#A6B9C2")
 
-    # 以长度为唯一变化项，端盖、支座、铜箍和箭头遵循已批准外观方案。
-    colors = {"steel": "#788E94", "shadow": "#3E5058", "light": "#A3B7B8", "brass": "#D2A359",
-              "dark": "#28353A", "orange": "#F08A36", "blue": "#85CDE0"}
-    for row, length in enumerate((5, 8, 11)):
-        x0, y0 = 82, 360 + row * 175
-        seg_w, body_h = 72, 76
-        body_x, body_y, body_w = x0 + 96, y0 + 18, length * seg_w
-        draw.text((28, y0 + 39), f"{length - 2} rotors / L={length}", font=font, fill="#E3ECE8")
-        # 八棱筒体侧面分段，重复节段表达配置长度可扩展。
-        draw.rectangle((body_x, body_y, body_x + body_w, body_y + body_h), fill=colors["steel"], outline=colors["dark"], width=4)
-        draw.polygon([(body_x, body_y + 10), (body_x + 20, body_y - 8),
-                      (body_x + body_w - 20, body_y - 8), (body_x + body_w, body_y + 10),
-                      (body_x + body_w - 9, body_y + 24), (body_x + 9, body_y + 24)],
-                     fill=colors["light"], outline=colors["dark"])
-        draw.rectangle((body_x + 10, body_y + 27, body_x + body_w - 10, body_y + 44), fill=colors["shadow"])
-        draw.rectangle((body_x + 10, body_y + 47, body_x + body_w - 10, body_y + 57), fill=colors["steel"])
-        for i in range(1, length):
-            seam = body_x + i * seg_w
-            draw.rectangle((seam - 3, body_y + 1, seam + 3, body_y + body_h - 1), fill=colors["brass"])
-        # 两端端盖与支座在各长度保持相同截面。
-        octagon(draw, body_x - 25, body_y - 2, 34, body_h + 4, colors["steel"], colors["dark"])
-        octagon(draw, body_x + body_w - 9, body_y - 2, 34, body_h + 4, colors["steel"], colors["dark"])
-        for support_x in (body_x + 34, body_x + body_w - 44):
-            draw.rectangle((support_x, body_y + body_h, support_x + 12, body_y + body_h + 19), fill=colors["shadow"])
-            draw.rectangle((support_x - 10, body_y + body_h + 18, support_x + 22, body_y + body_h + 24), fill=colors["brass"])
-        draw.polygon([(body_x + 53, body_y + 36), (body_x + 33, body_y + 29),
-                      (body_x + 33, body_y + 33), (body_x + 19, body_y + 33),
-                      (body_x + 19, body_y + 40), (body_x + 33, body_y + 40),
-                      (body_x + 33, body_y + 44)], fill=colors["orange"])
-        out_x = body_x + body_w - 64
-        draw.polygon([(out_x + 45, body_y + 34), (out_x + 25, body_y + 27),
-                      (out_x + 25, body_y + 31), (out_x + 11, body_y + 31),
-                      (out_x + 11, body_y + 38), (out_x + 25, body_y + 38),
-                      (out_x + 25, body_y + 42)], fill=colors["blue"])
-    draw.text((28, 894), "No part boundaries, UVs, collision, or blockstates are defined; final models wait for C's frozen interface.", font=small, fill="#A6B9C2")
+    return canvas
+
+
+def preview_nine_textures() -> Image.Image:
+    """把机身、金属、窗口和端口九种关键像素纹理排成单页色板。"""
+    selected = ("turbine_casing", "turbine_casing_panel", "turbine_casing_endcap",
+                "turbine_rotor_blade", "turbine_rotor_metal", "turbine_window",
+                "turbine_window_glass", "turbine_controller", "turbine_output_shaft")
+    canvas = Image.new("RGBA", (1180, 460), "#17212A")
+    draw = ImageDraw.Draw(canvas)
+    title = ImageFont.load_default(size=20)
+    label = ImageFont.load_default(size=16)
+    draw.text((28, 20), "EXT-B-TURBINE-01B / NINE PIXEL TEXTURES", font=title, fill="#E3ECE8")
+    for index, name in enumerate(selected):
+        col, row = index % 3, index // 3
+        x, y = 34 + col * 382, 66 + row * 128
+        draw.rectangle((x, y, x + 86, y + 86), fill="#34414A", outline="#6A7B82")
+        source = Image.open(TEXTURE_DIR / f"{name}.png").convert("RGBA")
+        canvas.alpha_composite(source.resize((80, 80), Image.Resampling.NEAREST), (x + 3, y + 3))
+        draw.text((x + 98, y + 28), name, font=label, fill="#E3ECE8")
+        draw.text((x + 98, y + 52), "16x16 RGBA / SVG", font=label, fill="#A6B9C2")
     return canvas
 
 
@@ -213,27 +233,25 @@ def main() -> None:
     if set(images) != set(PAINT):
         raise ValueError("汽轮机SVG源稿集合必须与导出白名单完全一致")
     EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
-    sheet = preview(images)
-    preview_path = EVIDENCE_DIR / "turbine-assets-preview.png"
-    sheet.save(preview_path, format="PNG", optimize=False)
-    for name, image in images.items():
-        image.save(EVIDENCE_DIR / f"{name}.png", format="PNG", optimize=False)
     if args.install:
         TEXTURE_DIR.mkdir(parents=True, exist_ok=True)
         for name, image in images.items():
             target = TEXTURE_DIR / f"{name}.png"
             image.save(target, format="PNG", optimize=False)
+    texture_board = preview_nine_textures()
+    texture_board_path = EVIDENCE_DIR / "turbine-01b-texture-sheet-3x3.png"
+    texture_board.save(texture_board_path, format="PNG", optimize=False)
     (EVIDENCE_DIR / "asset-preview.json").write_text(json.dumps({
         "status": "preview-only" if not args.install else "textures-installed",
         "sources_created": created,
         "source_count": len(images),
         "texture_size": "16x16 RGBA",
-        "preview": preview_path.relative_to(REPO).as_posix(),
+        "preview": texture_board_path.relative_to(REPO).as_posix(),
         "runtime_texture_dir": TEXTURE_DIR.relative_to(REPO).as_posix(),
         "textures_installed": bool(args.install),
-        "note": "三档比例为方案示意；最终模型与blockstate等待C冻结接口。",
+        "note": "01B网格与状态接口已冻结；纹理图板取自九张运行时PNG，几何预览见turbine-assets-preview.png。",
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"PASS: {len(images)} SVG textures validated; preview={preview_path.relative_to(REPO)}; install={args.install}")
+    print(f"PASS: {len(images)} SVG textures validated; texture_sheet={texture_board_path.relative_to(REPO)}; install={args.install}")
     if created:
         print("Initialized missing sources: " + ", ".join(created))
 

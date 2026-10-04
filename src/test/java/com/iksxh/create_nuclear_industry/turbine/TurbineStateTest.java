@@ -46,8 +46,8 @@ final class TurbineStateTest {
         assertEquals(0, state.totalSu());
 
         var tiny = new TurbineState();
-        var settings = smallSettings(new TurbineState.Tier(1, 1, 10, 10), 40);
-        tiny.applySettings(settings, 1, 256);
+        var settings = smallSettings(new TurbineState.Tier(3, 1, 10, 10), 40);
+        tiny.applySettings(settings, 3, 256);
         tiny.fillInput(INLET_A, 1, false, 0);
         assertEquals(1, tiny.tick(0, true));
         for (int tick = 1; tick < 40; tick++) {
@@ -60,7 +60,7 @@ final class TurbineStateTest {
 
     @Test void fullExhaustBlocksConversionWithoutConsumingInput() {
         var state = new TurbineState();
-        state.applySettings(smallSettings(new TurbineState.Tier(1, 3, 10, 3), 4), 1, 256);
+        state.applySettings(smallSettings(new TurbineState.Tier(3, 3, 10, 3), 4), 3, 256);
         assertEquals(10, state.fillInput(INLET_A, 10, false, 0));
         assertEquals(3, state.tick(0, true));
         assertEquals(0, state.tick(1, true));
@@ -73,12 +73,12 @@ final class TurbineStateTest {
     }
 
     @Test void tankSmallerThanRatedFlowStillProcessesAvailableVolume() {
-        var tier = new TurbineState.Tier(1, 10, 3, 2);
+        var tier = new TurbineState.Tier(3, 10, 3, 2);
         var settings = smallSettings(tier, 4);
         assertTrue(settings.valid(256));
         var state = new TurbineState();
-        state.applySettings(settings, 1, 256);
-        assertTrue(state.canFormForNewTier(1));
+        state.applySettings(settings, 3, 256);
+        assertTrue(state.canFormForNewTier(3));
         assertEquals(3, state.fillInput(INLET_A, 10, false, 0));
         assertEquals(2, state.tick(0, true));
         assertEquals(1, state.input());
@@ -117,9 +117,9 @@ final class TurbineStateTest {
         saved.putInt("Input", 100);
         saved.putInt("Exhaust", 200);
         state.load(saved);
-        var lower = smallSettings(new TurbineState.Tier(1, 10, 50, 100), 40);
-        state.applySettings(lower, 1, 256);
-        assertFalse(state.canFormForNewTier(1));
+        var lower = smallSettings(new TurbineState.Tier(3, 10, 50, 100), 40);
+        state.applySettings(lower, 3, 256);
+        assertFalse(state.canFormForNewTier(3));
         assertEquals(100, state.input());
         assertEquals(200, state.exhaust());
         assertEquals(0, state.fillInput(INLET_A, 1, false, 0));
@@ -129,7 +129,7 @@ final class TurbineStateTest {
         assertEquals(90, state.input());
         assertEquals(90, state.exhaust());
         var restored = new TurbineState();
-        restored.applySettings(lower, 1, 256);
+        restored.applySettings(lower, 3, 256);
         restored.load(state.save());
         assertEquals(90, restored.input());
         assertEquals(90, restored.exhaust());
@@ -138,7 +138,7 @@ final class TurbineStateTest {
 
     @Test void stopAndTimeJumpClearHistoryWithoutMakingOfflinePower() {
         var state = new TurbineState();
-        state.applySettings(smallSettings(new TurbineState.Tier(1, 1, 10, 10), 4), 1, 256);
+        state.applySettings(smallSettings(new TurbineState.Tier(3, 1, 10, 10), 4), 3, 256);
         state.fillInput(INLET_A, 2, false, 1);
         state.tick(1, true);
         assertTrue(state.totalSu() > 0);
@@ -180,13 +180,13 @@ final class TurbineStateTest {
     }
 
     @Test void portableRestoreCannotProcessTwiceInSameWorldTick() {
-        var settings = smallSettings(new TurbineState.Tier(1, 1, 10, 10), 4);
+        var settings = smallSettings(new TurbineState.Tier(3, 1, 10, 10), 4);
         var first = new TurbineState();
-        first.applySettings(settings, 1, 256);
+        first.applySettings(settings, 3, 256);
         assertEquals(2, first.fillInput(INLET_A, 2, false, 7));
         assertEquals(1, first.tick(7, true));
         var restored = new TurbineState();
-        restored.applySettings(settings, 1, 256);
+        restored.applySettings(settings, 3, 256);
         restored.load(first.save());
         assertEquals(0, restored.totalSu());
         assertEquals(0, restored.tick(7, true));
@@ -198,7 +198,7 @@ final class TurbineStateTest {
     }
 
     private static TurbineState.Settings smallSettings(TurbineState.Tier tier, int window) {
-        return new TurbineState.Settings(tier, new TurbineState.Tier(2, 2, 10, 10),
-                new TurbineState.Tier(3, 3, 10, 10), 128, 32768, window, 256, 256, .5);
+        return new TurbineState.Settings(tier, new TurbineState.Tier(4, 2, 10, 10),
+                new TurbineState.Tier(5, 3, 10, 10), 128, 32768, window, 256, 256, .5);
     }
 }

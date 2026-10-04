@@ -1,42 +1,122 @@
 {
   "variants": {
-    "formed=false,machine_facing=north": {
+    "diameter=d3,formed=false,machine_facing=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
       "y": 0,
       "uvlock": true
     },
-    "formed=false,machine_facing=east": {
+    "diameter=d5,formed=false,machine_facing=north": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "diameter=d7,formed=false,machine_facing=north": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "diameter=d3,formed=false,machine_facing=east": {
       "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
       "y": 90,
       "uvlock": true
     },
-    "formed=false,machine_facing=south": {
+    "diameter=d5,formed=false,machine_facing=east": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "diameter=d7,formed=false,machine_facing=east": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "diameter=d3,formed=false,machine_facing=south": {
       "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
       "y": 180,
       "uvlock": true
     },
-    "formed=false,machine_facing=west": {
+    "diameter=d5,formed=false,machine_facing=south": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "diameter=d7,formed=false,machine_facing=south": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "diameter=d3,formed=false,machine_facing=west": {
       "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
       "y": 270,
       "uvlock": true
     },
-    "formed=true,machine_facing=north": {
-      "model": "create_nuclear_industry:block/turbine/rotor_middle",
+    "diameter=d5,formed=false,machine_facing=west": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "diameter=d7,formed=false,machine_facing=west": {
+      "model": "create_nuclear_industry:block/turbine/turbine_rotor_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "diameter=d3,formed=true,machine_facing=north": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
       "y": 0,
       "uvlock": true
     },
-    "formed=true,machine_facing=east": {
-      "model": "create_nuclear_industry:block/turbine/rotor_middle",
+    "diameter=d5,formed=true,machine_facing=north": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 0,
+      "uvlock": true
+    },
+    "diameter=d7,formed=true,machine_facing=north": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 0,
+      "uvlock": true
+    },
+    "diameter=d3,formed=true,machine_facing=east": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
       "y": 90,
       "uvlock": true
     },
-    "formed=true,machine_facing=south": {
-      "model": "create_nuclear_industry:block/turbine/rotor_middle",
+    "diameter=d5,formed=true,machine_facing=east": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 90,
+      "uvlock": true
+    },
+    "diameter=d7,formed=true,machine_facing=east": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 90,
+      "uvlock": true
+    },
+    "diameter=d3,formed=true,machine_facing=south": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
       "y": 180,
       "uvlock": true
     },
-    "formed=true,machine_facing=west": {
-      "model": "create_nuclear_industry:block/turbine/rotor_middle",
+    "diameter=d5,formed=true,machine_facing=south": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 180,
+      "uvlock": true
+    },
+    "diameter=d7,formed=true,machine_facing=south": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 180,
+      "uvlock": true
+    },
+    "diameter=d3,formed=true,machine_facing=west": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 270,
+      "uvlock": true
+    },
+    "diameter=d5,formed=true,machine_facing=west": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
+      "y": 270,
+      "uvlock": true
+    },
+    "diameter=d7,formed=true,machine_facing=west": {
+      "model": "create_nuclear_industry:block/turbine/rotor_axle",
       "y": 270,
       "uvlock": true
     }

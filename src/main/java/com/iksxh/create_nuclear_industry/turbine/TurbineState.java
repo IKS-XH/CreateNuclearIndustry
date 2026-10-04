@@ -11,11 +11,18 @@ import net.minecraft.nbt.Tag;
  * 不持有世界或 Create 网络；结构、红石及区块有效性由控制器作为 tick 的运行许可传入。
  */
 public final class TurbineState {
-    /** 一个合法档位的轴向长度恒为转子数加两端面，双库存和额定流量由配置给出。 */
-    public record Tier(int rotorCount, int ratedFlowMbPerTick, int inputCapacityMb, int exhaustCapacityMb) {
+    /** 一个合法档位的长度为转子数加两端面，直径限定已建模的三种奇数规格。 */
+    public record Tier(int rotorCount, int ratedFlowMbPerTick, int inputCapacityMb, int exhaustCapacityMb,
+                       int diameter) {
+        /** 旧测试及调用入口的四参数兼容构造；正式配置始终传入独立直径键。 */
+        public Tier(int rotorCount, int ratedFlowMbPerTick, int inputCapacityMb, int exhaustCapacityMb) {
+            this(rotorCount, ratedFlowMbPerTick, inputCapacityMb, exhaustCapacityMb,
+                    rotorCount == 6 ? 5 : rotorCount == 9 ? 7 : 3);
+        }
         public int length() { return rotorCount + 2; }
         public boolean valid() {
-            return rotorCount >= 1 && rotorCount <= 16 && ratedFlowMbPerTick >= 1
+            return rotorCount >= 3 && rotorCount <= 16 && TurbineGeometry.supportedDiameter(diameter)
+                    && ratedFlowMbPerTick >= 1
                     && ratedFlowMbPerTick <= 10_000 && inputCapacityMb >= 1 && inputCapacityMb <= 1_000_000
                     && exhaustCapacityMb >= 1 && exhaustCapacityMb <= 1_000_000;
         }
@@ -28,9 +35,9 @@ public final class TurbineState {
     public record Settings(Tier shortTier, Tier mediumTier, Tier longTier, int rpm,
                            double suPerMbPerTick, int smoothingTicks, int inletPortFlowMbPerTick,
                            int exhaustPortFlowMbPerTick, double frontShare) {
-        public static final Settings DEFAULT = new Settings(new Tier(3, 54, 4000, 4000),
-                new Tier(6, 108, 8000, 8000), new Tier(9, 162, 12000, 12000),
-                128, 32768, 40, 256, 256, .5);
+        public static final Settings DEFAULT = new Settings(new Tier(3, 54, 4000, 4000, 3),
+                new Tier(6, 108, 8000, 8000, 5), new Tier(9, 162, 12000, 12000, 7),
+                256, 32768, 40, 256, 256, .5);
 
         public Tier tierForRotors(int rotorCount) {
             if (shortTier != null && shortTier.rotorCount() == rotorCount) return shortTier;
@@ -85,7 +92,7 @@ public final class TurbineState {
         if (settings.smoothingTicks() != next.smoothingTicks()
                 || Double.compare(settings.suPerMbPerTick(), next.suPerMbPerTick()) != 0
                 || settings.rpm() != next.rpm() || tier == null || nextTier == null
-                || tier.rotorCount() != nextTier.rotorCount()
+                || tier.rotorCount() != nextTier.rotorCount() || tier.diameter() != nextTier.diameter()
                 || tier.ratedFlowMbPerTick() != nextTier.ratedFlowMbPerTick()
                 || !next.valid(currentCreateMaxRpm)) {
             history = new int[Math.clamp(next.smoothingTicks(), 1, 1200)];

@@ -1,8 +1,8 @@
 package com.iksxh.create_nuclear_industry.turbine;
 
 import com.iksxh.create_nuclear_industry.content.TurbineContent;
-import java.util.ArrayList;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,15 +18,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * 从前端控制器扫描完整的 3×3×L 水平机组。读取前先检查区块可 tick，绝不为核验加载区块。
- * 返回的坐标均为世界坐标；局部 x 向右、z 从前端向后端、y 以轴心为 1。
+ * 从侧控制器定位三档水平八棱机组。局部 +x 为机器面向的顺时针侧，+y 向上，
+ * +z 从前轴到后轴；读取每格前先确认区块可 tick，核验绝不主动加载区块。
  */
 public final class TurbineStructure {
-    private static final Map<Level, Map<BlockPos, WeakReference<TurbineControllerBlockEntity>>> OWNERS = new WeakHashMap<>();
-    public record Form(Direction facing, int rotors, BlockPos rear, List<BlockPos> parts,
-                       List<BlockPos> inlets, List<BlockPos> exhausts) {
+    private static final Map<Level, Map<BlockPos, WeakReference<TurbineControllerBlockEntity>>> OWNERS =
+            new WeakHashMap<>();
+
+    public record Form(Direction facing, int rotors, int diameter, BlockPos front, BlockPos rear,
+                       BlockPos controller, List<BlockPos> parts, List<BlockPos> inlets,
+                       List<BlockPos> exhausts, List<BlockPos> chunkSamples) {
         public int length() { return rotors + 2; }
-        public BlockPos front() { return rear.relative(facing, length() - 1); }
         public boolean contains(BlockPos pos) { return parts.contains(pos); }
     }
     public record Issue(String reason, BlockPos pos) {}
@@ -34,7 +36,7 @@ public final class TurbineStructure {
     private TurbineStructure() {}
 
     public static BlockPos at(BlockPos front, Direction facing, int x, int y, int z) {
-        return front.relative(facing.getClockWise(), x).above(y - 1).relative(facing.getOpposite(), z);
+        return front.relative(facing.getClockWise(), x).above(y).relative(facing.getOpposite(), z);
     }
 
     public static boolean ticking(Level level, BlockPos pos) {
@@ -45,71 +47,141 @@ public final class TurbineStructure {
                 && server.getWorldBorder().isWithinBounds(pos);
     }
 
-    /** 三档由当前配置决定；非配置长度和超容量换档均安全拒绝。 */
-    public static Form inspect(Level level, BlockPos front, TurbineState.Settings settings) {
-        return diagnose(level, front, settings).form();
+    public static Form inspect(Level level, BlockPos controller, TurbineState.Settings settings) {
+        return diagnose(level, controller, settings).form();
     }
 
-    public static Issue issue(Level level, BlockPos front, TurbineState.Settings settings) {
-        return diagnose(level, front, settings).issue();
+    public static Issue issue(Level level, BlockPos controller, TurbineState.Settings settings) {
+        return diagnose(level, controller, settings).issue();
     }
 
-    private static Result diagnose(Level level, BlockPos front, TurbineState.Settings settings) {
-        if (!ticking(level, front)) return new Result(null, new Issue("chunk", front));
-        BlockState controller = level.getBlockState(front);
-        if (!controller.is(TurbineContent.CONTROLLER.get())) return new Result(null, new Issue("controller", front));
-        Direction facing = controller.getValue(TurbinePartBlock.MACHINE_FACING);
+    private static Result diagnose(Level level, BlockPos controller, TurbineState.Settings settings) {
+        if (!ticking(level, controller)) return new Result(null, new Issue("chunk", controller));
+        BlockState state = level.getBlockState(controller);
+        if (!state.is(TurbineContent.CONTROLLER.get()))
+            return new Result(null, new Issue("controller", controller));
+        Direction facing = state.getValue(TurbinePartBlock.MACHINE_FACING);
+        TurbinePartBlock.Side side = state.getValue(TurbinePartBlock.SIDE);
         Issue first = null;
-        for (TurbineState.Tier tier : new TurbineState.Tier[]{settings.shortTier(), settings.mediumTier(), settings.longTier()}) {
+        for (TurbineState.Tier tier : new TurbineState.Tier[]{settings.shortTier(),
+                settings.mediumTier(), settings.longTier()}) {
             if (tier == null || !tier.valid()) continue;
-            Result candidate = scan(level, front, facing, tier.rotorCount());
-            if (candidate.form() != null) return candidate;
-            if (first == null || "length".equals(first.reason())) first = candidate.issue();
+            int length = tier.length(), radius = (tier.diameter() - 1) / 2;
+            int x = side.x(radius), y = side.y(radius);
+            for (int z : middleRows(length)) {
+                BlockPos front = controller.relative(facing.getClockWise(), -x)
+                        .below(y).relative(facing, z);
+                Result candidate = scan(level, controller, front, facing, tier);
+                if (candidate.form() != null) return candidate;
+                if (first == null || "length".equals(first.reason())) first = candidate.issue();
+            }
         }
-        return new Result(null, first == null ? new Issue("length", front) : first);
+        return new Result(null, first == null ? new Issue("length", controller) : first);
     }
 
-    private static Result scan(Level level, BlockPos front, Direction facing, int rotors) {
-        int length = rotors + 2;
-        List<BlockPos> parts = new ArrayList<>(length * 9);
-        List<BlockPos> inlets = new ArrayList<>();
-        List<BlockPos> exhausts = new ArrayList<>();
-        for (int z = 0; z < length; z++) for (int y = 0; y <= 2; y++) for (int x = -1; x <= 1; x++) {
-            BlockPos pos = at(front, facing, x, y, z);
-            if (!ticking(level, pos)) return new Result(null, new Issue("chunk", pos));
-            BlockState state = level.getBlockState(pos);
-            if (x == 0 && y == 1) {
-                if (!state.is(z == 0 ? TurbineContent.CONTROLLER.get()
-                        : z == length - 1 ? TurbineContent.OUTPUT_SHAFT.get() : TurbineContent.ROTOR.get()))
-                    return new Result(null, new Issue(z == length - 1 && state.is(TurbineContent.ROTOR.get())
-                            || z > 0 && z < length - 1 && state.is(TurbineContent.OUTPUT_SHAFT.get())
-                            ? "length" : "axis", pos));
-                if (z == 0 && state.getValue(TurbinePartBlock.MACHINE_FACING) != facing)
-                    return new Result(null, new Issue("facing", pos));
-            } else if (state.is(TurbineContent.CASING.get())) {
-                // 端部及中段的八个环格皆可为壳；端口不能替换角位或底座。
-            } else if (z > 0 && z < length - 1 && portSlot(x, y)
-                    && (state.is(TurbineContent.INLET.get()) || state.is(TurbineContent.EXHAUST.get()))) {
-                // 玩家可从任意合法面放置端口；成型时按实际格位自动写入唯一外法线。
-                (state.is(TurbineContent.INLET.get()) ? inlets : exhausts).add(pos.immutable());
-            } else return new Result(null, new Issue(z == 0 || z == length - 1 ? "end" : "ring", pos));
-            // formed 仅为持久化外观提示；旧控制器拆除后不能把其残留标志当作归属证据。
-            parts.add(pos.immutable());
-        }
-        if (inlets.isEmpty()) return new Result(null, new Issue("inlet", front));
-        if (exhausts.isEmpty()) return new Result(null, new Issue("exhaust", front));
-        BlockPos rear = at(front, facing, 0, 1, length - 1);
-        // 更长的转子串不能以较短档误认：后轴必须确实占据本档末端。
-        return new Result(new Form(facing, rotors, rear, List.copyOf(parts), List.copyOf(inlets), List.copyOf(exhausts)), null);
+    public static int[] middleRows(int length) {
+        return length % 2 == 0 ? new int[]{length / 2 - 1, length / 2}
+                : new int[]{length / 2};
     }
 
-    private static boolean portSlot(int x, int y) { return (y == 1 && x != 0) || (y == 2 && x == 0); }
+    private static Result scan(Level level, BlockPos controller, BlockPos front, Direction facing,
+                               TurbineState.Tier tier) {
+        int length = tier.length(), diameter = tier.diameter();
+        int radius = (diameter - 1) / 2;
+        List<BlockPos> parts = new ArrayList<>(length * diameter * diameter);
+        List<BlockPos> inlets = new ArrayList<>(), exhausts = new ArrayList<>();
+        List<BlockPos> chunkSamples = new ArrayList<>();
+        Set<Long> seenChunks = new HashSet<>();
+        int controllers = 0;
+        for (int z = 0; z < length; z++) for (int y = -radius; y <= radius; y++)
+            for (int x = -radius; x <= radius; x++) {
+                if (!TurbineGeometry.footprint(diameter, x, y)) continue;
+                BlockPos pos = at(front, facing, x, y, z);
+                if (!ticking(level, pos)) return new Result(null, new Issue("chunk", pos));
+                if (seenChunks.add(ChunkPos.asLong(pos))) chunkSamples.add(pos.immutable());
+                BlockState state = level.getBlockState(pos);
+                if (z == 0 || z == length - 1) {
+                    if (x == 0 && y == 0) {
+                        if (!state.is(TurbineContent.OUTPUT_SHAFT.get()))
+                            return new Result(null, new Issue("axis", pos));
+                    } else if (!state.is(TurbineContent.CASING.get()))
+                        return new Result(null, new Issue("end", pos));
+                } else if (x == 0 && y == 0) {
+                    if (!state.is(TurbineContent.ROTOR.get()))
+                        return new Result(null, new Issue("axis", pos));
+                } else if (TurbineGeometry.airSlot(diameter, x, y)) {
+                    if (!state.isAir()) return new Result(null, new Issue("cavity", pos));
+                    continue;
+                } else if (state.is(TurbineContent.CONTROLLER.get())) {
+                    if (!middleRow(length, z) || !TurbineGeometry.sideSlot(diameter, x, y)
+                            || !pos.equals(controller)) return new Result(null, new Issue("controller", pos));
+                    controllers++;
+                } else if (state.is(TurbineContent.INLET.get()) || state.is(TurbineContent.EXHAUST.get())) {
+                    if (!TurbineGeometry.sideSlot(diameter, x, y))
+                        return new Result(null, new Issue("port", pos));
+                    if (state.is(TurbineContent.INLET.get())) {
+                        if (!middleRow(length, z)) return new Result(null, new Issue("inlet_position", pos));
+                        inlets.add(pos.immutable());
+                    } else {
+                        if (z != 1 && z != length - 2)
+                            return new Result(null, new Issue("exhaust_position", pos));
+                        exhausts.add(pos.immutable());
+                    }
+                } else if (state.is(TurbineContent.WINDOW.get())) {
+                    if (!TurbineGeometry.windowSlot(diameter, x, y))
+                        return new Result(null, new Issue("window", pos));
+                } else if (!state.is(TurbineContent.CASING.get()))
+                    return new Result(null, new Issue("ring", pos));
+                parts.add(pos.immutable());
+            }
+        if (controllers != 1) return new Result(null, new Issue("controller", controller));
+        if (inlets.isEmpty()) return new Result(null, new Issue("inlet", controller));
+        if (exhausts.isEmpty()) return new Result(null, new Issue("exhaust", controller));
+        BlockPos rear = at(front, facing, 0, 0, length - 1);
+        return new Result(new Form(facing, tier.rotorCount(), diameter, front.immutable(),
+                rear.immutable(), controller.immutable(), List.copyOf(parts), List.copyOf(inlets),
+                List.copyOf(exhausts), List.copyOf(chunkSamples)), null);
+    }
+
+    /**
+     * 已成型运行路径只检查少量实际区块票据、轴/口身份与内腔空气，不重试三档全体积扫描。
+     * 构件移除/放置由事件使 owner 失效；空腔仍逐 tick 自检以覆盖流体等非玩家变更。
+     */
+    public static boolean quickLive(Level level, Form form) {
+        for (BlockPos sample : form.chunkSamples()) if (!ticking(level, sample)) return false;
+        BlockState front = level.getBlockState(form.front());
+        BlockState rear = level.getBlockState(form.rear());
+        if (!level.getBlockState(form.controller()).is(TurbineContent.CONTROLLER.get())
+                || !front.is(TurbineContent.OUTPUT_SHAFT.get())
+                || !rear.is(TurbineContent.OUTPUT_SHAFT.get())
+                || front.getValue(TurbinePartBlock.MACHINE_FACING) != form.facing()
+                || rear.getValue(TurbinePartBlock.MACHINE_FACING) != form.facing()
+                || front.getValue(TurbineShaftBlock.END) != TurbineShaftBlock.End.FRONT
+                || rear.getValue(TurbineShaftBlock.END) != TurbineShaftBlock.End.REAR) return false;
+        for (BlockPos inlet : form.inlets()) if (!level.getBlockState(inlet).is(TurbineContent.INLET.get()))
+            return false;
+        for (BlockPos exhaust : form.exhausts()) if (!level.getBlockState(exhaust).is(TurbineContent.EXHAUST.get()))
+            return false;
+        int radius = (form.diameter() - 1) / 2;
+        for (int z = 1; z < form.length() - 1; z++)
+            for (int y = -radius; y <= radius; y++) for (int x = -radius; x <= radius; x++) {
+                if (!TurbineGeometry.airSlot(form.diameter(), x, y)) continue;
+                BlockPos pos = at(form.front(), form.facing(), x, y, z);
+                if (!level.getBlockState(pos).isAir()) return false;
+            }
+        return true;
+    }
+
+    private static boolean middleRow(int length, int z) {
+        return z == length / 2 || length % 2 == 0 && z == length / 2 - 1;
+    }
 
     public static Direction outward(Direction facing, int x, int y) {
-        return y == 2 ? Direction.UP : x < 0 ? facing.getCounterClockWise() : facing.getClockWise();
+        return y > 0 ? Direction.UP : y < 0 ? Direction.DOWN
+                : x < 0 ? facing.getCounterClockWise() : facing.getClockWise();
     }
 
-    /** 仅已加载、仍能重新核验完整结构的 owner 才可占有构件；弱引用不延长世界生命周期。 */
+    /** 重叠核验只比较活机组的坐标集合，不额外扫描世界或加载区块。 */
     public static boolean unique(Level level, TurbineControllerBlockEntity proposed, Form form) {
         Map<BlockPos, WeakReference<TurbineControllerBlockEntity>> entries = OWNERS.get(level);
         if (entries == null) return true;
@@ -118,24 +190,12 @@ public final class TurbineStructure {
         for (WeakReference<TurbineControllerBlockEntity> reference : entries.values()) {
             TurbineControllerBlockEntity other = reference.get();
             if (other == null || other == proposed) continue;
-            // 世界中远处机器只看纯坐标包围盒，不触发其结构扫描或区块读取。
-            Form old = other.currentForm();
-            if (old == null || !boxesIntersect(form, old)) continue;
             Form claimed = other.claimedForm();
             if (claimed == null) continue;
             if (parts == null) parts = new HashSet<>(form.parts());
             for (BlockPos part : claimed.parts()) if (parts.contains(part)) return false;
         }
         return true;
-    }
-
-    private static boolean boxesIntersect(Form a, Form b) {
-        BlockPos af = a.front(), bf = b.front();
-        return Math.max(Math.min(af.getX(), a.rear().getX()) - 1, Math.min(bf.getX(), b.rear().getX()) - 1)
-                <= Math.min(Math.max(af.getX(), a.rear().getX()) + 1, Math.max(bf.getX(), b.rear().getX()) + 1)
-                && Math.max(af.getY() - 1, bf.getY() - 1) <= Math.min(af.getY() + 1, bf.getY() + 1)
-                && Math.max(Math.min(af.getZ(), a.rear().getZ()) - 1, Math.min(bf.getZ(), b.rear().getZ()) - 1)
-                <= Math.min(Math.max(af.getZ(), a.rear().getZ()) + 1, Math.max(bf.getZ(), b.rear().getZ()) + 1);
     }
 
     public static void claim(Level level, TurbineControllerBlockEntity owner) {
@@ -149,42 +209,46 @@ public final class TurbineStructure {
                 || entry.getValue().get() == owner);
     }
 
-    public static TurbinePartBlock.RingRole ringRole(int x, int y) {
-        if (y == 2) return x < 0 ? TurbinePartBlock.RingRole.UPPER_LEFT
-                : x > 0 ? TurbinePartBlock.RingRole.UPPER_RIGHT : TurbinePartBlock.RingRole.TOP;
-        if (y == 0) return x < 0 ? TurbinePartBlock.RingRole.LOWER_LEFT
-                : x > 0 ? TurbinePartBlock.RingRole.LOWER_RIGHT : TurbinePartBlock.RingRole.BOTTOM;
-        return x < 0 ? TurbinePartBlock.RingRole.LEFT : TurbinePartBlock.RingRole.RIGHT;
+    public static TurbineControllerBlockEntity ownerForPart(Level level, BlockPos part) {
+        if (!ticking(level, part)) return null;
+        Map<BlockPos, WeakReference<TurbineControllerBlockEntity>> entries = OWNERS.get(level);
+        if (entries == null) return null;
+        for (WeakReference<TurbineControllerBlockEntity> reference : entries.values()) {
+            TurbineControllerBlockEntity owner = reference.get();
+            if (owner != null && owner.currentForm() != null && owner.currentForm().contains(part))
+                return owner;
+        }
+        return null;
     }
 
-    /** 普通构件变化只通知已加载候选控制器；owner 下一 tick 重扫并撤销旧轴源。 */
+    /** 构件或空腔变化通知近邻已加载控制器；上限使用配置允许的最大 18 格轴长。 */
     public static void invalidateNearby(Level level, BlockPos changed) {
         if (level.isClientSide) return;
-        for (Direction facing : Direction.Plane.HORIZONTAL) for (int z = 0; z <= 17; z++)
-            for (int x = -1; x <= 1; x++) for (int y = 0; y <= 2; y++) {
-                BlockPos candidate = changed.relative(facing, z).relative(facing.getClockWise(), -x).above(1 - y);
-                if (!ticking(level, candidate)) continue;
-                if (level.getBlockEntity(candidate) instanceof TurbineControllerBlockEntity owner)
-                    owner.invalidateForm();
-            }
+        Map<BlockPos, WeakReference<TurbineControllerBlockEntity>> entries = OWNERS.get(level);
+        if (entries != null) for (WeakReference<TurbineControllerBlockEntity> reference :
+                List.copyOf(entries.values())) {
+            TurbineControllerBlockEntity owner = reference.get();
+            if (owner != null && owner.currentForm() != null
+                    && withinBox(owner.currentForm(), changed)) owner.invalidateForm();
+        }
         if (level.hasChunkAt(changed)) level.invalidateCapabilities(changed);
     }
 
-    /** 成型口状态提供定位提示，最终仍必须由 owner 核验完整结构与实际口集合。 */
-    public static TurbineControllerBlockEntity ownerForPort(Level level, BlockPos port, BlockState state, boolean input) {
-        if (!state.getValue(TurbinePartBlock.FORMED) || !ticking(level, port)) return null;
-        Direction facing = state.getValue(TurbinePartBlock.MACHINE_FACING);
-        TurbinePartBlock.RingRole role = state.getValue(TurbinePartBlock.RING_ROLE);
-        int x = role == TurbinePartBlock.RingRole.LEFT ? -1 : role == TurbinePartBlock.RingRole.RIGHT ? 1 : 0;
-        int y = role == TurbinePartBlock.RingRole.TOP ? 2 : 1;
-        if (!portSlot(x, y) || state.getValue(TurbinePartBlock.OUTWARD) != outward(facing, x, y)) return null;
-        BlockPos axis = port.relative(facing.getClockWise(), -x).above(1 - y);
-        for (int z = 1; z <= 16; z++) {
-            BlockPos front = axis.relative(facing, z);
-            if (!ticking(level, front)) continue;
-            if (level.getBlockEntity(front) instanceof TurbineControllerBlockEntity owner
-                    && owner.validPort(port, input)) return owner;
-        }
-        return null;
+    private static boolean withinBox(Form form, BlockPos pos) {
+        BlockPos front = form.front();
+        Direction facing = form.facing();
+        int x = pos.getX() - front.getX(), y = pos.getY() - front.getY(), z = pos.getZ() - front.getZ();
+        int localX = x * facing.getClockWise().getStepX() + z * facing.getClockWise().getStepZ();
+        int localZ = x * facing.getOpposite().getStepX() + z * facing.getOpposite().getStepZ();
+        int radius = (form.diameter() - 1) / 2;
+        return Math.abs(localX) <= radius && Math.abs(y) <= radius
+                && localZ >= 0 && localZ < form.length();
+    }
+
+    public static TurbineControllerBlockEntity ownerForPort(Level level, BlockPos port, BlockState state,
+                                                              boolean input) {
+        if (!state.getValue(TurbinePartBlock.FORMED)) return null;
+        TurbineControllerBlockEntity owner = ownerForPart(level, port);
+        return owner != null && owner.validPort(port, input) ? owner : null;
     }
 }

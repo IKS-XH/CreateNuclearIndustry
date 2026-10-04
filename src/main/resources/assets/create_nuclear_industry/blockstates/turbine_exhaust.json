@@ -25,6 +25,11 @@
       "y": 0,
       "uvlock": true
     },
+    "formed=false,machine_facing=north,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
     "formed=false,machine_facing=north,ring_role=upper_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
@@ -46,6 +51,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=north,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
@@ -75,6 +85,11 @@
       "y": 0,
       "uvlock": true
     },
+    "formed=false,machine_facing=north,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
     "formed=false,machine_facing=north,ring_role=left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
@@ -96,6 +111,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=north,ring_role=left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
@@ -125,6 +145,11 @@
       "y": 0,
       "uvlock": true
     },
+    "formed=false,machine_facing=north,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
     "formed=false,machine_facing=north,ring_role=lower_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
@@ -146,6 +171,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=north,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
@@ -175,6 +205,11 @@
       "y": 0,
       "uvlock": true
     },
+    "formed=false,machine_facing=north,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
     "formed=false,machine_facing=north,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
@@ -196,6 +231,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=north,ring_role=bottom,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=north,ring_role=bottom,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
@@ -225,6 +265,11 @@
       "y": 90,
       "uvlock": true
     },
+    "formed=false,machine_facing=east,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
     "formed=false,machine_facing=east,ring_role=upper_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
@@ -246,6 +291,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=east,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
@@ -275,6 +325,11 @@
       "y": 90,
       "uvlock": true
     },
+    "formed=false,machine_facing=east,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
     "formed=false,machine_facing=east,ring_role=left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
@@ -296,6 +351,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=east,ring_role=left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
@@ -325,6 +385,11 @@
       "y": 90,
       "uvlock": true
     },
+    "formed=false,machine_facing=east,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
     "formed=false,machine_facing=east,ring_role=lower_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
@@ -346,6 +411,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=east,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
@@ -375,6 +445,11 @@
       "y": 90,
       "uvlock": true
     },
+    "formed=false,machine_facing=east,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
     "formed=false,machine_facing=east,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
@@ -396,6 +471,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=east,ring_role=bottom,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=east,ring_role=bottom,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
@@ -425,6 +505,11 @@
       "y": 180,
       "uvlock": true
     },
+    "formed=false,machine_facing=south,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
     "formed=false,machine_facing=south,ring_role=upper_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
@@ -446,6 +531,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=south,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
@@ -475,6 +565,11 @@
       "y": 180,
       "uvlock": true
     },
+    "formed=false,machine_facing=south,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
     "formed=false,machine_facing=south,ring_role=left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
@@ -496,6 +591,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=south,ring_role=left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
@@ -525,6 +625,11 @@
       "y": 180,
       "uvlock": true
     },
+    "formed=false,machine_facing=south,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
     "formed=false,machine_facing=south,ring_role=lower_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
@@ -546,6 +651,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=south,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
@@ -575,6 +685,11 @@
       "y": 180,
       "uvlock": true
     },
+    "formed=false,machine_facing=south,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
     "formed=false,machine_facing=south,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
@@ -596,6 +711,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=south,ring_role=bottom,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=south,ring_role=bottom,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
@@ -625,6 +745,11 @@
       "y": 270,
       "uvlock": true
     },
+    "formed=false,machine_facing=west,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
     "formed=false,machine_facing=west,ring_role=upper_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
@@ -646,6 +771,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=west,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
@@ -675,6 +805,11 @@
       "y": 270,
       "uvlock": true
     },
+    "formed=false,machine_facing=west,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
     "formed=false,machine_facing=west,ring_role=left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
@@ -696,6 +831,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=west,ring_role=left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
@@ -725,6 +865,11 @@
       "y": 270,
       "uvlock": true
     },
+    "formed=false,machine_facing=west,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
     "formed=false,machine_facing=west,ring_role=lower_left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
@@ -746,6 +891,11 @@
       "uvlock": true
     },
     "formed=false,machine_facing=west,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=false,machine_facing=west,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
@@ -775,6 +925,11 @@
       "y": 270,
       "uvlock": true
     },
+    "formed=false,machine_facing=west,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
     "formed=false,machine_facing=west,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
@@ -800,28 +955,38 @@
       "y": 270,
       "uvlock": true
     },
+    "formed=false,machine_facing=west,ring_role=bottom,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
     "formed=true,machine_facing=north,ring_role=top,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=top,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=top,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=top,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=top,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/exhaust_up",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
@@ -846,6 +1011,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
@@ -875,18 +1045,23 @@
       "y": 0,
       "uvlock": true
     },
+    "formed=true,machine_facing=north,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
     "formed=true,machine_facing=north,ring_role=left,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=left,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=left,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
@@ -896,12 +1071,17 @@
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=left,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=left,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=right,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
@@ -911,17 +1091,22 @@
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=right,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=right,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=right,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
     },
@@ -946,6 +1131,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=north,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=north,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
       "uvlock": true
@@ -975,6 +1165,11 @@
       "y": 0,
       "uvlock": true
     },
+    "formed=true,machine_facing=north,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 0,
+      "uvlock": true
+    },
     "formed=true,machine_facing=north,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 0,
@@ -1000,28 +1195,38 @@
       "y": 0,
       "uvlock": true
     },
+    "formed=true,machine_facing=north,ring_role=bottom,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/exhaust_down",
+      "y": 0,
+      "uvlock": true
+    },
     "formed=true,machine_facing=east,ring_role=top,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=top,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=top,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=top,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=top,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/exhaust_up",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
@@ -1046,6 +1251,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
@@ -1075,38 +1285,48 @@
       "y": 90,
       "uvlock": true
     },
+    "formed=true,machine_facing=east,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
     "formed=true,machine_facing=east,ring_role=left,outward=north": {
       "model": "create_nuclear_industry:block/turbine/exhaust_left",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=left,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=left,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=left,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=left,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=left,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=right,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=right,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
@@ -1116,12 +1336,17 @@
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=right,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=right,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
     },
@@ -1146,6 +1371,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=east,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=east,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
       "uvlock": true
@@ -1175,6 +1405,11 @@
       "y": 90,
       "uvlock": true
     },
+    "formed=true,machine_facing=east,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 90,
+      "uvlock": true
+    },
     "formed=true,machine_facing=east,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 90,
@@ -1200,28 +1435,38 @@
       "y": 90,
       "uvlock": true
     },
+    "formed=true,machine_facing=east,ring_role=bottom,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/exhaust_down",
+      "y": 90,
+      "uvlock": true
+    },
     "formed=true,machine_facing=south,ring_role=top,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=top,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=top,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=top,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=top,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/exhaust_up",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
@@ -1246,6 +1491,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
@@ -1275,8 +1525,13 @@
       "y": 180,
       "uvlock": true
     },
+    "formed=true,machine_facing=south,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
     "formed=true,machine_facing=south,ring_role=left,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
@@ -1286,32 +1541,37 @@
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=left,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=left,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=left,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=left,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=right,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=right,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=right,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
@@ -1321,7 +1581,12 @@
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=right,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
     },
@@ -1346,6 +1611,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=south,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=south,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
       "uvlock": true
@@ -1375,6 +1645,11 @@
       "y": 180,
       "uvlock": true
     },
+    "formed=true,machine_facing=south,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 180,
+      "uvlock": true
+    },
     "formed=true,machine_facing=south,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 180,
@@ -1400,28 +1675,38 @@
       "y": 180,
       "uvlock": true
     },
+    "formed=true,machine_facing=south,ring_role=bottom,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/exhaust_down",
+      "y": 180,
+      "uvlock": true
+    },
     "formed=true,machine_facing=west,ring_role=top,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=top,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=top,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=top,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=top,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_top",
+      "model": "create_nuclear_industry:block/turbine/exhaust_up",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=top,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
@@ -1446,6 +1731,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=upper_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=upper_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
@@ -1475,13 +1765,18 @@
       "y": 270,
       "uvlock": true
     },
+    "formed=true,machine_facing=west,ring_role=upper_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
     "formed=true,machine_facing=west,ring_role=left,outward=north": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=left,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
@@ -1491,12 +1786,17 @@
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=left,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=left,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_left",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=left,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
@@ -1506,22 +1806,27 @@
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=right,outward=east": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=right,outward=south": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=right,outward=west": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=right,outward=up": {
-      "model": "create_nuclear_industry:block/turbine/exhaust_right",
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
     },
@@ -1546,6 +1851,11 @@
       "uvlock": true
     },
     "formed=true,machine_facing=west,ring_role=lower_left,outward=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=lower_left,outward=down": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
       "uvlock": true
@@ -1575,6 +1885,11 @@
       "y": 270,
       "uvlock": true
     },
+    "formed=true,machine_facing=west,ring_role=lower_right,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
     "formed=true,machine_facing=west,ring_role=bottom,outward=north": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
       "y": 270,
@@ -1597,6 +1912,11 @@
     },
     "formed=true,machine_facing=west,ring_role=bottom,outward=up": {
       "model": "create_nuclear_industry:block/turbine/turbine_exhaust_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "formed=true,machine_facing=west,ring_role=bottom,outward=down": {
+      "model": "create_nuclear_industry:block/turbine/exhaust_down",
       "y": 270,
       "uvlock": true
     }

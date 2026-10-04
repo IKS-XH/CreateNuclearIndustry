@@ -33,6 +33,7 @@
     "create_nuclear_industry:turbine_controller",
     "create_nuclear_industry:turbine_output_shaft",
     "create_nuclear_industry:turbine_inlet",
-    "create_nuclear_industry:turbine_exhaust"
+    "create_nuclear_industry:turbine_exhaust",
+    "create_nuclear_industry:turbine_window"
   ]
 }

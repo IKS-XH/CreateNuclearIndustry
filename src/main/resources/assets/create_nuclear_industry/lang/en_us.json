@@ -303,5 +303,11 @@
   "gui.create_nuclear_industry.turbine.tanks": "Inlet %s/%s mB; exhaust steam %s/%s mB",
   "gui.create_nuclear_industry.turbine.su": "Total %s SU (front %s; rear %s)",
   "gui.create_nuclear_industry.turbine.state.overlap": "Turbine overlaps another formed turbine",
-  "gui.create_nuclear_industry.turbine.issue.overlap": "This part belongs to another turbine"
+  "gui.create_nuclear_industry.turbine.issue.overlap": "This part belongs to another turbine",
+  "block.create_nuclear_industry.turbine_window": "Turbine Window",
+  "gui.create_nuclear_industry.turbine.issue.cavity": "Casing interior is invalid",
+  "gui.create_nuclear_industry.turbine.issue.inlet_position": "Inlet position is invalid",
+  "gui.create_nuclear_industry.turbine.issue.exhaust_position": "Exhaust position is invalid",
+  "gui.create_nuclear_industry.turbine.issue.window": "Window position is invalid",
+  "gui.create_nuclear_industry.turbine.issue.port": "Turbine port position is invalid"
 }
