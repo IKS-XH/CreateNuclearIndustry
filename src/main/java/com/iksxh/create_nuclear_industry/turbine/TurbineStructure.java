@@ -62,6 +62,14 @@ public final class TurbineStructure {
             return new Result(null, new Issue("controller", controller));
         Direction facing = state.getValue(TurbinePartBlock.MACHINE_FACING);
         TurbinePartBlock.Side side = state.getValue(TurbinePartBlock.SIDE);
+        TurbineAssembly.Layout located = TurbineAssembly.at(level, controller);
+        if (located != null) {
+            TurbineState.Tier tier = settings.tierForRotors(located.length() - 2);
+            if (tier != null && tier.diameter() == located.diameter())
+                return scan(level, controller, located.front(), located.facing(), tier);
+        }
+        if (state.getValue(TurbinePartBlock.LOCATED))
+            return new Result(null, new Issue("unlocated_axis", controller));
         Issue first = null;
         for (TurbineState.Tier tier : new TurbineState.Tier[]{settings.shortTier(),
                 settings.mediumTier(), settings.longTier()}) {
@@ -135,8 +143,10 @@ public final class TurbineStructure {
                 parts.add(pos.immutable());
             }
         if (controllers != 1) return new Result(null, new Issue("controller", controller));
-        if (inlets.isEmpty()) return new Result(null, new Issue("inlet", controller));
-        if (exhausts.isEmpty()) return new Result(null, new Issue("exhaust", controller));
+        if (inlets.isEmpty()) return new Result(null, new Issue("inlet",
+                missingPortTarget(level, front, facing, tier, true)));
+        if (exhausts.isEmpty()) return new Result(null, new Issue("exhaust",
+                missingPortTarget(level, front, facing, tier, false)));
         BlockPos rear = at(front, facing, 0, 0, length - 1);
         return new Result(new Form(facing, tier.rotorCount(), diameter, front.immutable(),
                 rear.immutable(), controller.immutable(), List.copyOf(parts), List.copyOf(inlets),
@@ -174,6 +184,21 @@ public final class TurbineStructure {
 
     private static boolean middleRow(int length, int z) {
         return z == length / 2 || length % 2 == 0 && z == length / 2 - 1;
+    }
+
+    /** 缺少接口时标记可替换的合法侧槽，不把控制器或已有另一类接口误报为落点。 */
+    private static BlockPos missingPortTarget(Level level, BlockPos front, Direction facing,
+                                              TurbineState.Tier tier, boolean input) {
+        int radius = (tier.diameter() - 1) / 2;
+        int[] rows = input ? middleRows(tier.length()) : new int[]{1, tier.length() - 2};
+        for (int z : rows) for (int[] side : new int[][]{{0, radius}, {radius, 0},
+                {0, -radius}, {-radius, 0}}) {
+            BlockPos pos = at(front, facing, side[0], side[1], z);
+            BlockState state = level.getBlockState(pos);
+            if (state.isAir() || state.is(TurbineContent.CASING.get())
+                    || state.is(TurbineContent.WINDOW.get())) return pos;
+        }
+        return front;
     }
 
     public static Direction outward(Direction facing, int x, int y) {

@@ -309,5 +309,8 @@
   "gui.create_nuclear_industry.turbine.issue.inlet_position": "Inlet position is invalid",
   "gui.create_nuclear_industry.turbine.issue.exhaust_position": "Exhaust position is invalid",
   "gui.create_nuclear_industry.turbine.issue.window": "Window position is invalid",
-  "gui.create_nuclear_industry.turbine.issue.port": "Turbine port position is invalid"
+  "gui.create_nuclear_industry.turbine.issue.port": "Turbine port position is invalid",
+  "gui.create_nuclear_industry.turbine.issue.unlocated_axis": "The rotor axis is not uniquely located yet",
+  "gui.create_nuclear_industry.turbine.issue.blocked": "The next placement position is blocked",
+  "gui.create_nuclear_industry.turbine.located": "Located %s×%s; structure still needs completion"
 }

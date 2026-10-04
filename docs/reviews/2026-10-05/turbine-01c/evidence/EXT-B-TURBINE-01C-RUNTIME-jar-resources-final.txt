@@ -1,0 +1,34 @@
+jar=E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\build\libs\create_nuclear_industry-0.1.0.jar
+tracked_changed=9
+untracked_new=20
+total_scoped=29
+missing=0
+OK assets/create_nuclear_industry/blockstates/turbine_casing.json
+OK assets/create_nuclear_industry/blockstates/turbine_controller.json
+OK assets/create_nuclear_industry/blockstates/turbine_exhaust.json
+OK assets/create_nuclear_industry/blockstates/turbine_inlet.json
+OK assets/create_nuclear_industry/blockstates/turbine_output_shaft.json
+OK assets/create_nuclear_industry/blockstates/turbine_rotor.json
+OK assets/create_nuclear_industry/blockstates/turbine_window.json
+OK assets/create_nuclear_industry/lang/en_us.json
+OK assets/create_nuclear_industry/lang/zh_cn.json
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_down.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_east.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_north.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_south.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_west.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_window_unformed_down.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_window_unformed_east.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_window_unformed_north.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_window_unformed_south.obj
+OK assets/create_nuclear_industry/models/block/turbine/mesh/turbine_window_unformed_west.obj
+OK assets/create_nuclear_industry/models/block/turbine/turbine_casing_unformed_down.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_casing_unformed_east.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_casing_unformed_north.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_casing_unformed_south.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_casing_unformed_west.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed_down.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed_east.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed_north.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed_south.json
+OK assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed_west.json

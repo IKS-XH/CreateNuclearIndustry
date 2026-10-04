@@ -1,6 +1,8 @@
 # 汽轮机01B候选交付
 
-**状态：2026-10-05完成自动实现与定向验证，等待合并人工复测。** 功能只在主工程同级候选 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，尚未合入main。当前启动使用本目录的 `./gradlew.bat runClient`；主工程只同步文档。
+**状态：2026-10-05搭建与外观人工反馈未通过，由01C整改。** 用户指出未成型设备呈现散乱薄板，要求实际研究AeroEngine的搭建与成型。只读复核确认独立外壳方向/扳手未落实，以及模型顶板、碰撞底板不一致；用户已确认[核心先行＋辅助包壳](../../../superpowers/plans/2026-10-05-turbine-assembly-experience-proposal.md)，[01C任务](../../../superpowers/plans/2026-10-05-ext-b-turbine-01c.md)正在实施。下列自动证据仍是历史有效结果，但不足以证明搭建体验通过，原“无未解决阻断项”的交付判断已被本次反馈取代。
+
+功能只在主工程同级候选 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，尚未合入main。当前启动使用本目录的 `./gradlew.bat runClient`；主工程只同步文档。本轮调查未改动游戏实现，不要求用户重复测试同一版本。
 
 本批把三档改为3×5×3、5×8×5、7×11×7，默认256RPM。控制器移到四侧中央，两端独立轴分别领取总SU的50%；既有额定耗汽54/108/162mB/t、总容量和两种流体1:1守恒不变。几何改为薄八棱壳、轴心与12片叶片，增加可选透明观察窗。SVG与程序化网格为本仓库原创，AeroEngine仅作为形态参考。
 

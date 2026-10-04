@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
-REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01B-ASSETS"
+REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01C-ASSETS"
 STAGING = REPORT / "generated_resources"
 ASSETS = REPO / "src/main/resources/assets/create_nuclear_industry"
 BLOCKS = ("turbine_casing", "turbine_rotor", "turbine_controller", "turbine_output_shaft", "turbine_inlet", "turbine_exhaust")
@@ -923,13 +923,39 @@ def model_and_state_files():
             meshes[f"{kind}_{side}"] = source
             write_model_wrapper(files, f"{kind}_{side}", f"{kind}_{side}", f"turbine_{kind}")
 
-    # 各方块的独立放置模型均为真实三维单件，而机身壳块保持薄板几何。
+    # 独立面板沿用同一片3/16格薄壳，并预烘焙六个世界朝向，避免与机身朝向重复旋转。
     d3_top = casing_cell_mesh(3, "middle", 0, 1)
     meshes["turbine_casing_unformed"] = d3_top
     write_model_wrapper(files, "turbine_casing_unformed", "turbine_casing_unformed", "turbine_casing_panel")
     meshes["turbine_window_unformed"] = turbine_window_mesh("up")
     write_model_wrapper(files, "turbine_window_unformed", "turbine_window_unformed", "turbine_window_glass",
                         render_type="translucent")
+    face_transforms = {
+        "up": lambda p: (p[0], p[1], p[2]),
+        "down": lambda p: (p[0], 1 - p[1], 1 - p[2]),
+        "north": lambda p: (p[0], p[2], 1 - p[1]),
+        "south": lambda p: (p[0], 1 - p[2], p[1]),
+        "west": lambda p: (1 - p[1], p[0], p[2]),
+        "east": lambda p: (p[1], 1 - p[0], p[2]),
+    }
+    def face_transform(transform):
+        def apply(point, vector=False):
+            if not vector:
+                return transform(point)
+            origin = transform((0, 0, 0))
+            endpoint = transform(point)
+            return tuple(endpoint[i] - origin[i] for i in range(3))
+        return apply
+    for face, transform in face_transforms.items():
+        if face == "up":
+            continue
+        casing_name = f"turbine_casing_unformed_{face}"
+        window_name = f"turbine_window_unformed_{face}"
+        meshes[casing_name] = transform_mesh(d3_top, casing_name, face_transform(transform))
+        write_model_wrapper(files, casing_name, casing_name, "turbine_casing_panel")
+        meshes[window_name] = transform_mesh(meshes["turbine_window_unformed"], window_name,
+                                             face_transform(transform))
+        write_model_wrapper(files, window_name, window_name, "turbine_window_glass", render_type="translucent")
     meshes["turbine_rotor_unformed"] = small_item_rotor()
     write_model_wrapper(files, "turbine_rotor_unformed", "turbine_rotor_unformed", "turbine_rotor_blade", False)
     meshes["turbine_controller_unformed"] = controller_mesh("turbine_controller_unformed")
@@ -960,50 +986,58 @@ def model_and_state_files():
 
 
 def blockstates_01b(piece_map):
-    """为完整属性笛卡尔积生成JSON，并将非法旧组合路由至安全回退。"""
+    """按定位态选择已定位网格或六向独立板，formed仅表示运行资格。"""
     out = {}
     model = lambda name: f"create_nuclear_industry:block/turbine/{name}"
+    independent_faces = {0: "up", 207: "down", 208: "north", 209: "south", 210: "west", 211: "east"}
     for block in ("turbine_casing", "turbine_window"):
         variants = {}
-        for formed, facing, piece in itertools.product((False, True), FACING, range(207)):
-            key = f"formed={str(formed).lower()},machine_facing={facing},piece={piece}"
-            if block == "turbine_window":
-                candidate = piece_map.get(piece)
-                valid = candidate and candidate[1] == "middle" and (
-                    (candidate[2] == 0 and abs(candidate[3]) == (candidate[0] - 1) // 2) or
-                    (candidate[3] == 0 and abs(candidate[2]) == (candidate[0] - 1) // 2))
-                selected = f"window/{'d' + str(candidate[0]) + '_' + candidate[1] + '_x' + str(candidate[2]) + '_y' + str(candidate[3])}" if formed and valid else "turbine_window_unformed"
-            else:
-                candidate = piece_map.get(piece)
-                selected = f"casing/d{candidate[0]}_{candidate[1]}_x{candidate[2]}_y{candidate[3]}" if formed and candidate else "turbine_casing_unformed"
-            variants[key] = variant(model(selected), facing)
+        for located, facing, piece in itertools.product((False, True), FACING, range(212)):
+            key = f"located={str(located).lower()},machine_facing={facing},piece={piece}"
+            candidate = piece_map.get(piece)
+            selected = "turbine_window_unformed" if block == "turbine_window" else "turbine_casing_unformed"
+            rotation = facing
+            if located and candidate:
+                if block == "turbine_window":
+                    valid = candidate[1] == "middle" and (
+                        (candidate[2] == 0 and abs(candidate[3]) == (candidate[0] - 1) // 2) or
+                        (candidate[3] == 0 and abs(candidate[2]) == (candidate[0] - 1) // 2))
+                    if valid:
+                        selected = f"window/d{candidate[0]}_{candidate[1]}_x{candidate[2]}_y{candidate[3]}"
+                else:
+                    selected = f"casing/d{candidate[0]}_{candidate[1]}_x{candidate[2]}_y{candidate[3]}"
+            elif not located and piece in independent_faces:
+                face = independent_faces[piece]
+                selected = f"{block}_unformed" if face == "up" else f"{block}_unformed_{face}"
+                rotation = None
+            variants[key] = variant(model(selected), rotation)
         out[f"assets/create_nuclear_industry/blockstates/{block}.json"] = write_json(Path(block), {"variants": variants})
 
     variants = {}
-    for formed, facing, diameter in itertools.product((False, True), FACING, ("d3", "d5", "d7")):
-        key = f"diameter={diameter},formed={str(formed).lower()},machine_facing={facing}"
-        variants[key] = variant(model("rotor_axle" if formed else "turbine_rotor_unformed"), facing)
+    for located, facing, diameter in itertools.product((False, True), FACING, ("d3", "d5", "d7")):
+        key = f"diameter={diameter},located={str(located).lower()},machine_facing={facing}"
+        variants[key] = variant(model("rotor_axle" if located else "turbine_rotor_unformed"), facing)
     out["assets/create_nuclear_industry/blockstates/turbine_rotor.json"] = write_json(Path("turbine_rotor"), {"variants": variants})
 
     variants = {}
-    for formed, facing, end in itertools.product((False, True), FACING, ("front", "rear")):
-        key = f"end={end},formed={str(formed).lower()},machine_facing={facing}"
-        variants[key] = variant(model(f"output_shaft_{end}" if formed else "turbine_output_shaft_unformed"), facing)
+    for located, facing, end in itertools.product((False, True), FACING, ("front", "rear")):
+        key = f"end={end},located={str(located).lower()},machine_facing={facing}"
+        variants[key] = variant(model(f"output_shaft_{end}" if located else "turbine_output_shaft_unformed"), facing)
     out["assets/create_nuclear_industry/blockstates/turbine_output_shaft.json"] = write_json(Path("turbine_output_shaft"), {"variants": variants})
 
     variants = {}
-    for formed, facing, side in itertools.product((False, True), FACING, ("up", "down", "left", "right")):
-        key = f"formed={str(formed).lower()},machine_facing={facing},side={side}"
-        variants[key] = variant(model(f"controller_{side}" if formed else "turbine_controller_unformed"), facing)
+    for located, facing, side in itertools.product((False, True), FACING, ("up", "down", "left", "right")):
+        key = f"located={str(located).lower()},machine_facing={facing},side={side}"
+        variants[key] = variant(model(f"controller_{side}" if located else "turbine_controller_unformed"), facing)
     out["assets/create_nuclear_industry/blockstates/turbine_controller.json"] = write_json(Path("turbine_controller"), {"variants": variants})
 
     for block, kind in (("turbine_inlet", "inlet"), ("turbine_exhaust", "exhaust")):
         variants = {}
-        for formed, facing, role, outward in itertools.product((False, True), FACING, RING_ROLES, OUTWARD):
-            key = f"formed={str(formed).lower()},machine_facing={facing},ring_role={role},outward={outward}"
+        for located, facing, role, outward in itertools.product((False, True), FACING, RING_ROLES, OUTWARD):
+            key = f"located={str(located).lower()},machine_facing={facing},ring_role={role},outward={outward}"
             side = {"top": "up", "bottom": "down", "left": "left", "right": "right"}.get(role)
             expected = side if side in ("up", "down") else SIDE_WORLD[facing].get(side)
-            selected = f"{kind}_{side}" if formed and side and outward == expected else f"{block}_unformed"
+            selected = f"{kind}_{side}" if located and side and outward == expected else f"{block}_unformed"
             variants[key] = variant(model(selected), facing)
         out[f"assets/create_nuclear_industry/blockstates/{block}.json"] = write_json(Path(block), {"variants": variants})
     return out
@@ -1074,7 +1108,7 @@ def verify_01b(files: dict[str, bytes]) -> dict:
     assert tier_counts == {3: {"front": 9, "middle": 8, "rear": 9},
                            5: {"front": 25, "middle": 16, "rear": 25},
                            7: {"front": 45, "middle": 24, "rear": 45}}
-    assert len(model_files) == 243 and len(obj_files) == 243
+    assert len(model_files) == 253 and len(obj_files) == 253
     assert len(state_files) == 7 and len(item_files) == 7
     path_set = set(files)
     for path in model_files:
@@ -1091,7 +1125,7 @@ def verify_01b(files: dict[str, bytes]) -> dict:
         for entry in variants.values():
             model_path = entry["model"].split(":", 1)[-1]
             assert f"assets/create_nuclear_industry/models/{model_path}.json" in path_set, (path, model_path)
-    expected_counts = {"turbine_casing": 1656, "turbine_window": 1656,
+    expected_counts = {"turbine_casing": 1696, "turbine_window": 1696,
                        "turbine_rotor": 24, "turbine_output_shaft": 16,
                        "turbine_controller": 32, "turbine_inlet": 384,
                        "turbine_exhaust": 384}
@@ -1101,14 +1135,32 @@ def verify_01b(files: dict[str, bytes]) -> dict:
         for facing, side in itertools.product(FACING, ("top", "bottom", "left", "right")):
             local = {"top": "up", "bottom": "down", "left": "left", "right": "right"}[side]
             expected = local if local in ("up", "down") else SIDE_WORLD[facing][local]
-            good = f"formed=true,machine_facing={facing},ring_role={side},outward={expected}"
+            good = f"located=true,machine_facing={facing},ring_role={side},outward={expected}"
             assert variants[good]["model"].endswith(f"/{port}_{local}")
             wrong = next(direction for direction in OUTWARD if direction != expected)
-            bad = f"formed=true,machine_facing={facing},ring_role={side},outward={wrong}"
+            bad = f"located=true,machine_facing={facing},ring_role={side},outward={wrong}"
             assert variants[bad]["model"].endswith(f"/{block}_unformed")
+    face_codes = {0: "up", 207: "down", 208: "north", 209: "south", 210: "west", 211: "east"}
+    for block in ("turbine_casing", "turbine_window"):
+        variants = json_files[f"assets/create_nuclear_industry/blockstates/{block}.json"]["variants"]
+        for piece, face in face_codes.items():
+            selected = set()
+            for facing in FACING:
+                key = f"located=false,machine_facing={facing},piece={piece}"
+                value = variants[key]
+                selected.add(value["model"])
+                assert "y" not in value, (block, key, value)
+            expected_model = f"{block}_unformed" if face == "up" else f"{block}_unformed_{face}"
+            assert selected == {f"{MODEL_ROOT}/{expected_model}"}, (block, piece, selected)
+        for located, facing, piece in itertools.product((False, True), FACING, range(212)):
+            assert f"located={str(located).lower()},machine_facing={facing},piece={piece}" in variants
     window_models = [path for path in model_files if "/window/" in path]
     assert len(window_models) == 12
     assert all(json_files[path].get("render_type") == "translucent" for path in window_models)
+    independent_windows = ["assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed.json"] + [
+        f"assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed_{face}.json"
+        for face in ("down", "north", "south", "west", "east")]
+    assert all(json_files[path].get("render_type") == "translucent" for path in independent_windows)
     unformed_window = "assets/create_nuclear_industry/models/block/turbine/turbine_window_unformed.json"
     assert json_files[unformed_window].get("render_type") == "translucent"
     rotor_data = {}
@@ -1144,6 +1196,8 @@ def verify_01b(files: dict[str, bytes]) -> dict:
     return {"blockstate_variants": state_counts, "model_json_count": len(model_files),
             "obj_mesh_count": len(obj_files), "item_model_count": len(item_files),
             "piece_mapping": {"total": 206, "tier_sections": tier_counts},
+            "state_selection": "located controls exterior model; formed omitted from selector; piece 0/207..211 is world-face independent",
+            "independent_faces": "six pre-rotated panel and window meshes; no machine_facing rotation",
             "valid_window_models": len(window_models), "rotor_geometry": rotor_data,
             "rotor_axis_and_center": "+Z axis, block-local (0.5,0.5,0.5); partial has no shaft",
             "output_shaft_extent": "front/rear axes and 3/16 bearing plates remain within local z=0..1",

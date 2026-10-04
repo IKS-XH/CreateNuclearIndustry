@@ -4,6 +4,7 @@ import com.iksxh.create_nuclear_industry.config.TurbineConfig;
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
 import com.iksxh.create_nuclear_industry.content.TurbineContent;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.infrastructure.command.HighlightPacket;
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
@@ -13,11 +14,14 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import java.util.ArrayList;
 import java.util.List;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -106,6 +110,8 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
             if (activeForm != null) invalidateForm();
             nextProbeTick = now + 10;
             clearSavedAppearance();
+            if (getBlockState().getValue(TurbinePartBlock.LOCATED))
+                TurbineAssembly.refreshNear(level, worldPosition);
             ledger.applySettings(settings, lastLength > 0 ? lastLength - 2 : 0, maxRpm);
             ledger.tick(now, false);
             status = !settings.valid(maxRpm) ? "invalid_config" : "unformed";
@@ -224,7 +230,8 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
                 || before.getValue(TurbinePartBlock.MACHINE_FACING) != form.facing())) return;
         BlockState after = before.setValue(TurbinePartBlock.FORMED, formed);
         if (formed) {
-            after = after.setValue(TurbinePartBlock.MACHINE_FACING, form.facing());
+            after = after.setValue(TurbinePartBlock.LOCATED, true)
+                    .setValue(TurbinePartBlock.MACHINE_FACING, form.facing());
             if (before.is(TurbineContent.CASING.get()) || before.is(TurbineContent.WINDOW.get()))
                 after = after.setValue(TurbinePartBlock.PIECE, piece.id());
             if (before.is(TurbineContent.ROTOR.get()))
@@ -268,6 +275,10 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
                 for (int x = -1; x <= 1; x++)
                     clearStyleAt(TurbineStructure.at(worldPosition, lastFacing, x, y, z));
         }
+        BlockState control = getBlockState();
+        if (control.is(TurbineContent.CONTROLLER.get())
+                && control.getValue(TurbinePartBlock.FORMED))
+            level.setBlock(worldPosition, control.setValue(TurbinePartBlock.FORMED, false), 3);
     }
 
     private void clearStyleAt(BlockPos pos) {
@@ -470,16 +481,28 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
             viewTotalSu = view.getFloat("TotalSu"); viewFrontSu = view.getFloat("FrontSu"); viewRearSu = view.getFloat("RearSu");
         }
     }
-    /** 世界内短诊断显示首个缺口坐标；客户端状态始终取服务端同步值。 */
+    /** 服务端检查同时显示已定位的直径×轴长（单位方块）与当前档位首个缺件。 */
     public Component diagnostic() {
         String key = "gui.create_nuclear_industry.turbine.";
         if (activeForm != null) return Component.translatable(key + "formed", activeForm.rotors());
         if (status.equals("invalid_config") || status.equals("stock_over_capacity") || status.equals("overlap"))
             return Component.translatable(key + "state." + status);
         TurbineStructure.Issue issue = TurbineStructure.issue(level, worldPosition, TurbineConfig.settings());
-        return issue == null ? Component.translatable(key + "wait_stock")
+        Component detail = issue == null ? Component.translatable(key + "wait_stock")
                 : Component.translatable(key + "inspect", Component.translatable(key + "issue." + issue.reason()),
                         issue.pos().getX(), issue.pos().getY(), issue.pos().getZ());
+        TurbineAssembly.Layout layout = TurbineAssembly.at(level, worldPosition);
+        return layout == null ? detail : Component.translatable(key + "located",
+                layout.diameter(), layout.length()).append(Component.literal("；")).append(detail);
+    }
+
+    /** Create 自带的高亮包只发送给执行检查的玩家，错误坐标由服务端权威扫描确定。 */
+    public void highlightIssue(Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer) || level == null || level.isClientSide
+                || activeForm != null) return;
+        TurbineStructure.Issue issue = TurbineStructure.issue(level, worldPosition, TurbineConfig.settings());
+        if (issue != null && level.hasChunkAt(issue.pos()))
+            CatnipServices.NETWORK.sendToClient(serverPlayer, new HighlightPacket(issue.pos()));
     }
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
         String key = "gui.create_nuclear_industry.turbine.";

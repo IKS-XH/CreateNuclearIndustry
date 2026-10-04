@@ -11,8 +11,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -51,11 +54,13 @@ public final class TurbineShaftBlock {
         public Controller(Properties properties) {
             super(properties.noOcclusion());
             registerDefaultState(defaultBlockState().setValue(TurbinePartBlock.FORMED, false)
+                    .setValue(TurbinePartBlock.LOCATED, false)
                     .setValue(TurbinePartBlock.MACHINE_FACING, Direction.NORTH)
                     .setValue(TurbinePartBlock.SIDE, TurbinePartBlock.Side.RIGHT));
         }
         @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-            builder.add(TurbinePartBlock.FORMED, TurbinePartBlock.MACHINE_FACING, TurbinePartBlock.SIDE);
+            builder.add(TurbinePartBlock.FORMED, TurbinePartBlock.LOCATED,
+                    TurbinePartBlock.MACHINE_FACING, TurbinePartBlock.SIDE);
         }
         @Override public BlockState getStateForPlacement(BlockPlaceContext context) {
             Direction facing = context.getHorizontalDirection().getOpposite();
@@ -83,7 +88,10 @@ public final class TurbineShaftBlock {
         @Override public void onPlace(BlockState state, Level level, BlockPos pos, BlockState old,
                                       boolean moving) {
             super.onPlace(state, level, pos, old, moving);
-            if (!level.isClientSide && !old.is(state.getBlock())) TurbineStructure.invalidateNearby(level, pos);
+            if (!level.isClientSide && !old.is(state.getBlock())) {
+                TurbineStructure.invalidateNearby(level, pos);
+                TurbineAssembly.refreshNear(level, pos);
+            }
         }
         @Override public void onRemove(BlockState state, Level level, BlockPos pos, BlockState next,
                                        boolean moving) {
@@ -114,8 +122,10 @@ public final class TurbineShaftBlock {
         }
         @Override protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                                Player player, BlockHitResult hit) {
-            if (!level.isClientSide && level.getBlockEntity(pos) instanceof TurbineControllerBlockEntity owner)
+            if (!level.isClientSide && level.getBlockEntity(pos) instanceof TurbineControllerBlockEntity owner) {
                 player.displayClientMessage(owner.diagnostic(), true);
+                owner.highlightIssue(player);
+            }
             return InteractionResult.SUCCESS;
         }
         @Override public InteractionResult onWrenched(BlockState state, UseOnContext context) {
@@ -127,7 +137,10 @@ public final class TurbineShaftBlock {
                             state.getValue(TurbinePartBlock.MACHINE_FACING).getClockWise()), 3);
                     TurbineStructure.invalidateNearby(level, pos);
                 }
-                if (context.getPlayer() != null) context.getPlayer().displayClientMessage(owner.diagnostic(), true);
+                if (context.getPlayer() != null) {
+                    context.getPlayer().displayClientMessage(owner.diagnostic(), true);
+                    owner.highlightIssue(context.getPlayer());
+                }
             }
             return InteractionResult.SUCCESS;
         }
@@ -154,10 +167,17 @@ public final class TurbineShaftBlock {
         public Output(Properties properties) {
             super(properties.noOcclusion());
             registerDefaultState(defaultBlockState().setValue(TurbinePartBlock.FORMED, false)
+                    .setValue(TurbinePartBlock.LOCATED, false)
                     .setValue(TurbinePartBlock.MACHINE_FACING, Direction.NORTH).setValue(END, End.FRONT));
         }
         @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-            builder.add(TurbinePartBlock.FORMED, TurbinePartBlock.MACHINE_FACING, END);
+            builder.add(TurbinePartBlock.FORMED, TurbinePartBlock.LOCATED,
+                    TurbinePartBlock.MACHINE_FACING, END);
+        }
+        @Override protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level,
+                                                             BlockPos pos, Player player, InteractionHand hand,
+                                                             BlockHitResult hit) {
+            return TurbinePlacement.useOn(stack, state, level, pos, player, hand, hit);
         }
         @Override public BlockState getStateForPlacement(BlockPlaceContext context) {
             return defaultBlockState().setValue(TurbinePartBlock.MACHINE_FACING,
@@ -185,7 +205,7 @@ public final class TurbineShaftBlock {
         @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
         @Override public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos,
                                              CollisionContext context) {
-            if (!state.getValue(TurbinePartBlock.FORMED)) return Shapes.block();
+            if (!state.getValue(TurbinePartBlock.LOCATED)) return Shapes.block();
             Direction facing = state.getValue(TurbinePartBlock.MACHINE_FACING);
             double plateStart = state.getValue(END) == End.FRONT ? 0 : 13;
             return Shapes.or(TurbinePartBlock.boxRotated(0, 0, plateStart,
@@ -195,12 +215,21 @@ public final class TurbineShaftBlock {
         @Override public void onPlace(BlockState state, Level level, BlockPos pos, BlockState old,
                                       boolean moving) {
             super.onPlace(state, level, pos, old, moving);
-            if (!level.isClientSide && !old.is(state.getBlock())) TurbineStructure.invalidateNearby(level, pos);
+            if (!level.isClientSide && !old.is(state.getBlock())) {
+                TurbineStructure.invalidateNearby(level, pos);
+                TurbineAssembly.refreshNear(level, pos);
+            }
         }
         @Override public void onRemove(BlockState state, Level level, BlockPos pos, BlockState next,
                                        boolean moving) {
-            if (!level.isClientSide && !next.is(state.getBlock())) TurbineStructure.invalidateNearby(level, pos);
+            if (!level.isClientSide && !next.is(state.getBlock())) {
+                TurbineStructure.invalidateNearby(level, pos);
+                TurbineAssembly.refreshAfterRemoval(level, pos);
+            }
             super.onRemove(state, level, pos, next, moving);
+        }
+        @Override protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+            TurbineAssembly.refreshNear(level, pos);
         }
     }
 }

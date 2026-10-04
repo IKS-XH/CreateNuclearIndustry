@@ -1,0 +1,7 @@
+{
+  "full_state_paths_checked": 8440,
+  "located_formed_visual_independence": "PASS",
+  "independent_face_world_orientation": "PASS",
+  "independent_model_collision_envelopes": "PASS",
+  "hand_gui_item_models": "PASS"
+}

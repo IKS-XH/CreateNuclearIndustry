@@ -1,0 +1,10 @@
+{
+  "language_files": 2,
+  "new_keys": [
+    "gui.create_nuclear_industry.turbine.issue.unlocated_axis",
+    "gui.create_nuclear_industry.turbine.issue.blocked",
+    "gui.create_nuclear_industry.turbine.located"
+  ],
+  "install": true,
+  "status": "PASS"
+}

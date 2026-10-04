@@ -11,7 +11,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
-REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01B-ASSETS"
+REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01C-ASSETS"
 STAGING = REPORT / "data_resources"
 SVG_DIR = ROOT / "svg/fluid/steam"
 RESOURCE = REPO / "src/main/resources"
@@ -128,6 +128,8 @@ def translations() -> dict[str, dict[str, str]]:
         "issue.overlap": "此构件已属于另一台汽轮机",
         "issue.cavity": "机壳内部空间错误", "issue.inlet_position": "进汽口位置错误",
         "issue.exhaust_position": "排汽口位置错误", "issue.window": "观察窗位置错误",
+        "issue.unlocated_axis": "轴列尚未唯一确定", "issue.blocked": "下一放置位置被占用",
+        "located": "已定位 %s×%s，仍需补齐结构",
         "issue.port": "进排汽口位置错误",
         "formed": "结构已成型：%s 个转子", "wait_stock": "请检查库存容量与汽轮机配置",
         "hint": "空载仍消耗蒸汽；红石可停止汽轮机",
@@ -149,6 +151,9 @@ def translations() -> dict[str, dict[str, str]]:
         "issue.overlap": "This part belongs to another turbine",
         "issue.cavity": "Casing interior is invalid", "issue.inlet_position": "Inlet position is invalid",
         "issue.exhaust_position": "Exhaust position is invalid", "issue.window": "Window position is invalid",
+        "issue.unlocated_axis": "The rotor axis is not uniquely located yet",
+        "issue.blocked": "The next placement position is blocked",
+        "located": "Located %s×%s; structure still needs completion",
         "issue.port": "Turbine port position is invalid",
         "formed": "Formed with %s rotors", "wait_stock": "Check stored fluids, capacity and turbine settings",
         "hint": "Consumes steam while idle; redstone stops the turbine",
@@ -163,6 +168,19 @@ def _make_translations(blocks, gui):
     out[f"fluid_type.{NAMESPACE}.steam"] = blocks["steam"]
     out.update({f"gui.{NAMESPACE}.turbine.{key}": value for key, value in gui.items()})
     return out
+
+
+def language_files() -> dict[str, bytes]:
+    """只生成汽轮机语言增量，供01C安装新状态提示而不触碰配方或掉落。"""
+    files = {}
+    for locale, additions in translations().items():
+        path = RESOURCE / f"assets/{NAMESPACE}/lang/{locale}.json"
+        existing = json.loads(path.read_text(encoding="utf-8"))
+        existing.update({key: value for key, value in additions.items()
+                         if key not in existing or existing[key] == value})
+        files[f"assets/{NAMESPACE}/lang/{locale}.json"] = (
+            json.dumps(existing, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    return files
 
 
 def build_files() -> tuple[dict[str, bytes], list[str]]:
@@ -205,13 +223,7 @@ def build_files() -> tuple[dict[str, bytes], list[str]]:
         if data.get("replace") is not False:
             raise ValueError(f"矿物工具标签必须保留replace=false: {path}")
         files[f"data/minecraft/tags/block/{tag}.json"] = (json.dumps(data, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
-    for locale, additions in translations().items():
-        path = RESOURCE / f"assets/{NAMESPACE}/lang/{locale}.json"
-        existing = json.loads(path.read_text(encoding="utf-8"))
-        # 同一语言文件由运行时实现者更新时，保留已存在值，只补入缺失键。
-        existing.update({key: value for key, value in additions.items()
-                         if key not in existing or existing[key] == value})
-        files[f"assets/{NAMESPACE}/lang/{locale}.json"] = (json.dumps(existing, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    files.update(language_files())
     return files, new_svg
 
 
@@ -241,7 +253,29 @@ def verify(files: dict[str, bytes]):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--install", action="store_true")
+    parser.add_argument("--languages-only", action="store_true",
+                        help="只生成/安装汽轮机语言键，不写配方、掉落、标签或纹理")
     args = parser.parse_args()
+    if args.languages_only:
+        files = language_files()
+        for path, raw in files.items():
+            json.loads(raw.decode("utf-8"))
+            if args.install:
+                target = RESOURCE / path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(raw)
+        staging = REPORT / "language_resources"
+        write_files(files, staging)
+        REPORT.mkdir(parents=True, exist_ok=True)
+        summary = {"language_files": len(files), "new_keys": [
+            "gui.create_nuclear_industry.turbine.issue.unlocated_axis",
+            "gui.create_nuclear_industry.turbine.issue.blocked",
+            "gui.create_nuclear_industry.turbine.located"],
+            "install": args.install, "status": "PASS"}
+        (REPORT / "language-generation.json").write_text(
+            json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return
     files, new_svg = build_files()
     summary = verify(files)
     write_files(files, STAGING)

@@ -6,6 +6,7 @@ import com.iksxh.create_nuclear_industry.turbine.StorageOnlyOrdinarySteamFluid;
 import com.iksxh.create_nuclear_industry.turbine.TurbineControllerBlockEntity;
 import com.iksxh.create_nuclear_industry.turbine.TurbineOutputShaftBlockEntity;
 import com.iksxh.create_nuclear_industry.turbine.TurbinePartBlock;
+import com.iksxh.create_nuclear_industry.turbine.TurbinePlacement;
 import com.iksxh.create_nuclear_industry.turbine.TurbinePortBlockEntity;
 import com.iksxh.create_nuclear_industry.turbine.TurbineShaftBlock;
 import com.iksxh.create_nuclear_industry.turbine.TurbineStructure;
@@ -99,6 +100,7 @@ public final class TurbineContent {
     public static void register(IEventBus bus) {
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); TYPES.register(bus); FLUIDS.register(bus);
         bus.addListener(TurbineContent::capabilities);
+        TurbinePlacement.register();
     }
     private static void capabilities(RegisterCapabilitiesEvent event) {
         event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, blockEntity, side) -> {

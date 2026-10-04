@@ -38,7 +38,7 @@ public final class TurbineRotorRenderer implements BlockEntityRenderer<TurbineRo
     @Override public void render(TurbineRotorBlockEntity rotor, float partialTicks, PoseStack pose,
                                  MultiBufferSource buffers, int light, int overlay) {
         var state = rotor.getBlockState();
-        if (!state.getValue(TurbinePartBlock.FORMED)) return;
+        if (!state.getValue(TurbinePartBlock.LOCATED)) return;
         int index = switch (state.getValue(TurbinePartBlock.DIAMETER)) {
             case D3 -> 0;
             case D5 -> 1;

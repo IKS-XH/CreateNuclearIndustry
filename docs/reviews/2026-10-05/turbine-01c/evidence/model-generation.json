@@ -1,0 +1,102 @@
+{
+  "blockstate_variants": {
+    "turbine_controller": 32,
+    "turbine_inlet": 384,
+    "turbine_casing": 1696,
+    "turbine_window": 1696,
+    "turbine_rotor": 24,
+    "turbine_exhaust": 384,
+    "turbine_output_shaft": 16
+  },
+  "model_json_count": 253,
+  "obj_mesh_count": 253,
+  "item_model_count": 7,
+  "piece_mapping": {
+    "total": 206,
+    "tier_sections": {
+      "3": {
+        "front": 9,
+        "middle": 8,
+        "rear": 9
+      },
+      "5": {
+        "front": 25,
+        "middle": 16,
+        "rear": 25
+      },
+      "7": {
+        "front": 45,
+        "middle": 24,
+        "rear": 45
+      }
+    }
+  },
+  "state_selection": "located controls exterior model; formed omitted from selector; piece 0/207..211 is world-face independent",
+  "independent_faces": "six pre-rotated panel and window meshes; no machine_facing rotation",
+  "valid_window_models": 12,
+  "rotor_geometry": {
+    "d3": {
+      "origin": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "max_sweep_radius": 1.1875,
+      "vertex_z_range": [
+        0.13,
+        0.87
+      ],
+      "materials": [
+        "blade",
+        "blade_edge",
+        "inside",
+        "rotor_hub"
+      ]
+    },
+    "d5": {
+      "origin": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "max_sweep_radius": 2.1875,
+      "vertex_z_range": [
+        0.13,
+        0.87
+      ],
+      "materials": [
+        "blade",
+        "blade_edge",
+        "inside",
+        "rotor_hub"
+      ]
+    },
+    "d7": {
+      "origin": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "max_sweep_radius": 3.1875,
+      "vertex_z_range": [
+        0.13,
+        0.87
+      ],
+      "materials": [
+        "blade",
+        "blade_edge",
+        "inside",
+        "rotor_hub"
+      ]
+    }
+  },
+  "rotor_axis_and_center": "+Z axis, block-local (0.5,0.5,0.5); partial has no shaft",
+  "output_shaft_extent": "front/rear axes and 3/16 bearing plates remain within local z=0..1",
+  "model_obj_particle_references": "PASS",
+  "regular_mesh_bounds": "0..1 per block",
+  "install": true,
+  "staged_root": "build/reports/extension/EXT-B-TURBINE-01C-ASSETS/generated_resources",
+  "runtime_root": "src/main/resources",
+  "rotor_origin": "block-local (0.5,0.5,0.5)",
+  "status": "PASS"
+}
