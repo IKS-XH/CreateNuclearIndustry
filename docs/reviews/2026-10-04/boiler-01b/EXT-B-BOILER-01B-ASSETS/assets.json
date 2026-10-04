@@ -1,0 +1,215 @@
+{
+  "baseline": "9e8690b",
+  "textures": [
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/casing_side.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/casing_side.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/casing_top.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/casing_top.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/window_frame.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/window_frame.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/water_port_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/water_port_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/steam_port_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/steam_port_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/controller_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/controller_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/valve_body.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/valve_body.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/exchanger_face.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/exchanger_face.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/exchanger_top.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/exchanger_top.png",
+      "size": "16x16 RGBA"
+    },
+    {
+      "source": "tools/art-assets/svg/block/high_pressure_boiler/safety_badge.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/safety_badge.png",
+      "size": "16x16 RGBA"
+    }
+  ],
+  "preview": "build/reports/extension/EXT-B-BOILER-01B-ASSETS/boiler-reactor-style-comparison.png",
+  "blocks": [
+    "high_pressure_boiler_casing",
+    "high_pressure_boiler_window",
+    "high_pressure_boiler_water_port",
+    "high_pressure_boiler_steam_port",
+    "high_pressure_boiler_controller",
+    "boiler_safety_valve",
+    "boiler_heat_exchange_section"
+  ],
+  "symmetricTopTextures": {
+    "casing_top": true,
+    "exchanger_top": true
+  },
+  "files": [
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/casing_side.png",
+      "sha256": "02d61897f8ceabf8931a5b16ad67d50dd8f2d738071afd09bfeb386e324e7230"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/casing_top.png",
+      "sha256": "5092925fc2f32c02dd231ccab9a88658be19f5a0f3058e35412a47d685992511"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/window_frame.png",
+      "sha256": "02d61897f8ceabf8931a5b16ad67d50dd8f2d738071afd09bfeb386e324e7230"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/water_port_face.png",
+      "sha256": "bab7c748062ec0f936181c1510fd4bd8d0cfc7f81c454cb97826db85832e3463"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/steam_port_face.png",
+      "sha256": "ad1b2a44ecf953ba97ae3c7fd0ac08ca24436496e1bdd7c083104670102600ce"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/controller_face.png",
+      "sha256": "202688dd36f527b6048475d138a4aea7663fa1056bb400beedf171187d193f6f"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/valve_body.png",
+      "sha256": "b6a7a015b507a799f8e588cb4d9fcd0b74e85531f53be027b518777b103184dc"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/exchanger_face.png",
+      "sha256": "09168b9191d05408b1c2894335194c0ace93667cf4b90d2ca208b839a33496e8"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/exchanger_top.png",
+      "sha256": "f463bd1a56d910e91eb10e73febb0eccb0d61f20ff9790068f4a39a20439aed5"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler/safety_badge.png",
+      "sha256": "5a8d21a234a0283131bf8bb4030c2c50ea562c9f83df443e9c14b04bc2cd076a"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/casing_side.svg",
+      "sha256": "925c5892f68366b4e2c8e7e6b4d4be73816d01fd62cdd675d582df3a5d13304b"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/casing_top.svg",
+      "sha256": "bbdaa9fd57b2e85772356a8fc2136aac46580716921a24402036975ff86414d3"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/window_frame.svg",
+      "sha256": "925c5892f68366b4e2c8e7e6b4d4be73816d01fd62cdd675d582df3a5d13304b"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/water_port_face.svg",
+      "sha256": "e45b38345ebf79e900bd3b1e66ca7e9dbbe546cacbfe686f8fc86384cfcbed5e"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/steam_port_face.svg",
+      "sha256": "90ca2282fd03e826381bcea51644c8b3b0c8cc25142715c8e8d7b08de7c95d9b"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/controller_face.svg",
+      "sha256": "6c7812c98504231416da356b0f06b75c64da6dd2a42d8005a4b1717fd2a7abc0"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/valve_body.svg",
+      "sha256": "2cb7789d1819dcae6ab5a91ac0c0c86b5e5fc1e43f1c282f136933603fe87090"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/exchanger_face.svg",
+      "sha256": "f851f43f300563378d842b5b4e237aea367fd8f54d4a7bffda4d6ba6e5546819"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/exchanger_top.svg",
+      "sha256": "f8a72153036e6f46fa8f84bcc97941bfe676e7ef8c9af861a59bb4ef6dfebc9b"
+    },
+    {
+      "path": "tools/art-assets/svg/block/high_pressure_boiler/safety_badge.svg",
+      "sha256": "56d79ed09bc7aec6c02965f5f81dd0a3afd7553b9e6d0e02d5b0a495a1cff54e"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/high_pressure_boiler_casing.json",
+      "sha256": "dcf4ac9cf402573fb4a899f0527d8bfca63f56fa57b94388435c62e4efb599d7"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/high_pressure_boiler_casing.json",
+      "sha256": "5cf44a74fe98f9b0943381f1d68a9cbfb8c8d996899de24c28d763ef30f82d08"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/high_pressure_boiler_window.json",
+      "sha256": "80cad0c671f79da2719dcb8682f6038fbc520dae5e61330e51d23b34ca38fd4f"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/high_pressure_boiler_window.json",
+      "sha256": "81b82b34632f2fc042508810de270f12a595c10b5a53f899b144e1e5f8be2cec"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/high_pressure_boiler_water_port.json",
+      "sha256": "8d5888ce887d1ceb8bd61996cc3941c9baf7e701d22bae5b6efa5eb4bb48652d"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/high_pressure_boiler_water_port.json",
+      "sha256": "5afed0b54e5e496248d6c4b7e62ae48eddd06a14712e8c26028e9dd659509486"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/high_pressure_boiler_steam_port.json",
+      "sha256": "8eff9fcb55938b5d32ffd2dd549b01d8ae57715007055ea011111721aa18171d"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/high_pressure_boiler_steam_port.json",
+      "sha256": "f76c4e4dc29d89477d4dc0a93e44b1282346050f5311aa1c64103a1b0f6330cc"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/high_pressure_boiler_controller.json",
+      "sha256": "e17f3196b3a72a9b769fa785e3312c7609252c62b4415cd1e2e6a4f322e86939"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/high_pressure_boiler_controller.json",
+      "sha256": "06ea291d005ac16022712ddefdac6b66eeb5ed1ceccb1dd382594fa500512a7a"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/boiler_safety_valve.json",
+      "sha256": "a03db6792413d48bf515e657eb310fe29f7144b80f3f977759562d86664808f7"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/boiler_safety_valve.json",
+      "sha256": "de0bea9c24a5bb6ce0cbec8af03c14262dd14405d29bb4a777753fbf87fa7dd5"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/boiler_heat_exchange_section.json",
+      "sha256": "17c7ec6a5eec60a6261b5f15e73a26f409d018b3bee8d03a32ca5e731790756a"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/boiler_heat_exchange_section.json",
+      "sha256": "b502c0183b1cf4653cdae614d7e72098bc4416e0f623356ef46fb31c6b64d5ca"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/recipe/heat_exchanger/reinforced_steel_plate.json",
+      "sha256": "60a374c4573061377ad3a4cda048698324657e20958a0cddf36932382b7dfc36"
+    },
+    {
+      "path": "build/reports/extension/EXT-B-BOILER-01B-ASSETS/boiler-reactor-style-comparison.png",
+      "sha256": "ea1b8296b32e9cf99b10ada5e0b9ca8ba71964b217e63e94ad31fa74d76db144"
+    }
+  ]
+}

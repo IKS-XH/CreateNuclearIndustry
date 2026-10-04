@@ -55,6 +55,13 @@ public final class BoilerState {
     public int remainingFill(long now) { return Math.min(CAPACITY - water, FLOW_LIMIT - (now == flowTick ? fillUsed : 0)); }
     public int remainingDrain(long now) { return Math.min(steam, FLOW_LIMIT - (now == flowTick ? drainUsed : 0)); }
 
+    /** 结构段数改变时保留已付 HU，但新增段必须补足新暖炉上限后才恢复就绪。 */
+    public void sectionsChanged(int sections) {
+        double ceiling = Math.max(0, sections) * WARM_HU_PER_SECTION;
+        warmHu = Math.min(warmHu, ceiling);
+        if (warmHu < ceiling) ready = false;
+    }
+
     private void advanceFlow(long now) {
         if (flowTick == now) return;
         flowTick = now;
@@ -147,7 +154,7 @@ public final class BoilerState {
         rollbackPrepared = false;
         water = Math.clamp(tag.getInt("Water"), 0, CAPACITY);
         steam = Math.clamp(tag.getInt("Steam"), 0, CAPACITY);
-        warmHu = finite(tag.getDouble("WarmHu"), 8 * WARM_HU_PER_SECTION);
+        warmHu = finite(tag.getDouble("WarmHu"), 9 * WARM_HU_PER_SECTION);
         processHu = finite(tag.getDouble("ProcessHu"), Math.nextDown(1));
         ready = tag.getBoolean("Ready"); valveOpen = tag.getBoolean("ValveOpen");
         totalVented = Math.max(0, tag.getLong("TotalVented"));

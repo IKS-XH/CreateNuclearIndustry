@@ -172,7 +172,7 @@ public final class ExtensionHeatExchangerCraftingGameTests {
         });
     }
 
-    /** 原强化钢板工作台ID现承载序列装配，核对基底、投入顺序、末步压片与唯一结果。 */
+    /** 原强化钢板配方ID保持，核对坚固板投入、压片与唯一结果。 */
     @GameTest(template = TEMPLATE)
     public static void reinforcedPlateRecipeReplacesWorkbenchRoute(GameTestHelper helper) {
         var holder = helper.getLevel().getRecipeManager().byKey(id("heat_exchanger/reinforced_steel_plate"))
@@ -191,15 +191,18 @@ public final class ExtensionHeatExchangerCraftingGameTests {
                         && recipe.getResultItem(helper.getLevel().registryAccess()).getCount() == 1
                         && recipe.getOutputChance() == 1f,
                 "强化钢板基底、半成品、轮数或唯一结果不符");
-        require(helper, recipe.getSequence().size() == 3, "强化钢板工序不是两次机械手加一次压片");
+        require(helper, recipe.getSequence().size() == 2, "强化钢板工序不是一次机械手加一次压片");
         var first = recipe.getSequence().get(0).getRecipe();
-        var second = recipe.getSequence().get(1).getRecipe();
-        var last = recipe.getSequence().get(2).getRecipe();
-        require(helper, first instanceof DeployerApplicationRecipe && second instanceof DeployerApplicationRecipe
-                        && last instanceof PressingRecipe
-                        && first.getIngredients().get(1).test(new ItemStack(createItem("sturdy_sheet")))
-                        && second.getIngredients().get(1).test(new ItemStack(createItem("precision_mechanism"))),
-                "机械手耗材顺序或末步压片不符");
+        var last = recipe.getSequence().get(1).getRecipe();
+        require(helper, first instanceof DeployerApplicationRecipe && last instanceof PressingRecipe
+                        && first.getIngredients().get(1).test(new ItemStack(createItem("sturdy_sheet"))),
+                "坚固板投入或末步压片不符");
+        // Create 按保存的绝对 step 对当前工序数取模；旧 step=1 已投入坚固板，
+        // 可直接压片；旧 step=2 下一步重新要求坚固板，不能白得成品。
+        require(helper, recipe.getSequence().get(1 % recipe.getSequence().size()).getRecipe() instanceof PressingRecipe
+                        && recipe.getSequence().get(2 % recipe.getSequence().size()).getRecipe()
+                        instanceof DeployerApplicationRecipe,
+                "旧序列半成品在缩短工序后跳过坚固板");
         helper.succeed();
     }
 
@@ -218,8 +221,8 @@ public final class ExtensionHeatExchangerCraftingGameTests {
         helper.succeed();
     }
 
-    /** 真实机械手分步消耗坚固板、精密构件，真实压片机一轮产一块强化钢板。 */
-    @GameTest(template = TEMPLATE, timeoutTicks = 530)
+    /** 真实机械手消耗坚固板，真实压片机一轮产一块强化钢板。 */
+    @GameTest(template = TEMPLATE, timeoutTicks = 340)
     public static void realReinforcedPlateAssemblyConsumesEveryStep(GameTestHelper helper) {
         require(helper, HeatMaterialsContent.INCOMPLETE_REINFORCED_STEEL_PLATE.get() instanceof SequencedAssemblyItem,
                 "半成品未注册为Create序列装配物品");
@@ -230,19 +233,36 @@ public final class ExtensionHeatExchangerCraftingGameTests {
             assemblyPower(helper, 256);
         });
         helper.runAfterDelay(110, () -> {
-            assertAssemblyInterim(helper, 1, 1f / 3f);
+            assertAssemblyInterim(helper, 1, 1f / 2f);
             require(helper, handCount(helper) == 0, "第一步未精确消耗一块坚固板");
-            hand(helper, new ItemStack(createItem("precision_mechanism")));
-        });
-        helper.runAfterDelay(220, () -> {
-            assertAssemblyInterim(helper, 2, 2f / 3f);
-            require(helper, handCount(helper) == 0, "第二步未精确消耗一个精密构件");
             setupPress(helper);
         });
-        helper.runAfterDelay(390, () -> {
+        helper.runAfterDelay(290, () -> {
             ItemStack result = assemblyDepot(helper).getHeldItem();
             require(helper, result.is(registered(helper, "reinforced_steel_plate")) && result.getCount() == 1,
                     "真实压片未在一轮内产出唯一强化钢板");
+            helper.succeed();
+        });
+    }
+
+    /** 旧step=2在新配方会再要求坚固板，Create随后直接结算成品；记录原生迁移边界。 */
+    @GameTest(template = TEMPLATE, timeoutTicks = 180)
+    public static void legacyStepTwoStillConsumesSturdySheetBeforeResult(GameTestHelper helper) {
+        setupDeployerDepot(helper);
+        helper.runAfterDelay(5, () -> {
+            ItemStack legacy = new ItemStack(registered(helper, "incomplete_reinforced_steel_plate"));
+            legacy.set(AllDataComponents.SEQUENCED_ASSEMBLY,
+                    new SequencedAssemblyRecipe.SequencedAssembly(id("heat_exchanger/reinforced_steel_plate"),
+                            2, 2f / 3f));
+            putOnAssemblyDepot(helper, legacy);
+            hand(helper, new ItemStack(createItem("sturdy_sheet")));
+            assemblyPower(helper, 256);
+        });
+        helper.runAfterDelay(115, () -> {
+            ItemStack result = assemblyDepot(helper).getHeldItem();
+            require(helper, result.is(registered(helper, "reinforced_steel_plate")) && result.getCount() == 1
+                            && handCount(helper) == 0,
+                    "旧step=2未再消耗坚固板，或在同ID新序列中复制成品");
             helper.succeed();
         });
     }

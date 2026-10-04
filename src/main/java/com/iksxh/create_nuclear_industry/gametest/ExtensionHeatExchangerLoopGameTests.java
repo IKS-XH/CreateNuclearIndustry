@@ -4,6 +4,7 @@ import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockE
 import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.heat.NuclearHeatExchangerBlockEntity;
+import com.iksxh.create_nuclear_industry.heat.NuclearHeatExchangerBlock;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
@@ -98,15 +99,15 @@ public final class ExtensionHeatExchangerLoopGameTests {
         });
     }
 
-    /** 两个物理面向同一近满换热器热罐送液，核验同一账本的多句柄接收守恒。 */
+    /** 定向背面接入真实 Create 泵管网，核验近满热罐的执行量与源液守恒。 */
     @GameTest(template = TEMPLATE, timeoutTicks = 160)
-    public static void doubleSidedHeatExchangerNearFullInputConserves(GameTestHelper helper) {
-        helper.setBlock(EXCHANGER, HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get());
+    public static void directedHeatExchangerNearFullInputConserves(GameTestHelper helper) {
+        helper.setBlock(EXCHANGER, HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get().defaultBlockState()
+                .setValue(NuclearHeatExchangerBlock.FACING, Direction.EAST));
         helper.onEachTick(new Runnable() {
             private boolean started;
             private long initialTotal;
             private boolean westPortFlowObserved;
-            private boolean eastPortFlowObserved;
 
             @Override
             public void run() {
@@ -121,10 +122,10 @@ public final class ExtensionHeatExchangerLoopGameTests {
                             IFluidHandler.FluidAction.EXECUTE);
                     require(helper, prefilled == 1_000,
                             "近满换热器热罐预置失败：" + prefilled + "/1000");
-                    buildDoubleSidedExchangerNetwork(helper);
+                    buildDirectedExchangerNetwork(helper);
                     initialTotal = SOURCE_MB + prefilled;
                     started = true;
-                    LOGGER.info("EXCHANGER_LOOP_DOUBLE_SIDE_START source={} hot={} cold={} total={} capacity={} pumpRpm={}",
+                    LOGGER.info("EXCHANGER_LOOP_DIRECTED_START source={} hot={} cold={} total={} capacity={} pumpRpm={}",
                             sourceAmount(fluidHandler(helper, SOURCE_TANK, Direction.NORTH)),
                             machine.ledger().hot(), machine.ledger().cold(), initialTotal,
                             com.iksxh.create_nuclear_industry.heat.HeatExchangerState.CAPACITY,
@@ -138,22 +139,20 @@ public final class ExtensionHeatExchangerLoopGameTests {
                 long cold = machine.ledger().cold();
                 long total = sourceAmount + hot + cold;
                 westPortFlowObserved |= pipeFlowActive(helper, new BlockPos(1, 2, 2), Direction.EAST);
-                eastPortFlowObserved |= pipeFlowActive(helper, new BlockPos(3, 2, 2), Direction.WEST);
                 require(helper, pump(helper).getSpeed() == PUMP_RPM,
-                        "双面换热器输入网络的 Create 泵未保持 256 rpm");
+                        "定向换热器输入网络的 Create 泵未保持 256 rpm");
                 require(helper, total == initialTotal,
-                        "双面近满换热器管网发生冷却剂总量漂移：源/热/冷="
+                        "定向近满换热器管网发生冷却剂总量漂移：源/热/冷="
                                 + sourceAmount + "/" + hot + "/" + cold
                                 + "，初始=" + initialTotal + "，当前=" + total);
                 if (hot == com.iksxh.create_nuclear_industry.heat.HeatExchangerState.CAPACITY) {
                     require(helper, sourceAmount < SOURCE_MB,
                             "换热器满罐前没有观察到真实 Create 源液移动");
-                    require(helper, westPortFlowObserved && eastPortFlowObserved,
-                            "达到满罐前未观察到双侧换热器端口均有真实流体：西/东="
-                                    + westPortFlowObserved + "/" + eastPortFlowObserved);
+                    require(helper, westPortFlowObserved,
+                            "达到满罐前未观察到背面换热器端口真实流体");
                     require(helper, total == initialTotal,
-                            "双面近满换热器到达容量后总量不守恒");
-                    LOGGER.info("EXCHANGER_LOOP_DOUBLE_SIDE_FINAL source={} hot={} cold={} total={} capacity={} branches={}",
+                            "定向近满换热器到达容量后总量不守恒");
+                    LOGGER.info("EXCHANGER_LOOP_DIRECTED_FINAL source={} hot={} cold={} total={} capacity={} branches={}",
                             sourceAmount, hot, cold, total,
                             com.iksxh.create_nuclear_industry.heat.HeatExchangerState.CAPACITY,
                             branchFlowDiagnostics(helper, true));
@@ -363,19 +362,18 @@ public final class ExtensionHeatExchangerLoopGameTests {
         propagatePipes(helper, pipes);
     }
 
-    /** 构造近满换热器两个侧面并联受液的真实 Create 管网。 */
-    private static void buildDoubleSidedExchangerNetwork(GameTestHelper helper) {
+    /** 构造从换热器背面受液的真实 Create 管网。 */
+    private static void buildDirectedExchangerNetwork(GameTestHelper helper) {
         helper.setBlock(SOURCE_TANK, AllBlocks.FLUID_TANK.get().defaultBlockState());
         int loaded = fluidHandler(helper, SOURCE_TANK, Direction.NORTH).fill(
                 new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), SOURCE_MB),
                 IFluidHandler.FluidAction.EXECUTE);
         require(helper, loaded == SOURCE_MB,
-                "双面换热器源罐装热液失败：" + loaded + "/" + SOURCE_MB);
+                "定向换热器源罐装热液失败：" + loaded + "/" + SOURCE_MB);
 
         BlockPos[] pipes = {
                 new BlockPos(1, 2, 5), new BlockPos(2, 2, 5), new BlockPos(3, 2, 5),
                 new BlockPos(1, 2, 4), new BlockPos(1, 2, 3), new BlockPos(1, 2, 2),
-                new BlockPos(3, 2, 4), new BlockPos(3, 2, 3), new BlockPos(3, 2, 2),
                 new BlockPos(2, 2, 7)};
         for (BlockPos pipe : pipes) {
             helper.setBlock(pipe, AllBlocks.FLUID_PIPE.getDefaultState());

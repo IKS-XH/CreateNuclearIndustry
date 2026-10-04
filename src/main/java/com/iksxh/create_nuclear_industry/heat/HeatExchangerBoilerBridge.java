@@ -21,11 +21,22 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 public final class HeatExchangerBoilerBridge {
     private static final Map<Level, Set<BlockPos>> PENDING = new WeakHashMap<>();
     private static final Set<NuclearHeatExchangerBlockEntity> ACTIVE = java.util.Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<NuclearHeatExchangerBlockEntity> LOADED = java.util.Collections.newSetFromMap(new WeakHashMap<>());
     private HeatExchangerBoilerBridge() {}
 
     /** 仅登记本模组已经发布热的源，不追踪世界中的普通 Create 锅炉。 */
     static void track(NuclearHeatExchangerBlockEntity machine, boolean active) {
         if (active) ACTIVE.add(machine); else ACTIVE.remove(machine);
+    }
+    static void registerLoaded(NuclearHeatExchangerBlockEntity machine) { LOADED.add(machine); }
+    static void unregisterLoaded(NuclearHeatExchangerBlockEntity machine) { LOADED.remove(machine); }
+
+    /** 非供热成员停 tick 也须撤销整列句柄，否则恢复时旧端点能力可能重活。 */
+    private static void auditLoadedSources() {
+        for (var machine : java.util.List.copyOf(LOADED)) {
+            if (!machine.current()) LOADED.remove(machine);
+            else if (!machine.canTick()) machine.pauseHeat();
+        }
     }
 
     /**
@@ -34,7 +45,7 @@ public final class HeatExchangerBoilerBridge {
      */
     private static void auditActiveSources() {
         for (var machine : java.util.List.copyOf(ACTIVE)) {
-            if (!machine.current() || !machine.canTick()) {
+            if (!machine.current() || !machine.canTick() || HeatExchangerLine.find(machine) == null) {
                 machine.pauseHeat();
                 ACTIVE.remove(machine);
             }
@@ -42,6 +53,7 @@ public final class HeatExchangerBoilerBridge {
     }
 
     @SubscribeEvent public static void beforeServerTick(ServerTickEvent.Pre event) {
+        auditLoadedSources();
         auditActiveSources();
     }
 

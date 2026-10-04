@@ -24,12 +24,12 @@
 
 **验证方式：** 沿用治理5.1，同一实现的已审定向测试不重复执行；制造批次历史证据见[冷却剂与实验堆验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)，换热器本次集成证据单列。
 
-**当前优先级（2026-10-04用户调整）：** 先推进专用高压锅炉→超临界汽轮机→冷凝回水链，再补乏燃料基础封存；[完整锅炉方案](./superpowers/plans/2026-10-04-high-pressure-boiler-proposal.md)已全部确认，[01A](./superpowers/plans/2026-10-04-ext-b-boiler-01a.md)候选`af106ab`已通过定向验证与独立审查，等待[三组人工验收](./reviews/2026-10-04/boiler-01a/CLIENT-CHECKLIST.md)，[证据已归档](./reviews/2026-10-04/boiler-01a/CANDIDATE.md)。首期仅核热、外围1～8段、3×3×4、Create原生管网输送超临界蒸汽；辅助热和二级耐压限制延期，功能尚未手测/合入main。工作盆加热明确后移，[原准备卡](./superpowers/plans/2026-10-04-heat-exchanger-basin-preparation.md)停止派发，不再作为主线前置。完整EXT-B-API-01及专用蒸汽链未记完成；02E动画仍后置。
+**当前优先级（2026-10-04）：** 锅炉01A基本手测通过，已完成候选[01B整改](./superpowers/plans/2026-10-04-ext-b-boiler-01b.md)：5×5×5、底部中央最多9段、棱边全外壳、透明窗/统一素材、主动出汽、强化板去精密构件。用户同时确认[换热器01D](./superpowers/plans/2026-10-04-ext-b-exchanger-01d.md)定向接口及最多16台首尾共享库存，支撑三排九台换热器；均在同级候选完成22项JUnit、40项GameTest、增量打包与独立审查，等待[联合三组手测](./reviews/2026-10-04/boiler-01b/CLIENT-CHECKLIST.md)，未最终验收/合入main。后续为汽轮机→冷凝回水→基础封存；工作盆加热、辅助热、二级耐压限制和02E动画继续后置。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
-| [强化钢板序列装配](./superpowers/plans/2026-10-04-reinforced-plate-assembly.md) | 候选实现、13项定向GameTest、增量构建与独立审查通过；与锅炉合并手测，未合main |
+| [锅炉01B与换热器01D](./superpowers/plans/2026-10-04-ext-b-boiler-01b.md) | 候选与独立审查通过；锅炉扩容/出汽/素材、强化板减料、换热器直列共享合并等待人工门 |
 | [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 全部人工门通过、已合入main，见[最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |
 | [燃料02A/02B：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 全部手测通过并合入main；[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)，运行证据复用 |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |

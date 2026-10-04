@@ -49,12 +49,13 @@ public final class ExtensionHeatExchangerGameTests {
             require(helper, machine.ledger().converted() == 36, "小锅炉错误降低额定36mB/t耗液");
             var snapshot = machine.savePortableData();
             var pos = helper.absolutePos(BASE.below());
-            var port = machine.fluidPort(Direction.EAST);
+            var port = machine.fluidPort(Direction.SOUTH);
+            var outlet = machine.fluidPort(Direction.NORTH);
             for (int i = 0; i < 100; i++) {
                 require(helper, BoilerHeater.findHeat(helper.getLevel(), pos, machine.getBlockState()) == 18,
                         "公开BoilerHeater查询不是18");
                 port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 500), IFluidHandler.FluidAction.SIMULATE);
-                port.drain(500, IFluidHandler.FluidAction.SIMULATE);
+                outlet.drain(500, IFluidHandler.FluidAction.SIMULATE);
             }
             require(helper, snapshot.equals(machine.savePortableData()), "查询/模拟更改库存、HU或计时");
             require(helper, helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, pos, Direction.UP) == null,
@@ -77,10 +78,10 @@ public final class ExtensionHeatExchangerGameTests {
             if (settled[0]) require(helper, ready, "低流量稳态期间真实锅炉负载中断");
             if (!ready) return;
             // 负载成立后才逐tick注入，避免预热前囤积热液把18mB/t夹具变成短期满流量。
-            var port = machine.fluidPort(Direction.EAST);
+            var port = machine.fluidPort(Direction.SOUTH);
             require(helper, port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 18),
                     IFluidHandler.FluidAction.EXECUTE) == 18, "稳定供给未实际接收18mB");
-            port.drain(4000, IFluidHandler.FluidAction.EXECUTE);
+            machine.fluidPort(Direction.NORTH).drain(4000, IFluidHandler.FluidAction.EXECUTE);
             if (settled[0]) {
                 require(helper, machine.ledger().heat() == 9 && controller(helper, BASE).boiler.activeHeat == 9,
                         "真实18mB/t稳态在连续40tick内偏离9级");
@@ -130,11 +131,13 @@ public final class ExtensionHeatExchangerGameTests {
     public static void bareTankDoesNotConsumeAndRemovedMachineKeepsSinglePaidSnapshot(GameTestHelper helper) {
         buildBoiler(helper, BASE, 2, 1, false);
         var machine = machine(helper, BASE.below());
-        var port = machine.fluidPort(Direction.DOWN);
+        IFluidHandler[] port = {null};
         // NeoForge 的 onLoad 在放置后调度；载入前能力按合同拒绝操作，不能把拒绝误判为耗液。
-        helper.runAfterDelay(2, () -> require(helper,
-                port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 2000),
-                        IFluidHandler.FluidAction.EXECUTE) == 2000, "加载后热液未实际注入"));
+        helper.runAfterDelay(2, () -> {
+            port[0] = machine.fluidPort(Direction.SOUTH);
+            require(helper, port[0] != null && port[0].fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 2000),
+                    IFluidHandler.FluidAction.EXECUTE) == 2000, "加载后热液未实际注入");
+        });
         helper.runAfterDelay(45, () -> {
             require(helper, machine.ledger().hot() == 2000 && machine.ledger().cold() == 0, "裸储罐错误耗热液");
             placeEngine(helper, BASE);
@@ -151,8 +154,8 @@ public final class ExtensionHeatExchangerGameTests {
                     new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE));
             require(helper, player.gameMode.destroyBlock(absolute), "真实生存铁镐破坏失败");
             require(helper, controller.boiler.activeHeat == 0, "移除后真实锅炉仍缓存旧热");
-            require(helper, port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1),
-                    IFluidHandler.FluidAction.EXECUTE) == 0 && port.drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(),
+            require(helper, port[0].fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1),
+                    IFluidHandler.FluidAction.EXECUTE) == 0 && port[0].drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(),
                     "缓存旧能力在移除后仍修改库存");
             List<ItemEntity> drops = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(absolute).inflate(1),
                     e -> e.getItem().is(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER_ITEM.get()));
@@ -186,7 +189,7 @@ public final class ExtensionHeatExchangerGameTests {
             require(helper, (controller.getBlockPos().getX() >> 4) != (machine.getBlockPos().getX() >> 4),
                     "测试场景未实际跨区块");
             var saved = machine.savePortableData();
-            var oldPort = machine.fluidPort(Direction.EAST);
+            var oldPort = machine.fluidPort(Direction.SOUTH);
             machine.onChunkUnloaded();
             require(helper, controller.boiler.activeHeat == 0 && machine.publishedHeat() == -1,
                     "实体卸载生命周期未清除跨区块锅炉缓存");
@@ -213,7 +216,7 @@ public final class ExtensionHeatExchangerGameTests {
         var machine = machine(helper, source);
         var level = helper.getLevel();
         var cache = net.neoforged.neoforge.capabilities.BlockCapabilityCache.create(
-                Capabilities.FluidHandler.BLOCK, level, machine.getBlockPos(), Direction.EAST);
+                Capabilities.FluidHandler.BLOCK, level, machine.getBlockPos(), Direction.SOUTH);
         IFluidHandler[] oldPort = {null};
         net.minecraft.nbt.CompoundTag[] beforePause = {null};
         var sourceChunk = level.getChunkAt(machine.getBlockPos());
@@ -225,7 +228,8 @@ public final class ExtensionHeatExchangerGameTests {
                 var port = cache.getCapability();
                 if (port != null) {
                     port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 4000), IFluidHandler.FluidAction.EXECUTE);
-                    port.drain(4000, IFluidHandler.FluidAction.EXECUTE);
+                    var outlet = machine.fluidPort(Direction.NORTH);
+                    if (outlet != null) outlet.drain(4000, IFluidHandler.FluidAction.EXECUTE);
                 }
             }
         });
@@ -260,7 +264,7 @@ public final class ExtensionHeatExchangerGameTests {
             require(helper, machine.canTick() && machine.publishedHeat() < 18 && machine.ledger().reserve() < 720,
                     "恢复后未扣停tick期间热量或免费恢复完整余热");
             var port = cache.getCapability();
-            require(helper, port != oldPort[0] && port != null && port.getTanks() == 2,
+            require(helper, port != oldPort[0] && port != null && port.getTanks() == 1,
                     "恢复后真实BlockCapabilityCache未刷新可用端口");
             require(helper, oldPort[0].drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "恢复后旧epoch句柄复活");
         });
@@ -308,9 +312,10 @@ public final class ExtensionHeatExchangerGameTests {
         var handler = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(base), Direction.NORTH);
         if (handler != null) handler.fill(new FluidStack(Fluids.WATER, water), IFluidHandler.FluidAction.EXECUTE);
         if (replenish && machine.current()) {
-            var port = machine.fluidPort(Direction.EAST);
-            port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 4000), IFluidHandler.FluidAction.EXECUTE);
-            port.drain(4000, IFluidHandler.FluidAction.EXECUTE);
+            var port = machine.fluidPort(Direction.SOUTH);
+            var outlet = machine.fluidPort(Direction.NORTH);
+            if (port != null) port.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 4000), IFluidHandler.FluidAction.EXECUTE);
+            if (outlet != null) outlet.drain(4000, IFluidHandler.FluidAction.EXECUTE);
         }
     }
     private static void require(GameTestHelper helper, boolean condition, String message) {

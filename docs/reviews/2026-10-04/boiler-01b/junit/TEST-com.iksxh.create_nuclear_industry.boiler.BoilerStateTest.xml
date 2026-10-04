@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-04T01:42:34.501Z" hostname="DESKTOP-4G1EOU9" time="0.026">
+  <properties/>
+  <testcase name="openedValveThenExternalDrainBelowCloseThresholdNeverAddsSteam()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.016"/>
+  <testcase name="addingNinthSectionKeepsOldPaidHeatWithoutSkippingNewWarmup()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.002"/>
+  <testcase name="fractionalPaidHeatRequiresWholeHuForOneSteam()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.002"/>
+  <testcase name="resumedHeatCannotSkipElapsedCooling()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.0"/>
+  <testcase name="sharedFillBudgetAndSimulationStayPure()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.001"/>
+  <testcase name="warmingHeatCannotBecomeSteamTwice()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.0"/>
+  <testcase name="dedicatedHeatIsPaidOnceAndColdVolumeMatchesHot()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.002"/>
+  <testcase name="blockedValveHoldsSteamThenVentsAndClosesAtEightyPercent()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.001"/>
+  <testcase name="cooldownValveAndSaveRestoreConserveInventory()" classname="com.iksxh.create_nuclear_industry.boiler.BoilerStateTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

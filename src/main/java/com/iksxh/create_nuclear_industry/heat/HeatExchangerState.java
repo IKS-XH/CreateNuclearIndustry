@@ -15,6 +15,24 @@ public final class HeatExchangerState {
     private boolean legacyDeadlinePending;
     private String status = "no_load";
 
+    /** 服务端一次换热使用的库存边界；返回值是实际等体积转移量，单位 mB。 */
+    public interface Exchange {
+        int hot();
+        int coldSpace();
+        int convert(int amount);
+    }
+
+    private final Exchange localExchange = new Exchange() {
+        @Override public int hot() { return hot; }
+        @Override public int coldSpace() { return CAPACITY - cold; }
+        @Override public int convert(int amount) {
+            int moved = Math.min(amount, Math.min(hot, CAPACITY - cold));
+            hot -= moved;
+            cold += moved;
+            return moved;
+        }
+    };
+
     /** 有界配置快照；密度复用 P1 的 HU/mB，不把 Create 数值热等级当作物理单位。 */
     public record Settings(int heatLevel, double huPerLevel, int bufferTicks, double density) {
         public double rate() { return heatLevel * huPerLevel; }
@@ -55,12 +73,31 @@ public final class HeatExchangerState {
         return taken;
     }
 
+    /** 仅供已预检的整列换热事务使用；不改变本机已付热或流量分数。 */
+    int takeHotForConversion(int amount) {
+        int taken = Math.min(Math.max(0, amount), hot);
+        hot -= taken;
+        return taken;
+    }
+
+    /** 仅供同一次换热事务使用；热液扣量须与全列新增冷液等量。 */
+    int putColdFromConversion(int amount) {
+        int added = Math.min(Math.max(0, amount), CAPACITY - cold);
+        cold += added;
+        return added;
+    }
+
     /**
      * 每个世界 tick 最多执行一次。服务端先按已储HU决定档位并实付，再转换补储；
      * 因此发布热始终有足额已付款，热冷转换体积相等，且储备不超过配置上限。
      * 连续无实际转换达到bufferTicks后撤销供热并散去余热；普通查询和模拟不调用结算。
      */
     public void tick(long now, boolean load, Settings cfg) {
+        tick(now, load, cfg, localExchange);
+    }
+
+    /** 保持本机已付热与期限，只有热液转冷借用传入的整列库存事务。 */
+    public void tick(long now, boolean load, Settings cfg, Exchange exchange) {
         if (now == lastTick) return;
         heat = -1;
         converted = 0;
@@ -108,19 +145,17 @@ public final class HeatExchangerState {
         double requested = cfg.rate() / cfg.density() + flowFraction;
         flowFraction = requested - Math.floor(requested);
         int budget = (int) Math.min(CAPACITY, Math.floor(requested));
-        int available = Math.min(hot, CAPACITY - cold);
+        int available = Math.min(exchange.hot(), exchange.coldSpace());
         // 最后不足1mB的空间允许一个整mB完成充热，尾差有界散失；向下取整会让
         // 0.3HU/mB等密度永远充不到最高档阈值。空间已满时仍不转换，热液留在热罐。
         int headroomBudget = (int) Math.min(CAPACITY,
                 Math.ceil(Math.max(0, cfg.capacity() - reserve) / cfg.density()));
-        converted = Math.min(budget, Math.min(available, headroomBudget));
-        hot -= converted;
-        cold += converted;
+        converted = exchange.convert(Math.min(budget, Math.min(available, headroomBudget)));
         reserve = Math.min(cfg.capacity(), reserve + converted * cfg.density());
         if (converted > 0) noFlowDeadlineTick = safeAdd(now, cfg.bufferTicks());
         // 与本tick实际档位比较补热，而不是与额定转换上限比较；稳定低档同样属于正常供热。
         status = heat > 0 ? (converted * cfg.density() < payment ? "residual" : "running")
-                : cold == CAPACITY ? "blocked" : hot == 0 ? "empty" : "warming";
+                : exchange.coldSpace() == 0 ? "blocked" : exchange.hot() == 0 ? "empty" : "warming";
     }
 
     /**
@@ -128,6 +163,11 @@ public final class HeatExchangerState {
      * 转换在领取后发生并仍占用冷罐等量空间，不发布原生 Create 锅炉热级。
      */
     public double claimDedicated(long now, double requestHu, Settings cfg) {
+        return claimDedicated(now, requestHu, cfg, localExchange);
+    }
+
+    /** 专用锅炉仍只领取本机储备，补储使用整列可用热液和冷罐空位。 */
+    public double claimDedicated(long now, double requestHu, Settings cfg, Exchange exchange) {
         if (now == lastTick || !cfg.valid() || !Double.isFinite(requestHu) || requestHu <= 0) return 0;
         if (legacyDeadlinePending) restoreLegacyDeadline(cfg);
         if (lastTick >= 0 && now < lastTick) {
@@ -148,12 +188,10 @@ public final class HeatExchangerState {
         flowFraction = requested - Math.floor(requested);
         int budget = (int) Math.min(CAPACITY, Math.floor(requested));
         int headroom = (int) Math.min(CAPACITY, Math.ceil((cfg.capacity() - reserve) / cfg.density()));
-        converted = Math.min(budget, Math.min(Math.min(hot, CAPACITY - cold), headroom));
-        hot -= converted;
-        cold += converted;
+        converted = exchange.convert(Math.min(budget, Math.min(Math.min(exchange.hot(), exchange.coldSpace()), headroom)));
         reserve = Math.min(cfg.capacity(), reserve + converted * cfg.density());
         if (converted > 0) noFlowDeadlineTick = safeAdd(now, cfg.bufferTicks());
-        status = converted > 0 ? "dedicated" : paid > 0 ? "residual" : cold == CAPACITY ? "blocked" : "empty";
+        status = converted > 0 ? "dedicated" : paid > 0 ? "residual" : exchange.coldSpace() == 0 ? "blocked" : "empty";
         return paid;
     }
 

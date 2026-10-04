@@ -1,5 +1,7 @@
 # 高压锅炉01A：合并人工清单
 
+> 历史清单：用户已反馈本版基本通过；其后确认5×5×5/最多9段、主动出汽、素材与强化板减料及换热器直列共享。下文仅保留01A测试背景，不再按旧四层图搭建；当前实施见[01B卡](../../../superpowers/plans/2026-10-04-ext-b-boiler-01b.md)。
+
 **当前状态：锅炉功能基线`af106ab`及后续强化钢板序列装配增量均已通过各自定向验证和独立审查，现在等待用户人工验收；未记手测通过，未合入main。** 功能合同见[批准方案](../../../superpowers/plans/2026-10-04-high-pressure-boiler-proposal.md)，自动证据见[候选交付](./CANDIDATE.md)和[材料实施卡](../../../superpowers/plans/2026-10-04-reinforced-plate-assembly.md)。
 
 ## 候选启动

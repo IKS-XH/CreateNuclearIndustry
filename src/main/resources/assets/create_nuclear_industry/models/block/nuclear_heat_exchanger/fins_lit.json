@@ -12,7 +12,11 @@
     "brass": "create_nuclear_industry:block/nuclear_heat_exchanger/brass",
     "brass_dark": "create_nuclear_industry:block/nuclear_heat_exchanger/brass_dark",
     "hot": "create_nuclear_industry:block/nuclear_heat_exchanger/hot",
-    "hot_light": "create_nuclear_industry:block/nuclear_heat_exchanger/hot_light"
+    "hot_light": "create_nuclear_industry:block/nuclear_heat_exchanger/hot_light",
+    "cold": "create_nuclear_industry:block/nuclear_heat_exchanger/cold",
+    "cold_light": "create_nuclear_industry:block/nuclear_heat_exchanger/cold_light",
+    "cold_outlet": "create_nuclear_industry:block/nuclear_heat_exchanger/cold_outlet",
+    "hot_inlet": "create_nuclear_industry:block/nuclear_heat_exchanger/hot_inlet"
   },
   "elements": [
     {

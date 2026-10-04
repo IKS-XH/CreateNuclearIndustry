@@ -12,7 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** 固定3×3×4壳体的只读验证器；不加载区块，返回底部热段和所属端口位置。 */
+/** 固定5×5×5壳体的只读验证器；不加载区块，返回底面中央热段和所属端口位置。 */
 public final class BoilerStructure {
     private static final Map<Level, Map<BlockPos, WeakReference<BoilerControllerBlockEntity>>> OWNERS = new WeakHashMap<>();
     public record Form(BlockPos center, List<BlockPos> sections, List<BlockPos> waterPorts,
@@ -23,7 +23,7 @@ public final class BoilerStructure {
     /** 只有结构变更时复核相邻候选；弱引用不延长世界或实体寿命。 */
     public static void invalidateNearby(Level level, BlockPos changed) {
         if (level == null || level.isClientSide) return;
-        for (int y = -3; y <= 3; y++) for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++) {
+        for (int y = -4; y <= 4; y++) for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++) {
             BlockPos candidate = changed.offset(x, y, z);
             if (level.hasChunkAt(candidate) && level.getBlockEntity(candidate) instanceof BoilerControllerBlockEntity owner)
                 owner.invalidateForm();
@@ -33,14 +33,14 @@ public final class BoilerStructure {
 
     /** 两个完整外形的占位包围盒不得相交，防止共享壳体或热段被两个控制器认领。 */
     static boolean unique(Level level, BlockPos controller, Form form) {
-        for (int y = -3; y <= 3; y++) for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++) {
+        for (int y = -4; y <= 4; y++) for (int x = -8; x <= 8; x++) for (int z = -8; z <= 8; z++) {
             BlockPos candidate = controller.offset(x, y, z);
             if (candidate.equals(controller) || !level.hasChunkAt(candidate)
                     || !(level.getBlockEntity(candidate) instanceof BoilerControllerBlockEntity)) continue;
             Form other = inspect(level, candidate);
-            if (other != null && Math.abs(form.center().getX() - other.center().getX()) <= 2
-                    && Math.abs(form.center().getZ() - other.center().getZ()) <= 2
-                    && Math.abs(form.center().getY() - other.center().getY()) <= 3) return false;
+            if (other != null && Math.abs(form.center().getX() - other.center().getX()) <= 4
+                    && Math.abs(form.center().getZ() - other.center().getZ()) <= 4
+                    && Math.abs(form.center().getY() - other.center().getY()) <= 4) return false;
         }
         return true;
     }
@@ -85,44 +85,43 @@ public final class BoilerStructure {
         return owner != null && owner.current() ? owner : null;
     }
 
-    /** 控制器位于下侧边正中，facing 指向壳外；内部上下两格必须为空气。 */
+    /** 控制器位于下层侧面正中，facing 指向壳外；内部3×3×3必须为空气。 */
     public static Form inspect(Level level, BlockPos controllerPos) {
         if (level == null || !level.hasChunkAt(controllerPos)) return null;
         BlockState controller = level.getBlockState(controllerPos);
         if (!controller.is(BoilerContent.CONTROLLER.get())) return null;
         Direction outward = controller.getValue(BoilerPartBlock.FACING);
-        BlockPos center = controllerPos.relative(outward.getOpposite()).below();
+        BlockPos center = controllerPos.relative(outward.getOpposite(), 2).below();
         var sections = new ArrayList<BlockPos>();
         var water = new ArrayList<BlockPos>();
         var steam = new ArrayList<BlockPos>();
         int controls = 0, valves = 0;
-        BlockPos valvePos = center.above(3);
-        for (int y = 0; y < 4; y++) for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
+        BlockPos valvePos = center.above(4);
+        for (int y = 0; y < 5; y++) for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) {
             BlockPos pos = center.offset(x, y, z);
             if (!level.hasChunkAt(pos)) return null;
             BlockState state = level.getBlockState(pos);
-            if (x == 0 && z == 0 && (y == 1 || y == 2)) {
+            if (y >= 1 && y <= 3 && Math.abs(x) <= 1 && Math.abs(z) <= 1) {
                 if (!state.isAir()) return null;
                 continue;
             }
-            if (y == 0 && x == 0 && z == 0) {
-                if (!state.is(BoilerContent.CASING.get())) return null;
-                continue;
-            }
-            if (y == 3 && x == 0 && z == 0) {
+            if (y == 4 && x == 0 && z == 0) {
                 if (!state.is(BoilerContent.SAFETY_VALVE.get())) return null;
                 valves++;
                 continue;
             }
             if (state.is(BoilerContent.CASING.get())) continue;
-            if (y == 0 && state.is(BoilerContent.HEAT_SECTION.get()) && (x != 0 || z != 0)) {
+            if (y == 0 && Math.abs(x) <= 1 && Math.abs(z) <= 1
+                    && state.is(BoilerContent.HEAT_SECTION.get())) {
                 sections.add(pos.immutable());
                 continue;
             }
-            boolean faceCenter = (x == 0) != (z == 0);
+            // 棱边含四角只能为外壳；窗口仅占侧面非棱边三层。
+            boolean facePanel = (Math.abs(x) == 2) != (Math.abs(z) == 2);
+            boolean faceCenter = facePanel && (x == 0 || z == 0);
             Direction face = x < 0 ? Direction.WEST : x > 0 ? Direction.EAST
                     : z < 0 ? Direction.NORTH : Direction.SOUTH;
-            if ((y == 1 || y == 2) && state.is(BoilerContent.WINDOW.get())) continue;
+            if (facePanel && y >= 1 && y <= 3 && state.is(BoilerContent.WINDOW.get())) continue;
             if (faceCenter && y == 1 && state.is(BoilerContent.CONTROLLER.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) {
                 if (!pos.equals(controllerPos)) return null;
@@ -134,7 +133,7 @@ public final class BoilerStructure {
                 water.add(pos.immutable());
                 continue;
             }
-            if (faceCenter && y == 2 && state.is(BoilerContent.STEAM_PORT.get())
+            if (faceCenter && y == 3 && state.is(BoilerContent.STEAM_PORT.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) {
                 steam.add(pos.immutable());
                 continue;
@@ -151,41 +150,40 @@ public final class BoilerStructure {
         if (level == null || !level.hasChunkAt(controllerPos)) return new Issue("chunk", controllerPos);
         BlockState controller = level.getBlockState(controllerPos);
         if (!controller.is(BoilerContent.CONTROLLER.get())) return new Issue("controller", controllerPos);
-        BlockPos center = controllerPos.relative(controller.getValue(BoilerPartBlock.FACING).getOpposite()).below();
+        BlockPos center = controllerPos.relative(controller.getValue(BoilerPartBlock.FACING).getOpposite(), 2).below();
         int sections = 0, water = 0, steam = 0;
-        for (int y = 0; y < 4; y++) for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
+        for (int y = 0; y < 5; y++) for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) {
             BlockPos pos = center.offset(x, y, z);
             if (!level.hasChunkAt(pos)) return new Issue("chunk", pos);
             BlockState state = level.getBlockState(pos);
-            if (x == 0 && z == 0 && (y == 1 || y == 2)) {
+            if (y >= 1 && y <= 3 && Math.abs(x) <= 1 && Math.abs(z) <= 1) {
                 if (!state.isAir()) return new Issue("interior", pos);
                 continue;
             }
-            if (y == 0 && x == 0 && z == 0) {
-                if (!state.is(BoilerContent.CASING.get())) return new Issue("base_center", pos);
-                continue;
-            }
-            if (y == 3 && x == 0 && z == 0) {
+            if (y == 4 && x == 0 && z == 0) {
                 if (!state.is(BoilerContent.SAFETY_VALVE.get())) return new Issue("valve", pos);
                 continue;
             }
             if (state.is(BoilerContent.CASING.get())) continue;
-            if (y == 0 && state.is(BoilerContent.HEAT_SECTION.get())) { sections++; continue; }
-            if ((y == 1 || y == 2) && state.is(BoilerContent.WINDOW.get())) continue;
-            boolean faceCenter = (x == 0) != (z == 0);
+            if (y == 0 && Math.abs(x) <= 1 && Math.abs(z) <= 1
+                    && state.is(BoilerContent.HEAT_SECTION.get())) { sections++; continue; }
+            boolean facePanel = (Math.abs(x) == 2) != (Math.abs(z) == 2);
+            boolean faceCenter = facePanel && (x == 0 || z == 0);
+            if (facePanel && y >= 1 && y <= 3 && state.is(BoilerContent.WINDOW.get())) continue;
             Direction face = x < 0 ? Direction.WEST : x > 0 ? Direction.EAST
                     : z < 0 ? Direction.NORTH : Direction.SOUTH;
             if (faceCenter && y == 1 && state.is(BoilerContent.CONTROLLER.get())
                     && pos.equals(controllerPos) && state.getValue(BoilerPartBlock.FACING) == face) continue;
             if (faceCenter && y == 1 && state.is(BoilerContent.WATER_PORT.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) { water++; continue; }
-            if (faceCenter && y == 2 && state.is(BoilerContent.STEAM_PORT.get())
+            if (faceCenter && y == 3 && state.is(BoilerContent.STEAM_PORT.get())
                     && state.getValue(BoilerPartBlock.FACING) == face) { steam++; continue; }
-            return new Issue(y == 0 ? "base_shell" : y == 3 ? "top_shell" : "side", pos);
+            return new Issue(y == 0 ? "base_shell" : y == 4 ? "top_shell"
+                    : !facePanel ? "edge" : "side", pos);
         }
-        if (sections == 0) return new Issue("section", center.relative(Direction.EAST));
+        if (sections == 0) return new Issue("section", center);
         if (water == 0) return new Issue("water", controllerPos);
-        if (steam == 0) return new Issue("steam", controllerPos.above());
+        if (steam == 0) return new Issue("steam", controllerPos.above(2));
         return new Issue("overlap", controllerPos);
     }
 
@@ -197,9 +195,9 @@ public final class BoilerStructure {
                 : hit.currentForm().steamPorts()).contains(port)) return hit;
         BoilerControllerBlockEntity found = null;
         for (Direction side : Direction.Plane.HORIZONTAL) {
-            BlockPos center = port.relative(side.getOpposite()).below(input ? 0 : 1);
+            BlockPos center = port.relative(side.getOpposite(), 2).below(input ? 1 : 3);
             for (Direction controlSide : Direction.Plane.HORIZONTAL) {
-                BlockPos candidate = center.relative(controlSide);
+                BlockPos candidate = center.above().relative(controlSide, 2);
                 if (!level.hasChunkAt(candidate) || !(level.getBlockEntity(candidate) instanceof BoilerControllerBlockEntity owner)) continue;
                 Form form = owner.currentForm();
                 if (form != null && (input ? form.waterPorts() : form.steamPorts()).contains(port)) {
@@ -220,7 +218,7 @@ public final class BoilerStructure {
         for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
             BlockPos center = section.offset(x, 0, z);
             for (Direction side : Direction.Plane.HORIZONTAL) {
-                BlockPos candidate = center.above().relative(side);
+                BlockPos candidate = center.above().relative(side, 2);
                 if (!level.hasChunkAt(candidate) || !(level.getBlockEntity(candidate) instanceof BoilerControllerBlockEntity owner)) continue;
                 Form form = owner.currentForm();
                 if (form == null || !form.sections().contains(section)) continue;

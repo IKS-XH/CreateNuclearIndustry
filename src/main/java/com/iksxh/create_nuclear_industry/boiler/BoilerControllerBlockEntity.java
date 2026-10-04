@@ -4,7 +4,13 @@ import com.iksxh.create_nuclear_industry.compat.create.SharedFluidReceiver;
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
 import com.iksxh.create_nuclear_industry.heat.NuclearHeatExchangerBlockEntity;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.fluids.FluidPropagator;
+import com.simibubi.create.content.fluids.FluidTransportBehaviour;
+import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -21,6 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 /**
  * 唯一持有水、汽、炉体热与排放账本的服务端控制器。
@@ -28,14 +35,18 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
  */
 public final class BoilerControllerBlockEntity extends BlockEntity implements IHaveGoggleInformation {
     private final BoilerState ledger = new BoilerState();
+    private final BoilerSteamPressure steamPressure;
     private int epoch, sectionCount, paidView;
     private boolean available, formed, stopped;
     private boolean formDirty = true;
+    private boolean steamPipeDirty = true;
     private BoilerStructure.Form cachedForm;
+    private final Set<BlockPos> pendingSteamPipeCenters = new HashSet<>();
     private String status = "unformed";
 
     public BoilerControllerBlockEntity(BlockPos pos, BlockState state) {
         super(BoilerContent.CONTROLLER_BE.get(), pos, state);
+        steamPressure = new BoilerSteamPressure(pos);
     }
     public BoilerState ledger() { return ledger; }
     public boolean current() {
@@ -55,6 +66,9 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
     /** 邻块变动、卸载或放回时撤销旧归属与能力，下一次查询才重验全结构。 */
     public void invalidateForm() {
         BoilerStructure.Form old = cachedForm;
+        steamPressure.release();
+        steamPipeDirty = true;
+        if (old != null) pendingSteamPipeCenters.add(old.center());
         formDirty = true;
         cachedForm = null;
         epoch++;
@@ -67,9 +81,9 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
             }
             // 成型前曾缓存空能力的口也须被通知重新查询，限于本结构侧面的候选格。
             if (level.hasChunkAt(worldPosition) && getBlockState().hasProperty(BoilerPartBlock.FACING)) {
-                BlockPos center = worldPosition.relative(getBlockState().getValue(BoilerPartBlock.FACING).getOpposite());
-                for (int y = 0; y <= 1; y++) for (Direction side : Direction.Plane.HORIZONTAL) {
-                    BlockPos port = center.above(y).relative(side);
+                BlockPos center = worldPosition.relative(getBlockState().getValue(BoilerPartBlock.FACING).getOpposite(), 2);
+                for (int y : new int[]{0, 2}) for (Direction side : Direction.Plane.HORIZONTAL) {
+                    BlockPos port = center.above(y).relative(side, 2);
                     if (level.hasChunkAt(port)) level.invalidateCapabilities(port);
                 }
             }
@@ -81,11 +95,19 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         if (!current()) return null;
         if (!formDirty && cachedForm != null) {
             BlockPos center = cachedForm.center();
-            if (!level.hasChunkAt(center.north().west()) || !level.hasChunkAt(center.north().east())
-                    || !level.hasChunkAt(center.south().west()) || !level.hasChunkAt(center.south().east())
-                    || !level.getBlockState(center.above()).isAir()
-                    || !level.getBlockState(center.above(2)).isAir()
-                    || !BoilerStructure.specialPartsStillMatch(level, cachedForm)) invalidateForm();
+            boolean invalid = !getBlockState().hasProperty(BoilerPartBlock.FACING)
+                    || !worldPosition.relative(getBlockState().getValue(BoilerPartBlock.FACING).getOpposite(), 2)
+                    .below().equals(center)
+                    || !level.hasChunkAt(center.offset(-2, 0, -2))
+                    || !level.hasChunkAt(center.offset(-2, 0, 2))
+                    || !level.hasChunkAt(center.offset(2, 0, -2))
+                    || !level.hasChunkAt(center.offset(2, 0, 2));
+            // 内部阻塞不一定触发本模组壳体事件，故每次只复核27格空气。
+            if (!invalid) for (int y = 1; y <= 3 && !invalid; y++)
+                for (int x = -1; x <= 1 && !invalid; x++)
+                    for (int z = -1; z <= 1; z++)
+                        if (!level.getBlockState(center.offset(x, y, z)).isAir()) invalid = true;
+            if (invalid || !BoilerStructure.specialPartsStillMatch(level, cachedForm)) invalidateForm();
         }
         if (!formDirty) return cachedForm;
         formDirty = false;
@@ -100,8 +122,18 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         if (level.isClientSide || !owner.current()) return;
         long now = level.getGameTime();
         BoilerStructure.Form form = owner.currentForm();
+        if (owner.steamPipeDirty) {
+            owner.steamPipeDirty = false;
+            if (form != null) owner.pendingSteamPipeCenters.add(form.center());
+            else if (state.hasProperty(BoilerPartBlock.FACING)) owner.pendingSteamPipeCenters.add(
+                    pos.relative(state.getValue(BoilerPartBlock.FACING).getOpposite(), 2).below());
+            owner.refreshSteamPipeConnections();
+        }
         owner.formed = form != null;
-        if (form != null) owner.sectionCount = form.sections().size();
+        if (form != null && owner.sectionCount != form.sections().size()) {
+            owner.sectionCount = form.sections().size();
+            owner.ledger.sectionsChanged(owner.sectionCount);
+        }
         owner.stopped = level.hasNeighborSignal(pos);
         owner.ledger.prepare(now, owner.sectionCount);
         double demand = form == null || owner.stopped ? 0 : owner.ledger.demand(form.sections().size());
@@ -116,6 +148,8 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         boolean clear = form != null && level.hasChunkAt(form.valve().above())
                 && level.getBlockState(form.valve().above()).isAir();
         owner.ledger.tick(now, owner.sectionCount, paid, clear, owner.stopped);
+        owner.pushAdjacentSteam(form, now);
+        owner.steamPressure.refresh(level, form, owner.ledger.steam() > 0);
         if (clear && owner.ledger.vented() > 0 && level instanceof ServerLevel server) {
             BlockPos mouth = form.valve().above();
             server.sendParticles(ParticleTypes.CLOUD, mouth.getX() + 0.5, mouth.getY() + 0.15,
@@ -129,6 +163,52 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
                 : paid == 0 ? "no_heat" : owner.ledger.ready() ? "running" : "warming";
         owner.setChanged();
         if (now % 5 == 0 || owner.ledger.produced() > 0 || owner.ledger.vented() > 0) owner.sync();
+    }
+
+    /** 能力随成型切换时重算相邻 Create 管方块状态；仅传播流量不会重开先铺管的封闭面。 */
+    private void refreshSteamPipeConnections() {
+        for (BlockPos center : pendingSteamPipeCenters) for (Direction side : Direction.Plane.HORIZONTAL) {
+            BlockPos pipePos = center.above(3).relative(side, 3);
+            if (!level.hasChunkAt(pipePos)) continue;
+            BlockState pipeState = level.getBlockState(pipePos);
+            if (pipeState.getBlock() instanceof FluidPipeBlock pipe) {
+                BlockState refreshed = pipe.updateBlockState(pipeState, side.getOpposite(), null, level, pipePos);
+                if (refreshed != pipeState) level.setBlock(pipePos, refreshed, 3);
+                pipeState = refreshed;
+            }
+            if (BlockEntityBehaviour.get(level, pipePos, FluidTransportBehaviour.TYPE) != null)
+                FluidPropagator.propagateChangedPipe(level, pipePos, pipeState);
+        }
+        pendingSteamPipeCenters.clear();
+    }
+
+    /**
+     * 邻接非管道的流体容器不会主动抽汽，故控制器沿汽口外向面推送。
+     * 先由目标模拟确认，再执行目标写入，最后按实际接收量扣共享汽账；Create 管网仍走原生压力流。
+     */
+    private void pushAdjacentSteam(BoilerStructure.Form form, long now) {
+        if (form == null || ledger.steam() == 0) return;
+        boolean moved = false;
+        for (BlockPos port : form.steamPorts()) {
+            int availableSteam = ledger.remainingDrain(now);
+            if (availableSteam <= 0) break;
+            Direction outward = level.getBlockState(port).getValue(BoilerPartBlock.FACING);
+            BlockPos targetPos = port.relative(outward);
+            if (!level.hasChunkAt(targetPos) || FluidPropagator.getPipe(level, targetPos) != null) continue;
+            IFluidHandler target = level.getCapability(Capabilities.FluidHandler.BLOCK,
+                    targetPos, outward.getOpposite());
+            if (target == null) continue;
+            FluidStack offered = new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), availableSteam);
+            int simulated = target.fill(offered, IFluidHandler.FluidAction.SIMULATE);
+            if (simulated <= 0) continue;
+            int accepted = target.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
+                    Math.min(simulated, availableSteam)), IFluidHandler.FluidAction.EXECUTE);
+            if (accepted > 0) {
+                ledger.drainSteam(Math.min(accepted, availableSteam), false, now);
+                moved = true;
+            }
+        }
+        if (moved) setChanged();
     }
 
     /** 端口侧仅允许朝外且结构完整；缓存句柄带 epoch，卸载后不可复活。 */
@@ -199,7 +279,7 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
     }
     public void loadPortableData(CompoundTag data) {
         ledger.load(data.getCompound("Ledger"));
-        sectionCount = Math.clamp(data.getInt("Sections"), 0, 8);
+        sectionCount = Math.clamp(data.getInt("Sections"), 0, 9);
         changed();
     }
     @Override public void onLoad() { super.onLoad(); available = true; invalidateForm(); }
@@ -213,7 +293,7 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
     @Override protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         ledger.load(tag.getCompound("Boiler"));
-        sectionCount = Math.clamp(tag.getInt("BoilerSections"), 0, 8);
+        sectionCount = Math.clamp(tag.getInt("BoilerSections"), 0, 9);
         if (tag.contains("View")) readView(tag.getCompound("View"));
     }
     @Override public CompoundTag getUpdateTag(HolderLookup.Provider registries) {

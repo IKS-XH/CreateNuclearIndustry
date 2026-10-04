@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[3]
 ASSETS = ROOT / "src/main/resources/assets/create_nuclear_industry"
 ART = Path(__file__).resolve().parent
 GENERATED = ART / "generated"
-EVIDENCE = ROOT / "build/reports/extension/EXT-B-EXCHANGER-01B-ART"
+EVIDENCE = ROOT / "build/reports/extension/EXT-B-EXCHANGER-01D-ART"
 BLOCK_MODELS = ASSETS / "models/block/nuclear_heat_exchanger"
 TEXTURES = ASSETS / "textures/block/nuclear_heat_exchanger"
 
@@ -27,6 +27,10 @@ PALETTE = {
     "brass_dark": (117, 82, 37, 255),
     "hot": (245, 106, 37, 255),
     "hot_light": (255, 208, 107, 255),
+    "cold": (41, 137, 190, 255),
+    "cold_light": (143, 218, 245, 255),
+    "cold_outlet": (20, 31, 35, 255),
+    "hot_inlet": (20, 31, 35, 255),
 }
 
 
@@ -36,29 +40,16 @@ def box(name: str, start: tuple[int, int, int], end: tuple[int, int, int], mater
 
 
 def base_parts() -> list[dict]:
-    """生成Y=0..12完整深灰基座，并在四侧开出后缩一格的接口凹口。"""
+    """生成Y=0..12完整深灰基座，并在北/南面标出定向流体接口。"""
     voxels: dict[tuple[int, int, int], str] = {
         (x, y, z): "steel_dark" if y < 2 else "steel"
         for x in range(16) for y in range(12) for z in range(16)
     }
-    for y in range(4, 9):
-        for edge in range(5, 11):
-            # 四个朝向共用方形金属法兰，端面材质形成可辨识的管口环。
-            for x, z in ((edge, 0), (edge, 15), (0, edge), (15, edge)):
-                voxels[(x, y, z)] = "brass" if edge in (5, 10) or y in (4, 8) else "copper"
-        for offset in range(6, 10):
-            # 只移除最外一层，形成真实凹口；凹底保留暗色面板和銅芯端面。
-            voxels.pop((offset, y, 0), None)
-            voxels.pop((offset, y, 15), None)
-            voxels.pop((0, y, offset), None)
-            voxels.pop((15, y, offset), None)
-            voxels[(offset, y, 1)] = "panel"
-            voxels[(offset, y, 14)] = "panel"
-            voxels[(1, y, offset)] = "panel"
-            voxels[(14, y, offset)] = "panel"
-        # 凹底的窄铜色内芯突出管路方向，仍处在基座轮廓内。
-        for x, z in ((7, 1), (8, 1), (7, 14), (8, 14), (1, 7), (1, 8), (14, 7), (14, 8)):
-            voxels[(x, y, z)] = "copper_light" if y in (5, 6, 7) else "panel"
+    # 方向标记只重绘北/南外表面的中央像素，不挖槽、不增加几何厚度。
+    for x in range(5, 11):
+        for y in range(3, 9):
+            voxels[(x, y, 0)] = "cold_face"
+            voxels[(x, y, 15)] = "hot_face"
 
     # 贪心合并同材质体素为尽可能大的长方体，控制方块与物品模型元素数。
     parts: list[dict] = []
@@ -75,7 +66,7 @@ def base_parts() -> list[dict]:
         while all(voxels.get((xx, end_y, zz)) == material
                   for xx in range(x, end_x) for zz in range(z, end_z)):
             end_y += 1
-        parts.append(box("base_ported_body", (x, y, z), (end_x, end_y, end_z), material))
+        parts.append(box("base_directional_body", (x, y, z), (end_x, end_y, end_z), material))
         for xx in range(x, end_x):
             for yy in range(y, end_y):
                 for zz in range(z, end_z):
@@ -104,6 +95,9 @@ def model_json(parts: list[dict]) -> dict:
         texture = "#" + part["material"]
         faces = {face: {"texture": texture, "uv": [0, 0, 16, 16]}
                  for face in ("down", "up", "north", "south", "west", "east")}
+        if part["material"] in ("cold_face", "hot_face"):
+            faces = {face: {"texture": "#steel", "uv": [0, 0, 16, 16]} for face in faces}
+            faces["north" if part["material"] == "cold_face" else "south"]["texture"] = "#cold_outlet" if part["material"] == "cold_face" else "#hot_inlet"
         elements.append({"from": part["from"], "to": part["to"], "faces": faces})
     return {"credit": "Create: Nuclear Industry 美术团队", "ambientocclusion": True,
             "textures": textures, "elements": elements}
@@ -136,10 +130,22 @@ def texture_pixels(kind: str) -> Image.Image:
         draw.rectangle((2, 2, 13, 13), outline=PALETTE["brass_dark"], width=2)
         draw.point((4, 4), fill=PALETTE["hot_light"])
         draw.point((11, 11), fill=PALETTE["brass_dark"])
-    elif kind.startswith("hot"):
+    elif kind.startswith("hot") and kind != "hot_inlet":
         draw.rectangle((1, 1, 14, 14), outline=PALETTE["copper"], width=2)
         for y in (4, 8, 12):
             draw.line((3, y, 12, y), fill=PALETTE["hot_light"], width=1)
+    elif kind == "cold_outlet":
+        draw.rectangle((1, 1, 14, 14), outline=PALETTE["cold"], width=2)
+        draw.rectangle((3, 3, 12, 12), fill=PALETTE["panel"])
+        draw.line((7, 10, 7, 5), fill=PALETTE["cold_light"], width=2)
+        draw.line((8, 10, 8, 5), fill=PALETTE["cold"], width=1)
+        draw.polygon(((4, 6), (7, 3), (10, 6)), fill=PALETTE["cold_light"])
+    elif kind == "hot_inlet":
+        draw.rectangle((1, 1, 14, 14), outline=PALETTE["hot"], width=2)
+        draw.rectangle((3, 3, 12, 12), fill=PALETTE["panel"])
+        draw.line((7, 5, 7, 10), fill=PALETTE["hot_light"], width=2)
+        draw.line((8, 5, 8, 10), fill=PALETTE["hot"], width=1)
+        draw.polygon(((4, 9), (7, 12), (10, 9)), fill=PALETTE["hot_light"])
     return image
 
 
@@ -159,7 +165,7 @@ def blockstate_json() -> dict:
 
 
 def preview_png(active: bool) -> Image.Image:
-    """按部件实体体素绘制等距预览，槽内空隙与接口凹口均来自几何。"""
+    """按部件实体体素绘制等距预览，槽内空隙来自真实几何。"""
     image = Image.new("RGBA", (840, 900), (28, 34, 40, 255))
     draw = ImageDraw.Draw(image)
     origin = (420, 650)
@@ -177,7 +183,8 @@ def preview_png(active: bool) -> Image.Image:
         for x in range(x0, x1):
             for y in range(y0, y1):
                 for z in range(z0, z1):
-                    voxels[(x, y, z)] = part["material"]
+                    material = part["material"]
+                    voxels[(x, y, z)] = "steel" if material in ("cold_face", "hot_face") else material
 
     faces = (
         ("top", (0, 1, 0), lambda x, y, z: ((x, y + 1, z), (x + 1, y + 1, z), (x + 1, y + 1, z + 1), (x, y + 1, z + 1))),
@@ -197,26 +204,43 @@ def preview_png(active: bool) -> Image.Image:
         draw.polygon(polygon, fill=color)
     title = "Heat Exchanger / Hot" if active else "Heat Exchanger / Cold"
     draw.text((34, 34), title, fill=(226, 235, 240, 255))
-    draw.text((34, 58), "Graphite base / recessed pipe ports / separated copper fins", fill=(174, 193, 204, 255))
+    draw.text((34, 58), "Steel base / directional inlet and outlet / separated copper fins", fill=(174, 193, 204, 255))
+    return image
+
+
+def directional_preview_png() -> Image.Image:
+    """并排展示FACING北侧冷出与背面热入的面板方向和颜色。"""
+    image = Image.new("RGBA", (720, 300), (28, 34, 40, 255))
+    draw = ImageDraw.Draw(image)
+    draw.text((52, 24), "FACING / NORTH: COLD LIQUID OUT", fill=PALETTE["cold"])
+    draw.text((402, 24), "REAR / SOUTH: HOT LIQUID IN", fill=PALETTE["hot"])
+    cold = texture_pixels("cold_outlet").resize((144, 144), Image.Resampling.NEAREST)
+    hot = texture_pixels("hot_inlet").resize((144, 144), Image.Resampling.NEAREST)
+    for x, texture, accent in ((126, cold, PALETTE["cold"]), (476, hot, PALETTE["hot"])):
+        draw.rectangle((x - 14, 65, x + 158, 237), fill=PALETTE["steel_dark"], outline=PALETTE["steel_light"], width=5)
+        image.alpha_composite(texture, (x, 79))
+        draw.rectangle((x - 14, 65, x + 158, 237), outline=accent, width=3)
+    draw.text((62, 260), "OUTWARD arrow / away from exchanger", fill=(196, 216, 225, 255))
+    draw.text((412, 260), "INWARD arrow / into exchanger", fill=(196, 216, 225, 255))
     return image
 
 
 def svg_sources() -> None:
-    """输出与游戏几何一致的基座、鳍片、接口及装配坐标矢量稿。"""
+    """输出与游戏几何一致的封闭基座、定向面板、鳍片及装配矢量稿。"""
     (ART / "sources").mkdir(parents=True, exist_ok=True)
     (ART / "sources/device-components.svg").write_text('''<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420">
 <rect width="760" height="420" fill="#202a33"/>
-<g transform="translate(70 70)" stroke="#11191d" stroke-width="4"><path d="M80 95h150v110H80z" fill="#4d5659"/><path d="M80 95l55-32h150l-55 32z" fill="#7d898b"/><path d="M230 95l55-32v110l-55 32z" fill="#263032"/><rect x="144" y="125" width="22" height="20" fill="#151b1d" stroke="#d5a945"/><text x="76" y="240" fill="#e0e8ec" stroke="none" font-size="18">完整深灰基座 / Y=0..12 / 四侧凹入管口</text></g>
-<g transform="translate(380 70)" stroke="#11191d" stroke-width="3"><path d="M0 95l65-38v90L0 185z" fill="#c06b39"/><path d="M35 95l65-38v90l-65 38z" fill="#e79756"/><path d="M70 95l65-38v90L70 185z" fill="#c06b39"/><path d="M105 95l65-38v90l-65 38z" fill="#e79756"/><path d="M140 95l65-38v90l-65 38z" fill="#c06b39"/><path d="M175 95l65-38v90l-65 38z" fill="#e79756"/><path d="M210 95l65-38v90l-65 38z" fill="#c06b39"/><text x="15" y="240" fill="#e0e8ec" stroke="none" font-size="18">七条独立铜鳍片 / Y=12..16 / 槽口贯通</text></g>
-<text x="38" y="375" fill="#aebfca" font-size="16">热态提示条位于鳍片槽内；冷热层不互相覆盖。模型坐标范围0..16。</text></svg>''', encoding="utf-8")
+<g transform="translate(55 55)" stroke="#11191d" stroke-width="4"><path d="M45 110h175v115H45z" fill="#4d5659"/><path d="M45 110l60-38h175l-60 38z" fill="#7d898b"/><path d="M220 110l60-38v115l-60 38z" fill="#263032"/><path d="M107 145h48v48h-48z" fill="#151b1d" stroke="#2989be"/><path d="M131 181v-23m-11 10 11-12 11 12" fill="none" stroke="#8fdaef" stroke-width="5"/><text x="32" y="270" fill="#e0e8ec" stroke="none" font-size="17">北面 FACING：蓝色冷液出口，箭头向外</text></g>
+<g transform="translate(395 55)" stroke="#11191d" stroke-width="4"><path d="M45 110h175v115H45z" fill="#4d5659"/><path d="M45 110l60-38h175l-60 38z" fill="#7d898b"/><path d="M220 110l60-38v115l-60 38z" fill="#263032"/><path d="M107 145h48v48h-48z" fill="#151b1d" stroke="#f56a25"/><path d="M131 157v23m-11-10 11 12 11-12" fill="none" stroke="#ffd06b" stroke-width="5"/><text x="32" y="270" fill="#e0e8ec" stroke="none" font-size="17">南面背侧：橙色热液入口，箭头向内</text></g>
+<g fill="#c06b39" stroke="#11191d" stroke-width="2"><path d="M310 100h8v105h-8z"/><path d="M323 100h8v105h-8z"/></g><text x="80" y="380" fill="#aebfca" font-size="16">左右侧与底面保持暗钢封闭；上方七条铜鳍片独立分件，坐标范围0..16。</text></svg>''', encoding="utf-8")
     (ART / "sources/pivots-and-assembly.svg").write_text('''<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300">
-<rect width="760" height="300" fill="#202a33"/><g fill="#4d5659" stroke="#11191d" stroke-width="3"><path d="M90 100h180v125H90z"/><path d="M90 100l70-45h180l-70 45z"/><path d="M270 100l70-45v125l-70 45z"/></g>
-<g fill="#c06b39" stroke="#11191d" stroke-width="2"><path d="M130 97h8v-33h-8z"/><path d="M150 97h8v-33h-8z"/><path d="M170 97h8v-33h-8z"/><path d="M190 97h8v-33h-8z"/><path d="M210 97h8v-33h-8z"/></g>
-<g fill="#e0e8ec" font-family="sans-serif" font-size="17"><text x="390" y="70">基座：Y=0..12，覆盖一个完整方格</text><text x="390" y="105">鳍片：Y=12..16，沿Z方向平行排列</text><text x="390" y="140">管口：四个侧面各有一处凹入金属接口</text><text x="390" y="175">热态：提示条处在开放鳍片槽内</text><text x="390" y="210">旋转枢轴：方块中心 (8,8,8)</text><text x="390" y="245">四朝向仅绕Y轴旋转，不改变高度分层</text></g></svg>''', encoding="utf-8")
+<rect width="760" height="300" fill="#202a33"/><g fill="#4d5659" stroke="#11191d" stroke-width="3"><path d="M65 105h180v125H65z"/><path d="M65 105l70-45h180l-70 45z"/><path d="M245 105l70-45v125l-70 45z"/></g>
+<g fill="#c06b39" stroke="#11191d" stroke-width="2"><path d="M100 102h9v-38h-9z"/><path d="M122 102h9v-38h-9z"/><path d="M144 102h9v-38h-9z"/><path d="M166 102h9v-38h-9z"/><path d="M188 102h9v-38h-9z"/></g>
+<g fill="#e0e8ec" font-family="sans-serif" font-size="16"><text x="370" y="62">基座：Y=0..12，封闭完整覆盖方格</text><text x="370" y="97">鳍片：Y=12..16，沿Z方向平行排列</text><text x="370" y="132">北面冷出口；南面热入口；四朝向整体旋转</text><text x="370" y="167">左右侧与底部不画可接管接口</text><text x="370" y="202">旋转枢轴：方块中心 (8,8,8)</text><text x="370" y="237">热态提示条留在开放鳍片槽内</text></g></svg>''', encoding="utf-8")
 
 
 def validate_parts_and_resources() -> dict:
-    """检查体素相交、冷热槽空间、坐标/UV、状态引用与物品变换。"""
+    """检查定向面板、体素相交、冷热槽、坐标/UV、资源引用与手持变换。"""
     base, fins, hot = base_parts(), fin_parts(), lit_parts()
     layers = {"base": base, "fins": fins, "fins_lit": hot}
     seen: dict[tuple[int, int, int], tuple[str, str]] = {}
@@ -233,6 +257,8 @@ def validate_parts_and_resources() -> dict:
                             seen[key] = (layer, part["name"])
 
     assert all(part["from"][1] == 12 and part["to"][1] == 16 for part in fins)
+    assert sum((p["to"][0]-p["from"][0])*(p["to"][1]-p["from"][1])*(p["to"][2]-p["from"][2]) for p in base) == 16*12*16
+    assert {p["material"] for p in base} >= {"cold_face", "hot_face"}
     assert all(part["from"][1] == 14 and part["to"][1] == 16 for part in hot)
     fin_x = {x for part in fins for x in range(part["from"][0], part["to"][0])}
     hot_x = {x for part in hot for x in range(part["from"][0], part["to"][0])}
@@ -270,6 +296,17 @@ def validate_parts_and_resources() -> dict:
             for face in element["faces"].values():
                 assert all(0 <= n <= 16 for n in face["uv"]), (path, face)
 
+    base_model = json.loads((BLOCK_MODELS / "base.json").read_text(encoding="utf-8"))
+    cold_faces = [element["faces"] for element in base_model["elements"]
+                  if element["faces"]["north"]["texture"] == "#cold_outlet"]
+    hot_faces = [element["faces"] for element in base_model["elements"]
+                 if element["faces"]["south"]["texture"] == "#hot_inlet"]
+    assert cold_faces and hot_faces
+    assert all(all(faces[face]["texture"] != "#cold_outlet" for face in ("up", "down", "south", "east", "west"))
+               for faces in cold_faces)
+    assert all(all(faces[face]["texture"] != "#hot_inlet" for face in ("up", "down", "north", "east", "west"))
+               for faces in hot_faces)
+
     state = json.loads((ASSETS / "blockstates/nuclear_heat_exchanger.json").read_text(encoding="utf-8"))
     model_references = set()
     for selector in state["multipart"]:
@@ -295,13 +332,14 @@ def validate_parts_and_resources() -> dict:
         "model_element_count_checked": checked_elements,
         "blockstate_models_resolved": sorted(model_references),
         "textures_resolved": sorted(texture_references),
-        "texture_dimensions": "10 RGBA PNG, 16x16, fully opaque",
+        "texture_dimensions": f"{len(list(TEXTURES.glob('*.png')))} RGBA PNG, 16x16, fully opaque",
         "coordinate_and_explicit_uv_bounds": [0, 16],
         "base_y": [0, 12], "fin_y": [12, 16], "fin_count": len(fins),
         "true_fin_grooves": True, "lit_channels_inside_grooves": len(hot),
         "intersecting_component_voxels": 0,
         "same_facing_coplanar_face_overlaps": coplanar_overlaps,
-        "face_port_recess_depth": 1, "four_side_ports": 4,
+        "directional_interfaces": {"north": "cold outlet, outward arrow", "south": "hot inlet, inward arrow", "east_west_down": "closed steel"},
+        "directional_face_texture_assignments": {"north_cold_panel_elements": len(cold_faces), "south_hot_panel_elements": len(hot_faces), "other_faces_use_directional_texture": False},
         "facing_rotations": {"north": 0, "east": 90, "south": 180, "west": 270},
         "handheld_scale": item["display"]["firstperson_righthand"]["scale"],
         "gradle_or_runtime_checks": "not run; art-only task"
@@ -349,9 +387,11 @@ def main() -> None:
     for filename, active in (("heat-exchanger-preview.png", False), ("heat-exchanger-hot-preview.png", True)):
         preview_png(active).save(GENERATED / filename)
         preview_png(active).save(EVIDENCE / filename)
+    directional_preview_png().save(GENERATED / "directional-interfaces-preview.png")
+    directional_preview_png().save(EVIDENCE / "directional-interfaces-preview.png")
     validation = validate_parts_and_resources()
     (EVIDENCE / "resource-validation.json").write_text(json.dumps(validation, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"生成完成：基座{len(base_parts())}段、{len(fin_parts())}条铜鳍片、{len(lit_parts())}条热态提示；证据写入01B目录。")
+    print(f"生成完成：基座{len(base_parts())}段、{len(fin_parts())}条铜鳍片、{len(lit_parts())}条热态提示；证据写入01D目录。")
 
 
 if __name__ == "__main__":

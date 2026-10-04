@@ -75,6 +75,20 @@ class BoilerStateTest {
         assertEquals(0, restored.steam());
     }
 
+    @Test void addingNinthSectionKeepsOldPaidHeatWithoutSkippingNewWarmup() {
+        var saved = new net.minecraft.nbt.CompoundTag();
+        saved.putDouble("WarmHu", 8 * 3600);
+        saved.putBoolean("Ready", true);
+        var state = new BoilerState();
+        state.load(saved);
+        state.sectionsChanged(9);
+        assertEquals(8 * 3600, state.warmHu());
+        assertFalse(state.ready());
+        state.tick(1, 9, 162, true, false);
+        assertEquals(8 * 3600 + 162, state.warmHu());
+        assertEquals(0, state.steam());
+    }
+
     @Test void openedValveThenExternalDrainBelowCloseThresholdNeverAddsSteam() {
         var tag = new net.minecraft.nbt.CompoundTag();
         tag.putInt("Steam", 12000);

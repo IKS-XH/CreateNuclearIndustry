@@ -565,5 +565,6 @@
         }
       }
     }
-  ]
+  ],
+  "render_type": "translucent"
 }

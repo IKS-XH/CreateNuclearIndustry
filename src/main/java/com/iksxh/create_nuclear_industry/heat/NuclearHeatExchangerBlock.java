@@ -35,7 +35,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
-/** 单格无 GUI 换热器；朝向和 lit 仅改变外观，顶面供热，其余五面热入冷出。 */
+/** 单格无 GUI 换热器；朝向决定前冷出、后热入及水平直列，顶面独立供热。 */
 public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements IWrenchable {
     public static final MapCodec<NuclearHeatExchangerBlock> CODEC = simpleCodec(NuclearHeatExchangerBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -57,6 +57,11 @@ public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements 
     }
     @Override public RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
     @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
+    @Override protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean moving) {
+        super.onPlace(state, level, pos, oldState, moving);
+        if (!level.isClientSide && (!oldState.is(this) || oldState.getValue(FACING) != state.getValue(FACING)))
+            NuclearHeatExchangerBlockEntity.topologyChanged(level, pos);
+    }
     @Override public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new NuclearHeatExchangerBlockEntity(pos, state);
     }
@@ -93,12 +98,18 @@ public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements 
     /** 掉落仅由原版破坏流程或扳手触发；邻居替换回调不额外掉第二台。 */
     @Override protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState next, boolean moving) {
         super.onRemove(state, level, pos, next, moving);
-        if (!state.is(next.getBlock()) && !level.isClientSide) level.invalidateCapabilities(pos);
+        if (!state.is(next.getBlock()) && !level.isClientSide) {
+            level.invalidateCapabilities(pos);
+            NuclearHeatExchangerBlockEntity.topologyChanged(level, pos);
+        }
     }
     @Override public InteractionResult onWrenched(BlockState state, UseOnContext context) {
         BlockState rotated = getRotatedBlockState(state, context.getClickedFace());
         if (rotated == state) return InteractionResult.PASS;
-        if (!context.getLevel().isClientSide) context.getLevel().setBlock(context.getClickedPos(), rotated, 3);
+        if (!context.getLevel().isClientSide) {
+            context.getLevel().setBlock(context.getClickedPos(), rotated, 3);
+            NuclearHeatExchangerBlockEntity.topologyChanged(context.getLevel(), context.getClickedPos());
+        }
         IWrenchable.playRotateSound(context.getLevel(), context.getClickedPos());
         return InteractionResult.SUCCESS;
     }

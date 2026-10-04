@@ -265,6 +265,38 @@ final class HeatExchangerStateTest {
         assertEquals(0, s.reserve());
     }
 
+    @Test void remoteInventoryCanFeedAnEmptyAndColdFullWorkingMemberWithoutSharingReserve() {
+        var worker = new HeatExchangerState();
+        var remote = new HeatExchangerState();
+        var filled = worker.save();
+        filled.putInt("Cold", 4000);
+        worker.load(filled);
+        remote.fillHot(4000, false);
+        HeatExchangerState.Exchange shared = new HeatExchangerState.Exchange() {
+            @Override public int hot() { return worker.hot() + remote.hot(); }
+            @Override public int coldSpace() { return 8000 - worker.cold() - remote.cold(); }
+            @Override public int convert(int amount) {
+                int moved = Math.min(amount, Math.min(hot(), coldSpace()));
+                var source = remote.save();
+                source.putInt("Hot", source.getInt("Hot") - moved);
+                source.putInt("Cold", source.getInt("Cold") + moved);
+                remote.load(source);
+                return moved;
+            }
+        };
+        double emitted = 0;
+        for (int tick = 0; tick < 80; tick++) {
+            worker.tick(tick, true, DEFAULT, shared);
+            emitted += Math.max(0, worker.heat());
+        }
+        assertEquals(0, worker.hot());
+        assertEquals(4000, worker.cold());
+        assertTrue(worker.heat() > 0 && worker.converted() > 0);
+        assertEquals(0, remote.reserve());
+        assertEquals(4000 - remote.hot(), remote.cold());
+        assertEquals((4000 - remote.hot()) * .5, worker.reserve() + emitted, 1e-9);
+    }
+
     /** 实际逐tick注入36mB并排出冷液，避免以预灌储备代替有偿升温。 */
     private static HeatExchangerState warmedAtFullInput() {
         var s = new HeatExchangerState();
