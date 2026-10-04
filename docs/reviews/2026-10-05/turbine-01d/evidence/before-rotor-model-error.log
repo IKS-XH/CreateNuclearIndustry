@@ -1,0 +1,31 @@
+[0510月2026 01:33:46.679] [Worker-Main-14/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_jp_patch-15.1.05.hex, loading
+[0510月2026 01:33:46.679] [Worker-Main-1/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.1.05.hex, loading
+[0510月2026 01:33:47.382] [Worker-Main-11/ERROR] [net.minecraft.client.resources.model.ModelManager/]: Failed to load model create_nuclear_industry:models/block/turbine/rotor_middle.json
+java.lang.RuntimeException: Could not read OBJ model
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.obj.ObjLoader.lambda$loadModel$0(ObjLoader.java:66) ~[neoforge-21.1.219.jar%23190!/:?]
+	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1740) ~[?:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.obj.ObjLoader.loadModel(ObjLoader.java:59) ~[neoforge-21.1.219.jar%23190!/:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.obj.ObjLoader.read(ObjLoader.java:55) ~[neoforge-21.1.219.jar%23190!/:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.obj.ObjLoader.read(ObjLoader.java:28) ~[neoforge-21.1.219.jar%23190!/:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.ExtendedBlockModelDeserializer.deserializeGeometry(ExtendedBlockModelDeserializer.java:105) ~[neoforge-21.1.219.jar%23190!/:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.ExtendedBlockModelDeserializer.deserialize(ExtendedBlockModelDeserializer.java:53) ~[neoforge-21.1.219.jar%23190!/:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.ExtendedBlockModelDeserializer.deserialize(ExtendedBlockModelDeserializer.java:37) ~[neoforge-21.1.219.jar%23190!/:?]
+	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.1.jar%23110!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromNullableJson(GsonHelper.java:432) ~[neoforge-21.1.219.jar%23189!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:439) ~[neoforge-21.1.219.jar%23189!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:491) ~[neoforge-21.1.219.jar%23189!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.renderer.block.model.BlockModel.fromStream(BlockModel.java:83) ~[neoforge-21.1.219.jar%23189!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.resources.model.ModelManager.lambda$loadBlockModels$8(ModelManager.java:144) ~[neoforge-21.1.219.jar%23189!/:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1310) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+Caused by: java.util.NoSuchElementException: The material was not found in the library: rotor
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.obj.ObjMaterialLibrary.getMaterial(ObjMaterialLibrary.java:88) ~[neoforge-21.1.219.jar%23190!/:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.obj.ObjModel.parse(ObjModel.java:141) ~[neoforge-21.1.219.jar%23190!/:?]
+	at TRANSFORMER/neoforge@21.1.219/net.neoforged.neoforge.client.model.obj.ObjLoader.lambda$loadModel$0(ObjLoader.java:62) ~[neoforge-21.1.219.jar%23190!/:?]
+	... 20 more
+[0510月2026 01:33:47.497] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [create] Found status: OUTDATED Current: 6.0.10 Target: 6.0.10+mc1.21.1

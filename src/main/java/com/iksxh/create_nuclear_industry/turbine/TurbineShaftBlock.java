@@ -82,8 +82,32 @@ public final class TurbineShaftBlock {
         @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
         @Override public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos,
                                              CollisionContext context) {
-            return TurbinePartBlock.sidePlate(state.getValue(TurbinePartBlock.SIDE),
-                    state.getValue(TurbinePartBlock.MACHINE_FACING));
+            Direction facing = state.getValue(TurbinePartBlock.MACHINE_FACING);
+            // 面板厚 0.08 格，中央盒体再向内伸至 0.4 格；边缘后方必须保持可通行。
+            if (!state.getValue(TurbinePartBlock.LOCATED))
+                return Shapes.or(
+                        TurbinePartBlock.boxRotated(0, 0, 0, 16, 16, 1.28, facing),
+                        TurbinePartBlock.boxRotated(1.92, 1.92, 1.28, 14.08, 14.08, 6.4, facing)
+                ).optimize();
+            // 四侧模型由同一前向网格旋转而来，仍分别保留薄面板与中心盒体。
+            return switch (state.getValue(TurbinePartBlock.SIDE)) {
+                case UP -> Shapes.or(
+                        TurbinePartBlock.boxRotated(0, 14.72, 0, 16, 16, 16, facing),
+                        TurbinePartBlock.boxRotated(1.92, 9.6, 1.92, 14.08, 14.72, 14.08, facing)
+                ).optimize();
+                case DOWN -> Shapes.or(
+                        TurbinePartBlock.boxRotated(0, 0, 0, 16, 1.28, 16, facing),
+                        TurbinePartBlock.boxRotated(1.92, 1.28, 1.92, 14.08, 6.4, 14.08, facing)
+                ).optimize();
+                case LEFT -> Shapes.or(
+                        TurbinePartBlock.boxRotated(0, 0, 0, 1.28, 16, 16, facing),
+                        TurbinePartBlock.boxRotated(1.28, 1.92, 1.92, 6.4, 14.08, 14.08, facing)
+                ).optimize();
+                case RIGHT -> Shapes.or(
+                        TurbinePartBlock.boxRotated(14.72, 0, 0, 16, 16, 16, facing),
+                        TurbinePartBlock.boxRotated(9.6, 1.92, 1.92, 14.72, 14.08, 14.08, facing)
+                ).optimize();
+            };
         }
         @Override public void onPlace(BlockState state, Level level, BlockPos pos, BlockState old,
                                       boolean moving) {

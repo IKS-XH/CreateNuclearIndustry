@@ -273,7 +273,7 @@
   "block.create_nuclear_industry.turbine_casing": "汽轮机机壳",
   "block.create_nuclear_industry.turbine_rotor": "汽轮机转子",
   "block.create_nuclear_industry.turbine_controller": "汽轮机控制器",
-  "block.create_nuclear_industry.turbine_output_shaft": "汽轮机后输出轴",
+  "block.create_nuclear_industry.turbine_output_shaft": "汽轮机动力输出轴",
   "block.create_nuclear_industry.turbine_inlet": "汽轮机进汽口",
   "block.create_nuclear_industry.turbine_exhaust": "汽轮机排汽口",
   "fluid_type.create_nuclear_industry.steam": "蒸汽",

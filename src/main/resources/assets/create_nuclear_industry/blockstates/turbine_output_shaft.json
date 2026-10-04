@@ -6,7 +6,7 @@
       "uvlock": true
     },
     "end=rear,located=false,machine_facing=north": {
-      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed_rear",
       "y": 0,
       "uvlock": true
     },
@@ -16,7 +16,7 @@
       "uvlock": true
     },
     "end=rear,located=false,machine_facing=east": {
-      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed_rear",
       "y": 90,
       "uvlock": true
     },
@@ -26,7 +26,7 @@
       "uvlock": true
     },
     "end=rear,located=false,machine_facing=south": {
-      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed_rear",
       "y": 180,
       "uvlock": true
     },
@@ -36,7 +36,7 @@
       "uvlock": true
     },
     "end=rear,located=false,machine_facing=west": {
-      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed",
+      "model": "create_nuclear_industry:block/turbine/turbine_output_shaft_unformed_rear",
       "y": 270,
       "uvlock": true
     },

@@ -14,6 +14,8 @@ public final class TurbineClientEvents {
     private TurbineClientEvents() {}
 
     @SubscribeEvent public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // NeoForge 在首次资源加载前注册渲染器，此时先创建 partial 供 Flywheel 的模型注册事件枚举。
+        var blades = TurbineRotorRenderer.BLADES;
         event.registerBlockEntityRenderer(TurbineContent.ROTOR_BE.get(), TurbineRotorRenderer::new);
     }
 }

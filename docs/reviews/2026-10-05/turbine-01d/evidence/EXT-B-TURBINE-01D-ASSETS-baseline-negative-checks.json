@@ -1,0 +1,46 @@
+{
+  "baseline": "9ac94ae6ec67ac66c7032ec7f9cef22fb7955115",
+  "negative_checks": {
+    "rotor_missing_material": {
+      "failed": true,
+      "used_missing": [
+        "rotor"
+      ],
+      "declared": [
+        "blade",
+        "blade_edge",
+        "brass",
+        "casing",
+        "controller",
+        "edge",
+        "endcap",
+        "exhaust",
+        "glass",
+        "glass_edge",
+        "inlet",
+        "inside",
+        "rotor_hub",
+        "shaft",
+        "support"
+      ]
+    },
+    "fan_uv_discontinuity": {
+      "failed": true,
+      "shared_points_with_multiple_uvs": 6,
+      "triangle_count": 6
+    },
+    "independent_shell_axial_caps": {
+      "failed": true,
+      "axial_endcap_face_count": 0
+    },
+    "controller_panel_back": {
+      "failed": true,
+      "back_panel_cap_present": false
+    },
+    "bearing_overlap": {
+      "failed": true,
+      "evidence": "baseline output_shaft_mesh uses annular inner radius 0.14 and shaft radius 0.14; cylinder caps=True plus explicit disk at z=0; annular end-ring faces share z=0 and z=3/16 plate planes"
+    }
+  },
+  "all_expected_failures_reproduced": true
+}

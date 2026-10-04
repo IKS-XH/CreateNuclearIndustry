@@ -94,7 +94,8 @@ public abstract class TurbinePartBlock extends Block {
         BlockState state = defaultBlockState().setValue(MACHINE_FACING,
                 context.getHorizontalDirection().getOpposite());
         if (kind() == Kind.INLET || kind() == Kind.EXHAUST)
-            state = state.setValue(OUTWARD, context.getClickedFace());
+            // 普通端口先让外端面朝向放置玩家；进入已定位布局后再由结构坐标覆盖合法外向。
+            state = state.setValue(OUTWARD, context.getNearestLookingDirection().getOpposite());
         if (kind() == Kind.CASING || kind() == Kind.WINDOW)
             state = state.setValue(PIECE, independentPiece(context.getClickedFace()));
         return state;

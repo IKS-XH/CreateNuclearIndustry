@@ -273,7 +273,7 @@
   "block.create_nuclear_industry.turbine_casing": "Steam Turbine Casing",
   "block.create_nuclear_industry.turbine_rotor": "Steam Turbine Rotor",
   "block.create_nuclear_industry.turbine_controller": "Steam Turbine Controller",
-  "block.create_nuclear_industry.turbine_output_shaft": "Steam Turbine Rear Shaft",
+  "block.create_nuclear_industry.turbine_output_shaft": "Turbine Power Output Shaft",
   "block.create_nuclear_industry.turbine_inlet": "Steam Turbine Inlet",
   "block.create_nuclear_industry.turbine_exhaust": "Steam Turbine Exhaust",
   "fluid_type.create_nuclear_industry.steam": "Steam",

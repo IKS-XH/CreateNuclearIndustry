@@ -19,7 +19,7 @@ import net.minecraft.world.phys.AABB;
  * 渲染包围盒按当前直径扩展到全部叶片扫掠范围，避免轴心格离开视锥后叶片消失。
  */
 public final class TurbineRotorRenderer implements BlockEntityRenderer<TurbineRotorBlockEntity> {
-    private static final PartialModel[] BLADES = {
+    static final PartialModel[] BLADES = {
             model("rotor_blades_d3"), model("rotor_blades_d5"), model("rotor_blades_d7")};
 
     private static PartialModel model(String name) {

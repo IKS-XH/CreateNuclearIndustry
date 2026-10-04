@@ -11,7 +11,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
-REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01C-ASSETS"
+REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01D-ASSETS"
 STAGING = REPORT / "data_resources"
 SVG_DIR = ROOT / "svg/fluid/steam"
 RESOURCE = REPO / "src/main/resources"
@@ -101,14 +101,14 @@ def render_steam() -> tuple[dict[str, bytes], list[str]]:
 def translations() -> dict[str, dict[str, str]]:
     zh = {
         "turbine_casing": "汽轮机机壳", "turbine_rotor": "汽轮机转子",
-        "turbine_controller": "汽轮机控制器", "turbine_output_shaft": "汽轮机输出轴",
+        "turbine_controller": "汽轮机控制器", "turbine_output_shaft": "汽轮机动力输出轴",
         "turbine_inlet": "汽轮机进汽口", "turbine_exhaust": "汽轮机排汽口",
         "turbine_window": "汽轮机观察窗",
         "steam": "普通蒸汽",
     }
     en = {
         "turbine_casing": "Steam Turbine Casing", "turbine_rotor": "Steam Turbine Rotor",
-        "turbine_controller": "Steam Turbine Controller", "turbine_output_shaft": "Steam Turbine Rear Shaft",
+        "turbine_controller": "Steam Turbine Controller", "turbine_output_shaft": "Turbine Power Output Shaft",
         "turbine_inlet": "Steam Turbine Inlet", "turbine_exhaust": "Steam Turbine Exhaust",
         "turbine_window": "Turbine Window",
         "steam": "Steam",
@@ -178,6 +178,9 @@ def language_files() -> dict[str, bytes]:
         existing = json.loads(path.read_text(encoding="utf-8"))
         existing.update({key: value for key, value in additions.items()
                          if key not in existing or existing[key] == value})
+        shaft_key = f"block.{NAMESPACE}.turbine_output_shaft"
+        if shaft_key in additions:
+            existing[shaft_key] = additions[shaft_key]
         files[f"assets/{NAMESPACE}/lang/{locale}.json"] = (
             json.dumps(existing, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     return files

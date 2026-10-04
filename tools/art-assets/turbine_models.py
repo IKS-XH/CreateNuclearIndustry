@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import io
 import itertools
 import json
 import math
@@ -12,7 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
-REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01C-ASSETS"
+REPORT = REPO / "build/reports/extension/EXT-B-TURBINE-01D-FINAL-ART"
 STAGING = REPORT / "generated_resources"
 ASSETS = REPO / "src/main/resources/assets/create_nuclear_industry"
 BLOCKS = ("turbine_casing", "turbine_rotor", "turbine_controller", "turbine_output_shaft", "turbine_inlet", "turbine_exhaust")
@@ -59,15 +60,40 @@ class Mesh:
         self.normals: list[tuple[float, float, float]] = []
         self.faces: list[tuple[str, list[tuple[int, int, int]]]] = []
 
-    def face(self, points, material: str, target_normal=None, uv_axis=None):
+    def face(self, points, material: str, target_normal=None, uv_axis=None, uv_coords=None):
         points = [tuple(map(float, p)) for p in points]
         if len(points) < 3:
             raise ValueError("OBJ面至少需要三个顶点")
         if self.bounds and any(any(c < -1e-8 or c > 1.00000001 for c in p) for p in points):
             raise ValueError(f"{self.name}: 顶点越出单格0..1范围: {points}")
+        if uv_coords is not None and len(uv_coords) != len(points):
+            raise ValueError(f"{self.name}: UV数量必须与面顶点数量一致")
         if len(points) > 4:
+            normal = cross(tuple(points[1][i] - points[0][i] for i in range(3)),
+                           tuple(points[2][i] - points[0][i] for i in range(3)))
+            length = math.sqrt(dot(normal, normal))
+            if length < 1e-9:
+                raise ValueError(f"{self.name}: 零面积网格面")
+            normal = tuple(c / length for c in normal)
+            if target_normal is not None and dot(normal, target_normal) < 0:
+                points.reverse()
+                if uv_coords is not None:
+                    uv_coords = list(reversed(uv_coords))
+                normal = tuple(-c for c in normal)
+            if uv_coords is None:
+                if uv_axis is None:
+                    dominant = max(range(3), key=lambda i: abs(normal[i]))
+                    uv_axis = {0: (2, 1), 1: (0, 2), 2: (0, 1)}[dominant]
+                us = [p[uv_axis[0]] for p in points]
+                vs = [p[uv_axis[1]] for p in points]
+                u0, u1 = min(us), max(us)
+                v0, v1 = min(vs), max(vs)
+                du, dv = max(u1 - u0, 1e-6), max(v1 - v0, 1e-6)
+                uv_coords = [((p[uv_axis[0]] - u0) / du, (p[uv_axis[1]] - v0) / dv) for p in points]
             for i in range(1, len(points) - 1):
-                self.face([points[0], points[i], points[i + 1]], material, target_normal, uv_axis)
+                tri_points = [points[0], points[i], points[i + 1]]
+                tri_uvs = [uv_coords[0], uv_coords[i], uv_coords[i + 1]]
+                self._emit_face(tri_points, material, target_normal, tri_uvs)
             return
         normal = cross(tuple(points[1][i] - points[0][i] for i in range(3)),
                        tuple(points[2][i] - points[0][i] for i in range(3)))
@@ -77,19 +103,36 @@ class Mesh:
         normal = tuple(c / length for c in normal)
         if target_normal is not None and dot(normal, target_normal) < 0:
             points.reverse()
+            if uv_coords is not None:
+                uv_coords = list(reversed(uv_coords))
             normal = tuple(-c for c in normal)
         if uv_axis is None:
             dominant = max(range(3), key=lambda i: abs(normal[i]))
             uv_axis = {0: (2, 1), 1: (0, 2), 2: (0, 1)}[dominant]
-        us = [p[uv_axis[0]] for p in points]
-        vs = [p[uv_axis[1]] for p in points]
-        u0, u1 = min(us), max(us)
-        v0, v1 = min(vs), max(vs)
-        du, dv = max(u1 - u0, 1e-6), max(v1 - v0, 1e-6)
+        if uv_coords is None:
+            us = [p[uv_axis[0]] for p in points]
+            vs = [p[uv_axis[1]] for p in points]
+            u0, u1 = min(us), max(us)
+            v0, v1 = min(vs), max(vs)
+            du, dv = max(u1 - u0, 1e-6), max(v1 - v0, 1e-6)
+            uv_coords = [((p[uv_axis[0]] - u0) / du, (p[uv_axis[1]] - v0) / dv) for p in points]
+        self._emit_face(points, material, target_normal, uv_coords)
+
+    def _emit_face(self, points, material, target_normal, uv_coords):
+        normal = cross(tuple(points[1][i] - points[0][i] for i in range(3)),
+                       tuple(points[2][i] - points[0][i] for i in range(3)))
+        length = math.sqrt(dot(normal, normal))
+        if length < 1e-9:
+            raise ValueError(f"{self.name}: 零面积网格面")
+        normal = tuple(c / length for c in normal)
+        if target_normal is not None and dot(normal, target_normal) < 0:
+            points = list(reversed(points))
+            uv_coords = list(reversed(uv_coords))
+            normal = tuple(-c for c in normal)
         ids = []
-        for point in points:
+        for point, uv in zip(points, uv_coords):
             self.vertices.append(point)
-            self.uvs.append(((point[uv_axis[0]] - u0) / du, (point[uv_axis[1]] - v0) / dv))
+            self.uvs.append(uv)
             self.normals.append(normal)
             idx = len(self.vertices)
             ids.append((idx, idx, idx))
@@ -234,7 +277,8 @@ def cylinder(mesh: Mesh, axis: str, center, radius: float, start: float, end: fl
         raw = cross(tuple(p1[k] - p0[k] for k in range(3)), tuple(q1[k] - p0[k] for k in range(3)))
         mid = tuple((p0[k] + p1[k]) / 2 for k in range(3))
         desired = normal_fn(mid)
-        mesh.face([p0, p1, q1, q0], material, desired)
+        mesh.face([p0, p1, q1, q0], material, desired,
+                  uv_coords=[(i / sides, 0), (j / sides, 0), (j / sides, 1), (i / sides, 1)])
     if caps:
         mesh.face(points0, cap_material or material, cap_normals[0], uv_axis=cap_uv_axis)
         mesh.face(points1, cap_material or material, cap_normals[1], uv_axis=cap_uv_axis)
@@ -258,14 +302,14 @@ def disk(mesh: Mesh, axis: str, center, radius: float, plane: float, material: s
 
 def rotor_mesh(name="rotor_middle") -> Mesh:
     mesh = Mesh(name)
-    cylinder(mesh, "z", (0.5, 0.5), 0.42, 0.04, 0.96, "rotor", sides=16, caps=True)
+    cylinder(mesh, "z", (0.5, 0.5), 0.42, 0.04, 0.96, "rotor_hub", sides=16, caps=True)
     return mesh
 
 
 def controller_mesh(name="controller_front") -> Mesh:
     mesh = Mesh(name)
     # 前端薄面板封住轴心开口，后方控制器壳体与面板边缘相接但不共面。
-    mesh.quads_for_box((0, 0, 0), (1, 1, 0.08), "endcap", cap_front="controller")
+    mesh.quads_for_box((0, 0, 0), (1, 1, 0.08), "endcap", cap_front="controller", cap_back="endcap")
     mesh.quads_for_box((0.12, 0.12, 0.08), (0.88, 0.88, 0.40),
                        "casing", cap_back="casing")
     return mesh
@@ -353,16 +397,22 @@ def port_mesh(kind: str, role: str, name: str) -> Mesh:
         band_start, band_end, inboard = 0.89, 1.0, (0.0, 0.08)
         end_sign = 1
     cap = "inlet" if kind == "inlet" else "exhaust"
+    side_material = f"{cap}_side"
     # 钢管主体分成标识环与管身两个不重叠区间，端面颜色表示介质方向。
     if role == "left":
         cylinder(mesh, axis, center, 0.32, band_end, end, "casing", sides=16, caps=False)
-        cylinder(mesh, axis, center, 0.32, start, band_end, cap, sides=16, caps=False)
+        cylinder(mesh, axis, center, 0.32, start, band_end, side_material, sides=16, caps=False)
         disk(mesh, axis, center, 0.32, start, cap, end_sign)
     else:
         cylinder(mesh, axis, center, 0.32, start, band_start, "casing", sides=16, caps=False)
-        cylinder(mesh, axis, center, 0.32, band_start, end, cap, sides=16, caps=False)
+        cylinder(mesh, axis, center, 0.32, band_start, end, side_material, sides=16, caps=False)
         disk(mesh, axis, center, 0.32, end, cap, end_sign)
     square_hole_plate(mesh, axis, inboard[0], inboard[1], 0.35, "endcap", "casing")
+    # 方孔内侧以独立平面封口；其范围恰落在薄板开孔内，不与四条端板共面重叠。
+    inner_plane = inboard[0] if end_sign < 0 else inboard[1]
+    inner_square = [(0.15, 0.15), (0.85, 0.15), (0.85, 0.85), (0.15, 0.85)]
+    mesh.face([point_on_plane(axis, inner_plane, u, v) for u, v in inner_square],
+              "inside", axis_normal(axis, -end_sign))
     return mesh
 
 
@@ -451,7 +501,7 @@ def shell_cells(diameter):
     return cells
 
 
-def casing_cell_mesh(diameter, section, x, y):
+def casing_cell_mesh(diameter, section, x, y, seal_axial=False):
     """生成单格连续壳壁；端层同时带3/16封闭端盖和接续侧壳。"""
     name = f"d{diameter}_{section}_x{x}_y{y}"
     mesh = Mesh(name)
@@ -460,6 +510,16 @@ def casing_cell_mesh(diameter, section, x, y):
     band_z0 = SHELL_THICKNESS if section == "front" else 0.0
     band_z1 = 1 - SHELL_THICKNESS if section == "rear" else 1.0
     _append_shell_band(mesh, diameter, x, y, band_z0, band_z1)
+    if seal_axial and section == "middle":
+        # 独立薄壳没有相邻轴向格遮住端口，需封闭外壁与内壁之间的截面。
+        for i in range(8):
+            band = [outer[i], outer[(i + 1) % 8], inner[(i + 1) % 8], inner[i]]
+            clipped = clip_to_cell(band, x, y)
+            if polygon_area(clipped) <= 1e-9:
+                continue
+            local = [(px - x + 0.5, py - y + 0.5) for px, py in clipped]
+            mesh.face([(px, py, 0.0) for px, py in local], "endcap", (0, 0, -1), uv_axis=(0, 1))
+            mesh.face([(px, py, 1.0) for px, py in local], "endcap", (0, 0, 1), uv_axis=(0, 1))
     if section in ("front", "rear"):
         # 端盖厚3/16格并覆盖完整八棱截面；侧壳从盖内缘接续到下一段。
         clipped = clip_to_cell(outer, x, y)
@@ -562,7 +622,7 @@ def turbine_window_mesh(side):
     return mesh
 
 
-def annular_sleeve(mesh, center, outer_radius, inner_radius, start, end, sides=24):
+def annular_sleeve(mesh, center, outer_radius, inner_radius, start, end, sides=24, cap_ends=True):
     """生成中空轮毂套筒，内孔给独立转子轴留出净空。"""
     outer0, outer1, inner0, inner1 = [], [], [], []
     for i in range(sides):
@@ -576,10 +636,16 @@ def annular_sleeve(mesh, center, outer_radius, inner_radius, start, end, sides=2
         j = (i + 1) % sides
         mid = ((outer0[i][0] + outer0[j][0]) / 2 - center[0],
                (outer0[i][1] + outer0[j][1]) / 2 - center[1], 0)
-        mesh.face([outer0[i], outer0[j], outer1[j], outer1[i]], "rotor_hub", mid)
-        mesh.face([inner0[j], inner0[i], inner1[i], inner1[j]], "inside", (-mid[0], -mid[1], 0))
-        mesh.face([outer1[i], outer1[j], inner1[j], inner1[i]], "rotor_hub", (0, 0, 1))
-        mesh.face([outer0[j], outer0[i], inner0[i], inner0[j]], "rotor_hub", (0, 0, -1))
+        u0, u1 = i / sides, (i + 1) / sides
+        mesh.face([outer0[i], outer0[j], outer1[j], outer1[i]], "rotor_hub", mid,
+                  uv_coords=[(u0, 0), (u1, 0), (u1, 1), (u0, 1)])
+        mesh.face([inner0[j], inner0[i], inner1[i], inner1[j]], "inside", (-mid[0], -mid[1], 0),
+                  uv_coords=[(u1, 0), (u0, 0), (u0, 1), (u1, 1)])
+        if cap_ends:
+            mesh.face([outer1[i], outer1[j], inner1[j], inner1[i]], "rotor_hub", (0, 0, 1),
+                      uv_coords=[(u0, 1), (u1, 1), (u1, 0), (u0, 0)])
+            mesh.face([outer0[j], outer0[i], inner0[i], inner0[j]], "rotor_hub", (0, 0, -1),
+                      uv_coords=[(u1, 1), (u0, 1), (u0, 0), (u1, 0)])
 
 
 def rotor_blades_mesh(diameter):
@@ -746,14 +812,15 @@ def all_files() -> dict[str, bytes]:
 
 
 def transform_mesh(source: Mesh, name: str, transform) -> Mesh:
-    """将标准侧向构件按局部坐标变换，保留闭合面和外法线。"""
+    """将标准构件变换到世界面，并保留逐顶点UV，避免圆端面重新分片贴图。"""
     target = Mesh(name, bounds=False)
     for material, indexes in source.faces:
         points = [source.vertices[v - 1] for v, _, _ in indexes]
         normal = source.normals[indexes[0][2] - 1]
         transformed = [transform(point) for point in points]
         transformed_normal = transform(normal, vector=True)
-        target.face(transformed, material, transformed_normal)
+        uvs = [source.uvs[t - 1] for _, t, _ in indexes]
+        target.face(transformed, material, transformed_normal, uv_coords=uvs)
     return target
 
 
@@ -772,20 +839,41 @@ def controller_side_mesh(side):
     return transform_mesh(controller_mesh(f"controller_{side}"), f"controller_{side}", do_transform)
 
 
+def port_direction_mesh(kind, direction):
+    """将端口外端从统一局部西向基准旋转到六个世界方向。"""
+    transforms = {
+        "west": lambda p: (p[0], p[1], p[2]),
+        "east": lambda p: (1 - p[0], p[1], 1 - p[2]),
+        "north": lambda p: (1 - p[2], p[1], p[0]),
+        "south": lambda p: (p[2], p[1], 1 - p[0]),
+        "up": lambda p: (p[1], 1 - p[0], p[2]),
+        "down": lambda p: (p[1], p[0], 1 - p[2]),
+    }
+    transform = transforms[direction]
+    def apply(point, vector=False):
+        if not vector:
+            return transform(point)
+        origin = transform((0, 0, 0))
+        endpoint = transform(point)
+        return tuple(endpoint[i] - origin[i] for i in range(3))
+    base = port_mesh(kind, "left", f"{kind}_loose_{direction}")
+    return transform_mesh(base, f"{kind}_loose_{direction}", apply)
+
+
 def output_shaft_mesh(end):
     """生成端部承轴板、轴承座与0..1格内的轴身，端面平接相邻动力轴。"""
     mesh = Mesh(f"output_shaft_{end}", bounds=False)
     if end == "front":
         plate_start, plate_end = 0.0, SHELL_THICKNESS
         square_hole_plate(mesh, "z", plate_start, plate_end, 0.19, "endcap", "casing")
-        annular_sleeve(mesh, (0.5, 0.5), 0.27, 0.14, plate_start, plate_end, sides=24)
-        cylinder(mesh, "z", (0.5, 0.5), 0.14, 0.0, 1.0, "shaft", sides=20)
+        annular_sleeve(mesh, (0.5, 0.5), 0.27, 0.155, plate_start, plate_end, sides=24, cap_ends=False)
+        cylinder(mesh, "z", (0.5, 0.5), 0.14, 0.0, 1.0, "shaft", sides=20, caps=False)
         disk(mesh, "z", (0.5, 0.5), 0.14, 0.0, "shaft", -1, sides=20)
     else:
         plate_start, plate_end = 1.0 - SHELL_THICKNESS, 1.0
         square_hole_plate(mesh, "z", plate_start, plate_end, 0.19, "endcap", "casing")
-        annular_sleeve(mesh, (0.5, 0.5), 0.27, 0.14, plate_start, plate_end, sides=24)
-        cylinder(mesh, "z", (0.5, 0.5), 0.14, 0.0, 1.0, "shaft", sides=20)
+        annular_sleeve(mesh, (0.5, 0.5), 0.27, 0.155, plate_start, plate_end, sides=24, cap_ends=False)
+        cylinder(mesh, "z", (0.5, 0.5), 0.14, 0.0, 1.0, "shaft", sides=20, caps=False)
         disk(mesh, "z", (0.5, 0.5), 0.14, 1.0, "shaft", 1, sides=20)
     return mesh
 
@@ -805,8 +893,10 @@ def small_item_rotor():
     for material, indexes in source.faces:
         points = [source.vertices[v - 1] for v, _, _ in indexes]
         normal = source.normals[indexes[0][2] - 1]
+        uvs = [source.uvs[t - 1] for _, t, _ in indexes]
         target.face([(0.5 + (p[0] - 0.5) * scale,
-                      0.5 + (p[1] - 0.5) * scale, p[2]) for p in points], material, normal)
+                      0.5 + (p[1] - 0.5) * scale, p[2]) for p in points], material, normal,
+                    uv_coords=uvs)
     return target
 
 
@@ -839,9 +929,11 @@ def obj_resource_files(meshes):
         "edge": "turbine_casing_panel", "endcap": "turbine_casing_panel",
         "glass": "turbine_window_glass", "glass_edge": "turbine_window_glass",
         "rotor_hub": "turbine_rotor_metal", "blade": "turbine_rotor_blade",
-        "blade_edge": "turbine_rotor_metal", "shaft": "turbine_output_shaft",
-        "brass": "turbine_casing_endcap", "controller": "turbine_controller",
-        "inlet": "turbine_inlet", "exhaust": "turbine_exhaust", "support": "turbine_bearing_support",
+        "blade_edge": "turbine_rotor_metal", "shaft": "turbine_output_shaft_surface",
+        "brass": "turbine_brass_surface", "controller": "turbine_controller_surface",
+        "inlet": "turbine_inlet_face", "exhaust": "turbine_exhaust_face",
+        "inlet_side": "turbine_inlet_side", "exhaust_side": "turbine_exhaust_side",
+        "support": "turbine_bearing_support_surface",
     }
     for name, mesh in meshes.items():
         name = name.replace("/", "_")
@@ -852,9 +944,11 @@ def obj_resource_files(meshes):
         "edge": "turbine_casing_panel", "endcap": "turbine_casing_panel",
         "glass": "turbine_window_glass", "glass_edge": "turbine_window_glass",
         "rotor_hub": "turbine_rotor_metal", "blade": "turbine_rotor_blade",
-        "blade_edge": "turbine_rotor_metal", "shaft": "turbine_output_shaft",
-        "brass": "turbine_casing_endcap", "controller": "turbine_controller",
-        "inlet": "turbine_inlet", "exhaust": "turbine_exhaust", "support": "turbine_bearing_support",
+        "blade_edge": "turbine_rotor_metal", "shaft": "turbine_output_shaft_surface",
+        "brass": "turbine_brass_surface", "controller": "turbine_controller_surface",
+        "inlet": "turbine_inlet_face", "exhaust": "turbine_exhaust_face",
+        "inlet_side": "turbine_inlet_side", "exhaust_side": "turbine_exhaust_side",
+        "support": "turbine_bearing_support_surface",
     }
     mtl = []
     for material, texture in materials.items():
@@ -922,9 +1016,14 @@ def model_and_state_files():
                     (p[0], 1 - p[1], p[2]) if not vector else (p[0], -p[1], p[2])))
             meshes[f"{kind}_{side}"] = source
             write_model_wrapper(files, f"{kind}_{side}", f"{kind}_{side}", f"turbine_{kind}")
+    for direction in OUTWARD:
+        for kind in ("inlet", "exhaust"):
+            model_name = f"{kind}_loose_{direction}"
+            meshes[model_name] = port_direction_mesh(kind, direction)
+            write_model_wrapper(files, model_name, model_name, f"turbine_{kind}")
 
     # 独立面板沿用同一片3/16格薄壳，并预烘焙六个世界朝向，避免与机身朝向重复旋转。
-    d3_top = casing_cell_mesh(3, "middle", 0, 1)
+    d3_top = casing_cell_mesh(3, "middle", 0, 1, seal_axial=True)
     meshes["turbine_casing_unformed"] = d3_top
     write_model_wrapper(files, "turbine_casing_unformed", "turbine_casing_unformed", "turbine_casing_panel")
     meshes["turbine_window_unformed"] = turbine_window_mesh("up")
@@ -958,10 +1057,16 @@ def model_and_state_files():
         write_model_wrapper(files, window_name, window_name, "turbine_window_glass", render_type="translucent")
     meshes["turbine_rotor_unformed"] = small_item_rotor()
     write_model_wrapper(files, "turbine_rotor_unformed", "turbine_rotor_unformed", "turbine_rotor_blade", False)
+    # 保留旧partial资源路径，避免客户端已缓存的块状态或调用方再次遇到rotor缺失。
+    meshes["rotor_middle"] = rotor_mesh()
+    write_model_wrapper(files, "rotor_middle", "rotor_middle", "turbine_rotor_metal")
     meshes["turbine_controller_unformed"] = controller_mesh("turbine_controller_unformed")
     write_model_wrapper(files, "turbine_controller_unformed", "turbine_controller_unformed", "turbine_controller")
-    meshes["turbine_output_shaft_unformed"] = output_shaft_mesh("rear")
+    meshes["turbine_output_shaft_unformed"] = output_shaft_mesh("front")
     write_model_wrapper(files, "turbine_output_shaft_unformed", "turbine_output_shaft_unformed", "turbine_output_shaft", False)
+    meshes["turbine_output_shaft_unformed_rear"] = output_shaft_mesh("rear")
+    write_model_wrapper(files, "turbine_output_shaft_unformed_rear", "turbine_output_shaft_unformed_rear",
+                        "turbine_output_shaft", False)
     for kind in ("inlet", "exhaust"):
         meshes[f"turbine_{kind}_unformed"] = port_mesh(kind, "left", f"turbine_{kind}_unformed")
         write_model_wrapper(files, f"turbine_{kind}_unformed", f"turbine_{kind}_unformed", f"turbine_{kind}")
@@ -1022,7 +1127,11 @@ def blockstates_01b(piece_map):
     variants = {}
     for located, facing, end in itertools.product((False, True), FACING, ("front", "rear")):
         key = f"end={end},located={str(located).lower()},machine_facing={facing}"
-        variants[key] = variant(model(f"output_shaft_{end}" if located else "turbine_output_shaft_unformed"), facing)
+        if located:
+            selected = f"output_shaft_{end}"
+        else:
+            selected = "turbine_output_shaft_unformed" if end == "front" else "turbine_output_shaft_unformed_rear"
+        variants[key] = variant(model(selected), facing)
     out["assets/create_nuclear_industry/blockstates/turbine_output_shaft.json"] = write_json(Path("turbine_output_shaft"), {"variants": variants})
 
     variants = {}
@@ -1037,14 +1146,60 @@ def blockstates_01b(piece_map):
             key = f"located={str(located).lower()},machine_facing={facing},ring_role={role},outward={outward}"
             side = {"top": "up", "bottom": "down", "left": "left", "right": "right"}.get(role)
             expected = side if side in ("up", "down") else SIDE_WORLD[facing].get(side)
-            selected = f"{kind}_{side}" if located and side and outward == expected else f"{block}_unformed"
-            variants[key] = variant(model(selected), facing)
+            if located:
+                selected = f"{kind}_{side}" if side and outward == expected else f"{block}_unformed"
+                rotation = facing
+            else:
+                selected = f"{kind}_loose_{outward}"
+                rotation = None
+            variants[key] = variant(model(selected), rotation)
         out[f"assets/create_nuclear_industry/blockstates/{block}.json"] = write_json(Path(block), {"variants": variants})
     return out
 
 
 def all_files_01b():
-    return model_and_state_files()
+    files = model_and_state_files()
+    # 旧包装JSON仍可能加载顶部端口OBJ，保持其端面与新端口同样封闭且UV连续。
+    for kind in ("inlet", "exhaust"):
+        files[f"assets/create_nuclear_industry/models/block/turbine/mesh/{kind}_top.obj"] = (
+            port_mesh(kind, "top", f"{kind}_top").text().encode("utf-8"))
+    files.update(opaque_surface_files())
+    return files
+
+
+def opaque_surface_files():
+    """从原图标构造实体面贴图；透明底只供物品图标使用，玻璃继续透明。"""
+    icon_root = ASSETS / "textures/block/turbine"
+    specs = {
+        "turbine_controller_surface": ("turbine_controller", (62, 80, 88)),
+        "turbine_inlet_face": ("turbine_inlet", (80, 62, 42)),
+        "turbine_exhaust_face": ("turbine_exhaust", (38, 65, 77)),
+        "turbine_output_shaft_surface": ("turbine_output_shaft", (80, 92, 96)),
+        "turbine_bearing_support_surface": ("turbine_bearing_support", (89, 77, 59)),
+        "turbine_brass_surface": ("turbine_casing_endcap", (101, 79, 53)),
+    }
+    result = {}
+    for output, (source, base) in specs.items():
+        background = Image.new("RGBA", (16, 16), (*base, 255))
+        foreground = Image.open(icon_root / f"{source}.png").convert("RGBA")
+        background.alpha_composite(foreground)
+        stream = io.BytesIO()
+        background.save(stream, format="PNG", optimize=False)
+        result[f"assets/create_nuclear_industry/textures/block/turbine/{output}.png"] = stream.getvalue()
+    for name, base, accent in (
+        ("turbine_inlet_side", (80, 62, 42), (240, 138, 54)),
+        ("turbine_exhaust_side", (38, 65, 77), (133, 205, 224)),
+    ):
+        texture = Image.new("RGBA", (16, 16), (*base, 255))
+        painter = ImageDraw.Draw(texture)
+        painter.rectangle((0, 0, 15, 2), fill=(*accent, 255))
+        painter.rectangle((0, 13, 15, 15), fill=(*accent, 255))
+        painter.line((0, 5, 15, 5), fill=(163, 183, 182, 255), width=1)
+        painter.line((0, 10, 15, 10), fill=(163, 183, 182, 255), width=1)
+        stream = io.BytesIO()
+        texture.save(stream, format="PNG", optimize=False)
+        result[f"assets/create_nuclear_industry/textures/block/turbine/{name}.png"] = stream.getvalue()
+    return result
 
 
 def verify(files: dict[str, bytes]) -> dict:
@@ -1108,7 +1263,7 @@ def verify_01b(files: dict[str, bytes]) -> dict:
     assert tier_counts == {3: {"front": 9, "middle": 8, "rear": 9},
                            5: {"front": 25, "middle": 16, "rear": 25},
                            7: {"front": 45, "middle": 24, "rear": 45}}
-    assert len(model_files) == 253 and len(obj_files) == 253
+    assert len(model_files) == 267 and len(obj_files) == 269
     assert len(state_files) == 7 and len(item_files) == 7
     path_set = set(files)
     for path in model_files:
@@ -1125,6 +1280,37 @@ def verify_01b(files: dict[str, bytes]) -> dict:
         for entry in variants.values():
             model_path = entry["model"].split(":", 1)[-1]
             assert f"assets/create_nuclear_industry/models/{model_path}.json" in path_set, (path, model_path)
+    material_libraries = {path: data.decode("utf-8") for path, data in files.items() if path.endswith(".mtl")}
+    for path in obj_files:
+        obj_text = files[path].decode("utf-8")
+        library_names = [row.split(maxsplit=1)[1] for row in obj_text.splitlines() if row.startswith("mtllib ")]
+        assert library_names, (path, "缺少mtllib")
+        declared = set()
+        for library_name in library_names:
+            library_path = (Path(path).parent / library_name).as_posix()
+            assert library_path in material_libraries, (path, library_path)
+            declared.update(row.split(maxsplit=1)[1] for row in material_libraries[library_path].splitlines()
+                            if row.startswith("newmtl "))
+        used = {row.split(maxsplit=1)[1] for row in obj_text.splitlines() if row.startswith("usemtl ")}
+        assert used <= declared, (path, sorted(used - declared))
+        vertices = [tuple(float(v) for v in row.split()[1:4]) for row in obj_text.splitlines() if row.startswith("v ")]
+        normals = [tuple(float(v) for v in row.split()[1:4]) for row in obj_text.splitlines() if row.startswith("vn ")]
+        for row in (line for line in obj_text.splitlines() if line.startswith("f ")):
+            refs = [tuple(int(index) for index in token.split("/")) for token in row.split()[1:]]
+            points = [vertices[ref[0] - 1] for ref in refs]
+            normal = normals[refs[0][2] - 1]
+            geometric = cross(tuple(points[1][i] - points[0][i] for i in range(3)),
+                              tuple(points[2][i] - points[0][i] for i in range(3)))
+            assert dot(geometric, normal) > 1e-9, (path, row, geometric, normal)
+    uv_probe = Mesh("uv_probe", bounds=False)
+    polygon = [(math.cos(2 * math.pi * i / 8), math.sin(2 * math.pi * i / 8), 0) for i in range(8)]
+    uv_probe.face(polygon, "probe", (0, 0, 1))
+    by_point = {}
+    for face_material, indexes in uv_probe.faces:
+        for vertex_index, texture_index, _ in indexes:
+            point, uv = uv_probe.vertices[vertex_index - 1], uv_probe.uvs[texture_index - 1]
+            by_point.setdefault(point, set()).add(uv)
+    assert all(len(values) == 1 for values in by_point.values())
     expected_counts = {"turbine_casing": 1696, "turbine_window": 1696,
                        "turbine_rotor": 24, "turbine_output_shaft": 16,
                        "turbine_controller": 32, "turbine_inlet": 384,
@@ -1184,6 +1370,42 @@ def verify_01b(files: dict[str, bytes]) -> dict:
         vertices = [tuple(float(v) for v in row.split()[1:4]) for row in files[path].decode("utf-8").splitlines()
                     if row.startswith("v ")]
         assert all(all(-1e-8 <= c <= 1.00000001 for c in point) for point in vertices), path
+        shaft_faces = parse_obj(files[path])
+        plate_plane = 0.0 if end == "front" else 1.0
+        assert not any(material == "rotor_hub" and all(abs(p[2] - plate_plane) < 1e-8 for p in points)
+                       for material, points, _ in shaft_faces), (path, "轴承环端面与端板共面")
+        assert any(material == "shaft" and all(abs(p[2] - plate_plane) < 1e-8 for p in points)
+                   for material, points, _ in shaft_faces), (path, "外向轴端封面缺失")
+    independent_casing = ["turbine_casing_unformed"] + [f"turbine_casing_unformed_{face}"
+                                                        for face in ("down", "north", "south", "west", "east")]
+    for name in independent_casing:
+        faces = parse_obj(files[f"assets/create_nuclear_industry/models/block/turbine/mesh/{name}.obj"])
+        cap_planes = set()
+        for material, points, normal in faces:
+            if material != "endcap":
+                continue
+            for axis in range(3):
+                if all(abs(point[axis] - points[0][axis]) < 1e-8 for point in points) and abs(normal[axis]) > 0.999:
+                    cap_planes.add((axis, round(points[0][axis], 6), 1 if normal[axis] > 0 else -1))
+        assert any(axis == other_axis and sign == -other_sign and abs(plane - other_plane) > 0.5
+                   for axis, plane, sign in cap_planes for other_axis, other_plane, other_sign in cap_planes), \
+            (name, "轴向截面未形成方向相反的封口")
+    controller = parse_obj(files["assets/create_nuclear_industry/models/block/turbine/mesh/turbine_controller_unformed.obj"])
+    assert any(material == "endcap" and all(abs(point[2] - 0.08) < 1e-8 for point in points)
+               for material, points, _ in controller), "控制器大面板背面未封口"
+    shaft_states = json_files["assets/create_nuclear_industry/blockstates/turbine_output_shaft.json"]["variants"]
+    for facing in FACING:
+        front_key = f"end=front,located=false,machine_facing={facing}"
+        rear_key = f"end=rear,located=false,machine_facing={facing}"
+        assert shaft_states[front_key]["model"].endswith("/turbine_output_shaft_unformed")
+        assert shaft_states[rear_key]["model"].endswith("/turbine_output_shaft_unformed_rear")
+        assert shaft_states[front_key].get("y") == ROTATION[facing]
+    for block, kind in (("turbine_inlet", "inlet"), ("turbine_exhaust", "exhaust")):
+        variants = json_files[f"assets/create_nuclear_industry/blockstates/{block}.json"]["variants"]
+        for direction in OUTWARD:
+            key = f"located=false,machine_facing=north,ring_role=top,outward={direction}"
+            value = variants[key]
+            assert value["model"].endswith(f"/{kind}_loose_{direction}") and "y" not in value, (block, key, value)
     for path, data in files.items():
         if path.endswith(".obj") and "/rotor_blades_" not in path and "output_shaft" not in path:
             vertices = [tuple(float(v) for v in row.split()[1:4]) for row in data.decode("utf-8").splitlines()
@@ -1201,7 +1423,10 @@ def verify_01b(files: dict[str, bytes]) -> dict:
             "valid_window_models": len(window_models), "rotor_geometry": rotor_data,
             "rotor_axis_and_center": "+Z axis, block-local (0.5,0.5,0.5); partial has no shaft",
             "output_shaft_extent": "front/rear axes and 3/16 bearing plates remain within local z=0..1",
-            "model_obj_particle_references": "PASS", "regular_mesh_bounds": "0..1 per block"}
+            "model_obj_particle_references": "PASS", "regular_mesh_bounds": "0..1 per block",
+            "reachable_obj_materials_and_normals": "PASS", "triangulated_uv_projection": "PASS",
+            "independent_shell_and_controller_sealing": "PASS", "bearing_coplanar_faces": "PASS",
+            "ordinary_shaft_and_port_orientation": "PASS"}
 
 
 def parse_obj(data: bytes):
@@ -1308,7 +1533,7 @@ def main() -> None:
         target = REPO / "src/main/resources"
         for relative, data in files.items():
             if ("/models/block/turbine/" in relative or "/blockstates/turbine_" in relative or
-                    "/models/item/turbine_" in relative):
+                    "/models/item/turbine_" in relative or "/textures/block/turbine/" in relative):
                 path = target / relative
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(data)

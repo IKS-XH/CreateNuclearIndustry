@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -33,6 +34,89 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public final class ExtensionTurbineAssemblyGameTests {
     private static final BlockPos FRONT = new BlockPos(5, 5, 1);
     private ExtensionTurbineAssemblyGameTests() {}
+
+    /** 用实际放置上下文核对六向端面、前轴外露侧及控制器两层网格的选取/碰撞。 */
+    @GameTest(template = "turbine_empty", timeoutTicks = 30)
+    public static void ordinaryPortsFaceViewerAndControllerShapeMatchesVisibleThickness(GameTestHelper helper) {
+        BlockPos pos = helper.absolutePos(new BlockPos(5, 5, 5));
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setPos(pos.getX() + .5, pos.getY() + 1, pos.getZ() + 1.5);
+        Direction[] expected = {Direction.NORTH, Direction.EAST, Direction.SOUTH,
+                Direction.WEST, Direction.DOWN, Direction.UP};
+        float[][] angles = {{0, 0}, {90, 0}, {180, 0}, {270, 0}, {0, -89}, {0, 89}};
+        for (int index = 0; index < angles.length; index++) {
+            player.setYRot(angles[index][0]);
+            player.setYHeadRot(angles[index][0]);
+            player.setXRot(angles[index][1]);
+            BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
+            BlockPlaceContext context = new BlockPlaceContext(
+                    new UseOnContext(player, InteractionHand.MAIN_HAND, hit));
+            for (var port : new TurbinePartBlock[]{TurbineContent.INLET.get(),
+                    TurbineContent.EXHAUST.get()}) {
+                BlockState placed = port.getStateForPlacement(context);
+                require(helper, placed != null && placed.getValue(TurbinePartBlock.OUTWARD)
+                        == expected[index], "普通汽口外端没有面向玩家的六向视线：" + index
+                        + " expected=" + expected[index] + " actual="
+                        + (placed == null ? "null" : placed.getValue(TurbinePartBlock.OUTWARD))
+                        + " nearest=" + context.getNearestLookingDirection()
+                        + " yaw=" + player.getYRot() + " pitch=" + player.getXRot());
+            }
+            if (index < 4) {
+                BlockState shaft = TurbineContent.OUTPUT_SHAFT.get().getStateForPlacement(context);
+                require(helper, shaft != null && shaft.getValue(TurbinePartBlock.MACHINE_FACING)
+                        == expected[index]
+                        && shaft.getValue(TurbineShaftBlock.END) == TurbineShaftBlock.End.FRONT
+                        && TurbineContent.OUTPUT_SHAFT.get().hasShaftTowards(helper.getLevel(),
+                        pos, shaft, expected[index]), "前端轴普通放置方向与外露 Create 轴不一致");
+            }
+        }
+        BlockState controller = TurbineContent.CONTROLLER.get().defaultBlockState();
+        for (Direction facing : Direction.Plane.HORIZONTAL) {
+            BlockState unlocated = controller.setValue(TurbinePartBlock.MACHINE_FACING, facing);
+            var ordinaryShape = unlocated.getShape(helper.getLevel(), pos);
+            var ordinary = ordinaryShape.bounds();
+            var ordinaryCollision = unlocated.getCollisionShape(helper.getLevel(), pos).bounds();
+            require(helper, ordinary.equals(ordinaryCollision), "普通控制器选取与碰撞不一致");
+            double thickness = facing.getAxis() == Direction.Axis.Z
+                    ? ordinary.maxZ - ordinary.minZ : ordinary.maxX - ordinary.minX;
+            require(helper, Math.abs(thickness - .4) < 1e-6,
+                    "普通控制器未采用可见模型的 0.4 格厚度");
+            require(helper, !containsLocal(ordinaryShape, facing, .05, .05, .2)
+                    && containsLocal(ordinaryShape, facing, .5, .5, .2),
+                    "普通控制器边缘后方应为空而中心盒体应有碰撞");
+            for (TurbinePartBlock.Side side : TurbinePartBlock.Side.values()) {
+                BlockState located = unlocated.setValue(TurbinePartBlock.LOCATED, true)
+                        .setValue(TurbinePartBlock.SIDE, side);
+                var locatedShape = located.getShape(helper.getLevel(), pos);
+                var shape = locatedShape.bounds();
+                var collision = located.getCollisionShape(helper.getLevel(), pos).bounds();
+                require(helper, shape.equals(collision), "定位控制器选取与碰撞不一致");
+                double sideThickness = side == TurbinePartBlock.Side.UP
+                        || side == TurbinePartBlock.Side.DOWN
+                        ? shape.maxY - shape.minY
+                        : facing.getAxis() == Direction.Axis.Z
+                        ? shape.maxX - shape.minX : shape.maxZ - shape.minZ;
+                require(helper, Math.abs(sideThickness - .4) < 1e-6,
+                        "定位控制器厚度与 .4 格模型不符");
+                double[] edge = switch (side) {
+                    case UP -> new double[]{.05, .8, .05};
+                    case DOWN -> new double[]{.05, .2, .05};
+                    case LEFT -> new double[]{.2, .05, .05};
+                    case RIGHT -> new double[]{.8, .05, .05};
+                };
+                double[] body = switch (side) {
+                    case UP -> new double[]{.5, .8, .5};
+                    case DOWN -> new double[]{.5, .2, .5};
+                    case LEFT -> new double[]{.2, .5, .5};
+                    case RIGHT -> new double[]{.8, .5, .5};
+                };
+                require(helper, !containsLocal(locatedShape, facing, edge[0], edge[1], edge[2])
+                        && containsLocal(locatedShape, facing, body[0], body[1], body[2]),
+                        "定位控制器边缘后方应为空而中心盒体应有碰撞");
+            }
+        }
+        helper.succeed();
+    }
 
     @GameTest(template = "turbine_empty", timeoutTicks = 40)
     public static void crossingCompleteAxesRejectAssistedPlacementWithoutConsumingItem(GameTestHelper helper) {
@@ -220,5 +304,18 @@ public final class ExtensionTurbineAssemblyGameTests {
 
     private static void require(GameTestHelper helper, boolean condition, String message) {
         if (!condition) helper.fail(message);
+    }
+
+    /** 把局部北向的测试点转到世界方向，用于比对二层模型内部的实际占据体积。 */
+    private static boolean containsLocal(VoxelShape shape, Direction facing,
+                                         double x, double y, double z) {
+        Vec3 point = switch (facing) {
+            case NORTH -> new Vec3(x, y, z);
+            case EAST -> new Vec3(1 - z, y, x);
+            case SOUTH -> new Vec3(1 - x, y, 1 - z);
+            case WEST -> new Vec3(z, y, 1 - x);
+            default -> throw new IllegalArgumentException("仅水平朝向");
+        };
+        return shape.toAabbs().stream().anyMatch(box -> box.contains(point));
     }
 }
