@@ -1,5 +1,7 @@
 # 《机械动力：核工业》内容注册与素材清单
 
+> **汽轮机最新修订：** 01A目前只注册六种构件，手测未整体通过。用户已要求新增透明 `turbine_window`、双端复用 `turbine_output_shaft`、控制器移到侧面，并重绘薄壳与叶片转子；上述结构代码/观察窗尚未实现，见[01B方案](./superpowers/plans/2026-10-04-turbine-structure-revision-proposal.md)。`steam` 显示名已在候选改为“蒸汽”，注册ID与流体身份不变。
+
 **适用版本：** Java 21 + Minecraft 1.21.1 + NeoForge + Create 6.0.10  
 **玩法规则：** [project.md](./project.md)  
 **材料与配方：** [recipes.md](./recipes.md)  
