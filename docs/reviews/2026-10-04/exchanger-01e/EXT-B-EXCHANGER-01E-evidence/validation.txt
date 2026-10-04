@@ -1,0 +1,10 @@
+EXT-B-EXCHANGER-01E 验证记录
+基线：dd3df15；候选工作树：E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition
+版本核对：Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82；未升级。
+技能实际使用：minecraft-modding（模组/资源路径及平台核对）、minecraft-testing（按低风险纯语言资源范围复用证据，不运行JUnit/GameTest）、minecraft-resource-pack（语言JSON约定与资源格式核对）。
+
+状态覆盖：HeatExchangerState 的 no_load、invalid、warming、running、residual、empty、blocked、dedicated 均在 zh_cn/en_us 有键；line_unavailable 是护目镜直列状态回退键，两语言也均存在。两份JSON均可解析，顶层键无重复。
+
+构建：./gradlew assemble，BUILD SUCCESSFUL；4 actionable tasks，2 executed、2 up-to-date。未运行clean、JUnit或GameTest。
+制品：build/libs/create_nuclear_industry-0.1.0.jar 内中英文语言资源均包含 gui.create_nuclear_industry.heat_exchanger.state.dedicated，值分别为“向高压锅炉供热”和“Supplying heat to high-pressure boiler”。
+备注：第一次尝试调用系统 Python 被 WindowsApps 拒绝启动；随后改用 PowerShell JSON 解析与重复键扫描完成同一项检查，不影响构建结果。

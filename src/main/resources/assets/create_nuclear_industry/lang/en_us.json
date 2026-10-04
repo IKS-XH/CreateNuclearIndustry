@@ -13,6 +13,7 @@
   "gui.create_nuclear_industry.heat_exchanger.state.invalid": "Invalid configuration: safely stopped",
   "gui.create_nuclear_industry.heat_exchanger.state.warming": "Heating gradually: output never exceeds paid reserve",
   "gui.create_nuclear_industry.heat_exchanger.state.running": "Supplying heat",
+  "gui.create_nuclear_industry.heat_exchanger.state.dedicated": "Supplying heat to high-pressure boiler",
   "gui.create_nuclear_industry.heat_exchanger.state.residual": "Using paid residual heat: low hot coolant or blocked return",
   "gui.create_nuclear_industry.heat_exchanger.state.empty": "Insufficient hot coolant",
   "gui.create_nuclear_industry.heat_exchanger.state.blocked": "Cold coolant return blocked",

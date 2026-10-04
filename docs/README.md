@@ -30,6 +30,7 @@
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
 | [锅炉01D按层三格端口](./superpowers/plans/2026-10-04-ext-b-boiler-01d.md) | 实现及独立审查通过，待手测；保留给水第2层/汽口第4层，扩展到同面三个非棱边格，与已通过自动门的01C每口独立限流合并手测，尚未合main |
+| [换热器01E护目镜翻译](./superpowers/plans/2026-10-04-ext-b-exchanger-01e.md) | 修复向高压锅炉供热时缺少`state.dedicated`翻译的反馈；仅语言资源，不改变运行规则，人工确认并入本轮锅炉复测 |
 | [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 全部人工门通过、已合入main，见[最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |
 | [燃料02A/02B：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 全部手测通过并合入main；[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)，运行证据复用 |
 | [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |

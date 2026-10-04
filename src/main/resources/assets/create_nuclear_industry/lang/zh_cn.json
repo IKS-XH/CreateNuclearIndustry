@@ -13,6 +13,7 @@
   "gui.create_nuclear_industry.heat_exchanger.state.invalid": "配置无效：已安全停机",
   "gui.create_nuclear_industry.heat_exchanger.state.warming": "正在逐步升温：输出不超过已付储热",
   "gui.create_nuclear_industry.heat_exchanger.state.running": "正常供热",
+  "gui.create_nuclear_industry.heat_exchanger.state.dedicated": "向高压锅炉供热",
   "gui.create_nuclear_industry.heat_exchanger.state.residual": "使用已付余热：热液不足或回液受阻",
   "gui.create_nuclear_industry.heat_exchanger.state.empty": "热液不足",
   "gui.create_nuclear_industry.heat_exchanger.state.blocked": "冷液回流堵塞",
