@@ -1,6 +1,6 @@
 # 锅炉01B与换热器01D候选交付
 
-**2026-10-04：实现及定向自动验证完成，[独立审查通过](./EXT-B-BOILER-01B-EXCHANGER-01D-REVIEW.md)；客户端尚未复测，不合入main，不启动汽轮机。** 执行基线`9e8690b`，候选仍在主工程同级目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、分支`codex/ore-acquisition`。
+**2026-10-04更新：用户已确认联合手测通过，见[人工验收与新增端口优化](./MANUAL-ACCEPTANCE.md)。** 实现提交`d10e1af`，自动证据及[独立审查](./EXT-B-BOILER-01B-EXCHANGER-01D-REVIEW.md)复用。尚未合入main；先完成01C每口独立限流及多口反馈核查，不启动汽轮机。以下保留交付时的行为与证据说明，历史“待手测”由本条更新取代。执行基线`9e8690b`，候选仍在主工程同级目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、分支`codex/ore-acquisition`。
 
 ## 本批行为
 

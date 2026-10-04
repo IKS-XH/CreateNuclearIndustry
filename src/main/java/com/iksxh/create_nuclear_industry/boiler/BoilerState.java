@@ -1,17 +1,24 @@
 package com.iksxh.create_nuclear_industry.boiler;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.BlockPos;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 高压锅炉服务端唯一账本。水汽单位为 mB，炉体与加工尾量单位为 HU，时间为世界 tick。
- * 暖炉热与加工热互斥，模拟流体事务不改变库存或共享流量预算。
+ * 暖炉热与加工热互斥；同一物理口共享每tick流量预算，水汽库存仍由全部端口共享。
  */
 public final class BoilerState {
     public static final int CAPACITY = 16000;
     public static final int FLOW_LIMIT = 256;
     public static final double WARM_HU_PER_SECTION = 3600;
-    private int water, steam, fillUsed, drainUsed, produced, vented;
+    private int water, steam, legacyFillUsed, legacyDrainUsed, produced, vented;
     private long flowTick = Long.MIN_VALUE, lastTick = Long.MIN_VALUE, totalVented;
+    private final Map<Long, Integer> fillUsedByPort = new HashMap<>();
+    private final Map<Long, Integer> drainUsedByPort = new HashMap<>();
     private double warmHu, processHu;
     private boolean ready, valveOpen, valveBlocked;
     private long preparedTick = Long.MIN_VALUE;
@@ -28,32 +35,40 @@ public final class BoilerState {
     public int produced() { return produced; }
     public int vented() { return vented; }
 
-    /** 同一控制器的所有水口共用每 tick 256mB 额度；simulate 仅返回可接受量。 */
-    public int fillWater(int amount, boolean simulate, long now) {
-        int used = now == flowTick ? fillUsed : 0;
-        int accepted = Math.min(Math.max(0, amount), Math.min(CAPACITY - water, FLOW_LIMIT - used));
+    /** 每个物理水口独立限流，所有口仍写入控制器共享水量；模拟不预留预算。 */
+    public int fillWater(BlockPos port, int amount, boolean simulate, long now) {
+        long key = port.asLong();
+        int used = now == flowTick ? fillUsedByPort.getOrDefault(key, 0) + legacyFillUsed : 0;
+        int accepted = Math.min(Math.max(0, amount), Math.min(CAPACITY - water, Math.max(0, FLOW_LIMIT - used)));
         if (!simulate && accepted > 0) {
             advanceFlow(now);
             water += accepted;
-            fillUsed += accepted;
+            fillUsedByPort.merge(key, accepted, Integer::sum);
         }
         return accepted;
     }
 
-    /** 汽口共享每 tick 抽取上限；阀门排放单独计数，不占玩家抽汽额度。 */
-    public int drainSteam(int amount, boolean simulate, long now) {
-        int used = now == flowTick ? drainUsed : 0;
-        int taken = Math.min(Math.max(0, amount), Math.min(steam, FLOW_LIMIT - used));
+    /** 每个物理汽口独立限流，所有口仍从控制器共享汽量扣除；模拟不预留预算。 */
+    public int drainSteam(BlockPos port, int amount, boolean simulate, long now) {
+        long key = port.asLong();
+        int used = now == flowTick ? drainUsedByPort.getOrDefault(key, 0) + legacyDrainUsed : 0;
+        int taken = Math.min(Math.max(0, amount), Math.min(steam, Math.max(0, FLOW_LIMIT - used)));
         if (!simulate && taken > 0) {
             advanceFlow(now);
             steam -= taken;
-            drainUsed += taken;
+            drainUsedByPort.merge(key, taken, Integer::sum);
         }
         return taken;
     }
 
-    public int remainingFill(long now) { return Math.min(CAPACITY - water, FLOW_LIMIT - (now == flowTick ? fillUsed : 0)); }
-    public int remainingDrain(long now) { return Math.min(steam, FLOW_LIMIT - (now == flowTick ? drainUsed : 0)); }
+    public int remainingFill(BlockPos port, long now) {
+        int used = now == flowTick ? fillUsedByPort.getOrDefault(port.asLong(), 0) + legacyFillUsed : 0;
+        return Math.min(CAPACITY - water, Math.max(0, FLOW_LIMIT - used));
+    }
+    public int remainingDrain(BlockPos port, long now) {
+        int used = now == flowTick ? drainUsedByPort.getOrDefault(port.asLong(), 0) + legacyDrainUsed : 0;
+        return Math.min(steam, Math.max(0, FLOW_LIMIT - used));
+    }
 
     /** 结构段数改变时保留已付 HU，但新增段必须补足新暖炉上限后才恢复就绪。 */
     public void sectionsChanged(int sections) {
@@ -65,7 +80,9 @@ public final class BoilerState {
     private void advanceFlow(long now) {
         if (flowTick == now) return;
         flowTick = now;
-        fillUsed = drainUsed = 0;
+        fillUsedByPort.clear();
+        drainUsedByPort.clear();
+        legacyFillUsed = legacyDrainUsed = 0;
     }
 
     /** 返回本 tick 最多能完成的实际收热需求；无水、无汽空间时停止换热。 */
@@ -145,7 +162,11 @@ public final class BoilerState {
         tag.putDouble("WarmHu", warmHu); tag.putDouble("ProcessHu", processHu);
         tag.putBoolean("Ready", ready); tag.putBoolean("ValveOpen", valveOpen);
         tag.putLong("TotalVented", totalVented); tag.putLong("LastTick", lastTick);
-        tag.putLong("FlowTick", flowTick); tag.putInt("FillUsed", fillUsed); tag.putInt("DrainUsed", drainUsed);
+        tag.putLong("FlowTick", flowTick);
+        tag.putInt("FillUsed", 0); tag.putInt("DrainUsed", 0);
+        tag.putInt("LegacyFillUsed", legacyFillUsed); tag.putInt("LegacyDrainUsed", legacyDrainUsed);
+        tag.put("FillBudgets", saveBudgets(fillUsedByPort));
+        tag.put("DrainBudgets", saveBudgets(drainUsedByPort));
         return tag;
     }
 
@@ -160,8 +181,39 @@ public final class BoilerState {
         totalVented = Math.max(0, tag.getLong("TotalVented"));
         lastTick = tag.contains("LastTick") ? tag.getLong("LastTick") : Long.MIN_VALUE;
         flowTick = tag.contains("FlowTick") ? tag.getLong("FlowTick") : Long.MIN_VALUE;
-        fillUsed = Math.clamp(tag.getInt("FillUsed"), 0, FLOW_LIMIT);
-        drainUsed = Math.clamp(tag.getInt("DrainUsed"), 0, FLOW_LIMIT);
+        legacyFillUsed = legacyDrainUsed = 0;
+        fillUsedByPort.clear();
+        drainUsedByPort.clear();
+        // 旧存档只有整炉预算；在原tick余下时间继续保守占用，tick前进后自然转为逐口额度。
+        if (tag.contains("FillBudgets", Tag.TAG_LIST)) {
+            loadBudgets(tag.getList("FillBudgets", Tag.TAG_COMPOUND), fillUsedByPort);
+            legacyFillUsed = Math.clamp(tag.getInt("LegacyFillUsed"), 0, FLOW_LIMIT);
+        }
+        else legacyFillUsed = Math.clamp(tag.getInt("FillUsed"), 0, FLOW_LIMIT);
+        if (tag.contains("DrainBudgets", Tag.TAG_LIST)) {
+            loadBudgets(tag.getList("DrainBudgets", Tag.TAG_COMPOUND), drainUsedByPort);
+            legacyDrainUsed = Math.clamp(tag.getInt("LegacyDrainUsed"), 0, FLOW_LIMIT);
+        }
+        else legacyDrainUsed = Math.clamp(tag.getInt("DrainUsed"), 0, FLOW_LIMIT);
+    }
+
+    private static ListTag saveBudgets(Map<Long, Integer> budgets) {
+        ListTag result = new ListTag();
+        budgets.forEach((port, used) -> {
+            CompoundTag entry = new CompoundTag();
+            entry.putLong("Port", port);
+            entry.putInt("Used", Math.clamp(used, 0, FLOW_LIMIT));
+            result.add(entry);
+        });
+        return result;
+    }
+
+    private static void loadBudgets(ListTag saved, Map<Long, Integer> budgets) {
+        for (int index = 0; index < saved.size(); index++) {
+            CompoundTag entry = saved.getCompound(index);
+            int used = Math.clamp(entry.getInt("Used"), 0, FLOW_LIMIT);
+            if (used > 0) budgets.put(entry.getLong("Port"), used);
+        }
     }
 
     private static double finite(double value, double max) {

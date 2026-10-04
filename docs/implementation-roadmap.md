@@ -10,9 +10,9 @@
 | :--- | :--- | :--- |
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
 | 核换热器首期 / EXT-B-EXCHANGER-01A～01C | 当前手测通过并合入main，闭环守恒与自适应供热已验收 | [最终验收](./reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)：复用候选30项JUnit、15项真实GameTest，本次main增量assemble通过；工作盆与完整蒸汽链另批 |
-| 首台高压锅炉 / EXT-B-BOILER-01A～01B | 01B候选与独立审查通过，待联合复测，未合main | [01B卡](./superpowers/plans/2026-10-04-ext-b-boiler-01b.md)：5×5×5、最多9段、全外壳边框、透明窗/统一素材与主动出汽 |
-| 强化钢板 / EXT-B-REINFORCED-PLATE-01 | 用户追加去掉精密构件，两工序实现已验证，待联合复测 | 钢板→加坚固板→压片产1；旧三工序[证据保留](./superpowers/plans/2026-10-04-reinforced-plate-assembly.md) |
-| 换热器定向直列 / EXT-B-EXCHANGER-01D | 候选与独立审查通过，待联合复测 | [01D卡](./superpowers/plans/2026-10-04-ext-b-exchanger-01d.md)：前冷后热、最多16台、冷热各4000mB/台共享，热储备独立，三排各3台支撑9段锅炉 |
+| 首台高压锅炉 / EXT-B-BOILER-01A～01B | 01B联合手测通过；新增01C每口独立限流候选通过，待本轮复测，未合main | [01B卡](./superpowers/plans/2026-10-04-ext-b-boiler-01b.md)：5×5×5、最多9段、全外壳边框、透明窗/统一素材与主动出汽 |
+| 强化钢板 / EXT-B-REINFORCED-PLATE-01 | 去精密构件的两工序实现已通过联合手测 | 钢板→加坚固板→压片产1；旧三工序[证据保留](./superpowers/plans/2026-10-04-reinforced-plate-assembly.md) |
+| 换热器定向直列 / EXT-B-EXCHANGER-01D | 联合手测通过，尚未合main | [01D卡](./superpowers/plans/2026-10-04-ext-b-exchanger-01d.md)：前冷后热、最多16台、冷热各4000mB/台共享，热储备独立，三排各3台支撑9段锅炉 |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 实验堆制造配方修订 EXT-A-REACTOR-01A/01B/01C | 全部手测通过并合入main | [最终验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：铅玻璃热搅拌、燃料柱1件、三类动力合成、仪表21格及控制棒组件工作台制造 |
 | 固定实验堆生存制造 EXT-A-REACTOR-01 | 全部手测通过并合入main | [合并验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：7种材料与16条现行配方；本次复用已审证据，main增量assemble通过 |

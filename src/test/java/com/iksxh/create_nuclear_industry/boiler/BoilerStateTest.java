@@ -2,12 +2,18 @@ package com.iksxh.create_nuclear_industry.boiler;
 
 import static org.junit.jupiter.api.Assertions.*;
 import com.iksxh.create_nuclear_industry.heat.HeatExchangerState;
+import net.minecraft.core.BlockPos;
 import org.junit.jupiter.api.Test;
 
 class BoilerStateTest {
+    private static final BlockPos WATER_EAST = new BlockPos(2, 1, 0);
+    private static final BlockPos WATER_SOUTH = new BlockPos(0, 1, 2);
+    private static final BlockPos STEAM_WEST = new BlockPos(-2, 3, 0);
+    private static final BlockPos STEAM_EAST = new BlockPos(2, 3, 0);
+
     @Test void warmingHeatCannotBecomeSteamTwice() {
         var state = new BoilerState();
-        state.fillWater(1000, false, 1);
+        state.fillWater(WATER_EAST, 1000, false, 1);
         for (int tick = 1; tick <= 200; tick++) state.tick(tick, 1, 18, true, false);
         assertEquals(3600, state.warmHu());
         assertEquals(0, state.steam());
@@ -16,20 +22,66 @@ class BoilerStateTest {
         assertEquals(238, state.water());
     }
 
-    @Test void sharedFillBudgetAndSimulationStayPure() {
+    @Test void waterPortsHaveIndependentBudgetsAndSimulationStaysPure() {
         var state = new BoilerState();
-        assertEquals(256, state.fillWater(1000, true, 1));
+        assertEquals(256, state.fillWater(WATER_EAST, 1000, true, 1));
         assertEquals(0, state.water());
-        assertEquals(200, state.fillWater(200, false, 1));
-        assertEquals(56, state.fillWater(1000, false, 1));
-        assertEquals(256, state.water());
-        assertEquals(0, state.fillWater(1000, false, 1));
-        assertEquals(256, state.fillWater(1000, false, 2));
+        assertEquals(256, state.fillWater(WATER_EAST, 1000, false, 1));
+        assertEquals(0, state.fillWater(WATER_EAST, 1, false, 1));
+        assertEquals(256, state.fillWater(WATER_SOUTH, 1000, false, 1));
+        assertEquals(512, state.water());
+        assertEquals(256, state.fillWater(WATER_EAST, 1000, false, 2));
+    }
+
+    @Test void independentWaterBudgetsStillShareTheWholeBoilerCapacity() {
+        var state = new BoilerState();
+        var saved = new net.minecraft.nbt.CompoundTag();
+        saved.putInt("Water", BoilerState.CAPACITY - 300);
+        state.load(saved);
+        assertEquals(256, state.fillWater(WATER_EAST, 1000, true, 1));
+        assertEquals(256, state.fillWater(WATER_SOUTH, 1000, true, 1));
+        assertEquals(256, state.fillWater(WATER_EAST, 1000, false, 1));
+        assertEquals(44, state.fillWater(WATER_SOUTH, 1000, false, 1));
+        assertEquals(BoilerState.CAPACITY, state.water());
+        assertEquals(0, state.remainingFill(WATER_SOUTH, 1));
+    }
+
+    @Test void steamPortsHaveIndependentBudgetsAndSamePortSharesItsBudget() {
+        var tag = new net.minecraft.nbt.CompoundTag();
+        tag.putInt("Steam", 1000);
+        var state = new BoilerState();
+        state.load(tag);
+        assertEquals(128, state.drainSteam(STEAM_WEST, 128, false, 4));
+        assertEquals(128, state.drainSteam(STEAM_WEST, 256, false, 4));
+        assertEquals(0, state.drainSteam(STEAM_WEST, 1, false, 4));
+        assertEquals(256, state.drainSteam(STEAM_EAST, 256, false, 4));
+        assertEquals(488, state.steam());
+
+        var restored = new BoilerState();
+        restored.load(state.save());
+        assertEquals(0, restored.drainSteam(STEAM_WEST, 1, false, 4));
+        assertEquals(256, restored.drainSteam(STEAM_WEST, 256, false, 5));
+        assertEquals(232, restored.drainSteam(STEAM_EAST, 256, false, 5));
+        assertEquals(0, restored.steam());
+    }
+
+    @Test void oldSingleBudgetSaveRemainsConservativeUntilNextTick() {
+        var tag = new net.minecraft.nbt.CompoundTag();
+        tag.putInt("Water", 200);
+        tag.putLong("FlowTick", 7);
+        tag.putInt("FillUsed", 200);
+        var state = new BoilerState();
+        state.load(tag);
+        assertEquals(56, state.fillWater(WATER_EAST, 256, false, 7));
+        var restored = new BoilerState();
+        restored.load(state.save());
+        assertEquals(0, restored.fillWater(WATER_EAST, 1, false, 7));
+        assertEquals(256, state.fillWater(WATER_SOUTH, 256, false, 8));
     }
 
     @Test void cooldownValveAndSaveRestoreConserveInventory() {
         var state = new BoilerState();
-        state.fillWater(1000, false, 1);
+        state.fillWater(WATER_EAST, 1000, false, 1);
         for (int tick = 1; tick <= 200; tick++) state.tick(tick, 1, 18, true, false);
         state.tick(201, 1, 0, true, false);
         assertTrue(state.warmHu() < 3600);
@@ -62,7 +114,7 @@ class BoilerStateTest {
 
     @Test void resumedHeatCannotSkipElapsedCooling() {
         var state = new BoilerState();
-        state.fillWater(256, false, 1);
+        state.fillWater(WATER_EAST, 256, false, 1);
         for (int tick = 1; tick <= 200; tick++) state.tick(tick, 1, 18, true, false);
         var restored = new BoilerState();
         restored.load(state.save());

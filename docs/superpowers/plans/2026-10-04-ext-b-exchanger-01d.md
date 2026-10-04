@@ -1,5 +1,7 @@
 # EXT-B-EXCHANGER-01D：定向接口与直列共享流体
 
+**最新状态（2026-10-04）：** 提交d10e1af已获用户联合手测通过，见[人工验收](../../reviews/2026-10-04/boiler-01b/MANUAL-ACCEPTANCE.md)。下文保留执行与交付时记录，其中待手测状态由本条取代；新增锅炉01C每口独立限流候选及审查通过，待本轮复测，尚未合main，不启动汽轮机。
+
 **状态：2026-10-04用户已确认[整套方案](./2026-10-04-heat-exchanger-chain-proposal.md)，候选实现、定向验证和独立审查通过，暂停于联合人工门。** 候选为`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、分支`codex/ore-acquisition`、Git基线`9e8690b`，叠加正在执行的锅炉01B未提交改动。PM已明确授权本卡，执行者禁止修改其他任务写集、核心文档或执行Git写操作；不得转派。保留用户日志、缓存、客户端配置和世界。
 
 ## 合同

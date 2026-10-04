@@ -9,7 +9,9 @@ import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,6 +44,7 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
     private boolean steamPipeDirty = true;
     private BoilerStructure.Form cachedForm;
     private final Set<BlockPos> pendingSteamPipeCenters = new HashSet<>();
+    private final Map<Long, Object> portFlowIdentities = new HashMap<>();
     private String status = "unformed";
 
     public BoilerControllerBlockEntity(BlockPos pos, BlockState state) {
@@ -190,8 +193,8 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         if (form == null || ledger.steam() == 0) return;
         boolean moved = false;
         for (BlockPos port : form.steamPorts()) {
-            int availableSteam = ledger.remainingDrain(now);
-            if (availableSteam <= 0) break;
+            int availableSteam = ledger.remainingDrain(port, now);
+            if (availableSteam <= 0) continue;
             Direction outward = level.getBlockState(port).getValue(BoilerPartBlock.FACING);
             BlockPos targetPos = port.relative(outward);
             if (!level.hasChunkAt(targetPos) || FluidPropagator.getPipe(level, targetPos) != null) continue;
@@ -204,7 +207,7 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
             int accepted = target.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
                     Math.min(simulated, availableSteam)), IFluidHandler.FluidAction.EXECUTE);
             if (accepted > 0) {
-                ledger.drainSteam(Math.min(accepted, availableSteam), false, now);
+                ledger.drainSteam(port, Math.min(accepted, availableSteam), false, now);
                 moved = true;
             }
         }
@@ -235,8 +238,10 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
             return state.hasProperty(BoilerPartBlock.FACING) && state.getValue(BoilerPartBlock.FACING) == side;
         }
         @Override public Limits sharedFluidLimits() {
-            return valid() && input ? new Limits(ledger, ledger.remainingFill(level.getGameTime()),
-                    ledger, ledger.remainingFill(level.getGameTime())) : null;
+            if (!valid() || !input) return null;
+            int remaining = ledger.remainingFill(part, level.getGameTime());
+            Object budget = portFlowIdentities.computeIfAbsent(part.asLong(), ignored -> new Object());
+            return new Limits(ledger, BoilerState.CAPACITY - ledger.water(), budget, remaining);
         }
         @Override public int getTanks() { return valid() ? 1 : 0; }
         @Override public FluidStack getFluidInTank(int tank) {
@@ -251,7 +256,7 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         }
         @Override public int fill(FluidStack stack, FluidAction action) {
             if (!isFluidValid(0, stack)) return 0;
-            int accepted = ledger.fillWater(stack.getAmount(), action.simulate(), level.getGameTime());
+            int accepted = ledger.fillWater(part, stack.getAmount(), action.simulate(), level.getGameTime());
             if (accepted > 0 && action.execute()) changed();
             return accepted;
         }
@@ -260,7 +265,7 @@ public final class BoilerControllerBlockEntity extends BlockEntity implements IH
         }
         @Override public FluidStack drain(int amount, FluidAction action) {
             if (!valid() || input) return FluidStack.EMPTY;
-            int taken = ledger.drainSteam(amount, action.simulate(), level.getGameTime());
+            int taken = ledger.drainSteam(part, amount, action.simulate(), level.getGameTime());
             if (taken > 0 && action.execute()) changed();
             return taken == 0 ? FluidStack.EMPTY : new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), taken);
         }
