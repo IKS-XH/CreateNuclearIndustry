@@ -40,8 +40,6 @@ final class TurbineStateTest {
         }
         assertEquals(2160, state.exhaust());
         assertEquals(1_769_472D, state.totalSu());
-        assertEquals(884_736D, state.frontSu());
-        assertEquals(884_736D, state.rearSu());
         for (int tick = 40; tick < 80; tick++) state.tick(tick, true);
         assertEquals(0, state.totalSu());
 
@@ -155,7 +153,7 @@ final class TurbineStateTest {
         assertEquals(0, state.totalSu());
     }
 
-    @Test void coefficientChangeClearsOldPowerAndCustomFrontShareOnlySplitsNewTotal() {
+    @Test void coefficientChangeClearsOldPowerAndLegacyFrontShareDoesNotChangeNewTotal() {
         var state = new TurbineState();
         var defaults = TurbineState.Settings.DEFAULT;
         state.applySettings(defaults, 3, 256);
@@ -169,8 +167,11 @@ final class TurbineStateTest {
         assertEquals(54, state.exhaust());
         state.fillInput(INLET_A, 54, false, 1);
         state.tick(1, true);
-        assertEquals(state.totalSu() * .25, state.frontSu());
-        assertEquals(state.totalSu() * .75, state.rearSu());
+        double unchanged = state.totalSu();
+        var legacyKeyChanged = new TurbineState.Settings(defaults.shortTier(), defaults.mediumTier(),
+                defaults.longTier(), 128, 65536, 40, 256, 256, .75);
+        state.applySettings(legacyKeyChanged, 3, 256);
+        assertEquals(unchanged, state.totalSu());
         var invalid = new TurbineState.Settings(defaults.shortTier(), defaults.mediumTier(),
                 defaults.longTier(), 512, 65536, 40, 256, 256, .25);
         state.applySettings(invalid, 3, 256);

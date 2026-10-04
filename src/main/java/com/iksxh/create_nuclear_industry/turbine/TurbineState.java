@@ -31,6 +31,7 @@ public final class TurbineState {
     /**
      * 配置快照不访问全局 TOML；运行前还要传入当前 Create 服务端实际转速上限。
      * 三档仅按配置中的转子数匹配，不能以未列出的中间长度形成第四档。
+     * frontShare 仅为旧 SERVER 配置兼容字段，不参与总 SU 计算或动力分配。
      */
     public record Settings(Tier shortTier, Tier mediumTier, Tier longTier, int rpm,
                            double suPerMbPerTick, int smoothingTicks, int inletPortFlowMbPerTick,
@@ -140,8 +141,6 @@ public final class TurbineState {
         return settings.valid(createMaxRpm) && tier != null
                 ? processedInWindow * settings.suPerMbPerTick() / settings.smoothingTicks() : 0;
     }
-    public double frontSu() { return totalSu() * settings.frontShare(); }
-    public double rearSu() { return totalSu() - frontSu(); }
 
     /** 按物理进汽口独立限流，所有口进入同一库存；模拟不占空间或本 tick 额度。 */
     public int fillInput(long portKey, int amount, boolean simulate, long now) {

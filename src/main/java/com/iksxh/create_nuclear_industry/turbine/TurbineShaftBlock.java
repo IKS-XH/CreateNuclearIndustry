@@ -39,7 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
-/** 两端独立 Create 轴与侧面非动力控制器的方块入口。 */
+/** 两端向机外各暴露一侧 Create 轴，完整机组内贯通；侧面控制器不提供动力。 */
 public final class TurbineShaftBlock {
     public enum End implements StringRepresentable {
         FRONT, REAR;
@@ -186,7 +186,7 @@ public final class TurbineShaftBlock {
         }
     }
 
-    /** 同一输出轴 ID 根据端位只向本端机外暴露轴，两个网络不通过机器内部相连。 */
+    /** 同一输出轴 ID 根据端位只向本端机外暴露轴，完整机组内两端由动力实体贯通。 */
     public static final class Output extends KineticBlock implements IBE<TurbineOutputShaftBlockEntity> {
         public Output(Properties properties) {
             super(properties.noOcclusion());

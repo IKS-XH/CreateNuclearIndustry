@@ -17,7 +17,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/** 用真实 Create 方块、传播器及网络核对双轴份额与撤销。 */
+/** 用真实 Create 方块、传播器及网络核对唯一整机总 SU 源、两端贯通共享与失效撤销。 */
 @GameTestHolder(TurbineProbeContent.NAMESPACE)
 @PrefixGameTestTemplate(false)
 public final class TurbineKineticProbeGameTests {
@@ -25,33 +25,33 @@ public final class TurbineKineticProbeGameTests {
 
     private TurbineKineticProbeGameTests() {}
 
-    /** 单端、同网与拆网反复核对网络容量，未连通端不得把半额转给另一端。 */
+    /** 两端机内贯通后，分别从任一端读取同一份机组容量。 */
     @GameTest(template = "probe_empty", timeoutTicks = 150)
     public static void splitJoinAndSplitCapacity(GameTestHelper helper) {
         BlockPos front = helper.absolutePos(FRONT);
         build(helper.getLevel(), front, false);
         helper.runAfterDelay(20, () -> {
-            require(helper, capacity(helper.getLevel(), front) == 16384, "单端网络容量不等于半额");
-            require(helper, capacity(helper.getLevel(), front.south(5)) == 16384, "后轴网络容量不等于半额");
-            require(helper, !shaft(helper.getLevel(), front).network.equals(shaft(helper.getLevel(), front.south(5)).network),
-                    "没有联轴时两端意外同网");
+            require(helper, capacity(helper.getLevel(), front) == 32768, "前端未取得整机容量");
+            require(helper, capacity(helper.getLevel(), front.south(5)) == 32768, "后端未取得整机容量");
+            require(helper, shaft(helper.getLevel(), front).network.equals(shaft(helper.getLevel(), front.south(5)).network),
+                    "完整机组的两端没有机内贯通");
             for (int z = 1; z <= 4; z++) set(helper.getLevel(), front.south(z),
                     AllBlocks.SHAFT.getDefaultState().setValue(ShaftBlock.AXIS, Direction.Axis.Z));
             helper.runAfterDelay(20, () -> {
                 require(helper, shaft(helper.getLevel(), front).network.equals(shaft(helper.getLevel(), front.south(5)).network),
                         "联轴后两端没有成为同一个 Create 网络");
-                require(helper, capacity(helper.getLevel(), front) == 32768, "同网容量没有恰好合计一次总 SU");
+                require(helper, capacity(helper.getLevel(), front) == 32768, "外部回接使整机容量重复登记");
                 set(helper.getLevel(), front.south(2), Blocks.AIR.defaultBlockState());
                 helper.runAfterDelay(20, () -> {
-                    require(helper, capacity(helper.getLevel(), front) == 16384, "拆网后前端没有恢复半额");
-                    require(helper, capacity(helper.getLevel(), front.south(5)) == 16384, "拆网后后端没有恢复半额");
+                    require(helper, capacity(helper.getLevel(), front) == 32768, "拆除外部回接后前端容量错误");
+                    require(helper, capacity(helper.getLevel(), front.south(5)) == 32768, "拆除外部回接后后端容量错误");
                     helper.succeed();
                 });
             });
         });
     }
 
-    /** 同速外源正常贡献自己的容量；红石停机仅撤销本机份额，恢复后重新登记。 */
+    /** 同速外源正常贡献自己的容量；红石停机仅撤销本机生成容量，恢复后重新登记。 */
     @GameTest(template = "probe_empty", timeoutTicks = 150)
     public static void redstoneStopWithSameSpeedExternalSource(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -161,7 +161,7 @@ public final class TurbineKineticProbeGameTests {
                         && reloadedMotor.hasNetwork()
                         && reloadedMotor.getOrCreateNetwork().calculateCapacity() == motorSu + 32768
                         && shaft(level, front).getGeneratedSpeed() == 128
-                        && shaft(level, front.south(5)).getGeneratedSpeed() == 128) {
+                        && shaft(level, front.south(5)).getTheoreticalSpeed() == 128) {
                     for (ChunkPos chunk : machineChunks) level.setChunkForced(chunk.x, chunk.z, false);
                     level.setChunkForced(motorChunk.x, motorChunk.z, false);
                     helper.succeed();
@@ -169,6 +169,79 @@ public final class TurbineKineticProbeGameTests {
                     for (ChunkPos chunk : machineChunks) level.setChunkForced(chunk.x, chunk.z, false);
                     level.setChunkForced(motorChunk.x, motorChunk.z, false);
                     helper.fail("重载后双轴容量未恰好恢复，或Create保留了重复容量");
+                }
+            }
+        });
+    }
+
+    /** 前轴唯一源真实卸载、后轴与外源仍加载时，后网不能保留前轴的卸载容量。 */
+    @GameTest(template = "probe_empty", timeoutTicks = 700)
+    public static void sourceChunkUnloadWhileRearExternalNetworkRemains(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos anchor = helper.absolutePos(new BlockPos(768, 2, 256));
+        BlockPos front = new BlockPos((anchor.getX() & ~15) + 15, anchor.getY(),
+                (anchor.getZ() & ~15) + 14);
+        BlockPos rear = front.south(5);
+        BlockPos motorPos = rear.south(33);
+        Set<ChunkPos> chunks = new LinkedHashSet<>();
+        chunks.add(new ChunkPos(front.west()));
+        chunks.add(new ChunkPos(rear));
+        chunks.add(new ChunkPos(front.east().south(1)));
+        chunks.add(new ChunkPos(front.east().south(4)));
+        ChunkPos rearChunk = new ChunkPos(rear);
+        ChunkPos frontChunk = new ChunkPos(front);
+        for (ChunkPos chunk : chunks) level.setChunkForced(chunk.x, chunk.z, true);
+        ChunkPos motorChunk = new ChunkPos(motorPos);
+        level.setChunkForced(motorChunk.x, motorChunk.z, true);
+        build(level, front, false);
+        for (int z = 1; z <= 32; z++) set(level, rear.south(z),
+                AllBlocks.SHAFT.getDefaultState().setValue(ShaftBlock.AXIS, Direction.Axis.Z));
+        set(level, motorPos, AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.NORTH));
+        CreativeMotorBlockEntity motor = (CreativeMotorBlockEntity) level.getBlockEntity(motorPos);
+        motor.generatedSpeed.setValue(-128);
+        float motorSu = motor.calculateAddedStressCapacity() * Math.abs(motor.getGeneratedSpeed());
+        long[] since = {level.getGameTime()};
+        int[] phase = {0};
+        helper.onEachTick(() -> {
+            long elapsed = level.getGameTime() - since[0];
+            if (phase[0] == 0 && elapsed >= 25) {
+                require(helper, capacity(level, rear) == motorSu + 32768,
+                        "反向卸载前后轴未与外源共享容量：后端=" + capacity(level, rear)
+                                + " 电机=" + motorSu + " 前轴=" + level.getBlockState(front)
+                                + " 后轴=" + level.getBlockState(rear)
+                                + " 电机速度=" + motor.getTheoreticalSpeed());
+                for (ChunkPos chunk : chunks) level.setChunkForced(chunk.x, chunk.z, false);
+                phase[0] = 1;
+                since[0] = level.getGameTime();
+            } else if (phase[0] == 1) {
+                boolean partial = level.getChunkSource().getChunkNow(frontChunk.x, frontChunk.z) == null
+                        && level.getChunkSource().getChunkNow(rearChunk.x, rearChunk.z) != null;
+                if (!partial && elapsed <= 400) return;
+                if (!partial) {
+                    level.setChunkForced(motorChunk.x, motorChunk.z, false);
+                    helper.fail("前轴源未真实卸载且后轴保留加载：前端="
+                            + (level.getChunkSource().getChunkNow(frontChunk.x, frontChunk.z) != null)
+                            + " 后端=" + (level.getChunkSource().getChunkNow(rearChunk.x, rearChunk.z) != null));
+                    return;
+                }
+                require(helper, motor.hasNetwork() && motor.getOrCreateNetwork().calculateCapacity() == motorSu,
+                        "前轴源真实卸载后后轴外源网络留有幽灵 SU");
+                for (ChunkPos chunk : chunks) level.setChunkForced(chunk.x, chunk.z, true);
+                phase[0] = 2;
+                since[0] = level.getGameTime();
+            } else if (phase[0] == 2) {
+                boolean restored = chunks.stream().allMatch(chunk ->
+                        level.getChunkSource().getChunkNow(chunk.x, chunk.z) != null)
+                        && motor.hasNetwork() && motor.getOrCreateNetwork().calculateCapacity() == motorSu + 32768;
+                if (restored) {
+                    for (ChunkPos chunk : chunks) level.setChunkForced(chunk.x, chunk.z, false);
+                    level.setChunkForced(motorChunk.x, motorChunk.z, false);
+                    helper.succeed();
+                } else if (elapsed > 150) {
+                    for (ChunkPos chunk : chunks) level.setChunkForced(chunk.x, chunk.z, false);
+                    level.setChunkForced(motorChunk.x, motorChunk.z, false);
+                    helper.fail("前轴源重载后容量未恰好恢复");
                 }
             }
         });

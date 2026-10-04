@@ -28,8 +28,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 /**
- * 汽轮机唯一服务端 owner，持有两份 mB 库存、成型关系与总 SU；后轴和各端口仅代理读取。
- * tick 先核验全结构和当前配置，再成交流体、发布双轴份额；客户端只接收显示快照。
+ * 汽轮机唯一服务端 owner，持有两份 mB 库存、成型关系与总 SU；两端轴及端口按有效结构查询机主。
+ * tick 先核验全结构和当前配置，再成交流体；前轴读取唯一总 SU 并发布到两端贯通的 Create 网络，客户端只接收显示快照。
  */
 public final class TurbineControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
     private final TurbineState ledger = new TurbineState();
@@ -41,7 +41,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     private int viewProcessed, viewRatedFlow, viewRpm;
     private long nextProbeTick;
     private boolean legacyKineticMigrationPending;
-    private float viewTotalSu, viewFrontSu, viewRearSu;
+    private float viewTotalSu;
     private String status = "unformed";
 
     public TurbineControllerBlockEntity(BlockPos pos, BlockState state) {
@@ -325,8 +325,8 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         return live() && (input ? activeForm.inlets() : activeForm.exhausts()).contains(port)
                 && level.getBlockState(port).is(input ? TurbineContent.INLET.get() : TurbineContent.EXHAUST.get());
     }
-    public float frontSu() { return live() && !level.hasNeighborSignal(worldPosition) ? (float) ledger.frontSu() : 0; }
-    public float rearSu() { return live() && !level.hasNeighborSignal(worldPosition) ? (float) ledger.rearSu() : 0; }
+    /** 仅服务端完整机组可发布总 SU；红石停机立即清零，断汽后按 40 tick 历史衰减，外源仍可经过贯通轴传动。 */
+    public float totalSu() { return live() && !level.hasNeighborSignal(worldPosition) ? (float) ledger.totalSu() : 0; }
     public float signedRpm() { return live() ? ledger.rpm() : 0; }
 
     /** 句柄带成型世代；卸载、拆件或换档后旧管路引用不能继续交易。 */
@@ -415,7 +415,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         viewInput = ledger.input(); viewExhaust = ledger.exhaust();
         viewInputCapacity = ledger.inletCapacity(); viewExhaustCapacity = ledger.exhaustCapacity();
         viewProcessed = ledger.processed(); viewRatedFlow = ledger.ratedFlowMbPerTick(); viewRpm = ledger.rpm();
-        viewTotalSu = (float) ledger.totalSu(); viewFrontSu = (float) ledger.frontSu(); viewRearSu = (float) ledger.rearSu();
+        viewTotalSu = (float) ledger.totalSu();
     }
 
     public CompoundTag savePortableData() {
@@ -456,7 +456,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         view.putInt("Input", viewInput); view.putInt("Exhaust", viewExhaust);
         view.putInt("InputCapacity", viewInputCapacity); view.putInt("ExhaustCapacity", viewExhaustCapacity);
         view.putInt("Processed", viewProcessed); view.putInt("RatedFlow", viewRatedFlow); view.putInt("Rpm", viewRpm);
-        view.putFloat("TotalSu", viewTotalSu); view.putFloat("FrontSu", viewFrontSu); view.putFloat("RearSu", viewRearSu);
+        view.putFloat("TotalSu", viewTotalSu);
         tag.put("TurbineView", view);
     }
     @Override protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
@@ -478,7 +478,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
             viewInput = view.getInt("Input"); viewExhaust = view.getInt("Exhaust");
             viewInputCapacity = view.getInt("InputCapacity"); viewExhaustCapacity = view.getInt("ExhaustCapacity");
             viewProcessed = view.getInt("Processed"); viewRatedFlow = view.getInt("RatedFlow"); viewRpm = view.getInt("Rpm");
-            viewTotalSu = view.getFloat("TotalSu"); viewFrontSu = view.getFloat("FrontSu"); viewRearSu = view.getFloat("RearSu");
+            viewTotalSu = view.getFloat("TotalSu");
         }
     }
     /** 服务端检查同时显示已定位的直径×轴长（单位方块）与当前档位首个缺件。 */
@@ -511,7 +511,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         tooltip.add(Component.translatable(key + "rotors_rpm", Math.max(0, lastLength - 2), viewRpm));
         tooltip.add(Component.translatable(key + "flow", viewProcessed, viewRatedFlow));
         tooltip.add(Component.translatable(key + "tanks", viewInput, viewInputCapacity, viewExhaust, viewExhaustCapacity));
-        tooltip.add(Component.translatable(key + "su", (long)viewTotalSu, (long)viewFrontSu, (long)viewRearSu));
+        tooltip.add(Component.translatable(key + "su", (long)viewTotalSu));
         tooltip.add(Component.translatable(key + "hint"));
         return true;
     }

@@ -134,7 +134,7 @@ def translations() -> dict[str, dict[str, str]]:
         "formed": "结构已成型：%s 个转子", "wait_stock": "请检查库存容量与汽轮机配置",
         "hint": "空载仍消耗蒸汽；红石可停止汽轮机",
         "rotors_rpm": "转子数 %s；转速 %s RPM", "flow": "实际处理 %s / 额定 %s mB/tick",
-        "tanks": "入口 %s/%s mB；排汽 %s/%s mB", "su": "总 %s SU（前 %s；后 %s）",
+        "tanks": "入口 %s/%s mB；排汽 %s/%s mB", "su": "共享容量 %s SU（两端共用）",
     }
     en_gui = {
         "state.running": "Running", "state.no_steam": "Waiting for inlet steam",
@@ -158,7 +158,7 @@ def translations() -> dict[str, dict[str, str]]:
         "formed": "Formed with %s rotors", "wait_stock": "Check stored fluids, capacity and turbine settings",
         "hint": "Consumes steam while idle; redstone stops the turbine",
         "rotors_rpm": "Rotors: %s; Speed: %s RPM", "flow": "Processed %s / rated %s mB/tick",
-        "tanks": "Inlet %s/%s mB; exhaust %s/%s mB", "su": "Total %s SU (front %s; rear %s)",
+        "tanks": "Inlet %s/%s mB; exhaust %s/%s mB", "su": "Shared capacity %s SU (both ends)",
     }
     return {"zh_cn": _make_translations(zh, zh_gui), "en_us": _make_translations(en, en_gui)}
 

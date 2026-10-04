@@ -28,7 +28,7 @@ public final class TurbineConfig {
                 .defineInRange("inletPortFlowMbPerTick", 256, 1, 1_000_000);
         EXHAUST_PORT_FLOW_MB_PER_TICK = b.comment("每个物理排汽口每 tick 最多排出量，单位 mB/t。主动与被动共用。")
                 .defineInRange("exhaustPortFlowMbPerTick", 256, 1, 1_000_000);
-        FRONT_SHARE = b.comment("前轴领取本机总 SU 的比例，范围 0 到 1；后轴取剩余比例。")
+        FRONT_SHARE = b.comment("已废弃且不影响动力：保留旧 frontShare 键供现有 SERVER 配置兼容读取。")
                 .defineInRange("frontShare", .5D, 0D, 1D);
         SPEC = b.build();
     }

@@ -301,7 +301,7 @@
   "gui.create_nuclear_industry.turbine.rotors_rpm": "Rotors: %s; Speed: %s RPM",
   "gui.create_nuclear_industry.turbine.flow": "Processed %s / rated %s mB/tick",
   "gui.create_nuclear_industry.turbine.tanks": "Inlet %s/%s mB; exhaust steam %s/%s mB",
-  "gui.create_nuclear_industry.turbine.su": "Total %s SU (front %s; rear %s)",
+  "gui.create_nuclear_industry.turbine.su": "Shared capacity %s SU (both ends)",
   "gui.create_nuclear_industry.turbine.state.overlap": "Turbine overlaps another formed turbine",
   "gui.create_nuclear_industry.turbine.issue.overlap": "This part belongs to another turbine",
   "block.create_nuclear_industry.turbine_window": "Turbine Window",

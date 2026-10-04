@@ -18,6 +18,8 @@
 
 ## 当前开发基线
 
+**2026-10-05候选：** 汽轮机三档结构、薄壳/叶轮与观察窗已在同级工作树实现，仍待整体人工验收。[01E两端共享应力容量](docs/reviews/2026-10-05/turbine-01e/README.md)已实现并通过定向验证，等待手测；[01D/R1外观复测](docs/reviews/2026-10-05/turbine-01d/manual-checklist.md)继续保留。功能尚未合入main，启动位置为`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`。
+
 **2026-10-04最新验收：** 高压锅炉首期、5×5×5/九换热段、独立多端口、换热器定向共享直列及护目镜中文已全部手测通过并合入main，见[本批验收](docs/reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。主目录runClient可用；本次仅增量assemble，复用候选定向验证。下一主线为超临界汽轮机及冷凝回水。
 
 P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，包括逐列热工/燃耗/损伤、控制棒与红石 SCRAM、真实 Create 冷热管网、玩家/机械臂换料、维修、护目镜遥测和基础 Ponder。融毁目前只有服务端事件占位符，具体事故后果后置。

@@ -11,9 +11,13 @@ import com.iksxh.create_nuclear_industry.turbine.TurbineShaftBlock;
 import com.iksxh.create_nuclear_industry.turbine.TurbineState;
 import com.iksxh.create_nuclear_industry.turbine.TurbineStructure;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlock;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -39,6 +44,139 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public final class ExtensionTurbineGameTests {
     private static final BlockPos FRONT = new BlockPos(5, 5, 1);
     private ExtensionTurbineGameTests() {}
+
+    /** 实际汽轮机两端各接 Create 风扇：单端可用超过半额，两端合计超限时同网过载。 */
+    @GameTest(template = "turbine_empty", timeoutTicks = 80)
+    public static void sharedCapacityDrivesEitherEndAndOverloadsTogether(GameTestHelper helper) {
+        TurbineState.Settings settings = TurbineConfig.settings();
+        TurbineState.Tier tier = settings.shortTier();
+        build(helper, FRONT, tier.rotorCount(), false);
+        BlockPos rearPos = part(FRONT, 0, 0, tier.length() - 1);
+        BlockPos frontFanPos = FRONT.north();
+        BlockPos rearFanPos = rearPos.south();
+        helper.setBlock(frontFanPos, AllBlocks.ENCASED_FAN.getDefaultState()
+                .setValue(EncasedFanBlock.FACING, Direction.NORTH));
+        helper.runAfterDelay(12, () -> {
+            KineticBlockEntity fan = (KineticBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(frontFanPos));
+            float oneLoad = fan.calculateStressApplied() * settings.rpm();
+            int steam = (int) Math.ceil(oneLoad * 1.5 * settings.smoothingTicks()
+                    / settings.suPerMbPerTick());
+            require(helper, oneLoad > 0 && steam > 0 && steam <= tier.ratedFlowMbPerTick(),
+                    "测试负载无法由少量蒸汽构造半额以上的边界");
+            IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
+            require(helper, input != null && input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), steam),
+                    IFluidHandler.FluidAction.EXECUTE) == steam, "实际机组未收到测试蒸汽");
+        });
+        helper.runAfterDelay(18, () -> {
+            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
+            TurbineOutputShaftBlockEntity rear = shaft(helper, rearPos);
+            KineticBlockEntity fan = (KineticBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(frontFanPos));
+            float capacity = front.getOrCreateNetwork().calculateCapacity();
+            float load = front.getOrCreateNetwork().calculateStress();
+            require(helper, front.network.equals(rear.network) && load > capacity / 2 && load < capacity
+                    && !front.isOverStressed() && !rear.isOverStressed()
+                    && Math.abs(fan.getSpeed()) == settings.rpm(), "前端单独超过旧半额未正常运转");
+            helper.setBlock(frontFanPos, Blocks.AIR);
+            helper.setBlock(rearFanPos, AllBlocks.ENCASED_FAN.getDefaultState()
+                    .setValue(EncasedFanBlock.FACING, Direction.SOUTH));
+        });
+        helper.runAfterDelay(23, () -> {
+            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
+            TurbineOutputShaftBlockEntity rear = shaft(helper, rearPos);
+            KineticBlockEntity fan = (KineticBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(rearFanPos));
+            float capacity = rear.getOrCreateNetwork().calculateCapacity();
+            float load = rear.getOrCreateNetwork().calculateStress();
+            require(helper, front.network.equals(rear.network) && load > capacity / 2 && load < capacity
+                    && !front.isOverStressed() && !rear.isOverStressed()
+                    && Math.abs(fan.getSpeed()) == settings.rpm(), "后端单独超过旧半额未正常运转");
+            helper.setBlock(frontFanPos, AllBlocks.ENCASED_FAN.getDefaultState()
+                    .setValue(EncasedFanBlock.FACING, Direction.NORTH));
+        });
+        helper.runAfterDelay(28, () -> {
+            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
+            TurbineOutputShaftBlockEntity rear = shaft(helper, rearPos);
+            require(helper, front.network.equals(rear.network)
+                    && front.getOrCreateNetwork().calculateStress() > front.getOrCreateNetwork().calculateCapacity()
+                    && front.isOverStressed() && rear.isOverStressed(), "双端合计超限未共同过载");
+            helper.setBlock(frontFanPos, Blocks.AIR);
+        });
+        helper.runAfterDelay(33, () -> {
+            require(helper, !shaft(helper, FRONT).isOverStressed()
+                    && !shaft(helper, rearPos).isOverStressed(), "减载后两端未一起恢复");
+            helper.succeed();
+        });
+    }
+
+    /** 当前格式机组供汽后保存恢复，账本历史归零时不重复登记本机容量。 */
+    @GameTest(template = "turbine_empty", timeoutTicks = 80)
+    public static void currentFormatReloadKeepsOnlyLiveCapacity(GameTestHelper helper) {
+        TurbineState.Tier tier = TurbineConfig.settings().shortTier();
+        build(helper, FRONT, tier.rotorCount(), false);
+        BlockPos rear = part(FRONT, 0, 0, tier.length() - 1);
+        BlockPos motorPos = FRONT.north();
+        helper.setBlock(motorPos, AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.SOUTH));
+        CreativeMotorBlockEntity motor = (CreativeMotorBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(motorPos));
+        motor.generatedSpeed.setValue(TurbineConfig.settings().rpm());
+        helper.runAfterDelay(13, () -> {
+            IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
+            require(helper, input != null && input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 40),
+                    IFluidHandler.FluidAction.EXECUTE) == 40, "当前格式恢复前机组未接收蒸汽");
+        });
+        helper.runAfterDelay(20, () -> {
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            CreativeMotorBlockEntity liveMotor = (CreativeMotorBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(motorPos));
+            BlockPos frontWorld = helper.absolutePos(FRONT);
+            BlockPos rearWorld = helper.absolutePos(rear);
+            BlockPos motorWorld = helper.absolutePos(motorPos);
+            CompoundTag frontTag = shaft(helper, FRONT).saveWithFullMetadata(helper.getLevel().registryAccess());
+            CompoundTag rearTag = shaft(helper, rear).saveWithFullMetadata(helper.getLevel().registryAccess());
+            CompoundTag motorTag = liveMotor.saveWithFullMetadata(helper.getLevel().registryAccess());
+            require(helper, owner.ledger().totalSu() > 0
+                    && frontTag.getCompound("Network").getFloat("AddedCapacity") > 0
+                    && frontTag.getCompound("Network").getFloat("TurbineGeneratedRpm")
+                    == TurbineConfig.settings().rpm(),
+                    "当前格式保存前缺少真实机组生成容量");
+            // 当前格式的控制器恢复会清空临时供汽历史；按电机、前轴、后轴顺序重建实体。
+            owner.ledger().load(owner.ledger().save());
+            replaceKinetic(helper, motorWorld, new CreativeMotorBlockEntity(AllBlockEntityTypes.MOTOR.get(),
+                    motorWorld, helper.getLevel().getBlockState(motorWorld)), motorTag);
+            replaceKinetic(helper, frontWorld, new TurbineOutputShaftBlockEntity(frontWorld,
+                    helper.getLevel().getBlockState(frontWorld)), frontTag);
+            replaceKinetic(helper, rearWorld, new TurbineOutputShaftBlockEntity(rearWorld,
+                    helper.getLevel().getBlockState(rearWorld)), rearTag);
+        });
+        helper.runAfterDelay(21, () -> {
+            CreativeMotorBlockEntity liveMotor = (CreativeMotorBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(motorPos));
+            float external = liveMotor.calculateAddedStressCapacity() * Math.abs(liveMotor.getGeneratedSpeed());
+            float actual = liveMotor.getOrCreateNetwork().calculateCapacity();
+            require(helper, actual <= external + 2,
+                    "当前格式恢复首tick重复容量：实际=" + actual + " 外源=" + external);
+        });
+        helper.runAfterDelay(27, () -> {
+            CreativeMotorBlockEntity liveMotor = (CreativeMotorBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(motorPos));
+            float external = liveMotor.calculateAddedStressCapacity() * Math.abs(liveMotor.getGeneratedSpeed());
+            float actual = liveMotor.getOrCreateNetwork().calculateCapacity();
+            require(helper, shaft(helper, FRONT).network.equals(shaft(helper, rear).network)
+                    && Math.abs(actual - external) < 2,
+                    "当前格式恢复后外源网络残留本机容量：实际=" + actual + " 外源=" + external);
+            helper.succeed();
+        });
+    }
+
+    private static void replaceKinetic(GameTestHelper helper, BlockPos pos, BlockEntity replacement,
+                                       CompoundTag snapshot) {
+        helper.getLevel().removeBlockEntity(pos);
+        replacement.loadWithComponents(snapshot, helper.getLevel().registryAccess());
+        helper.getLevel().setBlockEntity(replacement);
+    }
 
     /** 旧控制器动力NBT只触发旧Source分支清理，原账本库存继续保留。 */
     @GameTest(template = "turbine_empty", timeoutTicks = 50)
@@ -80,7 +218,7 @@ public final class ExtensionTurbineGameTests {
         });
     }
 
-    /** 三档均形成薄八棱壳，前后输出轴各占一半且实际转速取 SERVER 配置。 */
+    /** 三档均形成薄八棱壳，两端同网共享总容量且实际转速取 SERVER 配置。 */
     @GameTest(template = "turbine_empty", timeoutTicks = 115)
     public static void threeTiersFormAndAllocateOnlyActualProcessedSteam(GameTestHelper helper) {
         BlockPos[] fronts = {new BlockPos(2, 5, 1), new BlockPos(8, 5, 1), new BlockPos(15, 5, 1)};
@@ -125,13 +263,13 @@ public final class ExtensionTurbineGameTests {
                 TurbineOutputShaftBlockEntity rear = shaft(helper,
                         part(fronts[i], 0, 0, tier.length() - 1));
                 require(helper, front != null && rear != null && front.hasNetwork() && rear.hasNetwork()
-                        && front.getGeneratedSpeed() == settings.rpm()
-                        && rear.getGeneratedSpeed() == settings.rpm(), "两端轴未以配置RPM分别进入Create网络");
+                        && front.getTheoreticalSpeed() == settings.rpm()
+                        && rear.getTheoreticalSpeed() == settings.rpm(), "两端轴未以配置RPM进入同一Create网络");
                 float frontSu = front.getOrCreateNetwork().calculateCapacity();
                 float rearSu = rear.getOrCreateNetwork().calculateCapacity();
-                require(helper, Math.abs(frontSu - expected * settings.frontShare()) < 2
-                        && Math.abs(rearSu - expected * (1 - settings.frontShare())) < 2,
-                        "前后轴实际容量未按唯一账本分半");
+                require(helper, front.network.equals(rear.network)
+                        && Math.abs(frontSu - expected) < 2 && Math.abs(rearSu - expected) < 2,
+                        "两端未共享唯一机组总容量");
             }
             // 成型轴若被扳手改向，机主下一 tick 必须失效，不能向错误面继续发布旧 SU。
             helper.setBlock(fronts[0], helper.getBlockState(fronts[0])
