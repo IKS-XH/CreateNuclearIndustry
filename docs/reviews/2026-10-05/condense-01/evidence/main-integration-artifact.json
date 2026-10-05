@@ -1,0 +1,17 @@
+{
+  "mainCommit": "f34f190b93a022697ac6e2b59b3b3d19bc7db8cc",
+  "acceptedCandidate": "01b1578",
+  "finalFunctionalCommit": "8273aff",
+  "filename": "create_nuclear_industry-0.1.0.jar",
+  "bytes": 2101316,
+  "sha256": "1F201E856A2B187D26FFD8E72C92525216DB46849F0449E2D43856CF3C2125EC",
+  "candidateSha256": "79E3B45C2D0A6142A566994260C549FE75CD31E6F9736790DA8C1B136C1827A2",
+  "comparedFiles": 1603,
+  "lineEndingOnlyDifferences": 906,
+  "semanticOrBinaryDifferences": [],
+  "comparisonRule": "二进制按SHA-256；文本只归一CRLF/LF；忽略空目录条目，未忽略有效文件",
+  "buildCommand": ".\\gradlew.bat assemble --console=plain",
+  "buildExitCode": 0,
+  "manualAcceptance": "用户确认所有测试项都通过了",
+  "userLaunchSha256": "65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07"
+}

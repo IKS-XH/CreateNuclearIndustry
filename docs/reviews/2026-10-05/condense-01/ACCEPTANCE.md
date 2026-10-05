@@ -26,7 +26,7 @@
 
 ## 整合与启动
 
-从main基线6e1ed25，在现有干净同级工作树`Create_NuclearIndustry-svg-art`的`codex/thermal-loop-acceptance`准备无冲突合并，接收`codex/ore-acquisition`的01b1578。PM仅更新文档与执行Git；功能源码由原执行者实现。主目录随后快进到整合提交，运行方式：
+从main基线6e1ed25，在现有干净同级工作树`Create_NuclearIndustry-svg-art`的`codex/thermal-loop-acceptance`完成无冲突合并，接收`codex/ore-acquisition`的01b1578。PM仅更新文档与执行Git；功能源码由原执行者实现。主目录已快进到整合提交`f34f190`，运行方式：
 
 ```powershell
 cd E:\MyMC\NewMod\Create_NuclearIndustry
@@ -35,7 +35,9 @@ cd E:\MyMC\NewMod\Create_NuclearIndustry
 
 主目录`.vscode/launch.json`保留原用户改动；其SHA-256仍为`65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07`。候选原日志、pycache、运行配置与测试世界均保留，不搬移世界、不清理工作树或推送/发布。
 
-**本次合入验证：** 主目录增量打包及制品记录待执行，完成后在此补充实际日志与结果；原候选制品SHA-256为`79E3B45C2D0A6142A566994260C549FE75CD31E6F9736790DA8C1B136C1827A2`。
+**本次合入验证：** 主目录`assemble --console=plain`退出0，12秒；4项任务中2项执行、1项命中缓存、1项已最新，没有运行JUnit/GameTest。见[新运行日志](./evidence/main-assemble.log)、[退出码](./evidence/main-assemble.exit-code.txt)及[制品记录](./evidence/main-integration-artifact.json)。main JAR为2101316字节，SHA-256 `1F201E856A2B187D26FFD8E72C92525216DB46849F0449E2D43856CF3C2125EC`。
+
+初次逐字节比较发现906份文本换行不同及2个空目录条目不同，均保留在主目录`build/reports/extension/THERMAL-LOOP-ACCEPTANCE/artifact-raw-comparison.json`。main检出文本为CRLF，候选为LF；仅归一CRLF/LF并忽略空目录后，1603份有效文件全部一致，二进制仍按SHA-256精确比较，没有忽略有效文件或更改资源。原候选JAR SHA-256为`79E3B45C2D0A6142A566994260C549FE75CD31E6F9736790DA8C1B136C1827A2`；两个整体JAR哈希不同不被宣称为逐字节相同。Git管理的文档链接检查通过，旧三矿README的历史build制品链接按原记录保留，不要求整合工作树复制临时制品。
 
 ## 下一主线与版本边界
 
