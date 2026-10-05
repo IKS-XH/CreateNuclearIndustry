@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.production;
 
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
 import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
@@ -197,7 +198,7 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
         return Component.translatable("gui.create_nuclear_industry.shielded_assembly.wait." + waitReason());
     }
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
-        tooltip.add(Component.translatable("block.create_nuclear_industry.shielded_assembly_station"));
+        tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.shielded_assembly_station")));
         for (int slot = 0; slot < 4; slot++)
             tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.input." + slot,
                     state.input(slot).getCount(), ShieldedAssemblyState.COST[slot]));

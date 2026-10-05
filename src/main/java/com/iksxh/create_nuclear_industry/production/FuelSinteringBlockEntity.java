@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.production;
 
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
@@ -137,7 +138,7 @@ public final class FuelSinteringBlockEntity extends BlockEntity implements IHave
     }
 
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
-        tooltip.add(Component.translatable("block.create_nuclear_industry.fuel_sintering_furnace"));
+        tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.fuel_sintering_furnace")));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.sintering.input", state.input()));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.sintering.output", state.output()));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.sintering.heat",

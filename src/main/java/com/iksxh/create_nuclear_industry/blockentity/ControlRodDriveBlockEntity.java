@@ -6,6 +6,7 @@ import com.iksxh.create_nuclear_industry.control.ControlRodSliderPhase;
 import com.iksxh.create_nuclear_industry.control.ControlRodSliderResponsePayload;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
 import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentGoggleDisplay;
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentTelemetry;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
@@ -146,8 +147,8 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity
         if (clientColumnX < 0 || clientColumnX > 2 || clientColumnZ < 0 || clientColumnZ > 2) {
             return false;
         }
-        tooltip.add(Component.translatable(
-                "goggle.create_nuclear_industry.reactor.control_rod_summary"));
+        tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable(
+                "goggle.create_nuclear_industry.reactor.control_rod_summary")));
         if (clientControlRodIntegrity == null) {
             tooltip.add(Component.translatable(
                     "goggle.create_nuclear_industry.reactor.runtime_data_waiting"));

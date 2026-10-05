@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.heat;
 
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
 import com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity;
 import com.iksxh.create_nuclear_industry.boiler.BoilerStructure;
@@ -313,7 +314,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
 
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
         String prefix = "gui.create_nuclear_industry.heat_exchanger.";
-        tooltip.add(Component.translatable("block.create_nuclear_industry.nuclear_heat_exchanger"));
+        tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.nuclear_heat_exchanger")));
         if (viewStatus.equals("line_unavailable"))
             tooltip.add(Component.translatable(prefix + "local_tanks", ledger.hot(), ledger.cold(),
                     viewHotCapacity, viewColdCapacity));

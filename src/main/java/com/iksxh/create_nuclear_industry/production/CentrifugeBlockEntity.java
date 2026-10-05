@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.production;
 
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -235,7 +236,7 @@ public final class CentrifugeBlockEntity extends KineticBlockEntity {
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
-        tooltip.add(getDisplayName());
+        tooltip.add(GoggleTooltip.indentFirstLine(getDisplayName()));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.centrifuge.slurry", state.slurryMb));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.centrifuge.water", state.waterMb));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.centrifuge.enriched", state.enriched.getCount()));

@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.blockentity;
 
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
@@ -463,7 +464,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
         if (bindingType() != BindingType.REFUELING) {
             return false;
         }
-        tooltip.add(Component.translatable("goggle.create_nuclear_industry.reactor.fuel_column_summary"));
+        tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("goggle.create_nuclear_industry.reactor.fuel_column_summary")));
         if (fuelAssembly.isEmpty()) {
             tooltip.add(Component.translatable(
                     "goggle.create_nuclear_industry.reactor.fuel_assembly_empty"));

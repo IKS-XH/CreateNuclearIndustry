@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.turbine;
 
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.config.TurbineConfig;
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
 import com.iksxh.create_nuclear_industry.content.TurbineContent;
@@ -519,7 +520,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     }
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
         String key = "gui.create_nuclear_industry.turbine.";
-        tooltip.add(Component.translatable("block.create_nuclear_industry.turbine_controller"));
+        tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.turbine_controller")));
         tooltip.add(Component.translatable(key + "state." + status));
         tooltip.add(Component.translatable(key + "rotors_rpm", Math.max(0, lastLength - 2), viewRpm));
         tooltip.add(Component.translatable(key + "flow", String.format(java.util.Locale.ROOT, "%.2f", viewAverageFlow), viewRatedFlow));
