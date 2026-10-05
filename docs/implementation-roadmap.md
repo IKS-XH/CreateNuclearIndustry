@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**当前推进：** 01E三档功能手测通过，[01F流量与规模效率](./superpowers/plans/2026-10-05-ext-b-turbine-01f.md)已通过定向验证与独立审查，未确认人工项按用户最新授权并入后续闭环联调。护目镜两项显示修复免独立手测并已收尾。用户确认[蒸汽冷凝方案](./superpowers/plans/2026-10-05-steam-condensation-proposal.md)全部参数，现执行[冷凝回水01](./superpowers/plans/2026-10-05-ext-b-condense-01.md)；01D/R1外观仍保留[未确认项](./reviews/2026-10-05/turbine-01e/manual-acceptance.md)，不扩大既有人工结论。
+**当前推进：** 01E三档功能手测通过，[01F流量与规模效率](./superpowers/plans/2026-10-05-ext-b-turbine-01f.md)已通过定向验证与独立审查，未确认人工项按用户最新授权并入后续闭环联调。护目镜两项显示修复免独立手测并已收尾。用户确认[蒸汽冷凝方案](./superpowers/plans/2026-10-05-steam-condensation-proposal.md)全部参数，[冷凝回水01](./superpowers/plans/2026-10-05-ext-b-condense-01.md)已通过定向验证及独立审查，现交[合并联调](./reviews/2026-10-05/condense-01/manual-checklist.md)；01D/R1外观仍保留[未确认项](./reviews/2026-10-05/turbine-01e/manual-acceptance.md)，不扩大既有人工结论。
 
 **更新日期：2026-10-04。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是 `0.1.0` Alpha，完整生存/发电链和稳定发布尚未完成。
 

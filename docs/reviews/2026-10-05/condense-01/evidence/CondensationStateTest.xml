@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.heat.CondensationStateTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-05T10:37:04.182Z" hostname="DESKTOP-4G1EOU9" time="0.032">
+  <properties/>
+  <testcase name="simulateAndZeroAcceptanceDoNotChooseModeAndResidualHeatLocksMode()" classname="com.iksxh.create_nuclear_industry.heat.CondensationStateTest" time="0.023"/>
+  <testcase name="partialOutputSpacePreflightsRecoveredVolumeAndDoesNotConsumeRemainderWhenFull()" classname="com.iksxh.create_nuclear_industry.heat.CondensationStateTest" time="0.002"/>
+  <testcase name="ratedCondensationConservesMassAndNeverProducesHeatOrRepeatsTick()" classname="com.iksxh.create_nuclear_industry.heat.CondensationStateTest" time="0.001"/>
+  <testcase name="coldBudgetStopsAtStageBoundaryAndBlockedOutputDoesNotConsumeSource()" classname="com.iksxh.create_nuclear_industry.heat.CondensationStateTest" time="0.001"/>
+  <testcase name="configuredCapacitiesPreserveInventoryAndInvalidSettingsPauseSafely()" classname="com.iksxh.create_nuclear_industry.heat.CondensationStateTest" time="0.0"/>
+  <testcase name="smallPacketsAccumulateBoundedRecoveryRemainderThroughCurrentSaveRestore()" classname="com.iksxh.create_nuclear_industry.heat.CondensationStateTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

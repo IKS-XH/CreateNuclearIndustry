@@ -1,6 +1,6 @@
 # 蒸汽冷凝回水方案（EXT-B-CONDENSE-01，已确认）
 
-**状态：2026-10-05用户答复“采用推荐值吧”，本方案全部首轮参数已确认；按[实现卡](./2026-10-05-ext-b-condense-01.md)派发。** 用户免除护目镜两项小显示修复的独立手测，允许继续主线。汽轮机01F自动结果与未确认人工项保留，合并到后续闭环联调，不改写为已手测通过。
+**状态：2026-10-05用户答复“采用推荐值吧”，本方案全部首轮参数已确认；[实现卡](./2026-10-05-ext-b-condense-01.md)候选已通过定向验证与独立审查，待[闭环联调](../../reviews/2026-10-05/condense-01/manual-checklist.md)。** 用户免除护目镜两项小显示修复的独立手测，允许继续主线。汽轮机01F自动结果与未确认人工项保留，合并到后续闭环联调，不改写为已手测通过。
 
 PM按brainstorming整理新工序的接口和玩法取舍，技术设计使用minecraft-modding与minecraft-testing；现按writing-plans生成实现卡，由执行者实施，PM不编写功能或测试代码。
 
@@ -58,7 +58,7 @@ PM按brainstorming整理新工序的接口和玩法取舍，技术设计使用mi
 
 ## 4. SERVER配置建议
 
-追加到既有`create_nuclear_industry-heat-exchanger.toml`，保持核热参数的现行含义。以下键已批准，尚待实现，当前还不能作为现有可用键使用。
+已在候选的既有`create_nuclear_industry-heat-exchanger.toml`追加以下键，保持核热参数的现行含义；实际SERVER加载及制品证据见[本批交付](../../reviews/2026-10-05/condense-01/README.md)，候选功能尚未合入main。
 
 | 建议键 | 默认 | 取值/单位 |
 | :--- | ---: | :--- |

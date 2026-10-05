@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-05T10:37:04.215Z" hostname="DESKTOP-4G1EOU9" time="0.019">
+  <properties/>
+  <testcase name="dedicatedSourcePaysConfiguredRateAboveEighteen()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="publishingUsesPreviouslyPaidHeatAndRepeatedQueriesOrTicksArePure()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="remoteInventoryCanFeedAnEmptyAndColdFullWorkingMemberWithoutSharingReserve()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.002"/>
+  <testcase name="legacyMigrationSurvivesSavingBeforeFirstTickAndDoesNotRefreshFromLoadTime()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="unloadingAndPortableRoundTripsPreserveTheAbsoluteExpiry()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.003"/>
+  <testcase name="fractionalInputOscillatesOnlyBetweenAdjacentSupportedLevels()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="smallerHotAndColdCapacitiesPreserveOldInventoryAndLimitNewTransactions()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.0"/>
+  <testcase name="fractionalDensityCanReachItsThresholdWithoutEmittingUnpaidHeat()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="veryDenseSingleMillibucketIsBoundedAndPartialReturnSpaceIsConserved()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="densityOrWindowChangeNeverRevaluesExistingReserve()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.0"/>
+  <testcase name="absentLoadDoesNotConvertAndInvalidConfigurationCannotChangeFluidAmounts()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="sustainedInputsConserveMassAndEnergyAndSettleAtNineAndEighteen()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="pulsedInputAndMidRunSaveRestoreKeepPaidHeatAndEventuallyExpire()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.0"/>
+  <testcase name="blockedReturnExpiresWithinFortyTicksAndRetainsUnconvertedHotFluid()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.001"/>
+  <testcase name="customSettingsScaleOutputAndConfigurationChangesNeverCreateHeat()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.0"/>
+  <testcase name="freshConversionAfterSkippedDeadlineCannotSpendOrReviveExpiredHeat()" classname="com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
