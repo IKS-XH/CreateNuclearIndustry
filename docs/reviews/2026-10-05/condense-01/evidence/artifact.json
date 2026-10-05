@@ -1,0 +1,10 @@
+{
+  "filename": "create_nuclear_industry-0.1.0.jar",
+  "bytes": 2092101,
+  "sha256": "ECEB5EDE6415859A953390040A2696555CD1DBE57E102CA8B1C9EAA25A521CAB",
+  "sourceBaseline": "4657d06 plus EXT-B-CONDENSE-01 uncommitted implementation",
+  "junitTests": 22,
+  "gameTests": 8,
+  "manualStatus": "pending combined loop test",
+  "sourceCommit": "fdfba386081bb736dd054b4a9f330b9c8071a821"
+}

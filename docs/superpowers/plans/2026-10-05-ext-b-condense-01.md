@@ -2,7 +2,7 @@
 
 > PM使用writing-plans和subagent-driven-development组织实现与一次规格/质量联合审查。执行者按下方步骤实施，不派发其他代理、不改核心文档、不执行Git写操作。治理5.1与用户精简验证要求优先于技能的固定重复流程。
 
-**状态：执行中。** 2026-10-05用户确认[完整方案](./2026-10-05-steam-condensation-proposal.md)，包括顶部冷源、消耗量、蓝冰持续冷源及首轮吞吐；实施代理`condense01_impl`已启动。
+**状态：实现、定向验证及独立审查通过，待人工闭环联调。** 2026-10-05用户确认[完整方案](./2026-10-05-steam-condensation-proposal.md)，包括顶部冷源、消耗量、蓝冰持续冷源及首轮吞吐；功能提交`fdfba38`，交付见[本批记录](../../reviews/2026-10-05/condense-01/README.md)。
 
 **目标：** 复用换热器把汽轮机排出的蒸汽冷凝成水，接通锅炉给水闭环，并结算顶部冷源的融化和蒸发。
 
@@ -42,13 +42,13 @@
 
 **接口入口：** 保留`NuclearHeatExchangerBlockEntity.serverTick(...)`、流体能力`Port`、`HeatExchangerLine.find(...)`及`HeatExchangerState.save/load`的既有调用契约；由模式控制流体报告和转换。`HeatExchangerConfig`追加冷凝配置快照；新增内部接口由同一执行者一次完成，避免跨代理签名争用。
 
-- [ ] 先用一个代表性断言记录旧实现拒收普通蒸汽或未冷凝的失败；不为每个配置字段机械重复红绿流程。
-- [ ] 实现模式/库存/直列事务、冷凝小数尾量、逐台冷源预算、服务端方块变换及正常保存恢复。
-- [ ] 接入流体能力、核热隔离、SERVER配置及护目镜同步，完整核对八项配置与中英文键。
-- [ ] 定向JUnit仅覆盖受影响`HeatExchangerStateTest`及新冷凝状态测试：54mB/t与1:1守恒、模拟纯查询、模式切换余热锁、非默认回收率小包尾量、冷源预算边界、当前格式恢复。
-- [ ] 一组定向GameTest覆盖实际Create管泵蒸汽→水、输出堵塞/缺冷源恢复、顶部五种源和侧面无效/流水无效、融水后水蒸发、蓝冰持续、逐成员额度/混列安全与代表性原核热供热。组合场景，避免每类冷源复制整套测试；仅临时隔离配置缩短消耗阶段，完成后恢复。记录真实SERVER默认和至少一个非默认值生效。
-- [ ] 运行建议：`./gradlew.bat test --tests "*HeatExchangerStateTest" --tests "*Condensation*Test"`、`./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_condensation -PgameTestDirectory=build/runtime-condense-01-default`及增量`assemble`。准确命令以实际入口为准，退出0、必需断言全部通过。禁止clean/--rerun-tasks/全项目测试；公共事务出现疑点才扩大热域回归并报告原因。
-- [ ] 自审后交付`build/reports/extension/EXT-B-CONDENSE-01/implementation-report.md`与原始日志索引，记录实际写集、技能应用、配置键、制品哈希、未测边界。PM安排一次联合独立审查，复用已审运行证据；只对具体发现整改。
+- [x] 先用一个代表性断言记录旧实现拒收普通蒸汽或未冷凝的失败；不为每个配置字段机械重复红绿流程。
+- [x] 实现模式/库存/直列事务、冷凝小数尾量、逐台冷源预算、服务端方块变换及正常保存恢复。
+- [x] 接入流体能力、核热隔离、SERVER配置及护目镜同步，完整核对八项配置与中英文键。
+- [x] 定向JUnit仅覆盖受影响`HeatExchangerStateTest`及新冷凝状态测试：54mB/t与1:1守恒、模拟纯查询、模式切换余热锁、非默认回收率小包尾量、冷源预算边界、当前格式恢复。
+- [x] 一组定向GameTest覆盖实际Create管泵蒸汽→水、输出堵塞/缺冷源恢复、顶部五种源和侧面无效/流水无效、融水后水蒸发、蓝冰持续、逐成员额度/混列安全与代表性原核热供热。组合场景，避免每类冷源复制整套测试；仅临时隔离配置缩短消耗阶段，完成后恢复。记录真实SERVER默认和至少一个非默认值生效。
+- [x] 运行建议：`./gradlew.bat test --tests "*HeatExchangerStateTest" --tests "*Condensation*Test"`、`./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_condensation -PgameTestDirectory=build/runtime-condense-01-default`及增量`assemble`。准确命令以实际入口为准，退出0、必需断言全部通过。禁止clean/--rerun-tasks/全项目测试；公共事务出现疑点才扩大热域回归并报告原因。
+- [x] 自审后交付`build/reports/extension/EXT-B-CONDENSE-01/implementation-report.md`与原始日志索引，记录实际写集、技能应用、配置键、制品哈希、未测边界。PM安排一次联合独立审查，复用已审运行证据；只对具体发现整改。
 
 ## 审查重点与人工门
 
@@ -59,4 +59,6 @@
 ## PM执行记录
 
 - 2026-10-05：用户确认全部推荐参数；一个高级执行者负责共享账本与世界变化，一位高速审查者合并规格和质量审查。PM只维护文档与Git，未决取舍仍报用户。
-- 派发基线`1aa6987`，代理`/root/condense01_impl`使用gpt-6.1-sol/high；模型升级理由为共享工质事务、核热隔离与冷源世界修改耦合。尚未交付验证结果，后续审查优先gpt-6-luna/high。
+- 派发基线`1aa6987`，代理`/root/condense01_impl`使用gpt-6.1-sol/high；模型升级理由为共享工质事务、核热隔离与冷源世界修改耦合。派发时尚无交付证据，独立审查计划优先gpt-6-luna/high。
+- 最终执行者交付：原核热16项＋冷凝6项JUnit、8项独立真实GameTest、增量assemble均退出0。`condense01_review`采用gpt-6-luna/high联合审查，无发现；未重复执行测试。PM核对原始XML、日志及制品hash后提交功能，最终仅移除新增测试EOF空行，复用已审证据。
+- 现在停在[合并联调](../../reviews/2026-10-05/condense-01/manual-checklist.md)；01F与护目镜顺带观察，尚未人工通过，不合main或派发后续玩法。开发与用户世界配置未覆盖，新SERVER字段使用NeoForge默认补齐。
