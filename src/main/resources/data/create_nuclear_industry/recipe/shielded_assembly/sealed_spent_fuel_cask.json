@@ -1,0 +1,29 @@
+{
+  "type": "create_nuclear_industry:shielded_assembly",
+  "operation": "sealing",
+  "inputs": [
+    {
+      "ingredient": {
+        "item": "create_nuclear_industry:cooled_spent_fuel_assembly"
+      },
+      "count": 1
+    },
+    {
+      "ingredient": {
+        "tag": "create_nuclear_industry:vitrification_media"
+      },
+      "count": 1
+    },
+    {
+      "ingredient": {
+        "tag": "create_nuclear_industry:lead_shielding_casks"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "create_nuclear_industry:sealed_spent_fuel_cask",
+    "count": 1
+  },
+  "work": 12800
+}

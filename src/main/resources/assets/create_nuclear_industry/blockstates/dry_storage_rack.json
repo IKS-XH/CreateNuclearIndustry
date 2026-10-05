@@ -1,0 +1,276 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_frame",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_door",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "storage_level": "0"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_0",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "storage_level": "1"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_1",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "storage_level": "2"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_2",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "storage_level": "3"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_3",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "storage_level": "4"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_4",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_frame",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_door",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "storage_level": "0"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "storage_level": "1"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "storage_level": "2"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "storage_level": "3"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "storage_level": "4"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_frame",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_door",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "storage_level": "0"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "storage_level": "1"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "storage_level": "2"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "storage_level": "3"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "storage_level": "4"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_frame",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_door",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "storage_level": "0"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "storage_level": "1"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "storage_level": "2"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "storage_level": "3"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "storage_level": "4"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/dry_storage_rack_occupancy_4",
+        "y": 270
+      }
+    }
+  ]
+}

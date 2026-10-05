@@ -207,17 +207,13 @@ public final class ShieldedAssemblyBlock extends HorizontalKineticBlock
     }
     static ItemInteractionResult useItem(ItemStack stack, Level level, BlockPos pos, BlockState state, Player player) {
         if (stack.getItem() instanceof WrenchItem) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        boolean material = false;
-        for (int slot = 0; slot < 4; slot++) if (ShieldedAssemblyBlockEntity.accepts(slot, stack)) material = true;
-        if (!material) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        ShieldedAssemblyBlockEntity machine = state.getBlock() instanceof ShieldedAssemblyBlock
+                ? level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity found ? found : null
+                : ShieldedAssemblyStructure.master(level, pos, state);
+        if (machine == null || !machine.acceptsInput(stack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (!level.isClientSide) {
-            ShieldedAssemblyBlockEntity machine = state.getBlock() instanceof ShieldedAssemblyBlock
-                    ? level.getBlockEntity(pos) instanceof ShieldedAssemblyBlockEntity found ? found : null
-                    : ShieldedAssemblyStructure.master(level, pos, state);
-            if (machine != null) {
-                ItemStack remainder = machine.insert(stack);
-                if (!player.getAbilities().instabuild) stack.shrink(stack.getCount() - remainder.getCount());
-            }
+            ItemStack remainder = machine.insert(stack);
+            if (!player.getAbilities().instabuild) stack.shrink(stack.getCount() - remainder.getCount());
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
@@ -231,7 +227,7 @@ public final class ShieldedAssemblyBlock extends HorizontalKineticBlock
                 int taken = machine.takeToPlayer(player, player.isShiftKeyDown());
                 if (taken == 0) player.displayClientMessage(Component.translatable(
                         "gui.create_nuclear_industry.shielded_assembly.status", machine.waitStatus(),
-                        machine.state().progress(), ShieldedAssemblyState.WORK, Math.round(machine.getSpeed())), true);
+                        machine.state().progress(), machine.state().work(), Math.round(machine.getSpeed())), true);
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

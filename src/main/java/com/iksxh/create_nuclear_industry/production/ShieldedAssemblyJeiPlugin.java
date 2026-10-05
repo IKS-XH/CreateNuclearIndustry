@@ -21,7 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-/** JEI仅作客户端配方视图，四料数量和参考64RPM耗时不参与服务端事务。 */
+/** JEI仅作客户端配方视图，实际输入数量和参考64RPM耗时不参与服务端事务。 */
 @JeiPlugin
 public final class ShieldedAssemblyJeiPlugin implements IModPlugin {
     private static final RecipeType<ShieldedAssemblyRecipe> TYPE = RecipeType.create(
@@ -52,10 +52,8 @@ public final class ShieldedAssemblyJeiPlugin implements IModPlugin {
         @Override public int getWidth() { return 138; }
         @Override public int getHeight() { return 83; }
         @Override public void setRecipe(IRecipeLayoutBuilder builder, ShieldedAssemblyRecipe recipe, IFocusGroup focuses) {
-            builder.addInputSlot(6, 7).addItemStacks(stacks(recipe.pellet()));
-            builder.addInputSlot(27, 7).addItemStacks(stacks(recipe.cladding()));
-            builder.addInputSlot(6, 28).addItemStacks(stacks(recipe.solder()));
-            builder.addInputSlot(27, 28).addItemStacks(stacks(recipe.grate()));
+            for (int slot = 0; slot < recipe.inputs().size(); slot++)
+                builder.addInputSlot(6 + (slot % 2) * 21, 7 + (slot / 2) * 21).addItemStacks(stacks(recipe.inputs().get(slot)));
             builder.addOutputSlot(103, 18).addItemStack(recipe.result());
         }
         private static List<ItemStack> stacks(ShieldedAssemblyRecipe.Input input) {
@@ -67,7 +65,7 @@ public final class ShieldedAssemblyJeiPlugin implements IModPlugin {
                     Component.translatable("gui.create_nuclear_industry.shielded_assembly.jei.speed"),
                     4, 55, 0xff606060, false);
             graphics.drawString(Minecraft.getInstance().font,
-                    Component.translatable("gui.create_nuclear_industry.shielded_assembly.jei.time", 20),
+                    Component.translatable("gui.create_nuclear_industry.shielded_assembly.jei.time", recipe.work() / 1280.0),
                     4, 68, 0xff606060, false);
         }
     }

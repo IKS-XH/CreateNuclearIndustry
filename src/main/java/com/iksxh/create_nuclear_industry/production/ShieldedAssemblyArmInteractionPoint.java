@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-    /** Create机械臂只向有效外表面投四料；成品继续经侧面漏斗接外置置物台。 */
+    /** Create机械臂只向有效外表面投活动工序原料；成品继续经侧面漏斗接外置置物台。 */
 public final class ShieldedAssemblyArmInteractionPoint extends ArmInteractionPoint {
     public static final ArmInteractionPointType TYPE = new ArmInteractionPointType() {
         @Override public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {

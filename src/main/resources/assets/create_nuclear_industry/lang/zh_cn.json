@@ -323,5 +323,17 @@
   "gui.create_nuclear_industry.turbine.issue.port": "进排汽口位置错误",
   "gui.create_nuclear_industry.turbine.issue.unlocated_axis": "轴列尚未唯一确定",
   "gui.create_nuclear_industry.turbine.issue.blocked": "下一放置位置被占用",
-  "gui.create_nuclear_industry.turbine.located": "已定位 %s×%s，仍需补齐结构"
+  "gui.create_nuclear_industry.turbine.located": "已定位 %s×%s，仍需补齐结构",
+  "item.create_nuclear_industry.glass_dust": "玻璃碎料",
+  "item.create_nuclear_industry.vitrification_medium": "玻璃固化基材",
+  "item.create_nuclear_industry.lead_shielding_cask": "铅屏蔽桶",
+  "item.create_nuclear_industry.sealed_spent_fuel_cask": "已封装乏燃料桶",
+  "block.create_nuclear_industry.dry_storage_rack": "干式贮存架",
+  "gui.create_nuclear_industry.storage.occupied": "已用桶位：%s / %s",
+  "gui.create_nuclear_industry.storage.sealed": "已封装乏燃料贮存",
+  "gui.create_nuclear_industry.storage.invalid_payload": "拒收：桶内必须恰好保存一个枯竭铀燃料组件",
+  "gui.create_nuclear_industry.shielded_assembly.operation.unselected": "工序：未选择（首件原料自动确定）",
+  "gui.create_nuclear_industry.shielded_assembly.operation.manufacture": "工序：新燃料制造",
+  "gui.create_nuclear_industry.shielded_assembly.operation.sealing": "工序：乏燃料封存",
+  "gui.create_nuclear_industry.shielded_assembly.material": "%s：%s / %s"
 }

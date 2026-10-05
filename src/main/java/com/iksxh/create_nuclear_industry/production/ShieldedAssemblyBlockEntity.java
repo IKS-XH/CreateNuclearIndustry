@@ -2,9 +2,7 @@ package com.iksxh.create_nuclear_industry.production;
 
 import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
-import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
-import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -13,23 +11,19 @@ import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 
 /**
- * 八格装配台主控的服务端状态所有者。Create轴网只提供速度与过载判定；四料、成品和工时
+ * 八格装配台主控的服务端状态所有者。Create轴网只提供速度与过载判定；活动原料、成品和工时
  * 只写在同一个账本，客户端同步仅供渲染与护目镜展示，任何物料事务均在服务端完成。
  */
 public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implements IHaveGoggleInformation {
-    private static final TagKey<net.minecraft.world.item.Item> SOLDER = TagKey.create(Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath("c", "ingots/solder"));
     private static final ResourceLocation RECIPE_ID = ResourceLocation.fromNamespaceAndPath(
             CreateNuclearIndustry.MOD_ID, "shielded_assembly/fresh_fuel_assembly");
     private final ShieldedAssemblyState state = new ShieldedAssemblyState();
@@ -41,7 +35,7 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     }
 
     @Override public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        // 本机不用数值框；物料筛选由四个固定槽及外置Create物流完成。
+        // 本机不用数值框；活动配方决定最多四个输入槽，外置Create物流负责筛选。
     }
     @Override public float calculateStressApplied() {
         lastStressApplied = 4;
@@ -60,13 +54,14 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
                 && level.getBlockState(worldPosition).is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get());
     }
 
-    /** 配方重载与旧进度必须逐tick复核；无效配方只清工时，不能删除库存。 */
+    /** 配方重载逐tick复核；无效配方只清工时，不能删除库存。 */
     @Override public void tick() {
         super.tick();
         if (level == null || level.isClientSide || !current()) return;
         boolean structure = complete();
-        boolean recipe = structure && recipeReady();
         int oldProgress = state.progress();
+        boolean recipe = structure && recipeReady();
+        if (oldProgress != state.progress()) changed();
         if (structure && !recipe && oldProgress > 0) {
             state.invalidateProgress();
             changed();
@@ -77,49 +72,56 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
         if (blockState.getValue(ShieldedAssemblyBlock.WORKING) != working)
             level.setBlock(worldPosition, blockState.setValue(ShieldedAssemblyBlock.WORKING, working), 3);
         ShieldedAssemblyStructure.syncWorking(this, working);
-        if (working && state.advance(getSpeed(), new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get()))) {
+        if (working && state.advance(getSpeed(), currentRecipe().actualResult(state.input(0)))) {
             setChanged();
             if (state.progress() == 0 || oldProgress / 256 != state.progress() / 256) sendData();
         }
     }
 
-    /** 数据包必须保持专用四料、正式新组件及25600 RPM·tick合同。 */
+    private ShieldedAssemblyRecipe recipeFor(String operation) {
+        if (level == null) return null;
+        ResourceLocation id = "sealing".equals(operation) ? ResourceLocation.fromNamespaceAndPath(
+                CreateNuclearIndustry.MOD_ID, "shielded_assembly/sealed_spent_fuel_cask") : RECIPE_ID;
+        var holder = level.getRecipeManager().byKey(id);
+        if (holder.isEmpty() || !(holder.get().value() instanceof ShieldedAssemblyRecipe recipe)
+                || !recipe.valid() || !recipe.operation().equals(operation)) return null;
+        return recipe;
+    }
+    private ShieldedAssemblyRecipe currentRecipe() {
+        return recipeFor(state.operation().isEmpty() ? "manufacture" : state.operation());
+    }
+    private ShieldedAssemblyRecipe offeredRecipe(int slot, ItemStack offered) {
+        if (!state.operation().isEmpty()) {
+            ShieldedAssemblyRecipe recipe = currentRecipe();
+            return recipe != null && recipe.accepts(slot, offered) ? recipe : null;
+        }
+        for (String mode : List.of("manufacture", "sealing")) {
+            ShieldedAssemblyRecipe recipe = recipeFor(mode);
+            if (recipe != null && recipe.accepts(slot, offered)) return recipe;
+        }
+        return null;
+    }
+    /** 活动配方匹配完整已存栈后绑定数量及工时；重载失效不吞料、不沿用旧配方进度。 */
     public boolean recipeReady() {
-        if (level == null) return false;
-        var holder = level.getRecipeManager().byKey(RECIPE_ID);
-        if (holder.isEmpty() || !(holder.get().value() instanceof ShieldedAssemblyRecipe recipe)) return false;
-        if (recipe.work() != ShieldedAssemblyState.WORK
-                || recipe.pellet().count() != 8 || recipe.cladding().count() != 4
-                || recipe.solder().count() != 2 || recipe.grate().count() != 1
-                || !recipe.result().is(ModItems.FRESH_FUEL_ASSEMBLY.get())
-                || recipe.result().getCount() != 1 || recipe.result().getDamageValue() != 0
-                || !recipe.pellet().test(new ItemStack(FuelProcessingContent.SINTERED_FUEL_PELLET.get()))
-                || !recipe.cladding().test(new ItemStack(BasicMaterialContent.FUEL_CLADDING_TUBE.get()))
-                || !recipe.solder().test(new ItemStack(BasicMaterialContent.SOLDER_INGOT.get()))
-                || !recipe.grate().test(new ItemStack(BasicMaterialContent.STEEL_GRATE.get()))) return false;
+        ShieldedAssemblyRecipe recipe = currentRecipe();
+        if (recipe == null) return false;
         for (int slot = 0; slot < 4; slot++) {
             ItemStack stored = state.input(slot);
-            if (stored.isEmpty()) continue;
-            boolean matches = switch (slot) {
-                case 0 -> recipe.pellet().test(stored);
-                case 1 -> recipe.cladding().test(stored);
-                case 2 -> recipe.solder().test(stored);
-                default -> recipe.grate().test(stored);
-            };
-            if (!matches || !accepts(slot, stored)) return false;
+            if (!stored.isEmpty() && !recipe.accepts(slot, stored)) return false;
         }
+        state.configure(recipe.operation(), recipe.operation(), recipe.costs(), recipe.work());
         return true;
     }
-
-    public static boolean accepts(int slot, ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        return switch (slot) {
-            case 0 -> stack.is(FuelProcessingContent.SINTERED_FUEL_PELLET.get());
-            case 1 -> stack.is(BasicMaterialContent.FUEL_CLADDING_TUBE.get());
-            case 2 -> stack.is(SOLDER);
-            case 3 -> stack.is(BasicMaterialContent.STEEL_GRATE.get());
-            default -> false;
-        };
+    /** 模拟只读，不绑定工序或配方；真正接受首料才修改批次配置和选择。 */
+    private ItemStack insertSlot(int slot, ItemStack offered, boolean simulate) {
+        ShieldedAssemblyRecipe recipe = offeredRecipe(slot, offered);
+        if (recipe == null || level == null || level.isClientSide) return offered.copy();
+        ItemStack preview = state.insert(slot, offered, true, recipe.operation());
+        if (simulate || preview.getCount() == offered.getCount()) return preview;
+        state.configure(recipe.operation(), recipe.operation(), recipe.costs(), recipe.work());
+        ItemStack remainder = state.insert(slot, offered, false, recipe.operation());
+        changed();
+        return remainder;
     }
 
     public IItemHandler itemPort(BlockPos portPos, Direction side) {
@@ -133,12 +135,14 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     public IItemHandler itemPort(Direction side) { return itemPort(worldPosition, side); }
     public ItemStack insert(ItemStack stack) {
         if (!complete()) return stack.copy();
-        for (int slot = 0; slot < 4; slot++) if (accepts(slot, stack)) {
-            ItemStack remainder = state.insert(slot, stack, false);
-            if (remainder.getCount() != stack.getCount()) changed();
-            return remainder;
-        }
+        for (int slot = 0; slot < 4; slot++) if (offeredRecipe(slot, stack) != null) return insertSlot(slot, stack, false);
         return stack.copy();
+    }
+
+    /** 手持交互复用数据配方谓词，允许标签中的合法替代材料；不修改选择和账本。 */
+    public boolean acceptsInput(ItemStack stack) {
+        for (int slot = 0; slot < 4; slot++) if (offeredRecipe(slot, stack) != null) return true;
+        return false;
     }
 
     /** 玩家背包先接受物品，再从机器账本扣除同数，背包满时机器保持原样。 */
@@ -199,14 +203,20 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     }
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
         tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.shielded_assembly_station")));
-        for (int slot = 0; slot < 4; slot++)
-            tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.input." + slot,
-                    state.input(slot).getCount(), ShieldedAssemblyState.COST[slot]));
+        tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.operation." +
+                (state.operation().isEmpty() ? "unselected" : state.operation())));
+        ShieldedAssemblyRecipe recipe = currentRecipe();
+        int slots = recipe == null ? 4 : recipe.inputs().size();
+        for (int slot = 0; slot < slots; slot++)
+            tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.material",
+                    state.input(slot).isEmpty() ? recipe == null ? Component.literal("—")
+                    : recipe.inputs().get(slot).ingredient().getItems()[0].getHoverName() : state.input(slot).getHoverName(),
+                    state.input(slot).getCount(), recipe == null ? state.cost(slot) : recipe.inputs().get(slot).count()));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.output",
                 state.output().isEmpty() ? 0 : 1));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.speed", Math.round(getSpeed())));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.progress",
-                state.progress(), ShieldedAssemblyState.WORK));
+                state.progress(), state.work()));
         tooltip.add(waitStatus());
         return true;
     }
@@ -219,7 +229,7 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
             this.portPos = portPos.immutable(); this.part = part; this.side = side;
         }
         private boolean valid() {
-            if (!complete() || level == null || !level.hasChunkAt(portPos)) return false;
+            if (!complete() || level == null || level.isClientSide || !level.hasChunkAt(portPos)) return false;
             BlockState portState = level.getBlockState(portPos);
             return ShieldedAssemblyStructure.master(level, portPos, portState) == ShieldedAssemblyBlockEntity.this
                     && ShieldedAssemblyLayout.exterior(part,
@@ -233,9 +243,7 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
         }
         @Override public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             if (!valid() || !isItemValid(slot, stack)) return stack.copy();
-            ItemStack remainder = state.insert(slot, stack, simulate);
-            if (!simulate && remainder.getCount() != stack.getCount()) changed();
-            return remainder;
+            return insertSlot(slot, stack, simulate);
         }
         @Override public ItemStack extractItem(int slot, int amount, boolean simulate) {
             if (!valid() || side == Direction.UP || slot != 4) return ItemStack.EMPTY;
@@ -248,7 +256,7 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
                     : side != Direction.UP && slot == 4 ? 1 : 0;
         }
         @Override public boolean isItemValid(int slot, ItemStack stack) {
-            return valid() && accepts(slot, stack);
+            return valid() && offeredRecipe(slot, stack) != null;
         }
     }
 }

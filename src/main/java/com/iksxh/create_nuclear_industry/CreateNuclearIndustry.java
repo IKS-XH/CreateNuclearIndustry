@@ -16,6 +16,8 @@ import com.iksxh.create_nuclear_industry.heat.HeatExchangerBoilerBridge;
 import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
+import com.iksxh.create_nuclear_industry.content.SpentFuelStorageContent;
+import com.iksxh.create_nuclear_industry.config.SpentFuelStorageConfig;
 import com.iksxh.create_nuclear_industry.production.CentrifugeBlock;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyArmInteractionPoint;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyStructure;
@@ -60,12 +62,14 @@ public final class CreateNuclearIndustry {
         HeatExchangerConfig.register(modContainer);
         BoilerConfig.register(modContainer);
         TurbineConfig.register(modContainer);
+        SpentFuelStorageConfig.register(modContainer);
         ModFluids.register(modEventBus);
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
         BasicMaterialContent.register(modEventBus);
         ReactorCraftingContent.register(modEventBus);
         FuelProcessingContent.register(modEventBus);
+        SpentFuelStorageContent.register(modEventBus);
         HeatMaterialsContent.register(modEventBus);
         HeatExchangeContent.register(modEventBus);
         BoilerContent.register(modEventBus);
@@ -73,7 +77,8 @@ public final class CreateNuclearIndustry {
         NeoForge.EVENT_BUS.register(HeatExchangerBoilerBridge.class);
         // 持有库存的整机及其分块均禁止 Create 构造搬移；搬迁统一走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
-                state.is(FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get())
+                state.is(SpentFuelStorageContent.DRY_STORAGE_RACK.get())
+                        || state.is(FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get())
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get())
                         || state.is(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get())

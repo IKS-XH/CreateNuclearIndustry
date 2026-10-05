@@ -1,0 +1,14 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:glass"
+    }
+  ],
+  "processing_time": 100,
+  "results": [
+    {
+      "id": "create_nuclear_industry:glass_dust"
+    }
+  ]
+}
