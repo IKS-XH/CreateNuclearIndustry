@@ -1,0 +1,9 @@
+{
+  "filename": "create_nuclear_industry-0.1.0.jar",
+  "bytes": 2096123,
+  "sha256": "79E3B45C2D0A6142A566994260C549FE75CD31E6F9736790DA8C1B136C1827A2",
+  "testedBaseline": "56dd5ef plus EXT-B-TURBINE-01G source changes",
+  "gameTests": 17,
+  "manualStatus": "pending original client scenario",
+  "sourceCommit": "8273aff0e904994a215366492d3db4e9c9dbc846"
+}
