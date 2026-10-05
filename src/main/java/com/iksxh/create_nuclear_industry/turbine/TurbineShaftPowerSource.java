@@ -122,8 +122,16 @@ public abstract class TurbineShaftPowerSource extends GeneratingKineticBlockEnti
             float rpm = assignedRpm();
             // 服务端逐 tick 查询唯一账本，失效及负载变化只在数值改变时通知 Create。
             if (Float.compare(su, lastAssignedSu) != 0 || Float.compare(rpm, lastAssignedRpm) != 0) {
+                float previousSu = lastAssignedSu;
+                float previousRpm = lastAssignedRpm;
                 lastAssignedSu = su;
                 lastAssignedRpm = rpm;
+                // Create 的父 tick 校验可能先把无上游源的旧 speed 直接写成 0。
+                // 随后同步账本的停机变化时，恢复最后生成转速作为传播器拆源前值，避免 0->0 跳过网络撤销。
+                if (previousSu > 0 && su == 0 && previousRpm != 0 && !hasSource()
+                        && hasNetwork() && getTheoreticalSpeed() == 0) {
+                    setSpeed(previousRpm);
+                }
                 updateGeneratedRotation();
             }
         }

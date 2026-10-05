@@ -6,6 +6,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /** 探针实体轴从唯一机主读取总容量及结构有效的内部连接。 */
 public final class TurbineProbeShaftBlockEntity extends TurbineShaftPowerSource {
+    private int updatePacketCount;
+
     public TurbineProbeShaftBlockEntity(BlockPos pos, BlockState state) {
         super(TurbineProbeContent.shaftEntity(), pos, state);
     }
@@ -32,4 +34,13 @@ public final class TurbineProbeShaftBlockEntity extends TurbineShaftPowerSource 
                 && level.getBlockEntity(ownerPos) instanceof TurbineProbeOwnerBlockEntity owner
                 ? owner.otherFor(worldPosition) : null;
     }
+
+    /** 仅供定向 GameTest 确认 Create 源撤销时是否向下游发送实体更新包。 */
+    @Override
+    public void sendData() {
+        updatePacketCount++;
+        super.sendData();
+    }
+
+    public int updatePacketCount() { return updatePacketCount; }
 }

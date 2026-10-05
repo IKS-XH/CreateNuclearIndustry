@@ -51,6 +51,54 @@ public final class TurbineKineticProbeGameTests {
         });
     }
 
+    /** 无外源断供时，验证父类先清零不会跳过原生拆源及下游速度更新包。 */
+    @GameTest(template = "probe_empty", timeoutTicks = 180)
+    public static void zeroSupplyDetachesAndNotifiesDownstream(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos front = helper.absolutePos(FRONT);
+        BlockPos rear = front.south(5);
+        BlockPos frontExternal = front.north();
+        BlockPos rearExternal = rear.south();
+        build(level, front, false);
+        set(level, frontExternal, AllBlocks.SHAFT.getDefaultState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.Z));
+        set(level, rearExternal, AllBlocks.SHAFT.getDefaultState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.Z));
+        TurbineProbeShaftBlockEntity frontSource = shaft(level, front);
+        TurbineProbeShaftBlockEntity rearSource = shaft(level, rear);
+        TurbineProbeOwnerBlockEntity owner = (TurbineProbeOwnerBlockEntity) level.getBlockEntity(front.west());
+        int[] rearPacketsBefore = {0};
+        helper.runAfterDelay(25, () -> {
+            require(helper, frontSource.hasNetwork() && frontSource.network.equals(rearSource.network)
+                    && Math.abs(frontSource.getTheoreticalSpeed()) == 128
+                    && Math.abs(rearSource.getTheoreticalSpeed()) == 128,
+                    "断供探针未先建立真实双端Create网络");
+            rearPacketsBefore[0] = rearSource.updatePacketCount();
+            owner.setSupply(0, false);
+        });
+        helper.onEachTick(() -> {
+            if (owner.shareFor(front) == 0)
+                forceCreateKineticValidation(frontSource);
+        });
+        helper.runAfterDelay(105, () -> {
+            TurbineProbeShaftBlockEntity frontNow = shaft(level, front);
+            TurbineProbeShaftBlockEntity rearNow = shaft(level, rear);
+            var frontExternalNow = (com.simibubi.create.content.kinetics.base.KineticBlockEntity)
+                    level.getBlockEntity(frontExternal);
+            var rearExternalNow = (com.simibubi.create.content.kinetics.base.KineticBlockEntity)
+                    level.getBlockEntity(rearExternal);
+            require(helper, !frontNow.hasNetwork() && frontNow.getTheoreticalSpeed() == 0
+                    && rearNow.getTheoreticalSpeed() == 0
+                    && frontExternalNow.getTheoreticalSpeed() == 0
+                    && rearExternalNow.getTheoreticalSpeed() == 0
+                    && rearNow.updatePacketCount() > rearPacketsBefore[0],
+                    "Create父类先清零后未撤销源网络或通知下游：前网=" + frontNow.network
+                            + " 后速=" + rearNow.getTheoreticalSpeed()
+                            + " 后Source包=" + rearPacketsBefore[0] + "->" + rearNow.updatePacketCount());
+            helper.succeed();
+        });
+    }
+
     /** 同速外源正常贡献自己的容量；红石停机仅撤销本机生成容量，恢复后重新登记。 */
     @GameTest(template = "probe_empty", timeoutTicks = 150)
     public static void redstoneStopWithSameSpeedExternalSource(GameTestHelper helper) {
@@ -74,7 +122,17 @@ public final class TurbineKineticProbeGameTests {
                     require(helper, capacity(level, front) == motorSu + 32768, "解除红石后容量未恢复或重复登记");
                     ((TurbineProbeOwnerBlockEntity) level.getBlockEntity(front.west())).setSupply(0, false);
                     helper.runAfterDelay(10, () -> {
-                        require(helper, capacity(level, front) == motorSu, "账本断供后仍保留本机容量");
+                        TurbineProbeShaftBlockEntity frontShaft = shaft(level, front);
+                        TurbineProbeShaftBlockEntity rearShaft = shaft(level, front.south(5));
+                        require(helper, capacity(level, front) == motorSu
+                                        && frontShaft.getGeneratedSpeed() == 0
+                                        && Math.abs(frontShaft.getTheoreticalSpeed()) == 128
+                                        && Math.abs(rearShaft.getTheoreticalSpeed()) == 128
+                                        && Math.abs(motor.getTheoreticalSpeed()) == 128,
+                                "同速外源下断汽未只撤本机容量并保留外源转速：网=" + capacity(level, front)
+                                        + " 外源SU=" + motorSu + " 前源=" + frontShaft.getGeneratedSpeed()
+                                        + " 前/后/电机RPM=" + frontShaft.getTheoreticalSpeed() + "/"
+                                        + rearShaft.getTheoreticalSpeed() + "/" + motor.getTheoreticalSpeed());
                         helper.succeed();
                     });
                 });
@@ -268,6 +326,18 @@ public final class TurbineKineticProbeGameTests {
 
     static TurbineProbeShaftBlockEntity shaft(ServerLevel level, BlockPos pos) {
         return (TurbineProbeShaftBlockEntity) level.getBlockEntity(pos);
+    }
+
+    /** 仅在 GameTest 中将真实 Create 校验安排到供能归零后的下一 tick。 */
+    private static void forceCreateKineticValidation(TurbineProbeShaftBlockEntity shaft) {
+        try {
+            var field = com.simibubi.create.content.kinetics.base.KineticBlockEntity.class
+                    .getDeclaredField("validationCountdown");
+            field.setAccessible(true);
+            field.setInt(shaft, 0);
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalStateException("无法固定Create动力校验时序", exception);
+        }
     }
 
     static float capacity(ServerLevel level, BlockPos pos) {

@@ -99,6 +99,93 @@ public final class ExtensionTurbineGameTests {
         });
     }
 
+    /** 无外源时停止真实供汽，等待残留与40tick窗口衰减后应撤销整条双端动力网。 */
+    @GameTest(template = "turbine_empty", timeoutTicks = 330)
+    public static void zeroFlowStopsBothEndsAndExternalShafts(GameTestHelper helper) {
+        TurbineState.Settings settings = TurbineConfig.settings();
+        TurbineState.Tier tier = settings.shortTier();
+        build(helper, FRONT, tier.rotorCount(), false);
+        BlockPos rearPos = part(FRONT, 0, 0, tier.length() - 1);
+        BlockPos frontExternal = FRONT.north();
+        BlockPos rearExternal = rearPos.south();
+        helper.setBlock(frontExternal, AllBlocks.SHAFT.getDefaultState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.Z));
+        helper.setBlock(rearExternal, AllBlocks.SHAFT.getDefaultState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.Z));
+        final boolean[] feeding = {true};
+        helper.onEachTick(() -> {
+            if (!feeding[0]) return;
+            IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
+            if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
+                    tier.ratedFlowMbPerTick()), IFluidHandler.FluidAction.EXECUTE);
+            IFluidHandler output = handler(helper, exhaust(FRONT, tier), Direction.EAST);
+            if (output != null) output.drain(tier.ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
+        });
+        TurbineOutputShaftBlockEntity[] frontRef = {null};
+        helper.onEachTick(() -> {
+            if (feeding[0]) return;
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            if (owner != null && owner.ledger().totalSu() == 0) {
+                if (frontRef[0] == null) frontRef[0] = shaft(helper, FRONT);
+                forceCreateKineticValidation(frontRef[0]);
+            }
+        });
+        // 真实流量窗口归零后，测试夹具固定父类校验相位以复现 0->0 生命周期竞态。
+        helper.runAfterDelay(93, () -> {
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
+            TurbineOutputShaftBlockEntity rear = shaft(helper, rearPos);
+            KineticBlockEntity frontExternalShaft = (KineticBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(frontExternal));
+            KineticBlockEntity rearExternalShaft = (KineticBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(rearExternal));
+            require(helper, owner.ledger().totalSu() > 0 && front.network.equals(rear.network)
+                    && Math.abs(front.getTheoreticalSpeed()) == settings.rpm()
+                    && Math.abs(rear.getTheoreticalSpeed()) == settings.rpm()
+                    && Math.abs(frontExternalShaft.getTheoreticalSpeed()) == settings.rpm()
+                    && Math.abs(rearExternalShaft.getTheoreticalSpeed()) == settings.rpm(),
+                    "断汽回归场景在供汽期未建立双端真实动力网");
+            feeding[0] = false;
+        });
+        helper.runAfterDelay(240, () -> {
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
+            TurbineOutputShaftBlockEntity rear = shaft(helper, part(FRONT, 0, 0, tier.length() - 1));
+            KineticBlockEntity frontExternalShaft = (KineticBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(FRONT.north()));
+            KineticBlockEntity rearExternalShaft = (KineticBlockEntity) helper.getLevel()
+                    .getBlockEntity(helper.absolutePos(part(FRONT, 0, 0, tier.length() - 1).south()));
+            require(helper, owner.ledger().totalSu() == 0 && owner.ledger().averageFlowMbPerTick() == 0,
+                    "停止输入后流量窗口未衰减归零：SU=" + owner.ledger().totalSu()
+                            + " 平均=" + owner.ledger().averageFlowMbPerTick());
+            require(helper, !front.hasNetwork(), "Create校验先把生成轴speed清零后，前轴未执行源网络拆除：network="
+                    + front.network + " source=" + front.source
+                    + " 本机SU=" + owner.ledger().totalSu() + " 实际RPM=" + front.getTheoreticalSpeed());
+            require(helper, front.getGeneratedSpeed() == 0 && front.getTheoreticalSpeed() == 0
+                    && rear.getTheoreticalSpeed() == 0
+                    && frontExternalShaft.getTheoreticalSpeed() == 0
+                    && rearExternalShaft.getTheoreticalSpeed() == 0,
+                    "无外源时双轴或外接轴仍残留转速：本机源=" + front.getGeneratedSpeed()
+                            + " 前轴=" + front.getTheoreticalSpeed() + " 后轴=" + rear.getTheoreticalSpeed()
+                            + " 外接前=" + frontExternalShaft.getTheoreticalSpeed()
+                            + " 外接后=" + rearExternalShaft.getTheoreticalSpeed());
+            feeding[0] = true;
+        });
+        helper.runAfterDelay(295, () -> {
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
+            TurbineOutputShaftBlockEntity rear = shaft(helper, part(FRONT, 0, 0, tier.length() - 1));
+            require(helper, owner.ledger().totalSu() > 0 && front.network != null
+                    && front.network.equals(rear.network)
+                    && Math.abs(front.getTheoreticalSpeed()) == settings.rpm()
+                    && Math.abs(rear.getTheoreticalSpeed()) == settings.rpm()
+                    && Math.abs(front.getOrCreateNetwork().calculateCapacity() - owner.ledger().totalSu()) < 2,
+                    "停止后恢复供汽未重新建立唯一本机容量：SU=" + owner.ledger().totalSu()
+                            + " 前轴=" + front.getTheoreticalSpeed() + " 后轴=" + rear.getTheoreticalSpeed());
+            helper.succeed();
+        });
+    }
+
     /** 当前格式机组供汽后保存恢复，账本历史归零时不重复登记本机容量。 */
     @GameTest(template = "turbine_empty", timeoutTicks = 80)
     public static void currentFormatReloadKeepsOnlyLiveCapacity(GameTestHelper helper) {
@@ -170,6 +257,17 @@ public final class ExtensionTurbineGameTests {
         helper.getLevel().removeBlockEntity(pos);
         replacement.loadWithComponents(snapshot, helper.getLevel().registryAccess());
         helper.getLevel().setBlockEntity(replacement);
+    }
+
+    /** GameTest专用：将Create前轴下一次真实validateKinetics对齐到SU归零后。 */
+    private static void forceCreateKineticValidation(KineticBlockEntity kinetic) {
+        try {
+            var field = KineticBlockEntity.class.getDeclaredField("validationCountdown");
+            field.setAccessible(true);
+            field.setInt(kinetic, 0);
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalStateException("无法在GameTest中对齐Create动力校验相位", exception);
+        }
     }
 
     /** 三档均形成薄八棱壳，两端同网共享总容量且实际转速取 SERVER 配置。 */
