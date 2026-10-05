@@ -28,9 +28,12 @@ final class TurbineSteamPressure {
 
     TurbineSteamPressure(BlockPos controller) { owner = controller.asLong(); }
 
-    /** 每 tick 按现有拓扑设置自有贡献；Create wipe 后记录清零，下个 tick 自动补上。 */
-    void refresh(Level level, TurbineStructure.Form form, boolean hasSteam, int portFlowMbPerTick) {
-        if (level == null || level.isClientSide || form == null || !hasSteam) {
+    /**
+     * 每 tick 按现有拓扑设置自有贡献；空周转量也维持管路压力以免反复预热。
+     * 压力只负责管网流动，不能作为已成交排汽或 SU 的计量依据。
+     */
+    void refresh(Level level, TurbineStructure.Form form, int portFlowMbPerTick) {
+        if (level == null || level.isClientSide || form == null) {
             release();
             return;
         }

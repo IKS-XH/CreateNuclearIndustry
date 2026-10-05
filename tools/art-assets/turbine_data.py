@@ -114,8 +114,9 @@ def translations() -> dict[str, dict[str, str]]:
         "steam": "Steam",
     }
     zh_gui = {
-        "state.running": "正在运行", "state.no_steam": "入口库存不足，等待蒸汽",
-        "state.exhaust_full": "排汽库存已满", "state.stock_over_capacity": "库存超过当前配置容量",
+        "state.running": "正在运行", "state.no_steam": "等待蒸汽流入",
+        "state.low_flow": "排汽流量低于启动门槛，当前无本机动力",
+        "state.exhaust_full": "排汽受堵，周转缓存已满", "state.stock_over_capacity": "周转残留超过新档容量",
         "state.redstone": "红石信号暂停", "state.unformed": "结构未成型",
         "state.invalid_config": "汽轮机配置无效，已停机",
         "state.overlap": "机组构件与另一台已成型汽轮机重叠",
@@ -131,14 +132,17 @@ def translations() -> dict[str, dict[str, str]]:
         "issue.unlocated_axis": "轴列尚未唯一确定", "issue.blocked": "下一放置位置被占用",
         "located": "已定位 %s×%s，仍需补齐结构",
         "issue.port": "进排汽口位置错误",
-        "formed": "结构已成型：%s 个转子", "wait_stock": "请检查库存容量与汽轮机配置",
-        "hint": "空载仍消耗蒸汽；红石可停止汽轮机",
-        "rotors_rpm": "转子数 %s；转速 %s RPM", "flow": "实际处理 %s / 额定 %s mB/tick",
-        "tanks": "入口 %s/%s mB；排汽 %s/%s mB", "su": "共享容量 %s SU（两端共用）",
+        "formed": "结构已成型：%s 个转子", "wait_stock": "请检查周转残留与汽轮机配置",
+        "hint": "低流量仍等量排汽；红石可停止汽轮机",
+        "rotors_rpm": "转子数 %s；转速 %s RPM", "flow": "平均实际排汽 %s / 额定 %s mB/tick",
+        "efficiency": "当前倍率 %s；启动门槛 %s mB/tick",
+        "turnover": "待排周转蒸汽 %s/%s mB", "su": "共享容量 %s SU（两端共用）",
     }
     en_gui = {
-        "state.running": "Running", "state.no_steam": "Waiting for inlet steam",
-        "state.exhaust_full": "Exhaust stock is full", "state.stock_over_capacity": "Stock exceeds configured capacity",
+        "state.running": "Running", "state.no_steam": "Waiting for steam flow",
+        "state.low_flow": "Exhaust flow below startup threshold; no turbine power",
+        "state.exhaust_full": "Exhaust blocked; turnover buffer full",
+        "state.stock_over_capacity": "Turnover remainder exceeds new tier capacity",
         "state.redstone": "Paused by redstone", "state.unformed": "Structure is unformed",
         "state.invalid_config": "Invalid turbine configuration; stopped",
         "state.overlap": "Turbine overlaps another formed turbine",
@@ -155,10 +159,11 @@ def translations() -> dict[str, dict[str, str]]:
         "issue.blocked": "The next placement position is blocked",
         "located": "Located %s×%s; structure still needs completion",
         "issue.port": "Turbine port position is invalid",
-        "formed": "Formed with %s rotors", "wait_stock": "Check stored fluids, capacity and turbine settings",
-        "hint": "Consumes steam while idle; redstone stops the turbine",
-        "rotors_rpm": "Rotors: %s; Speed: %s RPM", "flow": "Processed %s / rated %s mB/tick",
-        "tanks": "Inlet %s/%s mB; exhaust %s/%s mB", "su": "Shared capacity %s SU (both ends)",
+        "formed": "Formed with %s rotors", "wait_stock": "Check turnover remainder and turbine settings",
+        "hint": "Low flow still exhausts equal steam; redstone stops the turbine",
+        "rotors_rpm": "Rotors: %s; Speed: %s RPM", "flow": "Average actual exhaust %s / rated %s mB/tick",
+        "efficiency": "Current multiplier %s; startup threshold %s mB/tick",
+        "turnover": "Pending exhaust turnover %s/%s mB", "su": "Shared capacity %s SU (both ends)",
     }
     return {"zh_cn": _make_translations(zh, zh_gui), "en_us": _make_translations(en, en_gui)}
 

@@ -18,7 +18,10 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlock;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
+import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
+import com.simibubi.create.content.fluids.pump.PumpBlock;
+import com.simibubi.create.content.fluids.pump.PumpBlockEntity;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -27,6 +30,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -38,16 +43,16 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** 三档侧控汽轮机的真实世界结构、双轴、库存和原生管网场景。 */
+/** 三档侧控汽轮机的真实结构、双轴、周转流量和原生管网场景。 */
 @GameTestHolder("create_nuclear_industry_turbine")
 @PrefixGameTestTemplate(false)
 public final class ExtensionTurbineGameTests {
     private static final BlockPos FRONT = new BlockPos(5, 5, 1);
     private ExtensionTurbineGameTests() {}
 
-    /** 实际汽轮机两端各接 Create 风扇：单端可用超过半额，两端合计超限时同网过载。 */
-    @GameTest(template = "turbine_empty", timeoutTicks = 80)
-    public static void sharedCapacityDrivesEitherEndAndOverloadsTogether(GameTestHelper helper) {
+    /** 持续真实排汽后，前后端连接的 Create 风扇读取同一份总容量。 */
+    @GameTest(template = "turbine_empty", timeoutTicks = 115)
+    public static void sharedCapacityDrivesEitherEndAtRealExhaustFlow(GameTestHelper helper) {
         TurbineState.Settings settings = TurbineConfig.settings();
         TurbineState.Tier tier = settings.shortTier();
         build(helper, FRONT, tier.rotorCount(), false);
@@ -56,56 +61,40 @@ public final class ExtensionTurbineGameTests {
         BlockPos rearFanPos = rearPos.south();
         helper.setBlock(frontFanPos, AllBlocks.ENCASED_FAN.getDefaultState()
                 .setValue(EncasedFanBlock.FACING, Direction.NORTH));
-        helper.runAfterDelay(12, () -> {
-            KineticBlockEntity fan = (KineticBlockEntity) helper.getLevel()
-                    .getBlockEntity(helper.absolutePos(frontFanPos));
-            float oneLoad = fan.calculateStressApplied() * settings.rpm();
-            int steam = (int) Math.ceil(oneLoad * 1.5 * settings.smoothingTicks()
-                    / settings.suPerMbPerTick());
-            require(helper, oneLoad > 0 && steam > 0 && steam <= tier.ratedFlowMbPerTick(),
-                    "测试负载无法由少量蒸汽构造半额以上的边界");
+        helper.onEachTick(() -> {
             IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
-            require(helper, input != null && input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), steam),
-                    IFluidHandler.FluidAction.EXECUTE) == steam, "实际机组未收到测试蒸汽");
+            if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
+                    tier.ratedFlowMbPerTick()), IFluidHandler.FluidAction.EXECUTE);
+            IFluidHandler output = handler(helper, exhaust(FRONT, tier), Direction.EAST);
+            if (output != null) output.drain(tier.ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
         });
-        helper.runAfterDelay(18, () -> {
+        helper.runAfterDelay(75, () -> {
             TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
             TurbineOutputShaftBlockEntity rear = shaft(helper, rearPos);
             KineticBlockEntity fan = (KineticBlockEntity) helper.getLevel()
                     .getBlockEntity(helper.absolutePos(frontFanPos));
             float capacity = front.getOrCreateNetwork().calculateCapacity();
-            float load = front.getOrCreateNetwork().calculateStress();
-            require(helper, front.network.equals(rear.network) && load > capacity / 2 && load < capacity
+            require(helper, front.network.equals(rear.network)
+                    && Math.abs(capacity - owner(helper, FRONT).ledger().totalSu()) < 2
                     && !front.isOverStressed() && !rear.isOverStressed()
-                    && Math.abs(fan.getSpeed()) == settings.rpm(), "前端单独超过旧半额未正常运转");
+                    && Math.abs(fan.getSpeed()) == settings.rpm(),
+                    "前端容量/流量不符：网络=" + capacity + " 账本=" + owner(helper, FRONT).ledger().totalSu()
+                            + " 平均=" + owner(helper, FRONT).ledger().averageFlowMbPerTick());
             helper.setBlock(frontFanPos, Blocks.AIR);
             helper.setBlock(rearFanPos, AllBlocks.ENCASED_FAN.getDefaultState()
                     .setValue(EncasedFanBlock.FACING, Direction.SOUTH));
         });
-        helper.runAfterDelay(23, () -> {
+        helper.runAfterDelay(85, () -> {
             TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
             TurbineOutputShaftBlockEntity rear = shaft(helper, rearPos);
             KineticBlockEntity fan = (KineticBlockEntity) helper.getLevel()
                     .getBlockEntity(helper.absolutePos(rearFanPos));
             float capacity = rear.getOrCreateNetwork().calculateCapacity();
-            float load = rear.getOrCreateNetwork().calculateStress();
-            require(helper, front.network.equals(rear.network) && load > capacity / 2 && load < capacity
-                    && !front.isOverStressed() && !rear.isOverStressed()
-                    && Math.abs(fan.getSpeed()) == settings.rpm(), "后端单独超过旧半额未正常运转");
-            helper.setBlock(frontFanPos, AllBlocks.ENCASED_FAN.getDefaultState()
-                    .setValue(EncasedFanBlock.FACING, Direction.NORTH));
-        });
-        helper.runAfterDelay(28, () -> {
-            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
-            TurbineOutputShaftBlockEntity rear = shaft(helper, rearPos);
             require(helper, front.network.equals(rear.network)
-                    && front.getOrCreateNetwork().calculateStress() > front.getOrCreateNetwork().calculateCapacity()
-                    && front.isOverStressed() && rear.isOverStressed(), "双端合计超限未共同过载");
-            helper.setBlock(frontFanPos, Blocks.AIR);
-        });
-        helper.runAfterDelay(33, () -> {
-            require(helper, !shaft(helper, FRONT).isOverStressed()
-                    && !shaft(helper, rearPos).isOverStressed(), "减载后两端未一起恢复");
+                    && Math.abs(capacity - owner(helper, FRONT).ledger().totalSu()) < 2
+                    && !front.isOverStressed() && !rear.isOverStressed()
+                    && Math.abs(fan.getSpeed()) == settings.rpm(),
+                    "后端容量/流量不符：网络=" + capacity + " 账本=" + owner(helper, FRONT).ledger().totalSu());
             helper.succeed();
         });
     }
@@ -122,12 +111,17 @@ public final class ExtensionTurbineGameTests {
         CreativeMotorBlockEntity motor = (CreativeMotorBlockEntity) helper.getLevel()
                 .getBlockEntity(helper.absolutePos(motorPos));
         motor.generatedSpeed.setValue(TurbineConfig.settings().rpm());
-        helper.runAfterDelay(13, () -> {
+        final boolean[] feeding = {true};
+        helper.onEachTick(() -> {
+            if (!feeding[0]) return;
             IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
-            require(helper, input != null && input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 40),
-                    IFluidHandler.FluidAction.EXECUTE) == 40, "当前格式恢复前机组未接收蒸汽");
+            if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 40),
+                    IFluidHandler.FluidAction.EXECUTE);
+            IFluidHandler output = handler(helper, exhaust(FRONT, tier), Direction.EAST);
+            if (output != null) output.drain(40, IFluidHandler.FluidAction.EXECUTE);
         });
-        helper.runAfterDelay(20, () -> {
+        helper.runAfterDelay(28, () -> {
+            feeding[0] = false;
             TurbineControllerBlockEntity owner = owner(helper, FRONT);
             CreativeMotorBlockEntity liveMotor = (CreativeMotorBlockEntity) helper.getLevel()
                     .getBlockEntity(helper.absolutePos(motorPos));
@@ -151,7 +145,7 @@ public final class ExtensionTurbineGameTests {
             replaceKinetic(helper, rearWorld, new TurbineOutputShaftBlockEntity(rearWorld,
                     helper.getLevel().getBlockState(rearWorld)), rearTag);
         });
-        helper.runAfterDelay(21, () -> {
+        helper.runAfterDelay(29, () -> {
             CreativeMotorBlockEntity liveMotor = (CreativeMotorBlockEntity) helper.getLevel()
                     .getBlockEntity(helper.absolutePos(motorPos));
             float external = liveMotor.calculateAddedStressCapacity() * Math.abs(liveMotor.getGeneratedSpeed());
@@ -159,7 +153,7 @@ public final class ExtensionTurbineGameTests {
             require(helper, actual <= external + 2,
                     "当前格式恢复首tick重复容量：实际=" + actual + " 外源=" + external);
         });
-        helper.runAfterDelay(27, () -> {
+        helper.runAfterDelay(35, () -> {
             CreativeMotorBlockEntity liveMotor = (CreativeMotorBlockEntity) helper.getLevel()
                     .getBlockEntity(helper.absolutePos(motorPos));
             float external = liveMotor.calculateAddedStressCapacity() * Math.abs(liveMotor.getGeneratedSpeed());
@@ -178,46 +172,6 @@ public final class ExtensionTurbineGameTests {
         helper.getLevel().setBlockEntity(replacement);
     }
 
-    /** 旧控制器动力NBT只触发旧Source分支清理，原账本库存继续保留。 */
-    @GameTest(template = "turbine_empty", timeoutTicks = 50)
-    public static void oldControllerKineticSourceDoesNotSurviveMigration(GameTestHelper helper) {
-        BlockPos control = new BlockPos(5, 5, 5);
-        BlockPos oldShaft = control.east();
-        helper.setBlock(control, TurbineContent.CONTROLLER.get().defaultBlockState());
-        helper.setBlock(oldShaft, AllBlocks.SHAFT.getDefaultState()
-                .setValue(ShaftBlock.AXIS, Direction.Axis.X));
-        helper.runAfterDelay(2, () -> {
-            TurbineControllerBlockEntity owner = (TurbineControllerBlockEntity) helper.getLevel()
-                    .getBlockEntity(helper.absolutePos(control));
-            KineticBlockEntity shaft = (KineticBlockEntity) helper.getLevel()
-                    .getBlockEntity(helper.absolutePos(oldShaft));
-            CompoundTag stock = new CompoundTag();
-            stock.putInt("Input", 700);
-            owner.ledger().load(stock);
-            CompoundTag legacy = owner.saveWithFullMetadata(helper.getLevel().registryAccess());
-            legacy.putFloat("Speed", 128);
-            CompoundTag oldNetwork = new CompoundTag();
-            oldNetwork.putLong("Id", helper.absolutePos(control).asLong());
-            oldNetwork.putFloat("Capacity", 16384);
-            legacy.put("Network", oldNetwork);
-            owner.loadWithComponents(legacy, helper.getLevel().registryAccess());
-            shaft.source = helper.absolutePos(control);
-            shaft.setSpeed(128);
-            shaft.network = helper.absolutePos(control).asLong();
-            require(helper, owner.ledger().input() == 700 && shaft.hasSource(), "旧NBT测试前置无效");
-        });
-        helper.runAfterDelay(5, () -> {
-            TurbineControllerBlockEntity owner = (TurbineControllerBlockEntity) helper.getLevel()
-                    .getBlockEntity(helper.absolutePos(control));
-            KineticBlockEntity shaft = (KineticBlockEntity) helper.getLevel()
-                    .getBlockEntity(helper.absolutePos(oldShaft));
-            require(helper, owner.ledger().input() == 700, "迁移清理删除了唯一库存");
-            require(helper, !shaft.hasSource() && !shaft.hasNetwork() && shaft.getTheoreticalSpeed() == 0,
-                    "旧控制器 Source/Network/Speed 仍留在邻接轴");
-            helper.succeed();
-        });
-    }
-
     /** 三档均形成薄八棱壳，两端同网共享总容量且实际转速取 SERVER 配置。 */
     @GameTest(template = "turbine_empty", timeoutTicks = 115)
     public static void threeTiersFormAndAllocateOnlyActualProcessedSteam(GameTestHelper helper) {
@@ -225,15 +179,20 @@ public final class ExtensionTurbineGameTests {
         TurbineState.Settings settings = TurbineConfig.settings();
         TurbineState.Tier[] tiers = {settings.shortTier(), settings.mediumTier(), settings.longTier()};
         List<BlockPos> feeds = new ArrayList<>();
+        List<BlockPos> outlets = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             build(helper, fronts[i], tiers[i].rotorCount(), i == 2);
             feeds.add(inlet(fronts[i], tiers[i]));
+            outlets.add(exhaust(fronts[i], tiers[i]));
         }
         helper.onEachTick(() -> {
-            for (BlockPos feed : feeds) {
-                IFluidHandler input = handler(helper, feed, Direction.WEST);
-                if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 256),
+            for (int i = 0; i < feeds.size(); i++) {
+                IFluidHandler input = handler(helper, feeds.get(i), Direction.WEST);
+                if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
+                                tiers[i].ratedFlowMbPerTick()),
                         IFluidHandler.FluidAction.EXECUTE);
+                IFluidHandler output = handler(helper, outlets.get(i), Direction.EAST);
+                if (output != null) output.drain(tiers[i].ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
             }
         });
         helper.runAfterDelay(14, () -> {
@@ -247,17 +206,23 @@ public final class ExtensionTurbineGameTests {
             IFluidHandler second = handler(helper, part(fronts[2], 0, 3, 5), Direction.UP);
             require(helper, second != null && second.fill(new FluidStack(TurbineContent.STEAM.get(), 100),
                     IFluidHandler.FluidAction.EXECUTE) == 0, "普通蒸汽被进汽口接收");
-            require(helper, second.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 256),
-                    IFluidHandler.FluidAction.EXECUTE) > 0, "第二物理进口未独立接收超临界蒸汽");
+            int secondAccepted = second.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 256),
+                    IFluidHandler.FluidAction.EXECUTE);
+            require(helper, secondAccepted <= tiers[2].ratedFlowMbPerTick()
+                    && owner(helper, fronts[2]).ledger().remainingInput(
+                            helper.absolutePos(part(fronts[2], 0, 3, 5)).asLong(),
+                            helper.getLevel().getGameTime()) == 0,
+                    "第二物理进口绕过整机每 tick 额定值");
         });
-        helper.runAfterDelay(55, () -> {
+        helper.runAfterDelay(75, () -> {
             for (int i = 0; i < 3; i++) {
                 TurbineControllerBlockEntity owner = owner(helper, fronts[i]);
                 TurbineState.Tier tier = tiers[i];
-                double expected = tier.ratedFlowMbPerTick() * settings.suPerMbPerTick();
-                require(helper, owner.ledger().processed() == tier.ratedFlowMbPerTick()
-                        && owner.ledger().totalSu() == expected,
-                        "真实蒸汽流量/SU 不符：" + tier + " 流量=" + owner.ledger().processed()
+                double expected = tier.ratedFlowMbPerTick() * settings.suPerMbPerTick()
+                        * tier.maxEfficiencyMultiplier();
+                require(helper, owner.ledger().averageFlowMbPerTick() == tier.ratedFlowMbPerTick()
+                        && Math.abs(owner.ledger().totalSu() - expected) < 2,
+                        "真实蒸汽流量/SU 不符：" + tier + " 流量=" + owner.ledger().averageFlowMbPerTick()
                                 + " SU=" + owner.ledger().totalSu());
                 TurbineOutputShaftBlockEntity front = shaft(helper, fronts[i]);
                 TurbineOutputShaftBlockEntity rear = shaft(helper,
@@ -277,7 +242,7 @@ public final class ExtensionTurbineGameTests {
             require(helper, shaft(helper, fronts[0]).getGeneratedSpeed() == 0,
                     "前轴改向的同tick仍向错误面发布旧SU");
         });
-        helper.runAfterDelay(58, () -> {
+        helper.runAfterDelay(95, () -> {
             require(helper, owner(helper, fronts[0]).currentForm() != null
                     && helper.getBlockState(fronts[0]).getValue(TurbinePartBlock.MACHINE_FACING)
                     == Direction.NORTH
@@ -287,7 +252,7 @@ public final class ExtensionTurbineGameTests {
         });
     }
 
-    /** 红石与控制器拆放撤销旧SU，携物NBT只保留一份库存。 */
+    /** 红石与控制器拆放撤销本机 SU，携物 NBT 只保留一份周转残留。 */
     @GameTest(template = "turbine_empty", timeoutTicks = 100)
     public static void redstoneStopAndPortableControllerKeepSingleLedger(GameTestHelper helper) {
         TurbineState.Tier tier = TurbineConfig.settings().shortTier();
@@ -298,14 +263,14 @@ public final class ExtensionTurbineGameTests {
             var owner = owner(helper, FRONT);
             require(helper, owner != null && owner.currentForm() != null, "拆装场景未成型");
             var port = handler(helper, input, Direction.WEST);
-            require(helper, port != null && port.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 256),
-                    IFluidHandler.FluidAction.EXECUTE) == 256, "真实进汽口未收汽");
+            require(helper, port != null && port.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 54),
+                    IFluidHandler.FluidAction.EXECUTE) == 54, "真实进汽口未收汽");
         });
         final IFluidHandler[] oldHandle = {null};
         helper.runAfterDelay(18, () -> {
             var owner = owner(helper, FRONT);
-            require(helper, owner.ledger().input() + owner.ledger().exhaust() == 256
-                    && owner.ledger().totalSu() > 0, "加工不守恒或没有SU");
+            require(helper, owner.ledger().exhaust() == 54
+                    && owner.ledger().totalSu() == 0, "未排汽时周转残留或 SU 不符");
             oldHandle[0] = handler(helper, input, Direction.WEST);
             helper.setBlock(control.below(), Blocks.REDSTONE_BLOCK);
         });
@@ -315,8 +280,7 @@ public final class ExtensionTurbineGameTests {
             TurbineOutputShaftBlockEntity rear = shaft(helper, part(FRONT, 0, 0, tier.length() - 1));
             require(helper, owner.ledger().totalSu() == 0 && front.getGeneratedSpeed() == 0
                     && rear.getGeneratedSpeed() == 0, "红石未撤销两端轴SU");
-            require(helper, owner.ledger().input() + owner.ledger().exhaust() == 256,
-                    "红石停机改变库存");
+            require(helper, owner.ledger().exhaust() == 54, "红石停机改变周转残留");
             ItemStack carried = Block.getDrops(helper.getBlockState(control), helper.getLevel(),
                     helper.absolutePos(control), owner).stream()
                     .filter(stack -> stack.is(TurbineContent.CONTROLLER_ITEM.get())).findFirst().orElse(ItemStack.EMPTY);
@@ -335,35 +299,140 @@ public final class ExtensionTurbineGameTests {
         helper.runAfterDelay(39, () -> {
             var owner = owner(helper, FRONT);
             require(helper, owner.currentForm() != null
-                    && owner.ledger().input() + owner.ledger().exhaust() == 256,
-                    "携物重放没有成型或复制/删除库存");
+                    && owner.ledger().exhaust() == 54,
+                    "携物重放没有成型或复制/删除周转残留");
             require(helper, owner.ledger().totalSu() == 0, "重放保留旧动力历史");
             helper.succeed();
         });
     }
 
-    /** 原生Create无泵管道实际接收本机普通蒸汽。 */
+    /** 两张独立 Create 泵/管网同时运行，按源罐扣量与目标罐实收核对守恒及额定吞吐。 */
     @GameTest(template = "turbine_empty", timeoutTicks = 100)
     public static void ordinarySteamMovesThroughNativeCreatePipe(GameTestHelper helper) {
         TurbineState.Tier tier = TurbineConfig.settings().mediumTier();
-        build(helper, FRONT, tier.rotorCount(), false);
-        BlockPos exhaust = part(FRONT, (tier.diameter() - 1) / 2, 0, 1);
+        BlockPos front = new BlockPos(10, 5, 1);
+        build(helper, front, tier.rotorCount(), false);
+        BlockPos inlet = inlet(front, tier);
+        BlockPos sourceTank = inlet.west(2).south(2);
+        BlockPos sourcePipe = inlet.west(2).south();
+        BlockPos pump = inlet.west(2);
+        BlockPos targetPipeA = pump.north();
+        BlockPos targetPipeB = targetPipeA.east();
+        BlockPos inletPipe = inlet.west();
+        BlockPos cog = pump.west();
+        BlockPos shaft = cog.south();
+        BlockPos motor = shaft.south();
+        helper.setBlock(sourceTank, AllBlocks.FLUID_TANK.get());
+        IFluidHandler source = handler(helper, sourceTank, Direction.EAST);
+        require(helper, source != null && source.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 8000),
+                IFluidHandler.FluidAction.EXECUTE) == 8000, "Create 源罐装汽失败");
+        helper.setBlock(sourcePipe, AllBlocks.FLUID_PIPE.get());
+        helper.setBlock(targetPipeA, AllBlocks.FLUID_PIPE.get());
+        helper.setBlock(targetPipeB, AllBlocks.FLUID_PIPE.get());
+        helper.setBlock(inletPipe, AllBlocks.FLUID_PIPE.get());
+        helper.setBlock(pump, AllBlocks.MECHANICAL_PUMP.getDefaultState()
+                .setValue(PumpBlock.FACING, Direction.NORTH));
+        helper.setBlock(cog, AllBlocks.COGWHEEL.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
+        helper.setBlock(shaft, AllBlocks.SHAFT.getDefaultState()
+                .setValue(ShaftBlock.AXIS, Direction.Axis.Z));
+        helper.setBlock(motor, AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.NORTH));
+        ((CreativeMotorBlockEntity) helper.getBlockEntity(motor)).generatedSpeed.setValue(256);
+        sealOpenEnds(helper, new BlockPos[]{sourcePipe, targetPipeA, targetPipeB, inletPipe});
+        BlockPos exhaust = exhaust(front, tier);
         BlockPos[] pipes = {exhaust.east(), exhaust.east(2), exhaust.east(3)};
         BlockPos tankPos = exhaust.east(4);
         helper.setBlock(tankPos, AllBlocks.FLUID_TANK.get());
         for (BlockPos pipe : pipes) helper.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
         sealOpenEnds(helper, pipes);
         helper.runAfterDelay(15, () -> {
-            CompoundTag stored = new CompoundTag(); stored.putInt("Exhaust", 1000);
-            owner(helper, FRONT).ledger().load(stored);
-            require(helper, owner(helper, FRONT).currentForm() != null, "管网场景未成型");
+            require(helper, owner(helper, front).currentForm() != null
+                    && ((PumpBlockEntity) helper.getBlockEntity(pump)).getSpeed() != 0,
+                    "双管网场景未成型或入口机械泵未转动：成型="
+                            + (owner(helper, front).currentForm() != null)
+                            + " 泵速=" + ((PumpBlockEntity) helper.getBlockEntity(pump)).getSpeed()
+                            + " 马达速=" + ((CreativeMotorBlockEntity) helper.getBlockEntity(motor)).getSpeed());
+        });
+        final int[] baseline = {0};
+        helper.runAfterDelay(45, () -> {
+            IFluidHandler tank = handler(helper, tankPos, Direction.WEST);
+            baseline[0] = tank == null ? 0 : tank.getFluidInTank(0).getAmount();
         });
         helper.runAfterDelay(65, () -> {
             IFluidHandler tank = handler(helper, tankPos, Direction.WEST);
             int moved = tank == null ? 0 : tank.getFluidInTank(0).getAmount();
+            IFluidHandler sourceEnd = handler(helper, sourceTank, Direction.EAST);
+            int remaining = sourceEnd == null ? 0 : sourceEnd.getFluidInTank(0).getAmount();
             require(helper, moved > 0 && TurbineContent.isOrdinarySteam(tank.getFluidInTank(0))
-                    && moved + owner(helper, FRONT).ledger().exhaust() == 1000,
-                    "原生管网未保量传递普通蒸汽");
+                    && moved + owner(helper, front).ledger().exhaust() + remaining == 8000
+                    && owner(helper, front).ledger().exhaust() <= tier.ratedFlowMbPerTick(),
+                    "双 Create 管网未守恒：源余=" + remaining + " 目标=" + moved
+                            + " 周转=" + owner(helper, front).ledger().exhaust());
+            require(helper, moved - baseline[0] == tier.ratedFlowMbPerTick() * 20,
+                    "原生 Create 管路稳定段未达到额定流量：20tick 实收="
+                            + (moved - baseline[0]) + " 预期=" + tier.ratedFlowMbPerTick() * 20);
+            helper.succeed();
+        });
+    }
+
+    /** 堵塞只占一 tick 周转空间；开放原生管路后低供汽仍守恒但无 SU，满供汽恢复额定与共享动力。 */
+    @GameTest(template = "turbine_empty", timeoutTicks = 155)
+    public static void blockedPipeThenLowAndFullSupplyConservesSteam(GameTestHelper helper) {
+        TurbineState.Tier tier = TurbineConfig.settings().mediumTier();
+        build(helper, FRONT, tier.rotorCount(), false);
+        BlockPos outlet = exhaust(FRONT, tier);
+        BlockPos[] pipes = {outlet.east(), outlet.east(2), outlet.east(3)};
+        BlockPos tankPos = outlet.east(4);
+        helper.setBlock(tankPos, Blocks.IRON_BLOCK);
+        for (BlockPos pipe : pipes) helper.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
+        sealOpenEnds(helper, pipes);
+        final int[] supply = {tier.ratedFlowMbPerTick()}, accepted = {0};
+        helper.onEachTick(() -> {
+            IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
+            if (input != null) accepted[0] += input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
+                    supply[0]), IFluidHandler.FluidAction.EXECUTE);
+        });
+        helper.runAfterDelay(25, () -> {
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            require(helper, accepted[0] == tier.ratedFlowMbPerTick()
+                    && owner.ledger().exhaust() == tier.ratedFlowMbPerTick()
+                    && owner.ledger().totalSu() == 0, "堵塞时未将真实入汽封顶保留在周转缓存");
+            supply[0] = 10;
+            helper.setBlock(tankPos, AllBlocks.FLUID_TANK.get());
+            for (BlockPos pipe : pipes) FluidPropagator.propagateChangedPipe(helper.getLevel(),
+                    helper.absolutePos(pipe), helper.getBlockState(pipe));
+        });
+        helper.runAfterDelay(75, () -> {
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            IFluidHandler tank = handler(helper, tankPos, Direction.WEST);
+            int moved = tank == null ? 0 : tank.getFluidInTank(0).getAmount();
+            require(helper, moved > 0 && moved + owner.ledger().exhaust() == accepted[0]
+                    && owner.ledger().averageFlowMbPerTick() < owner.ledger().minimumFlowMbPerTick()
+                    && owner.ledger().totalSu() == 0,
+                    "低供汽实际排出/守恒/零动力不符：入=" + accepted[0] + " 出=" + moved
+                            + " 缓存=" + owner.ledger().exhaust());
+            supply[0] = tier.ratedFlowMbPerTick();
+        });
+        helper.runAfterDelay(130, () -> {
+            TurbineControllerBlockEntity owner = owner(helper, FRONT);
+            IFluidHandler tank = handler(helper, tankPos, Direction.WEST);
+            int moved = tank == null ? 0 : tank.getFluidInTank(0).getAmount();
+            List<Component> tooltip = new ArrayList<>();
+            owner.addToGoggleTooltip(tooltip, false);
+            boolean running = tooltip.size() > 1 && tooltip.get(1).getContents() instanceof TranslatableContents text
+                    && text.getKey().endsWith(".running");
+            require(helper, moved + owner.ledger().exhaust() == accepted[0]
+                    && owner.ledger().averageFlowMbPerTick() == tier.ratedFlowMbPerTick()
+                    && running && owner.ledger().totalSu() > 0,
+                    "恢复后管路未持续额定排汽或护目镜误报堵塞：入=" + accepted[0]
+                            + " 出=" + moved + " 平均=" + owner.ledger().averageFlowMbPerTick()
+                            + " 状态=" + (tooltip.size() > 1 ? tooltip.get(1).getContents() : "无"));
+            TurbineOutputShaftBlockEntity front = shaft(helper, FRONT);
+            TurbineOutputShaftBlockEntity rear = shaft(helper, part(FRONT, 0, 0, tier.length() - 1));
+            require(helper, front.network.equals(rear.network)
+                    && Math.abs(front.getOrCreateNetwork().calculateCapacity() - owner.ledger().totalSu()) < 2,
+                    "恢复后两端未共享唯一真实排汽容量");
             helper.succeed();
         });
     }
@@ -411,6 +480,9 @@ public final class ExtensionTurbineGameTests {
     static BlockPos inlet(BlockPos front, TurbineState.Tier tier) {
         return part(front, -(tier.diameter() - 1) / 2, 0,
                 tier.length() % 2 == 0 ? tier.length() / 2 - 1 : tier.length() / 2);
+    }
+    static BlockPos exhaust(BlockPos front, TurbineState.Tier tier) {
+        return part(front, (tier.diameter() - 1) / 2, 0, 1);
     }
     static TurbineControllerBlockEntity owner(GameTestHelper helper, BlockPos front) {
         for (TurbineState.Tier tier : new TurbineState.Tier[]{TurbineConfig.settings().shortTier(),

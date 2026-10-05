@@ -28,17 +28,19 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 /**
- * 汽轮机唯一服务端 owner，持有两份 mB 库存、成型关系与总 SU；两端轴及端口按有效结构查询机主。
- * tick 先核验全结构和当前配置，再成交流体；前轴读取唯一总 SU 并发布到两端贯通的 Create 网络，客户端只接收显示快照。
+ * 汽轮机唯一服务端 owner，持有一份 mB 排汽周转量、成型关系与总 SU。
+ * tick 先核验全结构与配置，随后允许入口和出口独立成交；只有出口真实排汽计入窗口。
+ * 前轴读取唯一总 SU 并发布到两端贯通的 Create 网络，客户端只接收显示快照。
  */
 public final class TurbineControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
     private final TurbineState ledger = new TurbineState();
     private final TurbineSteamPressure steamPressure;
     private TurbineStructure.Form activeForm;
-    private int epoch, lastLength, lastDiameter, viewInput, viewExhaust, viewInputCapacity, viewExhaustCapacity;
+    private int epoch, lastLength, lastDiameter, viewExhaust, viewExhaustCapacity;
     private BlockPos lastFront;
     private Direction lastFacing = Direction.NORTH;
     private int viewProcessed, viewRatedFlow, viewRpm;
+    private float viewAverageFlow, viewMinimumFlow, viewEfficiency;
     private long nextProbeTick;
     private boolean legacyKineticMigrationPending;
     private float viewTotalSu;
@@ -50,7 +52,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     }
 
     @Override public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        // 侧控制器不提供 Create 动力，运行许可及库存只由服务端账本决定。
+        // 侧控制器不提供 Create 动力，运行许可及周转量只由服务端账本决定。
     }
 
     public TurbineState ledger() { return ledger; }
@@ -165,14 +167,16 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         if (redstone) steamPressure.release();
         else {
             pushAdjacentSteam(found, now);
-            steamPressure.refresh(level, found, ledger.exhaust() > 0,
-                    settings.exhaustPortFlowMbPerTick());
+            // 空周转量时也维持排汽侧压力；否则每 tick 清空后会反复预热管网，持续供汽无法达到额定流量。
+            steamPressure.refresh(level, found, settings.exhaustPortFlowMbPerTick());
         }
-        status = redstone ? "redstone" : ledger.processed() > 0 ? "running"
-                : ledger.exhaust() >= ledger.exhaustCapacity() ? "exhaust_full" : "no_steam";
+        status = redstone ? "redstone" : ledger.exhaust() >= ledger.exhaustCapacity()
+                && !ledger.hasRecentOutput(now) ? "exhaust_full"
+                : ledger.efficiencyMultiplier() > 0 ? "running"
+                : ledger.averageFlowMbPerTick() > 0 ? "low_flow" : "no_steam";
         refreshView();
         setChanged();
-        if (changedForm || now % 5 == 0 || ledger.processed() > 0) sendData();
+        if (changedForm || now % 5 == 0 || ledger.processed(now) > 0) sendData();
     }
 
     /**
@@ -325,7 +329,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         return live() && (input ? activeForm.inlets() : activeForm.exhausts()).contains(port)
                 && level.getBlockState(port).is(input ? TurbineContent.INLET.get() : TurbineContent.EXHAUST.get());
     }
-    /** 仅服务端完整机组可发布总 SU；红石停机立即清零，断汽后按 40 tick 历史衰减，外源仍可经过贯通轴传动。 */
+    /** 仅服务端完整机组可发布总 SU；红石立即清零，断汽按配置窗口衰减，外源仍可经过贯通轴传动。 */
     public float totalSu() { return live() && !level.hasNeighborSignal(worldPosition) ? (float) ledger.totalSu() : 0; }
     public float signedRpm() { return live() ? ledger.rpm() : 0; }
 
@@ -344,17 +348,18 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         }
         private boolean valid() {
             return issuedEpoch == epoch && validPort(part, input)
+                    && !level.hasNeighborSignal(worldPosition)
                     && level.getBlockState(part).getValue(TurbinePartBlock.OUTWARD) == side;
         }
         @Override public int getTanks() { return valid() ? 1 : 0; }
         @Override public FluidStack getFluidInTank(int tank) {
             if (!valid() || tank != 0) return FluidStack.EMPTY;
-            int amount = input ? ledger.input() : ledger.exhaust();
+            int amount = input ? 0 : ledger.exhaust();
             return amount <= 0 ? FluidStack.EMPTY : new FluidStack(input
                     ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get(), amount);
         }
         @Override public int getTankCapacity(int tank) {
-            return valid() && tank == 0 ? input ? ledger.inletCapacity() : ledger.exhaustCapacity() : 0;
+            return valid() && tank == 0 ? ledger.exhaustCapacity() : 0;
         }
         @Override public boolean isFluidValid(int tank, FluidStack stack) {
             return valid() && input && tank == 0 && TurbineContent.isSupercritical(stack);
@@ -376,7 +381,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         }
     }
 
-    /** 非管道容器没有主动抽取机制；执行目标 fill 后按实际接收量扣同一物理口预算。 */
+    /** 非管道容器没有主动抽取机制；目标真实接收后才扣排汽量并计入窗口。 */
     private void pushAdjacentSteam(TurbineStructure.Form form, long now) {
         for (BlockPos port : form.exhausts()) {
             int available = ledger.remainingExhaust(port.asLong(), now);
@@ -412,9 +417,13 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
 
     private void changed() { setChanged(); refreshView(); sendData(); }
     private void refreshView() {
-        viewInput = ledger.input(); viewExhaust = ledger.exhaust();
-        viewInputCapacity = ledger.inletCapacity(); viewExhaustCapacity = ledger.exhaustCapacity();
-        viewProcessed = ledger.processed(); viewRatedFlow = ledger.ratedFlowMbPerTick(); viewRpm = ledger.rpm();
+        viewExhaust = ledger.exhaust();
+        viewExhaustCapacity = ledger.exhaustCapacity();
+        viewProcessed = ledger.processed(level.getGameTime());
+        viewRatedFlow = ledger.ratedFlowMbPerTick(); viewRpm = ledger.rpm();
+        viewAverageFlow = (float) ledger.averageFlowMbPerTick();
+        viewMinimumFlow = (float) ledger.minimumFlowMbPerTick();
+        viewEfficiency = (float) ledger.efficiencyMultiplier();
         viewTotalSu = (float) ledger.totalSu();
     }
 
@@ -425,7 +434,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     }
     public void loadPortableData(CompoundTag tag) {
         ledger.load(tag.getCompound("Ledger"));
-        // 搬运只携库存与成交时间，不携旧机器坐标/外观归属。
+        // 搬运只携周转残留与成交时间，不携旧机器坐标/外观归属。
         lastLength = 0;
         lastDiameter = 0;
         lastFront = null;
@@ -453,9 +462,11 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         }
         CompoundTag view = new CompoundTag();
         view.putString("Status", status); view.putInt("Length", lastLength);
-        view.putInt("Input", viewInput); view.putInt("Exhaust", viewExhaust);
-        view.putInt("InputCapacity", viewInputCapacity); view.putInt("ExhaustCapacity", viewExhaustCapacity);
+        view.putInt("Exhaust", viewExhaust); view.putInt("ExhaustCapacity", viewExhaustCapacity);
         view.putInt("Processed", viewProcessed); view.putInt("RatedFlow", viewRatedFlow); view.putInt("Rpm", viewRpm);
+        view.putFloat("AverageFlow", viewAverageFlow);
+        view.putFloat("MinimumFlow", viewMinimumFlow);
+        view.putFloat("Efficiency", viewEfficiency);
         view.putFloat("TotalSu", viewTotalSu);
         tag.put("TurbineView", view);
     }
@@ -475,9 +486,11 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         if (tag.contains("TurbineView")) {
             CompoundTag view = tag.getCompound("TurbineView");
             status = view.getString("Status"); lastLength = view.getInt("Length");
-            viewInput = view.getInt("Input"); viewExhaust = view.getInt("Exhaust");
-            viewInputCapacity = view.getInt("InputCapacity"); viewExhaustCapacity = view.getInt("ExhaustCapacity");
+            viewExhaust = view.getInt("Exhaust"); viewExhaustCapacity = view.getInt("ExhaustCapacity");
             viewProcessed = view.getInt("Processed"); viewRatedFlow = view.getInt("RatedFlow"); viewRpm = view.getInt("Rpm");
+            viewAverageFlow = view.getFloat("AverageFlow");
+            viewMinimumFlow = view.getFloat("MinimumFlow");
+            viewEfficiency = view.getFloat("Efficiency");
             viewTotalSu = view.getFloat("TotalSu");
         }
     }
@@ -509,8 +522,11 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         tooltip.add(Component.translatable("block.create_nuclear_industry.turbine_controller"));
         tooltip.add(Component.translatable(key + "state." + status));
         tooltip.add(Component.translatable(key + "rotors_rpm", Math.max(0, lastLength - 2), viewRpm));
-        tooltip.add(Component.translatable(key + "flow", viewProcessed, viewRatedFlow));
-        tooltip.add(Component.translatable(key + "tanks", viewInput, viewInputCapacity, viewExhaust, viewExhaustCapacity));
+        tooltip.add(Component.translatable(key + "flow", String.format(java.util.Locale.ROOT, "%.2f", viewAverageFlow), viewRatedFlow));
+        tooltip.add(Component.translatable(key + "efficiency",
+                String.format(java.util.Locale.ROOT, "%.3f", viewEfficiency),
+                String.format(java.util.Locale.ROOT, "%.2f", viewMinimumFlow)));
+        tooltip.add(Component.translatable(key + "turnover", viewExhaust, viewExhaustCapacity));
         tooltip.add(Component.translatable(key + "su", (long)viewTotalSu));
         tooltip.add(Component.translatable(key + "hint"));
         return true;

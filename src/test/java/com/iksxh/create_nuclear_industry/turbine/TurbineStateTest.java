@@ -5,201 +5,163 @@ import static org.junit.jupiter.api.Assertions.*;
 import net.minecraft.nbt.CompoundTag;
 import org.junit.jupiter.api.Test;
 
-/** 仅验证纯账本的守恒、容量边界与历史预算；Create 双轴生命周期由 B/C 实机验证。 */
+/** 服务端纯账本的成交、守恒、同 tick 额度与效率曲线；真实 Create 管路另由 GameTest 验证。 */
 final class TurbineStateTest {
-    private static final long INLET_A = 11L, INLET_B = 12L, EXHAUST_A = 21L, EXHAUST_B = 22L;
+    private static final long IN_A = 11, IN_B = 12, OUT_A = 21, OUT_B = 22;
 
-    @Test void exactlyThreeDistinctBoundedTiersAndRuntimeCreateLimit() {
+    @Test void configuredTiersAndCrossFieldValidation() {
         var defaults = TurbineState.Settings.DEFAULT;
         assertTrue(defaults.valid(256));
-        assertFalse(defaults.valid(127));
-        assertEquals(5, defaults.shortTier().length());
-        assertEquals(8, defaults.mediumTier().length());
-        assertEquals(11, defaults.longTier().length());
-        assertNull(defaults.tierForRotors(4));
-        var repeated = new TurbineState.Settings(defaults.shortTier(),
-                new TurbineState.Tier(3, 108, 8000, 8000), defaults.longTier(),
-                128, 32768, 40, 256, 256, .5);
-        assertFalse(repeated.valid(256));
-        var faster = new TurbineState.Settings(defaults.shortTier(), defaults.mediumTier(),
-                defaults.longTier(), 512, 32768, 40, 256, 256, .5);
-        assertTrue(faster.valid(512));
-        assertFalse(faster.valid(256));
-        var invalidShare = new TurbineState.Settings(defaults.shortTier(), defaults.mediumTier(),
-                defaults.longTier(), 128, 32768, 40, 256, 256, Double.NaN);
-        assertFalse(invalidShare.valid(256));
+        assertFalse(defaults.valid(255));
+        assertEquals(54, defaults.shortTier().ratedFlowMbPerTick());
+        assertEquals(108, defaults.mediumTier().ratedFlowMbPerTick());
+        assertEquals(216, defaults.longTier().ratedFlowMbPerTick());
+        assertEquals(1.2, defaults.shortTier().maxEfficiencyMultiplier());
+        assertEquals(1.5, defaults.mediumTier().maxEfficiencyMultiplier());
+        assertEquals(1.8, defaults.longTier().maxEfficiencyMultiplier());
+        assertFalse(settings(defaults.shortTier(), 40, 1, 1.3, .3).valid(256));
+        assertFalse(settings(defaults.shortTier(), 40, 1, .5, 1).valid(256));
+        assertFalse(settings(defaults.shortTier(), 40, 0, .5, .3).valid(256));
     }
 
-    @Test void fullFortyTickWindowMatchesActualFlowAndSingleMillibucketBudget() {
-        var state = new TurbineState();
-        state.applySettings(TurbineState.Settings.DEFAULT, 3, 256);
-        for (int tick = 0; tick < 40; tick++) {
-            assertEquals(54, state.fillInput(INLET_A, 54, false, tick));
-            assertEquals(54, state.tick(tick, true));
-            assertEquals(0, state.tick(tick, true));
-        }
-        assertEquals(2160, state.exhaust());
-        assertEquals(1_769_472D, state.totalSu());
-        for (int tick = 40; tick < 80; tick++) state.tick(tick, true);
+    @Test void simulateAndAllPortsShareWholeMachineLimit() {
+        var state = ready(TurbineState.Settings.DEFAULT, 3);
+        assertEquals(54, state.fillInput(IN_A, 54, true, 1));
+        assertEquals(0, state.exhaust());
+        assertEquals(54, state.fillInput(IN_A, 54, false, 1));
+        assertEquals(0, state.fillInput(IN_B, 54, false, 1));
+        assertEquals(54, state.drainExhaust(OUT_A, 54, true, 1));
+        assertEquals(54, state.exhaust());
         assertEquals(0, state.totalSu());
+        assertEquals(54, state.drainExhaust(OUT_A, 54, false, 1));
+        assertEquals(0, state.drainExhaust(OUT_B, 54, false, 1));
+        assertEquals(0, state.fillInput(IN_B, 54, false, 1));
+        assertEquals(0, state.exhaust());
+        assertEquals(54, state.processedInWindow());
+    }
 
-        var tiny = new TurbineState();
-        var settings = smallSettings(new TurbineState.Tier(3, 1, 10, 10), 40);
-        tiny.applySettings(settings, 3, 256);
-        tiny.fillInput(INLET_A, 1, false, 0);
-        assertEquals(1, tiny.tick(0, true));
-        for (int tick = 1; tick < 40; tick++) {
-            tiny.tick(tick, true);
-            assertEquals(32768D / 40, tiny.totalSu());
+    @Test void thresholdEqualityMidpointAndFullFlowForEveryTier() {
+        var defaults = TurbineState.Settings.DEFAULT;
+        for (var tier : new TurbineState.Tier[]{defaults.shortTier(), defaults.mediumTier(), defaults.longTier()}) {
+            int rate = tier.ratedFlowMbPerTick();
+            var state = ready(defaults, tier.rotorCount());
+            for (int tick = 1; tick <= 40; tick++) move(state, rate, tick);
+            assertEquals(rate, state.averageFlowMbPerTick());
+            assertEquals(tier.maxEfficiencyMultiplier(), state.efficiencyMultiplier(), 1e-10);
+            assertEquals(rate * defaults.suPerMbPerTick() * tier.maxEfficiencyMultiplier(),
+                    state.totalSu(), 1e-6);
+            state.tick(41, true);
+            assertEquals(rate, state.averageFlowMbPerTick(),
+                    "控制器先于本 tick 排汽读取时不能稳定少算一个窗口样本");
+            assertEquals(rate, state.fillInput(IN_A, rate, false, 41));
+            assertEquals(rate, state.drainExhaust(OUT_A, rate, false, 41));
+            assertEquals(rate, state.averageFlowMbPerTick());
+
+            // 窗口总量可精确表达 0.30R，即使每 tick 交易是整数 mB。
+            state = ready(defaults, tier.rotorCount());
+            int belowTotal = (int) (rate * 40 * .3) - 1;
+            spread(state, belowTotal, rate, 40);
+            assertEquals(0, state.totalSu());
+            move(state, 1, 41);
+            assertEquals(0, state.totalSu());
+            state = ready(defaults, tier.rotorCount());
+            spread(state, (int) (rate * 40 * .3), rate, 40);
+            assertEquals(.5, state.efficiencyMultiplier(), 1e-10);
+            assertEquals(rate * .3 * defaults.suPerMbPerTick() * .5, state.totalSu(), 1e-6);
+
+            state = ready(defaults, tier.rotorCount());
+            spread(state, (int) (rate * 40 * .65), rate, 40);
+            assertEquals((.5 + tier.maxEfficiencyMultiplier()) / 2,
+                    state.efficiencyMultiplier(), 1e-10);
         }
-        tiny.tick(40, true);
-        assertEquals(0, tiny.totalSu());
     }
 
-    @Test void fullExhaustBlocksConversionWithoutConsumingInput() {
-        var state = new TurbineState();
-        state.applySettings(smallSettings(new TurbineState.Tier(3, 3, 10, 3), 4), 3, 256);
-        assertEquals(10, state.fillInput(INLET_A, 10, false, 0));
-        assertEquals(3, state.tick(0, true));
-        assertEquals(0, state.tick(1, true));
-        assertEquals(7, state.input());
-        assertEquals(3, state.exhaust());
-        assertEquals(2, state.drainExhaust(EXHAUST_A, 2, false, 1));
-        assertEquals(2, state.tick(2, true));
-        assertEquals(5, state.input());
-        assertEquals(3, state.exhaust());
+    @Test void configurableCurveAndWindow() {
+        var tier = new TurbineState.Tier(3, 20, 3, 2);
+        var state = ready(settings(tier, 10, 1, .4, .2), 3);
+        for (int tick = 1; tick <= 10; tick++) move(state, 4, tick);
+        assertEquals(.4, state.efficiencyMultiplier(), 1e-10);
+        for (int tick = 11; tick <= 20; tick++) move(state, 12, tick);
+        assertEquals(1.2, state.efficiencyMultiplier(), 1e-10);
+        assertEquals(12 * 32768 * 1.2, state.totalSu(), 1e-6);
     }
 
-    @Test void tankSmallerThanRatedFlowStillProcessesAvailableVolume() {
-        var tier = new TurbineState.Tier(3, 10, 3, 2);
-        var settings = smallSettings(tier, 4);
-        assertTrue(settings.valid(256));
-        var state = new TurbineState();
-        state.applySettings(settings, 3, 256);
-        assertTrue(state.canFormForNewTier(3));
-        assertEquals(3, state.fillInput(INLET_A, 10, false, 0));
-        assertEquals(2, state.tick(0, true));
-        assertEquals(1, state.input());
-        assertEquals(2, state.exhaust());
-        assertEquals(2, state.drainExhaust(EXHAUST_A, 2, false, 0));
-        assertEquals(1, state.tick(1, true));
-    }
-
-    @Test void eachPortHasIndependentBudgetSimulationIsPureAndExhaustPathsShareIt() {
-        var state = new TurbineState();
-        state.applySettings(TurbineState.Settings.DEFAULT, 3, 256);
-        assertEquals(256, state.fillInput(INLET_A, 1000, true, 10));
-        assertEquals(0, state.input());
-        assertEquals(256, state.fillInput(INLET_A, 1000, false, 10));
-        assertEquals(0, state.fillInput(INLET_A, 1, false, 10));
-        assertEquals(256, state.fillInput(INLET_B, 1000, false, 10));
-        var seed = state.save();
-        seed.putInt("Exhaust", 1000);
-        state.load(seed);
-        assertEquals(128, state.drainExhaust(EXHAUST_A, 128, true, 10));
-        assertEquals(128, state.drainExhaust(EXHAUST_A, 128, false, 10));
-        assertEquals(128, state.drainExhaust(EXHAUST_A, 256, false, 10));
-        assertEquals(0, state.drainExhaust(EXHAUST_A, 1, false, 10));
-        assertEquals(256, state.drainExhaust(EXHAUST_B, 256, false, 10));
-        var restored = new TurbineState();
-        restored.applySettings(TurbineState.Settings.DEFAULT, 3, 256);
+    @Test void blockedResidualRecoveryAndCurrentFormatSave() {
+        var state = ready(TurbineState.Settings.DEFAULT, 3);
+        assertEquals(54, state.fillInput(IN_A, 54, false, 1));
+        for (int tick = 2; tick <= 50; tick++) {
+            state.tick(tick, true);
+            assertEquals(0, state.fillInput(IN_B, 54, false, tick));
+        }
+        assertEquals(54, state.exhaust());
+        assertEquals(0, state.totalSu());
+        var restored = ready(TurbineState.Settings.DEFAULT, 3);
         restored.load(state.save());
-        assertEquals(0, restored.drainExhaust(EXHAUST_A, 1, false, 10));
-        assertEquals(256, restored.remainingExhaust(EXHAUST_A, 11));
-    }
-
-    @Test void lowerCapacityKeepsOldInventoryAndExistingMachineCanProcessAfterDrain() {
-        var state = new TurbineState();
-        state.applySettings(TurbineState.Settings.DEFAULT, 3, 256);
-        var saved = new CompoundTag();
-        saved.putInt("Input", 100);
-        saved.putInt("Exhaust", 200);
-        state.load(saved);
-        var lower = smallSettings(new TurbineState.Tier(3, 10, 50, 100), 40);
-        state.applySettings(lower, 3, 256);
-        assertFalse(state.canFormForNewTier(3));
-        assertEquals(100, state.input());
-        assertEquals(200, state.exhaust());
-        assertEquals(0, state.fillInput(INLET_A, 1, false, 0));
-        assertEquals(0, state.tick(0, true));
-        assertEquals(120, state.drainExhaust(EXHAUST_A, 120, false, 0));
-        assertEquals(10, state.tick(1, true));
-        assertEquals(90, state.input());
-        assertEquals(90, state.exhaust());
-        var restored = new TurbineState();
-        restored.applySettings(lower, 3, 256);
-        restored.load(state.save());
-        assertEquals(90, restored.input());
-        assertEquals(90, restored.exhaust());
+        assertEquals(54, restored.exhaust());
         assertEquals(0, restored.totalSu());
+        assertEquals(54, restored.drainExhaust(OUT_A, 54, false, 51));
+        assertEquals(54, restored.fillInput(IN_B, 54, false, 51));
+        assertEquals(54, restored.exhaust());
+        assertEquals(0, restored.drainExhaust(OUT_B, 1, false, 51));
     }
 
-    @Test void stopAndTimeJumpClearHistoryWithoutMakingOfflinePower() {
-        var state = new TurbineState();
-        state.applySettings(smallSettings(new TurbineState.Tier(3, 1, 10, 10), 4), 3, 256);
-        state.fillInput(INLET_A, 2, false, 1);
-        state.tick(1, true);
+    @Test void outputBeforeControllerTickAndCapacityReductionPreserveAccounting() {
+        var defaults = TurbineState.Settings.DEFAULT;
+        var state = ready(settings(defaults.shortTier(), 1, 2, .5, .3), 3);
+        assertEquals(54, state.fillInput(IN_A, 54, false, 7));
+        assertEquals(54, state.drainExhaust(OUT_A, 54, false, 7));
+        assertEquals(54, state.tick(7, true));
+        assertEquals(54, state.processedInWindow());
+        assertEquals(54, state.fillInput(IN_A, 54, false, 8));
+        assertEquals(54, state.fillInput(IN_A, 54, false, 9));
+        assertEquals(108, state.exhaust());
+        state.applySettings(defaults, 3, 256);
+        assertEquals(0, state.fillInput(IN_B, 1, false, 10));
+        assertEquals(108, state.exhaust());
+        assertEquals(54, state.drainExhaust(OUT_B, 54, false, 10));
+        assertEquals(54, state.exhaust());
+    }
+
+    @Test void stopAndMissingTicksRemoveOnlyPower() {
+        var state = ready(TurbineState.Settings.DEFAULT, 3);
+        for (int tick = 1; tick <= 40; tick++) move(state, 54, tick);
         assertTrue(state.totalSu() > 0);
         state.stop();
         assertEquals(0, state.totalSu());
-        state.tick(2, false);
+        assertEquals(54, state.fillInput(IN_A, 54, false, 41));
+        state.tick(41, false);
+        assertEquals(54, state.exhaust());
         assertEquals(0, state.totalSu());
-        state.tick(1000, true);
-        assertEquals(1, state.processed());
-        assertEquals(32768D / 4, state.totalSu());
-        state.tick(10, true);
-        assertEquals(0, state.totalSu());
-        state.tick(10, true);
-        assertEquals(0, state.totalSu());
-    }
-
-    @Test void coefficientChangeClearsOldPowerAndLegacyFrontShareDoesNotChangeNewTotal() {
-        var state = new TurbineState();
-        var defaults = TurbineState.Settings.DEFAULT;
-        state.applySettings(defaults, 3, 256);
-        state.fillInput(INLET_A, 54, false, 0);
-        state.tick(0, true);
-        assertTrue(state.totalSu() > 0);
-        var changed = new TurbineState.Settings(defaults.shortTier(), defaults.mediumTier(),
-                defaults.longTier(), 128, 65536, 40, 256, 256, .25);
-        state.applySettings(changed, 3, 256);
+        state.tick(100, true);
         assertEquals(0, state.totalSu());
         assertEquals(54, state.exhaust());
-        state.fillInput(INLET_A, 54, false, 1);
-        state.tick(1, true);
-        double unchanged = state.totalSu();
-        var legacyKeyChanged = new TurbineState.Settings(defaults.shortTier(), defaults.mediumTier(),
-                defaults.longTier(), 128, 65536, 40, 256, 256, .75);
-        state.applySettings(legacyKeyChanged, 3, 256);
-        assertEquals(unchanged, state.totalSu());
-        var invalid = new TurbineState.Settings(defaults.shortTier(), defaults.mediumTier(),
-                defaults.longTier(), 512, 65536, 40, 256, 256, .25);
-        state.applySettings(invalid, 3, 256);
-        assertEquals(0, state.totalSu());
-        assertEquals(0, state.tick(2, true));
-        assertEquals(108, state.exhaust());
     }
 
-    @Test void portableRestoreCannotProcessTwiceInSameWorldTick() {
-        var settings = smallSettings(new TurbineState.Tier(3, 1, 10, 10), 4);
-        var first = new TurbineState();
-        first.applySettings(settings, 3, 256);
-        assertEquals(2, first.fillInput(INLET_A, 2, false, 7));
-        assertEquals(1, first.tick(7, true));
-        var restored = new TurbineState();
-        restored.applySettings(settings, 3, 256);
-        restored.load(first.save());
-        assertEquals(0, restored.totalSu());
-        assertEquals(0, restored.tick(7, true));
-        assertEquals(1, restored.input());
-        assertEquals(1, restored.exhaust());
-        assertEquals(1, restored.tick(8, true));
-        assertEquals(0, restored.input());
-        assertEquals(2, restored.exhaust());
+    private static TurbineState ready(TurbineState.Settings settings, int rotors) {
+        var state = new TurbineState();
+        state.applySettings(settings, rotors, 256);
+        return state;
     }
 
-    private static TurbineState.Settings smallSettings(TurbineState.Tier tier, int window) {
-        return new TurbineState.Settings(tier, new TurbineState.Tier(4, 2, 10, 10),
-                new TurbineState.Tier(5, 3, 10, 10), 128, 32768, window, 256, 256, .5);
+    private static void move(TurbineState state, int amount, int tick) {
+        state.tick(tick, true);
+        assertEquals(amount, state.fillInput(IN_A, amount, false, tick));
+        assertEquals(amount, state.drainExhaust(OUT_A, amount, false, tick));
+    }
+
+    private static void spread(TurbineState state, int total, int rate, int ticks) {
+        for (int tick = 1; tick <= ticks; tick++) {
+            int amount = Math.min(rate, total);
+            move(state, amount, tick);
+            total -= amount;
+        }
+        assertEquals(0, total);
+    }
+
+    private static TurbineState.Settings settings(TurbineState.Tier shortTier, int window,
+                                                  int turnover, double minimumMultiplier, double threshold) {
+        var defaults = TurbineState.Settings.DEFAULT;
+        return new TurbineState.Settings(shortTier, defaults.mediumTier(), defaults.longTier(), 256,
+                32768, window, 256, 256, turnover, minimumMultiplier, threshold, .5);
     }
 }

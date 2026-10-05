@@ -10,20 +10,28 @@ public final class TurbineConfig {
     public static final ModConfigSpec SPEC;
     private static final TierValues SHORT, MEDIUM, LONG;
     public static final ModConfigSpec.IntValue RPM, SMOOTHING_TICKS;
+    public static final ModConfigSpec.IntValue TURNOVER_TICKS;
     public static final ModConfigSpec.DoubleValue SU_PER_MB_PER_TICK, FRONT_SHARE;
+    public static final ModConfigSpec.DoubleValue MIN_EFFICIENCY_MULTIPLIER, MINIMUM_OPERATING_FLOW_RATIO;
     public static final ModConfigSpec.IntValue INLET_PORT_FLOW_MB_PER_TICK, EXHAUST_PORT_FLOW_MB_PER_TICK;
 
     static {
         var b = new ModConfigSpec.Builder();
-        SHORT = tier(b, "short", 3, 3, 54, 4000);
-        MEDIUM = tier(b, "medium", 6, 5, 108, 8000);
-        LONG = tier(b, "long", 9, 7, 162, 12000);
+        SHORT = tier(b, "short", 3, 3, 54, 1.2);
+        MEDIUM = tier(b, "medium", 6, 5, 108, 1.5);
+        LONG = tier(b, "long", 9, 7, 216, 1.8);
         RPM = b.comment("汽轮机两轴固定工作转速，单位 RPM；运行时还必须不超过当前 Create 服务端上限。")
                 .defineInRange("rpm", 256, 1, 65_536);
         SU_PER_MB_PER_TICK = b.comment("实际平均每 1mB/t 蒸汽流量换算的总应力容量，单位 SU/(mB/t)。")
                 .defineInRange("suPerMbPerTick", 32768D, .000001D, 1_000_000D);
         SMOOTHING_TICKS = b.comment("实际处理蒸汽的滑动平均窗口，单位服务端 tick；缺失历史按零。")
                 .defineInRange("smoothingTicks", 40, 1, 1200);
+        TURNOVER_TICKS = b.comment("全机待排蒸汽周转容量等于额定 mB/t 乘此 tick 数；默认只暂存一 tick。")
+                .defineInRange("turnoverTicks", 1, 1, 1200);
+        MIN_EFFICIENCY_MULTIPLIER = b.comment("达到启动流量时的效率倍率；不得高于任一档最高倍率。")
+                .defineInRange("minEfficiencyMultiplier", .5D, .000001D, 100D);
+        MINIMUM_OPERATING_FLOW_RATIO = b.comment("平均实际排汽达到额定流量的此比例才发电；须小于 1。")
+                .defineInRange("minimumOperatingFlowRatio", .3D, .000001D, .999999D);
         INLET_PORT_FLOW_MB_PER_TICK = b.comment("每个物理进汽口每 tick 最多接收量，单位 mB/t。")
                 .defineInRange("inletPortFlowMbPerTick", 256, 1, 1_000_000);
         EXHAUST_PORT_FLOW_MB_PER_TICK = b.comment("每个物理排汽口每 tick 最多排出量，单位 mB/t。主动与被动共用。")
@@ -35,20 +43,18 @@ public final class TurbineConfig {
 
     private TurbineConfig() {}
 
-    /** 每档五键平铺在同一 TOML；直径须属于已建模的 3/5/7，转子数须互异。 */
+    /** 每档四键平铺在同一 TOML；直径须属于已建模的 3/5/7，转子数须互异。 */
     private static TierValues tier(ModConfigSpec.Builder b, String prefix, int rotors, int diameter,
-                                   int flow, int capacity) {
+                                   int flow, double maxEfficiency) {
         return new TierValues(
                 b.comment(prefix + " 档转子数；轴向长度由此值加两端面派生，单位 节。")
                         .defineInRange(prefix + "RotorCount", rotors, 3, 16),
                 b.comment(prefix + " 档外径，只支持已建模的 3、5、7 格；不符合时整机安全停机。")
                         .defineInRange(prefix + "Diameter", diameter, 3, 7),
-                b.comment(prefix + " 档额定最大耗汽量，单位 mB/t；实际处理仍受两库存空位约束。")
+                b.comment(prefix + " 档额定最大进汽及排汽量，单位 mB/t；全机多口共用。")
                         .defineInRange(prefix + "RateMbPerTick", flow, 1, 10_000),
-                b.comment(prefix + " 档超临界进汽罐容量，单位 mB；降低后保留既存液量。")
-                        .defineInRange(prefix + "InputCapacityMb", capacity, 1, 1_000_000),
-                b.comment(prefix + " 档普通排汽罐容量，单位 mB；降低后保留既存液量。")
-                        .defineInRange(prefix + "ExhaustCapacityMb", capacity, 1, 1_000_000));
+                b.comment(prefix + " 档满额定实际排汽时的最高效率倍率。")
+                        .defineInRange(prefix + "MaxEfficiencyMultiplier", maxEfficiency, .000001D, 100D));
     }
 
     /** NeoForge 默认在实例 config 生成 SERVER 文件；世界 serverconfig 同名文件可覆盖。 */
@@ -60,15 +66,14 @@ public final class TurbineConfig {
     public static TurbineState.Settings settings() {
         return new TurbineState.Settings(SHORT.snapshot(), MEDIUM.snapshot(), LONG.snapshot(), RPM.get(),
                 SU_PER_MB_PER_TICK.get(), SMOOTHING_TICKS.get(), INLET_PORT_FLOW_MB_PER_TICK.get(),
-                EXHAUST_PORT_FLOW_MB_PER_TICK.get(), FRONT_SHARE.get());
+                EXHAUST_PORT_FLOW_MB_PER_TICK.get(), TURNOVER_TICKS.get(),
+                MIN_EFFICIENCY_MULTIPLIER.get(), MINIMUM_OPERATING_FLOW_RATIO.get(), FRONT_SHARE.get());
     }
 
     private record TierValues(ModConfigSpec.IntValue rotors, ModConfigSpec.IntValue diameter,
-                              ModConfigSpec.IntValue rate,
-                              ModConfigSpec.IntValue inputCapacity, ModConfigSpec.IntValue exhaustCapacity) {
+                              ModConfigSpec.IntValue rate, ModConfigSpec.DoubleValue maxEfficiency) {
         TurbineState.Tier snapshot() {
-            return new TurbineState.Tier(rotors.get(), rate.get(), inputCapacity.get(), exhaustCapacity.get(),
-                    diameter.get());
+            return new TurbineState.Tier(rotors.get(), rate.get(), diameter.get(), maxEfficiency.get());
         }
     }
 }

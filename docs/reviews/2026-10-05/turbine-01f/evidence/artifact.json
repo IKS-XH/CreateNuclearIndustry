@@ -1,0 +1,10 @@
+{
+  "file": "create_nuclear_industry-0.1.0.jar",
+  "bytes": 2055512,
+  "sha256": "1E6FD6D6C37F2BFDB02D61AEF62017AF0742D0B1F03C21B65FCE70984D835460",
+  "buildResult": "assemble-final.log: exit 0",
+  "unitTests": "7/7",
+  "machineTests": "11/11",
+  "configTests": "1/1",
+  "manualAcceptance": "pending"
+}
