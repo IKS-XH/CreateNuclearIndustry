@@ -115,7 +115,8 @@
 | `P1` | `fresh_fuel_assembly` | 浓缩铀燃料组件 |
 | `P1` | `cooled_spent_fuel_assembly` | 枯竭铀燃料组件；首发燃料耗尽直接输出冷却态 |
 | `暂缓` | `hot_spent_fuel_assembly` | 未来命名预留；首发不注册、不生成、不作为运行输入 |
-| `P1` | `encapsulated_spent_fuel`、`sealed_spent_fuel_cask` | 灌封乏燃料件、已封装乏燃料桶 |
+| `P1` | `sealed_spent_fuel_cask` | 已封装乏燃料桶；2026-10-06确认单次灌封装桶，每桶一个枯竭组件，STORE-01待实现验收 |
+| 预留，非首发 | `encapsulated_spent_fuel` | 灌封中间件；轻量方案取消首发注册，不作为前置 |
 | `P3` | `spent_fuel_rod`、`contaminated_cladding`、`contaminated_grid` | 乏燃料棒、受污染包壳、受污染格架 |
 | `P3` | `reprocessed_fuel_dust`、`reprocessed_fuel_blend` | 再生燃料粉末、再生燃料混合粉 |
 | `P3` | `green_reprocessed_fuel_pellet`、`reprocessed_fuel_pellet` | 再生燃料生芯块、再生燃料芯块 |
@@ -186,7 +187,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | `P1` | `shielded_assembly_station` | 屏蔽装配台 | 芯块/包壳/焊料/格架8/4/2/1 → 1新组件；封存与再生燃料另批 | [02E已合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)：2×2×2、四周漏斗物流、21格制造和动画分件；`shielded_assembly_part`为无独立物品/库存代理，不提前实现屏蔽机械臂 |
 | `P1` | `nuclear_heat_exchanger` | 换热器 | 热复合冷却剂→复合冷却剂；超临界蒸汽→蒸汽；蒸汽+冷源→水 | 按输入选择唯一模式；核热/蒸汽供热默认返回 18/9 锅炉热值；冷凝缺少冷源时安全停机 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体端口 | 水、循环能力和热乏燃料 → 冷却状态 | 后置玩法；首发不实现热/冷转换、乏燃料池冷却或相关流体路线 |
-| `P1` | `dry_storage_rack` | 干式贮存架 | 已封装乏燃料桶 → 安全贮存状态 | 检查封装完整性并提供稳定堆放，不消除辐射物质 |
+| `P1` | `dry_storage_rack` | 干式贮存架 | 已封装乏燃料桶 → 贮存位置状态 | STORE-01待实现：单格无GUI，默认16单件槽，保留完整桶记录；不消除辐射物质 |
 | `P3` | `shielded_disassembler` | 屏蔽拆解机 | 冷却乏燃料组件 → 乏燃料棒 + 受污染格架 | 在屏蔽环境拆解乏燃料，禁止普通机械手直接处理 |
 | `P3` | `sealed_reprocessor` | 密闭再处理器 | 乏燃料棒 + 处理介质 → 再生燃料粉末 + 高放残渣 + 受污染包壳 | 回收部分燃料价值，并保证同步产生不可消除的高放废物 |
 | `P3` | `shielded_manipulator` | 屏蔽机械臂 | 危险物品搬运 | 在热室和屏蔽机器之间自动转移高辐射物品，不执行加工配方 |
