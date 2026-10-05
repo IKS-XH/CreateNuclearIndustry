@@ -98,6 +98,13 @@ public final class ModCreativeTabs {
                         output.accept(BoilerContent.CONTROLLER_ITEM.get());
                         output.accept(BoilerContent.SAFETY_VALVE_ITEM.get());
                         output.accept(BoilerContent.HEAT_SECTION_ITEM.get());
+                        output.accept(TurbineContent.CASING_ITEM.get());
+                        output.accept(TurbineContent.WINDOW_ITEM.get());
+                        output.accept(TurbineContent.ROTOR_ITEM.get());
+                        output.accept(TurbineContent.CONTROLLER_ITEM.get());
+                        output.accept(TurbineContent.OUTPUT_SHAFT_ITEM.get());
+                        output.accept(TurbineContent.INLET_ITEM.get());
+                        output.accept(TurbineContent.EXHAUST_ITEM.get());
                     })
                     .build()
     );

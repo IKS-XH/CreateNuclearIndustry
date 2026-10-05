@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:plates/steel"
+    },
+    {
+      "tag": "c:plates/steel"
+    },
+    {
+      "tag": "c:plates/steel"
+    },
+    {
+      "tag": "c:plates/steel"
+    },
+    {
+      "item": "create_nuclear_industry:heavy_bearing"
+    },
+    {
+      "item": "create_nuclear_industry:heavy_bearing"
+    },
+    {
+      "item": "create:shaft"
+    },
+    {
+      "item": "create_nuclear_industry:turbine_casing"
+    }
+  ],
+  "result": {
+    "id": "create_nuclear_industry:turbine_output_shaft",
+    "count": 1
+  }
+}

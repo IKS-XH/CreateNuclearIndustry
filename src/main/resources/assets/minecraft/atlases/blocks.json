@@ -15,6 +15,14 @@
     {
       "type": "single",
       "resource": "create_nuclear_industry:fluid/supercritical_steam_flow"
+    },
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/steam_still"
+    },
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/steam_flow"
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SCS",
+    "CRC",
+    "SCS"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "C": {
+      "tag": "c:plates/copper"
+    },
+    "R": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:turbine_casing",
+    "count": 8
+  }
+}

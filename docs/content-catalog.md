@@ -1,6 +1,6 @@
 # 《机械动力：核工业》内容注册与素材清单
 
-> **汽轮机最新修订：** 同级候选已包含透明 `turbine_window`、双端复用 `turbine_output_shaft`、侧面控制器、薄壳与叶片转子；[01D/R1外观](./reviews/2026-10-05/turbine-01d/README.md)仍待复测。[01E](./superpowers/plans/2026-10-05-ext-b-turbine-01e.md)已按用户确认实现两端贯通、共享总应力，不新增构件或改变注册ID。`steam` 显示名为“蒸汽”。整体未人工验收、未合main。
+> **2026-10-05现行验收：** 透明`turbine_window`、双端复用`turbine_output_shaft`、侧面控制器、薄壳与叶片转子，01D/R1外观、01F流量效率/周转及01G断汽停机均已人工通过并合入main。换热器冷凝回水也已完成联合验收，见[本批记录](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。注册ID保持，`steam`显示名为“蒸汽”。
 
 **适用版本：** Java 21 + Minecraft 1.21.1 + NeoForge + Create 6.0.10  
 **玩法规则：** [project.md](./project.md)  

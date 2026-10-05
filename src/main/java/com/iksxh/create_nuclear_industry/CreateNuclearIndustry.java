@@ -7,8 +7,11 @@ import com.iksxh.create_nuclear_industry.content.ModCreativeTabs;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
+import com.iksxh.create_nuclear_industry.content.TurbineContent;
 import com.iksxh.create_nuclear_industry.content.HeatMaterialsContent;
 import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
+import com.iksxh.create_nuclear_industry.config.BoilerConfig;
+import com.iksxh.create_nuclear_industry.config.TurbineConfig;
 import com.iksxh.create_nuclear_industry.heat.HeatExchangerBoilerBridge;
 import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.OreContent;
@@ -55,6 +58,8 @@ public final class CreateNuclearIndustry {
     public CreateNuclearIndustry(IEventBus modEventBus, ModContainer modContainer) {
         P1ServerConfig.register(modContainer);
         HeatExchangerConfig.register(modContainer);
+        BoilerConfig.register(modContainer);
+        TurbineConfig.register(modContainer);
         ModFluids.register(modEventBus);
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
@@ -64,6 +69,7 @@ public final class CreateNuclearIndustry {
         HeatMaterialsContent.register(modEventBus);
         HeatExchangeContent.register(modEventBus);
         BoilerContent.register(modEventBus);
+        TurbineContent.register(modEventBus);
         NeoForge.EVENT_BUS.register(HeatExchangerBoilerBridge.class);
         // 持有库存的整机及其分块均禁止 Create 构造搬移；搬迁统一走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
@@ -75,6 +81,10 @@ public final class CreateNuclearIndustry {
                         || state.is(BoilerContent.WATER_PORT.get()) || state.is(BoilerContent.STEAM_PORT.get())
                         || state.is(BoilerContent.CONTROLLER.get()) || state.is(BoilerContent.SAFETY_VALVE.get())
                         || state.is(BoilerContent.HEAT_SECTION.get())
+                        || state.is(TurbineContent.CASING.get()) || state.is(TurbineContent.WINDOW.get())
+                        || state.is(TurbineContent.ROTOR.get())
+                        || state.is(TurbineContent.CONTROLLER.get()) || state.is(TurbineContent.OUTPUT_SHAFT.get())
+                        || state.is(TurbineContent.INLET.get()) || state.is(TurbineContent.EXHAUST.get())
                         ? BlockMovementChecks.CheckResult.FAIL : BlockMovementChecks.CheckResult.PASS);
         OreGenerationFilter.register(modEventBus);
         ModBlocks.register(modEventBus);

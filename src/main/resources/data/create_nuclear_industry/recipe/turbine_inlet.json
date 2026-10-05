@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create_nuclear_industry:turbine_casing"
+    },
+    {
+      "item": "create_nuclear_industry:steel_pipe_blank"
+    },
+    {
+      "item": "create_nuclear_industry:steel_pipe_blank"
+    },
+    {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    },
+    {
+      "item": "create_nuclear_industry:seal_ring"
+    }
+  ],
+  "result": {
+    "id": "create_nuclear_industry:turbine_inlet",
+    "count": 1
+  }
+}

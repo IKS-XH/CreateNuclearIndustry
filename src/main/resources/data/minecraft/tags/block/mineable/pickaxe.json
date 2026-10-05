@@ -32,6 +32,13 @@
     "create_nuclear_industry:high_pressure_boiler_steam_port",
     "create_nuclear_industry:high_pressure_boiler_controller",
     "create_nuclear_industry:boiler_safety_valve",
-    "create_nuclear_industry:boiler_heat_exchange_section"
+    "create_nuclear_industry:boiler_heat_exchange_section",
+    "create_nuclear_industry:turbine_casing",
+    "create_nuclear_industry:turbine_rotor",
+    "create_nuclear_industry:turbine_controller",
+    "create_nuclear_industry:turbine_output_shaft",
+    "create_nuclear_industry:turbine_inlet",
+    "create_nuclear_industry:turbine_exhaust",
+    "create_nuclear_industry:turbine_window"
   ]
 }

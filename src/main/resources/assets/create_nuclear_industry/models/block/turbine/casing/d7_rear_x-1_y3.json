@@ -1,0 +1,11 @@
+{
+  "loader": "neoforge:obj",
+  "model": "create_nuclear_industry:models/block/turbine/mesh/casing_d7_rear_x-1_y3.obj",
+  "textures": {
+    "particle": "create_nuclear_industry:block/turbine/turbine_casing_panel"
+  },
+  "automatic_culling": true,
+  "shade_quads": true,
+  "flip_v": false,
+  "emissive_ambient": false
+}

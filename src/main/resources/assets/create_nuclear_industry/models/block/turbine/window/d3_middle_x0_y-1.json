@@ -1,0 +1,12 @@
+{
+  "loader": "neoforge:obj",
+  "model": "create_nuclear_industry:models/block/turbine/mesh/window_d3_middle_x0_y-1.obj",
+  "textures": {
+    "particle": "create_nuclear_industry:block/turbine/turbine_window_glass"
+  },
+  "automatic_culling": true,
+  "shade_quads": true,
+  "flip_v": false,
+  "emissive_ambient": false,
+  "render_type": "translucent"
+}

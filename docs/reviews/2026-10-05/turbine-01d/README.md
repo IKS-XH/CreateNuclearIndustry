@@ -1,6 +1,6 @@
 # 汽轮机01D：外观、端口方向与碰撞修复候选
 
-**状态：01D六项候选已交付，用户随后反馈成型端口未密封；R1修复候选已完成，等待端口复测。** 对应[01D任务卡](../../../superpowers/plans/2026-10-05-ext-b-turbine-01d.md)，基线9ac94ae。本页只记录本轮六项反馈；01C人工外观未通过，旧自动证据不改写。功能位于 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录仅同步文档，未合main。
+**状态：01D六项与R1端口方向/密封整改均已人工通过，已合入main。** 用户2026-10-05在集中确认整体范围后明确“所有测试项都通过了”，见[联合验收](../condense-01/ACCEPTANCE.md)。下方保留原缺陷、处理和自动证据，不追改此前未通过反馈。
 
 ## 用户反馈与处理范围
 
@@ -25,7 +25,7 @@
 
 验证过程中第一次客户端探针的workingDir被ModDev的gameDirectory覆盖，更新了开发目录的`run/config/fml.toml`及日志；未进入世界，未修改存档、options或其他配置。已停止自有进程，并改为gameDirectory/workingDir双校验。第二次在`build/runtime-01d-client`生成日志，原run未继续写入；资源可加载但不等于画面通过。原始事故和主动退出码均在运行报告中记录，不作静默回退或清理。
 
-[六项精简手测清单](./manual-checklist.md)现在可用。人工门通过前不合main、不推进冷凝；游戏中的完整搭建体验仍需用户确认。
+[六项精简手测清单](./manual-checklist.md)与R1端口整改现均获用户通过确认，整体搭建/外观人工门解除，不要求重复验证。
 
 ## 留存证据
 

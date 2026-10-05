@@ -1,0 +1,164 @@
+{
+  "variants": {
+    "located=false,machine_facing=north,side=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=false,machine_facing=north,side=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=false,machine_facing=north,side=left": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=false,machine_facing=north,side=right": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=false,machine_facing=east,side=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=false,machine_facing=east,side=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=false,machine_facing=east,side=left": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=false,machine_facing=east,side=right": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=false,machine_facing=south,side=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=false,machine_facing=south,side=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=false,machine_facing=south,side=left": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=false,machine_facing=south,side=right": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=false,machine_facing=west,side=up": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "located=false,machine_facing=west,side=down": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "located=false,machine_facing=west,side=left": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "located=false,machine_facing=west,side=right": {
+      "model": "create_nuclear_industry:block/turbine/turbine_controller_unformed",
+      "y": 270,
+      "uvlock": true
+    },
+    "located=true,machine_facing=north,side=up": {
+      "model": "create_nuclear_industry:block/turbine/controller_up",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=true,machine_facing=north,side=down": {
+      "model": "create_nuclear_industry:block/turbine/controller_down",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=true,machine_facing=north,side=left": {
+      "model": "create_nuclear_industry:block/turbine/controller_left",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=true,machine_facing=north,side=right": {
+      "model": "create_nuclear_industry:block/turbine/controller_right",
+      "y": 0,
+      "uvlock": true
+    },
+    "located=true,machine_facing=east,side=up": {
+      "model": "create_nuclear_industry:block/turbine/controller_up",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=true,machine_facing=east,side=down": {
+      "model": "create_nuclear_industry:block/turbine/controller_down",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=true,machine_facing=east,side=left": {
+      "model": "create_nuclear_industry:block/turbine/controller_left",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=true,machine_facing=east,side=right": {
+      "model": "create_nuclear_industry:block/turbine/controller_right",
+      "y": 90,
+      "uvlock": true
+    },
+    "located=true,machine_facing=south,side=up": {
+      "model": "create_nuclear_industry:block/turbine/controller_up",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=true,machine_facing=south,side=down": {
+      "model": "create_nuclear_industry:block/turbine/controller_down",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=true,machine_facing=south,side=left": {
+      "model": "create_nuclear_industry:block/turbine/controller_left",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=true,machine_facing=south,side=right": {
+      "model": "create_nuclear_industry:block/turbine/controller_right",
+      "y": 180,
+      "uvlock": true
+    },
+    "located=true,machine_facing=west,side=up": {
+      "model": "create_nuclear_industry:block/turbine/controller_up",
+      "y": 270,
+      "uvlock": true
+    },
+    "located=true,machine_facing=west,side=down": {
+      "model": "create_nuclear_industry:block/turbine/controller_down",
+      "y": 270,
+      "uvlock": true
+    },
+    "located=true,machine_facing=west,side=left": {
+      "model": "create_nuclear_industry:block/turbine/controller_left",
+      "y": 270,
+      "uvlock": true
+    },
+    "located=true,machine_facing=west,side=right": {
+      "model": "create_nuclear_industry:block/turbine/controller_right",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

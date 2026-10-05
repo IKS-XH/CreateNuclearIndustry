@@ -8,6 +8,57 @@ import org.junit.jupiter.api.Test;
 final class HeatExchangerStateTest {
     private static final HeatExchangerState.Settings DEFAULT = new HeatExchangerState.Settings(18, 1, 40, .5);
 
+    @Test void dedicatedSourcePaysConfiguredRateAboveEighteen() {
+        var source = new HeatExchangerState();
+        var boosted = new HeatExchangerState.Settings(18, 2, 40, 1);
+        source.fillHot(100, false);
+        assertEquals(0, source.claimDedicated(1, 40, boosted));
+        assertEquals(36, source.converted());
+        assertEquals(36, source.reserve());
+        assertEquals(36, source.claimDedicated(2, 40, boosted));
+        assertEquals(0, source.claimDedicated(2, 40, boosted));
+    }
+
+    @Test void smallerHotAndColdCapacitiesPreserveOldInventoryAndLimitNewTransactions() {
+        var state = new HeatExchangerState();
+        var old = new CompoundTag();
+        old.putInt("Hot", 300);
+        old.putInt("Cold", 350);
+        state.load(old);
+        var configured = new HeatExchangerState.Settings(6, 2, 20, .5, 200, 300, 4);
+        state.setSettings(configured);
+        assertEquals(300, state.hot());
+        assertEquals(350, state.cold());
+        assertEquals(0, state.fillHot(20, false));
+        assertEquals(50, state.drainCold(50, false));
+        assertEquals(50, state.drainCold(50, false));
+        state.tick(1, true, configured);
+        assertEquals(24, state.converted());
+        assertEquals(274, state.cold());
+        var restored = new HeatExchangerState();
+        restored.load(state.save());
+        restored.setSettings(configured);
+        assertEquals(550, restored.hot() + restored.cold());
+        assertEquals(274, restored.cold());
+    }
+
+    @Test void densityOrWindowChangeNeverRevaluesExistingReserve() {
+        var state = new HeatExchangerState();
+        var saved = new CompoundTag();
+        saved.putInt("Hot", 100);
+        saved.putDouble("ReserveHu", 20);
+        saved.putDouble("FlowFraction", .5);
+        saved.putDouble("SettingsDensity", .5);
+        saved.putInt("SettingsBufferTicks", 40);
+        state.load(saved);
+        var changed = new HeatExchangerState.Settings(18, 1, 20, 2);
+        state.setSettings(changed);
+        assertEquals(0, state.reserve());
+        assertEquals(0, state.save().getDouble("FlowFraction"));
+        assertEquals(100, state.hot());
+        assertFalse(new HeatExchangerState.Settings(18, Double.NaN, 40, .5).valid());
+    }
+
     @Test void sustainedInputsConserveMassAndEnergyAndSettleAtNineAndEighteen() {
         for (int input : new int[]{18, 36}) {
             var s = new HeatExchangerState();
@@ -254,8 +305,8 @@ final class HeatExchangerStateTest {
         assertEquals(80, s.reserve());
         s = warmedAtFullInput();
         s.tick(400, true, custom);
-        assertEquals(6, s.heat());
-        assertEquals(228, s.reserve());
+        assertEquals(-1, s.heat());
+        assertEquals(0, s.reserve());
         assertTrue(s.remainingTicks() <= 20);
         var before = s.save();
         s.tick(400, true, DEFAULT);

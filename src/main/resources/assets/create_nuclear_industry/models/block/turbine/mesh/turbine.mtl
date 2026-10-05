@@ -1,0 +1,86 @@
+newmtl casing
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_panel
+
+newmtl inside
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_panel
+
+newmtl edge
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_panel
+
+newmtl endcap
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_panel
+
+newmtl glass
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_window_glass
+d 0.53
+
+newmtl glass_edge
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_window_glass
+d 0.53
+
+newmtl rotor_hub
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_rotor_metal
+
+newmtl blade
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_rotor_blade
+
+newmtl blade_edge
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_rotor_metal
+
+newmtl shaft
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_output_shaft_surface
+
+newmtl brass
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_brass_surface
+
+newmtl controller
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_controller_surface
+
+newmtl inlet
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_inlet_face
+
+newmtl exhaust
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_exhaust_face
+
+newmtl inlet_side
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_inlet_side
+
+newmtl exhaust_side
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_exhaust_side
+
+newmtl support
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_bearing_support_surface

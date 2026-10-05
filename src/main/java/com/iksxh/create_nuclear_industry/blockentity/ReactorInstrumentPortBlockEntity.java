@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.blockentity;
 
+import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.content.P1ContentIds;
 import com.iksxh.create_nuclear_industry.config.P1ServerConfig;
@@ -1336,7 +1337,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      */
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "structure_summary"));
+        tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable(GOGGLE_KEY_PREFIX + "structure_summary")));
         if (!clientStructureSummary.valid()) {
             tooltip.add(Component.translatable(GOGGLE_KEY_PREFIX + "unavailable"));
             return true;

@@ -15,6 +15,30 @@ public final class BoilerState {
     public static final int CAPACITY = 16000;
     public static final int FLOW_LIMIT = 256;
     public static final double WARM_HU_PER_SECTION = 3600;
+    /** 服务端一次结算的全部平衡边界；几何段数与 1:1 流体体积守恒保持结构常量。 */
+    public record Settings(int waterCapacityMb, int steamCapacityMb, int portFlowMbPerTick,
+                           double sectionHeatHuPerTick, double steamHuPerMb, double warmHuPerSection,
+                           double coolingHuPerSectionPerTick, double reheatFraction,
+                           double valveOpenFraction, double valveCloseFraction, int valveFlowMbPerTick) {
+        public boolean valid() {
+            return waterCapacityMb >= 1 && waterCapacityMb <= 1_000_000
+                    && steamCapacityMb >= 1 && steamCapacityMb <= 1_000_000
+                    && portFlowMbPerTick >= 1 && portFlowMbPerTick <= 1_000_000
+                    && valveFlowMbPerTick >= 1 && valveFlowMbPerTick <= 1_000_000
+                    && Double.isFinite(sectionHeatHuPerTick) && sectionHeatHuPerTick > 0 && sectionHeatHuPerTick <= 1_000_000
+                    && Double.isFinite(steamHuPerMb) && steamHuPerMb > 0 && steamHuPerMb <= 1_000_000
+                    && Double.isFinite(warmHuPerSection) && warmHuPerSection > 0 && warmHuPerSection <= 1_000_000_000
+                    && Double.isFinite(coolingHuPerSectionPerTick) && coolingHuPerSectionPerTick >= 0
+                    && coolingHuPerSectionPerTick <= 1_000_000
+                    && Double.isFinite(reheatFraction) && reheatFraction >= 0 && reheatFraction <= 1
+                    && Double.isFinite(valveOpenFraction) && Double.isFinite(valveCloseFraction)
+                    && valveCloseFraction >= 0 && valveCloseFraction < valveOpenFraction && valveOpenFraction <= 1
+                    && Double.isFinite(9 * warmHuPerSection) && Double.isFinite(9 * sectionHeatHuPerTick);
+        }
+    }
+    public static final Settings DEFAULT = new Settings(CAPACITY, CAPACITY, FLOW_LIMIT, 18, 1,
+            WARM_HU_PER_SECTION, .9, .25, .9, .8, FLOW_LIMIT);
+    private Settings settings = DEFAULT;
     private int water, steam, legacyFillUsed, legacyDrainUsed, produced, vented;
     private long flowTick = Long.MIN_VALUE, lastTick = Long.MIN_VALUE, totalVented;
     private final Map<Long, Integer> fillUsedByPort = new HashMap<>();
@@ -34,12 +58,28 @@ public final class BoilerState {
     public long totalVented() { return totalVented; }
     public int produced() { return produced; }
     public int vented() { return vented; }
+    public Settings settings() { return settings; }
+
+    /** 服务端 tick 设置整机快照；非法组合停机，旧库存始终按原数量保存。 */
+    public void setSettings(Settings next) {
+        double previousWarmPerSection = settings.warmHuPerSection();
+        settings = next;
+        if (!next.valid()) { ready = false; processHu = 0; return; }
+        // 系数改变时旧加工尾数不能按新 HU/mB 重解释；已支付暖炉 HU 只限缩不放大。
+        if (Double.compare(next.steamHuPerMb(), lastSteamHuPerMb) != 0) processHu = 0;
+        lastSteamHuPerMb = next.steamHuPerMb();
+        warmHu = Math.min(warmHu, 9 * next.warmHuPerSection());
+        if (next.warmHuPerSection() > previousWarmPerSection) ready = false;
+    }
+    private double lastSteamHuPerMb = DEFAULT.steamHuPerMb();
 
     /** 每个物理水口独立限流，所有口仍写入控制器共享水量；模拟不预留预算。 */
     public int fillWater(BlockPos port, int amount, boolean simulate, long now) {
         long key = port.asLong();
         int used = now == flowTick ? fillUsedByPort.getOrDefault(key, 0) + legacyFillUsed : 0;
-        int accepted = Math.min(Math.max(0, amount), Math.min(CAPACITY - water, Math.max(0, FLOW_LIMIT - used)));
+        if (!settings.valid()) return 0;
+        int accepted = Math.min(Math.max(0, amount), Math.min(Math.max(0, settings.waterCapacityMb() - water),
+                Math.max(0, settings.portFlowMbPerTick() - used)));
         if (!simulate && accepted > 0) {
             advanceFlow(now);
             water += accepted;
@@ -52,7 +92,7 @@ public final class BoilerState {
     public int drainSteam(BlockPos port, int amount, boolean simulate, long now) {
         long key = port.asLong();
         int used = now == flowTick ? drainUsedByPort.getOrDefault(key, 0) + legacyDrainUsed : 0;
-        int taken = Math.min(Math.max(0, amount), Math.min(steam, Math.max(0, FLOW_LIMIT - used)));
+        int taken = Math.min(Math.max(0, amount), Math.min(steam, Math.max(0, settings.portFlowMbPerTick() - used)));
         if (!simulate && taken > 0) {
             advanceFlow(now);
             steam -= taken;
@@ -63,16 +103,17 @@ public final class BoilerState {
 
     public int remainingFill(BlockPos port, long now) {
         int used = now == flowTick ? fillUsedByPort.getOrDefault(port.asLong(), 0) + legacyFillUsed : 0;
-        return Math.min(CAPACITY - water, Math.max(0, FLOW_LIMIT - used));
+        return settings.valid() ? Math.min(Math.max(0, settings.waterCapacityMb() - water),
+                Math.max(0, settings.portFlowMbPerTick() - used)) : 0;
     }
     public int remainingDrain(BlockPos port, long now) {
         int used = now == flowTick ? drainUsedByPort.getOrDefault(port.asLong(), 0) + legacyDrainUsed : 0;
-        return Math.min(steam, Math.max(0, FLOW_LIMIT - used));
+        return Math.min(steam, Math.max(0, settings.portFlowMbPerTick() - used));
     }
 
     /** 结构段数改变时保留已付 HU，但新增段必须补足新暖炉上限后才恢复就绪。 */
     public void sectionsChanged(int sections) {
-        double ceiling = Math.max(0, sections) * WARM_HU_PER_SECTION;
+        double ceiling = Math.max(0, sections) * settings.warmHuPerSection();
         warmHu = Math.min(warmHu, ceiling);
         if (warmHu < ceiling) ready = false;
     }
@@ -87,11 +128,12 @@ public final class BoilerState {
 
     /** 返回本 tick 最多能完成的实际收热需求；无水、无汽空间时停止换热。 */
     public double demand(int sections) {
-        if (sections < 1 || water < 1 || steam >= CAPACITY) return 0;
-        double rating = sections * 18.0;
-        double ceiling = sections * WARM_HU_PER_SECTION;
+        if (!settings.valid() || sections < 1 || water < 1 || steam >= settings.steamCapacityMb()) return 0;
+        double rating = sections * settings.sectionHeatHuPerTick();
+        double ceiling = sections * settings.warmHuPerSection();
         if (!ready) return Math.min(rating, Math.max(0, ceiling - warmHu));
-        return Math.min(rating, Math.max(0, Math.min(water, CAPACITY - steam) - processHu));
+        return Math.min(rating, Math.max(0, Math.min(water, settings.steamCapacityMb() - steam)
+                * settings.steamHuPerMb() - processHu));
     }
 
     /** 在申请本 tick 热之前先结算卸载/停 tick 期间的散热，避免恢复首 tick 跳过暖炉。 */
@@ -99,14 +141,15 @@ public final class BoilerState {
         if (preparedTick == now) return;
         preparedTick = now;
         rollbackPrepared = lastTick != Long.MIN_VALUE && now < lastTick;
-        double ceiling = Math.max(0, sections) * WARM_HU_PER_SECTION;
+        double ceiling = Math.max(0, sections) * settings.warmHuPerSection();
         if (rollbackPrepared) {
             warmHu = processHu = 0;
             ready = false;
         } else {
             long missing = lastTick == Long.MIN_VALUE || now <= lastTick ? 0 : now - lastTick - 1;
-            warmHu = Math.max(0, Math.min(warmHu, ceiling) - missing * Math.max(0, sections) * 0.9);
-            if (warmHu <= ceiling * 0.25) ready = false;
+            warmHu = Math.max(0, Math.min(warmHu, ceiling) - missing * Math.max(0, sections)
+                    * settings.coolingHuPerSectionPerTick());
+            if (warmHu <= ceiling * settings.reheatFraction()) ready = false;
             if (ceiling > 0 && warmHu >= ceiling) ready = true;
         }
     }
@@ -117,17 +160,19 @@ public final class BoilerState {
      */
     public void tick(long now, int sections, double paidHu, boolean ventClear, boolean redstoneStop) {
         if (now == lastTick) return;
+        if (!settings.valid()) { produced = vented = 0; ready = false; return; }
         prepare(now, sections);
         produced = vented = 0;
-        double ceiling = Math.max(0, sections) * WARM_HU_PER_SECTION;
+        double ceiling = Math.max(0, sections) * settings.warmHuPerSection();
         lastTick = now;
         warmHu = Math.min(warmHu, ceiling);
         if (ceiling > 0 && warmHu >= ceiling) ready = true;
-        if (warmHu <= ceiling * 0.25) ready = false;
-        double paid = redstoneStop || rollbackPrepared ? 0 : Math.max(0, Math.min(sections * 18.0, Double.isFinite(paidHu) ? paidHu : 0));
+        if (warmHu <= ceiling * settings.reheatFraction()) ready = false;
+        double paid = redstoneStop || rollbackPrepared ? 0 : Math.max(0, Math.min(sections
+                * settings.sectionHeatHuPerTick(), Double.isFinite(paidHu) ? paidHu : 0));
         if (paid == 0) {
-            warmHu = Math.max(0, warmHu - Math.max(0, sections) * 0.9);
-            if (warmHu <= ceiling * 0.25) ready = false;
+            warmHu = Math.max(0, warmHu - Math.max(0, sections) * settings.coolingHuPerSectionPerTick());
+            if (warmHu <= ceiling * settings.reheatFraction()) ready = false;
         }
         if (paid > 0 && !ready) {
             double warming = Math.min(paid, ceiling - warmHu);
@@ -135,24 +180,26 @@ public final class BoilerState {
             paid -= warming;
             if (warmHu >= ceiling && ceiling > 0) ready = true;
         }
-        if (ready && paid > 0 && water > 0 && steam < CAPACITY) {
+        if (ready && paid > 0 && water > 0 && steam < settings.steamCapacityMb()) {
             processHu += paid;
-            produced = Math.min(Math.min(water, CAPACITY - steam), (int) Math.floor(processHu));
+            produced = Math.min(Math.min(water, settings.steamCapacityMb() - steam),
+                    (int) Math.floor(processHu / settings.steamHuPerMb()));
             water -= produced;
             steam += produced;
-            processHu -= produced;
+            processHu -= produced * settings.steamHuPerMb();
         }
-        if (steam >= CAPACITY * 0.9) valveOpen = true;
-        if (steam <= CAPACITY * 0.8) valveOpen = false;
+        if (steam >= settings.steamCapacityMb() * settings.valveOpenFraction()) valveOpen = true;
+        if (steam <= settings.steamCapacityMb() * settings.valveCloseFraction()) valveOpen = false;
         if (valveOpen && ventClear) {
-            vented = Math.max(0, Math.min(steam - (int) (CAPACITY * 0.8), FLOW_LIMIT));
+            vented = Math.max(0, Math.min(steam - (int) (settings.steamCapacityMb()
+                    * settings.valveCloseFraction()), settings.valveFlowMbPerTick()));
             if (vented > 0) {
                 steam -= vented;
                 totalVented += vented;
             }
         }
         valveBlocked = valveOpen && !ventClear;
-        if (steam <= CAPACITY * 0.8) valveOpen = false;
+        if (steam <= settings.steamCapacityMb() * settings.valveCloseFraction()) valveOpen = false;
     }
 
     /** 保存绝对 tick 和有限 HU；载入不能刷新冷却期限或扩充库存。 */
@@ -160,6 +207,7 @@ public final class BoilerState {
         var tag = new CompoundTag();
         tag.putInt("Water", water); tag.putInt("Steam", steam);
         tag.putDouble("WarmHu", warmHu); tag.putDouble("ProcessHu", processHu);
+        tag.putDouble("ProcessHuPerMb", lastSteamHuPerMb);
         tag.putBoolean("Ready", ready); tag.putBoolean("ValveOpen", valveOpen);
         tag.putLong("TotalVented", totalVented); tag.putLong("LastTick", lastTick);
         tag.putLong("FlowTick", flowTick);
@@ -173,10 +221,11 @@ public final class BoilerState {
     public void load(CompoundTag tag) {
         preparedTick = Long.MIN_VALUE;
         rollbackPrepared = false;
-        water = Math.clamp(tag.getInt("Water"), 0, CAPACITY);
-        steam = Math.clamp(tag.getInt("Steam"), 0, CAPACITY);
-        warmHu = finite(tag.getDouble("WarmHu"), 9 * WARM_HU_PER_SECTION);
-        processHu = finite(tag.getDouble("ProcessHu"), Math.nextDown(1));
+        water = Math.max(0, tag.getInt("Water"));
+        steam = Math.max(0, tag.getInt("Steam"));
+        warmHu = finite(tag.getDouble("WarmHu"), 9 * 1_000_000_000D);
+        processHu = finite(tag.getDouble("ProcessHu"), 1_000_000D);
+        lastSteamHuPerMb = tag.contains("ProcessHuPerMb") ? finite(tag.getDouble("ProcessHuPerMb"), 1_000_000D) : 1D;
         ready = tag.getBoolean("Ready"); valveOpen = tag.getBoolean("ValveOpen");
         totalVented = Math.max(0, tag.getLong("TotalVented"));
         lastTick = tag.contains("LastTick") ? tag.getLong("LastTick") : Long.MIN_VALUE;
@@ -187,14 +236,14 @@ public final class BoilerState {
         // 旧存档只有整炉预算；在原tick余下时间继续保守占用，tick前进后自然转为逐口额度。
         if (tag.contains("FillBudgets", Tag.TAG_LIST)) {
             loadBudgets(tag.getList("FillBudgets", Tag.TAG_COMPOUND), fillUsedByPort);
-            legacyFillUsed = Math.clamp(tag.getInt("LegacyFillUsed"), 0, FLOW_LIMIT);
+            legacyFillUsed = Math.max(0, tag.getInt("LegacyFillUsed"));
         }
-        else legacyFillUsed = Math.clamp(tag.getInt("FillUsed"), 0, FLOW_LIMIT);
+        else legacyFillUsed = Math.max(0, tag.getInt("FillUsed"));
         if (tag.contains("DrainBudgets", Tag.TAG_LIST)) {
             loadBudgets(tag.getList("DrainBudgets", Tag.TAG_COMPOUND), drainUsedByPort);
-            legacyDrainUsed = Math.clamp(tag.getInt("LegacyDrainUsed"), 0, FLOW_LIMIT);
+            legacyDrainUsed = Math.max(0, tag.getInt("LegacyDrainUsed"));
         }
-        else legacyDrainUsed = Math.clamp(tag.getInt("DrainUsed"), 0, FLOW_LIMIT);
+        else legacyDrainUsed = Math.max(0, tag.getInt("DrainUsed"));
     }
 
     private static ListTag saveBudgets(Map<Long, Integer> budgets) {
@@ -202,7 +251,7 @@ public final class BoilerState {
         budgets.forEach((port, used) -> {
             CompoundTag entry = new CompoundTag();
             entry.putLong("Port", port);
-            entry.putInt("Used", Math.clamp(used, 0, FLOW_LIMIT));
+            entry.putInt("Used", Math.max(0, used));
             result.add(entry);
         });
         return result;
@@ -211,7 +260,7 @@ public final class BoilerState {
     private static void loadBudgets(ListTag saved, Map<Long, Integer> budgets) {
         for (int index = 0; index < saved.size(); index++) {
             CompoundTag entry = saved.getCompound(index);
-            int used = Math.clamp(entry.getInt("Used"), 0, FLOW_LIMIT);
+            int used = Math.max(0, entry.getInt("Used"));
             if (used > 0) budgets.put(entry.getLong("Port"), used);
         }
     }

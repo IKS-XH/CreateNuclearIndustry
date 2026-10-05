@@ -1,6 +1,6 @@
 # 三矿资源与美术重绘：客户端验收候选
 
-> 本页保留三矿/素材批次历史。该工作树已包含[汽轮机01F：微量周转与流量效率](../../2026-10-05/turbine-01f/README.md)，当前追加[护目镜显示修复](../../../superpowers/plans/2026-10-05-ext-ui-goggles-01.md)；启动目录仍为主工程同级的 `Create_NuclearIndustry-ore-acquisition`，请按最新交付状态与清单验收。
+> 本页保留三矿/素材批次历史。2026-10-05三档汽轮机、冷凝回水及护目镜已[全部验收并合入main](../../2026-10-05/condense-01/ACCEPTANCE.md)，主目录`Create_NuclearIndustry`可直接runClient；同级`Create_NuclearIndustry-ore-acquisition`仍保留原测试世界，不搬移或清理。
 
 **状态：** 已完成。用户分别确认三矿自然生成/采集、粉碎轮加工、粗矿9:1合成拆解、重载存档、其他新素材及两冷却剂回退测试通过。本批于2026-10-01随 `d165d88` 合入 main，未推送或发布。见 [最终收尾与新鲜验证](../../2026-10-01/ore-art-acceptance.md)。本批出口仍仅为资源获取/粗矿/粉碎与素材；后续铅锡基础加工单独成卡。
 

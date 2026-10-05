@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SRS",
+    "ABA",
+    "SRS"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "R": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    },
+    "A": {
+      "item": "create:shaft"
+    },
+    "B": {
+      "item": "create_nuclear_industry:heavy_bearing"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:turbine_rotor",
+    "count": 1
+  }
+}

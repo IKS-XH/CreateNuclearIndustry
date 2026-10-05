@@ -1,6 +1,6 @@
 # 蒸汽冷凝回水01候选交付
 
-**状态：实现、定向验证与独立审查通过，待人工闭环联调。** 功能提交`fdfba38`；用户确认顶部冷源与全部首轮参数，本批未宣称人工通过，候选功能尚未合入main。
+**状态：实现、定向验证、独立审查及人工闭环联调通过，已合入main。** 用户2026-10-05明确“所有测试项都通过了”，冷凝回水、01F新行为、01G断汽/恢复与此前01D/R1外观一并验收，见[联合验收](./ACCEPTANCE.md)。冷凝功能提交`fdfba38`，最终运行基线`8273aff`。
 
 既有换热器背面橙口输入汽轮机排出的蒸汽，正面蓝口输出水。保持同向直列、最多16台、只从两端接管，各台54mB/t、蒸汽/水各4000mB，默认1:1回收。直列库存共享，工质模式互斥，各台独立结算；冷凝不提供锅炉热或Create应力，原核热功能保留。
 
@@ -18,4 +18,4 @@
 
 [修前失败](./evidence/baseline-failure.log)确认原换热器拒收蒸汽；[首次管泵失败](./evidence/first-fixture-failure.log)及[夹具调度异常](./evidence/fixture-scheduling-failure.log)保留。将逐tick回调注册移到初始化后守恒断言保留并通过；不以隐藏失败替代定位。最终暂存检查另清理了一行测试EOF空白，无语义变化，复用同一运行证据。
 
-重启候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`的`./gradlew.bat runClient`，按[合并联调清单](./manual-checklist.md)检查锅炉→汽轮机→冷凝→给水，以及01F新门槛/效率/周转。护目镜两处小显示问题只顺带观察，不另设测试门。新SERVER字段由NeoForge按默认补齐，本批未覆盖开发配置或编辑用户世界；完整客户端回路、画面和跨区块冷凝卸载恢复仍没有本批人工证据。
+主目录`E:/MyMC/NewMod/Create_NuclearIndustry`的`./gradlew.bat runClient`已包含本批功能；同级候选和原世界保留。[合并清单](./manual-checklist.md)记录本轮通过范围，无需重复客户端测试。新SERVER字段按NeoForge默认补齐，PM未覆盖开发配置或编辑用户世界；未列入本清单的跨区块冷凝专项不扩记为人工通过。
