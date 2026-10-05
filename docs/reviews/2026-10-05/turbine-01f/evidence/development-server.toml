@@ -1,0 +1,70 @@
+#short 档转子数；轴向长度由此值加两端面派生，单位 节。
+# Default: 3
+# Range: 3 ~ 16
+shortRotorCount = 3
+#short 档额定最大进汽及排汽量，单位 mB/t；全机多口共用。
+# Default: 54
+# Range: 1 ~ 10000
+shortRateMbPerTick = 54
+#medium 档转子数；轴向长度由此值加两端面派生，单位 节。
+# Default: 6
+# Range: 3 ~ 16
+mediumRotorCount = 6
+#medium 档额定最大进汽及排汽量，单位 mB/t；全机多口共用。
+# Default: 108
+# Range: 1 ~ 10000
+mediumRateMbPerTick = 108
+#long 档转子数；轴向长度由此值加两端面派生，单位 节。
+# Default: 9
+# Range: 3 ~ 16
+longRotorCount = 9
+#long 档额定最大进汽及排汽量，单位 mB/t；全机多口共用。
+# Default: 216
+# Range: 1 ~ 10000
+longRateMbPerTick = 216
+#汽轮机两轴固定工作转速，单位 RPM；运行时还必须不超过当前 Create 服务端上限。
+# Default: 256
+# Range: 1 ~ 65536
+rpm = 256
+#实际平均每 1mB/t 蒸汽流量换算的总应力容量，单位 SU/(mB/t)。
+# Default: 32768.0
+# Range: 1.0E-6 ~ 1000000.0
+suPerMbPerTick = 32768.0
+#实际处理蒸汽的滑动平均窗口，单位服务端 tick；缺失历史按零。
+# Default: 40
+# Range: 1 ~ 1200
+smoothingTicks = 40
+#每个物理进汽口每 tick 最多接收量，单位 mB/t。
+# Default: 256
+# Range: 1 ~ 1000000
+inletPortFlowMbPerTick = 256
+#每个物理排汽口每 tick 最多排出量，单位 mB/t。主动与被动共用。
+# Default: 256
+# Range: 1 ~ 1000000
+exhaustPortFlowMbPerTick = 256
+#已废弃且不影响动力：保留旧 frontShare 键供现有 SERVER 配置兼容读取。
+# Default: 0.5
+# Range: 0.0 ~ 1.0
+frontShare = 0.5
+#short 档外径，只支持已建模的 3、5、7 格；不符合时整机安全停机。
+# Default: 3
+# Range: 3 ~ 7
+shortDiameter = 3
+#medium 档外径，只支持已建模的 3、5、7 格；不符合时整机安全停机。
+# Default: 5
+# Range: 3 ~ 7
+mediumDiameter = 5
+#long 档外径，只支持已建模的 3、5、7 格；不符合时整机安全停机。
+# Default: 7
+# Range: 3 ~ 7
+longDiameter = 7
+#各档满额定实际排汽时的最高效率倍率。
+shortMaxEfficiencyMultiplier = 1.2
+mediumMaxEfficiencyMultiplier = 1.5
+longMaxEfficiencyMultiplier = 1.8
+#全机待排蒸汽周转容量等于额定 mB/t 乘此 tick 数。
+turnoverTicks = 1
+#达到启动流量时的效率倍率，不得高于任一档最高倍率。
+minEfficiencyMultiplier = 0.5
+#平均实际排汽达到额定流量的此比例才发电，须小于 1。
+minimumOperatingFlowRatio = 0.3

@@ -1,0 +1,27 @@
+> Task :createMinecraftArtifacts UP-TO-DATE
+
+> Task :compileJava
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\content\TurbineContent.java:83: 警告: [removal] FluidType 中的 initializeClient(Consumer<IClientFluidTypeExtensions>) 已过时, 且标记为待删除
+            @Override public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                                  ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\turbine\client\TurbineClientEvents.java:12: 警告: [removal] EventBusSubscriber 中的 bus() 已过时, 且标记为待删除
+        bus = EventBusSubscriber.Bus.MOD)
+        ^
+E:\MyMC\NewMod\Create_NuclearIndustry-ore-acquisition\src\main\java\com\iksxh\create_nuclear_industry\turbine\client\TurbineClientEvents.java:12: 警告: [removal] EventBusSubscriber 中的 Bus 已过时, 且标记为待删除
+        bus = EventBusSubscriber.Bus.MOD)
+                                ^
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+3 个警告
+
+> Task :processResources UP-TO-DATE
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+
+[Incubating] Problems report is available at: file:///E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 2s
+4 actionable tasks: 2 executed, 2 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

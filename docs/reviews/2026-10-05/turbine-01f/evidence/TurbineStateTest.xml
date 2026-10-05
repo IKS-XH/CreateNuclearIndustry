@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-05T05:01:29.955Z" hostname="DESKTOP-4G1EOU9" time="0.029">
+  <properties/>
+  <testcase name="thresholdEqualityMidpointAndFullFlowForEveryTier()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.017"/>
+  <testcase name="configurableCurveAndWindow()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.0"/>
+  <testcase name="configuredTiersAndCrossFieldValidation()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.002"/>
+  <testcase name="blockedResidualRecoveryAndCurrentFormatSave()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.007"/>
+  <testcase name="outputBeforeControllerTickAndCapacityReductionPreserveAccounting()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.0"/>
+  <testcase name="stopAndMissingTicksRemoveOnlyPower()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.0"/>
+  <testcase name="simulateAndAllPortsShareWholeMachineLimit()" classname="com.iksxh.create_nuclear_industry.turbine.TurbineStateTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
