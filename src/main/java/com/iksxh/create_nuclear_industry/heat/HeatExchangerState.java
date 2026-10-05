@@ -15,17 +15,28 @@ public final class HeatExchangerState {
     private long noFlowDeadlineTick = -1;
     private boolean legacyDeadlinePending;
     private String status = "no_load";
+    private HeatExchangerMode mode = HeatExchangerMode.NUCLEAR;
+    private final CondensationState condensation = new CondensationState();
+    private CondensationState.Settings condensationSettings = CondensationState.Settings.DEFAULT;
 
     /** 服务端一次换热使用的库存边界；返回值是实际等体积转移量，单位 mB。 */
     public interface Exchange {
         int hot();
         int coldSpace();
         int convert(int amount);
+        /** 原子提交不同体积的汽→水；仅冷凝路径使用，返回实际消耗输入量。 */
+        default int condense(int input, int output) { throw new UnsupportedOperationException(); }
     }
 
     private final Exchange localExchange = new Exchange() {
         @Override public int hot() { return hot; }
         @Override public int coldSpace() { return Math.max(0, settings.coldCapacityMb() - cold); }
+        @Override public int condense(int input, int output) {
+            if (input < 0 || output < 0 || input > hot || output > Math.max(0, coldCapacity() - cold)) return 0;
+            hot -= input;
+            cold += output;
+            return input;
+        }
         @Override public int convert(int amount) {
             int moved = Math.min(amount, Math.min(hot, Math.max(0, settings.coldCapacityMb() - cold)));
             hot -= moved;
@@ -61,6 +72,38 @@ public final class HeatExchangerState {
     public double reserve() { return reserve; }
     public String status() { return status; }
     public Settings settings() { return settings; }
+    public HeatExchangerMode mode() { return mode; }
+    public CondensationState condensation() { return condensation; }
+    public CondensationState.Settings condensationSettings() { return condensationSettings; }
+    public void setCondensationSettings(CondensationState.Settings cfg) { condensationSettings = cfg; }
+    public int hotCapacity() { return capacityFor(mode, true); }
+    public int coldCapacity() { return capacityFor(mode, false); }
+    int capacityFor(HeatExchangerMode candidate, boolean input) {
+        return candidate == HeatExchangerMode.CONDENSATION
+                ? (input ? condensationSettings.steamCapacityMb() : condensationSettings.waterCapacityMb())
+                : (input ? settings.hotCapacityMb() : settings.coldCapacityMb());
+    }
+    /** 未排尽的任何液体或已付核余热均锁住模式；尾量留在本机，不冒充整数库存。 */
+    public HeatExchangerMode activeMode() {
+        return hot > 0 || cold > 0 || reserve > 0 ? mode : HeatExchangerMode.EMPTY;
+    }
+    public boolean acceptsMode(HeatExchangerMode candidate) {
+        return candidate != HeatExchangerMode.EMPTY && (activeMode() == HeatExchangerMode.EMPTY || mode == candidate);
+    }
+    /** 仅真实输入或已选定模式的直列工作机可调用；纯能力查询不得调用。 */
+    void selectMode(HeatExchangerMode next) {
+        if (!acceptsMode(next)) throw new IllegalStateException("换热器工质模式未排空");
+        mode = next;
+    }
+    /** 冲突整列暂停供热但不改库存；核余热沿世界tick自然散去，不能由查询提前清掉。 */
+    void pauseMode(long now, String reason) {
+        if (now != lastTick) {
+            if (mode == HeatExchangerMode.NUCLEAR) tick(now, false, settings);
+            else { lastTick = now; converted = 0; heat = -1; }
+        }
+        status = reason;
+        heat = -1;
+    }
 
     /** 服务端库存能力与热账本共用此快照；密度或窗口变动后丢弃无法复用的尾差及余热历史。 */
     public void setSettings(Settings next) {
@@ -86,9 +129,15 @@ public final class HeatExchangerState {
 
     /** 只返回实际容量内的接收量；simulate 不修改数量及时间。 */
     public int fillHot(int amount, boolean simulate) {
-        int accepted = settings.valid() ? Math.min(Math.max(0, amount),
-                Math.max(0, settings.hotCapacityMb() - hot)) : 0;
-        if (!simulate) hot += accepted;
+        return fillInput(amount, HeatExchangerMode.NUCLEAR, simulate);
+    }
+
+    /** 先核对工质和实际容量；只有成功EXECUTE才选择模式，缩容不会截断存量。 */
+    public int fillInput(int amount, HeatExchangerMode candidate, boolean simulate) {
+        boolean valid = candidate == HeatExchangerMode.CONDENSATION ? condensationSettings.valid() : settings.valid();
+        int accepted = valid && acceptsMode(candidate) ? Math.min(Math.max(0, amount),
+                Math.max(0, capacityFor(candidate, true) - hot)) : 0;
+        if (!simulate && accepted > 0) { selectMode(candidate); hot += accepted; }
         return accepted;
     }
 
@@ -106,10 +155,10 @@ public final class HeatExchangerState {
         return taken;
     }
 
-    /** 仅供同一次换热事务使用；热液扣量须与全列新增冷液等量。 */
+    /** 仅供预检后的同次事务加入产物；核热等体积，冷凝按回收率预先确定独立产出量。 */
     int putColdFromConversion(int amount) {
-        int added = settings.valid() ? Math.min(Math.max(0, amount),
-                Math.max(0, settings.coldCapacityMb() - cold)) : 0;
+        boolean valid = mode == HeatExchangerMode.CONDENSATION ? condensationSettings.valid() : settings.valid();
+        int added = valid ? Math.min(Math.max(0, amount), Math.max(0, coldCapacity() - cold)) : 0;
         cold += added;
         return added;
     }
@@ -125,6 +174,7 @@ public final class HeatExchangerState {
 
     /** 保持本机已付热与期限，只有热液转冷借用传入的整列库存事务。 */
     public void tick(long now, boolean load, Settings cfg, Exchange exchange) {
+        if (mode == HeatExchangerMode.CONDENSATION) return;
         if (now == lastTick) return;
         setSettings(cfg);
         heat = -1;
@@ -196,6 +246,7 @@ public final class HeatExchangerState {
 
     /** 专用锅炉仍只领取本机储备，补储使用整列可用热液和冷罐空位。 */
     public double claimDedicated(long now, double requestHu, Settings cfg, Exchange exchange) {
+        if (mode == HeatExchangerMode.CONDENSATION) return 0;
         if (now == lastTick) return 0;
         setSettings(cfg);
         if (!cfg.valid() || !Double.isFinite(requestHu) || requestHu <= 0) return 0;
@@ -225,6 +276,39 @@ public final class HeatExchangerState {
         return paid;
     }
 
+    /**
+     * 服务端每机每tick仅一次冷凝。输入/输出空间与顶部阶段剩余预算共同预检，
+     * 整列提交成功后才记单机尾量和冷源消耗；冷凝不发布HU、热等级或SU。
+     */
+    public void tickCondensation(long now, CondensationState.Source source,
+                                 CondensationState.Settings cfg, Exchange exchange) {
+        if (now == lastTick) return;
+        condensationSettings = cfg;
+        lastTick = now;
+        heat = -1;
+        converted = 0;
+        if (mode != HeatExchangerMode.CONDENSATION || !cfg.valid()) { status = "invalid"; return; }
+        int budget = condensation.budget(source, cfg);
+        status = source == CondensationState.Source.NONE ? "no_cold_source"
+                : exchange.coldSpace() <= 0 ? "water_full" : exchange.hot() <= 0 ? "steam_empty" : "condensing";
+        int input = condensation.limitInput(Math.min(exchange.hot(), budget), exchange.coldSpace(), cfg);
+        if (input <= 0) return;
+        int output = condensation.output(input, cfg);
+        converted = exchange.condense(input, output);
+        if (converted != input) throw new IllegalStateException("冷凝预检与原子提交不一致");
+        condensation.commit(converted, cfg);
+    }
+
+    /** 纯账本测试的本机库存入口，生产环境使用已验证的整列事务。 */
+    public void tickCondensation(long now, CondensationState.Source source, CondensationState.Settings cfg) {
+        tickCondensation(now, source, cfg, new Exchange() {
+            @Override public int hot() { return hot; }
+            @Override public int coldSpace() { return Math.max(0, coldCapacity() - cold); }
+            @Override public int convert(int amount) { return 0; }
+            @Override public int condense(int input, int output) { return localExchange.condense(input, output); }
+        });
+    }
+
     /** 旧格式只存最后tick、额定耗热与储备；据此保守推断期限，绝不从加载时刻重新计时。 */
     private void restoreLegacyDeadline(Settings cfg) {
         legacyDeadlinePending = false;
@@ -247,6 +331,8 @@ public final class HeatExchangerState {
         var tag = new CompoundTag();
         tag.putInt("Hot", hot);
         tag.putInt("Cold", cold);
+        tag.putString("Mode", mode.name());
+        tag.put("Condensation", condensation.save());
         tag.putDouble("ReserveHu", reserve);
         tag.putDouble("FlowFraction", flowFraction);
         tag.putDouble("LastRate", lastRate);
@@ -262,6 +348,8 @@ public final class HeatExchangerState {
     public void load(CompoundTag tag) {
         hot = Math.max(0, tag.getInt("Hot"));
         cold = Math.max(0, tag.getInt("Cold"));
+        mode = "CONDENSATION".equals(tag.getString("Mode")) ? HeatExchangerMode.CONDENSATION : HeatExchangerMode.NUCLEAR;
+        condensation.load(tag.getCompound("Condensation"));
         reserve = finite(tag.getDouble("ReserveHu"), 21_600_000_000D);
         flowFraction = finite(tag.getDouble("FlowFraction"), Math.nextDown(1D));
         lastRate = finite(tag.getDouble("LastRate"), 18_000_000D);

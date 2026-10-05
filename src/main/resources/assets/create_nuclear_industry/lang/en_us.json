@@ -1,4 +1,13 @@
 {
+  "gui.create_nuclear_industry.heat_exchanger.mode.nuclear": "Mode: nuclear heat exchange",
+  "gui.create_nuclear_industry.heat_exchanger.mode.condensation": "Mode: steam condensation",
+  "gui.create_nuclear_industry.heat_exchanger.condensation_tanks": "Line of %s; steam %s / %4$s mB; water %3$s / %5$s mB",
+  "gui.create_nuclear_industry.heat_exchanger.condensation_flow": "Actual condensation: %s mB/t; Rated maximum: %s mB/t",
+  "gui.create_nuclear_industry.heat_exchanger.state.mode_conflict": "Fluid mode conflict: line paused; separate incompatible members",
+  "gui.create_nuclear_industry.heat_exchanger.state.no_cold_source": "No valid cold source directly above: condensation paused",
+  "gui.create_nuclear_industry.heat_exchanger.state.water_full": "Water outlet blocked: water tank full",
+  "gui.create_nuclear_industry.heat_exchanger.state.steam_empty": "Waiting for steam: inlet empty",
+  "gui.create_nuclear_industry.heat_exchanger.state.condensing": "Condensing steam and recovering water",
   "itemGroup.create_nuclear_industry.main": "Create: Nuclear Industry",
   "block.create_nuclear_industry.nuclear_heat_exchanger": "Nuclear Heat Exchanger",
   "gui.create_nuclear_industry.heat_exchanger.tanks": "Hot: %s / %3$s mB; Cold: %2$s / %3$s mB",

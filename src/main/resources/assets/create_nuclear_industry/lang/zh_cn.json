@@ -1,4 +1,13 @@
 {
+  "gui.create_nuclear_industry.heat_exchanger.mode.nuclear": "模式：核热换热",
+  "gui.create_nuclear_industry.heat_exchanger.mode.condensation": "模式：蒸汽冷凝",
+  "gui.create_nuclear_industry.heat_exchanger.condensation_tanks": "直列 %s 台；蒸汽 %s / %4$s mB；回水 %3$s / %5$s mB",
+  "gui.create_nuclear_industry.heat_exchanger.condensation_flow": "实际冷凝：%s mB/t；额定上限：%s mB/t",
+  "gui.create_nuclear_industry.heat_exchanger.state.mode_conflict": "工质模式冲突：整列暂停，请分开不同工质成员",
+  "gui.create_nuclear_industry.heat_exchanger.state.no_cold_source": "无有效顶部冷源：冷凝暂停",
+  "gui.create_nuclear_industry.heat_exchanger.state.water_full": "回水出口堵塞：水罐已满",
+  "gui.create_nuclear_industry.heat_exchanger.state.steam_empty": "等待蒸汽：入口为空",
+  "gui.create_nuclear_industry.heat_exchanger.state.condensing": "正在冷凝蒸汽并回收水",
   "itemGroup.create_nuclear_industry.main": "机械动力：核工业",
   "block.create_nuclear_industry.nuclear_heat_exchanger": "核换热器",
   "gui.create_nuclear_industry.heat_exchanger.tanks": "热液：%s / %3$s mB；冷液：%2$s / %3$s mB",
