@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**当前推进：** 三档汽轮机与蒸汽冷凝回水已[联合验收并合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。用户2026-10-06确认[轻量封存方案](./superpowers/plans/2026-10-05-spent-fuel-storage-proposal.md)，按[STORE-01实施卡](./superpowers/plans/2026-10-06-ext-a-store-01.md)自动执行单次灌封装桶、低耗材及16桶架；候选6da520f已完成实现、8项JUnit/6项GameTest及联合审查，现等待[集中手测](./reviews/2026-10-06/store-01/CANDIDATE.md)，暂停自动推进，功能尚未合入main。
+**当前推进：** 三档汽轮机与蒸汽冷凝回水已[联合验收并合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。用户2026-10-06确认[轻量封存方案](./superpowers/plans/2026-10-05-spent-fuel-storage-proposal.md)，按[STORE-01实施卡](./superpowers/plans/2026-10-06-ext-a-store-01.md)自动执行单次灌封装桶、低耗材及16桶架；候选f2cbb59已完成实现、原8项JUnit/6项GameTest及联合审查，铅桶R1用户手测通过。其余13条设备有序整改已完成数量/导出器/JAR核对和一次资源打包，五条拆解保持无序，见[整改卡](./superpowers/plans/2026-10-06-crafting-shaped-01.md)。现等待同一张[集中手测](./reviews/2026-10-06/store-01/CANDIDATE.md)，暂停自动推进，功能尚未合入main。
 
 **更新日期：2026-10-06。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是`0.1.0` Alpha；热端闭环完成，基础封存与发布出口尚未完成。
 
@@ -20,7 +20,7 @@
 | 强化钢板 / EXT-B-REINFORCED-PLATE-01 | 去精密构件的两工序实现已通过联合手测 | 钢板→加坚固板→压片产1；旧三工序[证据保留](./superpowers/plans/2026-10-04-reinforced-plate-assembly.md) |
 | 换热器定向直列 / EXT-B-EXCHANGER-01D～01E | 直列及护目镜中文均人工通过，已合入main | [最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)：前冷后热、最多16台、冷热各4000mB/台，库存共享、储热独立 |
 | 三档汽轮机01A～01G与护目镜显示 | 全部本批人工门通过，已合入main | [联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)：三档尺寸、256RPM、薄壳/叶片、共享容量、效率/周转、断汽恢复及显示 |
-| 轻量乏燃料封存 EXT-A-STORE-01 | 候选实现和审查完成，待联合手测；未合入main | [候选与启动](./reviews/2026-10-06/store-01/CANDIDATE.md)：一次三料封装、默认16桶架、8项JUnit/6项GameTest通过 |
+| 轻量乏燃料封存 EXT-A-STORE-01 | 候选实现和审查完成，铅桶R1手测通过；其余待联合手测，未合入main | [候选与启动](./reviews/2026-10-06/store-01/CANDIDATE.md)：一次三料封装、默认16桶架、原8项JUnit/6项GameTest通过，13条设备有序配方资源整改完成 |
 | 蒸汽冷凝回水 EXT-B-CONDENSE-01 | 全部联调清单通过，已合入main | [联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)：锅炉→汽轮机→冷凝→给水守恒、顶格冷源、融水/蒸发与堵塞恢复 |
 | 生产依赖审计 EXT-A-DEPS-01 | 已完成；缺口仍须分别解决 | [审计归档](./archive/EXT-A-DEPS-01.md) |
 | 实验堆制造配方修订 EXT-A-REACTOR-01A/01B/01C | 全部手测通过并合入main | [最终验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)：铅玻璃热搅拌、燃料柱1件、三类动力合成、仪表21格及控制棒组件工作台制造 |

@@ -1,6 +1,6 @@
 # 三矿资源与美术重绘：客户端验收候选
 
-> **2026-10-06当前候选：** [轻量封存与16桶架](../../2026-10-06/store-01/CANDIDATE.md)已完成必要验证和联合审查，等待一次手测；新功能请从同级`Create_NuclearIndustry-ore-acquisition`启动，尚未合入main。
+> **2026-10-06当前候选：** [轻量封存与16桶架](../../2026-10-06/store-01/CANDIDATE.md)f2cbb59已完成必要验证和联合审查，铅桶R1手测通过、其他13条设备有序配方资源整改完成，等待其余联合手测；新功能请从同级`Create_NuclearIndustry-ore-acquisition`启动，尚未合入main。
 
 > 本页保留三矿/素材批次历史。2026-10-05三档汽轮机、冷凝回水及护目镜已[全部验收并合入main](../../2026-10-05/condense-01/ACCEPTANCE.md)，主目录`Create_NuclearIndustry`可直接runClient；同级`Create_NuclearIndustry-ore-acquisition`仍保留原测试世界，不搬移或清理。
 
