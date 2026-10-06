@@ -26,7 +26,7 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
 
     /** 扫描前后各端，先查区块再查方块实体，不触发区块加载。 */
     static HeatExchangerLine find(NuclearHeatExchangerBlockEntity origin) {
-        if (!origin.current() || !origin.canTick() || origin.getLevel().isClientSide) return null;
+        if (!origin.current() || !origin.canTick() || origin.getLevel().isClientSide || origin.inBoiler()) return null;
         Level level = origin.getLevel();
         Direction facing = origin.getBlockState().getValue(NuclearHeatExchangerBlock.FACING);
         List<NuclearHeatExchangerBlockEntity> members = new ArrayList<>();
@@ -59,7 +59,8 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
     private static boolean matches(Level level, BlockPos pos, Direction facing) {
         var state = level.getBlockState(pos);
         return state.getBlock() instanceof NuclearHeatExchangerBlock
-                && state.getValue(NuclearHeatExchangerBlock.FACING) == facing;
+                && state.getValue(NuclearHeatExchangerBlock.FACING) == facing
+                && (!(level.getBlockEntity(pos) instanceof NuclearHeatExchangerBlockEntity machine) || !machine.inBoiler());
     }
 
     boolean contains(NuclearHeatExchangerBlockEntity machine) { return members.contains(machine); }

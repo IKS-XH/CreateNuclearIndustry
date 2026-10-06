@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","category":"misc","pattern":["P", "F", "C"],"key":{"P":{"item":"create:fluid_pipe"},"F":{"item":"create_nuclear_industry:pressure_fitting"},"C":{"item":"create_nuclear_industry:high_pressure_boiler_casing"}},"result":{"id":"create_nuclear_industry:high_pressure_boiler_cold_coolant_port","count":1}}

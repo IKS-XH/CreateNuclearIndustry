@@ -1,0 +1,18 @@
+{
+  "source": [
+    "high_pressure_boiler_hot_coolant_port.svg",
+    "high_pressure_boiler_cold_coolant_port.svg"
+  ],
+  "outputs": [
+    "src/main/resources/assets/create_nuclear_industry/blockstates/high_pressure_boiler_hot_coolant_port.json",
+    "src/main/resources/assets/create_nuclear_industry/models/block/high_pressure_boiler_hot_coolant_port.json",
+    "src/main/resources/assets/create_nuclear_industry/models/item/high_pressure_boiler_hot_coolant_port.json",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler_hot_coolant_port.png",
+    "src/main/resources/assets/create_nuclear_industry/blockstates/high_pressure_boiler_cold_coolant_port.json",
+    "src/main/resources/assets/create_nuclear_industry/models/block/high_pressure_boiler_cold_coolant_port.json",
+    "src/main/resources/assets/create_nuclear_industry/models/item/high_pressure_boiler_cold_coolant_port.json",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/high_pressure_boiler_cold_coolant_port.png"
+  ],
+  "method": "tools/art-assets/export.py::render_svg；显式限制到palette.json中对应端口色板",
+  "preview": "build/reports/extension/EXT-B-BOILER-REWORK-01/coolant-port-preview.png"
+}

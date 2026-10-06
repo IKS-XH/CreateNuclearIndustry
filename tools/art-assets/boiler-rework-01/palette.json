@@ -1,0 +1,24 @@
+{
+  "hot": {
+    "outline": "#28353A",
+    "steel_dark": "#3E5058",
+    "steel": "#5B7078",
+    "steel_light": "#788E94",
+    "steel_highlight": "#A3B7B8",
+    "brass": "#D2A359",
+    "hot_dark": "#A8441D",
+    "hot": "#E66A2E",
+    "hot_light": "#FFB15C"
+  },
+  "cold": {
+    "outline": "#28353A",
+    "steel_dark": "#3E5058",
+    "steel": "#5B7078",
+    "steel_light": "#788E94",
+    "steel_highlight": "#A3B7B8",
+    "brass": "#D2A359",
+    "cold_dark": "#174A74",
+    "cold": "#287FC1",
+    "cold_light": "#78C9F2"
+  }
+}

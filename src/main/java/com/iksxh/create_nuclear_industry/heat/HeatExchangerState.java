@@ -70,6 +70,12 @@ public final class HeatExchangerState {
     public int heat() { return heat; }
     public int converted() { return converted; }
     public double reserve() { return reserve; }
+    /** 锅炉接管成功后清空已转移的核库存与储热，不再发放给独立供热路径。 */
+    public void relinquishToBoiler() {
+        if (activeMode() == HeatExchangerMode.CONDENSATION) throw new IllegalStateException("冷凝工质不能转入核锅炉");
+        hot = cold = 0; reserve = flowFraction = 0; converted = 0; heat = -1;
+        noFlowDeadlineTick = -1; legacyDeadlinePending = false; status = "in_boiler";
+    }
     public String status() { return status; }
     public Settings settings() { return settings; }
     public HeatExchangerMode mode() { return mode; }

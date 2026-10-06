@@ -49,6 +49,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     private boolean tickPaused;
     private boolean topologyReady;
     private BlockPos lastController;
+    private BlockPos boilerOwner;
     private int sizeLimit, waterLimit, viewHeat = -1, viewFlow;
     private double nominalFlow;
     private int viewLineCount = 1, viewLineHot, viewLineCold;
@@ -62,6 +63,20 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         super(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER_BE.get(), pos, state);
     }
     public HeatExchangerState ledger() { return ledger; }
+    /** 炉内归属改变先撤销独立能力及 Create 热贡献，库存由接管事务另行转移。 */
+    public void setBoilerOwner(BoilerControllerBlockEntity owner) {
+        BlockPos next = owner == null ? null : owner.getBlockPos();
+        if (java.util.Objects.equals(next, boilerOwner)) return;
+        boilerOwner = next; invalidateTopology();
+    }
+    /** 全组预检后无外部回调地先入控制器再清空本机，重复接管空库存不会增量。 */
+    public void joinBoiler(BoilerControllerBlockEntity owner) {
+        setBoilerOwner(owner); owner.ledger().importMember(ledger.hot(), ledger.cold(), ledger.reserve());
+        ledger.relinquishToBoiler(); viewHeat = -1; viewFlow = 0; viewStatus = "in_boiler"; viewMode = HeatExchangerMode.NUCLEAR;
+        setChanged(); if (level != null && level.getGameTime() % 5 == 0) syncView();
+    }
+    /** 成型查询不付款；独立线扫描之前就排除炉内成员，杜绝双重结算。 */
+    public boolean inBoiler() { return level != null && !level.isClientSide && BoilerStructure.owner(level, worldPosition) != null; }
     public boolean isRemovalHandled() { return removalHandled; }
     public void markRemovalHandled() { removalHandled = true; }
     Object inventoryIdentity() { return inventoryIdentity; }
@@ -134,6 +149,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
 
     /** 纯读取已付热；当上方负载消失时立即拒绝查询，不刷新账本或余热。 */
     public int publishedHeat() {
+        if (inBoiler()) return -1;
         HeatExchangerLine line = level != null && !level.isClientSide ? HeatExchangerLine.find(this) : null;
         return viewMode == HeatExchangerMode.NUCLEAR && current() && canTick()
                 && (level.isClientSide || line != null && !line.conflict()
@@ -142,24 +158,9 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
                 HeatExchangerBoilerBridge.controller(level, worldPosition))) ? viewHeat : -1;
     }
 
-    /** 锅炉热段对正且源仍可 tick 才领取实付 HU；其他查询与同 tick 重复申请返回零。 */
+    /** 内置锅炉改由控制器收热；旧调用入口不再发放第二份 HU。 */
     public double claimBoilerHeat(BoilerControllerBlockEntity owner, double requestHu) {
-        if (!current() || !canTick() || level.isClientSide || requestHu <= 0
-                || BoilerStructure.ownerOfSection(level, worldPosition.above()) != owner) return 0;
-        HeatExchangerLine line = HeatExchangerLine.find(this);
-        if (line == null) { pauseHeat(); return 0; }
-        if (line.conflict() || line.displayMode() == HeatExchangerMode.CONDENSATION) return 0;
-        line.adoptMode(HeatExchangerMode.NUCLEAR);
-        double paid = ledger.claimDedicated(level.getGameTime(), requestHu, HeatExchangerConfig.settings(), line);
-        viewHeat = -1;
-        viewFlow = ledger.converted();
-        viewStatus = ledger.status();
-        updateLineView(line);
-        if (paid > 0 || viewFlow > 0) {
-            setChanged();
-            syncView();
-        }
-        return paid;
+        return 0;
     }
 
     /** 先记账、再同步外观、最后通知锅炉；回调能见到的热始终已支付。 */
@@ -168,6 +169,11 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         machine.ledger.setSettings(HeatExchangerConfig.settings());
         machine.ledger.setCondensationSettings(HeatExchangerConfig.condensationSettings());
         if (!machine.canTick()) { machine.pauseHeat(); return; }
+        if (machine.inBoiler()) {
+            machine.viewHeat = -1; machine.viewStatus = "in_boiler"; HeatExchangerBoilerBridge.track(machine, false);
+            if (level.getGameTime() % 5 == 0) machine.syncView(); return;
+        }
+        machine.setBoilerOwner(null);
         HeatExchangerLine line = HeatExchangerLine.find(machine);
         if (line == null) { machine.pauseHeat(); return; }
         if (!machine.topologyReady) {
@@ -200,15 +206,6 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         }
         line.adoptMode(HeatExchangerMode.NUCLEAR);
         machine.viewMode = HeatExchangerMode.NUCLEAR;
-        // 专用热段由控制器按需求结算；源先 tick 时不能抢先走原生锅炉账本。
-        if (BoilerStructure.ownerOfSection(level, pos.above()) != null) {
-            machine.viewHeat = -1;
-            machine.updateLineView(line);
-            if (machine.viewStatus.equals("line_unavailable")) machine.viewStatus = "no_load";
-            if (level.getGameTime() % 5 == 0) machine.syncView();
-            HeatExchangerBoilerBridge.track(machine, false);
-            return;
-        }
         var controller = HeatExchangerBoilerBridge.controller(level, pos);
         BlockPos nextController = controller == null ? null : controller.getBlockPos();
         int previous = machine.viewHeat;
@@ -268,6 +265,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     @Override public void onLoad() {
         super.onLoad();
         available = true;
+        BoilerStructure.invalidateNearby(level, worldPosition);
         if (level != null && !level.isClientSide) ledger.setSettings(HeatExchangerConfig.settings());
         if (level != null && !level.isClientSide) ledger.setCondensationSettings(HeatExchangerConfig.condensationSettings());
         topologyReady = false;
@@ -281,6 +279,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
 
     /** 先让热回调与旧流体句柄不可用，再刷新跨区块控制器；本方法重复调用安全。 */
     public void suspend() {
+        BoilerStructure.invalidateNearby(level, worldPosition);
         available = false;
         topologyReady = false;
         capabilityEpoch++;
@@ -389,6 +388,11 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
         String prefix = "gui.create_nuclear_industry.heat_exchanger.";
         tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.nuclear_heat_exchanger")));
+        // 炉内机不再拥有独立罐或 Create 热级，避免继续展示接管前的直列缓存。
+        if (viewStatus.equals("in_boiler")) {
+            tooltip.add(Component.translatable(prefix + "state.in_boiler"));
+            return true;
+        }
         tooltip.add(Component.translatable(prefix + "mode." + viewMode.name().toLowerCase(java.util.Locale.ROOT)));
         if (viewMode == HeatExchangerMode.CONDENSATION) {
             tooltip.add(Component.translatable(prefix + "condensation_tanks", viewLineCount, viewLineHot, viewLineCold,
