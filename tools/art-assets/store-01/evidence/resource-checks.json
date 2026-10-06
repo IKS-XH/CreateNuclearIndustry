@@ -308,9 +308,29 @@
     "glass_milling_time": 100,
     "mixing_time": 100,
     "mixing_heat": "heated",
-    "cask_lead_plates": 4,
-    "cask_output": 4,
-    "rack_output": 1
+    "rack_output": 1,
+    "lead_shielding_cask": {
+      "type": "minecraft:crafting_shaped",
+      "category": "misc",
+      "pattern": [
+        " R ",
+        "L L",
+        "LSL"
+      ],
+      "symbol_counts": {
+        "L": 4,
+        "R": 1,
+        "S": 1
+      },
+      "lead_plate_tag": "c:plates/lead",
+      "steel_plate_tag": "c:plates/steel",
+      "seal_ring_item": "create_nuclear_industry:seal_ring",
+      "output": {
+        "id": "create_nuclear_industry:lead_shielding_cask",
+        "count": 4
+      },
+      "native_horizontal_mirror_allowed": true
+    }
   },
   "rack_item_display_chain": {
     "chain": [
@@ -349,6 +369,41 @@
     "rack_bounds": "frame model spans [0,0,0] to [16,16,16]",
     "rack_item_display": "resolved item -> zero block model -> actual Minecraft 1.21.1 client block/block parent display",
     "blockstate_coverage": "all 4 facings x 5 storage levels are represented",
-    "minecraft_runtime_or_gradle": "not run by STORE-01-ART per task boundary"
+    "minecraft_runtime_or_gradle": "not run by STORE-01-ART per task boundary",
+    "lead_cask_recipe": "shaped pattern expanded: 4 lead plates, 1 steel plate, 1 seal ring -> 4 casks"
+  },
+  "lead_cask_recipe_verification": {
+    "file": "src/main/resources/data/create_nuclear_industry/recipe/crafting/lead_shielding_cask.json",
+    "json_schema": "minecraft:crafting_shaped",
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+      " R ",
+      "L L",
+      "LSL"
+    ],
+    "symbol_counts": {
+      "L": 4,
+      "R": 1,
+      "S": 1
+    },
+    "lead_plate_tag": "c:plates/lead",
+    "steel_plate_tag": "c:plates/steel",
+    "seal_ring_item": "create_nuclear_industry:seal_ring",
+    "output": {
+      "id": "create_nuclear_industry:lead_shielding_cask",
+      "count": 4
+    },
+    "native_horizontal_mirror_allowed": true
+  },
+  "r1_resource_packaging": {
+    "command": "gradlew.bat processResources jar --console=plain",
+    "exit_code": 0,
+    "elapsed_seconds": 3,
+    "jar": "build/libs/create_nuclear_industry-0.1.0.jar",
+    "jar_size_bytes": 2144709,
+    "jar_sha256": "4DAEABE7385D81B861F25E0DB6F08E7D6050B82D8C58FD01A6A9AE1CE91E1AA6",
+    "recipe_entry": "data/create_nuclear_industry/recipe/crafting/lead_shielding_cask.json",
+    "entry_matches_source_bytes": true
   }
 }

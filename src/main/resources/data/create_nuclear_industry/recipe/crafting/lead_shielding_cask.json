@@ -1,26 +1,22 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    {
+  "pattern": [
+    " R ",
+    "L L",
+    "LSL"
+  ],
+  "key": {
+    "L": {
       "tag": "c:plates/lead"
     },
-    {
-      "tag": "c:plates/lead"
-    },
-    {
-      "tag": "c:plates/lead"
-    },
-    {
-      "tag": "c:plates/lead"
-    },
-    {
+    "S": {
       "tag": "c:plates/steel"
     },
-    {
+    "R": {
       "item": "create_nuclear_industry:seal_ring"
     }
-  ],
+  },
   "result": {
     "id": "create_nuclear_industry:lead_shielding_cask",
     "count": 4

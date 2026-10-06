@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import argparse
 import re
 import sys
 import zipfile
@@ -149,6 +150,60 @@ def write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def lead_cask_recipe() -> dict[str, object]:
+    """生成用户确认的有序铅桶配方，固定成本为铅板 4、钢板 1、密封环 1。"""
+    return {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [" R ", "L L", "LSL"],
+        "key": {
+            "L": {"tag": "c:plates/lead"},
+            "S": {"tag": "c:plates/steel"},
+            "R": {"item": "create_nuclear_industry:seal_ring"},
+        },
+        "result": {"id": "create_nuclear_industry:lead_shielding_cask", "count": 4},
+    }
+
+
+def write_lead_cask_recipe() -> Path:
+    """只写本批铅桶配方，供局部整改时避免重导其他资源。"""
+    path = DATA_ROOT / "create_nuclear_industry/recipe/crafting/lead_shielding_cask.json"
+    write_json(path, lead_cask_recipe())
+    return path
+
+
+def verify_lead_cask_shaped_recipe(path: Path | None = None) -> dict[str, object]:
+    """展开有序 pattern 字符，核对原料身份、数量和原生有序配方形状。"""
+    if path is None:
+        path = DATA_ROOT / "create_nuclear_industry/recipe/crafting/lead_shielding_cask.json"
+    recipe = json.loads(path.read_text(encoding="utf-8"))
+    expected = lead_cask_recipe()
+    if recipe != expected:
+        raise ValueError("铅屏蔽桶有序配方 JSON 与已确认合同不符")
+    pattern = recipe["pattern"]
+    symbols = [symbol for row in pattern for symbol in row if symbol != " "]
+    symbol_counts = {symbol: symbols.count(symbol) for symbol in sorted(set(symbols))}
+    if symbol_counts != {"L": 4, "R": 1, "S": 1}:
+        raise ValueError(f"铅桶 pattern 展开数量应为 L4/R1/S1，实际为 {symbol_counts}")
+    if recipe["key"]["L"] != {"tag": "c:plates/lead"} or recipe["key"]["S"] != {"tag": "c:plates/steel"}:
+        raise ValueError("铅桶的铅板或钢板标签不符")
+    if recipe["key"]["R"] != {"item": "create_nuclear_industry:seal_ring"}:
+        raise ValueError("铅桶必须使用正式 seal_ring 物品身份")
+    if recipe["category"] != "misc" or recipe["result"] != {"id": "create_nuclear_industry:lead_shielding_cask", "count": 4}:
+        raise ValueError("铅桶配方类别或产量不符")
+    return {
+        "type": recipe["type"],
+        "category": recipe["category"],
+        "pattern": pattern,
+        "symbol_counts": symbol_counts,
+        "lead_plate_tag": recipe["key"]["L"]["tag"],
+        "steel_plate_tag": recipe["key"]["S"]["tag"],
+        "seal_ring_item": recipe["key"]["R"]["item"],
+        "output": recipe["result"],
+        "native_horizontal_mirror_allowed": True,
+    }
+
+
 def write_models() -> list[Path]:
     model_root = ASSET_ROOT / "models"
     models: list[Path] = []
@@ -230,15 +285,7 @@ def write_recipes_and_tags() -> list[Path]:
             "results": [{"id": "create_nuclear_industry:vitrification_medium", "count": 4}],
         },
         "recipe/crafting/lead_shielding_cask.json": {
-            "type": "minecraft:crafting_shapeless",
-            "category": "misc",
-            "ingredients": [
-                {"tag": "c:plates/lead"}, {"tag": "c:plates/lead"},
-                {"tag": "c:plates/lead"}, {"tag": "c:plates/lead"},
-                {"tag": "c:plates/steel"},
-                {"item": "create_nuclear_industry:seal_ring"},
-            ],
-            "result": {"id": "create_nuclear_industry:lead_shielding_cask", "count": 4},
+            **lead_cask_recipe(),
         },
         "recipe/crafting/dry_storage_rack.json": {
             "type": "minecraft:crafting_shapeless",
@@ -394,11 +441,7 @@ def verify_recipe_contract() -> dict[str, object]:
         {"item": "minecraft:clay_ball"},
     ]:
         raise ValueError("固化基材配方输入不符")
-    cask = json.loads((root / "crafting/lead_shielding_cask.json").read_text(encoding="utf-8"))
-    if cask["ingredients"].count({"tag": "c:plates/lead"}) != 4 or cask["ingredients"].count({"tag": "c:plates/steel"}) != 1 or cask["ingredients"].count({"item": "create_nuclear_industry:seal_ring"}) != 1 or len(cask["ingredients"]) != 6:
-        raise ValueError("铅屏蔽桶必须由四张独立铅板、一张钢板和密封环制作")
-    if cask["result"] != {"id": "create_nuclear_industry:lead_shielding_cask", "count": 4}:
-        raise ValueError("铅屏蔽桶产量与合同不符")
+    cask_contract = verify_lead_cask_shaped_recipe(root / "crafting/lead_shielding_cask.json")
     rack = json.loads((root / "crafting/dry_storage_rack.json").read_text(encoding="utf-8"))
     if rack["ingredients"] != [
         {"item": "create_nuclear_industry:shielding_concrete"},
@@ -406,7 +449,7 @@ def verify_recipe_contract() -> dict[str, object]:
         {"tag": "c:plates/steel"},
     ] or rack["result"] != {"id": "create_nuclear_industry:dry_storage_rack", "count": 1}:
         raise ValueError("干式贮存架无序配方与合同不符")
-    return {"glass_milling_time": 100, "mixing_time": 100, "mixing_heat": "heated", "cask_lead_plates": 4, "cask_output": 4, "rack_output": 1}
+    return {"glass_milling_time": 100, "mixing_time": 100, "mixing_heat": "heated", "lead_shielding_cask": cask_contract, "rack_output": 1}
 
 
 def verify_rack_item_display_chain() -> dict[str, object]:
@@ -528,6 +571,7 @@ def verify_and_write_evidence(models: list[Path], blockstate: Path, data_files: 
             "rack_bounds": "frame model spans [0,0,0] to [16,16,16]",
             "rack_item_display": "resolved item -> zero block model -> actual Minecraft 1.21.1 client block/block parent display",
             "blockstate_coverage": "all 4 facings x 5 storage levels are represented",
+            "lead_cask_recipe": "shaped pattern is expanded and checked as 4 lead plates, 1 steel plate, 1 seal ring -> 4 casks",
             "minecraft_runtime_or_gradle": "not run by STORE-01-ART per task boundary",
         },
     }
@@ -536,6 +580,28 @@ def verify_and_write_evidence(models: list[Path], blockstate: Path, data_files: 
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="导出 STORE-01 像素素材与资源检查证据")
+    parser.add_argument("--lead-cask-only", action="store_true", help="只写并检查铅屏蔽桶有序配方，不重导其他资源")
+    args = parser.parse_args()
+    if args.lead_cask_only:
+        path = write_lead_cask_recipe()
+        public_tags = verify_public_material_tags()
+        cask_contract = verify_lead_cask_shaped_recipe(path)
+        evidence_path = REPORT_ROOT / "resource-checks.json"
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        evidence["recipe_contract"].pop("cask_lead_plates", None)
+        evidence["recipe_contract"].pop("cask_output", None)
+        evidence["recipe_contract"]["lead_shielding_cask"] = cask_contract
+        evidence["public_material_tags"] = public_tags
+        evidence["checks"]["lead_cask_recipe"] = "shaped pattern expanded: 4 lead plates, 1 steel plate, 1 seal ring -> 4 casks"
+        evidence["lead_cask_recipe_verification"] = {
+            "file": path.relative_to(ROOT).as_posix(),
+            "json_schema": "minecraft:crafting_shaped",
+            **cask_contract,
+        }
+        write_json(evidence_path, evidence)
+        print(f"已写入并核对铅桶有序配方：{path.relative_to(ROOT)}")
+        return
     textures = render_textures()
     models = write_models()
     blockstate = write_blockstate()
