@@ -27,7 +27,7 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 
 **工作台整改：** 铅桶R1已获用户手测确认。CRAFT-SHAPED-01完成其余13条设备有序JSON和三个导出器同步；基线多重集合、完整result及元数据核对通过，五条拆解及铅桶字节不变，src与工具无设备/零件无序漏项。唯一processResources jar资源重包3秒退出0，未跑JUnit/GameTest/客户端或全量导出。PM已审实际差异，并从最终JAR核对13条修改、五条拆解及铅桶共19条与源逐字节一致；简短报告见[本轮证据](./crafting-shaped.md)。代表性工作台/JEI与搅拌机不匹配确认并入原清单第1项。
 
-**R1历史证据：** 原铅桶数量4铅/1钢/1环产4桶，资源重包3秒退出0；报告见[R1](./lead-cask-shaped.md)。封存和架子逻辑未改，原8/6行为证据继续复用。
+**R1历史证据：** 原铅桶数量4铅/1钢/1环产4桶，资源重包3秒退出0；报告见[R1](/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/docs/reviews/2026-10-06/store-01/lead-cask-shaped.md)。封存和架子逻辑未改，原8/6行为证据继续复用。
 
 定向JUnit8项全部通过；本批隔离GameTest6项全部通过，正常保存退出；增量test+assemble退出0。素材13模型、9纹理、20种方向/占用组合静态检查通过。只针对审查发现的物品显示父链修正重新运行processResources jar，4秒退出0；行为没有变化，复用原8/6证据。客户端视觉与人工流程尚待用户确认。
 
