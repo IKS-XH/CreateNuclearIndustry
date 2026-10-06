@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**指定重构（2026-10-07）：** [锅炉内置换热、汽水分区、可变尺寸与温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)全套参数已确认，按[REWORK-01](./superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)准备实施。本项优先于一般主线暂停，思索播放门不变，其他主线未获接续授权；候选最终停在本批人工门。
+**指定重构（2026-10-07）：** [锅炉内置换热、汽水分区、可变尺寸与温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)已实现。29项单测、15项真实GameTest、增量构建及合并审查通过，[同级候选等待集中手测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，尚未合入main；两台思索播放门保留，不自动接其他主线或教学。
 
 **当前推进：** 封存、有序配方和产热取整已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。锅炉重构已批准，其余主线暂停；[反应堆02-R1四情景候选](./reviews/2026-10-06/ponder-02/CANDIDATE.md)已打包并经PM审查，等待集中播放，未合入main。[离心机思索R3](./reviews/2026-10-06/ponder-01/CANDIDATE.md)回水与粉末输出已分开，时序/文案不变，已打包审查；播放门仍保留，不自动推进其他设备。
 
