@@ -1,6 +1,6 @@
 # 分区温压锅炉：候选与集中手测
 
-**状态：控件与自动汽种01B整改的自动验证和一次合并审查通过，仍待集中人工验收，尚未合入main。** 原候选及01A自动证据保留，当前执行合同为[01B控件与自动汽种整改](../../../superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)，功能快照`32e6f897c03d8d8813f776dd4702bdf5cfe87b7f`。原[REWORK-01](../../../superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)及[01A层位整改](../../../superpowers/plans/2026-10-07-boiler-hot-inlet-layer-fix.md)未变部分继续适用。原功能快照`d5d3604`，底层热口快照`cca0dbeb5eefb82d4022938497c0e545f1f3f077`；主目录仅同步PM文档，新功能须从同级候选启动。
+**状态：[01C连续流动与动力联动排错](../../../superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)已修复出汽来源缓存失效，5项定向GameTest、增量assemble及一次合并审查通过；功能快照`050afe3e4eb70789804697b2880b7c76281ca8d7`。现场0SU持续残转尚未复现，保留集中复测，尚未人工验收或合入main。** 原[01B控件与自动汽种整改](../../../superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)快照`32e6f897c03d8d8813f776dd4702bdf5cfe87b7f`及[REWORK-01](../../../superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)、[01A层位整改](../../../superpowers/plans/2026-10-07-boiler-hot-inlet-layer-fix.md)未变部分继续适用。原功能快照`d5d3604`，底层热口快照`cca0dbeb5eefb82d4022938497c0e545f1f3f077`；主目录仅同步PM文档，新功能须从同级候选启动。
 
 锅炉重构仍在`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录尚未应用新版锅炉。[离心机R3和反应堆02-R1](../ponder-acceptance-01/ACCEPTANCE.md)已获用户明确手测确认并单独合入main；这次教学验收不覆盖本页锅炉清单，锅炉独立人工门继续保留。
 
@@ -14,12 +14,15 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 
 请按下方新搭法搭建锅炉；原底部外置热源结构不属于本候选搭法。默认尺寸范围为`[5,11]`，热工、容量、逐口流量与压力阈值均在`create_nuclear_industry-boiler.toml`中配置，准确字段和实际生效路径见[配置指南](../../../server-config.md#锅炉)。显式机器保压设置由各机器保存。两类新口及再加热段成本见[配方表](../../../recipes.md#14-专用高压锅炉部件)。
 
-[最新01B候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01B/client-candidate/create_nuclear_industry-0.1.0-boiler-controls.jar)：2,193,605字节，内部版本仍为`0.1.0`；SHA-256为`94F5B6481AB62BDB4B8594AAD1044B2FB693DCAB009A6FA644A77CEBE818AA2F`。两目录均保存相同制品。开发启动读取源码和资源，JAR快照用于核对交付；依赖保持MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。原01A快照（2,186,418字节，SHA-256 `577CB895A33175AB18F08A65096B24E059271C94D95570622FC30638AFEC4414`）及REWORK-01快照（2,179,767字节，SHA-256 `A93ED326EAB0F9BF471DBD9A6A9497D968D226028509AB30D0E3B09856B9640D`）保留历史核对。
+[最新01C候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01C/client-candidate/create_nuclear_industry-0.1.0-boiler-flow.jar)：2,207,578字节，内部版本仍为`0.1.0`；SHA-256为`B3BF640B296561533EA1FDBAC802DBEAC11AFCA530C58879940325DA76E6E911`。两目录均保存相同制品，PM核对三个生产入口、测试类及NBT封包与实际构建输出一致。开发启动读取源码和资源，须重启客户端才能加载新代码。依赖保持MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。
+
+原[01B候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01B/client-candidate/create_nuclear_industry-0.1.0-boiler-controls.jar)（2,193,605字节，SHA-256 `94F5B6481AB62BDB4B8594AAD1044B2FB693DCAB009A6FA644A77CEBE818AA2F`）、01A快照（2,186,418字节，SHA-256 `577CB895A33175AB18F08A65096B24E059271C94D95570622FC30638AFEC4414`）及REWORK-01快照（2,179,767字节，SHA-256 `A93ED326EAB0F9BF471DBD9A6A9497D968D226028509AB30D0E3B09856B9640D`）保留历史核对。
 
 ## 自动证据与审查
 
 | 证据 | 结果 |
 | :--- | :--- |
+| 01C持续供热及联动 | 专用5/5、GameTest/Gradle exit0/24秒，增量assemble exit0/1秒，一次独立合并审查无阻断；持续大型/中型/空罐、自然快速切种、实际汽量/HU边界、异种背压及同机双端四齿轮箱回接停开均通过。持续残转没有复现，不据此关闭现场项。 |
 | 01B单控件与自动汽种定向验证 | 新BoilerStateTest 15/15，专用真实GameTest 3/3，增量assemble exit0。原生数值包17/43/70/0/100提交、冷液真实泵跨调压/汽种保持原句柄、蒸汽原管自动换种且质量/HU守恒均通过。首轮夹具快照错误及修复证据保留；一次合并审查通过，未发现确定性阻断缺陷。 |
 | 两套账本单测 | BoilerStateTest 13项＋HeatExchangerStateTest 16项，共29项，0失败/错误/跳过；生命周期整改未改账本，复用此证据。 |
 | 最终锅炉域GameTest | 15/15通过，包含真实Create普通/超临界管路、独立机冒烟及新增远端FULL可用性恢复/重叠拒绝回归；服务端正常保存退出。 |
@@ -30,6 +33,8 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 [实现及整改记录](./implementation.md)、[SVG素材记录](./assets.md)、[原审查及关闭结论](./review.md)、[01A实施及审查记录](./hot-inlet-layer.md)。原日志与XML保留在`build/reports/extension/EXT-B-BOILER-REWORK-01/`，01A定向日志在`build/reports/extension/EXT-B-BOILER-REWORK-01A/`，失败轮不改写为成功。远端用例证明FULL可用性退降/恢复，不声称发生完整区块磁盘卸载；32格是可配置工程封顶，不代表最大规模客户端性能已验收。
 
 01B见[实现及定向证据](./controls-automatic-output.md)、[规格/质量合并审查](./controls-review.md)；原始日志/XML及PM封包核对在同级候选`build/reports/extension/EXT-B-BOILER-REWORK-01B/`。原29/15项为当时合同证据，涉及旧手动模式的行为由01B新的15项账本及3项真实管路证据替代，未声称原全域按新规则重新运行。
+
+01C见[连续流动排错与原始证据索引](./continuous-flow-diagnosis.md)、[本批合并审查](./continuous-flow-review.md)。失败轮、最终运行及原始日志保留在同级候选`build/reports/extension/EXT-B-BOILER-REWORK-01C/`；未改账本公式与动力生产代码，不重复原15项账本单测或全域。汽口首段是管道的工况已实测，直接邻接机械泵仅有静态同接口依据，本批未专测。
 
 ## 新搭法
 
@@ -53,4 +58,6 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 
 自动验证已覆盖热量/流体守恒、模拟纯读、逐口额度、真实Create管路、配置范围及当前账本保存加载，不要求客户端逐条重做账本断言。仍需用户完成上表的世界内操作、外观及连续运行；本页不表示人工通过。
 
-01B复测重点为唯一压力控件的中间值与0/100、操作时冷液持续输出、实际温压自动换汽种和护目镜文案。已明确确认的基础功能不要求机械重复完整测试；锅炉本批整体验收仍待用户明确确认。
+本次重点只复测原装置：重启同级候选后保持供热，60→10，应继续接汽及回冷液，无需拆放管道；空罐在实际汽种资格变化后应能接收对应汽种，原有异种库存不能自动混装。设置10是出汽压力下限，实际温压仍满足超临界条件时出超临界蒸汽；它不要求炉压维持10或强制出蒸汽。热输入超过汽轮机吞吐时仍允许原规则安全阀泄放，不把正常过量供热改成新平衡规则。
+
+同时观察原汽轮机0SU后外接轴是否自行停转。真实自动场景能停，但用户现场持续残转尚未复现；若仍发生，提供前轴、后轴和外接轴的`/data get block x y z`输出（替换为各块实际坐标），重点核对Speed、Source、Network，并说明当时两端外接接法，再继续定向修复。已确认基础项不要求机械重复全表；本批整体人工门继续保留。
