@@ -24,9 +24,9 @@ public final class CentrifugePonderScenes {
     private static final BlockPos MACHINE_LOWER = new BlockPos(4, 2, 4);
     private static final BlockPos MACHINE_UPPER = new BlockPos(4, 3, 4);
     private static final BlockPos SLURRY_TANK = new BlockPos(4, 7, 4);
-    private static final BlockPos RECOVERY_TANK = new BlockPos(7, 2, 5);
+    private static final BlockPos RECOVERY_TANK = new BlockPos(4, 2, 7);
     private static final BlockPos PUMP = new BlockPos(4, 5, 4);
-    private static final BlockPos WATER_PUMP = new BlockPos(6, 2, 5);
+    private static final BlockPos WATER_PUMP = new BlockPos(4, 2, 6);
     private static final BlockPos LOWER_FUNNEL = new BlockPos(4, 2, 3);
     private static final BlockPos LOWER_RECEIVER = new BlockPos(4, 1, 3);
     private static final BlockPos UPPER_RECEIVER = new BlockPos(5, 2, 4);
@@ -50,7 +50,12 @@ public final class CentrifugePonderScenes {
         Selection inputPump = util.select().position(PUMP);
         Selection inputPumpDrive = util.select().fromTo(3, 5, 4, 3, 8, 4);
         Selection returnPump = util.select().position(WATER_PUMP);
-        Selection returnPumpDrive = util.select().fromTo(6, 2, 4, 8, 2, 4);
+        Selection returnPumpDrive = util.select().position(3, 2, 6)
+                .add(util.select().position(3, 2, 7))
+                .add(util.select().position(3, 2, 8));
+        Selection returnLine = util.select().position(4, 2, 5)
+                .add(returnPump)
+                .add(util.select().position(RECOVERY_TANK));
         Selection lowerBody = util.select().position(MACHINE_LOWER);
         Selection upperBody = util.select().position(MACHINE_UPPER);
         scene.world().setKineticSpeed(lowerDrive, 128);
@@ -120,14 +125,14 @@ public final class CentrifugePonderScenes {
                 tank.getTankInventory().drain(1000, IFluidHandler.FluidAction.EXECUTE));
         scene.world().showSection(util.select().position(LOWER_RECEIVER).add(util.select().position(LOWER_FUNNEL)), Direction.UP);
         scene.world().showSection(util.select().position(UPPER_RECEIVER).add(util.select().position(UPPER_FUNNEL)), Direction.UP);
-        scene.world().showSection(util.select().fromTo(4, 2, 5, 5, 2, 5), Direction.WEST);
+        scene.world().showSection(util.select().position(4, 2, 5), Direction.WEST);
         scene.world().showSection(returnPumpDrive, Direction.WEST);
         scene.world().showSection(returnPump, Direction.WEST);
         scene.world().showSection(util.select().position(RECOVERY_TANK), Direction.DOWN);
         scene.idle(10);
         scene.world().setKineticSpeed(returnPump, 128);
         scene.world().setKineticSpeed(returnPumpDrive, -128);
-        scene.effects().rotationDirectionIndicator(WATER_PUMP.north());
+        scene.effects().rotationDirectionIndicator(WATER_PUMP.west());
         scene.world().setFilterData(util.select().position(LOWER_FUNNEL), FunnelBlockEntity.class,
                 new ItemStack(FuelProcessingContent.DEPLETED_URANIUM_DUST.get()));
         scene.world().setFilterData(util.select().position(UPPER_FUNNEL), FunnelBlockEntity.class,
@@ -143,7 +148,13 @@ public final class CentrifugePonderScenes {
                 util.vector().of(0, -0.06, 0),
                 new ItemStack(FuelProcessingContent.LOW_ENRICHED_URANIUM_DUST.get()));
         setTankFluid(scene, RECOVERY_TANK, new FluidStack(net.minecraft.world.level.material.Fluids.WATER, 1000));
-        scene.overlay().showOutlineWithText(util.select().fromTo(4, 1, 3, 8, 3, 5).add(returnPumpDrive), 150)
+        scene.overlay().showBigLine(
+                net.createmod.ponder.api.PonderPalette.BLUE,
+                util.vector().centerOf(4, 2, 5),
+                util.vector().centerOf(RECOVERY_TANK),
+                70
+        );
+        scene.overlay().showOutlineWithText(returnLine.add(returnPumpDrive), 150)
                 .text("Both halves can output powder or water from any of their four sides. Use brass funnels to collect the powders separately and pipes to recover water.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(RECOVERY_TANK))

@@ -118,7 +118,7 @@ def _decode_root(data: bytes) -> dict:
 
 
 def _structure() -> bytes:
-    # 坐标与 CentrifugePonderScenes 中的分段一致；底部传动、上方接管和回水支路均可见。
+    # 坐标与 CentrifugePonderScenes 中的分段一致；底部传动、上方接管和南向直线回水支路均可见。
     blocks: list[tuple[tuple[int, int, int], tuple[str, dict[str, str]]]] = []
     for x in range(9):
         for z in range(9):
@@ -143,13 +143,12 @@ def _structure() -> bytes:
         ((4, 1, 3), ("minecraft:hopper", {"enabled": "true", "facing": "down"})),
         ((5, 3, 4), ("create:brass_funnel", {"facing": "east", "extracting": "true"})),
         ((5, 2, 4), ("minecraft:hopper", {"enabled": "true", "facing": "down"})),
-        ((4, 2, 5), _pipe_state(north=True, east=True)),
-        ((5, 2, 5), _pipe_state(west=True, east=True)),
-        ((6, 2, 5), ("create:mechanical_pump", {"facing": "east", "waterlogged": "false"})),
-        ((6, 2, 4), ("create:cogwheel", {"axis": "x"})),
-        ((7, 2, 4), ("create:shaft", {"axis": "x"})),
-        ((8, 2, 4), ("create:creative_motor", {"facing": "west"})),
-        ((7, 2, 5), ("create:fluid_tank", {"top": "true", "bottom": "true", "shape": "window"})),
+        ((4, 2, 5), _pipe_state(north=True, south=True)),
+        ((4, 2, 6), ("create:mechanical_pump", {"facing": "south", "waterlogged": "false"})),
+        ((4, 2, 7), ("create:fluid_tank", {"top": "true", "bottom": "true", "shape": "window"})),
+        ((3, 2, 6), ("create:cogwheel", {"axis": "z"})),
+        ((3, 2, 7), ("create:shaft", {"axis": "z"})),
+        ((3, 2, 8), ("create:creative_motor", {"facing": "north"})),
     ])
 
     palette: list[tuple[str, dict[str, str]]] = [("minecraft:air", {})]
@@ -237,14 +236,26 @@ def main() -> None:
         (5, 3, 4): ("create:brass_funnel", {"facing": "east", "extracting": "true"}),
         (5, 2, 4): ("minecraft:hopper", {"facing": "down"}),
         (3, 8, 4): ("create:creative_motor", {"facing": "down"}),
-        (8, 2, 4): ("create:creative_motor", {"facing": "west"}),
         (3, 5, 4): ("create:cogwheel", {"axis": "y"}),
-        (6, 2, 4): ("create:cogwheel", {"axis": "x"}),
+        (4, 2, 5): ("create:fluid_pipe", {"north": "true", "south": "true"}),
+        (4, 2, 6): ("create:mechanical_pump", {"facing": "south", "waterlogged": "false"}),
+        (4, 2, 7): ("create:fluid_tank", {"top": "true", "bottom": "true", "shape": "window"}),
+        (3, 2, 6): ("create:cogwheel", {"axis": "z"}),
+        (3, 2, 7): ("create:shaft", {"axis": "z"}),
+        (3, 2, 8): ("create:creative_motor", {"facing": "north"}),
     }
     for pos, (block_id, properties) in expected_states.items():
         state = state_at.get(pos, {})
         if state.get("Name") != block_id or not properties.items() <= state.get("Properties", {}).items():
             raise SystemExit(f"模板在 {pos} 缺少正确的方块方向或属性: {state}")
+    old_east_return_positions = {
+        (5, 2, 5), (6, 2, 5), (7, 2, 5),
+        (6, 2, 4), (7, 2, 4), (8, 2, 4),
+    }
+    if old_east_return_positions & state_at.keys():
+        raise SystemExit("旧东向回水折线不得残留或挤入东侧粉末输出")
+    if state_at[(4, 2, 5)]["Properties"].get("south") != "true":
+        raise SystemExit("回水管必须沿南北轴连接离心机侧与朝南的机械泵")
     print(
         f"wrote {OUTPUT} ({OUTPUT.stat().st_size} bytes); "
         f"NBT size=TAG_List<{size_type}>[{len(size_values)}]={size_values}; "
