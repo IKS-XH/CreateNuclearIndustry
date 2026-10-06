@@ -45,7 +45,7 @@ public final class P1PonderPlugin implements PonderPlugin {
         return CreateNuclearIndustry.MOD_ID;
     }
 
-    /** 将已注册组件绑定到唯一 P1 反应堆故事线，不创建或修改服务端内容。 */
+    /** 注册现有 P1 实验堆入口和独立离心机教程，不创建或修改服务端内容。 */
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         helper.forComponents(DIRECT_ENTRY_IDS.stream()
@@ -54,6 +54,11 @@ public final class P1PonderPlugin implements PonderPlugin {
                 .addStoryBoard(
                         ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, REACTOR_SCENE_ID),
                         P1PonderScenes::experimentalReactorBasics
+                );
+        helper.forComponents(componentId("enrichment_centrifuge"))
+                .addStoryBoard(
+                        ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "enrichment_centrifuge"),
+                        CentrifugePonderScenes::enrichmentCentrifugeBasics
                 );
     }
 
