@@ -1,12 +1,14 @@
 # 《机械动力：核工业》实施路线图
 
-**当前推进：** 三档汽轮机与蒸汽冷凝回水已[联合验收并合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。用户2026-10-06确认[轻量封存方案](./superpowers/plans/2026-10-05-spent-fuel-storage-proposal.md)，按[STORE-01实施卡](./superpowers/plans/2026-10-06-ext-a-store-01.md)自动执行单次灌封装桶、低耗材及16桶架；候选f2cbb59已完成实现、原8项JUnit/6项GameTest及联合审查，铅桶R1用户手测通过。其余13条设备有序整改已完成数量/导出器/JAR核对和一次资源打包，五条拆解保持无序，见[整改卡](./superpowers/plans/2026-10-06-crafting-shaped-01.md)。现等待同一张[集中手测](./reviews/2026-10-06/store-01/CANDIDATE.md)，暂停自动推进，功能尚未合入main。
+**当前推进：** 三档汽轮机与蒸汽冷凝回水已[联合验收并合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。用户2026-10-06确认[轻量封存方案](./superpowers/plans/2026-10-05-spent-fuel-storage-proposal.md)，按[STORE-01实施卡](./superpowers/plans/2026-10-06-ext-a-store-01.md)自动执行单次灌封装桶、低耗材及16桶架；候选3b1bc0a已完成实现、原8项JUnit/6项GameTest及联合审查，铅桶R1用户手测通过。其余13条设备有序整改已完成数量/导出器/JAR核对和一次资源打包，五条拆解保持无序，见[整改卡](./superpowers/plans/2026-10-06-crafting-shaped-01.md)。现等待同一张[集中手测](./reviews/2026-10-06/store-01/CANDIDATE.md)，暂停自动推进，功能尚未合入main。
 
 **更新日期：2026-10-06。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是`0.1.0` Alpha；热端闭环完成，基础封存与发布出口尚未完成。
 
 **验证边界：** 已验收热端复用既有证据。封存候选只运行受影响的8项JUnit、6项GameTest及一次增量test+assemble；资源显示整改仅重新打包，行为未改则复用原测试。现待一次联合手测，不重跑热端全量或旧存档矩阵。
 
 本文维护阶段、进度与验收门。玩法、公式、注册、配方和治理按[文档入口](./README.md)列出的权威文档维护；已完成任务细节进入[归档](./archive/README.md)。
+
+**2026-10-06追加：** [反应堆总产热取整](./superpowers/plans/2026-10-06-reactor-heat-rounding-01.md)按用户明确要求实施，正式总量、列热、冷却和遥测一致；并入现有联合手测，未解除封存人工门或启动其他后置范围。
 
 ## 1. 当前状态
 
