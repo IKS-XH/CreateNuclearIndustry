@@ -21,25 +21,32 @@
 
 ## 锅炉
 
-**规划增量（2026-10-07，已批准待实施）：** 用户确认[内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)全套默认值，见方案第3节和[REWORK-01](./superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)。下表仍为现行已验收代码，不能提前把新键当成可用；实施交付后旧固定容量/暖炉字段由新账本取代，不并行生效。
+**2026-10-07重构候选：** [内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)全套默认值已实现，下列实际字段经定向自动验证与审查，尚待人工、未合入main。候选状态与人工清单见[本批说明](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。主目录仍为此前已验收固定锅炉，历史参数见[01A配置化合同](./superpowers/plans/2026-10-04-ext-b-turbine-01a.md)。
 
 文件：`create_nuclear_industry-boiler.toml`。所有键在文件顶层。
 
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |
-| `waterCapacityMb` | 16000 | 整炉水容量，mB |
-| `steamCapacityMb` | 16000 | 整炉超临界蒸汽容量，mB |
-| `portFlowMbPerTick` | 256 | 每个物理给水口、汽口独立限流，mB/t |
-| `sectionHeatHuPerTick` | 18 | 每个换热段最高收热，HU/t |
-| `steamHuPerMb` | 1 | 每mB超临界蒸汽的产汽耗热，HU/mB |
-| `warmHuPerSection` | 3600 | 每个换热段对应暖炉所需热量，HU |
-| `coolingHuPerSectionPerTick` | 0.9 | 未收热时每段每tick散热，HU/t |
-| `reheatFraction` | 0.25 | 低于暖炉上限此比例时重新预热 |
-| `valveOpenFraction` | 0.9 | 安全阀开启汽量比例 |
-| `valveCloseFraction` | 0.8 | 安全阀关闭汽量比例，必须小于开启值 |
-| `valveFlowMbPerTick` | 256 | 安全阀每tick最多排汽，mB/t |
+| `dimensionRange` | `[5, 11]` | 三边分别允许的整数闭区间；恰好两值，5≤min≤max≤32 |
+| `waterCapacityPerCellMb` / `steamCapacityPerCellMb` | 各2000 | 每个有效水区/汽区格的mB容量 |
+| `portFlowMbPerTick` | 256 | 每个水、汽、热液、冷液口的独立mB/t额度，主动/被动共用 |
+| `pairHeatHuPerTick` | 18 | 每有效换热器/再加热段配对的HU/t上限 |
+| `boilingTemperature` / `supercriticalTemperature` | 1 / 2 | 归一游戏温度，后者须大于前者 |
+| `wallHeatCapacityHuPerWaterCell` | 1600 | 每个水区格提供的炉壁热容，HU/温升 |
+| `waterSpecificHeatHuPerMb` / `steamSpecificHeatHuPerMb` | 0.1 / 0.2 | 水/汽比热，HU/mB/温升 |
+| `vaporizationLatentHeatHuPerMb` | 0.7 | 汽化追加潜热，HU/mB |
+| `supercriticalPressure` | 0.5 | 超临界资格的归一炉压门槛 |
+| `normalOutputMinPressure` / `supercriticalOutputMinPressure` | 0.1 / 0.6 | 两模式默认保压；SC不低于资格门槛 |
+| `valveOpenPressure` / `valveClosePressure` | 0.9 / 0.8 | 阀开/关炉压，开启线也用于堵阀保护 |
+| `valveFlowPerSteamCellMbPerTick` | 32 | 每汽区格提供的泄放速率，mB/t |
+| `idleWaterCoolingHuPerCellPerTick` | 0.9 | 无实际收热时每水区格显热损失，HU/t |
+| `idleSteamCoolingHuPerCellPerTick` | 0.1 | 无实际收热时每汽区格高于沸点的显热损失，HU/t |
 
-端口主动输出与外部抽取共用该口限流；增加端口不增加水汽容量。固定5×5×5、最多9个换热段仍是当前结构合同，可变尺寸与随规模计算容量另批实现。安全阀排放仍会消耗工质。
+冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；32为工程扫描封顶，不代表最大规模已完成客户端性能验收。
+
+控制器的Create原生模式和保压设置按机器保存，两模式保压各自保留；显式调过的值不由默认配置覆盖。炉压由汽量、汽区容量和汽温共同决定，与Create管网运输压力分开。默认5³居中隔层上下各9格、水汽各18000mB；SC目标温度2、保压0.6时保留10800mB启动汽量。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出携带HU均实际扣账，切模式不免费升级库存。简化散热不扣潜热、不模拟炉内凝水，安全阀正常排放仍消耗工质和热量。
+
+旧`waterCapacityMb`、`steamCapacityMb`、`sectionHeatHuPerTick`、`steamHuPerMb`、`warmHuPerSection`、`coolingHuPerSectionPerTick`、`reheatFraction`、`valveOpenFraction`、`valveCloseFraction`及`valveFlowMbPerTick`不再控制重构候选。既有配置文件和用户世界不由本次文档整理删除。
 
 ## 换热器
 
