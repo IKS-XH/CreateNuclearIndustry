@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**当前推进：** 封存、有序配方和产热取整已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。主线按用户要求暂停，现有设备基础思索逐台制作；第一台[离心机](./superpowers/plans/2026-10-06-device-ponder-01-centrifuge.md)，客户端验收后才继续下一台。
+**当前推进：** 封存、有序配方和产热取整已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。主线按用户要求暂停；第一台[离心机思索候选](./reviews/2026-10-06/ponder-01/CANDIDATE.md)已完成必要打包与PM审查，停在客户端播放门，通过后才继续下一台。
 
 **更新日期：2026-10-06。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是`0.1.0` Alpha；热端闭环与基础封存已完成，教学及发布出口尚未完成。
 

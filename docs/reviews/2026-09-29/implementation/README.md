@@ -1,8 +1,8 @@
 # 三矿资源与美术重绘：客户端验收候选
 
-> **2026-10-06最新状态：** 封存/设备有序配方/产热取整已[全部手测通过并合入main](../../2026-10-06/store-01/ACCEPTANCE.md)，主目录runClient可使用；原同级候选继续制作[离心机思索](../../../superpowers/plans/2026-10-06-device-ponder-01-centrifuge.md)。本页下方旧候选说明保留原过程，不再表示当前待验收。
+> **2026-10-06最新状态：** 封存/设备有序配方/产热取整已[全部手测通过并合入main](../../2026-10-06/store-01/ACCEPTANCE.md)，主目录runClient可使用；[离心机思索候选](../../2026-10-06/ponder-01/CANDIDATE.md)等待同级候选客户端播放。本页下方旧候选说明保留原过程，不再表示当前待验收。
 
-> **2026-10-06当前候选：** [轻量封存与16桶架](../../2026-10-06/store-01/CANDIDATE.md)3b1bc0a已完成必要验证和联合审查，铅桶R1手测通过、其他13条设备有序配方资源整改完成，等待其余联合手测；新功能请从同级`Create_NuclearIndustry-ore-acquisition`启动，尚未合入main。
+> **2026-10-06封存验收前记录：** [轻量封存与16桶架](../../2026-10-06/store-01/CANDIDATE.md)3b1bc0a完成必要验证和联合审查后曾等待其余联合手测；该门槛现已通过，本段仅保留当时过程。
 
 > 本页保留三矿/素材批次历史。2026-10-05三档汽轮机、冷凝回水及护目镜已[全部验收并合入main](../../2026-10-05/condense-01/ACCEPTANCE.md)，主目录`Create_NuclearIndustry`可直接runClient；同级`Create_NuclearIndustry-ore-acquisition`仍保留原测试世界，不搬移或清理。
 
