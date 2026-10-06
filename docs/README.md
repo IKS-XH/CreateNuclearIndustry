@@ -1,6 +1,6 @@
 # 项目文档入口
 
-**当前锅炉整改（2026-10-07）：** 用户手测反馈后确认[单压力控件与自动汽种01B](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)：移除手动汽种开关，压力0～100逐整数，修复调节后冷液停流并更新护目镜。15项定向单测、3项真实管路GameTest及一次合并审查通过，功能快照`32e6f89`；原底层热口01A规则保留。最新同级候选及重点复测见[交付页](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，仍并入锅炉原集中人工门，不自动接下一项。
+**当前锅炉整改（2026-10-07）：** [连续流动与动力联动01C](./superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)已复现并修复快速跨汽种后原生来源缓存失效，专用5项GameTest、增量assemble及一次合并审查通过，功能快照`050afe3`。中/大型及空罐持续接汽、守恒与双端回接停开定向通过；用户现场0SU持续残转尚未复现，保留同次现场复测，不声称全部问题已修复。最新同级候选见[交付页](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，未人工验收或合入main；原[单控件与自动汽种01B](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)及01A未变规则保留，不自动接下一项。
 
 **当前进度（2026-10-05）：** 用户明确“所有测试项都通过了”，三档汽轮机的搭建/外观、双端共享容量、流量效率/微周转、断汽停机，蒸汽冷凝回水闭环及护目镜显示已完成[联合验收并合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。主目录`.\gradlew.bat runClient`包含现行实现；同级候选与原测试世界保留。未变实现复用各批定向验证，只新做一次合入增量打包。
 
