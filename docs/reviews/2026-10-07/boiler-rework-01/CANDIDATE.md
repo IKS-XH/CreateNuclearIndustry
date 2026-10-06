@@ -2,7 +2,7 @@
 
 **状态：自动验证和审查通过，等待集中人工验收，尚未合入main。** 用户已批准整组参数，执行合同见[REWORK-01](../../../superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)。功能快照为`d5d3604e1821d1f0d4682be97f21a4e2594e3948`；主目录仅同步PM文档，新功能须从同级候选启动。
 
-本批在`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`实施，主目录只更新项目文档。保留[离心机R3](../../2026-10-06/ponder-01/CANDIDATE.md)和[反应堆02-R1](../../2026-10-06/ponder-02/CANDIDATE.md)各自的播放门；这次锅炉实施不表示它们已经验收。
+锅炉重构仍在`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录尚未应用新版锅炉。[离心机R3和反应堆02-R1](../ponder-acceptance-01/ACCEPTANCE.md)已获用户明确手测确认并单独合入main；这次教学验收不覆盖本页锅炉清单，锅炉独立人工门继续保留。
 
 ## 启动与制品
 

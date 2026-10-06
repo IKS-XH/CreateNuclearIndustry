@@ -1,6 +1,6 @@
 # 三矿资源与美术重绘：客户端验收候选
 
-> **2026-10-07最新状态：** [分区温压锅炉候选](../../2026-10-07/boiler-rework-01/CANDIDATE.md)功能快照`d5d3604`已通过29项单测、15项真实GameTest、增量构建及审查，等待集中手测，需从同级`Create_NuclearIndustry-ore-acquisition`启动；尚未合入main。[反应堆02-R1](../../2026-10-06/ponder-02/CANDIDATE.md)与[离心机R3](../../2026-10-06/ponder-01/CANDIDATE.md)播放门各自保留。封存/有序配方/产热取整已验收合入main；本页下方旧候选保留历史。
+> **2026-10-07最新状态：** [两台思索](../../2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)已手测通过并单独合入main，可在主目录runClient使用。[分区温压锅炉候选](../../2026-10-07/boiler-rework-01/CANDIDATE.md)仍待集中手测，需从同级`Create_NuclearIndustry-ore-acquisition`启动，尚未合入main；封存/有序配方/产热取整已验收。下方旧候选保留历史。
 
 > **2026-10-06封存验收前记录：** [轻量封存与16桶架](../../2026-10-06/store-01/CANDIDATE.md)3b1bc0a完成必要验证和联合审查后曾等待其余联合手测；该门槛现已通过，本段仅保留当时过程。
 

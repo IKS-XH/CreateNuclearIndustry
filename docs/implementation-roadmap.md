@@ -1,8 +1,8 @@
 # 《机械动力：核工业》实施路线图
 
-**指定重构（2026-10-07）：** [锅炉内置换热、汽水分区、可变尺寸与温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)已实现。29项单测、15项真实GameTest、增量构建及合并审查通过，[同级候选等待集中手测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，尚未合入main；两台思索播放门保留，不自动接其他主线或教学。
+**指定重构（2026-10-07）：** [分区温压锅炉](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)已实现并通过定向自动验证/审查，[同级候选等待集中手测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，尚未合入main；两台思索已另行验收合入，不覆盖锅炉门，不自动接其他主线或教学。
 
-**当前推进：** 封存、有序配方和产热取整已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。锅炉重构已批准，其余主线暂停；[反应堆02-R1四情景候选](./reviews/2026-10-06/ponder-02/CANDIDATE.md)已打包并经PM审查，等待集中播放，未合入main。[离心机思索R3](./reviews/2026-10-06/ponder-01/CANDIDATE.md)回水与粉末输出已分开，时序/文案不变，已打包审查；播放门仍保留，不自动推进其他设备。
+**当前推进：** 用户确认离心机及反应堆思索手测通过，R1/R2/R3与02-R1四情景已[联合验收并单独合入main](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)。六个教学功能提交无冲突整合，13个相关文件与已验收候选一致；锅炉重构不夹带合入，继续等待本批手测。
 
 **更新日期：2026-10-06。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是`0.1.0` Alpha；热端闭环与基础封存已完成，教学及发布出口尚未完成。
 
@@ -40,7 +40,7 @@
 | 燃料组件直接装配02D/02E | 功能手测通过，连同R2模型修复已合入main | [最终验收](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)：2×2×2、四周漏斗物流、21格制造与动画分件；功能证据复用，R2仅几何/资源核对，新画面未再次人工确认 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 当前基础生产链已按批验收；后续主线暂停 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
-| 热端、动力、事故与思索 | 热端已验收；基础思索逐台；事故后置 | [离心机教学](./superpowers/plans/2026-10-06-device-ponder-01-centrifuge.md)为当前首台，不演示未实现事故 |
+| 热端、动力、事故与思索 | 两台基础思索已验收合入；新版锅炉待人工，事故后置 | [教学联合验收](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)；下一台未派发，不演示未实现事故 |
 
 P1 已交付固定 `5×5×5` 结构、逐列热工/燃耗/损伤、控制棒与 SCRAM、布局派生冷/热共享容量、真实 Create 管网、人工/机械臂换料、维修、护目镜遥测、危险拆除和停机重组，以及 11 项教学入口与十段基础场景。融毁只发布服务端事件占位符，尚无事故产物或世界破坏。
 

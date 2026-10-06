@@ -1,6 +1,6 @@
 # DEVICE-PONDER-02-R1：反应堆布局、可见管路与棒列关系教学
 
-**状态（2026-10-07）：** 用户2026-10-06播放反馈的整改已完成；功能提交`c2bb583`已打包并通过[PM审查](../../reviews/2026-10-06/ponder-02/R1-REVIEW.md)，等待[集中播放复验](../../reviews/2026-10-06/ponder-02/MANUAL-CHECKLIST.md)。此前三情景`72b8ff1`没有通过验收；离心机播放门也仍保留。主线暂停。
+**状态（2026-10-07）：** 用户明确“离心机、反应堆思索已经手动测试通过了”，本批四情景已[验收并合入main](../../reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)，原`c2bb583`对应main`f6d6129`。初版三情景播放问题由本批整改接续关闭，保留原失败/审查证据；离心机亦通过，锅炉重构另待人工。
 
 **目标：** 补全自由棒列布局及多个冷热端口说明，将搭建和运行的冷热接口移到默认镜头可见一侧，新增独立“燃料棒与控制棒”情景。只改教学，不修改生产逻辑、数值、注册内容、配方、模型或事务。
 
@@ -67,6 +67,6 @@ C装料与换料的正文/臂动画不改；如果共享模板函数改变，必
 - [x] 四模板/坐标/ID/方向、双语/后备、正文净间隔、多口及未受控持续裂变显示已核对；C和离心机保留，详见[交付](../../reviews/2026-10-06/ponder-02/r1-implementation.md)。
 - [x] 现有合同一次6/0/0/0，最终增量assemble一次退出0；源码资源随后未变，没有重复全量或生产测试。
 - [x] PM联合审查、实际XML/日志/JAR检查完成，候选交接；没有GameTest、旧存档兼容或客户端启动。
-- [ ] 用户同次播放A/B/D及四情景入口/关键帧；到人工门停止，保留C和离心机既有待验收项。
+- [x] 用户2026-10-07确认离心机与反应堆思索手测通过；本批A/D/B/C及离心机原播放门关闭，已单独合入main。锅炉重构人工门仍保留。
 
 **实际必读技能入口：** `C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`、`minecraft-resource-pack/SKILL.md`与`C:/Users/IKSXH/.codex/plugins/cache/openai-curated-remote/superpowers/6.4.2/skills/verification-before-completion/SKILL.md`。PM使用诊断、需求梳理、计划与子代理执行技能；用户已明确的本轮教学整改直接实施，仓库职责、中文注释与精简验证规则优先于通用技能的重复授权、Git写入和多轮全量流程。
