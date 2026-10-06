@@ -36,7 +36,7 @@
 | `waterSpecificHeatHuPerMb` / `steamSpecificHeatHuPerMb` | 0.1 / 0.2 | 水/汽比热，HU/mB/温升 |
 | `vaporizationLatentHeatHuPerMb` | 0.7 | 汽化追加潜热，HU/mB |
 | `supercriticalPressure` | 0.5 | 超临界资格的归一炉压门槛 |
-| `normalOutputMinPressure` / `supercriticalOutputMinPressure` | 0.1 / 0.6 | 两模式默认保压；SC不低于资格门槛 |
+| `outputMinPressure` | 0.6 | 默认出汽压力下限，合法范围[0,1]，控件按0～100%逐整数设置 |
 | `valveOpenPressure` / `valveClosePressure` | 0.9 / 0.8 | 阀开/关炉压，开启线也用于堵阀保护 |
 | `valveFlowPerSteamCellMbPerTick` | 32 | 每汽区格提供的泄放速率，mB/t |
 | `idleWaterCoolingHuPerCellPerTick` | 0.9 | 无实际收热时每水区格显热损失，HU/t |
@@ -44,7 +44,7 @@
 
 冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；32为工程扫描封顶，不代表最大规模已完成客户端性能验收。
 
-控制器的Create原生模式和保压设置按机器保存，两模式保压各自保留；显式调过的值不由默认配置覆盖。炉压由汽量、汽区容量和汽温共同决定，与Create管网运输压力分开。默认5³居中隔层上下各9格、水汽各18000mB；SC目标温度2、保压0.6时保留10800mB启动汽量。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出携带HU均实际扣账，切模式不免费升级库存。简化散热不扣潜热、不模拟炉内凝水，安全阀正常排放仍消耗工质和热量。
+用户手测后确认[01B整改](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)：删除汽种开关与两模式默认项，采用上述单一默认；显式机器出汽压力下限独立保存，不由默认配置覆盖。汽种按实际汽温/炉压自动决定，温压均达超临界资格输出超临界蒸汽，否则输出蒸汽。压力下限可设100%，可能因安全阀先泄放而停止正常出汽，这是合法操作，不改变阀值。炉压由汽量、汽区容量和汽温共同决定，与Create管网运输压力分开，护目镜按百分数显示。默认5³居中隔层上下各9格、水汽各18000mB；热工目标仍为超临界温度2、下限0.6时保留10800mB启动汽量。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出携带HU均实际扣账，自动换种不免费升级库存、不删除外部异种流体。简化散热不扣潜热、不模拟炉内凝水，安全阀正常排放仍消耗工质和热量。
 
 旧`waterCapacityMb`、`steamCapacityMb`、`sectionHeatHuPerTick`、`steamHuPerMb`、`warmHuPerSection`、`coolingHuPerSectionPerTick`、`reheatFraction`、`valveOpenFraction`、`valveCloseFraction`及`valveFlowMbPerTick`不再控制重构候选。既有配置文件和用户世界不由本次文档整理删除。
 
