@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**当前推进：** 封存、有序配方和产热取整已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。主线按用户要求暂停；第一台[离心机思索候选](./reviews/2026-10-06/ponder-01/CANDIDATE.md)已完成必要打包与PM审查，停在客户端播放门，通过后才继续下一台。
+**当前推进：** 封存、有序配方和产热取整已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。主线按用户要求暂停；[离心机思索候选](./reviews/2026-10-06/ponder-01/CANDIDATE.md)已完成时序/文案整改，保留播放门。用户追加指定[反应堆三情景重构](./superpowers/plans/2026-10-06-device-ponder-02-reactor.md)，按该卡执行，另设本台播放门。
 
 **更新日期：2026-10-06。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是`0.1.0` Alpha；热端闭环与基础封存已完成，教学及发布出口尚未完成。
 
@@ -8,7 +8,7 @@
 
 本文维护阶段、进度与验收门。玩法、公式、注册、配方和治理按[文档入口](./README.md)列出的权威文档维护；已完成任务细节进入[归档](./archive/README.md)。
 
-**2026-10-06最新安排：** 封存、有序配方与[总产热取整](./superpowers/plans/2026-10-06-reactor-heat-rounding-01.md)联合手测通过并合入main，见[验收](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。主线按用户指示暂停，现有设备基础思索逐台进行，第一台[离心机](./superpowers/plans/2026-10-06-device-ponder-01-centrifuge.md)，人工播放通过后才接下一台。
+**2026-10-06最新安排：** 封存、有序配方与[总产热取整](./superpowers/plans/2026-10-06-reactor-heat-rounding-01.md)联合手测通过并合入main，见[验收](./reviews/2026-10-06/store-01/ACCEPTANCE.md)。主线暂停，基础思索按设备验收；用户随后追加本次反应堆现有教学重构，允许指定任务先开展，未通过的离心机播放门不取消，未指定其他设备不提前派发。
 
 ## 1. 当前状态
 
