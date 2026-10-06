@@ -1,6 +1,6 @@
 # DEVICE-PONDER-01：离心机基础思索教学
 
-**状态：** 用户2026-10-06要求暂停主线，现有设备思索一个一个来，并明确选择先做离心机。本台功能`75265de`已完成必要增量打包及PM审查，[候选与播放清单](../../reviews/2026-10-06/ponder-01/CANDIDATE.md)已交付；现停在客户端人工门，不接着做下一台。
+**状态：** 用户2026-10-06首轮播放发现提示重叠；R1功能提交`91941ef`已完成限定整改、增量打包与PM审查，等待同一台播放复验，人工门尚未通过。主线及下一台继续暂停。当前交付见[候选说明](../../reviews/2026-10-06/ponder-01/CANDIDATE.md)。
 
 **执行方式：** PM自动派发单一高速模型执行者，维护核心文档/Git；执行者禁止Git写操作、核心文档/状态修改或再派发。候选仍为`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，PM先同步已验收main与本卡。主线功能、配方、模型、运行数值不改。
 
@@ -42,3 +42,11 @@
 读AGENTS、治理5.1/5.2、本卡、既有Ponder类、现行离心机代码/配方；实际读取`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`、`minecraft-resource-pack/SKILL.md`，及`C:/Users/IKSXH/.codex/plugins/cache/openai-curated-remote/superpowers/6.4.2/skills/verification-before-completion/SKILL.md`。
 
 核对MC1.21.1/Java21/NeoForge21.1.219/Create6.0.10-280/Ponder1.0.82/Flywheel1.0.6，并读锁定Create/Ponder源码核对API。不升级依赖，中文源码注释；技能全量/重复测试和Git要求让位于仓库规则。Python用`C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe`，系统入口为WindowsApps；Git只读，用`D:/Program Files/Git/cmd/git.exe`。
+
+## R1：提示时序整改（2026-10-06）
+
+用户截图显示第5段配比提示与第6段输出提示同时可见。锁定Ponder的`TextInstruction`继承`FadeInOutInstruction`，实际寿命为`duration + 2 × 5 tick`。首版5→6只等待90tick，但前提示需115tick；6→7只等待120tick，但前提示需160tick。尚不能记为客户端通过。
+
+只允许执行者修改`CentrifugePonderScenes.java`中的等待时序及必要中文说明，和新增报告`docs/reviews/2026-10-06/ponder-01/timing-r1.md`。不改字幕、八段内容、入口、模板、语言、设备行为或其他教程。无需新框架或持久化Java测试。
+
+全部八段逐项核对：每段正文完全退场后，下一段正文再出现，预留至少10tick净间隔；保留同段操作图标与物料动画。按当前原生寿命计算一份整改前/后的时间表，先证明上述重叠，再证明新时序正文可见数量不超过1。定向检查可放在`build/reports/extension/DEVICE-PONDER-01/timing-r1/`，只运行一次候选增量assemble并记录新JAR大小/SHA；已审入口、双语、NBT与设备功能证据复用。增加必读`superpowers:systematic-debugging`技能，原Minecraft/验证技能继续沿用。PM审查实际差异后交同一台播放复验，不派发下一台。
