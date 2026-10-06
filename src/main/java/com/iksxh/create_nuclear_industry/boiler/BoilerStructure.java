@@ -138,6 +138,16 @@ public final class BoilerStructure {
             boolean yEdge = p.getY() == min.getY() || p.getY() == max.getY();
             boolean zEdge = p.getZ() == min.getZ() || p.getZ() == max.getZ();
             int edges = (xEdge ? 1 : 0) + (yEdge ? 1 : 0) + (zEdge ? 1 : 0);
+            // 底层非角点热液口占用一个水平底边格；只放开这一类部件，并要求其水平接口朝外。
+            if (edges == 2 && p.getY() == min.getY() && (xEdge ^ zEdge)
+                    && s.is(BoilerContent.HOT_PORT.get())) {
+                Direction outward = xEdge ? (p.getX() == min.getX() ? Direction.WEST : Direction.EAST)
+                        : (p.getZ() == min.getZ() ? Direction.NORTH : Direction.SOUTH);
+                if (!s.hasProperty(BoilerPartBlock.FACING) || s.getValue(BoilerPartBlock.FACING) != outward)
+                    return fail("edge", p);
+                hot.add(p);
+                continue;
+            }
             if (edges >= 2) { if (!s.is(BoilerContent.CASING.get())) return fail("edge", p); continue; }
             if (edges == 0) {
                 if (p.getY() == py) {
@@ -159,7 +169,6 @@ public final class BoilerStructure {
             if (!s.hasProperty(BoilerPartBlock.FACING) || s.getValue(BoilerPartBlock.FACING) != outward) return fail("side", p);
             if (s.is(BoilerContent.CONTROLLER.get()) && p.equals(controller) && p.getY() < py) { controls++; continue; }
             if (s.is(BoilerContent.WATER_PORT.get()) && p.getY() < py) { water.add(p); continue; }
-            if (s.is(BoilerContent.HOT_PORT.get()) && p.getY() < py) { hot.add(p); continue; }
             if (s.is(BoilerContent.STEAM_PORT.get()) && p.getY() > py) { steam.add(p); continue; }
             if (s.is(BoilerContent.COLD_PORT.get()) && p.getY() == py) { cold.add(p); continue; }
             return fail("side", p);

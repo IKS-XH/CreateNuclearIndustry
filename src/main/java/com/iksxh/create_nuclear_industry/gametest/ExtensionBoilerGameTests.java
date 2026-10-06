@@ -24,7 +24,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 public final class ExtensionBoilerGameTests {
     private static final BlockPos BASE = new BlockPos(4, 2, 4);
-    private static final BlockPos CONTROL = BASE.offset(1, 1, 0), WATER = BASE.offset(2, 1, 0), HOT = BASE.offset(3, 1, 0);
+    private static final BlockPos CONTROL = BASE.offset(1, 1, 0), WATER = BASE.offset(2, 1, 0), HOT = BASE.offset(3, 0, 0);
     private ExtensionBoilerGameTests() {}
     /** 最小夹具底面与隔层全部配置有效机/段；可以选择偏心隔层和偶数长方体。 */
     static void build(GameTestHelper h, int width, int height, int depth, int partition) {
@@ -37,7 +37,7 @@ public final class ExtensionBoilerGameTests {
         }
         h.setBlock(CONTROL, BoilerContent.CONTROLLER.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.NORTH));
         h.setBlock(WATER, BoilerContent.WATER_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.NORTH));
-        h.setBlock(HOT, BoilerContent.HOT_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.NORTH));
+        h.setBlock(BASE.offset(3, 0, 0), BoilerContent.HOT_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.NORTH));
         h.setBlock(BASE.offset(3, partition, 0), BoilerContent.COLD_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.NORTH));
         h.setBlock(BASE.offset(0, partition + 1, 1), BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.WEST));
         h.setBlock(BASE.offset(1, height - 1, 1), BoilerContent.SAFETY_VALVE.get());
@@ -88,7 +88,7 @@ public final class ExtensionBoilerGameTests {
         build(h, 5, 5, 5, 2);
         BlockPos second = BASE.offset(0, 3, 2);
         h.setBlock(second, BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.WEST));
-        BlockPos secondWater = BASE.offset(4, 1, 1), secondHot = BASE.offset(1, 1, 4), secondCold = BASE.offset(1, 2, 4);
+        BlockPos secondWater = BASE.offset(4, 1, 1), secondHot = BASE.offset(1, 0, 4), secondCold = BASE.offset(1, 2, 4);
         h.setBlock(secondWater, BoilerContent.WATER_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.EAST));
         h.setBlock(secondHot, BoilerContent.HOT_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.SOUTH));
         h.setBlock(secondCold, BoilerContent.COLD_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.SOUTH));

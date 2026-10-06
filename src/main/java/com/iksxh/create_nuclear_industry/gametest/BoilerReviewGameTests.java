@@ -40,7 +40,7 @@ public final class BoilerReviewGameTests {
         BlockPos control = min.offset(end, 1, 1);
         level.setBlockAndUpdate(control, BoilerContent.CONTROLLER.get().defaultBlockState().setValue(BoilerPartBlock.FACING, facing));
         level.setBlockAndUpdate(min.offset(end, 1, 2), BoilerContent.WATER_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, facing));
-        level.setBlockAndUpdate(min.offset(end, 1, 3), BoilerContent.HOT_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, facing));
+        level.setBlockAndUpdate(min.offset(inner, 0, 0), BoilerContent.HOT_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.NORTH));
         level.setBlockAndUpdate(min.offset(end, 2, 2), BoilerContent.COLD_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, facing));
         level.setBlockAndUpdate(min.offset(end, 3, 1), BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, facing));
         level.setBlockAndUpdate(min.offset(inner, 0, 1), HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get().defaultBlockState());

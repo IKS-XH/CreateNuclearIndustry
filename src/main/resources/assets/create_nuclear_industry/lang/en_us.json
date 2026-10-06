@@ -303,7 +303,7 @@
   "gui.create_nuclear_industry.boiler.issue.base_center": "Bottom center must be casing",
   "gui.create_nuclear_industry.boiler.issue.valve": "One safety valve required on a non-edge top cell",
   "gui.create_nuclear_industry.boiler.issue.base_shell": "Incorrect bottom shell block",
-  "gui.create_nuclear_industry.boiler.issue.edge": "Boiler edges require casing blocks",
+  "gui.create_nuclear_industry.boiler.issue.edge": "Edges require casing, except non-corner bottom hot inlets facing outward",
   "gui.create_nuclear_industry.boiler.issue.top_shell": "Incorrect top shell block",
   "gui.create_nuclear_industry.boiler.issue.side": "Incorrect side block or facing",
   "gui.create_nuclear_industry.boiler.issue.section": "At least one reheater section required in the partition",

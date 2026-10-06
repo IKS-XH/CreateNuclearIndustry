@@ -303,7 +303,7 @@
   "gui.create_nuclear_industry.boiler.issue.base_center": "底面中心需要普通外壳",
   "gui.create_nuclear_industry.boiler.issue.valve": "顶面非棱边位置需要唯一安全阀",
   "gui.create_nuclear_industry.boiler.issue.base_shell": "底面壳位错误",
-  "gui.create_nuclear_industry.boiler.issue.edge": "棱边只能使用锅炉外壳",
+  "gui.create_nuclear_industry.boiler.issue.edge": "锅炉棱边须使用外壳；底层非角点热液入口须水平朝外",
   "gui.create_nuclear_industry.boiler.issue.top_shell": "顶面壳位错误",
   "gui.create_nuclear_industry.boiler.issue.side": "侧面部件或朝向错误",
   "gui.create_nuclear_industry.boiler.issue.section": "隔层至少需要一个再加热段",
