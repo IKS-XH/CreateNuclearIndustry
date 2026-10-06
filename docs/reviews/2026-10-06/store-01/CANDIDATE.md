@@ -1,19 +1,19 @@
-# STORE-01轻量封存：联合手测候选
+# STORE-01与数值优化：已验收候选记录
 
-**状态（2026-10-06）：** 功能、素材、必要自动验证及合并审查完成；唯一模型显示P2已闭合，用户确认铅桶R1有序配方手测通过。其余13条设备配方有序整改已完成，五条拆解保留无序。追加反应堆总产热取整已完成实现、定向验证和PM审查，并入本候选及同一人工清单。现停在原联合手测门，尚未整体验收或把功能合入main。
+**状态（2026-10-06）：** 用户确认全部联合手测通过，封存/16桶架、设备有序配方和总产热取整已验收合入main，见[最终验收](./ACCEPTANCE.md)。本页保留接收候选的原证据与制品，不再表示待验收；新思索候选另见[离心机任务](../../../superpowers/plans/2026-10-06-device-ponder-01-centrifuge.md)。
 
 **功能提交：** `3b1bc0a5b9f4c3616bb17cddab3796dc78323b43`，分支`codex/ore-acquisition`；包含原封存/有序配方候选和追加产热取整。后续仅文档提交不改变这份代码和资源。技术栈保持MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280及0.1.0 Alpha。
 
 ## 运行候选
 
-本批功能在主工程同级的`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`；主目录目前保留上批已验收功能，主目录runClient尚不包含这批封存实现。原测试世界及已有配置保留。
+本批功能已合入主目录`E:/MyMC/NewMod/Create_NuclearIndustry`，主目录runClient包含全部已验收功能；同级候选及原测试世界、配置保留，后续离心机思索仍在该候选实施。
 
 ```powershell
 Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 .\gradlew.bat runClient
 ```
 
-[打开联合手测清单](./MANUAL-CHECKLIST.md)。只需一轮，包含原生材料、原燃料制造、三料封装、工序切换、漏斗搬运、16桶满架及拒收、取出/拆除/本版本保存重进、模型和中文显示。
+[已通过的联合手测清单](./MANUAL-CHECKLIST.md)保留实际范围与补充，不重复运行。主目录合入增量打包见[记录](./main-integration.md)。
 
 ## 本批内容
 
@@ -32,12 +32,12 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 
 **R1历史证据：** 原铅桶数量4铅/1钢/1环产4桶，资源重包3秒退出0；报告见[R1](/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/docs/reviews/2026-10-06/store-01/lead-cask-shaped.md)。封存和架子逻辑未改，原8/6行为证据继续复用。
 
-定向JUnit8项全部通过；本批隔离GameTest6项全部通过，正常保存退出；增量test+assemble退出0。素材13模型、9纹理、20种方向/占用组合静态检查通过。只针对审查发现的物品显示父链修正重新运行processResources jar，4秒退出0；行为没有变化，复用原8/6证据。客户端视觉与人工流程尚待用户确认。
+定向JUnit8项全部通过；本批隔离GameTest6项全部通过，正常保存退出；增量test+assemble退出0。素材13模型、9纹理、20种方向/占用组合静态检查通过。只针对审查发现的物品显示父链修正重新运行processResources jar，4秒退出0；行为没有变化，复用原8/6证据。客户端视觉与人工流程已获用户确认。
 
-最终JAR：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/libs/create_nuclear_industry-0.1.0.jar`，2,145,606字节。
+验收时候选JAR（功能3b1bc0a）：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/build/libs/create_nuclear_industry-0.1.0.jar`，2,145,606字节。路径会随后续教学候选打包更新，下述SHA仅标识本次接收制品。
 
 SHA-256：`B224EF40A6EFE02D994EF0451492A8E4A5331EE4809F7311A48011144971A971`。
 
 [实施证据](/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/docs/reviews/2026-10-06/store-01/implementation.md)、[素材证据](/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/docs/reviews/2026-10-06/store-01/assets.md)、[联合审查](/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/docs/reviews/2026-10-06/store-01/review.md)、[静态预览](/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/tools/art-assets/store-01/evidence/store-01-static-preview.png)。原始日志在候选`build/reports/extension/STORE-01/`，属于构建产物。新增配置源码已由PM精确强制纳入Git，既有日志、缓存和主目录launch配置未提交。
 
-用户确认联合手测范围通过后，再完成验收与main合入；此前停止自动推进。首发前不安排旧存档兼容矩阵，本批没有辐射、温度、衰变热、再处理或动画实现。
+用户已确认联合范围通过并完成main合入。主线按新指示暂停，现有设备思索逐台制作与验收；首发前不安排旧存档兼容矩阵，本批没有辐射、温度、衰变热、再处理或动画实现。
