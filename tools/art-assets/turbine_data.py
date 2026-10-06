@@ -191,18 +191,23 @@ def language_files() -> dict[str, bytes]:
     return files
 
 
-def build_files() -> tuple[dict[str, bytes], list[str]]:
-    files, new_svg = render_steam()
-    # 六条既有配方保持原字节，本次只新增观察窗单步工作台配方。
-    window_recipe = {
-        "type": "minecraft:crafting_shapeless",
+def turbine_window_recipe() -> dict[str, object]:
+    """返回汽轮机观察窗的有序工作台配方，供导出和定向核验共用。"""
+    return {
+        "type": "minecraft:crafting_shaped",
         "category": "misc",
-        "ingredients": [
-            {"item": f"{NAMESPACE}:turbine_casing"},
-            {"item": f"{NAMESPACE}:shielded_glass"},
-        ],
+        "pattern": ["G", "C"],
+        "key": {
+            "G": {"item": f"{NAMESPACE}:shielded_glass"},
+            "C": {"item": f"{NAMESPACE}:turbine_casing"},
+        },
         "result": {"id": WINDOW_ID, "count": 1},
     }
+
+
+def build_files() -> tuple[dict[str, bytes], list[str]]:
+    files, new_svg = render_steam()
+    window_recipe = turbine_window_recipe()
     files[f"data/{NAMESPACE}/recipe/crafting/turbine_window.json"] = (
         json.dumps(window_recipe, ensure_ascii=False, indent=2) + "\n"
     ).encode("utf-8")

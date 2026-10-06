@@ -1,0 +1,353 @@
+{
+  "recipes": {
+    "crafting/reactor/reactor_window.json": {
+      "sha256": "36cc650ea8edfbcb9248dd5961b6a69cea65d54b46891c5804912f3842049dc1",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7ICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnJlYWN0b3JfY2FzaW5nIiB9LAogICAgeyAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpzaGllbGRlZF9nbGFzcyIgfQogIF0sCiAgInJlc3VsdCI6IHsgImlkIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnJlYWN0b3Jfd2luZG93IiB9Cn0K",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:reactor_casing"
+          },
+          {
+            "item": "create_nuclear_industry:shielded_glass"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:reactor_window"
+        }
+      }
+    },
+    "crafting/reactor/reactor_cold_port.json": {
+      "sha256": "e0eff33a3c470220576ae3e39f401aebbde5c5e3f7f615eceaf0d9122b72e6ae",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7ICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnJlYWN0b3JfY2FzaW5nIiB9LAogICAgeyAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpwcmVzc3VyZV9maXR0aW5nIiB9LAogICAgeyAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpzZWFsX3JpbmciIH0sCiAgICB7ICJ0YWciOiAiYzpkeWVzL2JsdWUiIH0KICBdLAogICJyZXN1bHQiOiB7ICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpyZWFjdG9yX2NvbGRfcG9ydCIgfQp9Cg==",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:reactor_casing"
+          },
+          {
+            "item": "create_nuclear_industry:pressure_fitting"
+          },
+          {
+            "item": "create_nuclear_industry:seal_ring"
+          },
+          {
+            "tag": "c:dyes/blue"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:reactor_cold_port"
+        }
+      }
+    },
+    "crafting/reactor/reactor_hot_port.json": {
+      "sha256": "1c522367f4702b9866ca9a6777d76846600097b43a500970cab59d3ab91170c2",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7ICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnJlYWN0b3JfY2FzaW5nIiB9LAogICAgeyAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpwcmVzc3VyZV9maXR0aW5nIiB9LAogICAgeyAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpzZWFsX3JpbmciIH0sCiAgICB7ICJ0YWciOiAiYzpkeWVzL3JlZCIgfQogIF0sCiAgInJlc3VsdCI6IHsgImlkIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnJlYWN0b3JfaG90X3BvcnQiIH0KfQo=",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:reactor_casing"
+          },
+          {
+            "item": "create_nuclear_industry:pressure_fitting"
+          },
+          {
+            "item": "create_nuclear_industry:seal_ring"
+          },
+          {
+            "tag": "c:dyes/red"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:reactor_hot_port"
+        }
+      }
+    },
+    "crafting/high_pressure_boiler_window.json": {
+      "sha256": "f4b489cef0945fb65dd4e6ac3b2a329a4180afe71cd52361e00ae1920aca437b",
+      "raw_base64": "ew0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIiwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGlnaF9wcmVzc3VyZV9ib2lsZXJfY2FzaW5nIg0KICAgIH0sDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c2hpZWxkZWRfZ2xhc3MiDQogICAgfQ0KICBdLA0KICAicmVzdWx0Ijogew0KICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpoaWdoX3ByZXNzdXJlX2JvaWxlcl93aW5kb3ciLA0KICAgICJjb3VudCI6IDENCiAgfQ0KfQ0K",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:high_pressure_boiler_casing"
+          },
+          {
+            "item": "create_nuclear_industry:shielded_glass"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:high_pressure_boiler_window",
+          "count": 1
+        }
+      }
+    },
+    "crafting/high_pressure_boiler_water_port.json": {
+      "sha256": "7be4021ba9bc60799a60daf97382e205d14369b32ac2f7c997d194cd109e5333",
+      "raw_base64": "ew0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIiwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGlnaF9wcmVzc3VyZV9ib2lsZXJfY2FzaW5nIg0KICAgIH0sDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlOmZsdWlkX3BpcGUiDQogICAgfSwNCiAgICB7DQogICAgICAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpwcmVzc3VyZV9maXR0aW5nIg0KICAgIH0NCiAgXSwNCiAgInJlc3VsdCI6IHsNCiAgICAiaWQiOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGlnaF9wcmVzc3VyZV9ib2lsZXJfd2F0ZXJfcG9ydCIsDQogICAgImNvdW50IjogMQ0KICB9DQp9DQo=",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:high_pressure_boiler_casing"
+          },
+          {
+            "item": "create:fluid_pipe"
+          },
+          {
+            "item": "create_nuclear_industry:pressure_fitting"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:high_pressure_boiler_water_port",
+          "count": 1
+        }
+      }
+    },
+    "crafting/high_pressure_boiler_steam_port.json": {
+      "sha256": "9c8c5cb92848eb3d55bdd2bbce242ed11363a05cf9ee91c2d8c94d05569c70ee",
+      "raw_base64": "ew0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIiwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGlnaF9wcmVzc3VyZV9ib2lsZXJfY2FzaW5nIg0KICAgIH0sDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6cHJlc3N1cmVfZml0dGluZyINCiAgICB9LA0KICAgIHsNCiAgICAgICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnByZXNzdXJlX2ZpdHRpbmciDQogICAgfSwNCiAgICB7DQogICAgICAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpyZWluZm9yY2VkX3N0ZWVsX3BsYXRlIg0KICAgIH0NCiAgXSwNCiAgInJlc3VsdCI6IHsNCiAgICAiaWQiOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGlnaF9wcmVzc3VyZV9ib2lsZXJfc3RlYW1fcG9ydCIsDQogICAgImNvdW50IjogMQ0KICB9DQp9DQo=",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:high_pressure_boiler_casing"
+          },
+          {
+            "item": "create_nuclear_industry:pressure_fitting"
+          },
+          {
+            "item": "create_nuclear_industry:pressure_fitting"
+          },
+          {
+            "item": "create_nuclear_industry:reinforced_steel_plate"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:high_pressure_boiler_steam_port",
+          "count": 1
+        }
+      }
+    },
+    "crafting/boiler_safety_valve.json": {
+      "sha256": "a2a5e0e54c357c7a4f795f2b56986397dcbfcbca7030288c112284489bf5586b",
+      "raw_base64": "ew0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIiwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGlnaF9wcmVzc3VyZV9ib2lsZXJfY2FzaW5nIg0KICAgIH0sDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlOmZsdWlkX3ZhbHZlIg0KICAgIH0sDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c2VhbF9yaW5nIg0KICAgIH0sDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aW5kdXN0cmlhbF9zZW5zb3IiDQogICAgfQ0KICBdLA0KICAicmVzdWx0Ijogew0KICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpib2lsZXJfc2FmZXR5X3ZhbHZlIiwNCiAgICAiY291bnQiOiAxDQogIH0NCn0NCg==",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:high_pressure_boiler_casing"
+          },
+          {
+            "item": "create:fluid_valve"
+          },
+          {
+            "item": "create_nuclear_industry:seal_ring"
+          },
+          {
+            "item": "create_nuclear_industry:industrial_sensor"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:boiler_safety_valve",
+          "count": 1
+        }
+      }
+    },
+    "crafting/boiler_heat_exchange_section.json": {
+      "sha256": "91ae7ab51607fcc1ecd397473abb26ef11d7843c33703913c44e46e7bda8a2e5",
+      "raw_base64": "ew0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIiwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGlnaF9wcmVzc3VyZV9ib2lsZXJfY2FzaW5nIg0KICAgIH0sDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6bnVjbGVhcl9oZWF0X2V4Y2hhbmdlX2J1bmRsZSINCiAgICB9DQogIF0sDQogICJyZXN1bHQiOiB7DQogICAgImlkIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OmJvaWxlcl9oZWF0X2V4Y2hhbmdlX3NlY3Rpb24iLA0KICAgICJjb3VudCI6IDENCiAgfQ0KfQ0K",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:high_pressure_boiler_casing"
+          },
+          {
+            "item": "create_nuclear_industry:nuclear_heat_exchange_bundle"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:boiler_heat_exchange_section",
+          "count": 1
+        }
+      }
+    },
+    "crafting/turbine_window.json": {
+      "sha256": "328e3ad1a2d06ad4d3ea0d3a85a265324d790ce783d62c35d03b4c52db4a3e8d",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7CiAgICAgICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnR1cmJpbmVfY2FzaW5nIgogICAgfSwKICAgIHsKICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c2hpZWxkZWRfZ2xhc3MiCiAgICB9CiAgXSwKICAicmVzdWx0IjogewogICAgImlkIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnR1cmJpbmVfd2luZG93IiwKICAgICJjb3VudCI6IDEKICB9Cn0K",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:turbine_casing"
+          },
+          {
+            "item": "create_nuclear_industry:shielded_glass"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:turbine_window",
+          "count": 1
+        }
+      }
+    },
+    "turbine_inlet.json": {
+      "sha256": "2603e8d9c6a67fef6c0a9a5c9237200cb7742d24916f31eb09cbba37a158d8b1",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7CiAgICAgICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnR1cmJpbmVfY2FzaW5nIgogICAgfSwKICAgIHsKICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c3RlZWxfcGlwZV9ibGFuayIKICAgIH0sCiAgICB7CiAgICAgICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnN0ZWVsX3BpcGVfYmxhbmsiCiAgICB9LAogICAgewogICAgICAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpyZWluZm9yY2VkX3N0ZWVsX3BsYXRlIgogICAgfSwKICAgIHsKICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c2VhbF9yaW5nIgogICAgfQogIF0sCiAgInJlc3VsdCI6IHsKICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTp0dXJiaW5lX2lubGV0IiwKICAgICJjb3VudCI6IDEKICB9Cn0K",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:turbine_casing"
+          },
+          {
+            "item": "create_nuclear_industry:steel_pipe_blank"
+          },
+          {
+            "item": "create_nuclear_industry:steel_pipe_blank"
+          },
+          {
+            "item": "create_nuclear_industry:reinforced_steel_plate"
+          },
+          {
+            "item": "create_nuclear_industry:seal_ring"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:turbine_inlet",
+          "count": 1
+        }
+      }
+    },
+    "turbine_exhaust.json": {
+      "sha256": "d65cded57fde113dcfcb6a6b52ea5747e834ac020f89299d307612d2162a401b",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7CiAgICAgICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnR1cmJpbmVfY2FzaW5nIgogICAgfSwKICAgIHsKICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c3RlZWxfcGlwZV9ibGFuayIKICAgIH0sCiAgICB7CiAgICAgICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnN0ZWVsX3BpcGVfYmxhbmsiCiAgICB9LAogICAgewogICAgICAidGFnIjogImM6cGxhdGVzL3N0ZWVsIgogICAgfSwKICAgIHsKICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c2VhbF9yaW5nIgogICAgfQogIF0sCiAgInJlc3VsdCI6IHsKICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTp0dXJiaW5lX2V4aGF1c3QiLAogICAgImNvdW50IjogMQogIH0KfQo=",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:turbine_casing"
+          },
+          {
+            "item": "create_nuclear_industry:steel_pipe_blank"
+          },
+          {
+            "item": "create_nuclear_industry:steel_pipe_blank"
+          },
+          {
+            "tag": "c:plates/steel"
+          },
+          {
+            "item": "create_nuclear_industry:seal_ring"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:turbine_exhaust",
+          "count": 1
+        }
+      }
+    },
+    "turbine_output_shaft.json": {
+      "sha256": "7ba33f01a989569750b119fa82f8035dda606a275618b7912814c5d5c49a5583",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYzpwbGF0ZXMvc3RlZWwiCiAgICB9LAogICAgewogICAgICAidGFnIjogImM6cGxhdGVzL3N0ZWVsIgogICAgfSwKICAgIHsKICAgICAgInRhZyI6ICJjOnBsYXRlcy9zdGVlbCIKICAgIH0sCiAgICB7CiAgICAgICJ0YWciOiAiYzpwbGF0ZXMvc3RlZWwiCiAgICB9LAogICAgewogICAgICAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpoZWF2eV9iZWFyaW5nIgogICAgfSwKICAgIHsKICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6aGVhdnlfYmVhcmluZyIKICAgIH0sCiAgICB7CiAgICAgICJpdGVtIjogImNyZWF0ZTpzaGFmdCIKICAgIH0sCiAgICB7CiAgICAgICJpdGVtIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnR1cmJpbmVfY2FzaW5nIgogICAgfQogIF0sCiAgInJlc3VsdCI6IHsKICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTp0dXJiaW5lX291dHB1dF9zaGFmdCIsCiAgICAiY291bnQiOiAxCiAgfQp9Cg==",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "tag": "c:plates/steel"
+          },
+          {
+            "tag": "c:plates/steel"
+          },
+          {
+            "tag": "c:plates/steel"
+          },
+          {
+            "tag": "c:plates/steel"
+          },
+          {
+            "item": "create_nuclear_industry:heavy_bearing"
+          },
+          {
+            "item": "create_nuclear_industry:heavy_bearing"
+          },
+          {
+            "item": "create:shaft"
+          },
+          {
+            "item": "create_nuclear_industry:turbine_casing"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:turbine_output_shaft",
+          "count": 1
+        }
+      }
+    },
+    "crafting/dry_storage_rack.json": {
+      "sha256": "c3769e3f4597254c98d301761695be94ff805b5d0454c25a089e3fe8efc9e7e3",
+      "raw_base64": "ew0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIiwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgIml0ZW0iOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6c2hpZWxkaW5nX2NvbmNyZXRlIg0KICAgIH0sDQogICAgew0KICAgICAgInRhZyI6ICJjOnBsYXRlcy9zdGVlbCINCiAgICB9LA0KICAgIHsNCiAgICAgICJ0YWciOiAiYzpwbGF0ZXMvc3RlZWwiDQogICAgfQ0KICBdLA0KICAicmVzdWx0Ijogew0KICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpkcnlfc3RvcmFnZV9yYWNrIiwNCiAgICAiY291bnQiOiAxDQogIH0NCn0NCg==",
+      "object": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create_nuclear_industry:shielding_concrete"
+          },
+          {
+            "tag": "c:plates/steel"
+          },
+          {
+            "tag": "c:plates/steel"
+          }
+        ],
+        "result": {
+          "id": "create_nuclear_industry:dry_storage_rack",
+          "count": 1
+        }
+      }
+    }
+  },
+  "preserved": {
+    "raw_lead_from_block.json": {
+      "sha256": "d937753c7275002caeddd1c2cc48e2beb44bbd5884e1a30f198051aba63bda1d",
+      "raw_base64": "ew0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgInRhZyI6ICJjOnN0b3JhZ2VfYmxvY2tzL3Jhd19sZWFkIg0KICAgIH0NCiAgXSwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAicmVzdWx0Ijogew0KICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpyYXdfbGVhZCIsDQogICAgImNvdW50IjogOQ0KICB9LA0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIg0KfQo="
+    },
+    "raw_tin_from_block.json": {
+      "sha256": "5b236169cd2596f1b95ea99b6438ac84e1e653274aa4bc1aaaa07f4e59deb1cf",
+      "raw_base64": "ew0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgInRhZyI6ICJjOnN0b3JhZ2VfYmxvY2tzL3Jhd190aW4iDQogICAgfQ0KICBdLA0KICAiY2F0ZWdvcnkiOiAibWlzYyIsDQogICJyZXN1bHQiOiB7DQogICAgImlkIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OnJhd190aW4iLA0KICAgICJjb3VudCI6IDkNCiAgfSwNCiAgInR5cGUiOiAibWluZWNyYWZ0OmNyYWZ0aW5nX3NoYXBlbGVzcyINCn0K"
+    },
+    "raw_uranium_from_block.json": {
+      "sha256": "160e1fe3c023f724470e1526b25b18dbe28b561d99e283dd8ce161634d78c390",
+      "raw_base64": "ew0KICAiaW5ncmVkaWVudHMiOiBbDQogICAgew0KICAgICAgInRhZyI6ICJjOnN0b3JhZ2VfYmxvY2tzL3Jhd191cmFuaXVtIg0KICAgIH0NCiAgXSwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAicmVzdWx0Ijogew0KICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpyYXdfdXJhbml1bSIsDQogICAgImNvdW50IjogOQ0KICB9LA0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVsZXNzIg0KfQo="
+    },
+    "crafting/materials/lead_nugget_from_ingot.json": {
+      "sha256": "b060bcf5c69c1e722a81f30e751b872d9488cbf9ff0a5e4e3ff6bf828a5898f1",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYzppbmdvdHMvbGVhZCIKICAgIH0KICBdLAogICJyZXN1bHQiOiB7CiAgICAiY291bnQiOiA5LAogICAgImlkIjogImNyZWF0ZV9udWNsZWFyX2luZHVzdHJ5OmxlYWRfbnVnZ2V0IgogIH0KfQo="
+    },
+    "crafting/materials/tin_nugget_from_ingot.json": {
+      "sha256": "4eb1d707b031b0f38aecc88990be0d837c0239ef63071613f36e766a277eb519",
+      "raw_base64": "ewogICJ0eXBlIjogIm1pbmVjcmFmdDpjcmFmdGluZ19zaGFwZWxlc3MiLAogICJjYXRlZ29yeSI6ICJtaXNjIiwKICAiaW5ncmVkaWVudHMiOiBbCiAgICB7CiAgICAgICJ0YWciOiAiYzppbmdvdHMvdGluIgogICAgfQogIF0sCiAgInJlc3VsdCI6IHsKICAgICJjb3VudCI6IDksCiAgICAiaWQiOiAiY3JlYXRlX251Y2xlYXJfaW5kdXN0cnk6dGluX251Z2dldCIKICB9Cn0K"
+    },
+    "crafting/lead_shielding_cask.json": {
+      "sha256": "12097b5152d31f2bc09ec1c9ee03bd7801b1c724d015c0434120eb337bf041e6",
+      "raw_base64": "ew0KICAidHlwZSI6ICJtaW5lY3JhZnQ6Y3JhZnRpbmdfc2hhcGVkIiwNCiAgImNhdGVnb3J5IjogIm1pc2MiLA0KICAicGF0dGVybiI6IFsNCiAgICAiIFIgIiwNCiAgICAiTCBMIiwNCiAgICAiTFNMIg0KICBdLA0KICAia2V5Ijogew0KICAgICJMIjogew0KICAgICAgInRhZyI6ICJjOnBsYXRlcy9sZWFkIg0KICAgIH0sDQogICAgIlMiOiB7DQogICAgICAidGFnIjogImM6cGxhdGVzL3N0ZWVsIg0KICAgIH0sDQogICAgIlIiOiB7DQogICAgICAiaXRlbSI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpzZWFsX3JpbmciDQogICAgfQ0KICB9LA0KICAicmVzdWx0Ijogew0KICAgICJpZCI6ICJjcmVhdGVfbnVjbGVhcl9pbmR1c3RyeTpsZWFkX3NoaWVsZGluZ19jYXNrIiwNCiAgICAiY291bnQiOiA0DQogIH0NCn0NCg=="
+    }
+  }
+}

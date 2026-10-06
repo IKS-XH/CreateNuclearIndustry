@@ -265,6 +265,20 @@ def write_blockstate() -> Path:
     return path
 
 
+def dry_storage_rack_recipe() -> dict[str, object]:
+    """返回干式贮存架工作台配方，供定向核验与资源写入共用。"""
+    return {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": ["S S", " C "],
+        "key": {
+            "S": {"tag": "c:plates/steel"},
+            "C": {"item": "create_nuclear_industry:shielding_concrete"},
+        },
+        "result": {"id": "create_nuclear_industry:dry_storage_rack", "count": 1},
+    }
+
+
 def write_recipes_and_tags() -> list[Path]:
     recipes = {
         "recipe/milling/glass_dust.json": {
@@ -287,16 +301,7 @@ def write_recipes_and_tags() -> list[Path]:
         "recipe/crafting/lead_shielding_cask.json": {
             **lead_cask_recipe(),
         },
-        "recipe/crafting/dry_storage_rack.json": {
-            "type": "minecraft:crafting_shapeless",
-            "category": "misc",
-            "ingredients": [
-                {"item": "create_nuclear_industry:shielding_concrete"},
-                {"tag": "c:plates/steel"},
-                {"tag": "c:plates/steel"},
-            ],
-            "result": {"id": "create_nuclear_industry:dry_storage_rack", "count": 1},
-        },
+        "recipe/crafting/dry_storage_rack.json": dry_storage_rack_recipe(),
     }
     files: list[Path] = []
     for relative, data in recipes.items():
@@ -443,12 +448,8 @@ def verify_recipe_contract() -> dict[str, object]:
         raise ValueError("固化基材配方输入不符")
     cask_contract = verify_lead_cask_shaped_recipe(root / "crafting/lead_shielding_cask.json")
     rack = json.loads((root / "crafting/dry_storage_rack.json").read_text(encoding="utf-8"))
-    if rack["ingredients"] != [
-        {"item": "create_nuclear_industry:shielding_concrete"},
-        {"tag": "c:plates/steel"},
-        {"tag": "c:plates/steel"},
-    ] or rack["result"] != {"id": "create_nuclear_industry:dry_storage_rack", "count": 1}:
-        raise ValueError("干式贮存架无序配方与合同不符")
+    if rack != dry_storage_rack_recipe():
+        raise ValueError("干式贮存架有序配方与合同不符")
     return {"glass_milling_time": 100, "mixing_time": 100, "mixing_heat": "heated", "lead_shielding_cask": cask_contract, "rack_output": 1}
 
 

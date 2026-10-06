@@ -1,9 +1,19 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    { "item": "create_nuclear_industry:reactor_casing" },
-    { "item": "create_nuclear_industry:shielded_glass" }
+  "result": {
+    "id": "create_nuclear_industry:reactor_window"
+  },
+  "pattern": [
+    "G",
+    "C"
   ],
-  "result": { "id": "create_nuclear_industry:reactor_window" }
+  "key": {
+    "G": {
+      "item": "create_nuclear_industry:shielded_glass"
+    },
+    "C": {
+      "item": "create_nuclear_industry:reactor_casing"
+    }
+  }
 }

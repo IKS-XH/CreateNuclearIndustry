@@ -1,11 +1,25 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    { "item": "create_nuclear_industry:reactor_casing" },
-    { "item": "create_nuclear_industry:pressure_fitting" },
-    { "item": "create_nuclear_industry:seal_ring" },
-    { "tag": "c:dyes/red" }
+  "result": {
+    "id": "create_nuclear_industry:reactor_hot_port"
+  },
+  "pattern": [
+    "FD",
+    "CS"
   ],
-  "result": { "id": "create_nuclear_industry:reactor_hot_port" }
+  "key": {
+    "F": {
+      "item": "create_nuclear_industry:pressure_fitting"
+    },
+    "D": {
+      "tag": "c:dyes/red"
+    },
+    "C": {
+      "item": "create_nuclear_industry:reactor_casing"
+    },
+    "S": {
+      "item": "create_nuclear_industry:seal_ring"
+    }
+  }
 }
