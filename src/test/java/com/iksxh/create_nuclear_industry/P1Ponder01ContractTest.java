@@ -66,15 +66,35 @@ class P1Ponder01ContractTest {
     }
 
     @Test
-    void pluginUsesTheSingleNamespacedExperimentalReactorStoryboard() {
+    void pluginRegistersThreeNamespacedReactorStoryboardsWithIndependentTemplates() throws IOException {
         assertEquals(CreateNuclearIndustry.MOD_ID, new P1PonderPlugin().getModId());
         assertEquals(P1ContentIds.EXPERIMENTAL_REACTOR_ID, P1PonderPlugin.REACTOR_SCENE_ID);
-        assertEquals("create_nuclear_industry:experimental_reactor",
-                ResourceLocation.fromNamespaceAndPath(
-                        CreateNuclearIndustry.MOD_ID, P1PonderPlugin.REACTOR_SCENE_ID).toString());
-        assertTrue(Files.exists(RESOURCES.resolve(
-                "assets/create_nuclear_industry/ponder/experimental_reactor.nbt")),
-                "实验反应堆故事板资源必须存在");
+        assertEquals(List.of(
+                "experimental_reactor",
+                "experimental_reactor_operation",
+                "experimental_reactor_refueling"), P1PonderPlugin.REACTOR_SCENE_IDS);
+        for (String id : P1PonderPlugin.REACTOR_SCENE_IDS) {
+            assertEquals("create_nuclear_industry:" + id,
+                    ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, id).toString());
+            assertTrue(Files.exists(RESOURCES.resolve(
+                            "assets/create_nuclear_industry/ponder/" + id + ".nbt")),
+                    "每条反应堆故事线都必须有独立模板: " + id);
+        }
+
+        String pluginSource = Files.readString(MAIN_SOURCES.resolve(
+                "com/iksxh/create_nuclear_industry/ponder/P1PonderPlugin.java"));
+        assertEquals(3, occurrences(pluginSource, "reactorEntries.addStoryBoard("));
+        assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorBasics"));
+        assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorOperation"));
+        assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorRefueling"));
+
+        String sceneSource = Files.readString(MAIN_SOURCES.resolve(
+                "com/iksxh/create_nuclear_industry/ponder/P1PonderScenes.java"));
+        assertEquals(6, occurrences(storyBody(sceneSource, "experimentalReactorBasics"), ".text(\"")
+                + occurrences(storyBody(sceneSource, "experimentalReactorBasics"), "caption(scene,"));
+        assertEquals(7, occurrences(storyBody(sceneSource, "experimentalReactorOperation"), "caption(scene,"));
+        assertEquals(6, occurrences(storyBody(sceneSource, "experimentalReactorRefueling"), ".text(\"")
+                + occurrences(storyBody(sceneSource, "experimentalReactorRefueling"), "caption(scene,"));
     }
 
     @Test
@@ -152,5 +172,20 @@ class P1Ponder01ContractTest {
             offset += token.length();
         }
         return count;
+    }
+
+    private static String storyBody(String source, String methodName) {
+        int start = source.indexOf("public static void " + methodName);
+        assertTrue(start >= 0, "缺少 Ponder 故事线方法: " + methodName);
+        int openingBrace = source.indexOf('{', start);
+        int depth = 0;
+        for (int index = openingBrace; index < source.length(); index++) {
+            if (source.charAt(index) == '{') {
+                depth++;
+            } else if (source.charAt(index) == '}' && --depth == 0) {
+                return source.substring(start, index + 1);
+            }
+        }
+        throw new AssertionError("Ponder 故事线方法的大括号不完整: " + methodName);
     }
 }

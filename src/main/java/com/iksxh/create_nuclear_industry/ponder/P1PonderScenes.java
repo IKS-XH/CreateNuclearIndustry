@@ -1,262 +1,454 @@
 package com.iksxh.create_nuclear_industry.ponder;
 
-import com.iksxh.create_nuclear_industry.content.P1Blocks;
-import com.iksxh.create_nuclear_industry.content.P1ContentIds;
-import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
+import com.iksxh.create_nuclear_industry.content.ModFluids;
+import com.iksxh.create_nuclear_industry.content.ModItems;
+import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
+import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import net.createmod.catnip.math.Pointing;
+import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.createmod.ponder.api.scene.Selection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-/**
- * P1 客户端教学故事线。
- *
- * <p>本类只修改 Ponder 创建的临时世界，用于展示结构、控制棒、冷却端口和 SCRAM 的关系；
- * 它不读取或写入正式服务端快照、玩家库存或真实世界。</p>
- */
+/** 反应堆三条 Ponder 客户端教学故事线；只操作各自的临时展示世界。 */
 public final class P1PonderScenes {
-    /** 结构定义中的仪表端口坐标，也是教学中说明权威状态所有权的锚点。 */
-    private static final BlockPos INSTRUMENT_PORT = local(ReactorStructureDefinition.DEFAULT_INSTRUMENT_PORT_POSITION);
-    /** 结构定义中的标准冷却剂输入端口坐标。 */
-    private static final BlockPos COLD_PORT = local(ReactorStructureDefinition.DEFAULT_COLD_PORT_POSITION);
-    /** 结构定义中的标准热冷却剂输出端口坐标。 */
-    private static final BlockPos HOT_PORT = local(ReactorStructureDefinition.DEFAULT_HOT_PORT_POSITION);
-    /** 教学场景中额外放置的控制棒驱动器坐标。 */
-    private static final BlockPos CONTROL_ROD = new BlockPos(2, 4, 2);
-    /** 用于展示多端口共享账本的第二个冷却剂输入坐标。 */
-    private static final BlockPos SECOND_COLD_PORT = new BlockPos(4, 2, 1);
-    /** 用于展示多端口独立输出容量的第二个热端口坐标。 */
-    private static final BlockPos SECOND_HOT_PORT = new BlockPos(4, 2, 3);
+    private static final BlockPos BUILD_DRIVE = new BlockPos(2, 4, 2);
+    private static final BlockPos BUILD_INSTRUMENT = new BlockPos(2, 2, 0);
+    private static final BlockPos BUILD_COLD_PORT = new BlockPos(1, 2, 4);
+    private static final BlockPos BUILD_HOT_PORT = new BlockPos(3, 2, 4);
+
+    private static final int REACTOR_OFFSET = 4;
+    private static final BlockPos OP_DRIVE = reactorPos(2, 4, 2);
+    private static final BlockPos OP_FUEL_PORT = reactorPos(2, 4, 1);
+    private static final BlockPos OP_INSTRUMENT = reactorPos(2, 2, 0);
+    private static final BlockPos OP_REDSTONE_LEVER = new BlockPos(6, 2, 3);
+    private static final BlockPos OP_COLD_PORT = reactorPos(1, 2, 4);
+    private static final BlockPos OP_HOT_PORT = reactorPos(3, 2, 4);
+    private static final BlockPos OP_COLD_PUMP = new BlockPos(5, 2, 11);
+    private static final BlockPos OP_HOT_PUMP = new BlockPos(7, 2, 11);
+    private static final BlockPos OP_COLD_TANK = new BlockPos(5, 2, 12);
+    private static final BlockPos OP_HOT_TANK = new BlockPos(7, 2, 12);
+    private static final BlockPos FUEL_PORT = reactorPos(2, 4, 1);
+    private static final BlockPos ARM = new BlockPos(6, 4, 3);
+    private static final BlockPos ARM_INPUT = new BlockPos(4, 4, 3);
+    private static final BlockPos ARM_OUTPUT = new BlockPos(8, 4, 3);
 
     private P1PonderScenes() {
     }
 
-    /**
-     * P1-PONDER-02：展示结构成形、扳手诊断、控制棒默认位置、滑块输入、SCRAM 和多冷却端口。
-     * 故事线不接触服务端状态或真实库存。
-     */
-    public static void experimentalReactorBasics(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("experimental_reactor", "Experimental Reactor: Formation and Safe Control");
-        scene.configureBasePlate(0, 0, ReactorStructureDefinition.SIZE);
-        scene.scaleSceneView(0.72F);
+    /** 展示外壳、内部列、侧面端口和最终封顶顺序。 */
+    public static void experimentalReactorBasics(SceneBuilder builder, SceneBuildingUtil util) {
+        SceneBuilder scene = builder;
+        scene.title("experimental_reactor", "Experimental Reactor: Build");
+        scene.configureBasePlate(0, 0, 5);
+        scene.scaleSceneView(0.8F);
         scene.showBasePlate();
 
-        materializeCanonicalStructure(scene);
-
-        // 共享模板的中心空列是合法的控制棒列展示位置，不会遮挡燃料列主体。
-        scene.world().setBlock(CONTROL_ROD, P1Blocks.CONTROL_ROD_DRIVE.get().defaultBlockState(), false);
-        scene.world().setBlock(SECOND_COLD_PORT, P1Blocks.REACTOR_COLD_PORT.get().defaultBlockState(), false);
-        scene.world().setBlock(SECOND_HOT_PORT, P1Blocks.REACTOR_HOT_PORT.get().defaultBlockState(), false);
-
-        // 冻结的占位结构不提供完整横向边界，因此显式选择 5×4×5 主体，最后再单独展示顶层。
-        scene.world().showSection(util.select().fromTo(0, 0, 0, 4, 3, 4), Direction.DOWN);
+        Selection innerColumns = util.select().fromTo(1, 1, 1, 3, 3, 3);
+        Selection frame = util.select().fromTo(0, 1, 0, 0, 3, 0)
+                .add(util.select().fromTo(0, 1, 4, 0, 3, 4))
+                .add(util.select().fromTo(4, 1, 0, 4, 3, 0))
+                .add(util.select().fromTo(4, 1, 4, 4, 3, 4));
+        Selection sidePorts = util.select().position(BUILD_INSTRUMENT)
+                .add(util.select().position(BUILD_COLD_PORT))
+                .add(util.select().position(BUILD_HOT_PORT));
+        scene.world().showSection(util.select().layer(0), Direction.UP);
         scene.idle(10);
-        // 十段说明分别挂接懒关键帧，玩家可在时间轴上手动前后选择教学段落。
-        scene.overlay().showText(80)
-                .text("A fixed 5x5x5 reactor starts with its casing and valid side interfaces.")
-                .attachKeyFrame()
-                .pointAt(util.vector().centerOf(2, 0, 2))
-                .placeNearTarget();
-        scene.idle(90);
+        caption(scene, util, "Build the 5×5 base and casing frame. Edges must use casing.",
+                new BlockPos(0, 0, 0), 80);
 
-        openTeachingCutaway(scene, util);
+        Selection walls = util.select().fromTo(0, 1, 0, 4, 3, 4).substract(innerColumns);
+        scene.world().showSection(frame, Direction.DOWN);
         scene.idle(10);
+        scene.world().showSection(innerColumns, Direction.DOWN);
+        Selection fuelPorts = util.select().position(1, 4, 2)
+                .add(util.select().position(2, 4, 1))
+                .add(util.select().position(2, 4, 3))
+                .add(util.select().position(3, 4, 2));
+        scene.world().showSection(fuelPorts, Direction.DOWN);
+        caption(scene, util, "Each fuel column has three fuel-rod blocks below its refueling port.",
+                new BlockPos(2, 2, 1), 80);
 
-        // 顶层八个换料端口分别对应八根燃料列，中心控制棒驱动器不属于换料端口。
-        var refuelingPorts = util.select().fromTo(1, 4, 1, 3, 4, 3)
-                .substract(util.select().position(CONTROL_ROD));
-        scene.world().showSection(refuelingPorts, Direction.DOWN);
+        scene.world().showSection(util.select().position(BUILD_DRIVE), Direction.DOWN);
         scene.idle(10);
-        scene.overlay().showOutlineWithText(refuelingPorts, 165)
-                .text("In this temporary teaching cutaway, each refueling port caps three fuel-rod blocks; the control-rod drive caps an air column, with no placeable control-rod block. After inspection, restore the walls and seal the roof with refueling ports, the drive, and casing before formation.")
-                .attachKeyFrame()
-                .placeNearTarget();
-        scene.idle(100);
-
-        restoreTeachingCutaway(scene);
-        scene.idle(15);
-        scene.world().showSection(util.select().fromTo(0, 4, 0, 4, 4, 4), Direction.DOWN);
-        scene.idle(50);
-        scene.overlay().showText(100)
-                .text("The single instrument port owns reactor state. A Create wrench requests one server-side formation diagnostic: exactly one instrument port, at least one valid cold port and hot port, plus the casing and column layout; it does not change reactor state.")
-                .attachKeyFrame()
-                .pointAt(util.vector().topOf(INSTRUMENT_PORT))
-                .placeNearTarget();
-        scene.overlay().showControls(util.vector().topOf(INSTRUMENT_PORT), Pointing.DOWN, 60)
-                .withItem(AllItems.WRENCH.asStack())
-                .rightClick();
-        scene.idle(120);
-
-        scene.overlay().showText(120)
-                .text("With Create engineer goggles, the instrument shows formed size, fuel and control-rod columns, cold and hot port counts, and configured total cold-plus-hot buffer capacity in mB—not current stock. Runtime heat and per-column data come later.")
-                .attachKeyFrame()
-                .pointAt(util.vector().topOf(INSTRUMENT_PORT))
-                .placeNearTarget();
-        scene.overlay().showControls(util.vector().topOf(INSTRUMENT_PORT), Pointing.DOWN, 70)
-                .withItem(AllItems.GOGGLES.asStack())
-                .rightClick();
-        scene.idle(140);
-
-        scene.overlay().showOutlineWithText(util.select().position(CONTROL_ROD), 90)
-                .text("A newly formed reactor sets every movable control rod's target and actual depth to fully inserted. The drive caps an empty column; no fake control-rod blocks are placed below it.")
+        for (BlockPos fuelColumn : new BlockPos[]{
+                new BlockPos(2, 2, 1), new BlockPos(1, 2, 2),
+                new BlockPos(3, 2, 2), new BlockPos(2, 2, 3)}) {
+            scene.overlay().showLine(PonderPalette.GREEN,
+                    util.vector().centerOf(BUILD_DRIVE), util.vector().centerOf(fuelColumn), 70);
+        }
+        scene.overlay().showOutlineWithText(util.select().position(BUILD_DRIVE), 80)
+                .text("Leave the control column hollow and cap it with a drive. It controls the four neighboring fuel columns.")
                 .attachKeyFrame()
                 .placeNearTarget();
         scene.idle(110);
 
-        scene.overlay().showScrollInput(util.vector().topOf(CONTROL_ROD), Direction.UP, 80);
-        scene.overlay().showText(120)
-                .text("Every player may adjust each drive with its own server-validated Create-style slider. The client previews continuously; the server commits the target, and redstone does not adjust the drive.")
-                .attachKeyFrame()
-                .pointAt(util.vector().topOf(CONTROL_ROD))
-                .placeNearTarget();
-        scene.idle(135);
-
-        // 冷热端口位于背面与右侧，先转动镜头确保两个物理端口都能被玩家看见。
-        scene.rotateCameraY(90.0F);
-        scene.idle(20);
-        scene.overlay().showOutlineWithText(
-                        util.select().position(COLD_PORT).add(util.select().position(SECOND_COLD_PORT)), 110)
-                .text("Multiple cold ports feed one shared cold buffer and coolant ledger. Each physical port has its configured per-tick quota; adding a port increases input throughput without creating another inventory.")
+        scene.world().showSection(sidePorts, Direction.DOWN);
+        scene.overlay().showOutlineWithText(sidePorts, 90)
+                .text("Place one instrument port, at least one cold port, and one hot port on non-edge side blocks.")
                 .attachKeyFrame()
                 .placeNearTarget();
-        scene.idle(130);
+        scene.idle(110);
 
-        scene.overlay().showOutlineWithText(
-                        util.select().position(HOT_PORT).add(util.select().position(SECOND_HOT_PORT)), 110)
-                .text("Multiple hot ports draw from one shared hot buffer and independently provide output capacity. There is no extra whole-reactor flow cap; conversion still depends on both sides' throughput, stock, capacity, heat, and backpressure.")
+        scene.world().showSection(walls.substract(frame).substract(sidePorts), Direction.DOWN);
+        scene.idle(10);
+        scene.world().showSection(util.select().layer(4), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay().showOutlineWithText(util.select().position(BUILD_INSTRUMENT), 80)
+                .text("Seal every outside wall. Windows may replace casing on non-edge side blocks.")
                 .attachKeyFrame()
                 .placeNearTarget();
-        scene.idle(135);
-
-        // SCRAM 仍由正面的仪表端口触发，端口教学结束后把镜头恢复到初始方向。
-        scene.rotateCameraY(-90.0F);
-        scene.idle(20);
-        scene.effects().indicateRedstone(INSTRUMENT_PORT);
-        scene.world().toggleRedstonePower(util.select().position(INSTRUMENT_PORT));
-        scene.overlay().showText(120)
-                .text("Holding a high redstone signal at the instrument port requests SCRAM, saves the earlier targets, and commands every still-movable control rod fully inserted. This request does not promise success for every layout or a jammed rod.")
+        scene.idle(100);
+        scene.overlay().showControls(util.vector().topOf(BUILD_INSTRUMENT), Pointing.DOWN, 70)
+                .withItem(AllItems.WRENCH.asStack())
+                .rightClick();
+        scene.overlay().showOutlineWithText(util.select().position(BUILD_INSTRUMENT), 80)
+                .text("Check the instrument port with a Create Wrench. Load fuel only after the structure forms.")
                 .attachKeyFrame()
-                .pointAt(util.vector().topOf(INSTRUMENT_PORT))
+                .pointAt(util.vector().topOf(BUILD_INSTRUMENT))
                 .placeNearTarget();
-        scene.idle(135);
-
-        scene.world().toggleRedstonePower(util.select().position(INSTRUMENT_PORT));
-        scene.overlay().showText(120)
-                .text("Removing the signal clears SCRAM and restores the saved pre-SCRAM target depths. Fuel and residual heat are never deleted by the redstone request.")
-                .attachKeyFrame()
-                .pointAt(util.vector().topOf(INSTRUMENT_PORT))
-                .placeNearTarget();
-        scene.idle(140);
-
+        scene.idle(100);
         scene.markAsFinished();
     }
 
-    /**
-     * 使用与服务端结构扫描器相同的标准契约填充虚拟 Ponder 世界。
-     * 即使某个 Ponder 资源管理器没有解码结构资源，故事线仍能保持稳定；所有修改都限制在临时世界内。
-     * 必须通过 WorldInstructions 写入，确保 Ponder 已建立的世界区段收到重绘通知。
-     */
-    private static void materializeCanonicalStructure(SceneBuilder scene) {
-        // 冻结的占位结构可能小于正式反应堆；仅扩展临时 Ponder 世界边界，允许写入完整 5×5×5 模板。
-        scene.addInstruction(ponderScene -> ponderScene.getWorld().setBounds(new BoundingBox(
-                0,
-                0,
-                0,
-                ReactorStructureDefinition.SIZE - 1,
-                ReactorStructureDefinition.SIZE - 1,
-                ReactorStructureDefinition.SIZE - 1
-        )));
-        ReactorStructureDefinition.canonicalTemplate().forEach((position, blockId) -> {
-            if (!ReactorStructureDefinition.AIR_ID.equals(blockId)) {
-                scene.world().setBlock(
-                        new BlockPos(position.x(), position.y(), position.z()),
-                        stateFor(blockId),
-                        false
-                );
+    /** 展示受控运行、冷却回路、红石停堆和撤去信号后的目标恢复。 */
+    public static void experimentalReactorOperation(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+        scene.title("experimental_reactor_operation", "Experimental Reactor: Run and Stop");
+        scene.configureBasePlate(0, 0, 13);
+        scene.scaleSceneView(0.63F);
+        scene.showBasePlate();
+
+        setTankFluid(scene, OP_COLD_TANK,
+                new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 4000));
+        setTankFluid(scene, OP_HOT_TANK, FluidStack.EMPTY);
+        scene.world().showSection(util.select().fromTo(4, 0, 4, 8, 4, 8), Direction.DOWN);
+        scene.world().showSection(util.select().fromTo(5, 2, 9, 5, 2, 12), Direction.SOUTH);
+        scene.world().showSection(util.select().fromTo(7, 2, 9, 7, 2, 12), Direction.SOUTH);
+        scene.world().showSection(util.select().fromTo(6, 2, 11, 6, 2, 12), Direction.SOUTH);
+        scene.world().showSection(util.select().fromTo(8, 2, 11, 8, 2, 12), Direction.SOUTH);
+        scene.world().showSection(util.select().position(OP_REDSTONE_LEVER), Direction.SOUTH);
+        ItemStack loadedFuel = new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get());
+        setPonderFuelPortDisplay(scene, OP_FUEL_PORT, loadedFuel);
+        var displayedFuel = scene.world().createItemEntity(
+                util.vector().centerOf(OP_FUEL_PORT).add(0, 1, 0), Vec3.ZERO, loadedFuel);
+        scene.world().modifyEntity(displayedFuel, entity -> {
+            if (entity instanceof ItemEntity itemEntity) {
+                itemEntity.setNoGravity(true);
+                itemEntity.setPickUpDelay(Integer.MAX_VALUE);
+            }
+        });
+        scene.idle(15);
+
+        Selection coldDrive = util.select().fromTo(6, 2, 11, 6, 2, 12);
+        Selection hotDrive = util.select().fromTo(8, 2, 11, 8, 2, 12);
+        scene.world().setKineticSpeed(coldDrive, 128);
+        scene.world().setKineticSpeed(hotDrive, 128);
+        scene.world().setKineticSpeed(util.select().position(OP_COLD_PUMP), -128);
+        scene.world().setKineticSpeed(util.select().position(OP_HOT_PUMP), -128);
+        scene.effects().rotationSpeedIndicator(OP_COLD_PUMP);
+        scene.effects().rotationSpeedIndicator(OP_HOT_PUMP);
+        scene.overlay().showBigLine(PonderPalette.BLUE,
+                util.vector().topOf(OP_COLD_TANK), util.vector().topOf(OP_COLD_PORT), 70);
+        scene.overlay().showBigLine(PonderPalette.RED,
+                util.vector().topOf(OP_HOT_PORT), util.vector().topOf(OP_HOT_TANK), 70);
+        caption(scene, util, "Before starting, connect the coolant loop and confirm the fuel is loaded.",
+                OP_COLD_PORT, 80);
+
+        scene.overlay().showScrollInput(util.vector().topOf(OP_DRIVE), Direction.UP, 80);
+        showFuelControlMarkers(scene, util, PonderPalette.GREEN, 70);
+        caption(scene, util, "Raise the rods gradually to start fission. Deeper insertion means lower power.",
+                OP_DRIVE, 80);
+
+        setTankFluid(scene, OP_COLD_TANK,
+                new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 2500));
+        setTankFluid(scene, OP_HOT_TANK,
+                new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1500));
+        scene.overlay().showBigLine(PonderPalette.BLUE,
+                util.vector().topOf(OP_COLD_TANK), util.vector().topOf(OP_COLD_PORT), 70);
+        scene.overlay().showBigLine(PonderPalette.RED,
+                util.vector().topOf(OP_HOT_PORT), util.vector().topOf(OP_HOT_TANK), 70);
+        caption(scene, util, "Cold coolant absorbs heat and leaves through the hot port. Keep both directions open.",
+                OP_HOT_PORT, 80);
+
+        scene.overlay().showControls(util.vector().topOf(OP_INSTRUMENT), Pointing.DOWN, 70)
+                .withItem(AllItems.GOGGLES.asStack());
+        caption(scene, util, "Engineer Goggles show heat production, cooling rate, and coolant stock at the instrument port.",
+                OP_INSTRUMENT, 80);
+
+        scene.effects().indicateRedstone(OP_REDSTONE_LEVER);
+        scene.world().toggleRedstonePower(util.select().position(OP_REDSTONE_LEVER));
+        showFuelControlMarkers(scene, util, PonderPalette.RED, 70);
+        caption(scene, util, "Fully insert the control rods to stop. A redstone signal at the instrument port inserts every movable rod.",
+                OP_INSTRUMENT, 80);
+
+        setTankFluid(scene, OP_COLD_TANK,
+                new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 1000));
+        setTankFluid(scene, OP_HOT_TANK,
+                new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 3000));
+        caption(scene, util, "Fission stops before residual heat does. Keep coolant circulating until the core cools.",
+                OP_HOT_TANK, 80);
+
+        scene.world().toggleRedstonePower(util.select().position(OP_REDSTONE_LEVER));
+        scene.overlay().showScrollInput(util.vector().topOf(OP_DRIVE), Direction.UP, 80);
+        showFuelControlMarkers(scene, util, PonderPalette.GREEN, 70);
+        caption(scene, util, "When the signal is removed, the control rod returns to its previous target depth.",
+                OP_DRIVE, 80);
+        scene.markAsFinished();
+    }
+
+    /** 展示手动装料、停裂变后取出，以及使用 Create 机械臂搬运燃料组件。 */
+    public static void experimentalReactorRefueling(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+        scene.title("experimental_reactor_refueling", "Experimental Reactor: Load and Replace Fuel");
+        scene.configureBasePlate(0, 0, 13);
+        scene.scaleSceneView(0.63F);
+        scene.showBasePlate();
+
+        scene.world().showSection(util.select().fromTo(4, 0, 4, 8, 4, 8), Direction.DOWN);
+        setPonderFuelPortDisplay(scene, FUEL_PORT, ItemStack.EMPTY);
+        configureRefuelingArmTargets(scene);
+        scene.world().showSection(util.select().fromTo(4, 3, 3, 8, 4, 3), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(ARM), 128);
+        scene.effects().rotationSpeedIndicator(ARM);
+        scene.idle(15);
+        scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 80)
+                .text("Each refueling port serves the fuel column directly below it and holds one assembly.")
+                .attachKeyFrame()
+                .placeNearTarget();
+        scene.idle(100);
+
+        ItemStack freshFuel = new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get());
+        var displayedFreshFuel = scene.world().createItemEntity(
+                util.vector().centerOf(FUEL_PORT).add(0, 1, 0), Vec3.ZERO, freshFuel);
+        scene.world().modifyEntity(displayedFreshFuel, entity -> {
+            if (entity instanceof ItemEntity itemEntity) {
+                itemEntity.setNoGravity(true);
+                itemEntity.setPickUpDelay(Integer.MAX_VALUE);
+            }
+        });
+        setPonderFuelPortDisplay(scene, FUEL_PORT, freshFuel);
+        scene.overlay().showControls(util.vector().topOf(FUEL_PORT), Pointing.DOWN, 70)
+                .withItem(freshFuel)
+                .rightClick();
+        scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 80)
+                .text("With a formed reactor and a non-fissioning column, right-click the port with a fresh enriched uranium fuel assembly.")
+                .attachKeyFrame()
+                .pointAt(util.vector().topOf(FUEL_PORT))
+                .placeNearTarget();
+        scene.idle(100);
+
+        scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 80)
+                .text("After the fuel is exhausted, it becomes a depleted uranium fuel assembly.")
+                .attachKeyFrame()
+                .placeNearTarget();
+        ItemStack cooledSpentFuel = new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
+        setPonderFuelPortDisplay(scene, FUEL_PORT, cooledSpentFuel);
+        var displayedSpentFuel = scene.world().createItemEntity(
+                util.vector().centerOf(FUEL_PORT).add(0, 1, 0), Vec3.ZERO, cooledSpentFuel);
+        scene.world().modifyEntity(displayedFreshFuel, Entity::discard);
+        scene.world().modifyEntity(displayedSpentFuel, entity -> {
+            if (entity instanceof ItemEntity itemEntity) {
+                itemEntity.setNoGravity(true);
+                itemEntity.setPickUpDelay(Integer.MAX_VALUE);
+            }
+        });
+        scene.idle(100);
+
+        scene.overlay().showScrollInput(util.vector().topOf(OP_DRIVE), Direction.UP, 70);
+        showFuelControlMarkers(scene, util, PonderPalette.RED, 70);
+        scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 80)
+                .text("Insert the neighboring control rod and wait for fission to stop in the target column. Keep cooling residual heat.")
+                .attachKeyFrame()
+                .pointAt(util.vector().topOf(FUEL_PORT))
+                .placeNearTarget();
+        scene.idle(100);
+
+        scene.overlay().showControls(util.vector().topOf(FUEL_PORT), Pointing.DOWN, 40)
+                .rightClick();
+        setPonderFuelPortDisplay(scene, FUEL_PORT, ItemStack.EMPTY);
+        scene.world().modifyEntity(displayedSpentFuel, Entity::discard);
+        scene.idle(50);
+        scene.overlay().showControls(util.vector().topOf(FUEL_PORT), Pointing.DOWN, 40)
+                .withItem(freshFuel)
+                .rightClick();
+        var replacementFuel = scene.world().createItemEntity(
+                util.vector().centerOf(FUEL_PORT).add(0, 1, 0), Vec3.ZERO, freshFuel);
+        scene.world().modifyEntity(replacementFuel, entity -> {
+            if (entity instanceof ItemEntity itemEntity) {
+                itemEntity.setNoGravity(true);
+                itemEntity.setPickUpDelay(Integer.MAX_VALUE);
+            }
+        });
+        setPonderFuelPortDisplay(scene, FUEL_PORT, freshFuel);
+        scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 80)
+                .text("Take the old assembly with an empty hand, then load a fresh one.")
+                .attachKeyFrame()
+                .pointAt(util.vector().topOf(FUEL_PORT))
+                .placeNearTarget();
+        scene.idle(100);
+
+        scene.world().modifyEntity(replacementFuel, Entity::discard);
+        setPonderFuelPortDisplay(scene, FUEL_PORT, ItemStack.EMPTY);
+        scene.overlay().showControls(util.vector().topOf(ARM_INPUT), Pointing.RIGHT, 50)
+                .withItem(freshFuel);
+        scene.world().createItemOnBeltLike(ARM_INPUT, Direction.UP, freshFuel);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.MOVE_TO_INPUT, ItemStack.EMPTY, 0);
+        scene.idle(24);
+        scene.world().removeItemsFromBelt(ARM_INPUT);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.SEARCH_OUTPUTS, freshFuel, -1);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.MOVE_TO_OUTPUT, freshFuel, 0);
+        scene.idle(24);
+        setPonderFuelPortDisplay(scene, FUEL_PORT, freshFuel);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.SEARCH_INPUTS, ItemStack.EMPTY, -1);
+
+        setPonderFuelPortDisplay(scene, FUEL_PORT, cooledSpentFuel);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.MOVE_TO_INPUT, ItemStack.EMPTY, 1);
+        scene.idle(24);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.SEARCH_OUTPUTS, cooledSpentFuel, -1);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.MOVE_TO_OUTPUT, cooledSpentFuel, 1);
+        scene.idle(24);
+        scene.world().createItemOnBeltLike(ARM_OUTPUT, Direction.UP, cooledSpentFuel);
+        scene.world().instructArm(ARM, ArmBlockEntity.Phase.SEARCH_INPUTS, ItemStack.EMPTY, -1);
+        scene.overlay().showOutlineWithText(
+                        util.select().position(ARM_INPUT).add(util.select().position(ARM_OUTPUT)), 80)
+                .text("Power a Create Mechanical Arm to take fresh fuel from supply and deliver spent fuel to receiving storage. Hoppers cannot access the fuel port.")
+                .attachKeyFrame()
+                .placeNearTarget();
+        scene.idle(100);
+        scene.markAsFinished();
+    }
+
+    /** 以彩色临时标记强调中心控制棒只作用于四向相邻燃料列。 */
+    private static void showFuelControlMarkers(
+            CreateSceneBuilder scene,
+            SceneBuildingUtil util,
+            PonderPalette color,
+            int duration
+    ) {
+        Vec3Target[] targets = {
+                new Vec3Target(6, 2, 5),
+                new Vec3Target(5, 2, 6),
+                new Vec3Target(7, 2, 6),
+                new Vec3Target(6, 2, 7),
+        };
+        for (Vec3Target target : targets) {
+            scene.overlay().showLine(color,
+                    util.vector().centerOf(OP_DRIVE),
+                    util.vector().centerOf(target.x(), target.y(), target.z()), duration);
+        }
+    }
+
+    /** 在 Ponder 临时 Create 储罐中直接调整可见流体，不走正式反应堆流体事务。 */
+    private static void setTankFluid(CreateSceneBuilder scene, BlockPos position, FluidStack fluid) {
+        scene.world().modifyBlockEntity(position, FluidTankBlockEntity.class, tank -> {
+            tank.getTankInventory().drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
+            if (!fluid.isEmpty()) {
+                tank.getTankInventory().fill(fluid.copy(), IFluidHandler.FluidAction.EXECUTE);
             }
         });
     }
 
-    /** 将结构契约中的方块 ID 映射为已注册方块状态，未知 ID 说明故事线与结构契约失配。 */
-    private static BlockState stateFor(String blockId) {
-        String path = blockId.substring(blockId.indexOf(':') + 1);
-        return switch (path) {
-            case P1ContentIds.REACTOR_CASING_ID -> P1Blocks.REACTOR_CASING.get().defaultBlockState();
-            case P1ContentIds.REACTOR_WINDOW_ID -> P1Blocks.REACTOR_WINDOW.get().defaultBlockState();
-            case P1ContentIds.REACTOR_INSTRUMENT_PORT_ID ->
-                    P1Blocks.REACTOR_INSTRUMENT_PORT.get().defaultBlockState();
-            case P1ContentIds.REACTOR_COLD_PORT_ID -> P1Blocks.REACTOR_COLD_PORT.get().defaultBlockState();
-            case P1ContentIds.REACTOR_HOT_PORT_ID -> P1Blocks.REACTOR_HOT_PORT.get().defaultBlockState();
-            case P1ContentIds.REACTOR_REFUELING_PORT_ID ->
-                    P1Blocks.REACTOR_REFUELING_PORT.get().defaultBlockState();
-            case P1ContentIds.REACTOR_FUEL_ROD_ID -> P1Blocks.REACTOR_FUEL_ROD.get().defaultBlockState();
-            case P1ContentIds.CONTROL_ROD_DRIVE_ID -> P1Blocks.CONTROL_ROD_DRIVE.get().defaultBlockState();
-            default -> throw new IllegalArgumentException("Unsupported Ponder structure block: " + blockId);
-        };
+    /** 仅为 Ponder 临时端口写入客户端可见的绑定和组件数据，不调用绑定或换料事务。 */
+    private static void setPonderFuelPortDisplay(SceneBuilder scene, BlockPos position, ItemStack assembly) {
+        scene.world().modifyBlockEntity(position, ReactorPortBlockEntity.class, port -> {
+            var level = port.getLevel();
+            if (level == null) {
+                return;
+            }
+            var registries = level.registryAccess();
+            CompoundTag tag = port.saveWithFullMetadata(registries);
+            tag.putBoolean("FuelColumnBound", true);
+            tag.putInt("FuelColumnPositionX", position.getX() - REACTOR_OFFSET - 1);
+            tag.putInt("FuelColumnPositionZ", position.getZ() - REACTOR_OFFSET - 1);
+            tag.putDouble("FuelColumnIntegrity", 1.0);
+            tag.putDouble("FuelColumnHeatHuPerTick", 0.0);
+            tag.put("FuelAssembly", assembly.saveOptional(registries));
+            port.readClient(tag, registries);
+        });
     }
 
-    /** 将结构定义的本地三维坐标转换为 Ponder 使用的方块坐标。 */
-    private static BlockPos local(ReactorStructureDefinition.LocalPosition position) {
-        return new BlockPos(position.x(), position.y(), position.z());
+    /** 用 Create 自身序列化器为客户端机械臂装配供料、端口和接收目标。 */
+    private static void configureRefuelingArmTargets(SceneBuilder scene) {
+        scene.world().modifyBlockEntity(ARM, ArmBlockEntity.class, arm -> {
+            var level = arm.getLevel();
+            if (level == null) {
+                return;
+            }
+            ArmInteractionPoint fuelSupply = createArmPoint(arm, ARM_INPUT, true);
+            ArmInteractionPoint refuelingInput = createArmPoint(arm, FUEL_PORT, true);
+            ArmInteractionPoint refuelingOutput = createArmPoint(arm, FUEL_PORT, false);
+            ArmInteractionPoint spentFuelReceiver = createArmPoint(arm, ARM_OUTPUT, false);
+
+            ListTag targets = new ListTag();
+            targets.add(fuelSupply.serialize(ARM));
+            targets.add(refuelingInput.serialize(ARM));
+            targets.add(refuelingOutput.serialize(ARM));
+            targets.add(spentFuelReceiver.serialize(ARM));
+
+            var registries = level.registryAccess();
+            CompoundTag tag = arm.saveWithFullMetadata(registries);
+            tag.put("InteractionPoints", targets);
+            arm.readClient(tag, registries);
+        });
     }
 
-    /**
-     * 正式结构仍是封闭的 5×5×5 外壳；临时 Ponder 剖面移除两块外墙以展示内部列，
-     * 并在随后把教学所需端口恢复到临时世界中。该剖面不代表可用于服务端扫描的实际结构。
-     */
-    private static void openTeachingCutaway(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.world().replaceBlocks(
-                util.select().fromTo(0, 1, 0, 4, 3, 0),
-                Blocks.AIR.defaultBlockState(),
-                false
-        );
-        scene.world().replaceBlocks(
-                util.select().fromTo(4, 1, 0, 4, 3, 4),
-                Blocks.AIR.defaultBlockState(),
-                false
-        );
-
-        scene.world().setBlock(INSTRUMENT_PORT,
-                P1Blocks.REACTOR_INSTRUMENT_PORT.get().defaultBlockState(), false);
-        scene.world().setBlock(SECOND_COLD_PORT,
-                P1Blocks.REACTOR_COLD_PORT.get().defaultBlockState(), false);
-        scene.world().setBlock(SECOND_HOT_PORT,
-                P1Blocks.REACTOR_HOT_PORT.get().defaultBlockState(), false);
-    }
-
-    /**
-     * 恢复教学切面被移除的两面外墙，并按正式结构模板还原观察窗与仪表端口。
-     * 该恢复只作用于 Ponder 临时世界，避免后续红石和端口说明停留在伪造的缺墙结构上。
-     */
-    private static void restoreTeachingCutaway(SceneBuilder scene) {
-        for (int x = 0; x < ReactorStructureDefinition.SIZE; x++) {
-            restoreCanonicalBlock(scene, new ReactorStructureDefinition.LocalPosition(x, 1, 0));
-            restoreCanonicalBlock(scene, new ReactorStructureDefinition.LocalPosition(x, 2, 0));
-            restoreCanonicalBlock(scene, new ReactorStructureDefinition.LocalPosition(x, 3, 0));
+    /** 将 Create 目标设置为取料或放料模式；Ponder 客户端不会执行物品事务。 */
+    private static ArmInteractionPoint createArmPoint(
+            ArmBlockEntity arm,
+            BlockPos target,
+            boolean input
+    ) {
+        var level = arm.getLevel();
+        if (level == null) {
+            throw new IllegalStateException("Ponder 机械臂缺少临时世界");
         }
-        for (int z = 0; z < ReactorStructureDefinition.SIZE; z++) {
-            restoreCanonicalBlock(scene, new ReactorStructureDefinition.LocalPosition(4, 1, z));
-            restoreCanonicalBlock(scene, new ReactorStructureDefinition.LocalPosition(4, 2, z));
-            restoreCanonicalBlock(scene, new ReactorStructureDefinition.LocalPosition(4, 3, z));
+        ArmInteractionPoint point = ArmInteractionPoint.create(level, target, level.getBlockState(target));
+        if (point == null) {
+            throw new IllegalStateException("Ponder 机械臂目标无效: " + target);
         }
-
-        // 标准模板恢复会把教学额外端口覆盖为外壳，因此最后重新放回它们供后续多端口说明使用。
-        scene.world().setBlock(SECOND_COLD_PORT, P1Blocks.REACTOR_COLD_PORT.get().defaultBlockState(), false);
-        scene.world().setBlock(SECOND_HOT_PORT, P1Blocks.REACTOR_HOT_PORT.get().defaultBlockState(), false);
+        if (input) {
+            point.cycleMode();
+        }
+        return point;
     }
 
-    /** 按结构定义恢复单个被切面的方块，确保窗口和仪表端口不会被统一外壳覆盖。 */
-    private static void restoreCanonicalBlock(SceneBuilder scene,
-                                              ReactorStructureDefinition.LocalPosition position) {
-        String blockId = ReactorStructureDefinition.canonicalTemplate().get(position);
-        if (blockId != null && !ReactorStructureDefinition.AIR_ID.equals(blockId)) {
-            scene.world().setBlock(new BlockPos(position.x(), position.y(), position.z()),
-                    stateFor(blockId), false);
-        }
+    /** 在每条故事线中给正文留出超过动画寿命的退场间隔。 */
+    private static void caption(
+            SceneBuilder scene,
+            SceneBuildingUtil util,
+            String text,
+            BlockPos target,
+            int duration
+    ) {
+        scene.overlay().showText(duration)
+                .text(text)
+                .attachKeyFrame()
+                .pointAt(util.vector().topOf(target))
+                .placeNearTarget();
+        scene.idle(duration + 20);
+    }
+
+    /** 将相对反应堆局部坐标映射到13×5×13故事线模板中的完整堆体。 */
+    private static BlockPos reactorPos(int x, int y, int z) {
+        return new BlockPos(x + REACTOR_OFFSET, y, z + REACTOR_OFFSET);
+    }
+
+    /** 控制棒标记只保存坐标，不关联实际方块或反应堆状态。 */
+    private record Vec3Target(int x, int y, int z) {
     }
 }
