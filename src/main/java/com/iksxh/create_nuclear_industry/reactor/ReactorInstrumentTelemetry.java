@@ -116,13 +116,11 @@ public record ReactorInstrumentTelemetry(
 
         ReactorSnapshot snapshot = result.snapshot();
         List<FuelColumnTelemetry> fuel = new ArrayList<>();
-        double totalHeat = 0.0D;
         for (Map.Entry<CoreColumnPosition, FuelColumnState> entry
                 : snapshot.fuelColumns().entrySet()) {
             FuelColumnFissionResult fission = result.fission().columns().get(entry.getKey());
             double generatedHeat = fission == null ? 0.0D : fission.generatedHeatHu();
             fuel.add(new FuelColumnTelemetry(entry.getKey(), entry.getValue().integrity(), generatedHeat));
-            totalHeat += generatedHeat;
         }
 
         List<ControlRodColumnTelemetry> controlRods = new ArrayList<>();
@@ -139,7 +137,7 @@ public record ReactorInstrumentTelemetry(
                 snapshot.hotCoolantMb(),
                 fuel,
                 controlRods,
-                totalHeat,
+                result.fission().generatedHeatHu(),
                 result.coolant().settlement().convertedCoolantMb()
         );
     }

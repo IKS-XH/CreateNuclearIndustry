@@ -160,11 +160,10 @@ public final class ReactorServerTick {
             ReactorSnapshot snapshot,
             ReactorFissionResult fission
     ) {
-        double total = 0.0D;
+        // 新生热采用裂变阶段的权威总量；缓存热按原账本直接相加，不能再次取整。
+        double total = fission.generatedHeatHu();
         for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : snapshot.fuelColumns().entrySet()) {
-            FuelColumnFissionResult column = fission.columns().get(entry.getKey());
-            double generated = column == null ? 0.0D : column.generatedHeatHu();
-            total += generated + entry.getValue().cachedHeatHu();
+            total += entry.getValue().cachedHeatHu();
         }
         if (!Double.isFinite(total) || total < 0.0D) {
             throw new IllegalArgumentException("available reactor heat must be finite and non-negative");

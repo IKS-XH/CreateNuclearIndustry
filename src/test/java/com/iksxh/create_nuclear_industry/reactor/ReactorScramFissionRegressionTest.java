@@ -60,7 +60,8 @@ class ReactorScramFissionRegressionTest {
         assertEquals(0.35D,
                 result.controlSnapshot().controlRodColumns().get(controlPosition).actualDepth(),
                 1.0E-12D);
-        assertEquals(1.95D, result.fission().columns().get(CENTER).generatedHeatHu(), 1.0E-12D);
+        assertEquals(1.95D, result.fission().rawHeatHu(), 1.0E-12D);
+        assertEquals(2.0D, result.fission().columns().get(CENTER).generatedHeatHu());
         assertTrue(result.fission().columns().get(CENTER).plannedFuelBurnUnits() > 0.0D);
     }
 

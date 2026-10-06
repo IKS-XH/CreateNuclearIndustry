@@ -25,7 +25,7 @@ class P1Thermal01ContractTest {
 
         FuelColumnThermalResult thermal = result.thermal().columns().get(CENTER);
         FuelColumnState next = result.snapshot().fuelColumns().get(CENTER);
-        assertEquals(0.25D, thermal.generatedHeatHu(), EPSILON);
+        assertEquals(0.0D, thermal.generatedHeatHu(), EPSILON);
         assertEquals(0.0D, thermal.removedHeatHu(), EPSILON);
         assertEquals(0.25D, thermal.quantizedHeatRemainderHu(), EPSILON);
         assertEquals(0.0D, thermal.integrityDamage(), EPSILON);
@@ -59,12 +59,11 @@ class P1Thermal01ContractTest {
     }
 
     @Test
-    void fractionalHeatAccumulatesAcrossTicksUntilOneWholeMbIsConverted() {
-        ReactorSimulationParameters parameters = parametersForGeneratedHeat(0.25D);
+    void fractionalCachedHeatAccumulatesAcrossTicksUntilOneWholeMbIsConverted() {
         ReactorSnapshot before = snapshot(fuel(1.0D, 0.0D, 0.0D), 1L, 0L);
 
-        ReactorServerTick.Result first = advance(before, parameters, 1_000L);
-        ReactorServerTick.Result second = advance(first.snapshot(), parameters, 1_000L);
+        ReactorServerTick.Result first = advance(0.25D, before, 1_000L);
+        ReactorServerTick.Result second = advance(0.25D, first.snapshot(), 1_000L);
 
         assertEquals(0.25D, first.snapshot().fuelColumns().get(CENTER).cachedHeatHu(), EPSILON);
         assertEquals(0.25D,
@@ -79,9 +78,8 @@ class P1Thermal01ContractTest {
 
     @Test
     void noCoolingTreatsFortyNineHundredthsHuAsRealShortage() {
-        ReactorServerTick.Result result = advance(
+        ReactorServerTick.Result result = advance(0.49D,
                 snapshot(fuel(1.0D, 0.0D, 0.0D), 0L, 0L),
-                parametersForGeneratedHeat(0.49D),
                 1_000L
         );
         double expectedDamage = (0.49D - DEFAULTS.damageHeatThresholdHuPerTick())
@@ -97,9 +95,8 @@ class P1Thermal01ContractTest {
 
     @Test
     void partialCoolingDoesNotChargeTheFractionalRemainderTwiceAsDamage() {
-        ReactorServerTick.Result result = advance(
+        ReactorServerTick.Result result = advance(1.25D,
                 snapshot(fuel(1.0D, 0.0D, 0.0D), 1L, 0L),
-                parametersForGeneratedHeat(1.25D),
                 1_000L
         );
         double expectedDamage = (1.25D - 0.5D - 0.25D
@@ -117,9 +114,8 @@ class P1Thermal01ContractTest {
 
     @Test
     void blockedHotEndStillAllowsQuantizedRemainderProtectionWithColdStock() {
-        ReactorServerTick.Result result = advance(
+        ReactorServerTick.Result result = advance(0.49D,
                 snapshot(fuel(1.0D, 0.0D, 0.0D), 1L, 0L),
-                parametersForGeneratedHeat(0.49D),
                 0L
         );
         assertEquals(0.0D, result.coolant().settlement().convertedCoolantMb(), EPSILON);
@@ -133,8 +129,8 @@ class P1Thermal01ContractTest {
         CoreColumnPosition east = new CoreColumnPosition(2, 2);
         ReactorSnapshot before = new ReactorSnapshot(
                 Map.of(
-                        CENTER, fuel(1.0D, 0.0D, 0.0D),
-                        east, fuel(0.5D, 0.0D, 0.0D)
+                        CENTER, fuel(1.0D, 0.3D, 0.0D),
+                        east, fuel(0.5D, 0.45D, 0.0D)
                 ),
                 Map.of(),
                 1L,
@@ -143,13 +139,13 @@ class P1Thermal01ContractTest {
                 false
         );
         ReactorServerTick.Result result = advance(before,
-                parametersForGeneratedHeat(0.3D), 1_000L);
+                parametersForGeneratedHeat(0.0D), 1_000L);
         FuelColumnThermalResult center = result.thermal().columns().get(CENTER);
         FuelColumnThermalResult eastResult = result.thermal().columns().get(east);
 
         assertEquals(0.25D,
                 center.quantizedHeatRemainderHu() + eastResult.quantizedHeatRemainderHu(), EPSILON);
-        assertEquals(center.generatedHeatHu() / eastResult.generatedHeatHu(),
+        assertEquals(2.0D / 3.0D,
                 center.removedHeatHu() / eastResult.removedHeatHu(), 1.0E-10D);
         assertEquals(center.netHeatLoadHu() / eastResult.netHeatLoadHu(),
                 center.quantizedHeatRemainderHu() / eastResult.quantizedHeatRemainderHu(),
@@ -209,9 +205,8 @@ class P1Thermal01ContractTest {
 
     @Test
     void quantizedRemainderSurvivesSnapshotNbtReloadAndLegacyFormatMigratesToZero() {
-        ReactorServerTick.Result result = advance(
+        ReactorServerTick.Result result = advance(0.49D,
                 snapshot(fuel(1.0D, 0.0D, 0.0D), 1L, 0L),
-                parametersForGeneratedHeat(0.49D),
                 1_000L
         );
         ReactorSnapshot reloaded = ReactorSnapshotNbtCodec.decode(
@@ -237,12 +232,18 @@ class P1Thermal01ContractTest {
                 migrated.fuelColumns().get(CENTER).quantizedHeatRemainderHu(), EPSILON);
     }
 
+    /** 分数热从已有缓存账本进入正式 tick；新生热已取整，不能再用分数新生热构造量化余数。 */
     private static ReactorServerTick.Result advance(
-            double generatedHeat,
+            double cachedHeat,
             ReactorSnapshot snapshot,
             long hotCapacityMb
     ) {
-        return advance(snapshot, parametersForGeneratedHeat(generatedHeat), hotCapacityMb);
+        FuelColumnState previous = snapshot.fuelColumns().get(CENTER);
+        FuelColumnState withCache = new FuelColumnState(previous.fuelAssembly(), previous.integrity(),
+                previous.cachedHeatHu() + cachedHeat, previous.fuelBurnRemainder(),
+                previous.quantizedHeatRemainderHu());
+        return advance(snapshot.withColumns(Map.of(CENTER, withCache), snapshot.controlRodColumns()),
+                parametersForGeneratedHeat(0.0D), hotCapacityMb);
     }
 
     private static ReactorServerTick.Result advance(

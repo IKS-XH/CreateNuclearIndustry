@@ -14,6 +14,29 @@ class ReactorFissionCalculatorTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     private static final int MAX_DAMAGE = 216_000;
 
+    /** 两个隔离列的原始热为 3.3 和 3.45 HU；总量取整为 7，逐列取整会错误得到 8。 */
+    @Test
+    void fractionalTotalRoundsOnceAndPreservesColumnProportions() {
+        CoreColumnPosition first = new CoreColumnPosition(0, 0);
+        CoreColumnPosition second = new CoreColumnPosition(2, 0);
+        CoreColumnPosition empty = new CoreColumnPosition(1, 2);
+        ReactorFissionResult result = ReactorFissionCalculator.calculate(new ReactorSnapshot(
+                Map.of(first, fuel(0.9D), second, fuel(0.85D), empty, FuelColumnState.empty()),
+                Map.of(), 0L, 0L, 0L, false), PARAMETERS);
+
+        assertEquals(6.75D, result.rawHeatHu(), 1.0E-12D);
+        assertEquals(7.0D, result.generatedHeatHu());
+        assertEquals(154.0D / 45.0D, result.columns().get(first).generatedHeatHu(), 1.0E-12D);
+        assertEquals(161.0D / 45.0D, result.columns().get(second).generatedHeatHu(), 1.0E-12D);
+        assertEquals(23.0D / 22.0D, result.columns().get(second).generatedHeatHu()
+                / result.columns().get(first).generatedHeatHu(), 1.0E-12D);
+        assertEquals(0.0D, result.columns().get(empty).generatedHeatHu());
+        assertEquals(result.generatedHeatHu(), result.columns().values().stream()
+                .mapToDouble(FuelColumnFissionResult::generatedHeatHu).sum());
+        assertEquals(PARAMETERS.baseBurnPerFuelBlockPerTick() * 7.5D,
+                result.plannedFuelBurnUnits(), 1.0E-15D);
+    }
+
     @Test
     void fullIntegrityIsolatedFuelUsesControlRodDepthForHeatAndBurn() {
         CoreColumnPosition fuelPosition = new CoreColumnPosition(1, 1);
@@ -62,7 +85,7 @@ class ReactorFissionCalculatorTest {
         FuelColumnFissionResult result = result(snapshot, fuelPosition, false);
 
         assertEquals(0.5D, result.controlledIntensity(), 1.0E-12D);
-        assertEquals(1.5D, result.generatedHeatHu(), 1.0E-12D);
+        assertEquals(2.0D, result.generatedHeatHu(), 1.0E-12D);
     }
 
     @Test
@@ -105,6 +128,7 @@ class ReactorFissionCalculatorTest {
         double[] integrities = {1.0D, 0.75D, 0.5D, 0.25D, 0.0D};
         double[] expectedHeat = {1.0D, 1.25D, 1.5D, 1.75D, 2.0D};
         double[] expectedBurn = {1.0D, 1.5D, 2.0D, 2.5D, 3.0D};
+        double[] expectedRoundedHeat = {3.0D, 4.0D, 5.0D, 6.0D, 6.0D};
         CoreColumnPosition position = new CoreColumnPosition(1, 1);
 
         for (int i = 0; i < integrities.length; i++) {
@@ -113,7 +137,7 @@ class ReactorFissionCalculatorTest {
             ).columns().get(position);
             assertEquals(expectedHeat[i], result.damageHeatMultiplier(), 1.0E-12D);
             assertEquals(expectedBurn[i], result.damageBurnMultiplier(), 1.0E-12D);
-            assertEquals(3.0D * expectedHeat[i], result.generatedHeatHu(), 1.0E-12D);
+            assertEquals(expectedRoundedHeat[i], result.generatedHeatHu(), 1.0E-12D);
             assertEquals(PARAMETERS.baseBurnPerFuelBlockPerTick() * 3.0D * expectedBurn[i],
                     result.plannedFuelBurnUnits(), 1.0E-15D);
             assertEquals(expectedHeat[i] / expectedBurn[i],
@@ -151,14 +175,16 @@ class ReactorFissionCalculatorTest {
         ReactorSnapshot damagedSnapshot = new ReactorSnapshot(
                 Map.of(first, fuel(0.5D), second, fuel(0.5D)), Map.of(), 0L, 0L, 0L, false);
 
-        FuelColumnFissionResult full = ReactorFissionCalculator.calculate(fullSnapshot, parameters)
-                .columns().get(first);
-        FuelColumnFissionResult damaged = ReactorFissionCalculator.calculate(damagedSnapshot, parameters)
-                .columns().get(first);
+        ReactorFissionResult fullResult = ReactorFissionCalculator.calculate(fullSnapshot, parameters);
+        ReactorFissionResult damagedResult = ReactorFissionCalculator.calculate(damagedSnapshot, parameters);
+        FuelColumnFissionResult full = fullResult.columns().get(first);
+        FuelColumnFissionResult damaged = damagedResult.columns().get(first);
 
         assertTrue(full.overclocked());
         assertTrue(damaged.overclocked());
-        assertEquals(2.0D, damaged.generatedHeatHu() / full.generatedHeatHu(), 1.0E-12D);
+        assertEquals(2.0D, damagedResult.rawHeatHu() / fullResult.rawHeatHu(), 1.0E-12D);
+        assertEquals(Math.ceil(fullResult.rawHeatHu()), fullResult.generatedHeatHu());
+        assertEquals(Math.ceil(damagedResult.rawHeatHu()), damagedResult.generatedHeatHu());
         assertEquals(3.0D, damaged.plannedFuelBurnUnits() / full.plannedFuelBurnUnits(), 1.0E-12D);
     }
 
@@ -174,6 +200,20 @@ class ReactorFissionCalculatorTest {
 
         assertEquals(3.0D, result.generatedHeatHu(), 1.0E-12D);
         assertEquals(expectedBurn, result.plannedFuelBurnUnits(), 1.0E-15D);
+    }
+
+    /** 原始 6 HU 被上限截为 3.3 HU 后取整为 4 HU；不能在取整后再限幅为 3.3。 */
+    @Test
+    void fractionalCapIsAppliedBeforeTotalRounding() {
+        CoreColumnPosition position = new CoreColumnPosition(1, 1);
+        ReactorFissionResult result = ReactorFissionCalculator.calculate(
+                ReactorSnapshot.singleFuelColumn(position, fuel(0.0D)), parameters(2.0D, 3.0D, 1.1D));
+
+        assertEquals(6.0D, result.rawHeatHu());
+        assertEquals(4.0D, result.generatedHeatHu());
+        assertEquals(4.0D, result.columns().get(position).generatedHeatHu());
+        assertEquals(PARAMETERS.baseBurnPerFuelBlockPerTick() * 9.0D,
+                result.plannedFuelBurnUnits(), 1.0E-15D);
     }
 
     @Test
@@ -216,8 +256,10 @@ class ReactorFissionCalculatorTest {
         assertTrue(halfInserted.generatedHeatHu() > fullyInserted.generatedHeatHu());
         assertTrue(withdrawn.plannedFuelBurnUnits() > halfInserted.plannedFuelBurnUnits());
         assertTrue(halfInserted.plannedFuelBurnUnits() > fullyInserted.plannedFuelBurnUnits());
-        assertEquals(62.89770874243574D, withdrawn.generatedHeatHu(), 1.0E-12D);
-        assertEquals(23.604377652134303D, halfInserted.generatedHeatHu(), 1.0E-12D);
+        assertEquals(62.89770874243574D, withdrawn.rawHeatHu(), 1.0E-12D);
+        assertEquals(23.604377652134303D, halfInserted.rawHeatHu(), 1.0E-12D);
+        assertEquals(63.0D, withdrawn.generatedHeatHu());
+        assertEquals(24.0D, halfInserted.generatedHeatHu());
         assertEquals(0.0002911930960297951D, withdrawn.plannedFuelBurnUnits(), 1.0E-15D);
         assertEquals(0.00010927952616728845D, halfInserted.plannedFuelBurnUnits(), 1.0E-15D);
         assertEquals(0.0D, fullyInserted.generatedHeatHu(), 1.0E-12D);

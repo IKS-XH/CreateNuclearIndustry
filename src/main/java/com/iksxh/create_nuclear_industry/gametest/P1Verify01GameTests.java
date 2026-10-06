@@ -239,9 +239,20 @@ public final class P1Verify01GameTests {
                 double heatRatio = telemetryB.totalGeneratedFissionHeatHuPerTick() / totalHeatA;
                 double burnRatio = damagedFission.plannedFuelBurnUnits()
                         / fissionA.plannedFuelBurnUnits();
-                require(helper, close(heatRatio, expectedHeatMultiplier),
-                        "受损/完好总产热比不符合线性损伤倍率：实际=" + heatRatio
-                                + "，期望=" + expectedHeatMultiplier);
+                // 原始诊断热保持损伤倍率；实际新生热先限幅再全堆取整，不能要求取整后的比值仍线性。
+                require(helper, close(damagedFission.rawHeatHu() / fissionA.rawHeatHu(),
+                                expectedHeatMultiplier), "受损/完好原始产热比不符合线性损伤倍率");
+                ReactorSimulationParameters heatParameters = ReactorSimulationParameters.defaults();
+                double heatCap = heatParameters.baseHeatPerFuelBlockHuPerTick()
+                        * ReactorSnapshot.INTERNAL_HEIGHT * 6 * heatParameters.totalHeatMultiplierCap();
+                double expectedHeatA = Math.ceil(Math.min(fissionA.rawHeatHu(), heatCap));
+                double expectedHeatB = Math.ceil(Math.min(damagedFission.rawHeatHu(), heatCap));
+                require(helper, close(totalHeatA, expectedHeatA)
+                                && close(telemetryB.totalGeneratedFissionHeatHuPerTick(), expectedHeatB),
+                        "正式遥测总产热不符合先限幅再向上取整规则");
+                require(helper, close(heatRatio, expectedHeatB / expectedHeatA),
+                        "受损/完好实际总产热比不符合取整后的总量：实际=" + heatRatio
+                                + "，期望=" + expectedHeatB / expectedHeatA);
                 require(helper, close(burnRatio, expectedBurnMultiplier),
                         "受损/完好总燃耗比不符合线性损伤倍率：实际=" + burnRatio
                                 + "，期望=" + expectedBurnMultiplier);

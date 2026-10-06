@@ -93,11 +93,15 @@ columnBurn(f) = baseBurnPerFuel × internalHeight × burnEquivalent(f) × burnDa
 rawHeat = Σ columnHeat(f)
 nominalInstalledHeat = baseHeatPerFuel × internalHeight × installedFuelColumnCount
 heatCap = nominalInstalledHeat × totalHeatMultiplierCap
-totalHeat = min(rawHeat, heatCap)
+limitedHeat = min(rawHeat, heatCap)
+totalHeat = ceil(limitedHeat)
+settledColumnHeat(f) = columnHeat(f) × totalHeat / rawHeat
 
 totalBurn = Σ columnBurn(f)
 fuelCapacity(f) = fuelCapacityPerBlock × internalHeight
 ```
+
+**2026-10-06用户确认：** 每座反应堆每tick的新生裂变热在汇总和限幅之后只向上取整一次，单位HU/t；零产热保持零，不逐列取整。`rawHeat = 0`时所有列结算热为零，不执行除法。正产热列按原比例分配整数总量并校正浮点尾差，因此各列之和与总量一致。整数不变，取整增量小于1HU/t，限幅后的最高结算量为`ceil(heatCap)`。正式冷却和遥测使用同一总量；已缓存的热量与整数mB换热余数保持原值，不反复取整。燃耗仍按原式，不随产热取整增加。本规则由[总产热取整任务](./superpowers/plans/2026-10-06-reactor-heat-rounding-01.md)实现，候选验证及人工状态以该卡为准；模拟器未据此宣称同步。
 
 数值锚点：`internalHeight = 1`、满功率、无超频时，一个组件必须在 3 小时后耗尽。按 20 tick/秒换算，`baseBurnPerFuel` 的基准量级为 `1 / (3 × 3600 × 20)` 每格高度，再由实际强度、超频燃耗倍率和配置单位折算；该反推结果必须作为数值平衡验收记录。玩家可修改 `baseBurnPerFuel` 或等价的 `burnHoursPerBlock` 配置项。
 

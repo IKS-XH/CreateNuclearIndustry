@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,6 +21,66 @@ class ReactorServerTickTest {
     private static final ReactorSimulationParameters PARAMETERS = ReactorSimulationParameters.defaults();
     /** 标准 3×3 堆芯中心列，作为单列 tick 测试的固定坐标。 */
     private static final CoreColumnPosition CENTER = new CoreColumnPosition(1, 1);
+
+    /** 默认 0.5 HU/mB 下，三行半插棒堆每 tick 原始约 23.604 HU，只取整成 24 HU/48 mB。 */
+    @Test
+    void repeatedFractionalFissionUsesOneTotalForColumnsCoolingAndTelemetry() {
+        TreeMap<CoreColumnPosition, FuelColumnState> fuels = new TreeMap<>();
+        TreeMap<CoreColumnPosition, ControlRodColumnState> controls = new TreeMap<>();
+        for (int z = 0; z < 3; z++) {
+            for (int x : new int[]{0, 2}) {
+                fuels.put(new CoreColumnPosition(x, z), new FuelColumnState(
+                        FuelAssemblyState.installed(216_000, 0), 1.0D, 0.0D));
+            }
+            controls.put(new CoreColumnPosition(1, z),
+                    new ControlRodColumnState(1.0D, 0.5D, 0.5D, false, 0.0D));
+        }
+        ReactorSnapshot snapshot = new ReactorSnapshot(fuels, controls, 1_000L, 0L, 0L, false);
+        for (int tick = 0; tick < 10; tick++) {
+            ReactorServerTick.Result result = ReactorServerTick.advance(
+                    snapshot, PARAMETERS, coolantInput(128.0D, 128.0D, 2_000L));
+            ReactorInstrumentTelemetry telemetry = ReactorInstrumentTelemetry.from(result);
+            assertEquals(23.604377652134303D, result.fission().rawHeatHu(), 1.0E-12D);
+            assertEquals(24.0D, result.fission().generatedHeatHu());
+            assertEquals(24.0D, result.fission().columns().values().stream()
+                    .mapToDouble(FuelColumnFissionResult::generatedHeatHu).sum(), 1.0E-12D);
+            assertEquals(24.0D, telemetry.totalGeneratedFissionHeatHuPerTick());
+            assertEquals(48.0D, telemetry.convertedCoolantMbPerTick());
+            assertEquals(24.0D, result.effectiveCoolingHeatHu());
+            assertEquals(48L, snapshot.coldCoolantMb() - result.snapshot().coldCoolantMb());
+            assertEquals(48L, result.snapshot().hotCoolantMb() - snapshot.hotCoolantMb());
+            assertEquals(0.00010927952616728845D,
+                    result.fission().plannedFuelBurnUnits(), 1.0E-15D);
+            for (CoreColumnPosition position : fuels.keySet()) {
+                assertEquals(result.fission().columns().get(position).generatedHeatHu(),
+                        result.thermal().columns().get(position).generatedHeatHu());
+                assertEquals(0.0D, result.snapshot().fuelColumns().get(position).cachedHeatHu(), 1.0E-12D);
+                assertEquals(0.0D, result.snapshot().fuelColumns().get(position).quantizedHeatRemainderHu(),
+                        1.0E-12D);
+                assertEquals(1.0D, result.snapshot().fuelColumns().get(position).integrity());
+            }
+            snapshot = result.snapshot();
+        }
+    }
+
+    /** 全插棒只冷却原有 0.75 HU 缓存；转换 1 mB 并保留 0.25 HU，不补成整数热。 */
+    @Test
+    void fullyInsertedRodsCoolFractionalCacheWithoutRoundingItAgain() {
+        ReactorSnapshot snapshot = new ReactorSnapshot(
+                Map.of(CENTER, new FuelColumnState(FuelAssemblyState.installed(216_000, 0), 1.0D, 0.75D)),
+                Map.of(new CoreColumnPosition(1, 0), ControlRodColumnState.fullyInserted()),
+                128L, 0L, 0L, false);
+        ReactorServerTick.Result result = ReactorServerTick.advance(
+                snapshot, PARAMETERS, coolantInput(128.0D, 128.0D, 1_000L));
+
+        assertEquals(0.0D, result.fission().generatedHeatHu());
+        assertEquals(0.0D, result.fission().plannedFuelBurnUnits());
+        assertEquals(1.0D, result.coolant().settlement().convertedCoolantMb());
+        assertEquals(0.5D, result.effectiveCoolingHeatHu());
+        assertEquals(0.25D, result.snapshot().fuelColumns().get(CENTER).cachedHeatHu());
+        assertEquals(0.25D, result.snapshot().fuelColumns().get(CENTER).quantizedHeatRemainderHu());
+        assertEquals(0.0D, ReactorInstrumentTelemetry.from(result).totalGeneratedFissionHeatHuPerTick());
+    }
 
     /** 验证一次完整 tick 的热量、冷却、损伤、燃耗和冷/热流体库存提交结果。 */
     @Test

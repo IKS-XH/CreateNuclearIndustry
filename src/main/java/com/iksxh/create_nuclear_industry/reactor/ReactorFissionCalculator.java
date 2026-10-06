@@ -128,12 +128,28 @@ public final class ReactorFissionCalculator {
                 * ReactorSnapshot.INTERNAL_HEIGHT
                 * installedFuelColumns
                 * parameters.totalHeatMultiplierCap();
-        double heatScale = rawHeat <= 0.0D ? 0.0D : Math.min(1.0D, heatCap / rawHeat);
+        // 服务端每 tick 只对限幅后的全堆新生热取整一次；诊断原始热和燃耗均保留原公式。
+        double limitedHeat = finiteNonNegative(Math.min(rawHeat, heatCap));
+        double generatedHeat = Math.ceil(limitedHeat);
+        CoreColumnPosition lastPositive = null;
+        if (generatedHeat > 0.0D) {
+            for (Map.Entry<CoreColumnPosition, FuelColumnFissionResult> entry : rawResults.entrySet()) {
+                if (entry.getValue().generatedHeatHu() > 0.0D) {
+                    lastPositive = entry.getKey();
+                }
+            }
+        }
         Map<CoreColumnPosition, FuelColumnFissionResult> settled = new TreeMap<>();
-        double generatedHeat = 0.0D;
+        double assignedHeat = 0.0D;
         for (Map.Entry<CoreColumnPosition, FuelColumnFissionResult> entry : rawResults.entrySet()) {
             FuelColumnFissionResult raw = entry.getValue();
-            double settledHeat = finiteNonNegative(raw.generatedHeatHu() * heatScale);
+            // 坐标顺序固定，最后一个正产热列接收剩余量，避免尾差影响整数 mB 冷却；零热列不分配。
+            double settledHeat = 0.0D;
+            if (generatedHeat > 0.0D && raw.generatedHeatHu() > 0.0D) {
+                double remainingHeat = Math.max(0.0D, generatedHeat - assignedHeat);
+                settledHeat = entry.getKey().equals(lastPositive) ? remainingHeat
+                        : Math.min(remainingHeat, raw.generatedHeatHu() / rawHeat * generatedHeat);
+            }
             settled.put(entry.getKey(), new FuelColumnFissionResult(
                     raw.controlledIntensity(),
                     raw.heatIntensity(),
@@ -144,7 +160,7 @@ public final class ReactorFissionCalculator {
                     raw.plannedFuelBurnUnits(),
                     raw.overclocked()
             ));
-            generatedHeat += settledHeat;
+            assignedHeat += settledHeat;
         }
         return new ReactorFissionResult(settled, rawHeat, generatedHeat, totalBurn);
     }
