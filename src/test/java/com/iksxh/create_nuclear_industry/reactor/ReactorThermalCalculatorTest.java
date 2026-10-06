@@ -59,7 +59,8 @@ class ReactorThermalCalculatorTest {
 
         assertTrue(high.netHeatLoadHu() > low.netHeatLoadHu());
         assertTrue(high.integrityDamage() > low.integrityDamage());
-        assertEquals(4.5D, high.generatedHeatHu(), 1.0E-12D);
+        assertEquals(4.5D, highFission.rawHeatHu(), 1.0E-12D);
+        assertEquals(5.0D, high.generatedHeatHu());
     }
 
     @Test

@@ -34,10 +34,9 @@ class ReactorControlRodTickTest {
         ReactorSnapshot after = ReactorControlRodTick.advance(before);
         assertEquals(0.25D, after.controlRodColumns().get(MOVABLE).targetDepth(), 1.0E-12D);
         assertEquals(0.25D, after.controlRodColumns().get(MOVABLE).actualDepth(), 1.0E-12D);
-        assertEquals(2.25D,
-                ReactorFissionCalculator.calculate(after, PARAMETERS, false)
-                        .columns().get(FUEL).generatedHeatHu(),
-                1.0E-12D);
+        ReactorFissionResult fission = ReactorFissionCalculator.calculate(after, PARAMETERS, false);
+        assertEquals(2.25D, fission.rawHeatHu(), 1.0E-12D);
+        assertEquals(3.0D, fission.columns().get(FUEL).generatedHeatHu());
     }
 
     @Test

@@ -1,0 +1,77 @@
+{
+  "target_shaped_count": 13,
+  "remaining_shapeless": [
+    "crafting/materials/lead_nugget_from_ingot.json",
+    "crafting/materials/tin_nugget_from_ingot.json",
+    "raw_lead_from_block.json",
+    "raw_tin_from_block.json",
+    "raw_uranium_from_block.json"
+  ],
+  "preserved_byte_hashes": {
+    "raw_lead_from_block.json": "d937753c7275002caeddd1c2cc48e2beb44bbd5884e1a30f198051aba63bda1d",
+    "raw_tin_from_block.json": "5b236169cd2596f1b95ea99b6438ac84e1e653274aa4bc1aaaa07f4e59deb1cf",
+    "raw_uranium_from_block.json": "160e1fe3c023f724470e1526b25b18dbe28b561d99e283dd8ce161634d78c390",
+    "crafting/materials/lead_nugget_from_ingot.json": "b060bcf5c69c1e722a81f30e751b872d9488cbf9ff0a5e4e3ff6bf828a5898f1",
+    "crafting/materials/tin_nugget_from_ingot.json": "4eb1d707b031b0f38aecc88990be0d837c0239ef63071613f36e766a277eb519",
+    "crafting/lead_shielding_cask.json": "12097b5152d31f2bc09ec1c9ee03bd7801b1c724d015c0434120eb337bf041e6"
+  },
+  "patterns": {
+    "crafting/reactor/reactor_window.json": [
+      "G",
+      "C"
+    ],
+    "crafting/reactor/reactor_cold_port.json": [
+      "FD",
+      "CS"
+    ],
+    "crafting/reactor/reactor_hot_port.json": [
+      "FD",
+      "CS"
+    ],
+    "crafting/high_pressure_boiler_window.json": [
+      "G",
+      "C"
+    ],
+    "crafting/high_pressure_boiler_water_port.json": [
+      "PF",
+      " C"
+    ],
+    "crafting/high_pressure_boiler_steam_port.json": [
+      "F F",
+      " P ",
+      " C "
+    ],
+    "crafting/boiler_safety_valve.json": [
+      "V R",
+      " I ",
+      " C "
+    ],
+    "crafting/boiler_heat_exchange_section.json": [
+      "H",
+      "C"
+    ],
+    "crafting/turbine_window.json": [
+      "G",
+      "C"
+    ],
+    "turbine_inlet.json": [
+      "P P",
+      " R ",
+      "SC "
+    ],
+    "turbine_exhaust.json": [
+      "P P",
+      " R ",
+      "SC "
+    ],
+    "turbine_output_shaft.json": [
+      "SBS",
+      "SAS",
+      "BC "
+    ],
+    "crafting/dry_storage_rack.json": [
+      "S S",
+      " C "
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "ambientocclusion": true,
+  "textures": {
+    "frame": "create_nuclear_industry:block/dry_storage_rack_frame",
+    "base": "create_nuclear_industry:block/dry_storage_rack_base",
+    "interior": "create_nuclear_industry:block/dry_storage_rack_interior",
+    "door": "create_nuclear_industry:block/dry_storage_rack_door",
+    "content": "create_nuclear_industry:block/dry_storage_rack_content",
+    "particle": "create_nuclear_industry:block/dry_storage_rack_frame"
+  },
+  "elements": []
+}

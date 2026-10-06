@@ -1,0 +1,409 @@
+{
+  "task": "STORE-01-ART",
+  "textures": {
+    "glass_dust": {
+      "source": "tools/art-assets/store-01/sources/glass_dust.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/item/glass_dust.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 197,
+      "opaque_pixels": 59,
+      "opaque_bounds": [
+        2,
+        3,
+        15,
+        14
+      ],
+      "sha256": "8c424dd5dfd3a02b98161b414e3e356713d6c4384d0279048b09c1d2fa3400f6"
+    },
+    "vitrification_medium": {
+      "source": "tools/art-assets/store-01/sources/vitrification_medium.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/item/vitrification_medium.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 152,
+      "opaque_pixels": 104,
+      "opaque_bounds": [
+        1,
+        4,
+        14,
+        13
+      ],
+      "sha256": "ded18a6fca549c59d7523c33e3c62b0be69298e418c4eab12696f9df40d7c562"
+    },
+    "lead_shielding_cask": {
+      "source": "tools/art-assets/store-01/sources/lead_shielding_cask.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/item/lead_shielding_cask.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 144,
+      "opaque_pixels": 112,
+      "opaque_bounds": [
+        3,
+        2,
+        13,
+        14
+      ],
+      "sha256": "104b4bcd12ea2cca87aaa2f773528e86d8789662c52da0d04041849f9fbccdbe"
+    },
+    "sealed_spent_fuel_cask": {
+      "source": "tools/art-assets/store-01/sources/sealed_spent_fuel_cask.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/item/sealed_spent_fuel_cask.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 146,
+      "opaque_pixels": 110,
+      "opaque_bounds": [
+        3,
+        1,
+        13,
+        14
+      ],
+      "sha256": "a26ecdee951963e0e28e14480676256654f32cae59ccebf717da8ee3cbf175e9"
+    },
+    "dry_storage_rack_frame": {
+      "source": "tools/art-assets/store-01/sources/dry_storage_rack_frame.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_frame.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 0,
+      "opaque_pixels": 256,
+      "opaque_bounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "sha256": "d4d41bdd15b36eb097243432caf93c35f96a8209e50c98acc4cb9ade75f4e725"
+    },
+    "dry_storage_rack_base": {
+      "source": "tools/art-assets/store-01/sources/dry_storage_rack_base.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_base.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 0,
+      "opaque_pixels": 256,
+      "opaque_bounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "sha256": "d93f30723ed499b9dfd51768a63fa1c85d642f3e25bf0b90e7be680916826414"
+    },
+    "dry_storage_rack_interior": {
+      "source": "tools/art-assets/store-01/sources/dry_storage_rack_interior.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_interior.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 0,
+      "opaque_pixels": 256,
+      "opaque_bounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "sha256": "4d0ab88305b9ebe914e3f7dc580398758856cf7690744633d3e69f8c9a9a44a2"
+    },
+    "dry_storage_rack_door": {
+      "source": "tools/art-assets/store-01/sources/dry_storage_rack_door.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_door.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 0,
+      "opaque_pixels": 256,
+      "opaque_bounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "sha256": "7b35bae4e0dc36bbf136defce67cab92bccd8e91d65cc970934b876160eed492"
+    },
+    "dry_storage_rack_content": {
+      "source": "tools/art-assets/store-01/sources/dry_storage_rack_content.svg",
+      "texture": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_content.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "transparent_pixels": 0,
+      "opaque_pixels": 256,
+      "opaque_bounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "sha256": "9de778db77ea76173c73d8d26b55c89ffe0cc562e52c5a9d7c1f94ca8461dae8"
+    }
+  },
+  "model_count": 13,
+  "models": [
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_frame.json",
+      "elements": 16,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    },
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_door.json",
+      "elements": 4,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    },
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_occupancy_0.json",
+      "elements": 0,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    },
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_occupancy_1.json",
+      "elements": 1,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    },
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_occupancy_2.json",
+      "elements": 2,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    },
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_occupancy_3.json",
+      "elements": 3,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    },
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_occupancy_4.json",
+      "elements": 4,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    },
+    {
+      "model": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_0.json",
+      "elements": 20,
+      "closed_faces": true,
+      "coordinates_and_uv_within_0_16": true
+    }
+  ],
+  "blockstate": {
+    "file": "src/main/resources/assets/create_nuclear_industry/blockstates/dry_storage_rack.json",
+    "directions": [
+      "north",
+      "east",
+      "south",
+      "west"
+    ],
+    "storage_levels": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "direction_level_pairs": 20,
+    "model_references_resolve": true
+  },
+  "recipes_and_tags": [
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/milling/glass_dust.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/mixing/vitrification_medium.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/crafting/lead_shielding_cask.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/crafting/dry_storage_rack.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/c/tags/item/dusts/glass.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/tags/item/vitrification_media.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/tags/item/lead_shielding_casks.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/c/tags/item/dusts.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/loot_table/blocks/dry_storage_rack.json",
+      "json": true
+    }
+  ],
+  "recipe_files": [
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/milling/glass_dust.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/mixing/vitrification_medium.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/crafting/lead_shielding_cask.json",
+      "json": true
+    },
+    {
+      "file": "src/main/resources/data/create_nuclear_industry/recipe/crafting/dry_storage_rack.json",
+      "json": true
+    }
+  ],
+  "public_material_tags": {
+    "c:plates/lead": [
+      "create_nuclear_industry:lead_plate"
+    ],
+    "c:plates/steel": [
+      "create_nuclear_industry:steel_plate"
+    ],
+    "c:dusts/quartz": [
+      "create_nuclear_industry:quartz_dust"
+    ]
+  },
+  "recipe_contract": {
+    "glass_milling_time": 100,
+    "mixing_time": 100,
+    "mixing_heat": "heated",
+    "rack_output": 1,
+    "lead_shielding_cask": {
+      "type": "minecraft:crafting_shaped",
+      "category": "misc",
+      "pattern": [
+        " R ",
+        "L L",
+        "LSL"
+      ],
+      "symbol_counts": {
+        "L": 4,
+        "R": 1,
+        "S": 1
+      },
+      "lead_plate_tag": "c:plates/lead",
+      "steel_plate_tag": "c:plates/steel",
+      "seal_ring_item": "create_nuclear_industry:seal_ring",
+      "output": {
+        "id": "create_nuclear_industry:lead_shielding_cask",
+        "count": 4
+      },
+      "native_horizontal_mirror_allowed": true
+    }
+  },
+  "rack_item_display_chain": {
+    "chain": [
+      "create_nuclear_industry:item/dry_storage_rack",
+      "create_nuclear_industry:block/dry_storage_rack_0",
+      "minecraft:block/block"
+    ],
+    "resolved_vanilla_model": "assets/minecraft/models/block/block.json",
+    "minecraft_client_version": "1.21.1",
+    "minecraft_client_sha256": "499f6897d1837516680f3114072d8106e11c9adcd933fe5cf051b551089b0c99",
+    "effective_display_contexts": [
+      "firstperson_lefthand",
+      "firstperson_righthand",
+      "fixed",
+      "ground",
+      "gui",
+      "thirdperson_righthand"
+    ],
+    "gui_and_handheld_display_inherited": true
+  },
+  "rack_model_bounds": [
+    0,
+    0,
+    0,
+    16,
+    16,
+    16
+  ],
+  "preview": "tools/art-assets/store-01/evidence/store-01-static-preview.png",
+  "checks": {
+    "png_dimensions": "all exported textures are 16x16 RGBA",
+    "item_transparency": "binary alpha; both transparent and opaque pixels present; opaque bounds stay inside the 16x16 safety border",
+    "model_bounds_and_uv": "coordinates and UV bounds are within 0..16",
+    "closed_faces": "all model elements define six faces",
+    "geometry_overlap": "no positive-volume intersections within or between frame, door, and occupancy components",
+    "rack_bounds": "frame model spans [0,0,0] to [16,16,16]",
+    "rack_item_display": "resolved item -> zero block model -> actual Minecraft 1.21.1 client block/block parent display",
+    "blockstate_coverage": "all 4 facings x 5 storage levels are represented",
+    "minecraft_runtime_or_gradle": "not run by STORE-01-ART per task boundary",
+    "lead_cask_recipe": "shaped pattern expanded: 4 lead plates, 1 steel plate, 1 seal ring -> 4 casks"
+  },
+  "lead_cask_recipe_verification": {
+    "file": "src/main/resources/data/create_nuclear_industry/recipe/crafting/lead_shielding_cask.json",
+    "json_schema": "minecraft:crafting_shaped",
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+      " R ",
+      "L L",
+      "LSL"
+    ],
+    "symbol_counts": {
+      "L": 4,
+      "R": 1,
+      "S": 1
+    },
+    "lead_plate_tag": "c:plates/lead",
+    "steel_plate_tag": "c:plates/steel",
+    "seal_ring_item": "create_nuclear_industry:seal_ring",
+    "output": {
+      "id": "create_nuclear_industry:lead_shielding_cask",
+      "count": 4
+    },
+    "native_horizontal_mirror_allowed": true
+  },
+  "r1_resource_packaging": {
+    "command": "gradlew.bat processResources jar --console=plain",
+    "exit_code": 0,
+    "elapsed_seconds": 3,
+    "jar": "build/libs/create_nuclear_industry-0.1.0.jar",
+    "jar_size_bytes": 2144709,
+    "jar_sha256": "4DAEABE7385D81B861F25E0DB6F08E7D6050B82D8C58FD01A6A9AE1CE91E1AA6",
+    "recipe_entry": "data/create_nuclear_industry/recipe/crafting/lead_shielding_cask.json",
+    "entry_matches_source_bytes": true
+  }
+}

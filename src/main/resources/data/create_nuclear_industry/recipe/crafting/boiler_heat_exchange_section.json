@@ -1,16 +1,20 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    {
-      "item": "create_nuclear_industry:high_pressure_boiler_casing"
-    },
-    {
-      "item": "create_nuclear_industry:nuclear_heat_exchange_bundle"
-    }
-  ],
   "result": {
     "id": "create_nuclear_industry:boiler_heat_exchange_section",
     "count": 1
+  },
+  "pattern": [
+    "H",
+    "C"
+  ],
+  "key": {
+    "H": {
+      "item": "create_nuclear_industry:nuclear_heat_exchange_bundle"
+    },
+    "C": {
+      "item": "create_nuclear_industry:high_pressure_boiler_casing"
+    }
   }
 }

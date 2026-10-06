@@ -323,5 +323,17 @@
   "gui.create_nuclear_industry.turbine.issue.port": "Turbine port position is invalid",
   "gui.create_nuclear_industry.turbine.issue.unlocated_axis": "The rotor axis is not uniquely located yet",
   "gui.create_nuclear_industry.turbine.issue.blocked": "The next placement position is blocked",
-  "gui.create_nuclear_industry.turbine.located": "Located %s×%s; structure still needs completion"
+  "gui.create_nuclear_industry.turbine.located": "Located %s×%s; structure still needs completion",
+  "item.create_nuclear_industry.glass_dust": "Glass Dust",
+  "item.create_nuclear_industry.vitrification_medium": "Vitrification Medium",
+  "item.create_nuclear_industry.lead_shielding_cask": "Lead Shielding Cask",
+  "item.create_nuclear_industry.sealed_spent_fuel_cask": "Sealed Spent Fuel Cask",
+  "block.create_nuclear_industry.dry_storage_rack": "Dry Storage Rack",
+  "gui.create_nuclear_industry.storage.occupied": "Occupied slots: %s / %s",
+  "gui.create_nuclear_industry.storage.sealed": "Sealed spent fuel storage",
+  "gui.create_nuclear_industry.storage.invalid_payload": "Rejected: the cask must contain exactly one spent fuel assembly",
+  "gui.create_nuclear_industry.shielded_assembly.operation.unselected": "Operation: unselected (selected by first input)",
+  "gui.create_nuclear_industry.shielded_assembly.operation.manufacture": "Operation: fresh fuel manufacturing",
+  "gui.create_nuclear_industry.shielded_assembly.operation.sealing": "Operation: spent fuel sealing",
+  "gui.create_nuclear_industry.shielded_assembly.material": "%s: %s / %s"
 }

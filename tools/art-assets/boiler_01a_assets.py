@@ -264,18 +264,21 @@ def generate_reinforced_steel_recipe() -> None:
     })
 
 
-def shapeless(a: str, b: str, result: str) -> dict[str, object]:
-    return {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [{"item": a}, {"item": b}], "result": {"id": result, "count": 1}}
+def shaped_device_recipes() -> dict[str, dict[str, object]]:
+    """返回五条锅炉设备工作台配方，供导出和定向核验共用。"""
+    return {
+        "crafting/high_pressure_boiler_window": {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["G", "C"], "key": {"G": {"item": f"{NS}:shielded_glass"}, "C": {"item": f"{NS}:{BLOCKS[0]}"}}, "result": {"id": f"{NS}:{BLOCKS[1]}", "count": 1}},
+        "crafting/high_pressure_boiler_water_port": {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["PF", " C"], "key": {"P": {"item": "create:fluid_pipe"}, "F": {"item": f"{NS}:pressure_fitting"}, "C": {"item": f"{NS}:{BLOCKS[0]}"}}, "result": {"id": f"{NS}:{BLOCKS[2]}", "count": 1}},
+        "crafting/high_pressure_boiler_steam_port": {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["F F", " P ", " C "], "key": {"F": {"item": f"{NS}:pressure_fitting"}, "P": {"item": f"{NS}:reinforced_steel_plate"}, "C": {"item": f"{NS}:{BLOCKS[0]}"}}, "result": {"id": f"{NS}:{BLOCKS[3]}", "count": 1}},
+        "crafting/boiler_safety_valve": {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["V R", " I ", " C "], "key": {"V": {"item": "create:fluid_valve"}, "R": {"item": f"{NS}:seal_ring"}, "I": {"item": f"{NS}:industrial_sensor"}, "C": {"item": f"{NS}:{BLOCKS[0]}"}}, "result": {"id": f"{NS}:{BLOCKS[5]}", "count": 1}},
+        "crafting/boiler_heat_exchange_section": {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["H", "C"], "key": {"H": {"item": f"{NS}:nuclear_heat_exchange_bundle"}, "C": {"item": f"{NS}:{BLOCKS[0]}"}}, "result": {"id": f"{NS}:{BLOCKS[6]}", "count": 1}},
+    }
 
 
 def generate_recipes() -> None:
     recipes: dict[str, object] = {
         "crafting/high_pressure_boiler_casing": {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["SBS", "BRB", "SBS"], "key": {"S": {"tag": "c:plates/steel"}, "B": {"item": "create_nuclear_industry:refractory_brick"}, "R": {"item": "create_nuclear_industry:reinforced_steel_plate"}}, "result": {"id": f"{NS}:{BLOCKS[0]}", "count": 8}},
-        "crafting/high_pressure_boiler_window": shapeless(f"{NS}:{BLOCKS[0]}", f"{NS}:shielded_glass", f"{NS}:{BLOCKS[1]}"),
-        "crafting/high_pressure_boiler_water_port": {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [{"item": f"{NS}:{BLOCKS[0]}"}, {"item": "create:fluid_pipe"}, {"item": f"{NS}:pressure_fitting"}], "result": {"id": f"{NS}:{BLOCKS[2]}", "count": 1}},
-        "crafting/high_pressure_boiler_steam_port": {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [{"item": f"{NS}:{BLOCKS[0]}"}, {"item": f"{NS}:pressure_fitting"}, {"item": f"{NS}:pressure_fitting"}, {"item": f"{NS}:reinforced_steel_plate"}], "result": {"id": f"{NS}:{BLOCKS[3]}", "count": 1}},
-        "crafting/boiler_safety_valve": {"type": "minecraft:crafting_shapeless", "category": "misc", "ingredients": [{"item": f"{NS}:{BLOCKS[0]}"}, {"item": "create:fluid_valve"}, {"item": f"{NS}:seal_ring"}, {"item": f"{NS}:industrial_sensor"}], "result": {"id": f"{NS}:{BLOCKS[5]}", "count": 1}},
-        "crafting/boiler_heat_exchange_section": shapeless(f"{NS}:{BLOCKS[0]}", f"{NS}:nuclear_heat_exchange_bundle", f"{NS}:{BLOCKS[6]}"),
+        **shaped_device_recipes(),
         "mechanical_crafting/high_pressure_boiler_controller": {"type": "create:mechanical_crafting", "accept_mirrored": False, "category": "misc", "key": {"S": {"tag": "c:plates/steel"}, "R": {"item": f"{NS}:reinforced_steel_plate"}, "P": {"item": "create:precision_mechanism"}, "I": {"item": f"{NS}:industrial_sensor"}, "C": {"item": f"{NS}:{BLOCKS[0]}"}}, "pattern": [" SSS ", "SRPRS", "SICIS", "SRPRS", " SSS "], "result": {"id": f"{NS}:{BLOCKS[4]}", "count": 1}, "show_notification": False},
     }
     for path, value in recipes.items():

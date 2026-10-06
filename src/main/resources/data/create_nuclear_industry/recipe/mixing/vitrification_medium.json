@@ -1,0 +1,22 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create_nuclear_industry:glass_dust"
+    },
+    {
+      "tag": "c:dusts/quartz"
+    },
+    {
+      "item": "minecraft:clay_ball"
+    }
+  ],
+  "heat_requirement": "heated",
+  "processing_time": 100,
+  "results": [
+    {
+      "id": "create_nuclear_industry:vitrification_medium",
+      "count": 4
+    }
+  ]
+}

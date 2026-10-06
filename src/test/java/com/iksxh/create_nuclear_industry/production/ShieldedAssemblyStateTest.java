@@ -21,6 +21,43 @@ final class ShieldedAssemblyStateTest {
                     ShieldedAssemblyState.COST[slot] * batches), false).isEmpty());
     }
 
+    @Test void sealingUsesDataCountsAndCannotCarryWorkAcrossOperations() {
+        ShieldedAssemblyState state = new ShieldedAssemblyState();
+        state.configure("sealing", "test:seal", new int[]{1, 2, 3}, 12800);
+        assertTrue(state.insert(0, new ItemStack(Items.IRON_INGOT), true, "sealing").isEmpty());
+        assertEquals("", state.operation());
+        state.insert(0, new ItemStack(Items.IRON_INGOT), false, "sealing");
+        assertEquals("sealing", state.operation());
+        assertEquals(1, state.insert(1, new ItemStack(Items.GOLD_INGOT), false, "manufacture").getCount());
+        state.insert(1, new ItemStack(Items.GOLD_INGOT, 2), false, "sealing");
+        state.insert(2, new ItemStack(Items.COPPER_INGOT, 3), false, "sealing");
+        for (int tick = 0; tick < 200; tick++) state.advance(64, result());
+        assertEquals(1, state.output().getCount());
+        assertEquals("sealing", state.operation());
+        state.extractOutput(1, true);
+        assertEquals("sealing", state.operation());
+        state.extractOutput(1, false);
+        assertEquals("", state.operation());
+    }
+
+    @Test void dataChangesAndIncompleteWithdrawalDiscardOnlyProgress() {
+        ShieldedAssemblyState state = new ShieldedAssemblyState();
+        state.configure("sealing", "test:seal", new int[]{1, 2, 3}, 12800);
+        state.insert(0, new ItemStack(Items.IRON_INGOT), false, "sealing");
+        state.insert(1, new ItemStack(Items.GOLD_INGOT, 2), false, "sealing");
+        state.insert(2, new ItemStack(Items.COPPER_INGOT, 3), false, "sealing");
+        state.advance(64, result());
+        assertEquals(64, state.progress());
+        state.configure("sealing", "test:seal", new int[]{1, 2, 3}, 6400);
+        assertEquals(0, state.progress());
+        state.advance(64, result());
+        state.extractInput(2, 1, true);
+        assertEquals(64, state.progress());
+        state.extractInput(2, 1, false);
+        assertEquals(0, state.progress());
+        assertEquals(2, state.input(2).getCount());
+    }
+
     @Test void exactBatchAndSpeedBoundaries() {
         ShieldedAssemblyState state = new ShieldedAssemblyState();
         fill(state, 1);
