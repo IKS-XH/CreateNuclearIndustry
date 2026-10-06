@@ -65,7 +65,8 @@ public final class CentrifugePonderScenes {
                 .text("The centrifuge separates uranium slurry into low-enriched dust, depleted dust, and reusable water.")
                 .attachKeyFrame()
                 .placeNearTarget();
-        scene.idle(100);
+        // TextInstruction 的正文寿命比指定时长多10tick；相邻正文前至少留10tick净间隔。
+        scene.idle(110);
 
         scene.overlay().showControls(util.vector().topOf(new BlockPos(4, 1, 3)), Pointing.DOWN, 70)
                 .withItem(new ItemStack(FuelProcessingContent.ENRICHMENT_CENTRIFUGE_ITEM.get()))
@@ -78,7 +79,7 @@ public final class CentrifugePonderScenes {
         scene.idle(100);
 
         scene.world().showSection(util.select().fromTo(1, 1, 4, 4, 1, 4), Direction.SOUTH);
-        scene.idle(8);
+        scene.idle(10);
         scene.world().setKineticSpeed(lowerDrive, 128);
         scene.effects().rotationSpeedIndicator(MACHINE_LOWER);
         scene.overlay().showOutlineWithText(util.select().position(GEARBOX), 90)
@@ -107,14 +108,14 @@ public final class CentrifugePonderScenes {
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(PUMP))
                 .placeNearTarget();
-        scene.idle(110);
+        scene.idle(120);
 
         scene.overlay().showOutlineWithText(upperBody, 105)
                 .text("Current recipe example: 1000 mB slurry yields 1 low-enriched dust, 7 depleted dust, and 1000 mB water. The visual is illustrative; actual time varies with speed.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(MACHINE_UPPER))
                 .placeNearTarget();
-        scene.idle(80);
+        scene.idle(115);
         scene.world().modifyBlockEntity(SLURRY_TANK, FluidTankBlockEntity.class, tank ->
                 tank.getTankInventory().drain(1000, IFluidHandler.FluidAction.EXECUTE));
         scene.world().showSection(util.select().position(LOWER_RECEIVER).add(util.select().position(LOWER_FUNNEL)), Direction.UP);
@@ -147,7 +148,7 @@ public final class CentrifugePonderScenes {
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(RECOVERY_TANK))
                 .placeNearTarget();
-        scene.idle(120);
+        scene.idle(170);
 
         scene.world().setKineticSpeed(lowerDrive, 0);
         scene.world().setKineticSpeed(inputPump, 0);
@@ -160,7 +161,7 @@ public final class CentrifugePonderScenes {
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(MACHINE_LOWER))
                 .placeNearTarget();
-        scene.idle(115);
+        scene.idle(125);
 
         scene.overlay().showOutlineWithText(lowerBody, 100)
                 .text("Stop the machine when bearing wear is exhausted, then repair the lower section with one heavy bearing. This scene is an action marker only.")
