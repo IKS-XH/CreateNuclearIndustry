@@ -7,7 +7,8 @@
 ![Create 6.0.10](https://img.shields.io/badge/Create-6.0.10-6F4E37)
 ![Java 21](https://img.shields.io/badge/Java-21-ED8B00)
 ![Development status](https://img.shields.io/badge/status-Alpha%20开发中-D9A441)
-![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-lightgrey)
+![Code license](https://img.shields.io/badge/code-MPL--2.0-blue)
+![Assets license](https://img.shields.io/badge/assets-All%20Rights%20Reserved-lightgrey)
 
 《机械动力：核工业》希望在 Create 的机械美学和自动化语言中，构建一套可读、可控制、会发生真实因果故障的核工业玩法。玩家需要布置堆芯、调节控制棒、维持冷却剂回路、处理燃料与余热，并最终通过换热器、锅炉和汽轮机向 Create 应力网络提供大规模旋转动力。
 
@@ -107,7 +108,15 @@ Linux / macOS：
 
 ## 许可与声明
 
-本仓库当前采用 **All Rights Reserved**。除非项目所有者另行书面授权，否则不得复制、修改、再分发或发布本项目的代码与资源。许可方案可能在正式发布前重新评估。
+本项目采用 **代码开源、美术资源单独授权** 的许可方式。除文件或目录另有许可声明、或属于第三方内容外，本项目原创程序代码（包括模组代码、测试、构建脚本及开发工具代码）采用 **Mozilla Public License 2.0（MPL-2.0）**，完整条款见 [MPL-2.0 官方文本](https://www.mozilla.org/en-US/MPL/2.0/)。
+
+你可以依照 MPL-2.0 使用、修改和分发代码，包括商业使用。对外分发源码或编译后的修改版时，受 MPL 覆盖的代码文件及其修改必须继续按 MPL 提供源码，并保留许可与版权声明；分发编译包时须告知接收者获取对应源码的方式。独立新增且不含受 MPL 覆盖代码的文件可采用其他许可，私下使用或修改不要求公开源码。以上为便于阅读的摘要，具体权利和义务以协议全文为准。
+
+本项目原创贴图、模型及其源文件、音效和其他美术资源采用 **All Rights Reserved（保留所有权利）**，不属于上述代码开源范围。允许玩家使用官方模组包，并允许整合包作者在保留本项目署名和许可声明的前提下，收录及分发未经修改的官方模组包。除此之外，未经相关权利人另行授权，不得单独提取、修改或在其他项目及修改版中再分发这些资源；这些资源限制不改变 MPL 对代码授予的权利。
+
+第三方代码、资源及依赖继续遵守各自原有许可，本声明不替代或扩大其授权。贡献代码前须确认可按 MPL-2.0 授权；贡献贴图、模型、音效等资源前须明确署名、来源及使用授权范围，贡献不自动转移著作权。
+
+本项目大量采用agent生成内容，其中包括程序代码、动画建模、贴图素材。
 
 本项目是非官方 Minecraft 模组，与 Mojang Studios、Microsoft 或 Create 团队不存在隶属或认可关系。Minecraft 是 Mojang Studios 的商标；Create 及其相关资源归各自权利人所有。
 

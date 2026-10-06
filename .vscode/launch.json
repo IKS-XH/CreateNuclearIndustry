@@ -26,10 +26,54 @@
     {
       "type": "java",
       "request": "launch",
-      "name": "Data",
+      "name": "ClientA",
       "presentation": {
         "group": "Mod Development - Create_NuclearIndustry",
         "order": 1
+      },
+      "projectName": "Create_NuclearIndustry",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\clientARunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\clientARunVmArgs.txt",
+        "-Dfml.modFolders\u003dcreate_nuclear_industry%%E:\\MyMC\\NewMod\\Create_NuclearIndustry\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run\\client_a",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "ClientB",
+      "presentation": {
+        "group": "Mod Development - Create_NuclearIndustry",
+        "order": 2
+      },
+      "projectName": "Create_NuclearIndustry",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\clientBRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\clientBRunVmArgs.txt",
+        "-Dfml.modFolders\u003dcreate_nuclear_industry%%E:\\MyMC\\NewMod\\Create_NuclearIndustry\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run\\client_b",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Data",
+      "presentation": {
+        "group": "Mod Development - Create_NuclearIndustry",
+        "order": 3
       },
       "projectName": "Create_NuclearIndustry",
       "mainClass": "net.neoforged.devlaunch.Main",
@@ -48,10 +92,32 @@
     {
       "type": "java",
       "request": "launch",
+      "name": "GameTestServer",
+      "presentation": {
+        "group": "Mod Development - Create_NuclearIndustry",
+        "order": 4
+      },
+      "projectName": "Create_NuclearIndustry",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\gameTestServerRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\moddev\\gameTestServerRunVmArgs.txt",
+        "-Dfml.modFolders\u003dcreate_nuclear_industry%%E:\\MyMC\\NewMod\\Create_NuclearIndustry\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
       "name": "Server",
       "presentation": {
         "group": "Mod Development - Create_NuclearIndustry",
-        "order": 2
+        "order": 5
       },
       "projectName": "Create_NuclearIndustry",
       "mainClass": "net.neoforged.devlaunch.Main",
