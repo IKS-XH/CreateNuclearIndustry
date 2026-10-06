@@ -13,8 +13,8 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 
 在JEI或创造栏悬停反应堆外壳、仪表端口等原有组件，按提示打开思索（默认长按W），分别选择四情景。仅按[播放清单](./MANUAL-CHECKLIST.md)检查教学；不重复已通过的反应堆功能测试。
 
-本候选同时包含离心机R1提示时序和R2玩家文案精简。离心机Java、模板与中英文值在本次重构中保持不变，其播放门仍按[原清单](../ponder-01/MANUAL-CHECKLIST.md)确认。两批教学尚未合入main，主目录runClient仍是已验收的功能版本。
+本候选同时包含离心机R1提示时序、R2玩家文案和后续[R3回水布局整改](../ponder-01/CANDIDATE.md)。离心机回水管线已搬到独立侧，其八段文案与时序不变；本页反应堆四情景在R3中未改。两台各按原清单播放确认，尚未合入main，主目录runClient仍是已验收的功能版本。
 
-当前R1制品：候选`build/libs/create_nuclear_industry-0.1.0.jar`，2,163,923字节，SHA-256 `67FF2C85E5565FCD15CF701CC12AEDECA3B22813A23CAAA6D1D77ADC5479B1CF`。本轮6项合同通过、增量assemble退出0；四模板/两语言与JAR资源一致。检查结果不能替代真实播放，未合入main。
+R1当时制品：候选`build/libs/create_nuclear_industry-0.1.0.jar`，2,163,923字节，SHA-256 `67FF2C85E5565FCD15CF701CC12AEDECA3B22813A23CAAA6D1D77ADC5479B1CF`。R1的6项合同通过、增量assemble退出0；四模板/两语言与当时JAR资源一致。后续离心机R3已更新同一路径，当前大小/SHA见上述离心机候选页；未改的反应堆复用本次R1证据，不重跑合同。检查结果不能替代真实播放，未合入main。
 
 R1证据见[执行报告](./r1-implementation.md)和[审查记录](./R1-REVIEW.md)；保留初版[执行报告](./implementation.md)与[PM审查](./REVIEW.md)。候选制品只在同级工作树，不搬移、清理用户测试世界或修改启动配置。
