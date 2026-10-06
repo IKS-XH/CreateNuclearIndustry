@@ -21,7 +21,7 @@
 
 ## 锅炉
 
-**规划增量（2026-10-07，尚未实现）：** 用户要求[内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)同批重构，尺寸范围须配置化。新容量/热容/温压默认值在方案第3节集中待确认；下表仍为当前实际代码，不能提前把拟配置键当成已可用。实施后旧固定容量和暖炉字段将由新账本规则取代，不同时生效。
+**规划增量（2026-10-07，已批准待实施）：** 用户确认[内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)全套默认值，见方案第3节和[REWORK-01](./superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)。下表仍为现行已验收代码，不能提前把新键当成可用；实施交付后旧固定容量/暖炉字段由新账本取代，不并行生效。
 
 文件：`create_nuclear_industry-boiler.toml`。所有键在文件顶层。
 
