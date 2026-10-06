@@ -16,7 +16,7 @@ public final class BoilerState {
             int steamCapacityPerCellMb, int portFlowMbPerTick, double pairHeatHuPerTick,
             double boilingTemperature, double supercriticalTemperature, double wallHeatCapacityHuPerWaterCell,
             double waterSpecificHeatHuPerMb, double steamSpecificHeatHuPerMb, double vaporizationLatentHeatHuPerMb,
-            double supercriticalPressure, double normalOutputMinPressure, double supercriticalOutputMinPressure,
+            double supercriticalPressure, double outputMinPressure,
             double valveOpenPressure, double valveClosePressure, int valveFlowPerSteamCellMbPerTick,
             double idleWaterCoolingHuPerCellPerTick, double idleSteamCoolingHuPerCellPerTick) {
         public boolean valid() {
@@ -27,13 +27,12 @@ public final class BoilerState {
                     wallHeatCapacityHuPerWaterCell, waterSpecificHeatHuPerMb, steamSpecificHeatHuPerMb,
                     vaporizationLatentHeatHuPerMb, supercriticalPressure, valveOpenPressure})
                 if (!Double.isFinite(v) || v <= 0 || v > 1e9) return false;
-            for (double v : new double[]{normalOutputMinPressure, supercriticalOutputMinPressure,
+            for (double v : new double[]{outputMinPressure,
                     valveClosePressure, idleWaterCoolingHuPerCellPerTick, idleSteamCoolingHuPerCellPerTick})
                 if (!Double.isFinite(v) || v < 0 || v > 1e9) return false;
             long cells = (long) (maxDimension - 2) * (maxDimension - 2) * (maxDimension - 4);
             return supercriticalTemperature > boilingTemperature && valveClosePressure < valveOpenPressure
-                    && supercriticalPressure < valveOpenPressure && normalOutputMinPressure < valveOpenPressure
-                    && supercriticalOutputMinPressure >= supercriticalPressure && supercriticalOutputMinPressure < valveOpenPressure
+                    && supercriticalPressure < valveOpenPressure && outputMinPressure <= 1
                     && cells * waterCapacityPerCellMb <= Integer.MAX_VALUE
                     && cells * steamCapacityPerCellMb <= Integer.MAX_VALUE
                     && cells * valveFlowPerSteamCellMbPerTick <= Integer.MAX_VALUE;
@@ -43,13 +42,13 @@ public final class BoilerState {
         public int steamCapacityMb() { return 9 * steamCapacityPerCellMb; }
     }
     public static final Settings DEFAULT = new Settings(5, 11, 2000, 2000, 256, 18, 1, 2,
-            1600, .1, .2, .7, .5, .1, .6, .9, .8, 32, .9, .1);
+            1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
     private Settings settings = DEFAULT;
     private int waterCells = 9, steamCells = 9, exchangers = 1, pairs = 1, hotCapacity = 4000, coldCapacity = 4000;
     private int water, steam, hot, cold, produced, vented;
     private double waterHu, steamHu, processHu, coolantHu, conversionFraction;
-    private double normalMinimum = .1, criticalMinimum = .6;
-    private boolean normalMinimumSet, criticalMinimumSet, supercritical = true, valveOpen, valveBlocked;
+    private double minimum = .6;
+    private boolean minimumSet, valveOpen, valveBlocked;
     private long lastTick = Long.MIN_VALUE, preparedTick = Long.MIN_VALUE, flowTick = Long.MIN_VALUE;
     private long conversionTick = Long.MIN_VALUE, ventTick = Long.MIN_VALUE, totalVented;
     private final Map<Long, Integer> usedByPort = new HashMap<>();
@@ -76,8 +75,10 @@ public final class BoilerState {
     public int steamCapacity() { return capacity(steamCells, settings.steamCapacityPerCellMb()); }
     public int hotCapacity() { return hotCapacity; }
     public int coldCapacity() { return coldCapacity; }
-    public boolean supercritical() { return supercritical; }
-    public double targetTemperature() { return supercritical ? settings.supercriticalTemperature() : settings.boilingTemperature(); }
+    /** 汽种只描述当前已付焓的温压资格，不能反过来改变热工目标或付款。 */
+    public boolean supercritical() { return outputQualified() && steamTemperature() + EPS >= settings.supercriticalTemperature()
+            && pressure() + EPS >= settings.supercriticalPressure(); }
+    public double targetTemperature() { return settings.supercriticalTemperature(); }
     public double boilingEnthalpy() { return settings.waterSpecificHeatHuPerMb() * settings.boilingTemperature() + settings.vaporizationLatentHeatHuPerMb(); }
     public double steamEnthalpy(double t) { return boilingEnthalpy() + settings.steamSpecificHeatHuPerMb() * Math.max(0, t - settings.boilingTemperature()); }
     public double waterHeatCapacity() { return settings.wallHeatCapacityHuPerWaterCell() * waterCells + settings.waterSpecificHeatHuPerMb() * water; }
@@ -85,15 +86,13 @@ public final class BoilerState {
     public double steamTemperature() { return steam > 0 ? settings.boilingTemperature()
             + Math.max(0, steamHu / steam - boilingEnthalpy()) / settings.steamSpecificHeatHuPerMb() : 0; }
     public double pressure() { return steamCapacity() > 0 ? (double) steam / steamCapacity() * steamTemperature() / settings.supercriticalTemperature() : 0; }
-    public double minimumPressure() { return supercritical ? Math.max(criticalMinimum, settings.supercriticalPressure()) : normalMinimum; }
-    public boolean outputQualified() { return settings.valid() && steam > 0 && steamHu + EPS >= steam * boilingEnthalpy()
-            && (!supercritical || steamTemperature() + EPS >= settings.supercriticalTemperature() && pressure() + EPS >= settings.supercriticalPressure()); }
+    public double minimumPressure() { return minimum; }
+    public boolean outputQualified() { return settings.valid() && steam > 0 && steamHu + EPS >= steam * boilingEnthalpy(); }
 
     /** 参数变化保留现存工质与已付热；非法设置由交易入口拒绝。 */
     public void setSettings(Settings next) {
         settings = next;
-        if (!normalMinimumSet) normalMinimum = next.normalOutputMinPressure();
-        if (!criticalMinimumSet) criticalMinimum = next.supercriticalOutputMinPressure();
+        if (!minimumSet) minimum = next.outputMinPressure();
     }
     /** 只接受已验证结构的格数与成员数，缩容只停止收量，不裁切旧库存。 */
     public void setGeometry(int waterCells, int steamCells, int exchangers, int sections, int hotPerMachine, int coldPerMachine) {
@@ -102,13 +101,10 @@ public final class BoilerState {
         hotCapacity = capacity(this.exchangers, hotPerMachine); coldCapacity = capacity(this.exchangers, coldPerMachine);
     }
     private static int capacity(int n, int per) { long value = (long) n * per; return value > 0 && value <= Integer.MAX_VALUE ? (int) value : 0; }
-    /** 切模式只切资格，不改汽量与实际焓；保压分别保存。 */
-    public void setSupercritical(boolean value) { supercritical = value; }
+    /** 出汽下限是独立的归一压力[0,1]；即使高于安全阀线也合法，不改任何库存或HU。 */
     public void setMinimumPressure(double value) {
         if (!Double.isFinite(value)) return;
-        value = Math.clamp(value, 0, 2);
-        if (supercritical) { criticalMinimum = Math.max(value, settings.supercriticalPressure()); criticalMinimumSet = true; }
-        else { normalMinimum = value; normalMinimumSet = true; }
+        minimum = Math.clamp(value, 0, 1); minimumSet = true;
     }
     private int budget(BlockPos port, long now) { return settings.valid() ? Math.max(0, settings.portFlowMbPerTick()
             - (now == flowTick ? usedByPort.getOrDefault(port.asLong(), 0) : 0)) : 0; }
@@ -265,8 +261,7 @@ public final class BoilerState {
         t.putDouble("CoolantHu", coolantHu); t.putDouble("ConversionFraction", conversionFraction);
         t.putInt("WaterCells", waterCells); t.putInt("SteamCells", steamCells); t.putInt("Exchangers", exchangers);
         t.putInt("Pairs", pairs); t.putInt("HotCapacity", hotCapacity); t.putInt("ColdCapacity", coldCapacity);
-        t.putBoolean("Supercritical", supercritical); t.putDouble("NormalMinimum", normalMinimum); t.putDouble("CriticalMinimum", criticalMinimum);
-        t.putBoolean("NormalMinimumSet", normalMinimumSet); t.putBoolean("CriticalMinimumSet", criticalMinimumSet); t.putBoolean("ValveOpen", valveOpen);
+        t.putDouble("Minimum", minimum); t.putBoolean("MinimumSet", minimumSet); t.putBoolean("ValveOpen", valveOpen);
         t.putLong("TotalVented", totalVented); t.putLong("LastTick", lastTick); t.putLong("FlowTick", flowTick);
         t.putLong("ConversionTick", conversionTick); t.putLong("VentTick", ventTick);
         ListTag list = new ListTag();
@@ -282,10 +277,8 @@ public final class BoilerState {
             exchangers = Math.clamp(t.getInt("Exchangers"), 0, 900); pairs = Math.clamp(t.getInt("Pairs"), 0, exchangers);
             hotCapacity = Math.max(0, t.getInt("HotCapacity")); coldCapacity = Math.max(0, t.getInt("ColdCapacity"));
         }
-        supercritical = !t.contains("Supercritical") || t.getBoolean("Supercritical");
-        normalMinimum = t.contains("NormalMinimum") ? finite(t.getDouble("NormalMinimum")) : settings.normalOutputMinPressure();
-        criticalMinimum = t.contains("CriticalMinimum") ? finite(t.getDouble("CriticalMinimum")) : settings.supercriticalOutputMinPressure();
-        normalMinimumSet = t.getBoolean("NormalMinimumSet"); criticalMinimumSet = t.getBoolean("CriticalMinimumSet");
+        minimum = t.contains("Minimum") ? Math.clamp(finite(t.getDouble("Minimum")), 0, 1) : settings.outputMinPressure();
+        minimumSet = t.getBoolean("MinimumSet");
         valveOpen = t.getBoolean("ValveOpen"); totalVented = Math.max(0, t.getLong("TotalVented"));
         lastTick = t.contains("LastTick") ? t.getLong("LastTick") : Long.MIN_VALUE;
         flowTick = t.contains("FlowTick") ? t.getLong("FlowTick") : Long.MIN_VALUE;

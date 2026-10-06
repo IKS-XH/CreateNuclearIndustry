@@ -13,7 +13,7 @@ public final class BoilerConfig {
     public static final ModConfigSpec.IntValue WATER_CAPACITY_PER_CELL_MB, STEAM_CAPACITY_PER_CELL_MB, PORT_FLOW_MB_PER_TICK, VALVE_FLOW_PER_STEAM_CELL;
     public static final ModConfigSpec.DoubleValue PAIR_HEAT, BOILING_TEMPERATURE, SUPERCRITICAL_TEMPERATURE,
             WALL_HEAT_CAPACITY, WATER_SPECIFIC_HEAT, STEAM_SPECIFIC_HEAT, LATENT_HEAT,
-            SUPERCRITICAL_PRESSURE, NORMAL_MIN_PRESSURE, SUPERCRITICAL_MIN_PRESSURE,
+            SUPERCRITICAL_PRESSURE, OUTPUT_MIN_PRESSURE,
             VALVE_OPEN_PRESSURE, VALVE_CLOSE_PRESSURE, WATER_COOLING, STEAM_COOLING;
     static {
         var b = new ModConfigSpec.Builder();
@@ -30,8 +30,8 @@ public final class BoilerConfig {
         STEAM_SPECIFIC_HEAT = positive(b, "steamSpecificHeatHuPerMb", .2, "汽比热 HU/mB/温升。");
         LATENT_HEAT = positive(b, "vaporizationLatentHeatHuPerMb", .7, "汽化追加潜热 HU/mB。");
         SUPERCRITICAL_PRESSURE = positive(b, "supercriticalPressure", .5, "超临界资格炉压。");
-        NORMAL_MIN_PRESSURE = nonnegative(b, "normalOutputMinPressure", .1, "普通模式默认保压。");
-        SUPERCRITICAL_MIN_PRESSURE = nonnegative(b, "supercriticalOutputMinPressure", .6, "超临界默认保压，不低于资格门槛。");
+        OUTPUT_MIN_PRESSURE = b.comment("默认出汽压力下限，归一范围[0,1]；高于阀开启线也合法，仅限制正常出汽。")
+                .defineInRange("outputMinPressure", .6, 0, 1);
         VALVE_OPEN_PRESSURE = positive(b, "valveOpenPressure", .9, "开启安全阀及堵塞保护的炉压。");
         VALVE_CLOSE_PRESSURE = nonnegative(b, "valveClosePressure", .8, "关闭安全阀炉压，必须低于开启线。");
         VALVE_FLOW_PER_STEAM_CELL = b.comment("每格汽区提供的阀泄放额度 mB/t。") .defineInRange("valveFlowPerSteamCellMbPerTick", 32, 1, 1_000_000);
@@ -53,7 +53,6 @@ public final class BoilerConfig {
         return new BoilerState.Settings(range.size() == 2 ? range.get(0) : 0, range.size() == 2 ? range.get(1) : 0,
                 WATER_CAPACITY_PER_CELL_MB.get(), STEAM_CAPACITY_PER_CELL_MB.get(), PORT_FLOW_MB_PER_TICK.get(), PAIR_HEAT.get(),
                 BOILING_TEMPERATURE.get(), SUPERCRITICAL_TEMPERATURE.get(), WALL_HEAT_CAPACITY.get(), WATER_SPECIFIC_HEAT.get(),
-                STEAM_SPECIFIC_HEAT.get(), LATENT_HEAT.get(), SUPERCRITICAL_PRESSURE.get(), NORMAL_MIN_PRESSURE.get(),
-                SUPERCRITICAL_MIN_PRESSURE.get(), VALVE_OPEN_PRESSURE.get(), VALVE_CLOSE_PRESSURE.get(), VALVE_FLOW_PER_STEAM_CELL.get(), WATER_COOLING.get(), STEAM_COOLING.get());
+                STEAM_SPECIFIC_HEAT.get(), LATENT_HEAT.get(), SUPERCRITICAL_PRESSURE.get(), OUTPUT_MIN_PRESSURE.get(), VALVE_OPEN_PRESSURE.get(), VALVE_CLOSE_PRESSURE.get(), VALVE_FLOW_PER_STEAM_CELL.get(), WATER_COOLING.get(), STEAM_COOLING.get());
     }
 }

@@ -110,7 +110,7 @@ public final class ExtensionBoilerGameTests {
             h.assertTrue(cold(h).drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256 && coldB.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256, "多个冷口模拟错误");
             int removedCold = cold(h).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount() + coldB.drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
             h.assertTrue(removedCold == coldBefore && ledger.cold() == 0, "多冷口复制产物");
-            var a = steam(h); var b = handler(h, second, Direction.WEST); seedSteam(h, 11100, 11100);
+            seedSteam(h, 11100, 11100); var a = steam(h); var b = handler(h, second, Direction.WEST);
             var before = owner(h).ledger().save();
             h.assertTrue(a.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256 && b.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256, "模拟保压余量错误");
             h.assertTrue(before.equals(owner(h).ledger().save()), "模拟改变账本");
@@ -166,20 +166,16 @@ public final class ExtensionBoilerGameTests {
         build(h, 5, 5, 5, 2); BlockPos pipe = BASE.offset(-1, 3, 1), tank = BASE.offset(-2, 3, 1);
         h.setBlock(pipe, AllBlocks.FLUID_PIPE.get()); h.setBlock(tank, AllBlocks.FLUID_TANK.get());
         h.runAfterDelay(4, () -> {
-            owner(h).selectMode(critical);
-            if (critical) {
-                seedSteam(h, 14000, 11200);
-                h.assertTrue(steam(h).drain(256, IFluidHandler.FluidAction.SIMULATE).isEmpty(), "低温汽错误进入超临界管线");
-            }
-            // 留下明确已付的100HU过热显热，覆盖等待管网建立期间的自然散热。
-            seedSteam(h, 14000, 14100);
+            owner(h).selectMinimum(critical ? 60 : 10);
+            // 资格来自实际温压；普通工况仅付沸点焓，超临界工况另留100HU显热供建网期间散失。
+            seedSteam(h, 14000, critical ? 14100 : 11200);
         });
         h.runAfterDelay(35, () -> {
             var t = handler(h, tank, Direction.EAST); var fluid = t == null ? FluidStack.EMPTY : t.getFluidInTank(0);
-            h.assertTrue(!fluid.isEmpty() && fluid.is(critical ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get()), "实际Create管道未输出所选汽种");
-            var old = steam(h); double before = owner(h).ledger().steamHu(); owner(h).selectMode(!critical);
-            h.assertTrue(old.drain(100, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "切模式旧句柄仍放汽");
-            h.assertTrue(owner(h).ledger().steamHu() == before && t.getFluidInTank(0).is(fluid.getFluid()), "切模式重写锅内焓或删除管外流体");
+            h.assertTrue(!fluid.isEmpty() && fluid.is(critical ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get()), "实际Create管道未输出实际汽种");
+            var old = steam(h); double before = owner(h).ledger().steamHu(); owner(h).selectMinimum(43);
+            h.assertTrue(old.getTanks() == 1, "调压撤销了既有汽口句柄");
+            h.assertTrue(owner(h).ledger().steamHu() == before && t.getFluidInTank(0).is(fluid.getFluid()), "调压重写锅内焓或删除管外流体");
             h.succeed();
         });
     }
@@ -196,7 +192,7 @@ public final class ExtensionBoilerGameTests {
             h.assertTrue(Math.abs(s.pressure() - .9) < 1e-8, "堵阀夹具未到真实开启压力");
             h.assertTrue(s.demand(false) < .000001, "堵阀保护线仍申请升压热");
             var portable = owner(h).savePortableData(); owner(h).loadPortableData(portable);
-            h.assertTrue(portable.equals(owner(h).savePortableData()), "当前保存加载改写库存/HU/模式");
+            h.assertTrue(portable.equals(owner(h).savePortableData()), "当前保存加载改写库存/HU/出汽下限");
             h.setBlock(CONTROL.north(), Blocks.REDSTONE_BLOCK);
             h.assertTrue(hot(h).fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256), IFluidHandler.FluidAction.EXECUTE) == 256, "红石状态不能储存待用热液");
             int before = s.hot();
