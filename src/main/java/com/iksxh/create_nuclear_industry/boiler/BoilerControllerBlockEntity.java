@@ -188,7 +188,17 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
                 BlockState next = pipe.updateBlockState(s, side.getOpposite(), null, level, pipePos);
                 if (next != s) level.setBlock(pipePos, next, 3); s = next;
             }
-            if (BlockEntityBehaviour.get(level, pipePos, FluidTransportBehaviour.TYPE) != null) FluidPropagator.propagateChangedPipe(level, pipePos, s);
+            var transport = BlockEntityBehaviour.get(level, pipePos, FluidTransportBehaviour.TYPE);
+            if (transport != null) {
+                FluidPropagator.propagateChangedPipe(level, pipePos, s);
+                BlockState port = level.getBlockState(p);
+                if (port.is(BoilerContent.STEAM_PORT.get()) && port.getValue(BoilerPartBlock.FACING) == side) {
+                    // 汽种可能在运输等待期内往返，第二层保持同种流体却留下第三层已失效的能力来源。
+                    // 在控制器tick重建真实外向端点网络，包含相邻原生泵；drain执行中只标脏，不销毁交易。
+                    var connection = transport.getConnection(side.getOpposite());
+                    if (connection != null) ((BoilerPressureConnection) connection).createNuclearIndustry$forgetSteamEndpointNetwork();
+                }
+            }
         }
         dirtyPorts.clear();
     }
