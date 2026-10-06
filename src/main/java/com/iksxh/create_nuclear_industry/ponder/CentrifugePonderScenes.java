@@ -62,7 +62,7 @@ public final class CentrifugePonderScenes {
         scene.world().showSection(upperBody, Direction.DOWN);
         scene.idle(10);
         scene.overlay().showOutlineWithText(lowerBody.add(upperBody), 90)
-                .text("The centrifuge separates uranium slurry into low-enriched dust, depleted dust, and reusable water.")
+                .text("The centrifuge separates uranium slurry into low-enriched uranium dust, depleted uranium dust, and recoverable water.")
                 .attachKeyFrame()
                 .placeNearTarget();
         // TextInstruction 的正文寿命比指定时长多10tick；相邻正文前至少留10tick净间隔。
@@ -72,7 +72,7 @@ public final class CentrifugePonderScenes {
                 .withItem(new ItemStack(FuelProcessingContent.ENRICHMENT_CENTRIFUGE_ITEM.get()))
                 .rightClick();
         scene.overlay().showOutlineWithText(lowerBody.add(upperBody), 90)
-                .text("Place one centrifuge item to form both halves. Leave room above the upper section for the pipe.")
+                .text("The machine is two blocks tall. Leave room above for the inlet pipe.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(MACHINE_UPPER))
                 .placeNearTarget();
@@ -83,7 +83,7 @@ public final class CentrifugePonderScenes {
         scene.world().setKineticSpeed(lowerDrive, 128);
         scene.effects().rotationSpeedIndicator(MACHINE_LOWER);
         scene.overlay().showOutlineWithText(util.select().position(GEARBOX), 90)
-                .text("Drive the lower shaft. Any nonzero speed stable for 20 ticks can run it; 128 RPM is an example. Creative motors only illustrate power.")
+                .text("Power the centrifuge from below. Processing starts once the speed is stable.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(GEARBOX))
                 .placeNearTarget();
@@ -104,14 +104,14 @@ public final class CentrifugePonderScenes {
         );
         scene.overlay().showOutlineWithText(inputPump.add(inputPumpDrive).add(
                         util.select().position(new BlockPos(4, 6, 4)).add(util.select().position(SLURRY_TANK))), 100)
-                .text("The top is the sole slurry inlet. A mechanical pump feeds slurry from the tank through the pipe; pipes alone do not pump.")
+                .text("Uranium slurry can only enter from the top.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(PUMP))
                 .placeNearTarget();
         scene.idle(120);
 
         scene.overlay().showOutlineWithText(upperBody, 105)
-                .text("Current recipe example: 1000 mB slurry yields 1 low-enriched dust, 7 depleted dust, and 1000 mB water. The visual is illustrative; actual time varies with speed.")
+                .text("Each 1000 mB of uranium slurry yields 1 low-enriched uranium dust, 7 depleted uranium dust, and 1000 mB of water. Higher speeds process it faster.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(MACHINE_UPPER))
                 .placeNearTarget();
@@ -144,7 +144,7 @@ public final class CentrifugePonderScenes {
                 new ItemStack(FuelProcessingContent.LOW_ENRICHED_URANIUM_DUST.get()));
         setTankFluid(scene, RECOVERY_TANK, new FluidStack(net.minecraft.world.level.material.Fluids.WATER, 1000));
         scene.overlay().showOutlineWithText(util.select().fromTo(4, 1, 3, 8, 3, 5).add(returnPumpDrive), 150)
-                .text("The top is the sole slurry inlet. Either side of both halves can output either powder or water; external filters choose the material. This example drops filtered powders into hoppers and pumps water to its tank.")
+                .text("Both halves can output powder or water from any of their four sides. Use brass funnels to collect the powders separately and pipes to recover water.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(RECOVERY_TANK))
                 .placeNearTarget();
@@ -157,14 +157,14 @@ public final class CentrifugePonderScenes {
         scene.world().setKineticSpeed(returnPumpDrive, 0);
         scene.effects().indicateRedstone(MACHINE_LOWER);
         scene.overlay().showOutlineWithText(lowerBody.add(upperBody), 105)
-                .text("Power loss, unstable speed, or blocked outputs pauses processing. Check power, input, and outputs with engineer goggles; an unfinished batch is kept.")
+                .text("Processing pauses if power is lost, speed is unstable, or outputs are blocked. Progress is preserved.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(MACHINE_LOWER))
                 .placeNearTarget();
         scene.idle(125);
 
         scene.overlay().showOutlineWithText(lowerBody, 100)
-                .text("Stop the machine when bearing wear is exhausted, then repair the lower section with one heavy bearing. This scene is an action marker only.")
+                .text("When the bearing wears out, stop the power. Hold one heavy bearing and right-click the front of the lower section to repair it.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(MACHINE_LOWER))
                 .placeNearTarget();
