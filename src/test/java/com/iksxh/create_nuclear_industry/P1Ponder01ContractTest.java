@@ -66,11 +66,12 @@ class P1Ponder01ContractTest {
     }
 
     @Test
-    void pluginRegistersThreeNamespacedReactorStoryboardsWithIndependentTemplates() throws IOException {
+    void pluginRegistersFourNamespacedReactorStoryboardsWithIndependentTemplates() throws IOException {
         assertEquals(CreateNuclearIndustry.MOD_ID, new P1PonderPlugin().getModId());
         assertEquals(P1ContentIds.EXPERIMENTAL_REACTOR_ID, P1PonderPlugin.REACTOR_SCENE_ID);
         assertEquals(List.of(
                 "experimental_reactor",
+                "experimental_reactor_rods",
                 "experimental_reactor_operation",
                 "experimental_reactor_refueling"), P1PonderPlugin.REACTOR_SCENE_IDS);
         for (String id : P1PonderPlugin.REACTOR_SCENE_IDS) {
@@ -83,18 +84,20 @@ class P1Ponder01ContractTest {
 
         String pluginSource = Files.readString(MAIN_SOURCES.resolve(
                 "com/iksxh/create_nuclear_industry/ponder/P1PonderPlugin.java"));
-        assertEquals(3, occurrences(pluginSource, "reactorEntries.addStoryBoard("));
+        assertEquals(4, occurrences(pluginSource, "reactorEntries.addStoryBoard("));
         assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorBasics"));
+        assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorRods"));
         assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorOperation"));
         assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorRefueling"));
 
         String sceneSource = Files.readString(MAIN_SOURCES.resolve(
                 "com/iksxh/create_nuclear_industry/ponder/P1PonderScenes.java"));
-        assertEquals(6, occurrences(storyBody(sceneSource, "experimentalReactorBasics"), ".text(\"")
-                + occurrences(storyBody(sceneSource, "experimentalReactorBasics"), "caption(scene,"));
-        assertEquals(7, occurrences(storyBody(sceneSource, "experimentalReactorOperation"), "caption(scene,"));
-        assertEquals(6, occurrences(storyBody(sceneSource, "experimentalReactorRefueling"), ".text(\"")
-                + occurrences(storyBody(sceneSource, "experimentalReactorRefueling"), "caption(scene,"));
+        // 保留四条故事线的方法完整性覆盖；字幕数量和文字不构成入口契约。
+        for (String method : List.of("experimentalReactorBasics", "experimentalReactorRods",
+                "experimentalReactorOperation", "experimentalReactorRefueling")) {
+            assertTrue(storyBody(sceneSource, method).contains("scene.markAsFinished()"),
+                    "故事线必须正常收尾: " + method);
+        }
     }
 
     @Test

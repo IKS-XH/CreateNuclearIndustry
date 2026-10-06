@@ -1,4 +1,4 @@
-"""生成并核验反应堆三条 Ponder 故事线的完整结构模板。"""
+"""生成并核验反应堆四条 Ponder 故事线的完整结构模板。"""
 
 from __future__ import annotations
 
@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = ROOT / "src/main/resources/assets/create_nuclear_industry/ponder"
 FUEL_COLUMNS = ((1, 0), (0, 1), (2, 1), (1, 2))
 CONTROL_COLUMN = (1, 1)
+RODS_FUEL_COLUMNS = ((1, 0), (1, 1), (0, 1), (2, 1), (1, 2), (2, 2))
+RODS_CONTROL_COLUMNS = ((0, 0), (2, 0))
 
 
 def _string(value: str) -> bytes:
@@ -67,7 +69,10 @@ def _add(blocks: dict[tuple[int, int, int], tuple[str, dict[str, str]]],
 
 
 def _reactor(blocks: dict[tuple[int, int, int], tuple[str, dict[str, str]]],
-             origin: tuple[int, int, int]) -> None:
+             origin: tuple[int, int, int],
+             fuel_columns: tuple[tuple[int, int], ...] = FUEL_COLUMNS,
+             control_columns: tuple[tuple[int, int], ...] = (CONTROL_COLUMN,),
+             multiple_coolant_ports: bool = False) -> None:
     ox, oy, oz = origin
     casing = "create_nuclear_industry:reactor_casing"
     windows = "create_nuclear_industry:reactor_window"
@@ -81,21 +86,27 @@ def _reactor(blocks: dict[tuple[int, int, int], tuple[str, dict[str, str]]],
     for x, z in ((0, 2), (4, 2), (2, 4)):
         _replace(blocks, (ox + x, oy + 2, oz + z), windows)
     _replace(blocks, (ox + 2, oy + 2, oz), "create_nuclear_industry:reactor_instrument_port")
-    _replace(blocks, (ox + 1, oy + 2, oz + 4), "create_nuclear_industry:reactor_cold_port")
-    _replace(blocks, (ox + 3, oy + 2, oz + 4), "create_nuclear_industry:reactor_hot_port")
+    cold_ports = ((1, 2, 0), (1, 1, 0)) if multiple_coolant_ports else ((1, 2, 0),)
+    hot_ports = ((3, 2, 0), (3, 1, 0)) if multiple_coolant_ports else ((3, 2, 0),)
+    for x, y, z in cold_ports:
+        _replace(blocks, (ox + x, oy + y, oz + z), "create_nuclear_industry:reactor_cold_port")
+    for x, y, z in hot_ports:
+        _replace(blocks, (ox + x, oy + y, oz + z), "create_nuclear_industry:reactor_hot_port")
 
     fuel_body = "create_nuclear_industry:reactor_fuel_rod"
     refueling_cap = "create_nuclear_industry:reactor_refueling_port"
     drive_cap = "create_nuclear_industry:control_rod_drive"
-    for core_x, core_z in FUEL_COLUMNS:
-        x, z = core_x + 1, core_z + 1
-        for y in range(1, 4):
-            _add(blocks, (ox + x, oy + y, oz + z), fuel_body)
-        _add(blocks, (ox + x, oy + 4, oz + z), refueling_cap)
-    for core_x, core_z in ((0, 0), (0, 2), (2, 0), (2, 2)):
-        _add(blocks, (ox + core_x + 1, oy + 4, oz + core_z + 1), casing)
-    core_x, core_z = CONTROL_COLUMN
-    _add(blocks, (ox + core_x + 1, oy + 4, oz + core_z + 1), drive_cap)
+    for core_x in range(3):
+        for core_z in range(3):
+            x, z = core_x + 1, core_z + 1
+            if (core_x, core_z) in fuel_columns:
+                for y in range(1, 4):
+                    _add(blocks, (ox + x, oy + y, oz + z), fuel_body)
+                _add(blocks, (ox + x, oy + 4, oz + z), refueling_cap)
+            elif (core_x, core_z) in control_columns:
+                _add(blocks, (ox + x, oy + 4, oz + z), drive_cap)
+            else:
+                _add(blocks, (ox + x, oy + 4, oz + z), casing)
 
 
 def _replace(blocks: dict[tuple[int, int, int], tuple[str, dict[str, str]]],
@@ -111,18 +122,18 @@ def _operation_scene() -> tuple[tuple[int, int, int], dict[tuple[int, int, int],
     _reactor(blocks, origin)
     pipe_state = {"north": "true", "south": "true", "waterlogged": "false"}
     for x in (5, 7):
-        _add(blocks, (x, 2, 9), "create:fluid_pipe", pipe_state)
-        _add(blocks, (x, 2, 10), "create:fluid_pipe", pipe_state)
-        direction = "north" if x == 5 else "south"
-        _add(blocks, (x, 2, 11), "create:mechanical_pump",
+        _add(blocks, (x, 2, 2), "create:fluid_pipe", pipe_state)
+        _add(blocks, (x, 2, 3), "create:fluid_pipe", pipe_state)
+        direction = "south" if x == 5 else "north"
+        _add(blocks, (x, 2, 1), "create:mechanical_pump",
              {"facing": direction, "waterlogged": "false"})
-        _add(blocks, (x, 2, 12), "create:fluid_tank",
+        _add(blocks, (x, 2, 0), "create:fluid_tank",
              {"top": "true", "bottom": "true", "shape": "window"})
 
-    _add(blocks, (6, 2, 11), "create:cogwheel", {"axis": "z"})
-    _add(blocks, (8, 2, 11), "create:cogwheel", {"axis": "z"})
-    _add(blocks, (6, 2, 12), "create:creative_motor", {"facing": "north"})
-    _add(blocks, (8, 2, 12), "create:creative_motor", {"facing": "north"})
+    _add(blocks, (6, 2, 1), "create:cogwheel", {"axis": "z"})
+    _add(blocks, (8, 2, 1), "create:cogwheel", {"axis": "z"})
+    _add(blocks, (6, 2, 0), "create:creative_motor", {"facing": "south"})
+    _add(blocks, (8, 2, 0), "create:creative_motor", {"facing": "south"})
     _add(blocks, (6, 2, 3), "minecraft:lever",
          {"face": "wall", "facing": "north", "powered": "false"})
     return (13, 5, 13), blocks
@@ -138,6 +149,15 @@ def _refueling_scene() -> tuple[tuple[int, int, int], dict[tuple[int, int, int],
         _add(blocks, (x, 4, 3), "create:depot")
     _add(blocks, (6, 3, 3), "create:creative_motor", {"facing": "up"})
     _add(blocks, (6, 4, 3), "create:mechanical_arm")
+    return (13, 5, 13), blocks
+
+
+def _rods_scene() -> tuple[tuple[int, int, int], dict[tuple[int, int, int], tuple[str, dict[str, str]]]]:
+    blocks: dict[tuple[int, int, int], tuple[str, dict[str, str]]] = {}
+    origin = (4, 0, 4)
+    _reactor(blocks, origin, RODS_FUEL_COLUMNS, RODS_CONTROL_COLUMNS)
+    _add(blocks, (6, 2, 3), "minecraft:lever",
+         {"face": "wall", "facing": "north", "powered": "false"})
     return (13, 5, 13), blocks
 
 
@@ -267,12 +287,14 @@ def main() -> None:
         "create_nuclear_industry:control_rod_drive",
     }
     build: dict[tuple[int, int, int], tuple[str, dict[str, str]]] = {}
-    _reactor(build, (0, 0, 0))
+    _reactor(build, (0, 0, 0), multiple_coolant_ports=True)
     scenes = [("experimental_reactor", (5, 5, 5), build)]
     size, operation = _operation_scene()
     scenes.append(("experimental_reactor_operation", size, operation))
     size, refueling = _refueling_scene()
     scenes.append(("experimental_reactor_refueling", size, refueling))
+    size, rods = _rods_scene()
+    scenes.append(("experimental_reactor_rods", size, rods))
 
     for name, size, blocks in scenes:
         scene_required = set(required)
@@ -281,6 +303,8 @@ def main() -> None:
                                    "create:creative_motor", "create:cogwheel", "minecraft:lever"})
         if name == "experimental_reactor_refueling":
             scene_required.update({"create:mechanical_arm", "create:depot", "create:creative_motor"})
+        if name == "experimental_reactor_rods":
+            scene_required.add("minecraft:lever")
         path, count = _write(name, size, blocks, scene_required)
         print(f"{path.relative_to(ROOT)}: size={size}; blocks={count}; palette IDs and Int-list positions valid")
 
