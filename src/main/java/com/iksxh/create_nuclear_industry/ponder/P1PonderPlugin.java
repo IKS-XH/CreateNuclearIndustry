@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * P1 Ponder 条目索引。
  *
- * <p>这里列出的每个组件都已由模组注册，并指向介绍或使用该组件的三条反应堆教学故事线之一。
+ * <p>这里列出的每个组件都已由模组注册，并指向介绍或使用该组件的四条反应堆教学故事线之一。
  * 未来机器应在其注册任务完成后建立独立条目，不能提前写入未注册内容。</p>
  *
  * <p>Ponder 运行在客户端临时世界中，只提供教学演示，不拥有服务端反应堆状态，也不替代
@@ -20,9 +20,10 @@ import java.util.List;
 public final class P1PonderPlugin implements PonderPlugin {
     /** 正式 P1 实验反应堆教学故事线的注册路径。 */
     public static final String REACTOR_SCENE_ID = P1ContentIds.EXPERIMENTAL_REACTOR_ID;
-    /** 三条独立反应堆故事线按搭建、运行停机、装料换料顺序注册。 */
+    /** 四条独立反应堆故事线按搭建、棒列关系、运行停机、装料换料顺序注册。 */
     public static final List<String> REACTOR_SCENE_IDS = List.of(
             REACTOR_SCENE_ID,
+            "experimental_reactor_rods",
             "experimental_reactor_operation",
             "experimental_reactor_refueling"
     );
@@ -50,7 +51,7 @@ public final class P1PonderPlugin implements PonderPlugin {
         return CreateNuclearIndustry.MOD_ID;
     }
 
-    /** 将反应堆直接入口挂接到三条教学故事线，并保留独立离心机故事线。 */
+    /** 将反应堆直接入口挂接到四条教学故事线，并保留独立离心机故事线。 */
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         var reactorEntries = helper.forComponents(DIRECT_ENTRY_IDS.stream()
@@ -59,8 +60,10 @@ public final class P1PonderPlugin implements PonderPlugin {
         reactorEntries.addStoryBoard(componentId(REACTOR_SCENE_IDS.get(0)),
                 P1PonderScenes::experimentalReactorBasics);
         reactorEntries.addStoryBoard(componentId(REACTOR_SCENE_IDS.get(1)),
-                P1PonderScenes::experimentalReactorOperation);
+                P1PonderScenes::experimentalReactorRods);
         reactorEntries.addStoryBoard(componentId(REACTOR_SCENE_IDS.get(2)),
+                P1PonderScenes::experimentalReactorOperation);
+        reactorEntries.addStoryBoard(componentId(REACTOR_SCENE_IDS.get(3)),
                 P1PonderScenes::experimentalReactorRefueling);
         helper.forComponents(componentId("enrichment_centrifuge"))
                 .addStoryBoard(
