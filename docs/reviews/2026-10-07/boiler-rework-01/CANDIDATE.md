@@ -1,14 +1,16 @@
-# 分区温压锅炉：候选与集中手测
+# 分区温压锅炉：候选证据与验收
 
-**当前状态：01F已实现并通过独立审查，等待集中手测。** 功能快照`fcb4b6d`；两种真实mB/HU库存分别记录、共用一份总容量，各口只抽所选库存，已有汽不自动换种。25项账本检查通过；真实机器采用07日志10项通过＋08直罐1项通过，07整轮exit1及全部夹具失败记录保留，未机械重跑其余项目。原13管实际成交46633mB蒸汽，已有SC低压实际抽走16809mB；直罐后段继续成交并保压。唯一assemble与一次独立审查通过。见[实施交付](./steam-inventory-01f-implementation.md)、[审查](./steam-inventory-01f-review.md)及[任务](../../../superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)。源码仅在同级候选，main只同步文档/制品，不接其他主线或教学。
+**当前状态（2026-10-08）：用户已确认01F精简手测通过，锅炉重构已验收合入main。** 整合提交`611d3ca`，65个源码/资源/美术源路径与最终候选`e721797`一致；复用25项账本和11个不同真实用例的证据，07整轮exit1及早期失败记录仍保留。新增一次main增量assemble及24项静态封包核对通过，见[验收与主目录制品](../../2026-10-08/boiler-rework-01/ACCEPTANCE.md)。本页旧待验收描述保留历史含义，不再作为人工门；下方四项清单已获用户确认，不扩大为未列场景或首发验收。
 
 **上一轮01E候选：** 汽轮机当前实体恢复后的断汽残转路径局部修复，功能快照`5ced309a46b85b3c0de7e98069bb1bf90f67e53f`，17项定向GameTest、一次增量assemble与独立审查通过。此轮用户报告残转没有复现；不扩写为全部动力场景验收。当时锅炉原始共管停流未定位、创造罐已拆除，旧非稳定快照不能代替故障现场；最新稳定拓扑和短窗复现以本页R1为准，旧恢复支路清单不继续作为当前操作要求。[01E计划与边界](../../../superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)。下方01D自动通过与暂缓说明为历史证据，不表示本次人工通过；主线/教学继续停止。
 
 **历史状态（01D）：[蒸汽口独立汽种过滤](../../../superpowers/plans/2026-10-07-boiler-steam-port-selection.md)已实现；最终4项定向GameTest、唯一一次增量assemble及一次合并审查通过，功能快照`99a526c97697e9de134cbd090674927c2147c2bd`。当时用户未能复现持续残转，排查暂缓；随后反馈及现阶段局部修复以01E为准。锅炉集中人工门仍保留，未合入main。** [01C来源缓存修复](../../../superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)快照`050afe3e4eb70789804697b2880b7c76281ca8d7`继续包含；原[01B](../../../superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)、[REWORK-01](../../../superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)和[01A](../../../superpowers/plans/2026-10-07-boiler-hot-inlet-layer-fix.md)的未变部分继续适用。01B自动任意汽种输出由01D逐口纯过滤替代，历史证据不改写。主目录仅同步文档与候选制品，新源码须从同级候选启动。
 
-锅炉重构仍在`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录尚未应用新版锅炉。[离心机R3和反应堆02-R1](../ponder-acceptance-01/ACCEPTANCE.md)已获用户明确手测确认并单独合入main；这次教学验收不覆盖本页锅炉清单，锅炉独立人工门继续保留。
+新版锅炉现已合入主目录`E:/MyMC/NewMod/Create_NuclearIndustry`，可从主目录启动runClient；原同级候选和测试世界保留。两套运行目录与配置各自独立，不搬移或改写存档。
 
 ## 启动与制品
+
+**当前启动：** 新版锅炉已合入主目录，可在`E:/MyMC/NewMod/Create_NuclearIndustry`运行`.\gradlew.bat runClient`。[本轮主目录打包制品及验收](../../2026-10-08/boiler-rework-01/ACCEPTANCE.md)以2026-10-08记录为准；下方候选制品和同级启动命令保留历史与原测试世界使用场景，不再表示必须从候选启动。
 
 [01F候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01F/create_nuclear_industry-0.1.0-boiler-01f.jar)：2,266,521字节，内部版本`0.1.0`；SHA-256 `B0CAE4FD76EA3244C1964331844DE66EBFDD9867393C10EF9A40452C27350CF8`。PM已核对24项相关class、语言及模板与实际编译输出一致，两目录保留同一制品；详见制品目录`pm-artifact-validation.json`。重启同级候选runClient加载01F源码。
 
@@ -61,7 +63,7 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 
 ## 01F集中手测清单
 
-当前候选已通过审查。只检查本次改变的库存与管路，未变搭建、外观、材料及汽轮机功能不要求重新全测。
+**本清单已于2026-10-08获用户确认通过。** 下表作为验收依据保留，不要求再重复操作；未变搭建、外观、材料及汽轮机功能不扩写为本轮全部复测。
 
 | 项目 | 操作与预期 |
 | :--- | :--- |

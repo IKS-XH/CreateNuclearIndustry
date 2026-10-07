@@ -198,13 +198,13 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 
 ### 4.4 组成多方块结构的可放置方块
 
-**高压锅炉（2026-10-04：全部现行人工门通过，已合入main）：** 下表首期实施七种部件，`boiler_blaze_heater_port`后置。固定5×5×5、棱边全外壳、底面中央3×3放1～9换热段；1控制器、1～11给水口、1～12主动出汽口、顶中央1安全阀。给水第2层、汽口第4层，各侧三个非棱边格可用，控制器面扣除1个给水位。每口256mB/t，共享库存不增容，见[最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。辅助热、普通蒸汽产出、耐压限制与可变规模仍后置。
+**高压锅炉（2026-10-08已验收合入main）：** 采用配置范围内可变完整长方体，默认三边[5,11]；底层非边框放核换热器，完整再加热隔层分开水区/汽区。换热器与再加热段数量的最小值决定有效热力回路，各区容积分别决定水/汽容量。热液口与换热器同层、可组成底层非角点棱边，冷液口位于隔层侧面；两种汽独立记账、共用总容量和压力，各蒸汽口只取所选库存。见[验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。辅助热和二级耐压仍后置，`boiler_blaze_heater_port`不属本批。
 
 本节列出玩家能够拿在手中、逐块放进世界、需要分别注册模型和纹理的组成方块。它们本身通常不能独立运行：外壳负责封闭结构，端口负责连接管道或物流，控制器负责扫描并组装结构。第 5 节则描述这些方块组装成功后形成的整台逻辑机器；两节不是重复注册两套内容。
 
 | 阶段 | 所属结构 | 可放置组成方块（注册 ID） | 各类部件作用 |
 | :--- | :--- | :--- | :--- |
-| `P1` | 专用高压锅炉 | `high_pressure_boiler_casing`、`high_pressure_boiler_window`、`high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port`、`boiler_safety_valve`、`boiler_blaze_heater_port`、`boiler_heat_exchange_section`、`high_pressure_boiler_controller` | 外壳/观察窗封闭锅炉；水口输入给水；蒸汽口输出超临界蒸汽；安全阀泄压；辅助加热口连接烈焰人燃烧室；换热段接收核热；控制器组装并保存锅炉状态 |
+| `P1` | 专用高压锅炉 | `high_pressure_boiler_casing`、`high_pressure_boiler_window`、`high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port`、`high_pressure_boiler_hot_coolant_port`、`high_pressure_boiler_cold_coolant_port`、`boiler_safety_valve`、`boiler_heat_exchange_section`、`high_pressure_boiler_controller` | 外壳/观察窗封闭锅炉；热/冷口统一供回内置核换热器冷却剂；再加热段构成分区隔层；给水口进水，汽口按选择输出对应库存；安全阀泄压，控制器保存整炉账本 |
 | `P1` | 超临界汽轮机 | 七件：`turbine_casing`、`turbine_rotor`、`turbine_inlet`、`turbine_exhaust`、`turbine_output_shaft`、`turbine_controller`、`turbine_window`；后续保留 `turbine_governor`、`turbine_brake` | 01B候选自动门通过：侧控制器、双端独立输出轴、透明窗和薄壳叶片；未通过新结构人工门。调速器、制动器仍属后续规划 |
 | `P3` | 屏蔽热室 | `hot_cell_casing`、`hot_cell_window`、`hot_cell_item_port`、`hot_cell_fluid_port`、`hot_cell_controller` | 外壳/观察窗提供辐射屏蔽；物品口和流体口限定危险物流；控制器检查屏蔽完整性并允许内部机械臂工作 |
 
@@ -213,7 +213,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | 阶段 | 结构 ID | 中文结构名 | 组成与规模 | 组装条件 | 运行职责 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `P1` | `experimental_reactor` | 实验反应堆 | 固定 `5×5×5`；外壳、观察窗、燃料列、控制棒驱动器列、逐列换料端口、冷/热端口和仪表端口 | 完整长方体、冷/热端口和唯一仪表端口齐全、燃料与控制棒布局合法；控制端口不参与 P1 成型；燃料列顶面使用换料端口，控制棒驱动器下方全为空气 | 产热、燃耗、余热、逐列完整度与热负荷、控制棒列卡死、四向损伤传播、20% 融毁计时、SCRAM、冷却剂转化、关键合成物品维修与停机重置 |
-| `P1` | `high_pressure_boiler` | 专用高压锅炉 | 当前固定尺寸；后期限定范围内可变长宽高，水/汽容量随规模变化；含水接口、换热段、蒸汽接口和安全阀 | 密闭结构、至少一个合格核换热段 | 将一回路热量转成超临界蒸汽 |
+| `P1` | `high_pressure_boiler` | 专用高压锅炉 | 配置范围内可变长宽高；内置核换热器/再加热隔层，水汽容量分别随区体积计算，双汽独立库存共用汽容量 | 密闭分区结构、有效热力回路、实际温压与出汽下限 | 将实际已付核热转成蒸汽或超临界蒸汽新批次 |
 | `P1` | `supercritical_steam_turbine` | 超临界汽轮机 | 默认宽×轴长×高为3×5×3、5×8×5、7×11×7，256RPM；仅接受服务端配置中的三档规格，成型后显示匹配的薄壳多边形模型 | 匹配某个预设规格，转子、空腔及双端完整；不接受任意尺寸 | 规模决定额定流量与总SU上限等性能；消耗超临界蒸汽并输出SU、产生 `steam` |
 | `暂缓` | `spent_fuel_pool` | 乏燃料冷却池 | 水池内衬、循环端口、储存格 | 后置玩法；首发不实现热/冷转换或乏燃料池冷却 |
 | `P2` | `variable_reactor` | 可变尺寸反应堆 | 5×5×5 至 11×11×15 | 从固定实验堆扩展；有效燃料长度受限 | 结构自由度和规模化产热 |

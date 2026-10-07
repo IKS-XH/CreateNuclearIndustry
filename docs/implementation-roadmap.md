@@ -1,12 +1,12 @@
 # 《机械动力：核工业》实施路线图
 
-**当前锅炉整改（2026-10-07）：** 用户确认[01F双汽库存](./superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)，分别记账、共用总容量、逐口取对应库存，不再自动切换已有汽种。已在同级候选实现并通过25项账本/11个真实用例定向证据与独立审查，功能快照`fcb4b6d`，等待集中手测，参数不变；R1长管短窗口根因与失败记录保留。本批定向验证后集中手测，未授权接续其他主线或教学。
+**最新验收（2026-10-08）：** [分区温压锅炉及01F双汽库存](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)已获用户集中手测确认，最终候选无冲突合入main `611d3ca`。65个源码/资源/美术源路径与候选一致，复用已审自动证据，仅新增一次8秒增量assemble及24项封包核对；参数不变，早期失败记录保留。
 
-**指定重构（2026-10-07）：** [分区温压锅炉](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)已实现并通过定向自动验证/审查，[同级候选等待集中手测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，尚未合入main；两台思索已另行验收合入，不覆盖锅炉门，不自动接其他主线或教学。
+**锅炉现行实现：** 配置范围内可变长宽高、内置换热器与再加热隔层、分区缓存及温压/保压出汽已合入main。两种汽独立记账、共同容量与压力，各口纯过滤所选库存；此批人工门关闭，不自动接其他主线或教学。
 
-**当前推进：** 用户确认离心机及反应堆思索手测通过，R1/R2/R3与02-R1四情景已[联合验收并单独合入main](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)。六个教学功能提交无冲突整合，13个相关文件与已验收候选一致；锅炉重构不夹带合入，继续等待本批手测。
+**教学进度：** 离心机及反应堆思索已[单独验收合入main](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)，本轮锅炉整合保留同样的教学实现。下一台设备教学仍需另行安排。
 
-**更新日期：2026-10-06。** 技术基线为 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。当前仍是`0.1.0` Alpha；热端闭环与基础封存已完成，教学及发布出口尚未完成。
+**更新日期：2026-10-08。** 技术基线为 Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。当前仍是`0.1.0` Alpha；已完成锅炉重构验收，其他设备教学及发布出口尚未完成。
 
 **验证边界：** 已验收功能复用原定向证据，main合入仅一次增量assemble。思索只做受影响的编译/资源检查及每台实际播放；不重复热端全量或旧存档矩阵。
 
@@ -22,7 +22,7 @@
 | :--- | :--- | :--- |
 | P0 可行性与 P1 固定实验反应堆 | 已完成最终交接 | [VERIFY-02](./archive/P1-VERIFY-02.md)、[VERIFY-03](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
 | 核换热器首期 / EXT-B-EXCHANGER-01A～01C | 当前手测通过并合入main，闭环守恒与自适应供热已验收 | [最终验收](./reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)：复用候选30项JUnit、15项真实GameTest，本次main增量assemble通过；工作盆与完整蒸汽链另批 |
-| 首台高压锅炉 / EXT-B-BOILER-01A～01D | 全部人工门通过并合入main | [最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)：5×5×5、最多9热段、给水第2层/汽口第4层最多11进12出，每口256mB/t；本次仅主目录增量assemble |
+| 分区温压高压锅炉 REWORK-01～01F | 本轮集中手测通过，已合入main | [验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)：内置换热、可变尺寸、分区容量、温压/保压、双汽库存和逐口选择；只新增main增量打包 |
 | 强化钢板 / EXT-B-REINFORCED-PLATE-01 | 去精密构件的两工序实现已通过联合手测 | 钢板→加坚固板→压片产1；旧三工序[证据保留](./superpowers/plans/2026-10-04-reinforced-plate-assembly.md) |
 | 换热器定向直列 / EXT-B-EXCHANGER-01D～01E | 直列及护目镜中文均人工通过，已合入main | [最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)：前冷后热、最多16台、冷热各4000mB/台，库存共享、储热独立 |
 | 三档汽轮机01A～01G与护目镜显示 | 全部本批人工门通过，已合入main | [联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)：三档尺寸、256RPM、薄壳/叶片、共享容量、效率/周转、断汽恢复及显示 |
@@ -42,7 +42,7 @@
 | 燃料组件直接装配02D/02E | 功能手测通过，连同R2模型修复已合入main | [最终验收](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)：2×2×2、四周漏斗物流、21格制造与动画分件；功能证据复用，R2仅几何/资源核对，新画面未再次人工确认 |
 | 模拟器 P1-BALANCE-02B | 候选未合并；不阻塞主线 | [专项计划](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)：离线单文件实际浏览器验收 |
 | 矿物、材料、设备与燃料生产 | 当前基础生产链已按批验收；后续主线暂停 | [扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md)、[成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) |
-| 热端、动力、事故与思索 | 两台基础思索已验收合入；新版锅炉待人工，事故后置 | [教学联合验收](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)；下一台未派发，不演示未实现事故 |
+| 热端、动力、事故与思索 | 两台基础思索及新版锅炉已分别验收合入，事故后置 | [锅炉验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)、[教学联合验收](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)；下一台未派发，不演示未实现事故 |
 
 P1 已交付固定 `5×5×5` 结构、逐列热工/燃耗/损伤、控制棒与 SCRAM、布局派生冷/热共享容量、真实 Create 管网、人工/机械臂换料、维修、护目镜遥测、危险拆除和停机重组，以及 11 项教学入口与十段基础场景。融毁只发布服务端事件占位符，尚无事故产物或世界破坏。
 
