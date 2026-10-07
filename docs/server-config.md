@@ -48,6 +48,8 @@
 
 旧`waterCapacityMb`、`steamCapacityMb`、`sectionHeatHuPerTick`、`steamHuPerMb`、`warmHuPerSection`、`coolingHuPerSectionPerTick`、`reheatFraction`、`valveOpenFraction`、`valveCloseFraction`及`valveFlowMbPerTick`不再控制重构候选。既有配置文件和用户世界不由本次文档整理删除。
 
+**01D汽口选择（候选待手测）：** 每个蒸汽出口使用Create原生选项控件，选择“蒸汽 / 超临界蒸汽”、默认超临界，当前选择各口独立保存。只过滤上述实际温压决定的汽种，不降级转换；不匹配时该口不出汽，出汽压力下限和安全阀仍按配置执行。不新增热工数值或分立汽种库存，也不改写外部异种流体。[本批任务](./superpowers/plans/2026-10-07-boiler-steam-port-selection.md)4项定向GameTest、增量assemble及一次合并审查通过，客户端门保留。控制器不重新增加汽种开关。
+
 ## 换热器
 
 文件：`create_nuclear_industry-heat-exchanger.toml`。所有键在文件顶层。
