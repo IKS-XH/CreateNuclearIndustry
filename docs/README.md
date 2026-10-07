@@ -1,5 +1,7 @@
 # 项目文档入口
 
+**当前执行（2026-10-08）：** [汽轮机三情景思索04](./superpowers/plans/2026-10-08-device-ponder-04-turbine.md)已获用户开工授权，使用同级候选实现；完工后整理文档。本台仍需独立播放验收，后续顺序见[接续排期](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)。
+
 **换热器范围修订（2026-10-08）：** 用户取消超临界蒸汽输入，原蒸汽降级供热模式及9级热值规划撤销。现行代码已拒收，不需运行整改；保留冷热冷却剂换热、普通蒸汽冷凝与随后补齐的工作盆核热接入，教学不再介绍取消路线。
 
 **当前进度（2026-10-08）：** [锅炉三情景思索](./superpowers/plans/2026-10-08-device-ponder-03-boiler.md)已验收并整合main`58a965e`：按用户反馈删除重复第四幕，保留前三幕原样，定向检查及唯一main打包通过。[验收记录](./reviews/2026-10-08/boiler-ponder-03/ACCEPTANCE.md)已关闭本批，不新增人工测试。用户随后明确[接续顺序](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)：汽轮机思索 → 换热器工作盆供热 → 换热器分情景思索，各批独立验收。
