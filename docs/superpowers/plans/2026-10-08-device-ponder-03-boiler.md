@@ -9,8 +9,19 @@
 
 ## 任务合同
 
+### R2：首次进入思索崩溃整改（2026-10-08）
+
+用户报告“对着锅炉方块按w游戏崩了”。当前候选崩溃报告为 `run/crash-reports/crash-2026-10-08_03.06.39-client.txt`：`PonderUI.tick` → `hideSection` → `WorldSectionElementImpl.erase`，基础区段的 `section` 仍为null。锁定Ponder1.0.82源码确认，`showSection`淡入15tick后才合并到基础区段；搭建幕开场紧随`showBasePlate`调用`hideSection(whole)`，尚未完成基础区段初始化。这是本台教学缺陷，不涉及锅炉生产逻辑。
+
+- **派发范围：** 执行者在原候选内只修正 `BoilerPonderScenes.java` 的区域显隐与初始化顺序，检查同文件其余显隐操作是否符合锁定Ponder生命周期。模板默认不可见，不以捕获空指针、改第三方库或修改正式世界规避错误。
+- **画面约束：** 仍逐层搭建；注意模板锅炉底部位于Y=0，与基础板选择相交。避免在基础板淡入未完成时擦除区段，也避免同一底层重复淡入导致重叠。
+- **最小验证：** 允许在 `BoilerPonderContractTest.java` 新增针对显隐初始化/时序的回归，必须能在本次故障版本失败并在修正后通过，不能仅检查方法名/资源存在。优先直接验证实际指令或锁定API约束；如普通JUnit无法驱动客户端，清楚记录替代检查的范围，不把静态检查称为实际播放。
+- **写集：** 上述两份代码文件；执行者追加 `docs/reviews/2026-10-08/boiler-ponder-03/implementation.md`，审查者追加同目录 `review.md`；新证据写 `build/reports/extension/DEVICE-PONDER-03-BOILER-R2/`。其余原写集本次不默认修改。
+- **执行要求：** 必读本卡、AGENTS、治理5.1/5.2及 minecraft-modding、minecraft-testing、systematic-debugging、test-driven-development 技能。执行者禁止Git写、核心文档修改及子派发。先建立失败证据，再修复，一次定向测试及一次增量assemble即可，不全量、clean、旧档测试或启动用户客户端。
+- **审核与交付：** PM核对源码/锁定Ponder实现及定向证据，由原审查者仅复核本次崩溃整改；修正进入同级候选后，用户重新按W并继续原四幕清单。未通过播放不合入main，不接其他任务。
+
 - **任务ID：** DEVICE-PONDER-03-BOILER。
-- **状态：** 待客户端播放验收；四幕实现、R1整改、定向检查及独立复核已完成，尚未通过播放门。
+- **状态：** R2修正候选待客户端播放；首次W崩溃已按锁定Ponder生命周期修正，功能提交`92f6d07`。新增回归先红后绿、四项定向检查和一次增量assemble通过，独立复核无遗留问题；尚未实际重试W或通过四幕播放门，原失败与R1证据保留。
 - **维护者：** 用户任命的现任项目经理；实现和合并规格/质量审查分别由执行者承担。
 - **前置：** 锅炉REWORK-01～01F集中手测与main合入已完成；离心机、反应堆教学已独立通过，不重复验收。
 - **执行根：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支 `codex/ore-acquisition`，基准 `b18c41c`；main当前 `b04a37c`。两根源码、思索工具及项目文档相同，使用已有同级候选，不创建新工作树。
