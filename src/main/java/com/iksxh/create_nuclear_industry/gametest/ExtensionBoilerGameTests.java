@@ -49,8 +49,14 @@ public final class ExtensionBoilerGameTests {
     static IFluidHandler steam(GameTestHelper h) { return handler(h, BASE.offset(0, 3, 1), Direction.WEST); }
     private static IFluidHandler hot(GameTestHelper h) { return handler(h, HOT, Direction.NORTH); }
     private static IFluidHandler cold(GameTestHelper h) { return handler(h, BASE.offset(3, 2, 0), Direction.NORTH); }
-    private static void seedSteam(GameTestHelper h, int amount, double energy) {
-        CompoundTag tag = owner(h).ledger().save(); tag.putInt("Steam", amount); tag.putDouble("SteamHu", energy); owner(h).ledger().load(tag);
+    /** 仅测试夹具使用本版本显式分池快照；每次替换两池，不能通过合计键或炉压重新猜测库存身份。 */
+    static void seedInventories(CompoundTag tag, int normal, double normalHu, int sc, double scHu) {
+        tag.putInt("NormalSteam", normal); tag.putDouble("NormalSteamHu", normalHu);
+        tag.putInt("SupercriticalSteam", sc); tag.putDouble("SupercriticalSteamHu", scHu);
+    }
+    private static void seedSteam(GameTestHelper h, int amount, double energy, boolean critical) {
+        CompoundTag tag = owner(h).ledger().save(); seedInventories(tag, critical ? 0 : amount, critical ? 0 : energy,
+                critical ? amount : 0, critical ? energy : 0); owner(h).ledger().load(tag);
     }
     @GameTest(template = "boiler_empty", timeoutTicks = 40)
     public static void referenceGeometryAndFourCapabilities(GameTestHelper h) {
@@ -110,7 +116,7 @@ public final class ExtensionBoilerGameTests {
             h.assertTrue(cold(h).drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256 && coldB.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256, "多个冷口模拟错误");
             int removedCold = cold(h).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount() + coldB.drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
             h.assertTrue(removedCold == coldBefore && ledger.cold() == 0, "多冷口复制产物");
-            seedSteam(h, 11100, 11100); var a = steam(h); var b = handler(h, second, Direction.WEST);
+            seedSteam(h, 11100, 11100, true); var a = steam(h); var b = handler(h, second, Direction.WEST);
             var before = owner(h).ledger().save();
             h.assertTrue(a.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256 && b.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256, "模拟保压余量错误");
             h.assertTrue(before.equals(owner(h).ledger().save()), "模拟改变账本");
@@ -168,8 +174,8 @@ public final class ExtensionBoilerGameTests {
         h.runAfterDelay(4, () -> {
             owner(h).selectMinimum(critical ? 60 : 10);
             BoilerSteamSelectionGameTests.submit(h, BASE.offset(0, 3, 1), critical ? 1 : 0);
-            // 资格来自实际温压；普通工况仅付沸点焓，超临界工况另留100HU显热供建网期间散失。
-            seedSteam(h, 14000, critical ? 14100 : 11200);
+            // 显式生成对应库存；普通池仅付沸点焓，SC另留100HU显热供建网期间散失。
+            seedSteam(h, 14000, critical ? 14100 : 11200, critical);
         });
         h.runAfterDelay(35, () -> {
             var t = handler(h, tank, Direction.EAST); var fluid = t == null ? FluidStack.EMPTY : t.getFluidInTank(0);
@@ -189,7 +195,7 @@ public final class ExtensionBoilerGameTests {
         build(h, 5, 5, 5, 2); h.setBlock(BASE.offset(1, 5, 1), Blocks.STONE);
         h.runAfterDelay(4, () -> {
             // 18000mB、Ts1.8对应17280HU及P0.9，不能用库存占比替代真实炉压。
-            seedSteam(h, 18000, 17280); var s = owner(h).ledger();
+            seedSteam(h, 18000, 17280, false); var s = owner(h).ledger();
             h.assertTrue(Math.abs(s.pressure() - .9) < 1e-8, "堵阀夹具未到真实开启压力");
             h.assertTrue(s.demand(false) < .000001, "堵阀保护线仍申请升压热");
             var portable = owner(h).savePortableData(); owner(h).loadPortableData(portable);

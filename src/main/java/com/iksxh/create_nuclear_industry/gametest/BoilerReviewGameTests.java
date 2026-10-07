@@ -75,7 +75,7 @@ public final class BoilerReviewGameTests {
                     owner.tick(); old[0] = level.getCapability(Capabilities.FluidHandler.BLOCK, water, Direction.WEST);
                     h.assertTrue(old[0] != null, "初始水口不可用");
                     old[0].fill(new FluidStack(Fluids.WATER, 123), IFluidHandler.FluidAction.EXECUTE);
-                    var saved = owner.ledger().save(); saved.putInt("Steam", 100); saved.putDouble("SteamHu", 80);
+                    var saved = owner.ledger().save(); ExtensionBoilerGameTests.seedInventories(saved, 100, 80, 0, 0);
                     saved.putInt("Cold", 37); owner.ledger().load(saved); hu[0] = owner.ledger().totalHu();
                     source.removeRegionTicket(TICKET, far, 0, far); stage[0] = 1;
                 } else if (stage[0] == 1) {

@@ -46,7 +46,7 @@ public final class ExtensionGoggleSyncGameTests {
             BoilerControllerBlockEntity owner = owner(helper);
             var saved = owner.ledger().save();
             saved.putInt("Water", 1000);
-            saved.putInt("Steam", 14399);
+            ExtensionBoilerGameTests.seedInventories(saved, 14399, saved.getDouble("SteamHu"), 0, 0);
             saved.putDouble("WarmHu", 3600);
             saved.putBoolean("Ready", true);
             owner.ledger().load(saved);

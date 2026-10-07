@@ -1,5 +1,7 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
+import static com.iksxh.create_nuclear_industry.boiler.BoilerSteamInventoryKind.*;
+
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
 import com.iksxh.create_nuclear_industry.content.TurbineContent;
@@ -34,7 +36,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** 01D隔离域：汽口只过滤实际汽种，默认超临界不能提前输出普通汽。 */
+/** 独立汽口合同：各口只取对应真实库存，默认SC不能提前输出另一池普通汽。 */
 @GameTestHolder("create_nuclear_industry_boiler_steam_selection")
 @PrefixGameTestTemplate(false)
 public final class BoilerSteamSelectionGameTests {
@@ -49,9 +51,10 @@ public final class BoilerSteamSelectionGameTests {
         ExtensionBoilerGameTests.build(h, 5, 5, 5, 2);
         h.setBlock(SECOND, BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.EAST));
     }
-    private static void seed(GameTestHelper h, int amount, double hu, int cold) {
+    private static void seed(GameTestHelper h, int amount, double hu, int cold, boolean sc) {
         var owner = ExtensionBoilerGameTests.owner(h); var tag = owner.ledger().save();
-        tag.putInt("Steam", amount); tag.putDouble("SteamHu", hu); tag.putInt("Cold", cold); owner.ledger().load(tag);
+        ExtensionBoilerGameTests.seedInventories(tag, sc ? 0 : amount, sc ? 0 : hu, sc ? amount : 0, sc ? hu : 0);
+        tag.putInt("Cold", cold); owner.ledger().load(tag);
     }
     /** 用Create真实选项包的服务端路由，不能直接调用产品选择回调绕过行为校验。 */
     static void submit(GameTestHelper h, BlockPos p, int value) { submit(h, p, 0, value); }
@@ -66,13 +69,13 @@ public final class BoilerSteamSelectionGameTests {
         try { var f = target.getClass().getDeclaredField(name); f.setAccessible(true); return f.get(target); }
         catch (ReflectiveOperationException e) { throw new IllegalStateException("只读汽口事务诊断失败：" + name, e); }
     }
-    @GameTest(template = "selection_empty", timeoutTicks = 40)
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 40)
     public static void defaultSupercriticalWaitsWithoutConvertingOrdinarySteam(GameTestHelper h) {
         ExtensionBoilerGameTests.build(h, 5, 5, 5, 2);
         h.setBlock(STEAM.west(), AllBlocks.FLUID_TANK.get());
         h.runAfterDelay(4, () -> {
             var owner = ExtensionBoilerGameTests.owner(h); owner.selectMinimum(0);
-            var tag = owner.ledger().save(); tag.putInt("Steam", 12000); tag.putDouble("SteamHu", 9600); owner.ledger().load(tag);
+            seed(h, 12000, 9600, 0, false);
             var port = handler(h, STEAM, Direction.WEST); var before = owner.ledger().save();
             h.assertTrue(port.getFluidInTank(0).isEmpty() && port.drain(256, IFluidHandler.FluidAction.SIMULATE).isEmpty(),
                     "默认超临界口错误声明或模拟输出普通蒸汽");
@@ -92,7 +95,7 @@ public final class BoilerSteamSelectionGameTests {
             h.succeed();
         });
     }
-    @GameTest(template = "selection_empty", timeoutTicks = 45)
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 45)
     public static void nativeOptionsPersistIndependentlyAndOnlySteamHasControl(GameTestHelper h) {
         twoPorts(h);
         h.runAfterDelay(4, () -> {
@@ -119,12 +122,12 @@ public final class BoilerSteamSelectionGameTests {
             client.readClient(snapshot, h.getLevel().registryAccess());
             h.assertTrue(client.selectedSteamKind() == BoilerSteamKind.NORMAL, "客户端快照未同步选项");
             h.assertTrue(Math.abs(owner.ledger().minimumPressure() - .6) < 1e-8, "选汽包改写控制器压力");
-            owner.selectMinimum(100); seed(h, 12000, 9600, 0); port(h, STEAM).tick();
+            owner.selectMinimum(100); seed(h, 12000, 9600, 0, false); port(h, STEAM).tick();
             h.assertTrue(port(h, STEAM).getUpdateTag(h.getLevel().registryAccess()).getString("SteamOutputStatus").equals("pressure"),
                     "压力下限100仍显示可出汽");
             submit(h, STEAM, 1); port(h, STEAM).tick();
-            h.assertTrue(port(h, STEAM).getUpdateTag(h.getLevel().registryAccess()).getString("SteamOutputStatus").equals("waiting"),
-                    "不匹配未显示等待汽种");
+            h.assertTrue(port(h, STEAM).getUpdateTag(h.getLevel().registryAccess()).getString("SteamOutputStatus").equals("no_steam"),
+                    "选中SC池为空时未显示对应库存等待");
             System.out.println("[steam-selection] native netId0 options independent; normal/SC current NBT restored; invalid values rejected; client snapshot verified"); h.succeed();
         });
     }
@@ -145,7 +148,7 @@ public final class BoilerSteamSelectionGameTests {
         if (!direct) FluidPropagator.propagateChangedPipe(h.getLevel(), h.absolutePos(port.relative(outward)), h.getBlockState(port.relative(outward)));
         return tank;
     }
-    @GameTest(template = "selection_empty", timeoutTicks = 160)
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 160)
     public static void nativeDualNetworksAndAdjacentPumpRecoverWithColdAndBackpressurePreserved(GameTestHelper h) {
         twoPorts(h);
         BlockPos pipe = STEAM.west(), tankA = STEAM.west(2);
@@ -157,7 +160,7 @@ public final class BoilerSteamSelectionGameTests {
         int[] previousAmount = {0}; double[] previousHu = {0}; boolean[] tracking = {false};
         h.runAfterDelay(4, () -> {
             ExtensionBoilerGameTests.owner(h).selectMinimum(0); submit(h, STEAM, 0); submit(h, SECOND, 0);
-            seed(h, 16000, 12800, 30000); previousAmount[0] = 16000; previousHu[0] = 12800; tracking[0] = true;
+            seed(h, 16000, 12800, 30000, false); previousAmount[0] = 16000; previousHu[0] = 12800; tracking[0] = true;
             originals[0] = handler(h, STEAM, Direction.WEST); originals[1] = handler(h, SECOND, Direction.EAST); originals[2] = handler(h, COLD, Direction.NORTH);
         });
         // 每tick只从真实收罐观测mB；显热散失允许最多0.9HU/t，输送必须扣实际比焓。
@@ -190,7 +193,7 @@ public final class BoilerSteamSelectionGameTests {
                     "他口或真实冷液泵在单口切换后停流");
             var transport = BlockEntityBehaviour.get(h.getLevel(), h.absolutePos(pipe), FluidTransportBehaviour.TYPE);
             h.assertTrue(transport.getConnection(Direction.EAST).getPressure().get(true) == 0, "等待匹配汽口仍贡献主动输送压力");
-            var s = ExtensionBoilerGameTests.owner(h).ledger(); gross[0] += 16000 - s.steam(); seed(h, 16000, 16800, s.cold());
+            var s = ExtensionBoilerGameTests.owner(h).ledger(); gross[0] += 16000 - s.steam(); seed(h, 16000, 16800, s.cold(), true);
             previousAmount[0] = 16000; previousHu[0] = 16800;
         });
         h.runAfterDelay(48, () -> {
@@ -219,11 +222,11 @@ public final class BoilerSteamSelectionGameTests {
                     + "; cold=" + received[2] + "->" + cold.getAmount() + "; each tick mB/HU conserved; external ordinary retained until explicit receiver drain"); h.succeed();
         });
     }
-    @GameTest(template = "selection_empty", timeoutTicks = 45)
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 45)
     public static void perPortEpochSimulationAndCrossingDrainConserveMassAndHu(GameTestHelper h) {
         twoPorts(h);
         h.runAfterDelay(4, () -> {
-            var owner = ExtensionBoilerGameTests.owner(h); owner.selectMinimum(0); seed(h, 12000, 9600, 1234);
+            var owner = ExtensionBoilerGameTests.owner(h); owner.selectMinimum(0); seed(h, 12000, 9600, 1234, false);
             submit(h, STEAM, 0);
             var a = handler(h, STEAM, Direction.WEST); var b = handler(h, SECOND, Direction.EAST);
             var cold = handler(h, COLD, Direction.NORTH); var water = ExtensionBoilerGameTests.water(h);
@@ -244,7 +247,7 @@ public final class BoilerSteamSelectionGameTests {
                     "单口切换未只撤销该口旧句柄");
             submit(h, STEAM, 0);
             h.assertTrue(handler(h, STEAM, Direction.WEST).drain(256, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "来回切换重置同tick额度");
-            seed(h, 9100, 9100, 1234); var sc = handler(h, SECOND, Direction.EAST);
+            seed(h, 9100, 9100, 1234, true); var sc = handler(h, SECOND, Direction.EAST);
             h.assertTrue(handler(h, STEAM, Direction.WEST).getFluidInTank(0).isEmpty()
                     && handler(h, STEAM, Direction.WEST).drain(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 256), IFluidHandler.FluidAction.EXECUTE).isEmpty(),
                     "普通汽选择口错误降级输出实际超临界汽");
@@ -254,11 +257,94 @@ public final class BoilerSteamSelectionGameTests {
             var actual = sc.drain(sim, IFluidHandler.FluidAction.EXECUTE);
             h.assertTrue(actual.is(sim.getFluid()) && actual.getAmount() == 256 && owner.ledger().steam() == 8844 && owner.ledger().steamHu() == 8844,
                     "跨温压门槛返回类型或256mB/256HU不符声明");
-            h.assertTrue(sc.getTanks() == 0 && sc.drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty()
-                    && handler(h, SECOND, Direction.EAST).getFluidInTank(0).isEmpty(), "旧超临界句柄抽走新的普通汽");
-            h.assertTrue(handler(h, STEAM, Direction.WEST).getFluidInTank(0).is(TurbineContent.STEAM.get())
-                    && handler(h, STEAM, Direction.WEST).drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "普通口未恢复声明或重置额度");
+            h.assertTrue(sc.getTanks() == 1 && sc.getFluidInTank(0).is(BoilerContent.SUPERCRITICAL_STEAM.get())
+                    && sc.drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "跨生产炉压线撤销了SC身份或重置同tick额度");
+            h.assertTrue(handler(h, STEAM, Direction.WEST).getFluidInTank(0).isEmpty(), "没有普通库存却声明免费普通汽");
             System.out.println("[steam-selection] per-port stale handles only; SIMULATE pure; ordinary256/204.8HU; crossing SC256/256HU; switching preserves tick budgets"); h.succeed();
+        });
+    }
+    /** 本版本混合库存与能力/遥测快照：两池可同时交易，低压SC不改种，保存不能刷新物理口额度。 */
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 35)
+    public static void mixedInventoriesCurrentSaveAndTooltipKeepIdentityAndBudget(GameTestHelper h) {
+        twoPorts(h);
+        h.runAfterDelay(4, () -> {
+            var owner = ExtensionBoilerGameTests.owner(h); owner.selectMinimum(10); submit(h, STEAM, 0);
+            var tag = owner.ledger().save(); ExtensionBoilerGameTests.seedInventories(tag, 1000, 800, 5000, 5100); owner.ledger().load(tag);
+            var normal = handler(h, STEAM, Direction.WEST); var sc = handler(h, SECOND, Direction.EAST);
+            h.assertTrue(owner.ledger().pressure() < owner.ledger().settings().supercriticalPressure(), "混合保存夹具未覆盖低炉压SC");
+            var before = owner.ledger().save();
+            h.assertTrue(normal.drain(128, IFluidHandler.FluidAction.SIMULATE).is(TurbineContent.STEAM.get())
+                    && sc.drain(256, IFluidHandler.FluidAction.SIMULATE).is(BoilerContent.SUPERCRITICAL_STEAM.get())
+                    && before.equals(owner.ledger().save()), "混合库存模拟错误或写账");
+            var n = normal.drain(128, IFluidHandler.FluidAction.EXECUTE); var s = sc.drain(256, IFluidHandler.FluidAction.EXECUTE);
+            h.assertTrue(n.is(TurbineContent.STEAM.get()) && s.is(BoilerContent.SUPERCRITICAL_STEAM.get())
+                    && owner.ledger().steam(NORMAL) == 872 && owner.ledger().steam(SUPERCRITICAL) == 4744
+                    && Math.abs(owner.ledger().steamHu(NORMAL) - 697.6) < 1e-6
+                    && Math.abs(owner.ledger().steamHu(SUPERCRITICAL) - 4838.88) < 1e-6, "混合真实交易跨种/热量串账");
+            var portable = owner.savePortableData(); owner.loadPortableData(portable);
+            h.assertTrue(portable.equals(owner.savePortableData()) && normal.getTanks() == 1 && sc.getTanks() == 1
+                    && sc.drain(1, IFluidHandler.FluidAction.EXECUTE).isEmpty()
+                    && normal.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 128, "当前保存改变身份、旧句柄或同tick额度");
+            var d = owner.ledger().settings();
+            owner.ledger().setSettings(new com.iksxh.create_nuclear_industry.boiler.BoilerState.Settings(d.minDimension(), d.maxDimension(),
+                    d.waterCapacityPerCellMb(), d.steamCapacityPerCellMb(), d.portFlowMbPerTick(), d.pairHeatHuPerTick(),
+                    d.boilingTemperature(), d.supercriticalTemperature(), d.wallHeatCapacityHuPerWaterCell(), d.waterSpecificHeatHuPerMb(),
+                    .4, d.vaporizationLatentHeatHuPerMb(), d.supercriticalPressure(), d.outputMinPressure(), d.valveOpenPressure(),
+                    d.valveClosePressure(), d.valveFlowPerSteamCellMbPerTick(), d.idleWaterCoolingHuPerCellPerTick(), d.idleSteamCoolingHuPerCellPerTick()));
+            // 只更改本测试实体的配置快照；SC当前1.02HU/mB在cpSteam=0.4时是1.55，客户端默认cp=0.2不能重算成2.10。
+            var mirror = new com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity(owner.getBlockPos(), owner.getBlockState());
+            mirror.handleUpdateTag(owner.getUpdateTag(h.getLevel().registryAccess()), h.getLevel().registryAccess());
+            var tooltip = new java.util.ArrayList<net.minecraft.network.chat.Component>(); mirror.addToGoggleTooltip(tooltip, false);
+            var inventoryLine = tooltip.stream().map(net.minecraft.network.chat.Component::getContents)
+                    .filter(c -> c instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                            && t.getKey().equals("gui.create_nuclear_industry.boiler.steam_inventories"))
+                    .map(c -> (net.minecraft.network.chat.contents.TranslatableContents) c).findFirst().orElseThrow();
+            h.assertTrue(((Number) inventoryLine.getArgs()[0]).intValue() == 872 && ((Number) inventoryLine.getArgs()[1]).intValue() == 4744
+                    && mirror.ledger().save().equals(owner.ledger().save()), "客户端只读快照复制/重标两种库存或护目镜未分别显示");
+            var temperatureLine = tooltip.stream().map(net.minecraft.network.chat.Component::getContents)
+                    .filter(c -> c instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                            && t.getKey().equals("gui.create_nuclear_industry.boiler.steam_inventory_temperatures"))
+                    .map(c -> (net.minecraft.network.chat.contents.TranslatableContents) c).findFirst().orElseThrow();
+            h.assertTrue(temperatureLine.getArgs()[0].equals("1.00") && temperatureLine.getArgs()[1].equals("1.55"),
+                    "客户端分池汽温没有使用服务端自定义比热的实际快照");
+            h.setBlock(BASE, net.minecraft.world.level.block.Blocks.AIR); owner.invalidateForm();
+            h.assertTrue(normal.getTanks() == 0 && sc.getTanks() == 0, "真实拆件没有撤销两种旧句柄");
+            System.out.println("[dual-inventory] mixed N128@0.8HU SC256@1.02HU below Psc; current NBT/budgets + client tooltip restored; server cpSteam0.4 temperatures=1.00/1.55; dismantling invalidated both");
+            h.succeed();
+        });
+    }
+    /** 冷SC始终保留流体身份，只有真实热液转冷付款足够后，原句柄才可交付同一库存。 */
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 45)
+    public static void coldScKeepsIdentityAndReheatsFromActualHotFluid(GameTestHelper h) {
+        ExtensionBoilerGameTests.build(h, 5, 5, 5, 2);
+        IFluidHandler[] original = {null}; boolean[] active = {false}; long[] coldRemoved = {0};
+        h.runAfterDelay(4, () -> {
+            var owner = ExtensionBoilerGameTests.owner(h); owner.selectMinimum(0); seed(h, 1000, 900, 0, true);
+            original[0] = handler(h, STEAM, Direction.WEST); var before = owner.ledger().save();
+            h.assertTrue(original[0].getFluidInTank(0).is(BoilerContent.SUPERCRITICAL_STEAM.get())
+                    && original[0].drain(256, IFluidHandler.FluidAction.SIMULATE).isEmpty()
+                    && original[0].drain(256, IFluidHandler.FluidAction.EXECUTE).isEmpty()
+                    && before.equals(owner.ledger().save()), "欠热SC错误免费交付或被降级");
+            active[0] = true;
+        });
+        h.onEachTick(() -> {
+            if (!active[0]) return;
+            handler(h, BASE.offset(3, 0, 0), Direction.NORTH).fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 36), IFluidHandler.FluidAction.EXECUTE);
+            coldRemoved[0] += handler(h, COLD, Direction.NORTH).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
+        });
+        h.succeedWhen(() -> {
+            h.assertTrue(active[0] && h.getTick() > 6, "等待冷SC实际再热");
+            var s = ExtensionBoilerGameTests.owner(h).ledger();
+            h.assertTrue(s.outputQualified(SUPERCRITICAL), "实际热液付款尚未补足SC焓");
+            double before = s.totalHu(), specific = s.steamHu(SUPERCRITICAL) / s.steam(SUPERCRITICAL);
+            var fluid = original[0].drain(128, IFluidHandler.FluidAction.EXECUTE);
+            h.assertTrue(fluid.is(BoilerContent.SUPERCRITICAL_STEAM.get()) && fluid.getAmount() == 128
+                    && s.steam(NORMAL) == 0 && s.steam(SUPERCRITICAL) == 872
+                    && Math.abs(before - s.totalHu() - 128 * specific) < 1e-6, "真实再热后原句柄未按SC实际HU交付");
+            double lost = 900 + .5 * (coldRemoved[0] + s.cold()) - before;
+            h.assertTrue(lost >= -1e-6 && lost <= h.getTick() * .9 + 1e-6, "实际热液再热付款/HU不守恒");
+            System.out.println("[dual-inventory] cold SC1000@900HU waited; actual converted=" + (coldRemoved[0] + s.cold())
+                    + " paidHU=" + .5 * (coldRemoved[0] + s.cold()) + " exported=" + 128 * specific + " currentP=" + s.pressure());
         });
     }
 }

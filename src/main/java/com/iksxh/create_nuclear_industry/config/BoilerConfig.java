@@ -24,12 +24,12 @@ public final class BoilerConfig {
         PORT_FLOW_MB_PER_TICK = b.comment("每个物理口共用主动/被动额度，单位 mB/t。") .defineInRange("portFlowMbPerTick", 256, 1, 1_000_000);
         PAIR_HEAT = positive(b, "pairHeatHuPerTick", 18, "每对换热器/再加热段的 HU/t 上限。");
         BOILING_TEMPERATURE = positive(b, "boilingTemperature", 1, "归一沸点温度。");
-        SUPERCRITICAL_TEMPERATURE = positive(b, "supercriticalTemperature", 2, "归一超临界资格温度，必须高于沸点。");
+        SUPERCRITICAL_TEMPERATURE = positive(b, "supercriticalTemperature", 2, "新批次归类与SC库存已付热交付所需的归一汽温，必须高于沸点。");
         WALL_HEAT_CAPACITY = positive(b, "wallHeatCapacityHuPerWaterCell", 1600, "每格水区对应的炉壁热容 HU/温升。");
         WATER_SPECIFIC_HEAT = positive(b, "waterSpecificHeatHuPerMb", .1, "水比热 HU/mB/温升。");
         STEAM_SPECIFIC_HEAT = positive(b, "steamSpecificHeatHuPerMb", .2, "汽比热 HU/mB/温升。");
         LATENT_HEAT = positive(b, "vaporizationLatentHeatHuPerMb", .7, "汽化追加潜热 HU/mB。");
-        SUPERCRITICAL_PRESSURE = positive(b, "supercriticalPressure", .5, "超临界资格炉压。");
+        SUPERCRITICAL_PRESSURE = positive(b, "supercriticalPressure", .5, "新批次归类SC所需的共同炉压；已有SC仅受公共出汽下限限制。");
         OUTPUT_MIN_PRESSURE = b.comment("默认出汽压力下限，归一范围[0,1]；高于阀开启线也合法，仅限制正常出汽。")
                 .defineInRange("outputMinPressure", .6, 0, 1);
         VALVE_OPEN_PRESSURE = positive(b, "valveOpenPressure", .9, "开启安全阀及堵塞保护的炉压。");

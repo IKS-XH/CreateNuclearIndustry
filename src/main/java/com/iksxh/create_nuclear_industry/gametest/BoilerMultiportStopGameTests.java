@@ -1,5 +1,7 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
+import static com.iksxh.create_nuclear_industry.boiler.BoilerSteamInventoryKind.*;
+
 import com.iksxh.create_nuclear_industry.boiler.BoilerPartBlock;
 import com.iksxh.create_nuclear_industry.config.TurbineConfig;
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
@@ -9,6 +11,7 @@ import com.iksxh.create_nuclear_industry.turbine.TurbineOutputShaftBlockEntity;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.fluids.tank.CreativeFluidTankBlockEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
@@ -62,6 +65,194 @@ public final class BoilerMultiportStopGameTests {
     @GameTest(template = "multiport_empty", timeoutTicks = 980)
     public static void latestFourSupercriticalCommonMediumAndCreativeSinkWithPump(GameTestHelper h) { sharedTurbine(h, TurbineConfig.settings().mediumTier(), true, true); }
 
+    /** R1独立域仅运行现场三SC/独立NORMAL管路，保留旧域与旧证据。 */
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 980)
+    public static void r1NormalThirteenPipesReceiveDuringQualifiedWindows(GameTestHelper h) { pressureR1(h, false); }
+
+    /** 普通汽直邻罐对照使用同一热负荷与汽种选择，区别原生启动等待和过滤资格。 */
+    @GameTest(template = "pressure_empty", templateNamespace = "create_nuclear_industry_boiler_pressure_r1", timeoutTicks = 980)
+    public static void r1NormalDirectTankReference(GameTestHelper h) { pressureR1(h, true); }
+
+    /**
+     * 复刻R1受支持拓扑：16对、实际126mB/t热液即63HU/t，三SC共管接近邻创造罐和13管中型；
+     * 第四NORMAL独立13管接普通空罐。仅只读原生缓存/模拟，真实成交仍由原生接收与锅炉交易执行。
+     */
+    private static void pressureR1(GameTestHelper h, boolean direct) {
+        ExtensionBoilerGameTests.build(h, 6, 5, 6, 2);
+        List<BlockPos> ports = new ArrayList<>(), scPipes = new ArrayList<>(), normalPipes = new ArrayList<>();
+        for (int z = 1; z <= 4; z++) {
+            BlockPos port = BASE.offset(0, 3, z); ports.add(port);
+            h.setBlock(port, BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.WEST));
+            if (z < 4) scPipes.add(port.west());
+        }
+        var tier = TurbineConfig.settings().mediumTier(); BlockPos front = new BlockPos(14, 5, 2);
+        clearTurbineInterior(h, front, tier); ExtensionTurbineGameTests.build(h, front, tier.rotorCount(), false);
+        scPipes.add(new BlockPos(3, 6, 5));
+        for (int x = 3; x <= 11; x++) scPipes.add(new BlockPos(x, 7, 5));
+        scPipes.add(new BlockPos(11, 6, 5)); scPipes.add(new BlockPos(11, 5, 5));
+        for (BlockPos pipe : scPipes) h.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
+        BlockPos sinkPos = ports.getFirst().west(2), normal = ports.getLast();
+        h.setBlock(sinkPos, AllBlocks.CREATIVE_FLUID_TANK.get());
+        BlockPos normalTank = direct ? normal.west() : new BlockPos(3, 3, 1);
+        if (!direct) {
+            normalPipes.add(normal.west()); normalPipes.add(normal.west(2)); normalPipes.add(normal.west(3));
+            normalPipes.add(new BlockPos(1, 4, 8)); normalPipes.add(new BlockPos(1, 3, 8));
+            for (int z = 7; z >= 1; z--) normalPipes.add(new BlockPos(1, 3, z));
+            normalPipes.add(new BlockPos(2, 3, 1));
+            for (BlockPos pipe : normalPipes) h.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
+            // 第一段玻璃管仅沿X轴连接，保持第四口与相邻SC主网物理隔离。
+            h.setBlock(normal.west(), AllBlocks.GLASS_FLUID_PIPE.getDefaultState()
+                    .setValue(com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock.AXIS, Direction.Axis.X));
+        }
+        for (int y = 0; y < 7; y++) h.setBlock(normalTank.above(y), AllBlocks.FLUID_TANK.get());
+        // 原生包覆管固定E/N两面，避免直邻普通罐对照被相邻SC首管横向接入。
+        h.setBlock(ports.get(2).west(), AllBlocks.ENCASED_FLUID_PIPE.getDefaultState()
+                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.EAST, true)
+                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.NORTH, true));
+        R1CreativeTank sink = new R1CreativeTank(h.absolutePos(sinkPos), h.getBlockState(sinkPos));
+        h.getLevel().removeBlockEntity(h.absolutePos(sinkPos)); h.getLevel().setBlockEntity(sink);
+        R1NormalTank receiver = new R1NormalTank(h.absolutePos(normalTank), h.getBlockState(normalTank));
+        h.getLevel().removeBlockEntity(h.absolutePos(normalTank)); h.getLevel().setBlockEntity(receiver);
+        // 替换观察实体后通过原生入口重新成型，避免观察器默认单格容量造成对照满罐。
+        receiver.removeController(true);
+        for (BlockPos pipe : scPipes) FluidPropagator.propagateChangedPipe(h.getLevel(), h.absolutePos(pipe), h.getBlockState(pipe));
+        for (BlockPos pipe : normalPipes) FluidPropagator.propagateChangedPipe(h.getLevel(), h.absolutePos(pipe), h.getBlockState(pipe));
+        boolean[] active = {false}; long[] counts = new long[8]; int[] windows = new int[4]; int[] lowPressureScTicks = {0}, pressureHeadTicks = {0};
+        IFluidHandler[] firstCaps = new IFluidHandler[2]; double[] initialHu = {0};
+        long[] midpointNormal = {0};
+        h.runAfterDelay(6, () -> {
+            var owner = ExtensionBoilerGameTests.owner(h); h.assertTrue(owner.currentForm() != null, "R1锅炉未成型");
+            owner.selectMinimum(60); BoilerSteamSelectionGameTests.submit(h, normal, 0);
+            var tag = owner.ledger().save(); tag.putInt("Water", 32000); tag.putDouble("WaterHu", 57600);
+            ExtensionBoilerGameTests.seedInventories(tag, 0, 0, 24000, 24000); owner.ledger().load(tag);
+            initialHu[0] = owner.ledger().totalHu(); counts[6] = 24000;
+            // 在首次账本tick前实际提供本tick热液，避免无收热初始化先消耗预热墙体余热。
+            counts[1] += capability(h, BASE.offset(3, 0, 0), Direction.NORTH)
+                    .fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 126), IFluidHandler.FluidAction.EXECUTE);
+            h.assertTrue(receiver.getTankInventory().getCapacity() >= 56000, "R1观察普通罐未由原生正确成型为足够容量");
+            firstCaps[0] = capability(h, ports.getFirst(), Direction.WEST); firstCaps[1] = capability(h, normal, Direction.WEST);
+            active[0] = true;
+            System.out.println("[pressure-r1] direct=" + direct + " scToMedium=13/14/15 normalPipes=" + normalPipes.size()
+                    + " sinkDistance=1 Tsc=" + owner.ledger().settings().supercriticalTemperature() + " Psc=" + owner.ledger().settings().supercriticalPressure());
+        });
+        h.onEachTick(() -> {
+            if (!active[0]) return;
+            var owner = ExtensionBoilerGameTests.owner(h); var s = owner.ledger();
+            counts[0] += ExtensionBoilerGameTests.water(h).fill(new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE);
+            if (h.getTick() != 6) counts[1] += capability(h, BASE.offset(3, 0, 0), Direction.NORTH)
+                    .fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 126), IFluidHandler.FluidAction.EXECUTE);
+            counts[2] += capability(h, BASE.offset(3, 2, 0), Direction.NORTH).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
+            var exhaust = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.exhaust(front, tier), Direction.EAST);
+            if (exhaust != null) counts[3] += exhaust.drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
+            counts[4] += s.produced(); var turbine = ExtensionTurbineGameTests.owner(h, front).ledger();
+            int stored = receiver.getTankInventory().getFluidAmount();
+            h.assertTrue(s.steam() + s.totalVented() + counts[3] + turbine.exhaust() + sink.executed + stored == 24000 + counts[4],
+                    "R1两种汽真实成交mB不守恒");
+            h.assertTrue(s.pressure() + 1e-8 >= s.minimumPressure(), "R1真实抽取越过共同出汽下限");
+            double carried = counts[3] + turbine.exhaust() + sink.executed + stored + s.totalVented();
+            double difference = initialHu[0] + .5 * (counts[2] + s.cold()) - s.totalHu() - carried;
+            double coolingBound = Math.max(0, h.getTick() - 6) * (s.waterCells() * s.settings().idleWaterCoolingHuPerCellPerTick()
+                    + s.steamCells() * s.settings().idleSteamCoolingHuPerCellPerTick());
+            h.assertTrue(Math.abs(s.steamHu() - s.steam()) < 1e-6 && difference >= -1e-6 && difference <= coolingBound + 1e-6,
+                    "R1两种汽真实成交HU不守恒：difference=" + difference);
+            var normalCap = capability(h, normal, Direction.WEST); var scCap = capability(h, ports.getFirst(), Direction.WEST);
+            CompoundTag before = s.save();
+            int normalSim = normalCap.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount();
+            int scSim = scCap.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount();
+            h.assertTrue(before.equals(s.save()), "R1观测模拟写入账本或消耗额度");
+            // 直邻罐已在本tick领取保压余量后，SIMULATE=0是合法结清；固定身份观察已付热库存，而不沿用旧自动切种短窗门。
+            boolean qualified = s.outputQualified(NORMAL);
+            if (s.removableSteam(NORMAL) > 0) pressureHeadTicks[0]++;
+            int producedSc = s.producedKind() == SUPERCRITICAL ? s.produced() : 0;
+            long drainedSc = Math.max(0, counts[6] + producedSc - s.steam(SUPERCRITICAL)); counts[6] = s.steam(SUPERCRITICAL);
+            if (s.pressure() < s.settings().supercriticalPressure() && drainedSc > 0) { lowPressureScTicks[0]++; counts[7] += drainedSc; }
+            if (qualified) { windows[0]++; windows[1]++; windows[2] = Math.max(windows[2], windows[0]); }
+            else if (windows[0] > 0) { windows[3]++; windows[0] = 0; }
+            if (h.getTick() == 100) { counts[5] = sink.executed + counts[3]; owner.selectMinimum(10); }
+            if (h.getTick() == 450) midpointNormal[0] = receiver.executed;
+            System.out.println("[pressure-r1] direct=" + direct + " t=" + h.getTick() + " P=" + s.pressure() + " Ts=" + s.steamTemperature()
+                    + " min=" + s.minimumPressure() + " produced=" + s.produced() + " hot=" + counts[1] + " paidInputHU=" + .5 * (counts[2] + s.cold())
+                    + " producedKind=" + s.producedKind() + " normalMb=" + s.steam(NORMAL) + " normalHU=" + s.steamHu(NORMAL)
+                    + " scMb=" + s.steam(SUPERCRITICAL) + " scHU=" + s.steamHu(SUPERCRITICAL) + " lowPressureScTicks=" + lowPressureScTicks[0] + " lowPressureScMb=" + counts[7]
+                    + " normalPaidStock=" + qualified + " stockWindow=" + windows[0] + " maxStockWindow=" + windows[2] + " paidStockTicks=" + windows[1] + " postTransactionHeadTicks=" + pressureHeadTicks[0]
+                    + " currentNormal=" + normalCap.getFluidInTank(0) + " oldNormalTanks=" + firstCaps[1].getTanks()
+                    + " oldScTanks=" + firstCaps[0].getTanks() + " normalSourceSim=" + normalSim + " scSourceSim=" + scSim
+                    + " normalFillSim=" + receiver.simulated + " normalFillExecute=" + receiver.executed + " normalStored=" + stored
+                    + " normalCapacity=" + receiver.getTankInventory().getCapacity()
+                    + " scFillSim=" + sink.simulated + " scFillExecute=" + sink.executed + " turbineReceived=" + counts[3]
+                    + " normalNative=" + r1Endpoint(h, normal.west(), Direction.EAST)
+                    + " scNative=" + r1Endpoint(h, ports.getFirst().west(), Direction.EAST));
+        });
+        h.runAfterDelay(900, () -> {
+            System.out.println("[pressure-r1-result] direct=" + direct + " normalPaidStockTicks=" + windows[1] + " maxStockWindow=" + windows[2]
+                    + " windows=" + windows[3] + " normalExecute=" + receiver.executed + " scExecute=" + sink.executed + " turbine=" + counts[3]
+                    + " lowPressureScTicks=" + lowPressureScTicks[0] + " lowPressureScMb=" + counts[7] + " postTransactionHeadTicks=" + pressureHeadTicks[0]
+                    + " normalAfter450=" + (receiver.executed - midpointNormal[0]));
+            h.assertTrue(counts[5] > 0, "R1下调前SC接收端未先成交");
+            h.assertTrue(sink.executed + counts[3] > counts[5], "R1下调后SC支路永久停流");
+            if (!direct) h.assertTrue(windows[1] >= 20, "R1长管未形成持续已付热普通库存，不能据此验收固定库存管路");
+            h.assertTrue(receiver.executed > 0, "R1匹配NORMAL支路长期饥饿：direct=" + direct + " eligible=" + windows[1] + " maxWindow=" + windows[2]);
+            h.assertTrue(receiver.executed > midpointNormal[0], "R1后半段NORMAL未继续真实成交");
+            h.assertTrue(lowPressureScTicks[0] > 0, "R1未覆盖已有SC在生产炉压线以下真实可抽的工况");
+            h.assertTrue(sink.nonSupercritical == 0 && receiver.nonNormal == 0, "R1纯过滤实际输出了错误汽种"); h.succeed();
+        });
+    }
+
+    /** 读取首段真实LayerII与LayerIII等待，反射仅取值，不创建或修改网络异常。 */
+    private static String r1Endpoint(GameTestHelper h, BlockPos pos, Direction side) {
+        var transport = BlockEntityBehaviour.get(h.getLevel(), h.absolutePos(pos), FluidTransportBehaviour.TYPE);
+        if (transport == null) return "direct";
+        var connection = transport.getConnection(side); if (connection == null) return "disconnected";
+        var flow = transport.getFlow(side); var network = (Optional<?>) field(connection, "network");
+        String result = "{phase=" + transport.phase + ",P=" + connection.getPressure() + ",flow="
+                + (flow == null ? "none" : flow.fluid + "/complete=" + flow.complete);
+        var flowSource = (Optional<?>) field(connection, "source");
+        if (flowSource.isPresent()) {
+            var source = (com.simibubi.create.content.fluids.FlowSource) flowSource.get();
+            var provider = source.provideHandler(); var handler = provider == null ? null : provider.getCapability();
+            result += ",flowSource=" + source.getClass().getSimpleName() + ",handler="
+                    + (handler == null ? "null" : handler.getTanks() + "/" + handler.drain(1, IFluidHandler.FluidAction.SIMULATE));
+        }
+        if (network.isPresent()) {
+            Object source = field(network.get(), "source");
+            var cap = source == null ? null : (IFluidHandler) ((com.simibubi.create.foundation.ICapabilityProvider<?>) source).getCapability();
+            result += ",pause=" + field(network.get(), "pauseBeforePropagation") + ",source=" + (cap == null ? "null" : cap.getTanks());
+        } else result += ",network=none";
+        return result + "}";
+    }
+
+    /** 原生创造接收端只统计原生fill结果，不改无限接收或库存语义。 */
+    private static final class R1CreativeTank extends CreativeFluidTankBlockEntity {
+        private long simulated, executed, nonSupercritical;
+        private R1CreativeTank(BlockPos pos, net.minecraft.world.level.block.state.BlockState state) { super(AllBlockEntityTypes.CREATIVE_FLUID_TANK.get(), pos, state); }
+        @Override protected SmartFluidTank createInventory() {
+            return new CreativeSmartFluidTank(getCapacityMultiplier(), this::onFluidStackChanged) {
+                @Override public int fill(FluidStack stack, FluidAction action) {
+                    int amount = super.fill(stack, action);
+                    if (action.simulate()) simulated += amount;
+                    else { executed += amount; if (!stack.is(BoilerContent.SUPERCRITICAL_STEAM.get())) nonSupercritical += amount; }
+                    return amount;
+                }
+            };
+        }
+    }
+
+    /** 普通罐仍由Create成型、储存和提供能力，仅累计真实fill的模拟与执行结果。 */
+    private static final class R1NormalTank extends FluidTankBlockEntity {
+        private long simulated, executed, nonNormal;
+        private R1NormalTank(BlockPos pos, net.minecraft.world.level.block.state.BlockState state) { super(AllBlockEntityTypes.FLUID_TANK.get(), pos, state); }
+        @Override protected SmartFluidTank createInventory() {
+            return new SmartFluidTank(getCapacityMultiplier(), this::onFluidStackChanged) {
+                @Override public int fill(FluidStack stack, FluidAction action) {
+                    int amount = super.fill(stack, action);
+                    if (action.simulate()) simulated += amount;
+                    else { executed += amount; if (!stack.is(com.iksxh.create_nuclear_industry.content.TurbineContent.STEAM.get())) nonNormal += amount; }
+                    return amount;
+                }
+            };
+        }
+    }
+
     /** 四口共同上行/跨炉顶管接单台真实汽轮机；3热口持续供料，16对付款上限288HU/t不变。 */
     private static void sharedTurbine(GameTestHelper h, TurbineState.Tier tier, boolean powered, boolean creative) {
         ExtensionBoilerGameTests.build(h, 6, 5, 6, 2);
@@ -105,7 +296,7 @@ public final class BoilerMultiportStopGameTests {
             var owner = ExtensionBoilerGameTests.owner(h); h.assertTrue(owner.currentForm() != null, "16对多汽口锅炉未成型");
             owner.selectMinimum(60); if (!creative) BoilerSteamSelectionGameTests.submit(h, ports.getLast(), 0);
             var tag = owner.ledger().save(); tag.putInt("Water", 16000); tag.putDouble("WaterHu", 54400);
-            tag.putInt("Steam", 28000); tag.putDouble("SteamHu", 28000); owner.ledger().load(tag); active[0] = true;
+            ExtensionBoilerGameTests.seedInventories(tag, 0, 0, 28000, 28000); owner.ledger().load(tag); active[0] = true;
             System.out.println("[shared-turbine] rotors=" + tier.rotorCount() + " powered=" + powered + " creative=" + creative + " topology=west4-manifold-up2-overRoof-east-down2, pipes=" + pipes);
         });
         h.onEachTick(() -> {
@@ -128,11 +319,11 @@ public final class BoilerMultiportStopGameTests {
                     + s.steamCells() * s.settings().idleSteamCoolingHuPerCellPerTick());
             h.assertTrue(Math.abs(s.steamHu() - s.steam()) < 1e-6 && heatDifference >= -1e-6 && heatDifference <= coolingBound + 1e-6,
                     "汇流真实汽轮机/创造罐HU不守恒：difference=" + heatDifference + " coolingBound=" + coolingBound);
-            int kind = s.supercritical() ? 1 : 0; if (previousKind[0] >= 0 && kind != previousKind[0]) changedKinds[0]++; previousKind[0] = kind;
+            int kind = s.outputQualified(SUPERCRITICAL) ? 1 : 0; if (previousKind[0] >= 0 && kind != previousKind[0]) changedKinds[0]++; previousKind[0] = kind;
             if (h.getTick() == 100) { counts[5] = counts[3]; owner.selectMinimum(10); }
             if (h.getTick() % 20 == 0) {
                 System.out.println("[shared-turbine] rotors=" + tier.rotorCount() + " creative=" + creative + " powered=" + powered + " t=" + h.getTick() + " pairs=" + s.pairs() + " Ts=" + s.steamTemperature()
-                        + " pressure=" + s.pressure() + " SC=" + s.supercritical() + " min=" + s.minimumPressure() + " hot=" + counts[1]
+                        + " pressure=" + s.pressure() + " SC=" + s.outputQualified(SUPERCRITICAL) + " min=" + s.minimumPressure() + " hot=" + counts[1]
                         + " inputPaidHU=" + .5 * (counts[2] + s.cold()) + " produced=" + s.produced() + " cumulativeProduced=" + counts[4]
                         + " received=" + counts[3] + " discarded=" + discarded + " vented=" + s.totalVented() + " turbineFlow=" + t.averageFlowMbPerTick() + " SU=" + t.totalSu()
                         + " changes=" + changedKinds[0]);
@@ -168,7 +359,7 @@ public final class BoilerMultiportStopGameTests {
             h.assertTrue(owner.currentForm() != null, "6×6×5汇流锅炉未成型");
             owner.selectMinimum(60); BoilerSteamSelectionGameTests.submit(h, ports.getLast(), 0);
             var seed = owner.ledger().save(); seed.putInt("Water", 16000); seed.putDouble("WaterHu", 65600);
-            seed.putInt("Steam", 28000); seed.putDouble("SteamHu", 28000); owner.ledger().load(seed);
+            ExtensionBoilerGameTests.seedInventories(seed, 0, 0, 28000, 28000); owner.ledger().load(seed);
             active[0] = true;
         });
         h.onEachTick(() -> {
@@ -182,7 +373,7 @@ public final class BoilerMultiportStopGameTests {
             if (h.getTick() == 80) { initial[0] = moved[0]; owner.selectMinimum(10); }
             if (h.getTick() % 20 == 0) {
                 System.out.println("[multiport] t=" + h.getTick() + " direct=" + direct + " steam=" + s.steam() + " HU=" + s.steamHu()
-                        + " pressure=" + s.pressure() + " Ts=" + s.steamTemperature() + " SC=" + s.supercritical() + " min=" + s.minimumPressure() + " received=" + moved[0] + " last=" + fluid);
+                        + " pressure=" + s.pressure() + " Ts=" + s.steamTemperature() + " SC=" + s.outputQualified(SUPERCRITICAL) + " min=" + s.minimumPressure() + " received=" + moved[0] + " last=" + fluid);
                 for (BlockPos p : ports) System.out.println("[multiport] port=" + p + " declared=" + capability(h, p, Direction.WEST).getFluidInTank(0)
                         + " sim=" + capability(h, p, Direction.WEST).drain(1, IFluidHandler.FluidAction.SIMULATE) + " " + pipe(h, p.west()));
             }

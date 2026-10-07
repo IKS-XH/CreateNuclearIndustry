@@ -1,5 +1,7 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
+import static com.iksxh.create_nuclear_industry.boiler.BoilerSteamInventoryKind.*;
+
 import com.iksxh.create_nuclear_industry.boiler.BoilerPartBlock;
 import com.iksxh.create_nuclear_industry.config.TurbineConfig;
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
@@ -42,7 +44,7 @@ public final class BoilerTurbineFlowGameTests {
     public static void continuousMediumAndRepeatedZero(GameTestHelper h) { scenario(h, TurbineConfig.settings().mediumTier()); }
     @GameTest(template = "flow_empty", timeoutTicks = 820)
     public static void continuousLargeAndRepeatedZero(GameTestHelper h) { scenario(h, TurbineConfig.settings().longTier()); }
-    @GameTest(template = "flow_empty", timeoutTicks = 820)
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 820)
     public static void continuousEmptyReceiver(GameTestHelper h) { scenario(h, null); }
 
     /** 复用已验证外部异种背压与每tick质量/实际焓断言，确认重建仅影响运输缓存。 */
@@ -184,7 +186,7 @@ public final class BoilerTurbineFlowGameTests {
             var owner = ExtensionBoilerGameTests.owner(h); h.assertTrue(owner.currentForm() != null, "锅炉连续夹具未成型");
             owner.selectMinimum(60);
             var seed = owner.ledger().save(); seed.putInt("Water", 8000); seed.putDouble("WaterHu", (14400 + 800) * 2D);
-            seed.putInt("Steam", 14400); seed.putDouble("SteamHu", 14400); owner.ledger().load(seed); initialized[0] = true;
+            ExtensionBoilerGameTests.seedInventories(seed, 0, 0, 14400, 14400); owner.ledger().load(seed); initialized[0] = true;
             System.out.println("[continuous-flow] " + label + " seed water=8000mB waterHU=30400 steam=14400mB steamHU=14400; native pump motors isolated from turbine");
         });
         h.onEachTick(() -> {
@@ -193,8 +195,7 @@ public final class BoilerTurbineFlowGameTests {
             totals[2] += drain(h, coldTank) + drain(h, coldTank2); totals[3] += drain(h, receiver);
             if (!initialized[0]) return;
             var s = ExtensionBoilerGameTests.owner(h).ledger(); totals[4] += s.produced();
-            // 本旧连续夹具主动提交当前实际汽种，保留原HU/流量/停转断言；产品汽口不再自动换种。
-            BoilerSteamSelectionGameTests.submit(h, STEAM, s.supercritical() ? 1 : 0);
+            // 口保持默认SC；生产普通汽时只积存对应池，不能为了旧连续测试逐tick追着全炉汽种切过滤。
             int turnover = tier == null ? 0 : ExtensionTurbineGameTests.owner(h, front).ledger().exhaust();
             h.assertTrue(s.steam() + s.totalVented() + totals[3] + turnover == 14400 + totals[4], "持续产汽质量不守恒："
                     + label + " steam=" + s.steam() + " vent=" + s.totalVented() + " received=" + totals[3] + " turnover=" + turnover + " produced=" + totals[4]);
@@ -207,7 +208,7 @@ public final class BoilerTurbineFlowGameTests {
                     + s.steamCells() * s.settings().idleSteamCoolingHuPerCellPerTick());
             h.assertTrue(heatDifference >= -1e-6 && heatDifference <= maximumCooling + 1e-6,
                     "持续流动HU不守恒：" + label + " unpaidOrLostHU=" + heatDifference + " maximumCoolingHU=" + maximumCooling);
-            int kind = s.supercritical() ? 2 : 1;
+            int kind = s.producedKind() == null ? previousKind[0] : s.producedKind() == SUPERCRITICAL ? 2 : 1;
             if (previousKind[0] != -1 && previousKind[0] != kind) kindChanges[0]++;
             previousKind[0] = kind;
             if (tick == 100) ExtensionBoilerGameTests.owner(h).selectMinimum(10);
@@ -224,7 +225,7 @@ public final class BoilerTurbineFlowGameTests {
             }
             if (tick % 20 == 0 || zeroTicks[0] == 1 || zeroTicks[0] == 8)
                 System.out.println("[continuous-flow] " + label + " t=" + tick + " min=" + s.minimumPressure() + " P=" + s.pressure() + " Tw=" + s.waterTemperature() + " Ts=" + s.steamTemperature()
-                        + " SC=" + s.supercritical() + " steam=" + s.steam() + " prod=" + s.produced() + " vent=" + s.vented() + " ventTotal=" + s.totalVented()
+                        + " SC=" + s.outputQualified(SUPERCRITICAL) + " steam=" + s.steam() + " prod=" + s.produced() + " vent=" + s.vented() + " ventTotal=" + s.totalVented()
                         + " hot=" + s.hot() + " cold=" + s.cold() + " water=" + s.water() + " received=" + totals[3] + " coldRemoved=" + totals[2] + machine);
             if (zeroTicks[0] >= 8) {
                 KineticBlockEntity a = (KineticBlockEntity) h.getBlockEntity(front.north()), b = (KineticBlockEntity) h.getBlockEntity(front.south(tier.length()));
@@ -243,7 +244,7 @@ public final class BoilerTurbineFlowGameTests {
             h.assertTrue(totals[2] > 10000 && totals[3] > 10000, "真实连续冷热/蒸汽链路未产生足量成交：cold=" + totals[2] + " received=" + totals[3]);
             if (tier != null) h.assertTrue(generated[0], "联动从未达到启动SU门槛");
             if (tier == null || tier.rotorCount() == TurbineConfig.settings().longTier().rotorCount())
-                h.assertTrue(kindChanges[0] >= 2, "持续工况未自然往返汽种资格门槛");
+                h.assertTrue(kindChanges[0] >= 2, "持续工况未覆盖实际新批次的两种归类");
             System.out.println("[continuous-flow] " + label + " complete received=" + totals[3] + " produced=" + totals[4] + " naturalKindChanges=" + kindChanges[0]); h.succeed();
         });
     }

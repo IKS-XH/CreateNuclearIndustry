@@ -46,7 +46,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     private final Map<BlockPos, Integer> steamEpochs = new HashMap<>();
     private final Map<BlockPos, Fluid> publishedSteamFluids = new HashMap<>();
     private int waterCapacityView = BoilerState.CAPACITY, steamCapacityView = BoilerState.CAPACITY;
-    private double paidView, waterTemperatureView, steamTemperatureView, pressureView, minimumView;
+    private double paidView, waterTemperatureView, steamTemperatureView, normalTemperatureView, scTemperatureView, pressureView, minimumView;
     private boolean available, formDirty = true, scanning;
     private BoilerStructure.Form cachedForm;
     private final Set<ChunkPos> missingChunks = new HashSet<>();
@@ -158,7 +158,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         pushSteam(membersReady ? form : null, now);
         ledger.vent(now, membersReady && clear);
         refreshSteamKind(form); refreshPipes();
-        steamPressure.refresh(level, membersReady ? form : null, p -> outputFluid(p) != null, ledger.settings().portFlowMbPerTick());
+        steamPressure.refresh(level, membersReady ? form : null, this::steamSourceReady, ledger.settings().portFlowMbPerTick());
         producedView = ledger.produced(); ventedView = ledger.vented();
         status = !ledger.settings().valid() || !heat.valid() ? "invalid" : form == null ? "unformed" : !membersReady ? "member_conflict"
                 : stopped ? "redstone" : ledger.valveBlocked() ? "vent_blocked"
@@ -209,12 +209,15 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         }
         dirtyPorts.clear();
     }
-    private Fluid outputFluid() { return !ledger.outputQualified() ? null
-            : ledger.supercritical() ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get(); }
     private Fluid outputFluid(BlockPos port) {
-        Fluid actual = outputFluid();
-        return actual != null && level.getBlockEntity(port) instanceof BoilerPortBlockEntity entity
-                && entity.selectedSteamKind().fluid() == actual ? actual : null;
+        return level.getBlockEntity(port) instanceof BoilerPortBlockEntity entity ? entity.selectedSteamKind().fluid() : null;
+    }
+    private BoilerSteamInventoryKind inventoryKind(BlockPos port) {
+        return level.getBlockEntity(port) instanceof BoilerPortBlockEntity entity ? entity.selectedSteamKind().inventoryKind() : null;
+    }
+    /** 原生源只随真实库存、付款和共同保压余量启停；本tick口额度耗尽不能撤销尚有存量的拓扑。 */
+    private boolean steamSourceReady(BlockPos port) {
+        var kind = inventoryKind(port); return kind != null && ledger.removableSteam(kind) > 0;
     }
     /** 单口选择变更立即撤销该口句柄；原生来源网络只在控制器tick刷新，不改变同tick额度。 */
     void steamSelectionChanged(BlockPos p) {
@@ -228,18 +231,16 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         steamEpochs.merge(p.immutable(), 1, Integer::sum);
         dirtyPorts.add(p.immutable()); if (level.hasChunkAt(p)) level.invalidateCapabilities(p);
     }
-    /** 服务端遥测只说明当前实际输出门槛，不改热工、外部流体或选择。 */
+    /** 服务端遥测只说明本口对应真实库存的输出门槛，不改热工、外部流体或选择。 */
     String steamPortStatus(BlockPos p) {
-        if (ledger.steam() == 0) return "no_steam";
-        if (!ledger.outputQualified()) return "warming";
-        if (!(level.getBlockEntity(p) instanceof BoilerPortBlockEntity entity)) return "unformed";
-        Fluid actual = ledger.supercritical() ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get();
-        if (entity.selectedSteamKind().fluid() != actual) return "waiting";
-        return ledger.pressure() > ledger.minimumPressure() ? "output" : "pressure";
+        var kind = inventoryKind(p); if (kind == null) return "unformed";
+        if (ledger.steam(kind) == 0) return "no_steam";
+        if (!ledger.outputQualified(kind)) return "warming";
+        return ledger.removableSteam(kind) > 0 ? "output" : "pressure";
     }
     /**
-     * 服务端汽种跨温压门槛后只撤销输出资格改变的汽口；结构代次和其他端口保持有效。
-     * 在真实抽取后立即撤销旧汽句柄，管网拓扑重建留在控制器tick，避免改动Create正在迭代的交易。
+     * 固定端口选择身份，只有选择或结构改变才撤销句柄；压力、温度和两种库存变化均由旧句柄动态读取。
+     * 来源真实空或欠热仍由原生模拟拒取，不广播全炉瞬时汽种变化。
      */
     private void refreshSteamKind(BoilerStructure.Form form) {
         if (form == null) return;
@@ -252,7 +253,8 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     private void pushSteam(BoilerStructure.Form form, long now) {
         if (form == null) return;
         for (BlockPos p : form.steamPorts()) {
-            int amount = ledger.remainingDrain(p, now); if (amount == 0) continue;
+            var kind = inventoryKind(p); if (kind == null) continue;
+            int amount = ledger.remainingDrain(kind, p, now); if (amount == 0) continue;
             Direction side = form.outward(p); BlockPos targetPos = p.relative(side);
             if (!level.hasChunkAt(targetPos) || FluidPropagator.getPipe(level, targetPos) != null) continue;
             IFluidHandler target = level.getCapability(Capabilities.FluidHandler.BLOCK, targetPos, side.getOpposite());
@@ -262,11 +264,11 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             int simulated = Math.min(amount, target.fill(new FluidStack(transactionFluid, amount), IFluidHandler.FluidAction.SIMULATE));
             if (simulated > 0) {
                 int actual = target.fill(new FluidStack(transactionFluid, simulated), IFluidHandler.FluidAction.EXECUTE);
-                ledger.drainSteam(p, Math.min(simulated, actual), false, now); refreshSteamKind(form);
+                ledger.drainSteam(kind, p, Math.min(simulated, actual), false, now);
             }
         }
     }
-    /** 四类端口能力只有外向面可用；结构代次变化后全部旧句柄永久失效，汽种变化仅撤销旧汽句柄。 */
+    /** 四类端口能力只有外向面可用；结构代次变化使旧句柄永久失效，单口选择只撤销该口旧汽句柄。 */
     public IFluidHandler port(BlockPos p, Direction side, boolean ignoredInput) { return port(p, side); }
     public IFluidHandler port(BlockPos p, Direction side) {
         if (level == null || side == null || level.isClientSide) return null;
@@ -280,9 +282,11 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     private final class Port implements IFluidHandler, SharedFluidReceiver {
         private final BlockPos pos; private final Direction side; private final int kind, issued = epoch, issuedSteam;
         private final Fluid steamFluid;
+        private final BoilerSteamInventoryKind steamInventory;
         private Port(BlockPos pos, Direction side, int kind) {
             this.pos = pos; this.side = side; this.kind = kind;
             issuedSteam = steamEpochs.getOrDefault(pos, 0); steamFluid = kind == 1 ? outputFluid(pos) : null;
+            steamInventory = kind == 1 ? inventoryKind(pos) : null;
         }
         private boolean valid() {
             if (issued != epoch || !current() || level.isClientSide
@@ -292,7 +296,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         }
         private Fluid fluid() { return kind == 0 ? Fluids.WATER : kind == 1 ? steamFluid
                 : kind == 2 ? ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get() : ModFluids.COMPOUND_COOLANT_SOURCE.get(); }
-        private int amount() { return kind == 0 ? ledger.water() : kind == 1 ? ledger.steam() : kind == 2 ? ledger.hot() : ledger.cold(); }
+        private int amount() { return kind == 0 ? ledger.water() : kind == 1 ? steamInventory == null ? 0 : ledger.steam(steamInventory) : kind == 2 ? ledger.hot() : ledger.cold(); }
         @Override public Limits sharedFluidLimits() {
             if (!valid() || kind != 0 && kind != 2) return null;
             int room = kind == 0 ? Math.max(0, ledger.waterCapacity() - ledger.water()) : Math.max(0, ledger.hotCapacity() - ledger.hot());
@@ -313,13 +317,10 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         @Override public FluidStack drain(FluidStack stack, FluidAction action) { return valid() && stack.is(fluid()) ? drain(stack.getAmount(), action) : FluidStack.EMPTY; }
         @Override public FluidStack drain(int amount, FluidAction action) {
             if (!valid() || kind != 1 && kind != 3 || kind == 1 && steamFluid == null) return FluidStack.EMPTY;
-            // 抽取可跨越汽种门槛；返回交易前声明的汽种，再以真实比焓扣账并撤销旧汽缓存。
+            // 交易始终取本口选定库存，按其真实比焓扣账；跨生产温压门槛不改变已有汽身份或句柄。
             Fluid transactionFluid = fluid();
-            int n = kind == 1 ? ledger.drainSteam(pos, amount, action.simulate(), level.getGameTime()) : ledger.drainCold(pos, amount, action.simulate(), level.getGameTime());
-            if (n > 0 && action.execute()) {
-                if (kind == 1) refreshSteamKind(cachedForm);
-                setChanged();
-            }
+            int n = kind == 1 ? ledger.drainSteam(steamInventory, pos, amount, action.simulate(), level.getGameTime()) : ledger.drainCold(pos, amount, action.simulate(), level.getGameTime());
+            if (n > 0 && action.execute()) setChanged();
             return n > 0 ? new FluidStack(transactionFluid, n) : FluidStack.EMPTY;
         }
     }
@@ -335,8 +336,10 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             tag.putInt("Width", widthView); tag.putInt("Height", heightView); tag.putInt("Depth", depthView); tag.putInt("Pairs", pairsView);
             tag.putInt("WaterCapacity", ledger.waterCapacity()); tag.putInt("SteamCapacity", ledger.steamCapacity());
             tag.putDouble("Tw", ledger.waterTemperature()); tag.putDouble("Ts", ledger.steamTemperature());
+            tag.putDouble("NormalTs", ledger.steamTemperature(BoilerSteamInventoryKind.NORMAL));
+            tag.putDouble("SupercriticalTs", ledger.steamTemperature(BoilerSteamInventoryKind.SUPERCRITICAL));
             tag.putDouble("Pressure", ledger.pressure()); tag.putDouble("Minimum", ledger.minimumPressure());
-            tag.putInt("SteamKind", !ledger.outputQualified() ? 0 : ledger.supercritical() ? 2 : 1);
+            tag.putInt("SteamKind", ledger.producedKind() == null ? 0 : ledger.producedKind() == BoilerSteamInventoryKind.SUPERCRITICAL ? 2 : 1);
         }
     }
     @Override protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
@@ -346,6 +349,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             widthView = tag.getInt("Width"); heightView = tag.getInt("Height"); depthView = tag.getInt("Depth"); pairsView = tag.getInt("Pairs");
             waterCapacityView = tag.getInt("WaterCapacity"); steamCapacityView = tag.getInt("SteamCapacity");
             waterTemperatureView = tag.getDouble("Tw"); steamTemperatureView = tag.getDouble("Ts"); pressureView = tag.getDouble("Pressure"); minimumView = tag.getDouble("Minimum");
+            normalTemperatureView = tag.getDouble("NormalTs"); scTemperatureView = tag.getDouble("SupercriticalTs");
         }
     }
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
@@ -354,6 +358,9 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         tooltip.add(Component.translatable(key + "state." + status));
         tooltip.add(Component.translatable(key + "geometry", widthView, heightView, depthView, ledger.waterCells(), ledger.steamCells(), pairsView));
         tooltip.add(Component.translatable(key + "tanks", ledger.water(), waterCapacityView, ledger.steam(), steamCapacityView));
+        tooltip.add(Component.translatable(key + "steam_inventories", ledger.steam(BoilerSteamInventoryKind.NORMAL), ledger.steam(BoilerSteamInventoryKind.SUPERCRITICAL)));
+        // 比热/沸点可由服务端配置；客户端只显示服务器给出的实际汽温，不用默认配置重算保存HU。
+        tooltip.add(Component.translatable(key + "steam_inventory_temperatures", format(normalTemperatureView), format(scTemperatureView)));
         tooltip.add(Component.translatable(key + "coolant", ledger.hot(), ledger.hotCapacity(), ledger.cold(), ledger.coldCapacity()));
         tooltip.add(Component.translatable(key + "temperature", format(waterTemperatureView), format(steamTemperatureView)));
         tooltip.add(Component.translatable(key + "real_pressure", format(pressureView * 100), format(minimumView * 100)));

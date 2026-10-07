@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.boiler;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static com.iksxh.create_nuclear_industry.boiler.BoilerSteamInventoryKind.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import org.junit.jupiter.api.Test;
@@ -10,12 +11,12 @@ class BoilerStateTest {
     private static final BlockPos A = BlockPos.ZERO, B = new BlockPos(1, 0, 0);
     private static final double EPS = 1e-6;
     private static BoilerState state(int water, int steam, double waterHu, double steamHu) {
-        var s = new BoilerState(); var tag = s.save(); tag.putInt("Water", water); tag.putInt("Steam", steam);
-        tag.putDouble("WaterHu", waterHu); tag.putDouble("SteamHu", steamHu); s.load(tag); return s;
+        var s = new BoilerState(); var tag = s.save(); tag.putInt("Water", water); tag.putInt("SupercriticalSteam", steam);
+        tag.putDouble("WaterHu", waterHu); tag.putDouble("SupercriticalSteamHu", steamHu); s.load(tag); return s;
     }
     @Test void actualThresholdsChooseSteamAndMinimumIsIndependent() {
         var lowPressure = state(0, 8999, 0, 8999);
-        assertFalse(lowPressure.supercritical(), "实际炉压未达门槛不能标识超临界蒸汽");
+        assertTrue(lowPressure.outputQualified(SUPERCRITICAL), "已生成且已付热的SC不受生产炉压门槛锁住");
         lowPressure.setMinimumPressure(.17);
         assertEquals(.17, lowPressure.minimumPressure(), EPS);
         assertTrue(lowPressure.outputQualified(), "已付汽化热的普通蒸汽仍可出汽");
@@ -37,7 +38,7 @@ class BoilerStateTest {
         var s = state(0, 9000, 0, 7200);
         for (int t = 1; t <= 100; t++) s.tick(t, 1, 18, true, false);
         assertEquals(9000, s.steamHu(), EPS); assertEquals(2, s.steamTemperature(), EPS); assertEquals(.5, s.pressure(), EPS);
-        assertEquals(0, s.drainSteam(A, 256, false, 101));
+        assertEquals(0, s.drainSteam(SUPERCRITICAL, A, 256, false, 101));
     }
     @Test void fullLowTemperatureTankStillReheats() {
         var s = state(0, 18000, 0, 14400); assertTrue(s.demand(true) > 0);
@@ -53,11 +54,11 @@ class BoilerStateTest {
     }
     @Test void multiplePortsCannotDuplicatePressureHeadroomAndCarryActualEnthalpy() {
         var s = state(0, 11100, 0, 11100); var before = s.save();
-        assertEquals(256, s.drainSteam(A, 256, true, 2)); assertEquals(256, s.drainSteam(B, 256, true, 2)); assertEquals(before, s.save());
-        assertEquals(256, s.drainSteam(A, 256, false, 2)); assertEquals(44, s.drainSteam(B, 256, false, 2));
+        assertEquals(256, s.drainSteam(SUPERCRITICAL, A, 256, true, 2)); assertEquals(256, s.drainSteam(SUPERCRITICAL, B, 256, true, 2)); assertEquals(before, s.save());
+        assertEquals(256, s.drainSteam(SUPERCRITICAL, A, 256, false, 2)); assertEquals(44, s.drainSteam(SUPERCRITICAL, B, 256, false, 2));
         assertEquals(10800, s.steam()); assertEquals(.6, s.pressure(), EPS); assertEquals(10800, s.steamHu(), EPS);
-        assertEquals(2, s.steamTemperature(), EPS); assertEquals(0, s.drainSteam(B, 1, false, 2));
-        s.setMinimumPressure(.17); double energy = s.steamHu(); int n = s.drainSteam(B, 256, false, 3);
+        assertEquals(2, s.steamTemperature(), EPS); assertEquals(0, s.drainSteam(SUPERCRITICAL, B, 1, false, 2));
+        s.setMinimumPressure(.17); double energy = s.steamHu(); int n = s.drainSteam(SUPERCRITICAL, B, 256, false, 3);
         assertEquals(energy - n, s.steamHu(), EPS); assertEquals(2, s.steamTemperature(), EPS);
     }
     @Test void singleMinimumKeepsEveryPercentWithoutChangingInventoryOrHeat() {
@@ -67,27 +68,27 @@ class BoilerStateTest {
             assertEquals(percent / 100D, s.minimumPressure(), EPS);
             assertEquals(12000, s.steam()); assertEquals(12000, s.totalHu(), EPS);
             assertEquals(percent == 100 ? 0 : Math.min(256, Math.max(0, 12000 - percent * 180)),
-                    s.drainSteam(A, 256, true, 1));
+                    s.drainSteam(SUPERCRITICAL, A, 256, true, 1));
             var restored = new BoilerState(); restored.load(s.save()); restored.setSettings(BoilerState.DEFAULT);
             assertEquals(s.save(), restored.save());
         }
     }
     @Test void bothActualThresholdsAndPaidLatentHeatAreRequired() {
-        assertTrue(state(0, 9000, 0, 9000).supercritical());
-        assertFalse(state(0, 9000, 0, 8999).supercritical());
-        assertFalse(state(0, 8999, 0, 8999).supercritical());
-        assertTrue(state(0, 9001, 0, 9001).supercritical());
+        assertTrue(state(0, 9000, 0, 9000).outputQualified(SUPERCRITICAL));
+        assertFalse(state(0, 9000, 0, 8999).outputQualified(SUPERCRITICAL));
+        assertTrue(state(0, 8999, 0, 8999).outputQualified(SUPERCRITICAL));
+        assertTrue(state(0, 9001, 0, 9001).outputQualified(SUPERCRITICAL));
         var unpaid = state(0, 12000, 0, 9599); unpaid.setMinimumPressure(0);
-        assertFalse(unpaid.outputQualified()); assertFalse(unpaid.supercritical());
-        assertEquals(0, unpaid.drainSteam(A, 256, false, 1));
+        assertFalse(unpaid.outputQualified()); assertFalse(unpaid.outputQualified(SUPERCRITICAL));
+        assertEquals(0, unpaid.drainSteam(SUPERCRITICAL, A, 256, false, 1));
         assertFalse(state(0, 0, 0, 20000).outputQualified());
         var s = state(0, 12000, 0, 12000); s.setMinimumPressure(0); double before = s.totalHu();
-        assertEquals(256, s.drainSteam(A, 256, false, 1));
-        assertEquals(before - 256, s.totalHu(), EPS); assertEquals(0, s.drainSteam(A, 256, false, 1));
+        assertEquals(256, s.drainSteam(SUPERCRITICAL, A, 256, false, 1));
+        assertEquals(before - 256, s.totalHu(), EPS); assertEquals(0, s.drainSteam(SUPERCRITICAL, A, 256, false, 1));
     }
     @Test void coolingKeepsLatentHeatAndCriticalRestorationMustPayAgain() {
         var s = state(0, 9000, 0, 9000); s.tick(1, 1, 0, true, true); s.prepare(100000, 1);
-        assertEquals(7200, s.steamHu(), EPS); assertEquals(1, s.steamTemperature(), EPS); assertTrue(s.outputQualified()); assertFalse(s.supercritical());
+        assertEquals(7200, s.steamHu(), EPS); assertEquals(1, s.steamTemperature(), EPS); assertFalse(s.outputQualified(SUPERCRITICAL));
         assertEquals(9000, s.steam());
     }
     @Test void redstoneResidualProductionSpendsExistingHeatOnly() {

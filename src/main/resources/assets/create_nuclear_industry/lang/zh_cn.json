@@ -291,7 +291,9 @@
   "gui.create_nuclear_industry.boiler.state.warming": "正在暖炉",
   "gui.create_nuclear_industry.boiler.state.running": "正在产汽",
   "gui.create_nuclear_industry.boiler.state.invalid": "配置无效：已安全停机",
-  "gui.create_nuclear_industry.boiler.tanks": "给水 %s / %s mB，蒸汽 %s / %s mB",
+  "gui.create_nuclear_industry.boiler.tanks": "给水 %s / %s mB，汽区共用 %s / %s mB",
+  "gui.create_nuclear_industry.boiler.steam_inventories": "蒸汽 %s mB，超临界蒸汽 %s mB",
+  "gui.create_nuclear_industry.boiler.steam_inventory_temperatures": "汽温：蒸汽 %s，超临界蒸汽 %s",
   "gui.create_nuclear_industry.boiler.warm": "炉体热 %s / %s HU",
   "gui.create_nuclear_industry.boiler.flow": "本 tick 核热 %s HU，产汽 %s mB",
   "gui.create_nuclear_industry.boiler.pressure": "库存压力 %s%%",
@@ -389,9 +391,9 @@
   "gui.create_nuclear_industry.boiler.steam_port.select": "输出汽种",
   "gui.create_nuclear_industry.boiler.steam_port.selected": "选择：%s",
   "gui.create_nuclear_industry.boiler.steam_port.state.unformed": "锅炉未成型",
-  "gui.create_nuclear_industry.boiler.steam_port.state.no_steam": "炉内无汽",
-  "gui.create_nuclear_industry.boiler.steam_port.state.waiting": "等待汽种匹配",
-  "gui.create_nuclear_industry.boiler.steam_port.state.output": "汽种匹配，可出汽",
+  "gui.create_nuclear_industry.boiler.steam_port.state.no_steam": "所选蒸汽库存为空",
+  "gui.create_nuclear_industry.boiler.steam_port.state.waiting": "等待所选蒸汽库存",
+  "gui.create_nuclear_industry.boiler.steam_port.state.output": "所选库存可出汽",
   "gui.create_nuclear_industry.boiler.steam_port.state.pressure": "等待出汽压力",
-  "gui.create_nuclear_industry.boiler.steam_port.state.warming": "汽温不足"
+  "gui.create_nuclear_industry.boiler.steam_port.state.warming": "等待库存再热"
 }

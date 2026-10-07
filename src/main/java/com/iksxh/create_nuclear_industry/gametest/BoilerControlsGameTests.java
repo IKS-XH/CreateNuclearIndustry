@@ -1,5 +1,7 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
+import static com.iksxh.create_nuclear_industry.boiler.BoilerSteamInventoryKind.*;
+
 import com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity;
 import com.iksxh.create_nuclear_industry.content.BoilerContent;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
@@ -39,8 +41,9 @@ public final class BoilerControlsGameTests {
     private static IFluidHandler handler(GameTestHelper h, BlockPos p, Direction side) {
         return h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(p), side);
     }
-    private static void seed(GameTestHelper h, int steam, double hu, int cold) {
-        var tag = owner(h).ledger().save(); tag.putInt("Steam", steam); tag.putDouble("SteamHu", hu); tag.putInt("Cold", cold);
+    private static void seed(GameTestHelper h, int steam, double hu, int cold, boolean sc) {
+        var tag = owner(h).ledger().save(); ExtensionBoilerGameTests.seedInventories(tag, sc ? 0 : steam, sc ? 0 : hu, sc ? steam : 0, sc ? hu : 0);
+        tag.putInt("Cold", cold);
         owner(h).ledger().load(tag);
     }
     /** 使用Create真实包的服务端分发入口；FakePlayer只提供反馈音上下文，不能绕开netId路由。 */
@@ -51,7 +54,7 @@ public final class BoilerControlsGameTests {
             apply.setAccessible(true); apply.invoke(packet, FakePlayerFactory.getMinecraft(h.getLevel()), owner(h));
         } catch (ReflectiveOperationException e) { throw new IllegalStateException("Create原生数值包无法提交", e); }
     }
-    @GameTest(template = "boiler_empty", timeoutTicks = 60)
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 60)
     public static void nativePercentSettingsPersistAndCrossingDrainKeepsDeclaredFluid(GameTestHelper h) {
         ExtensionBoilerGameTests.build(h, 5, 5, 5, 2);
         int[] values = {17, 43, 70, 0, 100};
@@ -70,26 +73,26 @@ public final class BoilerControlsGameTests {
             });
         }
         h.runAfterDelay(22, () -> {
-            submit(h, 0); seed(h, 9100, 9100, 1234);
+            submit(h, 0); seed(h, 9100, 9100, 1234, true);
             var cold = handler(h, COLD, Direction.NORTH); var steam = handler(h, STEAM, Direction.WEST); var s = owner(h).ledger();
             var before = s.save(); FluidStack simulated = steam.drain(256, IFluidHandler.FluidAction.SIMULATE);
             h.assertTrue(simulated.is(BoilerContent.SUPERCRITICAL_STEAM.get()) && before.equals(s.save()), "模拟汽种错误或写入账本");
             FluidStack actual = steam.drain(simulated, IFluidHandler.FluidAction.EXECUTE);
             h.assertTrue(actual.is(simulated.getFluid()) && actual.getAmount() == 256 && s.steam() == 8844 && s.steamHu() == 8844,
                     "跨压力门槛后返回了另一汽种或未扣实际焓");
-            h.assertTrue(steam.drain(256, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "旧汽网络generic drain抽走新汽");
+            h.assertTrue(steam.getTanks() == 1 && steam.drain(256, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "跨炉压线撤销身份或复制同tick口额度");
             BoilerSteamSelectionGameTests.submit(h, STEAM, 0);
             var next = handler(h, STEAM, Direction.WEST);
-            h.assertTrue(next.getFluidInTank(0).is(TurbineContent.STEAM.get()) && cold.getTanks() == 1, "汽种未更新或连带撤销冷口");
+            h.assertTrue(next.getFluidInTank(0).isEmpty() && steam.getTanks() == 0 && cold.getTanks() == 1, "无普通库存却降级输出SC或连带撤销冷口");
             h.assertTrue(next.drain(256, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "重建汽口复制同tick额度");
             h.setBlock(BASE, Blocks.AIR); owner(h).invalidateForm(); h.assertTrue(cold.getTanks() == 0, "真实拆炉未撤销旧冷口");
             h.setBlock(BASE, BoilerContent.CASING.get()); owner(h).invalidateForm();
             h.assertTrue(owner(h).currentForm() != null && cold.getTanks() == 0, "重装后结构旧句柄复活");
-            System.out.println("[boiler-controls] native packet percentages 17/43/70/0/100 persisted; crossing drain SC->steam returned declared SC, 256mB/256HU; stale generic rejected; structure epoch preserved");
+            System.out.println("[boiler-controls] native percentages 17/43/70/0/100 persisted; existing SC below Psc returned SC256mB/256HU; selecting empty normal rejected; structure epoch preserved");
             h.succeed();
         });
     }
-    @GameTest(template = "boiler_empty", timeoutTicks = 130)
+    @GameTest(template = "inventory_empty", templateNamespace = "create_nuclear_industry_boiler_inventory", timeoutTicks = 130)
     public static void poweredColdPipeSurvivesPressureAndAutomaticSteamChanges(GameTestHelper h) {
         ExtensionBoilerGameTests.build(h, 5, 5, 5, 2);
         BlockPos near = COLD.north(), pump = COLD.north(2), far = COLD.north(3), tank = COLD.north(4);
@@ -103,25 +106,25 @@ public final class BoilerControlsGameTests {
         ((CreativeMotorBlockEntity) h.getBlockEntity(motor)).generatedSpeed.setValue(256);
         for (BlockPos p : new BlockPos[]{near, far}) FluidPropagator.propagateChangedPipe(h.getLevel(), h.absolutePos(p), h.getBlockState(p));
         IFluidHandler[] oldCold = {null}; int[] received = {0, 0};
-        h.runAfterDelay(4, () -> { seed(h, 12000, 11400, 30000); oldCold[0] = handler(h, COLD, Direction.NORTH); });
+        h.runAfterDelay(4, () -> { seed(h, 12000, 11400, 30000, false); oldCold[0] = handler(h, COLD, Direction.NORTH); });
         h.runAfterDelay(35, () -> {
             var target = handler(h, tank, Direction.SOUTH); received[0] = target.getFluidInTank(0).getAmount();
             h.assertTrue(((PumpBlockEntity) h.getBlockEntity(pump)).getSpeed() != 0 && received[0] > 0, "真实冷液泵尚未出流");
-            submit(h, 43); seed(h, 12000, 12400, owner(h).ledger().cold());
+            submit(h, 43); seed(h, 12000, 12400, owner(h).ledger().cold(), true);
         });
         h.runAfterDelay(60, () -> {
             received[1] = handler(h, tank, Direction.SOUTH).getFluidInTank(0).getAmount();
-            h.assertTrue(received[1] > received[0] && owner(h).ledger().supercritical() && oldCold[0].getTanks() == 1,
-                    "调压或普通->超临界使冷液停流/句柄失效");
-            submit(h, 100); seed(h, 12000, 9600, owner(h).ledger().cold());
+            h.assertTrue(received[1] > received[0] && owner(h).ledger().outputQualified(SUPERCRITICAL) && oldCold[0].getTanks() == 1,
+                    "调压或替换双池夹具使冷液停流/句柄失效");
+            submit(h, 100); seed(h, 12000, 9600, owner(h).ledger().cold(), false);
         });
         h.runAfterDelay(90, () -> {
             var fluid = handler(h, tank, Direction.SOUTH).getFluidInTank(0);
             h.assertTrue(fluid.is(ModFluids.COMPOUND_COOLANT_SOURCE.get()) && fluid.getAmount() > received[1]
-                    && !owner(h).ledger().supercritical() && oldCold[0].getTanks() == 1, "超临界->普通或100%设置使冷液停流");
+                    && !owner(h).ledger().outputQualified(SUPERCRITICAL) && oldCold[0].getTanks() == 1, "双池夹具或100%设置使冷液停流");
             h.assertTrue(fluid.getAmount() + owner(h).ledger().cold() == 30000, "真实冷液管路丢量或复制");
             System.out.println("[boiler-controls] cold native pump continuous: " + received[0] + " -> " + received[1] + " -> " + fluid.getAmount()
-                    + "; original capability alive across pressure 43/100 and steam->SC->steam; coolant total=30000mB");
+                    + "; original capability alive across pressure 43/100 and explicit inventory fixtures; coolant total=30000mB");
             h.succeed();
         });
     }
@@ -131,7 +134,7 @@ public final class BoilerControlsGameTests {
         BlockPos pipe = STEAM.west(), tank = STEAM.west(2);
         h.setBlock(pipe, AllBlocks.FLUID_PIPE.get()); h.setBlock(tank, AllBlocks.FLUID_TANK.get());
         int[] withdrawn = {0}; boolean[] tracking = {false}; int[] previousAmount = {0}; double[] previousHu = {0};
-        h.runAfterDelay(4, () -> { submit(h, 0); BoilerSteamSelectionGameTests.submit(h, STEAM, 0); seed(h, 14000, 11200, 0); tracking[0] = true; previousAmount[0] = 14000; previousHu[0] = 11200; });
+        h.runAfterDelay(4, () -> { submit(h, 0); BoilerSteamSelectionGameTests.submit(h, STEAM, 0); seed(h, 14000, 11200, 0, false); tracking[0] = true; previousAmount[0] = 14000; previousHu[0] = 11200; });
         // 每tick核对真实接收量；有汽种差异却被generic抽出后丢弃，会立刻破坏质量等式。
         h.onEachTick(() -> {
             if (!tracking[0]) return;
@@ -150,14 +153,14 @@ public final class BoilerControlsGameTests {
             var target = handler(h, tank, Direction.EAST); var fluid = target.getFluidInTank(0);
             h.assertTrue(fluid.is(TurbineContent.STEAM.get()) && fluid.getAmount() > 0, "原生管路未送普通蒸汽");
             withdrawn[0] += target.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE).getAmount();
-            var s = owner(h).ledger(); seed(h, s.steam(), s.steam() * 1.05, 0); previousHu[0] = s.steamHu(); previousAmount[0] = s.steam();
+            var s = owner(h).ledger(); seed(h, s.steam(), s.steam() * 1.05, 0, true); previousHu[0] = s.steamHu(); previousAmount[0] = s.steam();
             BoilerSteamSelectionGameTests.submit(h, STEAM, 1);
         });
         h.runAfterDelay(65, () -> {
             var target = handler(h, tank, Direction.EAST); var fluid = target.getFluidInTank(0);
             h.assertTrue(fluid.is(BoilerContent.SUPERCRITICAL_STEAM.get()) && fluid.getAmount() > 0, "汽种变化后原生管路未自行更新为超临界蒸汽");
-            // 保留外罐超临界蒸汽；降低炉内夹具显热并显式选择普通汽，异种罐必须保持真实背压。
-            submit(h, 0); var s = owner(h).ledger(); seed(h, s.steam(), s.steam() * .8, 0); previousHu[0] = s.steamHu(); previousAmount[0] = s.steam();
+            // 保留外罐SC；仅替换本版本测试库存并显式选择普通汽，产品不得转换外部背压。
+            submit(h, 0); var s = owner(h).ledger(); seed(h, s.steam(), s.steam() * .8, 0, false); previousHu[0] = s.steamHu(); previousAmount[0] = s.steam();
             BoilerSteamSelectionGameTests.submit(h, STEAM, 0);
         });
         h.runAfterDelay(82, () -> {

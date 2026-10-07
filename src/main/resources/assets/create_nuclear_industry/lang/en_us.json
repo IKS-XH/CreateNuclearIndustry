@@ -291,7 +291,9 @@
   "gui.create_nuclear_industry.boiler.state.warming": "Warming boiler",
   "gui.create_nuclear_industry.boiler.state.running": "Producing steam",
   "gui.create_nuclear_industry.boiler.state.invalid": "Invalid configuration: safely stopped",
-  "gui.create_nuclear_industry.boiler.tanks": "Water %s / %s mB; steam %s / %s mB",
+  "gui.create_nuclear_industry.boiler.tanks": "Water %s / %s mB; shared steam space %s / %s mB",
+  "gui.create_nuclear_industry.boiler.steam_inventories": "Steam %s mB; supercritical steam %s mB",
+  "gui.create_nuclear_industry.boiler.steam_inventory_temperatures": "Steam temperatures: ordinary %s; supercritical %s",
   "gui.create_nuclear_industry.boiler.warm": "Boiler heat %s / %s HU",
   "gui.create_nuclear_industry.boiler.flow": "This tick: %s HU, %s mB steam",
   "gui.create_nuclear_industry.boiler.pressure": "Inventory pressure %s%%",
@@ -369,7 +371,7 @@
   "gui.create_nuclear_industry.shielded_assembly.material": "%s: %s / %s",
   "block.create_nuclear_industry.high_pressure_boiler_hot_coolant_port": "High-Pressure Boiler Hot Coolant Inlet",
   "block.create_nuclear_industry.high_pressure_boiler_cold_coolant_port": "High-Pressure Boiler Cold Coolant Outlet",
-  "gui.create_nuclear_industry.boiler.current_steam": "Current steam: %s",
+  "gui.create_nuclear_industry.boiler.current_steam": "Current production: %s",
   "gui.create_nuclear_industry.boiler.steam_kind.normal": "Steam",
   "gui.create_nuclear_industry.boiler.steam_kind.supercritical": "Supercritical Steam",
   "gui.create_nuclear_industry.boiler.steam_kind.none": "None",
@@ -389,9 +391,9 @@
   "gui.create_nuclear_industry.boiler.steam_port.select": "Output steam type",
   "gui.create_nuclear_industry.boiler.steam_port.selected": "Selected: %s",
   "gui.create_nuclear_industry.boiler.steam_port.state.unformed": "Boiler not formed",
-  "gui.create_nuclear_industry.boiler.steam_port.state.no_steam": "No steam in boiler",
-  "gui.create_nuclear_industry.boiler.steam_port.state.waiting": "Waiting for matching steam",
-  "gui.create_nuclear_industry.boiler.steam_port.state.output": "Matching steam, output ready",
+  "gui.create_nuclear_industry.boiler.steam_port.state.no_steam": "Selected steam inventory empty",
+  "gui.create_nuclear_industry.boiler.steam_port.state.waiting": "Waiting for selected steam inventory",
+  "gui.create_nuclear_industry.boiler.steam_port.state.output": "Selected inventory ready to output",
   "gui.create_nuclear_industry.boiler.steam_port.state.pressure": "Waiting for output pressure",
-  "gui.create_nuclear_industry.boiler.steam_port.state.warming": "Steam temperature too low"
+  "gui.create_nuclear_industry.boiler.steam_port.state.warming": "Waiting for inventory reheating"
 }
