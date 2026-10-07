@@ -2,7 +2,7 @@
 
 **后续状态（2026-10-04）：** 用户确认最新运行手测通过，01B随首期换热器及01C修复合入main，见[最终验收](../exchanger-01c/ACCEPTANCE.md)。以下为原候选交付记录。
 
-**状态：候选整改、定向自动验证及独立审查通过，等待客户端人工验收。** 用户确认布局及写集见[01B任务卡](../../../superpowers/plans/2026-10-04-heat-exchanger-cost-model-revision.md)。本页接续[01A交付](../../2026-10-03/exchanger-01a/README.md)，旧21格配方和笼架模型由本批替代。
+**状态：候选整改、定向自动验证及独立审查通过，等待客户端人工验收。** 用户确认布局及写集见[01B任务卡](../../../archive/2026-10-08-completed-plans/2026-10-04-heat-exchanger-cost-model-revision.md)。本页接续[01A交付](../../2026-10-03/exchanger-01a/README.md)，旧21格配方和笼架模型由本批替代。
 
 ## 新制造与外观
 

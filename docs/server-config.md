@@ -2,9 +2,9 @@
 
 > **版本边界：** 三档结构、256RPM、01E共享双轴、01F流量效率/微周转、01G停机及冷凝配置已完成现行联合验收并合入main，见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。已有实例的显式设置不会因代码默认值改变而自动覆盖；主目录与候选各使用自己的运行配置。
 
-三设备配置化随[01A](./superpowers/plans/2026-10-04-ext-b-turbine-01a.md)实施并经后续各批接续，当前数值与行为按下表及SERVER配置执行。数值调整由服务器决定，客户端护目镜读取服务端同步结果。
+三设备配置化随[01A](archive/2026-10-08-completed-plans/2026-10-04-ext-b-turbine-01a.md)实施并经后续各批接续，当前数值与行为按下表及SERVER配置执行。数值调整由服务器决定，客户端护目镜读取服务端同步结果。
 
-**反应堆总产热（2026-10-06确认）：** [总产热取整任务](./superpowers/plans/2026-10-06-reactor-heat-rounding-01.md)将新生裂变热汇总并限幅后向上取整为整数HU/t，冷却与遥测共用。沿用现有产热和吸热配置，不新增平衡开关；默认0.5HU/mB时100HU/t对应200mB/t。自定义吸热系数或变化的运行工况仍按实际账本结算，不承诺所有管路与负载都无波动；缓存余热不再取整。本项候选及人工状态见实施卡。
+**反应堆总产热（2026-10-06确认）：** [总产热取整任务](archive/2026-10-08-completed-plans/2026-10-06-reactor-heat-rounding-01.md)将新生裂变热汇总并限幅后向上取整为整数HU/t，冷却与遥测共用。沿用现有产热和吸热配置，不新增平衡开关；默认0.5HU/mB时100HU/t对应200mB/t。自定义吸热系数或变化的运行工况仍按实际账本结算，不承诺所有管路与负载都无波动；缓存余热不再取整。本项已在[封存/配方/取整联合验收](./reviews/2026-10-06/store-01/ACCEPTANCE.md)通过并合入main。
 
 ## 文件位置与修改方式
 
@@ -13,7 +13,7 @@
 - `create_nuclear_industry-boiler.toml`：高压锅炉。
 - `create_nuclear_industry-heat-exchanger.toml`：核换热器，保留原文件和已有键。
 - `create_nuclear_industry-turbine.toml`：三档汽轮机。
-- `create_nuclear_industry-storage.toml`：轻量封存候选中的干式贮存架，尚待联合手测。
+- `create_nuclear_industry-storage.toml`：已验收的轻量封存与干式贮存架。
 
 开发候选默认目录为 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/run/config/`；主目录启动的客户端使用主目录自己的 `run/config/`。如需仅对某个单人世界生效，可将相应文件复制到 `run/saves/<世界名>/serverconfig/` 再修改；已有覆盖文件会优先于实例配置。不要混淆两套运行目录。
 
@@ -21,9 +21,9 @@
 
 ## 锅炉
 
-**01F现行配置（2026-10-08已验收合入main）：** [双汽库存](./superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)替代下文01B/01D整炉瞬时切种规则。两种汽各自保存真实mB/HU，共用`steamCapacityPerCellMb`计算的一份总容量；新批次按实际温压归类，库存不自动换种，各口只取所选库存。`supercriticalPressure`用于新批次定种，已有SC仍须已付热合格，低于该生产门槛可排至公共出汽压力下限。配置键与默认数值不增加、不改变，见[验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。
+**01F现行配置（2026-10-08已验收合入main）：** [双汽库存](archive/2026-10-08-completed-plans/2026-10-07-boiler-dual-steam-inventory-01f.md)替代下文01B/01D整炉瞬时切种规则。两种汽各自保存真实mB/HU，共用`steamCapacityPerCellMb`计算的一份总容量；新批次按实际温压归类，库存不自动换种，各口只取所选库存。`supercriticalPressure`用于新批次定种，已有SC仍须已付热合格，低于该生产门槛可排至公共出汽压力下限。配置键与默认数值不增加、不改变，见[验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。
 
-**锅炉版本边界：** [内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)和01A～01F整改已于2026-10-08验收合入main。下列字段适用于新版锅炉，主目录runClient已包含实现；此前固定锅炉数值仅保留为[历史合同](./superpowers/plans/2026-10-04-ext-b-turbine-01a.md)。主目录与同级候选仍分别读取自己的运行配置。
+**锅炉版本边界：** [内置换热、分区、可变尺寸及温压](archive/2026-10-08-completed-plans/2026-10-07-high-pressure-boiler-rework-proposal.md)和01A～01F整改已于2026-10-08验收合入main。下列字段适用于新版锅炉，主目录runClient已包含实现；此前固定锅炉数值仅保留为[历史合同](archive/2026-10-08-completed-plans/2026-10-04-ext-b-turbine-01a.md)。主目录与同级候选仍分别读取自己的运行配置。
 
 文件：`create_nuclear_industry-boiler.toml`。所有键在文件顶层。
 
@@ -48,9 +48,9 @@
 
 控制器沿用01B单一出汽压力下限，显式机器设置独立保存，不由默认配置覆盖。01F新批次按实际批次汽温及加量后的共同炉压归类，已有两种库存不变身份；炉压由两种汽量和各自实际汽温共同决定，与Create运输压力分开。压力下限可设100%，可能因安全阀先泄放而停止正常出汽；它不是目标炉压，也不强制产生普通汽。默认5³居中隔层上下各9格、水汽各18000mB，汽容量由两种共用；全部汽温为2时，下限0.6对应保留10800mB。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出HU均实际扣账，普通汽不因再热变SC，欠热SC等待再热。散热不扣潜热、不模拟炉内凝水，安全阀排放仍消耗工质和热量。
 
-旧`waterCapacityMb`、`steamCapacityMb`、`sectionHeatHuPerTick`、`steamHuPerMb`、`warmHuPerSection`、`coolingHuPerSectionPerTick`、`reheatFraction`、`valveOpenFraction`、`valveCloseFraction`及`valveFlowMbPerTick`不再控制重构候选。既有配置文件和用户世界不由本次文档整理删除。
+历史配置键说明见已归档的重构合同，当前仅使用上表键；本次不删除用户配置或世界。
 
-**汽口选择（01F候选）：** 沿用01D原生选项“蒸汽 / 超临界蒸汽”，默认超临界，各口独立保存。每个口只抽所选的真实库存，无对应库存、欠热或无保压余量时等待；已有SC在低于生产炉压门槛后仍可按公共下限输出。两种可同时经各自独立管路交付，不降级、混装、转换或清除外部异种流体。控制器不增加汽种开关，所有配置数值保持原值。01D历史4项证据保留，本批25项账本/11个不同真实用例及独立审查见候选说明，客户端门尚未关闭。
+**汽口选择（01F现行）：** 沿用01D原生选项“蒸汽 / 超临界蒸汽”，默认超临界，各口独立保存。每个口只抽所选的真实库存，无对应库存、欠热或无保压余量时等待；已有SC在低于生产炉压门槛后仍可按公共下限输出。两种可同时经各自独立管路交付，不降级、混装、转换或清除外部异种流体。控制器不增加汽种开关，所有配置数值保持原值。01D历史4项证据保留，本批25项账本/11个不同真实用例及独立审查见候选说明，客户端门已由2026-10-08集中验收关闭。
 
 ## 换热器
 
@@ -69,7 +69,7 @@
 
 工质密度继续使用原 P1 SERVER 配置中的 `coolantAbsorptionHuPerMb`（默认0.5HU/mB），不新增第二份密度。它同时影响反应堆冷却语义，不能当作只调整换热器的局部参数。
 
-**冷凝增量（2026-10-05，已通过联合手测并合入main）：** [冷凝回水01](./superpowers/plans/2026-10-05-ext-b-condense-01.md)在同一文件顶层追加下表，不改变现有核热字段的含义。默认8字段及非默认回收率/容量已由真实SERVER断言核对，证据见[候选交付](./reviews/2026-10-05/condense-01/README.md)；最终运行验收见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。
+**冷凝增量（2026-10-05，已通过联合手测并合入main）：** [冷凝回水01](archive/2026-10-08-completed-plans/2026-10-05-ext-b-condense-01.md)在同一文件顶层追加下表，不改变现有核热字段的含义。默认8字段及非默认回收率/容量已由真实SERVER断言核对，证据见[候选交付](./reviews/2026-10-05/condense-01/README.md)；最终运行验收见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。
 
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |
@@ -86,7 +86,7 @@
 
 ## 汽轮机
 
-**01F修订（2026-10-05，已通过联合手测并合入main）：** 用户已确认三档最高倍率1.2/1.5/1.8、大型额定耗汽216mB/t、最低倍率0.5及30%启动门槛，并取消大储罐、保留极小周转缓存。以下表格记录[01F](./superpowers/plans/2026-10-05-ext-b-turbine-01f.md)字段与默认值；部署和验证结果见[本批交付](./reviews/2026-10-05/turbine-01f/README.md)，最终运行验收见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。
+**01F修订（2026-10-05，已通过联合手测并合入main）：** 用户已确认三档最高倍率1.2/1.5/1.8、大型额定耗汽216mB/t、最低倍率0.5及30%启动门槛，并取消大储罐、保留极小周转缓存。以下表格记录[01F](archive/2026-10-08-completed-plans/2026-10-05-ext-b-turbine-01f.md)字段与默认值；部署和验证结果见[本批交付](./reviews/2026-10-05/turbine-01f/README.md)，最终运行验收见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。
 
 文件：`create_nuclear_industry-turbine.toml`。三档字段使用 `short`、`medium`、`long` 前缀，例如 `shortRotorCount`。
 
@@ -111,7 +111,7 @@
 
 只允许配置中的三档合法组合，转子数各不相同且在3～16之间，截面为对应`Diameter`的八边形。默认外尺寸为3×5×3、5×8×5、7×11×7（宽×轴长×高）。不能用配方或额外端口突破所选档位的处理率。修改转子数或直径会改变合法搭法，既有结构需按新规格重新核验。
 
-2026-10-05用户确认[01E共享容量](./superpowers/plans/2026-10-05-ext-b-turbine-01e.md)，当前已验收实现：完整汽轮机两端内部贯通，同属一个Create动力网；只接任意一端即可使用全部容量，同时接出合计负载、共同过载，不翻倍总SU。现有`frontShare`标记为废弃，不再生效；红石立即停机，断汽沿用40tick窗口衰减归零，均不抹除同网外部动力源。
+2026-10-05用户确认[01E共享容量](archive/2026-10-08-completed-plans/2026-10-05-ext-b-turbine-01e.md)，当前已验收实现：完整汽轮机两端内部贯通，同属一个Create动力网；只接任意一端即可使用全部容量，同时接出合计负载、共同过载，不翻倍总SU。现有`frontShare`标记为废弃，不再生效；红石立即停机，断汽沿用40tick窗口衰减归零，均不抹除同网外部动力源。
 
 设平均排汽流量`q`、额定流量`R`、工作比例`x=clamp(q/R,0,1)`、门槛`t`、最低倍率`m`、本档最高倍率`M`。当`x<t`时本机SU为0；否则倍率为`m+(M-m)*(x-t)/(1-t)`，总SU为`q*suPerMbPerTick*倍率`。不将平均流量取整；默认三档启动门槛16.2/32.4/64.8mB/t。
 
@@ -120,7 +120,7 @@
 
 ## 乏燃料贮存架
 
-文件：`create_nuclear_industry-storage.toml`，NeoForge SERVER；本批候选已完成必要自动检查，客户端联合手测待用户完成，见[STORE-01卡](./superpowers/plans/2026-10-06-ext-a-store-01.md)。
+文件：`create_nuclear_industry-storage.toml`，NeoForge SERVER；轻量封存已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)，实施历史见[STORE-01卡](archive/2026-10-08-completed-plans/2026-10-06-ext-a-store-01.md)。
 
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |

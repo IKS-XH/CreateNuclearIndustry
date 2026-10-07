@@ -23,7 +23,7 @@ PM只读核对13个教学源码/模板/语言/合同/工具文件，main功能HE
 
 复用[离心机R3交付](../../2026-10-06/ponder-01/layout-r3.md)、[时序](../../2026-10-06/ponder-01/timing-r1.md)/[文案](../../2026-10-06/ponder-01/copy-r2.md)及[反应堆02-R1交付](../../2026-10-06/ponder-02/r1-implementation.md)/[审查](../../2026-10-06/ponder-02/R1-REVIEW.md)。PM本轮读取原XML确认6项合同0失败/错误/跳过及原构建退出0；这些是原候选证据，不冒充本轮重跑。
 
-**本轮main打包：** 唯一一次`.\gradlew.bat assemble --console=plain`退出0，11秒；4项任务为2执行/1缓存/1最新。五个教学NBT与两语言资源7/7逐字节匹配，三个场景/插件class存在。JAR为2,169,114字节，SHA-256 `2075B232E1B7E45BBE151498376337A9F382D9435916C6C233C11982DFA8C443`；PM独立读取实际日志/退出码和制品哈希。详见[打包报告](./integration.md)与[已验收教学JAR快照](../../../../build/reports/extension/DEVICE-PONDER-01-02-ACCEPTANCE/main-candidate/create_nuclear_industry-0.1.0-ponder-accepted.jar)。不重复JUnit/GameTest、设备手测、旧存档兼容或新客户端播放，见[整合合同](../../../superpowers/plans/2026-10-07-device-ponder-01-02-acceptance.md)。
+**本轮main打包：** 唯一一次`.\gradlew.bat assemble --console=plain`退出0，11秒；4项任务为2执行/1缓存/1最新。五个教学NBT与两语言资源7/7逐字节匹配，三个场景/插件class存在。JAR为2,169,114字节，SHA-256 `2075B232E1B7E45BBE151498376337A9F382D9435916C6C233C11982DFA8C443`；PM独立读取实际日志/退出码和制品哈希。详见[打包报告](./integration.md)与[已验收教学JAR快照](../../../../build/reports/extension/DEVICE-PONDER-01-02-ACCEPTANCE/main-candidate/create_nuclear_industry-0.1.0-ponder-accepted.jar)。不重复JUnit/GameTest、设备手测、旧存档兼容或新客户端播放，见[整合合同](../../../archive/2026-10-08-completed-plans/2026-10-07-device-ponder-01-02-acceptance.md)。
 
 ## 使用与当前待办
 

@@ -1,98 +1,40 @@
 # 项目文档入口
 
-**当前执行（2026-10-08）：** [汽轮机三情景思索04](./superpowers/plans/2026-10-08-device-ponder-04-turbine.md)已获用户开工授权，使用同级候选实现；完工后整理文档。本台仍需独立播放验收，后续顺序见[接续排期](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)。
+**更新：2026-10-08。** 当前进行汽轮机三情景思索；主线暂缓，按设备逐台播放验收。离心机、反应堆和锅炉教学已经通过。汽轮机教学通过后，先补换热器工作盆供热，再制作换热器分情景教学。
 
-**换热器范围修订（2026-10-08）：** 用户取消超临界蒸汽输入，原蒸汽降级供热模式及9级热值规划撤销。现行代码已拒收，不需运行整改；保留冷热冷却剂换热、普通蒸汽冷凝与随后补齐的工作盆核热接入，教学不再介绍取消路线。
+## 当前执行与接续
 
-**当前进度（2026-10-08）：** [锅炉三情景思索](./superpowers/plans/2026-10-08-device-ponder-03-boiler.md)已验收并整合main`58a965e`：按用户反馈删除重复第四幕，保留前三幕原样，定向检查及唯一main打包通过。[验收记录](./reviews/2026-10-08/boiler-ponder-03/ACCEPTANCE.md)已关闭本批，不新增人工测试。用户随后明确[接续顺序](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)：汽轮机思索 → 换热器工作盆供热 → 换热器分情景思索，各批独立验收。
-
-**最新验收（2026-10-08）：分区温压锅炉及01F双汽库存已手测通过并合入main。** 两种蒸汽分别记录真实mB/HU、共用总容量，各口只取对应库存，已有汽不自动换种。整合`611d3ca`的65个源码/资源/美术源路径与最终候选一致；复用已审定向证据，唯一一次main增量assemble和24项封包核对通过。主目录runClient包含新版锅炉，见[验收记录](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。其余主线和下一台思索不自动开启。
-
-**历史01E候选（2026-10-07）：** [01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)局部汽轮机停转修复及17项定向GameTest证据保留；最终实现随本次锅炉验收合入main。本次人工确认覆盖已列锅炉清单，不扩展为全部动力场景。
-
-**历史锅炉整改（01C，2026-10-07）：** [连续流动与动力联动01C](./superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)已复现并修复快速跨汽种后原生来源缓存失效，专用5项GameTest、增量assemble及一次合并审查通过，功能快照`050afe3`。当时中/大型及空罐持续接汽、守恒与双端回接停开定向通过，持续残转尚未复现；该描述仅保留当时证据，当前排查与局部修复以01E为准。原[单控件与自动汽种01B](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)及01A未变规则保留。
-
-**当前进度（2026-10-05）：** 用户明确“所有测试项都通过了”，三档汽轮机的搭建/外观、双端共享容量、流量效率/微周转、断汽停机，蒸汽冷凝回水闭环及护目镜显示已完成[联合验收并合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。主目录`.\gradlew.bat runClient`包含现行实现；同级候选与原测试世界保留。未变实现复用各批定向验证，只新做一次合入增量打包。
-
-**首发前范围（2026-10-05）：** 完成首个可发布版本前不研究旧存档兼容，不安排跨版本迁移及其验收门；当前版本自身的保存与加载仍做必要检查，见[治理5.2](./project-governance.md#52-首发前的存档验证边界2026-10-05起生效)。
-
-**锅炉现行实现：** [内置换热、汽水分区、可变尺寸与温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)及01A～01F整改已[验收合入main](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。默认三边范围[5,11]，水/汽容量按各区容积计算，冷热液共享，唯一压力下限控件与逐口汽种选择；数值均配置化。
-
-**两台思索验收（2026-10-07）：** 离心机R1/R2/R3及反应堆02-R1四情景已[单独验收合入main](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)。锅炉随后于2026-10-08另行通过本轮手测；教学与锅炉的历史证据各自保留。
-
-**整理日期：2026-09-29。** P1 固定实验反应堆已完成最终交接。下一阶段优先矿物获取、原材料与零件、设备制备及燃料生产。当前进度维护在[实施路线图](./implementation-roadmap.md)，本页负责导航。
-
-**现行产热：** 新生热总量汇总限幅后向上取整一次，贯通列热、冷却与遥测；燃耗、缓存余热与热端参数不改。[取整任务](./superpowers/plans/2026-10-06-reactor-heat-rounding-01.md)49项有效定向验证和用户人工确认已通过，随本批合入main。
-
-## 当前工作
-
-**锅炉逐口选择：** [01D蒸汽口选择](./superpowers/plans/2026-10-07-boiler-steam-port-selection.md)保留原生控件、默认超临界、纯过滤、不降级和不清外部异种库存；01F改为每口读取对应真实库存，已有汽不自动切换。最终状态见[本次验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。
-
-**本批已收尾：** 高压锅炉首期与01B～01D整改、强化钢板配方、换热器定向共享直列及01E翻译全部人工通过并合入main，见[最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。主目录runClient可直接使用；候选测试世界仍在原目录。
-
-**现行汽轮机：** 三档3×5×3、5×8×5、7×11×7，256RPM，核心先行辅助包壳、薄壳/叶片与透明观察窗，双端共享唯一容量。01D/R1外观、01F门槛/效率/微周转和01G停机均已验收；默认流量54/108/216mB/t，30%门槛处0.5倍，线性升至1.2/1.5/1.8倍。参数入口见[服务端配置指南](./server-config.md)。
-
-**配方设计规则：** 后续除确需大批量生产的基础零件外，默认不用序列装配；单一功能零件优先工作台、动力合成或单步加工。设备/零件的工作台配方使用有序，粗矿块与金属锭拆解保持无序，见[通用规则](./recipes.md#22-标签与替代材料)。
-
-**当前主线：** [铀原料加工与离心机](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与专用烧结炉02A/02B](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[02C包壳/焊料/钢网/格架材料](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)均已全部手测通过并合入main，焊料为3锡锭＋1铅锭→4件。[02D/02E屏蔽装配台](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)已完成功能手测并合入main，四材料直接装配燃料组件，取消新燃料棒中间步骤。
-
-**推进方式（2026-10-02）：** 按用户要求启用[按改动范围验证](./project-governance.md#51-按改动范围验证2026-10-02起生效)：默认增量构建和定向测试，未变实现复用已审证据，普通批次一轮合并审查，全量仅在明确风险触发时运行。
-
-**开发环境（2026-10-01）：** [JEI 加载整改](./superpowers/plans/2026-10-01-dev-jei-01a.md) 已同步三个开发客户端，用户确认界面出现；随后铅锡复测清单中的配方/用途查询也获确认。该证据只覆盖实际测试范围，不代表未来配方已验收。
-
-**已完成生产段：** 三矿、铅锡、钢材、锡条与传感器、石英粉/耐火砖/重型轴承，以及铀洗矿/制浆/两格离心机、生芯块/烧结炉均已完成各批人工验收并合入main。普通钢材名称简称“钢”，铅锡水洗副产物暂缓；主目录runClient已包含烧结炉。历史验证按各批报告保留，不重复全量。
-
-**当前安排：** 离心机、反应堆、锅炉思索及新版分区温压锅炉已验收合入main。下一台为汽轮机思索，随后优先补齐换热器工作盆热源，再做换热器各用途教学。无GUI规则保留，未实现事故/辐射不提前演示。
-
-**2026-10-04运行整改已验收：** 同一Create管网的多冷端共享容量损失已修复，自适应供热与保存恢复获用户手测确认。复用候选30项定向JUnit和15项真实GameTest，本次main仅新跑一次增量assemble，见[验收证据](./reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)。
-
-**现行制造：** 铅玻璃普通加热搅拌；燃料柱每次1件；仪表端口21格、换料端口和驱动器2×2动力合成；控制棒组件工作台竖排。原五条反应堆序列已移除。
-
-**验证方式：** 沿用治理5.1，同一实现的已审定向测试不重复执行；制造批次历史证据见[冷却剂与实验堆验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)，换热器本次集成证据单列。
-
-**当前优先级（2026-10-08）：** 既有三台思索不重复验收。工作盆加热已排到汽轮机思索验收之后，耗热/热级等未决项在开工前集中确认；冷凝回水纳入换热器教学。反应堆可变结构、辅助热、二级耐压、事故/辐射与02E动画仍后置，发布出口另行安排。
-
-| 入口 | 用途与状态 |
+| 工作 | 状态与入口 |
 | :--- | :--- |
-| [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
-| [锅炉重构REWORK-01](./superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md) | 分区温压、可变尺寸和01A～01F整改已[验收合入main](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)；主目录runClient可用 |
-| [锅炉01D按层三格端口](./superpowers/plans/2026-10-04-ext-b-boiler-01d.md) | 全部手测通过并合入main；第2层最多11给水口、第4层最多12汽口，每口独立256mB/t |
-| [换热器01E护目镜翻译](./superpowers/plans/2026-10-04-ext-b-exchanger-01e.md) | 语言资源及用户显示确认通过，已合入main；专用供热显示“向高压锅炉供热” |
-| [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 全部人工门通过、已合入main，见[最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |
-| [燃料02A/02B：生芯块与专用烧结炉](./superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md) | 全部手测通过并合入main；[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)，运行证据复用 |
-| [材料04：锡条与传感器实施](./superpowers/plans/2026-10-01-ext-a-material-04.md) | 人工通过并合入main；[最终验收与启动说明](./reviews/2026-10-01/material-04/ACCEPTANCE.md) |
-| [材料05：石英粉、耐火砖与重型轴承实施](./superpowers/plans/2026-10-02-ext-a-material-05.md) | 完整人工清单通过，已合入main；[最终验收](./reviews/2026-10-02/material-05/ACCEPTANCE.md)，后续离心机见当前实施卡 |
-| [青金石粉与冷却剂01B](./superpowers/plans/2026-10-03-ext-a-material-01b.md) | 全部手测通过并合入main，见[合并验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)；旧01A仅接续适用内容 |
-| [固定实验堆生存制造01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md) | 7种材料、16条现行配方及全部修订已验收合入main，见[最终验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md) |
-| [首套生产线成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md) | 已批准试验配比与未批准候选分开记录；不是完整配方冻结表 |
-| [损伤倍率专项](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) | 游戏端 02A 已完成；模拟器 02B 仍待离线浏览器验收，未合并 |
+| 汽轮机思索04 | [三情景实施卡](./superpowers/plans/2026-10-08-device-ponder-04-turbine.md)已完成实现与复核，等待同级[播放候选](./reviews/2026-10-08/turbine-ponder-04/CANDIDATE.md)验收 |
+| 换热器工作盆供热 | [接续排期](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)、[技术准备](./superpowers/plans/2026-10-04-heat-exchanger-basin-preparation.md)；汽轮机教学验收后讨论未决耗热/热级规则，不提前派发 |
+| 换热器分情景思索 | 工作盆功能验收后，分别介绍独立供热、高压锅炉内置换热、工作盆和蒸汽冷凝回水 |
 
-## 设计与执行规则
+候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`。在该目录执行 `./gradlew.bat runClient`播放新教学；主目录提供已验收版本，两目录分别使用自己的运行配置和世界。
 
-| 文档 | 权威职责 |
+## 权威文档
+
+| 入口 | 职责 |
 | :--- | :--- |
-| [AGENTS.md](../AGENTS.md)、[治理协议](./project-governance.md) | 开工规则、角色权限、技能、任务卡、验收和 Git 管理 |
-| [项目策划](./project.md) | 产品目标、首发范围与玩法规则 |
-| [反应堆局部控制](./reactor-local-control-revision-design.md) | 状态归属、热工/控制公式与运行不变量 |
-| [内容清单](./content-catalog.md) | 注册身份、内容阶段、资源与 Ponder 矩阵 |
-| [热端与汽轮机配置](./server-config.md) | 已验收实现的SERVER文件位置、锅炉/换热器/汽轮机/冷凝参数及当前实例设置 |
-| [配方关系](./recipes.md) | 材料来源、设备工序、标签与守恒 |
-| [彩蛋与进度](./easter-eggs-and-advancements.md) | 非主线趣味内容 |
-| [实施路线图](./implementation-roadmap.md) | 当前状态、阶段顺序、出口与阻塞项 |
+| [实施路线图](./implementation-roadmap.md) | 当前阶段、已通过批次、未完成范围及人工门 |
+| [项目策划](./project.md) | 现行玩法与明确的后续边界 |
+| [反应堆局部控制](./reactor-local-control-revision-design.md) | 棒列邻接、反馈、热工、损伤与停堆合同 |
+| [内容清单](./content-catalog.md) | 注册身份、资源、教学覆盖；阶段目标不等于已实现 |
+| [配方表](./recipes.md) | 材料工序及现行配方规则 |
+| [服务端配置指南](./server-config.md) | 锅炉、换热器、汽轮机配置键、单位和默认值 |
+| [治理协议](./project-governance.md)、[根AGENTS](../AGENTS.md) | PM/执行者权限、技能、派发与精简验证 |
+| [首发扩展入口](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 有效后续依赖与派发边界 |
+| [彩蛋与进度](./easter-eggs-and-advancements.md) | 彩蛋、进度及其范围限制 |
 
-已确认规则按上述职责维护；计划负责拆解任务，不另立玩法合同。发现矛盾时由项目经理核对，涉及未决玩法取舍再交用户决定。
+## 仍有效的后置工作
 
-## 后置与辅助工作
+- 反应堆可变尺寸、辅助热、二级耐压、自动控制、具体事故与辐射、动画及发布完善，按路线图安排；未实现行为不提前教学。
+- [事故教学与发布总验收](./superpowers/plans/2026-09-12-post-accident-ponder-plan.md)继续保留；已有设备基础教学无需等待事故实现。
+- [损伤倍率模拟器02B](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)和[三维辅助工具](./superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)未完成整体验收，不阻塞近期任务，不在人工门等待期间自行接续。
+- [生产成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md)保留核算口径；旧比较值不是未批准的新配方授权。铅锡洗矿副产物议题仍暂缓。
 
-- [事故后的 Ponder 教学](./superpowers/plans/2026-09-12-post-accident-ponder-plan.md)：具体事故验收后继续，仍属首发发布门。
-- [P1 PNG 素材说明](./superpowers/plans/2026-08-18-p1-png-generation-brief-for-gptimage2.md)：旧生图说明保留作历史，当前绘制方式由 SVG 启动计划取代；复杂结构视觉仍后置。
-- [三维核电站工具计划](./superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：未确认整体验收完成的辅助工具；恢复前须复核已有交付和剩余任务，不作为游戏功能完成证据。
-- [反应堆模拟器说明](../tools/reactor-simulator/README.md)：工具使用与限制；当前 main 不能当作 02B 新倍率已同步。
+换热器输入超临界蒸汽及降级供热路线已取消。现有核热换热和普通蒸汽冷凝保留，后续工作盆复用核热。首发前不研究旧存档兼容；当前版本保存加载仍按范围验证。
 
-## 历史与交接
+## 历史与验收
 
-- [归档索引](./archive/README.md)：已完成、被替代的任务合同及验收记录。
-- [P1 最终交接](./archive/P1-VERIFY-03.md)、[2026-09-29 原始证据包](./handoffs/2026-09-29/README.md)：核心切片的验收依据与限制。
-- [2026-09-28 换机检查点](./handoffs/2026-09-28/README.md)：历史工作树、候选和恢复线索；当前状态以路线图为准。
-
-归档保留历史证据，不把仍待验收的候选记为完成。执行者只领取项目经理明确派发、前置满足且有精确写集的任务。
+完成/被替代的计划见[归档索引](./archive/README.md)，验收报告保留在 `docs/reviews/`。历史待测和失败描述只代表原时点，不重新开启已关闭人工门。主要完成批次由[路线图](./implementation-roadmap.md#1-已验收范围)统一索引，不在此重复维护时间线。换机与P1证据见[2026-09-29交接](./handoffs/2026-09-29/README.md)。

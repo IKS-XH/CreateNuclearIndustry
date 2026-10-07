@@ -23,4 +23,4 @@
 
 历史 GameTest 的 116 项 required 断言通过、保存阶段挂起并退出 1 原样保留，不改写为正常退出，也不冒充本轮新运行。三矿 Java/数据未变时，复用既有真实设备、采样和 GameTest 证据，补充当前 JUnit/build 与制品验证。
 
-用户随后批准铅锡粗矿1:1熔锭、200/100ticks与0.7经验、锭1:1原生压板，见 [批准参数](../../superpowers/plans/2026-10-01-lead-tin-material-proposal.md)。本批已完成，接续 [EXT-A-MATERIAL-02](../../superpowers/plans/2026-10-01-ext-a-material-02.md)；其余未批准配比和设备参数不因此放行。
+用户随后批准铅锡粗矿1:1熔锭、200/100ticks与0.7经验、锭1:1原生压板，见 [批准参数](../../archive/2026-10-08-completed-plans/2026-10-01-lead-tin-material-proposal.md)。本批已完成，接续 [EXT-A-MATERIAL-02](../../archive/2026-10-08-completed-plans/2026-10-01-ext-a-material-02.md)；其余未批准配比和设备参数不因此放行。

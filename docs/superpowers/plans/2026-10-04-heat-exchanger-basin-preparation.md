@@ -1,10 +1,8 @@
 # EXT-B-EXCHANGER-02-PREP：工作盆供热接入核查
 
-**最新排期（2026-10-08）：** 用户明确汽轮机思索完成后优先补齐工作盆供热，再制作换热器分情景思索，见[接续排期](./2026-10-08-turbine-exchanger-ponder-sequence.md)。本卡恢复为该功能的准备入口；实际准备与实现按汽轮机播放门之后的顺序推进。下述2026-10-04后置记录及旧基线仅保留历史含义，未决耗热/热级等参数仍须集中确认，不能直接按旧只读卡实现功能。
+**状态（2026-10-08）：** 汽轮机思索播放验收后的下一项功能准备，见[接续排期](./2026-10-08-turbine-exchanger-ponder-sequence.md)。先复核现行核热账本与Create接入，再集中确认耗热/热级等未决参数；当前尚未派发功能实现。
 
-**状态（2026-10-04）：按用户最新指示后置，停止当前准备与派发。** 本卡曾进行只读源码核查，未派发或实施功能代码；未批准任何工作盆耗热参数。前置换热器01A～01C已人工验收并合入main，见[验收记录](../../reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)。
-
-用户明确要求先推进主线玩法，工作盆加热挪到后面。当前转入专用高压锅炉的方案准备，随后衔接汽轮机、冷凝回水与基础封存；工作盆不再作为这些任务的前置。下述核查范围保留供以后恢复时使用，不构成当前派发授权。
+2026-10-04只读核查属于历史基线，已由当前排期取代其“转入锅炉、继续后置”状态；原文字见[整理前快照](../../archive/2026-10-08-document-snapshots/2026-10-04-heat-exchanger-basin-preparation.md)。下文保留技术核查范围，不按旧提交号直接实现。
 
 ## 已确认范围与未决项
 
@@ -19,7 +17,7 @@
 
 执行者BASIN-PREP仅有执行者权限；禁止Git写入、核心文档/功能代码/测试/构建修改或转派。
 
-候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，基线`f131780`；保留`logs/debug.log`、`logs/latest.log`及`tools/art-assets/__pycache__/`。主工程用户`.vscode/launch.json`和两处客户端/存档均不操作。
+候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`；恢复准备时由PM记录当时的Git基线，不沿用旧提交号。保留`logs/debug.log`、`logs/latest.log`及`tools/art-assets/__pycache__/`。主工程用户`.vscode/launch.json`和两处客户端/存档均不操作。
 
 必读本卡、AGENTS、治理5.1、01A API报告、01C自适应方案；实际读取并应用`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`与`minecraft-testing/SKILL.md`。版本锁定Minecraft1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82，技能示例不得升级环境。
 

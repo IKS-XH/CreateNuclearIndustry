@@ -31,4 +31,4 @@
 
 候选默认run的180文件前后路径、大小、哈希和修改时刻无差异；前后CSV SHA-256均为`4FA17EE79C4E613DF99F645CC5F51D2CDEDADDE2BC50318D29A6A3ECDA8EE90F`。PM保存运行生成日志后，仅恢复两工作区本轮根跟踪日志。主工程既有`.vscode/launch.json`保持SHA-256 `65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07`，未纳入提交。
 
-PM按[03B任务卡](../../../superpowers/plans/2026-10-01-ext-a-material-03b.md)与modding/testing、ci-release、完成前验证及分支收尾流程验收并管理Git；执行者未做Git写。没有发布或推送。钢材整合门解除，下一步按首台设备的真实依赖整理最小基础零件参数；未经确认的数量、时间、热级不派发实现。
+PM按[03B任务卡](../../../archive/2026-10-08-completed-plans/2026-10-01-ext-a-material-03b.md)与modding/testing、ci-release、完成前验证及分支收尾流程验收并管理Git；执行者未做Git写。没有发布或推送。钢材整合门解除，下一步按首台设备的真实依赖整理最小基础零件参数；未经确认的数量、时间、热级不派发实现。

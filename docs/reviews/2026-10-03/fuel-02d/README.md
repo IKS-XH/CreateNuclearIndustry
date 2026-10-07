@@ -1,6 +1,6 @@
 # 燃料02D：屏蔽装配台与组件直接装配
 
-**现行状态：02D由02E八格版本替代并已合入main，见[02E最终验收](../fuel-02e/ACCEPTANCE.md)。以下保留02D交付时未合入、未手测的历史语境。** 用户随后要求2×2×2、四周任意面漏斗输入、21格动力合成及动画预留；当前入口改为[02E修订方案](../../../superpowers/plans/2026-10-03-shielded-assembly-multiblock-proposal.md)，本页旧尺寸/制造/接口手测不再作为下一步要求。以下保留02D交付记录，不能推定用户已通过四组人工门。原[完整方案](../../../superpowers/plans/2026-10-03-shielded-assembly-station-proposal.md)与[实施卡](../../../superpowers/plans/2026-10-03-ext-a-fuel-02d.md)中的8烧结芯块＋4包壳管＋2焊料＋1钢格架制1满耐久组件、无GUI和运行参数仍沿用。
+**现行状态：02D由02E八格版本替代并已合入main，见[02E最终验收](../fuel-02e/ACCEPTANCE.md)。以下保留02D交付时未合入、未手测的历史语境。** 用户随后要求2×2×2、四周任意面漏斗输入、21格动力合成及动画预留；当前入口改为[02E修订方案](../../../archive/2026-10-08-completed-plans/2026-10-03-shielded-assembly-multiblock-proposal.md)，本页旧尺寸/制造/接口手测不再作为下一步要求。以下保留02D交付记录，不能推定用户已通过四组人工门。原[完整方案](../../../archive/2026-10-08-completed-plans/2026-10-03-shielded-assembly-station-proposal.md)与[实施卡](../../../archive/2026-10-08-completed-plans/2026-10-03-ext-a-fuel-02d.md)中的8烧结芯块＋4包壳管＋2焊料＋1钢格架制1满耐久组件、无GUI和运行参数仍沿用。
 
 实现提交`3f7b207`，分支`codex/ore-acquisition`。main本轮只更新文档与证据，功能保留在候选；未推送或发布。构建自动写入的两条根目录日志已先保留到候选build证据目录，再由PM恢复基线，不夹带到提交。
 

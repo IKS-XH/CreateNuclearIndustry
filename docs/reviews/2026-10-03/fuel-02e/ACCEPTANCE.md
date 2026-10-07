@@ -19,4 +19,4 @@ R2候选一次增量assemble通过，20个模型与JAR字节一致，候选JAR S
 
 技能使用：执行者实际使用minecraft-modding、minecraft-testing、minecraft-resource-pack及systematic-debugging；PM沿用这些审查要求，读取并应用minecraft-ci-release与verification-before-completion，按治理5.1复用未变功能证据。
 
-下一批[01B](../../../superpowers/plans/2026-10-03-ext-a-material-01b.md)已按用户最新答复冻结：青金石1:1、两道加工参数100、冷却剂无需加热。复用同级候选工作树，不增加新GUI或流体桶；交付后停在该批三项人工清单。
+下一批[01B](../../../archive/2026-10-08-completed-plans/2026-10-03-ext-a-material-01b.md)已按用户最新答复冻结：青金石1:1、两道加工参数100、冷却剂无需加热。复用同级候选工作树，不增加新GUI或流体桶；交付后停在该批三项人工清单。

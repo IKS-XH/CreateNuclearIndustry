@@ -1,7 +1,7 @@
 # 资源生产与美术：第一轮评审检查点
 
-**状态：** 2026-09-29 用户明确批准四张样稿风格，并要求按此重绘现有美术资产；同时采用本页三矿推荐方案。决策门已解除，进入 [EXT-A-ORE-01](../../superpowers/plans/2026-09-29-ext-a-ore-01.md) 与 [EXT-ART-02](../../superpowers/plans/2026-09-29-ext-art-02.md) 实现。两项实现已形成候选，当前进度见 [客户端验收检查点](./implementation/README.md)。本页保留决策与原始准备证据，批准不代表客户端验收完成。
-**授权与任务：** [启动计划](../../superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。用户于 2026-09-29 授权自动派发，决策或手动测试暂停。
+**状态：** 2026-09-29 用户明确批准四张样稿风格，并要求按此重绘现有美术资产；同时采用本页三矿推荐方案。决策门已解除，进入 [EXT-A-ORE-01](../../archive/2026-10-08-completed-plans/2026-09-29-ext-a-ore-01.md) 与 [EXT-ART-02](../../archive/2026-10-08-completed-plans/2026-09-29-ext-art-02.md) 实现。两项实现已形成候选，当前进度见 [客户端验收检查点](./implementation/README.md)。本页保留决策与原始准备证据，批准不代表客户端验收完成。
+**授权与任务：** [启动计划](../../archive/2026-10-08-completed-plans/2026-09-29-resources-production-art-start-plan.md)。用户于 2026-09-29 授权自动派发，决策或手动测试暂停。
 
 ## 1. 已形成的交付
 
