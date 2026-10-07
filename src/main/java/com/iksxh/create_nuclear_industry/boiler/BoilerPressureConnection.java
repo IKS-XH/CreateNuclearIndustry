@@ -6,4 +6,7 @@ package com.iksxh.create_nuclear_industry.boiler;
  */
 public interface BoilerPressureConnection {
     void createNuclearIndustry$setBoilerPressure(long owner, boolean inbound, float pressure);
+
+    /** 服务端控制器tick遗忘汽口首段连接的传输网络；不清流体、压力或外部库存，禁止在drain交易中调用。 */
+    void createNuclearIndustry$forgetSteamEndpointNetwork();
 }

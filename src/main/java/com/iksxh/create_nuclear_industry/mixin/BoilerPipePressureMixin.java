@@ -2,12 +2,15 @@ package com.iksxh.create_nuclear_industry.mixin;
 
 import com.iksxh.create_nuclear_industry.boiler.BoilerPressureConnection;
 import com.simibubi.create.content.fluids.PipeConnection;
+import com.simibubi.create.content.fluids.FluidNetwork;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,6 +22,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = PipeConnection.class, remap = false)
 abstract class BoilerPipePressureMixin implements BoilerPressureConnection {
     @Unique private final Map<Long, float[]> createNuclearIndustry$boilerPressure = new HashMap<>();
+    @Shadow private Optional<FluidNetwork> network;
+
+    @Override
+    public void createNuclearIndustry$forgetSteamEndpointNetwork() {
+        // 原生reset保留旧source provider；快速跨汽种后该provider已永久失效，必须让manageFlows新建网络。
+        // 只丢第三层对象，第二层流体和全部压力贡献继续由Create管理，不能改写任何外部库存。
+        network = Optional.empty();
+    }
 
     @Override
     public void createNuclearIndustry$setBoilerPressure(long owner, boolean inbound, float pressure) {

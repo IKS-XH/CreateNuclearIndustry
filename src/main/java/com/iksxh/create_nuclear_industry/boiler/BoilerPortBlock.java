@@ -9,11 +9,14 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import com.iksxh.create_nuclear_industry.content.BoilerContent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.PushReaction;
 
-/** 水汽口只有位置身份，真实能力与库存始终由控制器代理。 */
+/** 水汽库存由控制器代理；仅汽口保存独立过滤选择并提供原生世界内控件。 */
 public final class BoilerPortBlock extends BaseEntityBlock {
     private static final MapCodec<BoilerPortBlock> WATER_CODEC = simpleCodec(p -> new BoilerPortBlock(p, true));
     private static final MapCodec<BoilerPortBlock> STEAM_CODEC = simpleCodec(p -> new BoilerPortBlock(p, false));
@@ -33,6 +36,9 @@ public final class BoilerPortBlock extends BaseEntityBlock {
     @Override public RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
     @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
     @Override public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new BoilerPortBlockEntity(pos, state); }
+    @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return createTickerHelper(type, BoilerContent.PORT_BE.get(), (l, p, s, port) -> port.tick());
+    }
     @Override protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moving) {
         super.onPlace(state, level, pos, old, moving);
         if (!level.isClientSide) BoilerStructure.invalidateNearby(level, pos);

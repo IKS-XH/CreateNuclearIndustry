@@ -1,56 +1,58 @@
 package com.iksxh.create_nuclear_industry.config;
 
 import com.iksxh.create_nuclear_industry.boiler.BoilerState;
+import java.util.List;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-/** 高压锅炉独立服务端规格；只生成数值快照，不在客户端决定真实库存或热交易。 */
+/** 独立 SERVER 锅炉配置；旧固定容量与暖炉键不再参与任何热工结算。 */
 public final class BoilerConfig {
     public static final ModConfigSpec SPEC;
-    public static final ModConfigSpec.IntValue WATER_CAPACITY_MB, STEAM_CAPACITY_MB, PORT_FLOW_MB_PER_TICK;
-    public static final ModConfigSpec.DoubleValue SECTION_HEAT_HU_PER_TICK, STEAM_HU_PER_MB;
-    public static final ModConfigSpec.DoubleValue WARM_HU_PER_SECTION, COOLING_HU_PER_SECTION_PER_TICK;
-    public static final ModConfigSpec.DoubleValue REHEAT_FRACTION, VALVE_OPEN_FRACTION, VALVE_CLOSE_FRACTION;
-    public static final ModConfigSpec.IntValue VALVE_FLOW_MB_PER_TICK;
+    public static final ModConfigSpec.ConfigValue<List<? extends Integer>> DIMENSION_RANGE;
+    public static final ModConfigSpec.IntValue WATER_CAPACITY_PER_CELL_MB, STEAM_CAPACITY_PER_CELL_MB, PORT_FLOW_MB_PER_TICK, VALVE_FLOW_PER_STEAM_CELL;
+    public static final ModConfigSpec.DoubleValue PAIR_HEAT, BOILING_TEMPERATURE, SUPERCRITICAL_TEMPERATURE,
+            WALL_HEAT_CAPACITY, WATER_SPECIFIC_HEAT, STEAM_SPECIFIC_HEAT, LATENT_HEAT,
+            SUPERCRITICAL_PRESSURE, OUTPUT_MIN_PRESSURE,
+            VALVE_OPEN_PRESSURE, VALVE_CLOSE_PRESSURE, WATER_COOLING, STEAM_COOLING;
     static {
         var b = new ModConfigSpec.Builder();
-        WATER_CAPACITY_MB = b.comment("水罐容量，单位 mB；降低容量不删除既存水。")
-                .defineInRange("waterCapacityMb", 16000, 1, 1_000_000);
-        STEAM_CAPACITY_MB = b.comment("超临界汽罐容量，单位 mB；降低容量不删除既存汽。")
-                .defineInRange("steamCapacityMb", 16000, 1, 1_000_000);
-        PORT_FLOW_MB_PER_TICK = b.comment("每个物理水口及汽口流量上限，单位 mB/t。")
-                .defineInRange("portFlowMbPerTick", 256, 1, 1_000_000);
-        SECTION_HEAT_HU_PER_TICK = b.comment("每个热段每 tick 最多接收的热，单位 HU/t。")
-                .defineInRange("sectionHeatHuPerTick", 18D, 0.000001D, 1_000_000D);
-        STEAM_HU_PER_MB = b.comment("生产 1 mB 超临界汽消耗的热，单位 HU/mB。")
-                .defineInRange("steamHuPerMb", 1D, 0.000001D, 1_000_000D);
-        WARM_HU_PER_SECTION = b.comment("每段暖炉所需热量，单位 HU。")
-                .defineInRange("warmHuPerSection", 3600D, 0.000001D, 1_000_000_000D);
-        COOLING_HU_PER_SECTION_PER_TICK = b.comment("未收热时每段每 tick 散热，单位 HU/t。")
-                .defineInRange("coolingHuPerSectionPerTick", 0.9D, 0D, 1_000_000D);
-        REHEAT_FRACTION = b.comment("暖炉热量低于此比例时重新预热，范围 0 到 1。")
-                .defineInRange("reheatFraction", 0.25D, 0D, 1D);
-        VALVE_OPEN_FRACTION = b.comment("汽罐达到此容量比例时开启安全阀，必须高于关闭比例。")
-                .defineInRange("valveOpenFraction", 0.9D, 0D, 1D);
-        VALVE_CLOSE_FRACTION = b.comment("汽罐降到此容量比例时关闭安全阀，必须低于开启比例。")
-                .defineInRange("valveCloseFraction", 0.8D, 0D, 1D);
-        VALVE_FLOW_MB_PER_TICK = b.comment("安全阀每 tick 最多排汽量，单位 mB/t。")
-                .defineInRange("valveFlowMbPerTick", 256, 1, 1_000_000);
+        DIMENSION_RANGE = b.comment("外部长宽高各自允许的闭区间，恰好两个整数，5≤min≤max≤32。")
+                .defineList("dimensionRange", List.of(5, 11), value -> value instanceof Integer n && n >= 5 && n <= 32);
+        WATER_CAPACITY_PER_CELL_MB = b.comment("每格有效水区容量，单位 mB。") .defineInRange("waterCapacityPerCellMb", 2000, 1, 1_000_000);
+        STEAM_CAPACITY_PER_CELL_MB = b.comment("每格有效汽区容量，单位 mB。") .defineInRange("steamCapacityPerCellMb", 2000, 1, 1_000_000);
+        PORT_FLOW_MB_PER_TICK = b.comment("每个物理口共用主动/被动额度，单位 mB/t。") .defineInRange("portFlowMbPerTick", 256, 1, 1_000_000);
+        PAIR_HEAT = positive(b, "pairHeatHuPerTick", 18, "每对换热器/再加热段的 HU/t 上限。");
+        BOILING_TEMPERATURE = positive(b, "boilingTemperature", 1, "归一沸点温度。");
+        SUPERCRITICAL_TEMPERATURE = positive(b, "supercriticalTemperature", 2, "新批次归类与SC库存已付热交付所需的归一汽温，必须高于沸点。");
+        WALL_HEAT_CAPACITY = positive(b, "wallHeatCapacityHuPerWaterCell", 1600, "每格水区对应的炉壁热容 HU/温升。");
+        WATER_SPECIFIC_HEAT = positive(b, "waterSpecificHeatHuPerMb", .1, "水比热 HU/mB/温升。");
+        STEAM_SPECIFIC_HEAT = positive(b, "steamSpecificHeatHuPerMb", .2, "汽比热 HU/mB/温升。");
+        LATENT_HEAT = positive(b, "vaporizationLatentHeatHuPerMb", .7, "汽化追加潜热 HU/mB。");
+        SUPERCRITICAL_PRESSURE = positive(b, "supercriticalPressure", .5, "新批次归类SC所需的共同炉压；已有SC仅受公共出汽下限限制。");
+        OUTPUT_MIN_PRESSURE = b.comment("默认出汽压力下限，归一范围[0,1]；高于阀开启线也合法，仅限制正常出汽。")
+                .defineInRange("outputMinPressure", .6, 0, 1);
+        VALVE_OPEN_PRESSURE = positive(b, "valveOpenPressure", .9, "开启安全阀及堵塞保护的炉压。");
+        VALVE_CLOSE_PRESSURE = nonnegative(b, "valveClosePressure", .8, "关闭安全阀炉压，必须低于开启线。");
+        VALVE_FLOW_PER_STEAM_CELL = b.comment("每格汽区提供的阀泄放额度 mB/t。") .defineInRange("valveFlowPerSteamCellMbPerTick", 32, 1, 1_000_000);
+        WATER_COOLING = nonnegative(b, "idleWaterCoolingHuPerCellPerTick", .9, "无收热时每水区格散失显热 HU/t。");
+        STEAM_COOLING = nonnegative(b, "idleSteamCoolingHuPerCellPerTick", .1, "无收热时每汽区格散失高于沸点的显热 HU/t。");
         SPEC = b.build();
     }
     private BoilerConfig() {}
-
-    /** NeoForge 默认在实例 config 生成 SERVER 文件；世界 serverconfig 同名文件可覆盖。 */
-    public static void register(ModContainer container) {
-        container.registerConfig(ModConfig.Type.SERVER, SPEC, "create_nuclear_industry-boiler.toml");
+    private static ModConfigSpec.DoubleValue positive(ModConfigSpec.Builder b, String key, double value, String comment) {
+        return b.comment(comment).defineInRange(key, value, .000001, 1e9);
     }
-
-    /** 跨字段错误保留为无效快照，由账本拒绝运行并由控制器报告状态。 */
+    private static ModConfigSpec.DoubleValue nonnegative(ModConfigSpec.Builder b, String key, double value, String comment) {
+        return b.comment(comment).defineInRange(key, value, 0, 1e9);
+    }
+    public static void register(ModContainer container) { container.registerConfig(ModConfig.Type.SERVER, SPEC, "create_nuclear_industry-boiler.toml"); }
+    /** 跨字段非法值保持无效快照，由服务端拒绝成型/交易并提示玩家。 */
     public static BoilerState.Settings settings() {
-        return new BoilerState.Settings(WATER_CAPACITY_MB.get(), STEAM_CAPACITY_MB.get(),
-                PORT_FLOW_MB_PER_TICK.get(), SECTION_HEAT_HU_PER_TICK.get(), STEAM_HU_PER_MB.get(),
-                WARM_HU_PER_SECTION.get(), COOLING_HU_PER_SECTION_PER_TICK.get(), REHEAT_FRACTION.get(),
-                VALVE_OPEN_FRACTION.get(), VALVE_CLOSE_FRACTION.get(), VALVE_FLOW_MB_PER_TICK.get());
+        List<? extends Integer> range = DIMENSION_RANGE.get();
+        return new BoilerState.Settings(range.size() == 2 ? range.get(0) : 0, range.size() == 2 ? range.get(1) : 0,
+                WATER_CAPACITY_PER_CELL_MB.get(), STEAM_CAPACITY_PER_CELL_MB.get(), PORT_FLOW_MB_PER_TICK.get(), PAIR_HEAT.get(),
+                BOILING_TEMPERATURE.get(), SUPERCRITICAL_TEMPERATURE.get(), WALL_HEAT_CAPACITY.get(), WATER_SPECIFIC_HEAT.get(),
+                STEAM_SPECIFIC_HEAT.get(), LATENT_HEAT.get(), SUPERCRITICAL_PRESSURE.get(), OUTPUT_MIN_PRESSURE.get(), VALVE_OPEN_PRESSURE.get(), VALVE_CLOSE_PRESSURE.get(), VALVE_FLOW_PER_STEAM_CELL.get(), WATER_COOLING.get(), STEAM_COOLING.get());
     }
 }

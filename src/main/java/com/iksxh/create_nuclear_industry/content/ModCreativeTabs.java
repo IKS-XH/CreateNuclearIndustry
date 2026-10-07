@@ -101,6 +101,8 @@ public final class ModCreativeTabs {
                         output.accept(BoilerContent.WINDOW_ITEM.get());
                         output.accept(BoilerContent.WATER_PORT_ITEM.get());
                         output.accept(BoilerContent.STEAM_PORT_ITEM.get());
+                        output.accept(BoilerContent.HOT_PORT_ITEM.get());
+                        output.accept(BoilerContent.COLD_PORT_ITEM.get());
                         output.accept(BoilerContent.CONTROLLER_ITEM.get());
                         output.accept(BoilerContent.SAFETY_VALVE_ITEM.get());
                         output.accept(BoilerContent.HEAT_SECTION_ITEM.get());

@@ -75,6 +75,19 @@ public final class CreateNuclearIndustry {
         BoilerContent.register(modEventBus);
         TurbineContent.register(modEventBus);
         NeoForge.EVENT_BUS.register(HeatExchangerBoilerBridge.class);
+        // 任意炉腔方块的玩家放拆也会改变几何；只通知已登记的附近锅炉，不搜索世界。
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent event) -> {
+            if (event.getLevel() instanceof net.minecraft.world.level.Level level)
+                com.iksxh.create_nuclear_industry.boiler.BoilerStructure.invalidateNearby(level, event.getPos());
+        });
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.level.BlockEvent.BreakEvent event) -> {
+            if (event.getLevel() instanceof net.minecraft.world.level.Level level)
+                com.iksxh.create_nuclear_industry.boiler.BoilerStructure.invalidateNearby(level, event.getPos());
+        });
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.level.BlockEvent.NeighborNotifyEvent event) -> {
+            if (event.getLevel() instanceof net.minecraft.world.level.Level level)
+                com.iksxh.create_nuclear_industry.boiler.BoilerStructure.invalidateNearby(level, event.getPos());
+        });
         // 持有库存的整机及其分块均禁止 Create 构造搬移；搬迁统一走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
                 state.is(SpentFuelStorageContent.DRY_STORAGE_RACK.get())
@@ -84,6 +97,7 @@ public final class CreateNuclearIndustry {
                         || state.is(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get())
                         || state.is(BoilerContent.CASING.get()) || state.is(BoilerContent.WINDOW.get())
                         || state.is(BoilerContent.WATER_PORT.get()) || state.is(BoilerContent.STEAM_PORT.get())
+                        || state.is(BoilerContent.HOT_PORT.get()) || state.is(BoilerContent.COLD_PORT.get())
                         || state.is(BoilerContent.CONTROLLER.get()) || state.is(BoilerContent.SAFETY_VALVE.get())
                         || state.is(BoilerContent.HEAT_SECTION.get())
                         || state.is(TurbineContent.CASING.get()) || state.is(TurbineContent.WINDOW.get())

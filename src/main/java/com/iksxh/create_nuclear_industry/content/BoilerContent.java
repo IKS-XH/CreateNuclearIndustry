@@ -9,6 +9,8 @@ import com.iksxh.create_nuclear_industry.boiler.BoilerShellBlock;
 import com.iksxh.create_nuclear_industry.boiler.StorageOnlySteamFluid;
 import com.iksxh.create_nuclear_industry.boiler.BoilerPortBlock;
 import com.iksxh.create_nuclear_industry.boiler.BoilerPortBlockEntity;
+import com.iksxh.create_nuclear_industry.boiler.BoilerWindowBlock;
+import com.iksxh.create_nuclear_industry.boiler.BoilerWindowBlockEntity;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -32,7 +34,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/** 七种锅炉部件和仅用于罐/管网的超临界蒸汽注册；无桶或世界放置入口。 */
+/** 分区锅炉部件和仅用于罐/管网的超临界蒸汽注册；端口库存始终由控制器持有。 */
 public final class BoilerContent {
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CreateNuclearIndustry.MOD_ID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreateNuclearIndustry.MOD_ID);
@@ -43,9 +45,11 @@ public final class BoilerContent {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(4).requiresCorrectToolForDrops();
     }
     public static final DeferredBlock<BoilerShellBlock> CASING = BLOCKS.register("high_pressure_boiler_casing", () -> new BoilerShellBlock(metal()));
-    public static final DeferredBlock<BoilerShellBlock> WINDOW = BLOCKS.register("high_pressure_boiler_window", () -> new BoilerShellBlock(metal().noOcclusion()));
+    public static final DeferredBlock<BoilerWindowBlock> WINDOW = BLOCKS.register("high_pressure_boiler_window", () -> new BoilerWindowBlock(metal().noOcclusion()));
     public static final DeferredBlock<BoilerPortBlock> WATER_PORT = BLOCKS.register("high_pressure_boiler_water_port", () -> new BoilerPortBlock(metal(), true));
     public static final DeferredBlock<BoilerPortBlock> STEAM_PORT = BLOCKS.register("high_pressure_boiler_steam_port", () -> new BoilerPortBlock(metal(), false));
+    public static final DeferredBlock<BoilerPortBlock> HOT_PORT = BLOCKS.register("high_pressure_boiler_hot_coolant_port", () -> new BoilerPortBlock(metal(), true));
+    public static final DeferredBlock<BoilerPortBlock> COLD_PORT = BLOCKS.register("high_pressure_boiler_cold_coolant_port", () -> new BoilerPortBlock(metal(), false));
     public static final DeferredBlock<BoilerControllerBlock> CONTROLLER = BLOCKS.register("high_pressure_boiler_controller", () -> new BoilerControllerBlock(metal()));
     public static final DeferredBlock<BoilerShellBlock> SAFETY_VALVE = BLOCKS.register("boiler_safety_valve", () -> new BoilerShellBlock(metal()));
     public static final DeferredBlock<BoilerShellBlock> HEAT_SECTION = BLOCKS.register("boiler_heat_exchange_section", () -> new BoilerShellBlock(metal()));
@@ -53,6 +57,8 @@ public final class BoilerContent {
     public static final DeferredItem<BlockItem> WINDOW_ITEM = item("high_pressure_boiler_window", WINDOW, false);
     public static final DeferredItem<BlockItem> WATER_PORT_ITEM = item("high_pressure_boiler_water_port", WATER_PORT, false);
     public static final DeferredItem<BlockItem> STEAM_PORT_ITEM = item("high_pressure_boiler_steam_port", STEAM_PORT, false);
+    public static final DeferredItem<BlockItem> HOT_PORT_ITEM = item("high_pressure_boiler_hot_coolant_port", HOT_PORT, false);
+    public static final DeferredItem<BlockItem> COLD_PORT_ITEM = item("high_pressure_boiler_cold_coolant_port", COLD_PORT, false);
     public static final DeferredItem<BlockItem> CONTROLLER_ITEM = item("high_pressure_boiler_controller", CONTROLLER, true);
     public static final DeferredItem<BlockItem> SAFETY_VALVE_ITEM = item("boiler_safety_valve", SAFETY_VALVE, false);
     public static final DeferredItem<BlockItem> HEAT_SECTION_ITEM = item("boiler_heat_exchange_section", HEAT_SECTION, false);
@@ -64,7 +70,9 @@ public final class BoilerContent {
                     BoilerControllerBlockEntity::new, CONTROLLER.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BoilerPortBlockEntity>> PORT_BE =
             ENTITIES.register("high_pressure_boiler_port", () -> BlockEntityType.Builder.of(
-                    BoilerPortBlockEntity::new, WATER_PORT.get(), STEAM_PORT.get()).build(null));
+                    BoilerPortBlockEntity::new, WATER_PORT.get(), STEAM_PORT.get(), HOT_PORT.get(), COLD_PORT.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BoilerWindowBlockEntity>> WINDOW_BE =
+            ENTITIES.register("high_pressure_boiler_window", () -> BlockEntityType.Builder.of(BoilerWindowBlockEntity::new, WINDOW.get()).build(null));
     public static final DeferredHolder<FluidType, FluidType> SUPERCRITICAL_TYPE = TYPES.register("supercritical_steam", () -> {
         ResourceLocation still = ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "fluid/supercritical_steam_still");
         ResourceLocation flowing = ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "fluid/supercritical_steam_flow");
@@ -90,12 +98,8 @@ public final class BoilerContent {
     }
     private static void capabilities(RegisterCapabilitiesEvent event) {
         event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
-            var owner = BoilerStructure.owner(level, pos, true);
-            return owner == null ? null : owner.port(pos, side, true);
-        }, WATER_PORT.get());
-        event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
-            var owner = BoilerStructure.owner(level, pos, false);
-            return owner == null ? null : owner.port(pos, side, false);
-        }, STEAM_PORT.get());
+            var owner = BoilerStructure.owner(level, pos);
+            return owner == null ? null : owner.port(pos, side);
+        }, WATER_PORT.get(), STEAM_PORT.get(), HOT_PORT.get(), COLD_PORT.get());
     }
 }

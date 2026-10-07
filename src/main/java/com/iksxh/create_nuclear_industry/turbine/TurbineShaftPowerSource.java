@@ -92,6 +92,16 @@ public abstract class TurbineShaftPowerSource extends GeneratingKineticBlockEnti
                 network.sources.remove(this);
                 network.updateCapacity();
             }
+            // 当前恢复已清空供汽历史，但保存的Speed仍可能非零。初始化阶段须按保存转速拆源，
+            // 否则父tick会从尚未清零的下游反向认领Source，形成没有生成源却持续转动的互指环。
+            // 原生传播器只撤销本轴的依赖分支；其他真实生成源保留，并可在后续attach重新带动本轴。
+            float previousSpeed = getTheoreticalSpeed();
+            detachKinetics();
+            removeSource();
+            setSpeed(0);
+            setNetwork(null);
+            onSpeedChanged(previousSpeed);
+            sendData();
             return;
         }
         super.initialize();

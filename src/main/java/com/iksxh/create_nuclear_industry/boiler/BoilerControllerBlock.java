@@ -51,7 +51,7 @@ public final class BoilerControllerBlock extends BaseEntityBlock implements IWre
     @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
     @Override public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new BoilerControllerBlockEntity(pos, state); }
     @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, BoilerContent.CONTROLLER_BE.get(), BoilerControllerBlockEntity::serverTick);
+        return createTickerHelper(type, BoilerContent.CONTROLLER_BE.get(), BoilerControllerBlockEntity::serverTick);
     }
     @Override public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         List<ItemStack> drops = super.getDrops(state, builder);
@@ -79,7 +79,7 @@ public final class BoilerControllerBlock extends BaseEntityBlock implements IWre
     @Override protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                           Player player, BlockHitResult hit) {
         if (!level.isClientSide) player.displayClientMessage(net.minecraft.network.chat.Component.translatable(
-                BoilerStructure.inspect(level, pos) == null ? "gui.create_nuclear_industry.boiler.state.unformed"
+                !(level.getBlockEntity(pos) instanceof BoilerControllerBlockEntity owner) || owner.currentForm() == null ? "gui.create_nuclear_industry.boiler.state.unformed"
                         : "gui.create_nuclear_industry.boiler.state.formed"), true);
         return InteractionResult.SUCCESS;
     }

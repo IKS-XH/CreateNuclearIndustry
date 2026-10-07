@@ -59,6 +59,7 @@ public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements 
     @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
     @Override protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean moving) {
         super.onPlace(state, level, pos, oldState, moving);
+        if (!level.isClientSide) com.iksxh.create_nuclear_industry.boiler.BoilerStructure.invalidateNearby(level, pos);
         if (!level.isClientSide && (!oldState.is(this) || oldState.getValue(FACING) != state.getValue(FACING)))
             NuclearHeatExchangerBlockEntity.topologyChanged(level, pos);
     }
@@ -97,6 +98,7 @@ public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements 
 
     /** 掉落仅由原版破坏流程或扳手触发；邻居替换回调不额外掉第二台。 */
     @Override protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState next, boolean moving) {
+        if (!level.isClientSide && !state.is(next.getBlock())) com.iksxh.create_nuclear_industry.boiler.BoilerStructure.invalidateNearby(level, pos);
         super.onRemove(state, level, pos, next, moving);
         if (!state.is(next.getBlock()) && !level.isClientSide) {
             level.invalidateCapabilities(pos);

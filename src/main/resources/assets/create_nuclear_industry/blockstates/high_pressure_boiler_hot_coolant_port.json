@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "create_nuclear_industry:block/high_pressure_boiler_hot_coolant_port"
+    },
+    "facing=east": {
+      "model": "create_nuclear_industry:block/high_pressure_boiler_hot_coolant_port",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "create_nuclear_industry:block/high_pressure_boiler_hot_coolant_port",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "create_nuclear_industry:block/high_pressure_boiler_hot_coolant_port",
+      "y": 270
+    }
+  }
+}
