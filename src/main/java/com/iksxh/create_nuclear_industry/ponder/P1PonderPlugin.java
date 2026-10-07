@@ -28,6 +28,26 @@ public final class P1PonderPlugin implements PonderPlugin {
             "experimental_reactor_refueling"
     );
 
+    /** 锅炉三条独立故事线按搭建、运行和出汽调压顺序注册。 */
+    public static final List<String> BOILER_SCENE_IDS = List.of(
+            "high_pressure_boiler_build",
+            "high_pressure_boiler_operation",
+            "high_pressure_boiler_steam"
+    );
+
+    /** 三幕共用的九种锅炉部件；每个入口均已有正式方块注册。 */
+    public static final List<String> BOILER_ENTRY_IDS = List.of(
+            "high_pressure_boiler_casing",
+            "high_pressure_boiler_window",
+            "high_pressure_boiler_water_port",
+            "high_pressure_boiler_steam_port",
+            "high_pressure_boiler_hot_coolant_port",
+            "high_pressure_boiler_cold_coolant_port",
+            "boiler_safety_valve",
+            "boiler_heat_exchange_section",
+            "high_pressure_boiler_controller"
+    );
+
     /**
      * P1 条目列表故意排除 P0 探针、保留的样例外壳、纯材料和不可直接放置的控制棒组件。
      */
@@ -51,7 +71,7 @@ public final class P1PonderPlugin implements PonderPlugin {
         return CreateNuclearIndustry.MOD_ID;
     }
 
-    /** 将反应堆直接入口挂接到四条教学故事线，并保留独立离心机故事线。 */
+    /** 保留离心机和反应堆原有绑定，并将锅炉部件挂接到本批三条独立故事线。 */
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         var reactorEntries = helper.forComponents(DIRECT_ENTRY_IDS.stream()
@@ -70,6 +90,15 @@ public final class P1PonderPlugin implements PonderPlugin {
                         ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "enrichment_centrifuge"),
                         CentrifugePonderScenes::enrichmentCentrifugeBasics
                 );
+        var boilerEntries = helper.forComponents(BOILER_ENTRY_IDS.stream()
+                .map(P1PonderPlugin::componentId)
+                .toList());
+        boilerEntries.addStoryBoard(componentId(BOILER_SCENE_IDS.get(0)),
+                BoilerPonderScenes::highPressureBoilerBuild);
+        boilerEntries.addStoryBoard(componentId(BOILER_SCENE_IDS.get(1)),
+                BoilerPonderScenes::highPressureBoilerOperation);
+        boilerEntries.addStoryBoard(componentId(BOILER_SCENE_IDS.get(2)),
+                BoilerPonderScenes::highPressureBoilerSteam);
     }
 
     /** 将 P1 内容路径转换为本模组命名空间下的 Ponder 组件 ID。 */
