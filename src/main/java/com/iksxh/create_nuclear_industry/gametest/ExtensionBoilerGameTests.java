@@ -167,6 +167,7 @@ public final class ExtensionBoilerGameTests {
         h.setBlock(pipe, AllBlocks.FLUID_PIPE.get()); h.setBlock(tank, AllBlocks.FLUID_TANK.get());
         h.runAfterDelay(4, () -> {
             owner(h).selectMinimum(critical ? 60 : 10);
+            BoilerSteamSelectionGameTests.submit(h, BASE.offset(0, 3, 1), critical ? 1 : 0);
             // 资格来自实际温压；普通工况仅付沸点焓，超临界工况另留100HU显热供建网期间散失。
             seedSteam(h, 14000, critical ? 14100 : 11200);
         });

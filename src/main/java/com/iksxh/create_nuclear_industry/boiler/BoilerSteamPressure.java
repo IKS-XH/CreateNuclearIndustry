@@ -11,6 +11,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -27,13 +28,14 @@ final class BoilerSteamPressure {
     BoilerSteamPressure(BlockPos controller) { owner = controller.asLong(); }
 
     /** 每 tick 按现有拓扑设置自有贡献；Create wipe 后记录清零，下个 tick 自动补上。 */
-    void refresh(Level level, BoilerStructure.Form form, boolean hasSteam, int portFlowMbPerTick) {
-        if (level == null || level.isClientSide || form == null || !hasSteam) {
+    void refresh(Level level, BoilerStructure.Form form, Predicate<BlockPos> qualified, int portFlowMbPerTick) {
+        if (level == null || level.isClientSide || form == null) {
             release();
             return;
         }
         List<BlockPos> connected = new ArrayList<>();
         for (BlockPos port : form.steamPorts()) {
+            if (!qualified.test(port)) continue;
             Direction outward = level.getBlockState(port).getValue(BoilerPartBlock.FACING);
             BlockPos first = port.relative(outward);
             if (!level.hasChunkAt(first)) continue;

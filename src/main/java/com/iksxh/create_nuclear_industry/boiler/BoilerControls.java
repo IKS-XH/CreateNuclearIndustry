@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 /** 控制器唯一的 Create 原生压力控件；网络ID只有一个接收者，真实百分数由服务端账本持有。 */
 final class BoilerControls {
     private BoilerControls() {}
-    private static ValueBoxTransform slot(double y) {
+    static ValueBoxTransform slot(double y) {
         return new ValueBoxTransform.Sided() {
             @Override protected Vec3 getSouthLocation() { return new Vec3(.5, y, 1.01); }
             @Override protected boolean isSideActive(BlockState state, Direction direction) {

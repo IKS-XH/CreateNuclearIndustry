@@ -42,8 +42,9 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     private final BoilerState ledger = new BoilerState();
     private final BoilerSteamPressure steamPressure;
     private BoilerControls.PressureBehaviour pressureControl;
-    private int epoch, steamEpoch, steamKindView, producedView, ventedView, widthView, heightView, depthView, pairsView;
-    private Fluid publishedSteamFluid;
+    private int epoch, steamKindView, producedView, ventedView, widthView, heightView, depthView, pairsView;
+    private final Map<BlockPos, Integer> steamEpochs = new HashMap<>();
+    private final Map<BlockPos, Fluid> publishedSteamFluids = new HashMap<>();
     private int waterCapacityView = BoilerState.CAPACITY, steamCapacityView = BoilerState.CAPACITY;
     private double paidView, waterTemperatureView, steamTemperatureView, pressureView, minimumView;
     private boolean available, formDirty = true, scanning;
@@ -157,7 +158,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         pushSteam(membersReady ? form : null, now);
         ledger.vent(now, membersReady && clear);
         refreshSteamKind(form); refreshPipes();
-        steamPressure.refresh(level, membersReady ? form : null, ledger.outputQualified(), ledger.settings().portFlowMbPerTick());
+        steamPressure.refresh(level, membersReady ? form : null, p -> outputFluid(p) != null, ledger.settings().portFlowMbPerTick());
         producedView = ledger.produced(); ventedView = ledger.vented();
         status = !ledger.settings().valid() || !heat.valid() ? "invalid" : form == null ? "unformed" : !membersReady ? "member_conflict"
                 : stopped ? "redstone" : ledger.valveBlocked() ? "vent_blocked"
@@ -180,23 +181,29 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     }
     public static void serverTick(Level level, BlockPos pos, BlockState state, BoilerControllerBlockEntity owner) { owner.tick(); }
     private void refreshPipes() {
-        for (BlockPos p : Set.copyOf(dirtyPorts)) for (Direction side : Direction.Plane.HORIZONTAL) {
-            BlockPos pipePos = p.relative(side);
-            if (!level.hasChunkAt(pipePos)) continue;
-            BlockState s = level.getBlockState(pipePos);
-            if (s.getBlock() instanceof FluidPipeBlock pipe) {
-                BlockState next = pipe.updateBlockState(s, side.getOpposite(), null, level, pipePos);
-                if (next != s) level.setBlock(pipePos, next, 3); s = next;
-            }
-            var transport = BlockEntityBehaviour.get(level, pipePos, FluidTransportBehaviour.TYPE);
-            if (transport != null) {
-                FluidPropagator.propagateChangedPipe(level, pipePos, s);
-                BlockState port = level.getBlockState(p);
-                if (port.is(BoilerContent.STEAM_PORT.get()) && port.getValue(BoilerPartBlock.FACING) == side) {
-                    // 汽种可能在运输等待期内往返，第二层保持同种流体却留下第三层已失效的能力来源。
-                    // 在控制器tick重建真实外向端点网络，包含相邻原生泵；drain执行中只标脏，不销毁交易。
-                    var connection = transport.getConnection(side.getOpposite());
-                    if (connection != null) ((BoilerPressureConnection) connection).createNuclearIndustry$forgetSteamEndpointNetwork();
+        for (BlockPos p : Set.copyOf(dirtyPorts)) {
+            BlockState portState = level.getBlockState(p);
+            // 单口选择只更新朝外首段；非汽口沿用结构变动时的原有相邻拓扑处理。
+            Iterable<Direction> sides = portState.is(BoilerContent.STEAM_PORT.get())
+                    ? List.of(portState.getValue(BoilerPartBlock.FACING)) : Direction.Plane.HORIZONTAL;
+            for (Direction side : sides) {
+                BlockPos pipePos = p.relative(side);
+                if (!level.hasChunkAt(pipePos)) continue;
+                BlockState s = level.getBlockState(pipePos);
+                if (s.getBlock() instanceof FluidPipeBlock pipe) {
+                    BlockState next = pipe.updateBlockState(s, side.getOpposite(), null, level, pipePos);
+                    if (next != s) level.setBlock(pipePos, next, 3); s = next;
+                }
+                var transport = BlockEntityBehaviour.get(level, pipePos, FluidTransportBehaviour.TYPE);
+                if (transport != null) {
+                    FluidPropagator.propagateChangedPipe(level, pipePos, s);
+                    BlockState port = level.getBlockState(p);
+                    if (port.is(BoilerContent.STEAM_PORT.get()) && port.getValue(BoilerPartBlock.FACING) == side) {
+                        // 汽种可能在运输等待期内往返，第二层保持同种流体却留下第三层已失效的能力来源。
+                        // 在控制器tick重建真实外向端点网络，包含相邻原生泵；drain执行中只标脏，不销毁交易。
+                        var connection = transport.getConnection(side.getOpposite());
+                        if (connection != null) ((BoilerPressureConnection) connection).createNuclearIndustry$forgetSteamEndpointNetwork();
+                    }
                 }
             }
         }
@@ -204,16 +211,41 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     }
     private Fluid outputFluid() { return !ledger.outputQualified() ? null
             : ledger.supercritical() ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get(); }
+    private Fluid outputFluid(BlockPos port) {
+        Fluid actual = outputFluid();
+        return actual != null && level.getBlockEntity(port) instanceof BoilerPortBlockEntity entity
+                && entity.selectedSteamKind().fluid() == actual ? actual : null;
+    }
+    /** 单口选择变更立即撤销该口句柄；原生来源网络只在控制器tick刷新，不改变同tick额度。 */
+    void steamSelectionChanged(BlockPos p) {
+        if (level == null || level.isClientSide) return;
+        var form = currentForm();
+        if (form == null || !form.steamPorts().contains(p)) return;
+        updateSteamPort(p, outputFluid(p));
+    }
+    private void updateSteamPort(BlockPos p, Fluid next) {
+        publishedSteamFluids.put(p.immutable(), next);
+        steamEpochs.merge(p.immutable(), 1, Integer::sum);
+        dirtyPorts.add(p.immutable()); if (level.hasChunkAt(p)) level.invalidateCapabilities(p);
+    }
+    /** 服务端遥测只说明当前实际输出门槛，不改热工、外部流体或选择。 */
+    String steamPortStatus(BlockPos p) {
+        if (ledger.steam() == 0) return "no_steam";
+        if (!ledger.outputQualified()) return "warming";
+        if (!(level.getBlockEntity(p) instanceof BoilerPortBlockEntity entity)) return "unformed";
+        Fluid actual = ledger.supercritical() ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get();
+        if (entity.selectedSteamKind().fluid() != actual) return "waiting";
+        return ledger.pressure() > ledger.minimumPressure() ? "output" : "pressure";
+    }
     /**
-     * 服务端汽种跨温压门槛后只撤销汽口缓存与本炉运输压力；结构代次和其他端口保持有效。
+     * 服务端汽种跨温压门槛后只撤销输出资格改变的汽口；结构代次和其他端口保持有效。
      * 在真实抽取后立即撤销旧汽句柄，管网拓扑重建留在控制器tick，避免改动Create正在迭代的交易。
      */
     private void refreshSteamKind(BoilerStructure.Form form) {
-        Fluid next = outputFluid();
-        if (next == publishedSteamFluid) return;
-        publishedSteamFluid = next; steamEpoch++; steamPressure.release();
-        if (form != null) for (BlockPos p : form.steamPorts()) {
-            dirtyPorts.add(p); if (level.hasChunkAt(p)) level.invalidateCapabilities(p);
+        if (form == null) return;
+        for (BlockPos p : form.steamPorts()) {
+            Fluid next = outputFluid(p);
+            if (!publishedSteamFluids.containsKey(p) || next != publishedSteamFluids.get(p)) updateSteamPort(p, next);
         }
     }
     /** 邻罐先模拟接收，再提交真实接收量；Create 管网由原生压力抽取，同口共享额度。 */
@@ -225,7 +257,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             if (!level.hasChunkAt(targetPos) || FluidPropagator.getPipe(level, targetPos) != null) continue;
             IFluidHandler target = level.getCapability(Capabilities.FluidHandler.BLOCK, targetPos, side.getOpposite());
             if (target == null) continue;
-            Fluid transactionFluid = outputFluid();
+            Fluid transactionFluid = outputFluid(p);
             if (transactionFluid == null) continue;
             int simulated = Math.min(amount, target.fill(new FluidStack(transactionFluid, amount), IFluidHandler.FluidAction.SIMULATE));
             if (simulated > 0) {
@@ -246,12 +278,15 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         return new Port(p.immutable(), side, form.waterPorts().contains(p) ? 0 : form.steamPorts().contains(p) ? 1 : form.hotPorts().contains(p) ? 2 : 3);
     }
     private final class Port implements IFluidHandler, SharedFluidReceiver {
-        private final BlockPos pos; private final Direction side; private final int kind, issued = epoch, issuedSteam = steamEpoch;
-        private final Fluid steamFluid = outputFluid();
-        private Port(BlockPos pos, Direction side, int kind) { this.pos = pos; this.side = side; this.kind = kind; }
+        private final BlockPos pos; private final Direction side; private final int kind, issued = epoch, issuedSteam;
+        private final Fluid steamFluid;
+        private Port(BlockPos pos, Direction side, int kind) {
+            this.pos = pos; this.side = side; this.kind = kind;
+            issuedSteam = steamEpochs.getOrDefault(pos, 0); steamFluid = kind == 1 ? outputFluid(pos) : null;
+        }
         private boolean valid() {
             if (issued != epoch || !current() || level.isClientSide
-                    || kind == 1 && (issuedSteam != steamEpoch || steamFluid != outputFluid())) return false;
+                    || kind == 1 && (issuedSteam != steamEpochs.getOrDefault(pos, 0) || steamFluid != outputFluid(pos))) return false;
             var form = currentForm();
             return issued == epoch && form != null && form.ports().contains(pos) && form.outward(pos) == side && ledger.settings().valid();
         }
@@ -277,7 +312,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         }
         @Override public FluidStack drain(FluidStack stack, FluidAction action) { return valid() && stack.is(fluid()) ? drain(stack.getAmount(), action) : FluidStack.EMPTY; }
         @Override public FluidStack drain(int amount, FluidAction action) {
-            if (!valid() || kind != 1 && kind != 3) return FluidStack.EMPTY;
+            if (!valid() || kind != 1 && kind != 3 || kind == 1 && steamFluid == null) return FluidStack.EMPTY;
             // 抽取可跨越汽种门槛；返回交易前声明的汽种，再以真实比焓扣账并撤销旧汽缓存。
             Fluid transactionFluid = fluid();
             int n = kind == 1 ? ledger.drainSteam(pos, amount, action.simulate(), level.getGameTime()) : ledger.drainCold(pos, amount, action.simulate(), level.getGameTime());

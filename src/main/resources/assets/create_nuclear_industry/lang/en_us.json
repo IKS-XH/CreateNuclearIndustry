@@ -385,5 +385,13 @@
   "gui.create_nuclear_industry.boiler.issue.partition": "One complete partition with at least one chamber layer on each side is required",
   "gui.create_nuclear_industry.boiler.issue.missing": "Requires base exchangers, reheater sections, all four port types, and one top valve",
   "gui.create_nuclear_industry.boiler.state.cold_full": "Cold coolant return blocked: heat intake stopped",
-  "gui.create_nuclear_industry.boiler.state.no_hot_coolant": "Waiting for hot coolant"
+  "gui.create_nuclear_industry.boiler.state.no_hot_coolant": "Waiting for hot coolant",
+  "gui.create_nuclear_industry.boiler.steam_port.select": "Output steam type",
+  "gui.create_nuclear_industry.boiler.steam_port.selected": "Selected: %s",
+  "gui.create_nuclear_industry.boiler.steam_port.state.unformed": "Boiler not formed",
+  "gui.create_nuclear_industry.boiler.steam_port.state.no_steam": "No steam in boiler",
+  "gui.create_nuclear_industry.boiler.steam_port.state.waiting": "Waiting for matching steam",
+  "gui.create_nuclear_industry.boiler.steam_port.state.output": "Matching steam, output ready",
+  "gui.create_nuclear_industry.boiler.steam_port.state.pressure": "Waiting for output pressure",
+  "gui.create_nuclear_industry.boiler.steam_port.state.warming": "Steam temperature too low"
 }

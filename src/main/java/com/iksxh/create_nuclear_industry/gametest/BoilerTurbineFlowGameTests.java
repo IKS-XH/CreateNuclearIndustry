@@ -193,10 +193,12 @@ public final class BoilerTurbineFlowGameTests {
             totals[2] += drain(h, coldTank) + drain(h, coldTank2); totals[3] += drain(h, receiver);
             if (!initialized[0]) return;
             var s = ExtensionBoilerGameTests.owner(h).ledger(); totals[4] += s.produced();
+            // 本旧连续夹具主动提交当前实际汽种，保留原HU/流量/停转断言；产品汽口不再自动换种。
+            BoilerSteamSelectionGameTests.submit(h, STEAM, s.supercritical() ? 1 : 0);
             int turnover = tier == null ? 0 : ExtensionTurbineGameTests.owner(h, front).ledger().exhaust();
             h.assertTrue(s.steam() + s.totalVented() + totals[3] + turnover == 14400 + totals[4], "持续产汽质量不守恒："
                     + label + " steam=" + s.steam() + " vent=" + s.totalVented() + " received=" + totals[3] + " turnover=" + turnover + " produced=" + totals[4]);
-            // 连续工况的汽温始终为2，每mB真实焓为1HU，低于压力门槛时声明普通汽也不能按沸点焓少扣。
+            // 连续工况汽温始终为2，每mB真实焓为1HU；低炉压时夹具选普通汽也必须扣实际比焓。
             h.assertTrue(Math.abs(s.steamHu() - s.steam()) < 1e-6, "连续工况汽温离开Ts=2，需按实际焓另行计量");
             double exportHu = totals[3] + turnover + s.totalVented();
             double heatDifference = 44800 + (totals[2] + s.cold()) * .5 - s.totalHu() - exportHu;

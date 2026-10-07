@@ -385,5 +385,13 @@
   "gui.create_nuclear_industry.boiler.issue.partition": "需要一层铺满的隔层，上下各留至少一层炉腔",
   "gui.create_nuclear_industry.boiler.issue.missing": "需要底面换热器、隔层再加热段、四类端口和唯一顶阀",
   "gui.create_nuclear_industry.boiler.state.cold_full": "冷液回流堵塞：停止接收新热",
-  "gui.create_nuclear_industry.boiler.state.no_hot_coolant": "热液不足：等待热液补充"
+  "gui.create_nuclear_industry.boiler.state.no_hot_coolant": "热液不足：等待热液补充",
+  "gui.create_nuclear_industry.boiler.steam_port.select": "输出汽种",
+  "gui.create_nuclear_industry.boiler.steam_port.selected": "选择：%s",
+  "gui.create_nuclear_industry.boiler.steam_port.state.unformed": "锅炉未成型",
+  "gui.create_nuclear_industry.boiler.steam_port.state.no_steam": "炉内无汽",
+  "gui.create_nuclear_industry.boiler.steam_port.state.waiting": "等待汽种匹配",
+  "gui.create_nuclear_industry.boiler.steam_port.state.output": "汽种匹配，可出汽",
+  "gui.create_nuclear_industry.boiler.steam_port.state.pressure": "等待出汽压力",
+  "gui.create_nuclear_industry.boiler.steam_port.state.warming": "汽温不足"
 }
