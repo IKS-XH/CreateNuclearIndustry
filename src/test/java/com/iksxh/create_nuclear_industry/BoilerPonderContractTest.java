@@ -43,10 +43,10 @@ class BoilerPonderContractTest {
             "create_nuclear_industry:nuclear_heat_exchanger"
     );
     private static final List<String> SCENES = List.of("high_pressure_boiler_build",
-            "high_pressure_boiler_operation", "high_pressure_boiler_steam", "high_pressure_boiler_shutdown");
+            "high_pressure_boiler_operation", "high_pressure_boiler_steam");
 
     @Test
-    void nineBoilerPartsShareTheFourOrderedStoryboards() throws IOException {
+    void nineBoilerPartsShareTheThreeOrderedStoryboards() throws IOException {
         assertEquals(List.of("high_pressure_boiler_casing", "high_pressure_boiler_window",
                 "high_pressure_boiler_water_port", "high_pressure_boiler_steam_port",
                 "high_pressure_boiler_hot_coolant_port", "high_pressure_boiler_cold_coolant_port",
@@ -165,7 +165,7 @@ class BoilerPonderContractTest {
                 }
                 if (id.equals("create:creative_motor")) drivenMotors++;
             }
-            if (scene.equals("high_pressure_boiler_operation") || scene.equals("high_pressure_boiler_shutdown")) {
+            if (scene.equals("high_pressure_boiler_operation")) {
                 assertEquals(Set.of(List.of(4, 1, 1), List.of(8, 0, 1),
                         List.of(4, 3, 1), List.of(8, 3, 1)), pumpPositions, "流体回路泵位不完整: " + scene);
                 assertEquals(4, drivenMotors, "每条液路应展示独立动力马达: " + scene);
@@ -249,7 +249,6 @@ class BoilerPonderContractTest {
             case "high_pressure_boiler_build" -> 7;
             case "high_pressure_boiler_operation" -> 8;
             case "high_pressure_boiler_steam" -> 5;
-            case "high_pressure_boiler_shutdown" -> 5;
             default -> throw new IllegalArgumentException(scene);
         };
     }

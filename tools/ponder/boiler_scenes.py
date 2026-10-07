@@ -1,4 +1,4 @@
-"""生成并校验高压锅炉四条 Ponder 故事线的完整结构模板。"""
+"""生成并校验高压锅炉三条 Ponder 故事线的完整结构模板。"""
 
 from __future__ import annotations
 
@@ -156,17 +156,6 @@ def _operation_scene() -> dict[tuple[int, int, int], tuple[str, dict[str, str]]]
 def _steam_scene() -> dict[tuple[int, int, int], tuple[str, dict[str, str]]]:
     blocks = _boiler()
     ox, oy, oz = BOILER_ORIGIN
-    for x in (ox + 1, ox + 5):
-        for z in (oz - 1, oz - 2):
-            _pipe(blocks, x, oy + 4, z)
-        _tank(blocks, x, oy + 4, oz - 3)
-    return blocks
-
-
-def _shutdown_scene() -> dict[tuple[int, int, int], tuple[str, dict[str, str]]]:
-    blocks = _operation_scene()
-    ox, oy, oz = BOILER_ORIGIN
-    # 停机时保留两条汽路，让余热产汽和安全阀泄放都能在同一镜头呈现。
     for x in (ox + 1, ox + 5):
         for z in (oz - 1, oz - 2):
             _pipe(blocks, x, oy + 4, z)
@@ -344,7 +333,6 @@ def main() -> None:
         ("high_pressure_boiler_build", _boiler()),
         ("high_pressure_boiler_operation", _operation_scene()),
         ("high_pressure_boiler_steam", _steam_scene()),
-        ("high_pressure_boiler_shutdown", _shutdown_scene()),
     )
     for name, blocks in scenes:
         path, count = _write(name, blocks)

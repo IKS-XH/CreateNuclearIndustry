@@ -16,13 +16,12 @@ import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 /**
- * 高压锅炉四条 Ponder 客户端教学故事线。模板中的炉体均为合法完整结构；液位、管内流向和动力
+ * 高压锅炉三条 Ponder 客户端教学故事线。模板中的炉体均为合法完整结构；液位、管内流向和动力
  * 只用于当前 Ponder 临时世界的可视讲解，不调用服务端账本、热工结算或正式流体交易。
  */
 public final class BoilerPonderScenes {
@@ -41,8 +40,6 @@ public final class BoilerPonderScenes {
     private static final BlockPos SUPERCRITICAL_PORT = new BlockPos(8, 4, FRONT);
     private static final BlockPos NORMAL_TANK = new BlockPos(4, 4, 0);
     private static final BlockPos SUPERCRITICAL_TANK = new BlockPos(8, 4, 0);
-    private static final BlockPos VALVE = new BlockPos(6, 6, 6);
-    private static final BlockPos REDSTONE_LEVER = new BlockPos(6, 2, 2);
 
     private BoilerPonderScenes() {
     }
@@ -240,111 +237,6 @@ public final class BoilerPonderScenes {
                 util.vector().centerOf(SUPERCRITICAL_TANK), 70);
         note(scene, supercritical, util.vector().centerOf(6, 4, 2), 105,
                 "Stored, heat-qualified supercritical steam can drain to the shared minimum below the new-steam classification pressure. Its type stays unchanged; keep steam types on separate lines.");
-        scene.markAsFinished();
-    }
-
-    /** 展示红石停机后的余热、日常检查点和安全阀净空，不模拟事故或改变锅炉机制。 */
-    public static void highPressureBoilerShutdown(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
-        scene.title("high_pressure_boiler_shutdown", "High-pressure boiler: Stop and troubleshoot");
-        scene.configureBasePlate(0, 0, 13);
-        scene.scaleSceneView(0.72F);
-        scene.showBasePlate();
-        Selection boiler = util.select().fromTo(OX, OY, OZ, OX + 6, OY + 6, OZ + 6);
-        Selection feed = util.select().fromTo(4, 1, 0, 4, 1, 2)
-                .add(util.select().position(5, 1, 0)).add(util.select().position(5, 1, 1));
-        Selection hotDrive = util.select().position(9, 0, 0).add(util.select().position(9, 0, 1));
-        Selection hot = util.select().fromTo(8, 0, 0, 8, 0, 2).add(hotDrive);
-        Selection cold = util.select().fromTo(4, 3, 0, 4, 3, 2)
-                .add(util.select().fromTo(8, 3, 0, 8, 3, 2))
-                .add(util.select().position(5, 3, 0)).add(util.select().position(5, 3, 1))
-                .add(util.select().position(9, 3, 0)).add(util.select().position(9, 3, 1));
-        Selection exhaust = util.select().fromTo(4, 4, 0, 4, 4, 2)
-                .add(util.select().fromTo(8, 4, 0, 8, 4, 2));
-        scene.world().showSection(boiler, Direction.DOWN);
-        scene.world().showSection(feed, Direction.SOUTH);
-        scene.world().showSection(hot, Direction.SOUTH);
-        scene.world().showSection(cold, Direction.SOUTH);
-        scene.world().showSection(exhaust, Direction.SOUTH);
-        scene.world().showSection(util.select().position(REDSTONE_LEVER), Direction.SOUTH);
-        scene.idle(12);
-        setTankFluid(scene, NORMAL_TANK, FluidStack.EMPTY);
-        setTankFluid(scene, SUPERCRITICAL_TANK, FluidStack.EMPTY);
-        setSteamSelection(scene, NORMAL_PORT, 0);
-        setSteamSelection(scene, SUPERCRITICAL_PORT, 1);
-        Selection waterDrive = util.select().position(5, 1, 0).add(util.select().position(5, 1, 1));
-        Selection coldWestDrive = util.select().position(5, 3, 0).add(util.select().position(5, 3, 1));
-        Selection coldEastDrive = util.select().position(9, 3, 0).add(util.select().position(9, 3, 1));
-        scene.world().setKineticSpeed(util.select().position(4, 1, 1), -64);
-        scene.world().setKineticSpeed(util.select().position(8, 0, 1), -64);
-        scene.world().setKineticSpeed(util.select().position(4, 3, 1), -64);
-        scene.world().setKineticSpeed(util.select().position(8, 3, 1), -64);
-        scene.world().setKineticSpeed(waterDrive, 64);
-        scene.world().setKineticSpeed(hotDrive, 64);
-        scene.world().setKineticSpeed(coldWestDrive, 64);
-        scene.world().setKineticSpeed(coldEastDrive, 64);
-        scene.effects().rotationSpeedIndicator(new BlockPos(4, 1, 1));
-        scene.effects().rotationSpeedIndicator(new BlockPos(8, 0, 1));
-        scene.effects().rotationSpeedIndicator(new BlockPos(4, 3, 1));
-        scene.effects().rotationSpeedIndicator(new BlockPos(8, 3, 1));
-        scene.effects().rotationDirectionIndicator(util.grid().at(4, 1, 1));
-        scene.effects().rotationDirectionIndicator(util.grid().at(8, 0, 1));
-        scene.effects().rotationDirectionIndicator(util.grid().at(4, 3, 1));
-        scene.effects().rotationDirectionIndicator(util.grid().at(8, 3, 1));
-        scene.overlay().showControls(util.vector().topOf(REDSTONE_LEVER), Pointing.DOWN, 60).rightClick();
-        scene.idle(60);
-        scene.world().cycleBlockProperty(REDSTONE_LEVER, BlockStateProperties.POWERED);
-        scene.effects().indicateRedstone(CONTROLLER);
-        scene.idle(12);
-        setTankFluid(scene, NORMAL_TANK, new FluidStack(TurbineContent.STEAM.get(), 1000));
-        setTankFluid(scene, SUPERCRITICAL_TANK, new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 1000));
-        scene.overlay().showBigLine(PonderPalette.BLUE, util.vector().centerOf(WATER_TANK),
-                util.vector().centerOf(WATER_PORT), 60);
-        scene.overlay().showBigLine(PonderPalette.BLUE, util.vector().centerOf(COLD_PORT),
-                util.vector().centerOf(COLD_TANK), 60);
-        scene.overlay().showBigLine(PonderPalette.WHITE, util.vector().centerOf(NORMAL_PORT),
-                util.vector().centerOf(NORMAL_TANK), 60);
-        scene.overlay().showBigLine(PonderPalette.GREEN, util.vector().centerOf(SUPERCRITICAL_PORT),
-                util.vector().centerOf(SUPERCRITICAL_TANK), 60);
-        note(scene, boiler, util.vector().centerOf(CONTROLLER), 100,
-                "Redstone stops new boiler heat intake, not the external pumps. Keep water, coolant return, and steam lines open; residual heat can still produce steam.");
-
-        setTankFluid(scene, WATER_TANK, FluidStack.EMPTY);
-        fillWindow(scene, new BlockPos(5, 1, FRONT), 0);
-        scene.world().hideSection(feed, Direction.SOUTH);
-        scene.idle(20);
-        note(scene, util.select().position(WATER_PORT), util.vector().centerOf(WATER_PORT), 90,
-                "If water is missing, check the water inlet and supply line.");
-        setTankFluid(scene, WATER_TANK, new FluidStack(Fluids.WATER, 1000));
-        fillWindow(scene, new BlockPos(5, 1, FRONT), .65F);
-        scene.world().showSection(feed, Direction.SOUTH);
-        scene.idle(20);
-        scene.overlay().showBigLine(PonderPalette.BLUE, util.vector().centerOf(WATER_TANK),
-                util.vector().centerOf(WATER_PORT), 70);
-
-        scene.world().hideSection(cold, Direction.SOUTH);
-        scene.idle(20);
-        note(scene, util.select().position(HOT_PORT).add(util.select().position(COLD_PORT)),
-                util.vector().centerOf(HOT_PORT), 95,
-                "If heat intake stops, check hot-coolant supply and cold-coolant return. A blocked return limits further heat intake.");
-        scene.world().showSection(cold, Direction.SOUTH);
-        scene.idle(20);
-        scene.overlay().showBigLine(PonderPalette.BLUE, util.vector().centerOf(COLD_PORT),
-                util.vector().centerOf(COLD_TANK), 70);
-
-        Selection normalExhaust = util.select().fromTo(4, 4, 0, 4, 4, 2);
-        scene.world().hideSection(normalExhaust, Direction.SOUTH);
-        scene.idle(20);
-        note(scene, exhaust, util.vector().centerOf(6, 4, 2), 100,
-                "If steam backs up, check outlet selections, line destinations, and the minimum output pressure. The minimum does not regulate a target boiler pressure.");
-        scene.world().showSection(normalExhaust, Direction.SOUTH);
-        scene.idle(20);
-        scene.overlay().showBigLine(PonderPalette.WHITE, util.vector().centerOf(NORMAL_PORT),
-                util.vector().centerOf(NORMAL_TANK), 70);
-        scene.overlay().showBigLine(PonderPalette.RED, util.vector().topOf(VALVE),
-                util.vector().topOf(VALVE).add(0, 2, 0), 70);
-        note(scene, util.select().position(VALVE), util.vector().topOf(VALVE), 100,
-                "At high pressure, the safety valve vents steam and loses working fluid. Keep the space above it clear.");
         scene.markAsFinished();
     }
 
