@@ -29,4 +29,4 @@ Set-Location E:\MyMC\NewMod\Create_NuclearIndustry
 
 **后续优先级修订（2026-10-04）：** 验收时曾建议先补工作盆供热；用户随后明确要求先主线，工作盆后置。其只读准备已停止，未实施运行代码、未批准耗热参数。
 
-当前推进[专用高压锅炉方案准备](../../../superpowers/plans/2026-10-04-high-pressure-boiler-preparation.md)，随后衔接超临界汽轮机→普通蒸汽冷凝回水，再补乏燃料基础封存。当前只完成核热接入Create原生锅炉的发电支线，完整`EXT-B-API-01`及专用机组闭环仍未完成。本次排序调整不改变上述验收证据。
+当前推进[专用高压锅炉方案准备](../../../archive/2026-10-08-completed-plans/2026-10-04-high-pressure-boiler-preparation.md)，随后衔接超临界汽轮机→普通蒸汽冷凝回水，再补乏燃料基础封存。当前只完成核热接入Create原生锅炉的发电支线，完整`EXT-B-API-01`及专用机组闭环仍未完成。本次排序调整不改变上述验收证据。

@@ -4,7 +4,7 @@
 
 2026-10-04，用户反馈：“手动测试通过了，但还有一个需要优化项，锅炉应该和反应堆一样可以拥有多个输入输出端口”。据此记录提交`d10e1af`的联合人工门通过；新增端口优化单独跟进，不将新行为计为已实现或已验收。
 
-原[三组清单](./CLIENT-CHECKLIST.md)与[候选证据](./CANDIDATE.md)对应本次手测。22项JUnit、40项定向GameTest、增量构建与独立审查复用原提交证据，未重新运行。候选仍在`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，尚未合入main；先完成[01C多端口整改](../../../superpowers/plans/2026-10-04-ext-b-boiler-01c.md)，不提前派发汽轮机。
+原[三组清单](./CLIENT-CHECKLIST.md)与[候选证据](./CANDIDATE.md)对应本次手测。22项JUnit、40项定向GameTest、增量构建与独立审查复用原提交证据，未重新运行。候选仍在`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，尚未合入main；先完成[01C多端口整改](../../../archive/2026-10-08-completed-plans/2026-10-04-ext-b-boiler-01c.md)，不提前派发汽轮机。
 
 核查当前实现：给水口允许1～3个，限定四侧第2层中央且排除控制器；蒸汽口允许1～4个，限定四侧第4层中央。已经支持多个端口，共用整炉库存和每种流体各256mB/t额度。反应堆允许四侧各3×3的非棱边位置放端口。
 

@@ -19,19 +19,9 @@
 
 ## 当前开发基线
 
-**2026-10-06待手测候选：** [轻量乏燃料封存](docs/reviews/2026-10-06/store-01/CANDIDATE.md)已完成实现、必要自动验证和联合审查，默认一次装桶、单格架存16桶。新功能尚未合入main；请从同级`Create_NuclearIndustry-ore-acquisition`启动，按一张联合清单集中手测。
+基础材料和燃料制造、固定实验反应堆、核换热与蒸汽回水闭环、三档汽轮机、轻量乏燃料封存及可变尺寸温压锅炉已按批验收合入main。反应堆具体事故世界效果、辐射和复杂再处理仍后置；当前完成范围与证据见[实施路线图](docs/implementation-roadmap.md)。
 
-**2026-10-05最新验收：** 用户确认所有测试项通过，三档汽轮机的搭建、薄壳/叶轮/观察窗、共享双轴、流量效率与微周转，冷凝回水闭环及护目镜显示均已验收合入main，见[联合验收](docs/reviews/2026-10-05/condense-01/ACCEPTANCE.md)。主目录可运行`.\gradlew.bat runClient`；同级候选及原测试世界保留。下一主线为乏燃料基础封存。
-
-**2026-10-04最新验收：** 高压锅炉首期、5×5×5/九换热段、独立多端口、换热器定向共享直列及护目镜中文已全部手测通过并合入main，见[本批验收](docs/reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。主目录runClient可用；本次仅增量assemble，复用候选定向验证。下一主线为超临界汽轮机及冷凝回水。
-
-P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，包括逐列热工/燃耗/损伤、控制棒与红石 SCRAM、真实 Create 冷热管网、玩家/机械臂换料、维修、护目镜遥测和基础 Ponder。融毁目前只有服务端事件占位符，具体事故后果后置。
-
-当时客户端总验收由用户确认通过，记录了261项JUnit、111项required GameTest断言及build通过；该轮GameTest保存挂起、强停导致Gradle退出1，作为历史运行器限制保留，不等同于本批运行结果。详见[总验收](docs/archive/P1-VERIFY-02.md)和[最终交接](docs/archive/P1-VERIFY-03.md)。
-
-三矿获取、粉碎与素材批，以及铅锡直熔、水洗9粒、粒锭合拆、压板和新素材，均已于2026-10-01完成人工验收并合入main，见[铅锡收尾记录](docs/reviews/2026-10-01/material-02-acceptance.md)。铁粉与煤/木炭粉→4+1搅拌成5钢粉→熔炼钢锭→现有钢板也已[验收并合入main](docs/reviews/2026-10-01/material-03b/README.md)，物品名现简称“钢”；旧遥测测试调度异常已修复，GameTest断言通过后的保存停滞单列为环境限制。[锡条、两种传感器及五项素材](docs/reviews/2026-10-01/material-04/ACCEPTANCE.md)和[石英粉、耐火砖、重型轴承及4项SVG](docs/reviews/2026-10-02/material-05/ACCEPTANCE.md)均已完成人工验收并合入main。
-
-[铀原料加工与两格富集离心机](docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[生芯块与整格燃料烧结炉](docs/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[装配材料02C](docs/reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)及[八格屏蔽装配台02E](docs/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)功能手测均通过并合入main，从主目录runClient即可使用。02E模型共面闪烁已修复并通过几何/打包核对，修后画面未再次人工确认；[青金石粉与无热冷却剂01B、固定实验堆生存制造01](docs/reviews/2026-10-03/reactor-01/ACCEPTANCE.md)已全部手测通过并合入main，补齐7种材料与16条反应堆制造配方。模型活动件已拆分，动画另批；按[改动范围验证](docs/project-governance.md#51-按改动范围验证2026-10-02起生效)，不重复全量回归。铅锡水洗副产物暂缓，完整生存生产和发电链尚未完成，见[实施路线图](docs/implementation-roadmap.md)。
+离心机、反应堆和高压锅炉的思索教学已通过播放验收。当前汽轮机三情景在同级候选中实现，尚待本台播放；使用`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`的`runClient`查看。下一步为换热器工作盆供热，再制作换热器各用途教学，见[当前任务入口](docs/README.md)。
 
 ## 设计方向
 
@@ -43,7 +33,7 @@ P1 固定 `5×5×5` 实验反应堆已于 **2026-09-29 完成最终交接**，�
                                                 └─→ Create 原生供热与蒸汽设备
 ```
 
-首发目标能源是Create旋转应力（SU）。基础燃料生产、核换热器供热、专用锅炉、三档汽轮机及蒸汽冷凝回水已完成现行验收；乏燃料基础封存、完整温压机制、辐射系统、可变尺寸反应堆/锅炉及烈焰人反应堆管理员分别按后续计划推进。各设备当前实现范围以活动计划和验收记录为准。
+首发目标能源是Create旋转应力（SU）。基础燃料生产、核换热器供热、专用锅炉、三档汽轮机及蒸汽冷凝回水已完成现行验收；乏燃料基础封存及可变尺寸温压锅炉也已实现；辐射系统、可变尺寸反应堆及烈焰人反应堆管理员后置。各设备当前实现范围以活动计划和验收记录为准。
 
 ## 版本与依赖
 
@@ -82,12 +72,7 @@ Linux / macOS：
 
 开发客户端 `runClient`、`runClientA`、`runClientB` 自动加载 JEI，版本固定在 `gradle.properties` 的 `jei_version`。JEI 仅用于开发时查看物品和配方，不进入服务端/GameTest/JUnit、发布依赖或模组 JAR。配置变更后需重启开发客户端。三矿与最终素材已在 main 生效；下一批未验收功能继续在同级隔离工作树测试，具体位置见任务卡。
 
-常用验证命令：
-
-```powershell
-.\gradlew.bat test --rerun-tasks --max-workers=1
-.\gradlew.bat runGameTestServer --rerun-tasks --max-workers=1
-```
+开发验证按[改动范围](docs/project-governance.md#51-按改动范围验证2026-10-02起生效)选择定向测试与增量打包，沿用已审证据；全量JUnit/GameTest只在明确风险触发时运行。
 
 反应堆离线数值模拟器位于 [`tools/reactor-simulator/`](tools/reactor-simulator/README.md)，用于验证堆芯布局、控制棒、冷却剂、损伤和融毁模型；它是开发工具，不是模组内 GUI。
 
@@ -100,10 +85,10 @@ Linux / macOS：
 ## 已知边界
 
 - 当前没有稳定发布包，也不承诺开发存档向后兼容。
-- 当前反应堆与高压锅炉均固定为`5×5×5`；两者后期都支持限定范围内自由选择长宽高，具体范围待确认。
-- 正式连接纹理、Blockbench 多边形模型、Flywheel 动画、粒子和音效在功能闭环后制作。
-- 基础矿物、材料、燃料组件与现有设备制造已可生存获取；乏燃料基础封存和复杂再处理尚未完成。
-- 核换热器供Create原生锅炉、专用锅炉核热产汽、三档超临界汽轮机及蒸汽冷凝闭环已实现并验收；完整温压机制后置。
+- 当前实验反应堆固定`5×5×5`；高压锅炉已支持配置范围内的整数长宽高，默认各边[5,11]，水汽容量按分区容积计算。汽轮机只支持三档预设尺寸。
+- 已有设备提供现行静态资源与多边形模型；连接纹理、运行状态动画、粒子和音效按后续批次完善。
+- 基础矿物、材料、燃料组件、现有设备制造和乏燃料基础封存已可生存获取；复杂再处理尚未实现。
+- 核换热器供Create原生锅炉、专用锅炉核热产汽、三档超临界汽轮机及蒸汽冷凝闭环已实现并验收；温压与双汽库存已实现，工作盆核热接入尚未实现。
 - 不实现受污染复合冷却剂、冷却剂净化器、工业仪表或独立 SCRAM 联锁器。
 
 ## 许可与声明
@@ -122,4 +107,4 @@ Linux / macOS：
 
 ## English summary
 
-**Create: Nuclear Industry** is an in-development NeoForge 1.21.1 addon that brings reactor control, coolant circulation, fuel management, thermal damage and safety systems into Create's mechanical automation language. The current Alpha focuses on a fixed `5×5×5` experimental reactor. Boilers, heat exchangers, turbines, full survival progression and final rotational-power generation are planned for later milestones.
+**Create: Nuclear Industry** is an in-development NeoForge 1.21.1 addon that brings reactor control, coolant circulation, fuel management, thermal damage and safety systems into Create's mechanical automation language. The Alpha includes fuel production, a fixed `5×5×5` experimental reactor, variable-size pressure boilers, three turbine sizes, a coolant/steam recovery loop and basic spent-fuel storage. Device tutorials are being added one at a time; radiation, concrete accident effects and reprocessing remain future work.

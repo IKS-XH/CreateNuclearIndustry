@@ -1,6 +1,6 @@
 # 燃料02C：焊料、包壳与格架材料
 
-**状态：四项手测通过，已验收合入main。** 用户2026-10-03确认本页手动测试全部通过，见[最终验收](./ACCEPTANCE.md)。已批准[方案](../../../superpowers/plans/2026-10-03-fuel-assembly-materials-proposal.md)中的焊料为3锡锭＋1铅锭→4件；实现提交`956bfbb`，实施与范围见[02C任务卡](../../../superpowers/plans/2026-10-03-ext-a-fuel-02c.md)。本批只补齐装配材料，屏蔽装配台和四材料直接装配燃料组件随后另卡。
+**状态：四项手测通过，已验收合入main。** 用户2026-10-03确认本页手动测试全部通过，见[最终验收](./ACCEPTANCE.md)。已批准[方案](../../../archive/2026-10-08-completed-plans/2026-10-03-fuel-assembly-materials-proposal.md)中的焊料为3锡锭＋1铅锭→4件；实现提交`956bfbb`，实施与范围见[02C任务卡](../../../archive/2026-10-08-completed-plans/2026-10-03-ext-a-fuel-02c.md)。本批只补齐装配材料，屏蔽装配台和四材料直接装配燃料组件随后另卡。
 
 ## 客户端启动与验收
 

@@ -1,6 +1,6 @@
 # 汽轮机准备证据
 
-**性质：** PM整理的只读核查记录，不是功能交付、运行探针或验收。基线 `01eaa52`；下一步方案见[三档汽轮机建议](../../../superpowers/plans/2026-10-04-supercritical-steam-turbine-proposal.md)。
+**性质：** PM整理的只读核查记录，不是功能交付、运行探针或验收。基线 `01eaa52`；下一步方案见[三档汽轮机建议](../../../archive/2026-10-08-completed-plans/2026-10-04-supercritical-steam-turbine-proposal.md)。
 
 两名执行者分别完成 `EXT-B-TURBINE-PREP-API` 与 `EXT-B-TURBINE-PREP-PARTS`，均使用 `gpt-6-luna/high`。已读取AGENTS、治理5.1、活动计划及 `minecraft-modding`、`minecraft-testing` 技能。只返回消息，未改代码/核心文档、未执行Git写操作、构建或测试。PM随后复核材料JSON、蒸汽注册与容量源码，并核算建议规格和配方数量。
 

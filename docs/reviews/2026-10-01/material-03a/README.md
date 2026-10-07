@@ -16,4 +16,4 @@
 
 显示名修订已完成；完整155项GameTest仍未完成，钢材链尚未合入main，不派发依赖它的下一批零件/设备。人工门已解除，不再要求用户重复确认或重测本批。当前使用新名称仍从`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`运行`gradlew.bat runClient`；已运行的客户端需重新启动才能加载更新后的内置语言文件。
 
-PM依据[03A任务卡](../../../superpowers/plans/2026-10-01-ext-a-material-03a.md)审核纯显示范围、18值差异与制品，管理文档和Git；执行者未做Git写。主工程既有`.vscode/launch.json`保持，不迁移或修改世界，不发布或推送。
+PM依据[03A任务卡](../../../archive/2026-10-08-completed-plans/2026-10-01-ext-a-material-03a.md)审核纯显示范围、18值差异与制品，管理文档和Git；执行者未做Git写。主工程既有`.vscode/launch.json`保持，不迁移或修改世界，不发布或推送。

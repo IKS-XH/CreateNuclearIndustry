@@ -1,21 +1,8 @@
 # 《机械动力：核工业》内容注册与素材清单
 
-> **2026-10-05现行验收：** 透明`turbine_window`、双端复用`turbine_output_shaft`、侧面控制器、薄壳与叶片转子，01D/R1外观、01F流量效率/周转及01G断汽停机均已人工通过并合入main。换热器冷凝回水也已完成联合验收，见[本批记录](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。注册ID保持，`steam`显示名为“蒸汽”。
+**更新：2026-10-08。** 注册身份、目标内容及资源职责由本清单维护；进度和完成证据统一见[路线图](./implementation-roadmap.md)。表中P1/P2/P3是目标阶段，不代表已实现；当前已验收基础链/热端/封存与三台教学，汽轮机思索04尚待本台播放。
 
-**适用版本：** Java 21 + Minecraft 1.21.1 + NeoForge + Create 6.0.10  
-**玩法规则：** [project.md](./project.md)  
-**材料与配方：** [recipes.md](./recipes.md)  
-**实施顺序：** [implementation-roadmap.md](./implementation-roadmap.md)
-
-本文是策划案与代码注册之间的单一内容索引，记录需要新增的流体、物品、方块和多方块结构。注册 ID 一旦进入可游玩版本就视为存档兼容接口，后续只调整显示名、纹理、模型和数值，不随意改 ID。
-
-**2026-10-01 实现检查点：** 三矿及铅锡加工/素材均已验收合入main。铅锡锭、板及粒六种身份 `lead_ingot`、`tin_ingot`、`lead_plate`、`tin_plate`、`lead_nugget`、`tin_nugget` 与配方/外观/保存重进获用户确认，见 [铅锡收尾](./reviews/2026-10-01/material-02-acceptance.md)。铁粉、煤粉、木炭粉、钢粉、钢锭和钢板的[制钢路线](./reviews/2026-10-01/material-03b/README.md)，以及锡条、两种传感器和两种序列半成品的[材料04路线](./reviews/2026-10-01/material-04/ACCEPTANCE.md)也已通过完整人工清单并合入main；传感器此阶段仅为制造材料。表中其余目标仍须按对应任务判断，不能从策划阶段标记推断已经实现。
-
-**2026-10-03燃料检查点：** `solder_ingot`、`fuel_cladding_tube`、`steel_mesh`、`steel_grate`四成品及`incomplete_steel_grate`配方/素材已[验收合入main](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。四材料装配组件及八格屏蔽装配台功能手测全部通过，连同模型R2共面修复已[合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)；修后画面未追记人工通过。青金石粉`lapis_dust`与无热冷却剂制备已在[01B候选](./reviews/2026-10-03/material-01b/README.md)实现，现已[验收合入main](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)。
-
-**2026-10-03反应堆制造候选：** [REACTOR-01](./superpowers/plans/2026-10-03-ext-a-reactor-01.md)接续六种普通材料`steel_rod`、`seal_ring`、`pressure_fitting`、`industrial_ceramic`、`neutron_absorbing_ceramic`、`shielded_glass`，一个普通方块`shielding_concrete`以及五个Create原生序列半成品。它们支撑正式八种实验堆部件的生存制造；屏蔽名称不表示辐射系统已实现。新内容及01A/01B/01C配方修订已与冷却剂01B完成合并人工验收，并合入main。
-
-**01A制造修订：** 铅玻璃改铅锭加玻璃普通加热搅拌，燃料柱每次1件；仪表/换料端口和驱动器改动力合成。控制棒组件再按[01C](./superpowers/plans/2026-10-03-ext-a-reactor-01c.md)改工作台合成；原5半成品身份均仅保留作旧存档兼容，不再用于新加工；不改注册、模型或运行逻辑。见[01A卡](./superpowers/plans/2026-10-03-ext-a-reactor-01a.md)。
+命名空间`create_nuclear_industry`，版本为Java21 / Minecraft1.21.1 / NeoForge21.1.219 / Create6.0.10。玩法见[项目策划](./project.md)，材料数量与工序见[配方表](./recipes.md)。ID保持稳定，但首发前不研究旧存档兼容，不把旧半成品身份列为新加工路线。
 
 ## 1. 状态与命名规则
 
@@ -35,7 +22,7 @@
 - 流体至少提供静止、流动纹理和桶/容器策略；危险蒸汽不提供生存模式手持桶。
 - 材料标签按 [recipes.md 的 NeoForge 通用标签目录](./recipes.md#23-neoforge-通用标签目录)生成。
 
-当前 P1 核心实施子集只包括：固定 `5×5×5` 实验反应堆、反应堆所需燃料/冷却剂状态、控制棒拖动滑块、燃料列降频与直接相邻超频、逐列热负荷损伤、可配置的损伤产热增益与更快增长的燃耗代价、控制棒列卡死、四向失效传播与 20% 融毁倒计时及其服务端事件占位符、燃料列关键合成物品维修、停机重组成型重置、SCRAM 和冷却剂冷/热状态转化。P1 不注册事故专用废物、残骸或污染内容，不实现任何事故世界效果；反应堆具体事故与锅炉、汽轮机事故统一后置。损伤倍率的新默认值与配置已由 `P1-BALANCE-02A` 接入游戏端；HTML 工具仍待 [P1-BALANCE-02B](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md) 同步，不新增物品或方块 ID，且只在主要目标阻塞时穿插，不作为 P1 验收前置。锅炉、汽轮机、完整燃料生产线、烈焰人管理员、可变结构和乏燃料封存虽可保留首发内容设计，但不得提前按当前 P1 任务实现。
+P1核心反应堆已经交接，基础生产、锅炉、汽轮机与轻量封存也已按批验收；事故世界效果、辐射、污染、烈焰人管理员和反应堆可变结构仍后置。命名或阶段清单不能授权创建空内容。
 
 ## 2. 流体
 
@@ -97,13 +84,13 @@
 
 复合冷却剂直接使用原版下界资源 `minecraft:glowstone_dust`（中文名“荧石粉”）。本模组不新增荧石矿物或荧石粉，也不为原版荧石复制注册项和素材。
 
-用户于 2026-09-23 确认保留青金石制粉工序并对接 NeoForge 通用材料标签。青金石粉正式身份为 `create_nuclear_industry:lapis_dust`，不依赖第三方模组提供基础产物；`c:dusts/lapis` 是按通用约定补充的标签，并非 NeoForge 21.1.219 已内置的粉末。原料读取 `c:gems/lapis`，粉末用途读取 `c:dusts/lapis`，不能把整颗青金石或蓝色染料加入粉末标签绕过工序。D-02a 已确认粉碎轮承担制粉、磨石保留 Create 原有染料配方，并接受本模组制粉路线的粉碎轮门槛；该需求已在01B候选实现，当前客户端与合入状态见[交付清单](./reviews/2026-10-03/material-01b/README.md)。
+用户于 2026-09-23 确认保留青金石制粉工序并对接 NeoForge 通用材料标签。青金石粉正式身份为 `create_nuclear_industry:lapis_dust`，不依赖第三方模组提供基础产物；`c:dusts/lapis` 是按通用约定补充的标签，并非 NeoForge 21.1.219 已内置的粉末。原料读取 `c:gems/lapis`，粉末用途读取 `c:dusts/lapis`，不能把整颗青金石或蓝色染料加入粉末标签绕过工序。D-02a 已确认粉碎轮承担制粉、磨石保留 Create 原有染料配方，并接受本模组制粉路线的粉碎轮门槛；该需求已验收合入main，见[合并验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)。
 
 用户于 2026-09-23 确认先完成基础材料、设备与燃料生产，再完成机组运行闭环和乏燃料基础封存，复杂再处理后置。上述两种材料的 `P1` 标记表示后续首发扩展，不加入当前固定实验堆核心切片；本次只调整阶段，不表示已经注册或实现，不提前引入 P3 辐射、污染或高放处理系统。
 
 钢板的正式注册 ID 冻结为 `steel_plate`，显示名为“钢板”，并加入对应的 `c:plates/steel` 通用标签。`alloy_steel_plate` 是早期需求记录中使用过的描述性旧名，不注册为物品、别名或兼容转发 ID；燃料列和控制棒列维修统一消耗 `steel_plate`。
 
-用户于2026-10-01将制钢改为铁锭经粉碎轮制铁粉，4铁粉+1煤粉或木炭粉动力搅拌成5钢粉，再熔炼成钢锭。`iron_dust` 不复用 `create:crushed_raw_iron`，两者分别代表金属粉和粉碎粗矿；`steel_dust` 是熔炼前的独立中间物。原有 `steel_plate` 保持身份与维修语义，本批不新增钢材逆向拆粉路线。用户已确认本批完整客户端清单通过，并将普通钢材显示名由“合金钢”简化为“钢”（钢粉、钢锭、钢板；英文Steel Dust/Ingot/Plate）；ID、标签和配方不变。完整自动回归及最终整合状态见[03A收尾卡](./superpowers/plans/2026-10-01-ext-a-material-03a.md)。
+用户于2026-10-01将制钢改为铁锭经粉碎轮制铁粉，4铁粉+1煤粉或木炭粉动力搅拌成5钢粉，再熔炼成钢锭。`iron_dust` 不复用 `create:crushed_raw_iron`，两者分别代表金属粉和粉碎粗矿；`steel_dust` 是熔炼前的独立中间物。原有 `steel_plate` 保持身份与维修语义，本批不新增钢材逆向拆粉路线。用户已确认本批完整客户端清单通过，并将普通钢材显示名由“合金钢”简化为“钢”（钢粉、钢锭、钢板；英文Steel Dust/Ingot/Plate）；ID、标签和配方不变。完整自动回归及最终整合状态见[03A收尾卡](archive/2026-10-08-completed-plans/2026-10-01-ext-a-material-03a.md)。
 
 ### 3.3 燃料、乏燃料与废物
 
@@ -115,7 +102,7 @@
 | `P1` | `fresh_fuel_assembly` | 浓缩铀燃料组件 |
 | `P1` | `cooled_spent_fuel_assembly` | 枯竭铀燃料组件；首发燃料耗尽直接输出冷却态 |
 | `暂缓` | `hot_spent_fuel_assembly` | 未来命名预留；首发不注册、不生成、不作为运行输入 |
-| `P1` | `sealed_spent_fuel_cask` | 已封装乏燃料桶；2026-10-06确认单次灌封装桶，每桶一个枯竭组件，STORE-01候选已实现，待联合手测 |
+| `P1` | `sealed_spent_fuel_cask` | 已封装乏燃料桶；2026-10-06确认单次灌封装桶，每桶一个枯竭组件，STORE-01已验收合入main |
 | 预留，非首发 | `encapsulated_spent_fuel` | 灌封中间件；轻量方案取消首发注册，不作为前置 |
 | `P3` | `spent_fuel_rod`、`contaminated_cladding`、`contaminated_grid` | 乏燃料棒、受污染包壳、受污染格架 |
 | `P3` | `reprocessed_fuel_dust`、`reprocessed_fuel_blend` | 再生燃料粉末、再生燃料混合粉 |
@@ -124,7 +111,7 @@
 | `P3` | `high_level_waste`、`vitrified_high_level_waste`、`sealed_high_level_waste_cask` | 高放残渣、高放玻璃固化体、已封装高放废物桶 |
 | `P3` | `recovered_alloy_scrap` | 回收合金碎料 |
 
-用户于2026-10-03取消首发`fresh_fuel_rod`中间物品规划，改为烧结燃料芯块＋燃料包壳管＋锡合金焊料＋钢格架直接装配既有`fresh_fuel_assembly`，不消耗工业传感器作为组件直接原料。具体数量与装配运行参数待确认。该中间物品尚未注册，无存档迁移；反应堆结构方块`reactor_fuel_rod`及P3乏燃料/再生燃料规划不受本次变更影响。
+用户于2026-10-03取消首发`fresh_fuel_rod`中间物品规划，改为烧结燃料芯块＋燃料包壳管＋锡合金焊料＋钢格架直接装配既有`fresh_fuel_assembly`，不消耗工业传感器作为组件直接原料。四材料装配参数已验收，见[02E验收](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)。该中间物品未注册；反应堆结构方块`reactor_fuel_rod`及P3乏燃料/再生燃料规划不受本次变更影响。
 
 燃料组件剩余燃料由 Minecraft ItemStack 原版损伤值与最大耐久唯一确定，`remainingFuelFraction`是运行时派生比例。2026-10-03核对`ModItems`与`FuelAssemblyItemCodec`确认：当前未注册独立的`fuel_assembly`数据组件，原文所述燃料身份/`decayHeatHu`/format自定义字段不得视为已实现或成为02D装配的额外前置；`decayHeatHu`仍仅作未来回收资格预留，首发不使用。每个燃料列一个组件，其完整实体`ItemStack`由对应`reactor_refueling_port`方块实体唯一持久化；仪表端口只保存燃耗小数余量和热工模拟状态，不保存第二份组件。燃料列有效高度决定基础耐久消耗速度；1格高、满功率、不超频的基准寿命为3小时，基础燃耗通过配置项控制。反应堆运行温度、燃料列完整度和控制棒列完整度保存在多方块结构模拟状态，不为每个燃耗阶段创建新的注册ID。只有处理规则和安全等级发生质变时才使用不同物品ID。
 
@@ -132,7 +119,7 @@
 
 实施优先级上，`fresh_fuel_assembly`（玩家名称“浓缩铀燃料组件”）、`cooled_spent_fuel_assembly`（玩家名称“枯竭铀燃料组件”）及其数据组件属于当前 P1 核心与后续燃料扩展共用的 **G1 合同**；`hot_spent_fuel_assembly` 只保留命名预留，首发不注册、不生成、不作为运行输入。燃料耗尽直接得到冷却乏燃料，热/冷转换与乏燃料池玩法后置。上述首发身份必须先于换料端口和完整铀生产线冻结。可以先让首发身份通过创造模式或开发测试获得，以解除运行与换料开发阻塞；这不代表后续生存生产线已经完成，也不得据此通过生存扩展验收。
 
-G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固定为：煤炭→浓缩铀燃料组件、木炭→枯竭铀燃料组件、熔岩→热复合冷却剂、水→复合冷却剂。这里仅指纹理/图标占位；四种原版 ID 不得作为本模组运行时输入、存档身份或自动化绕过。实际注册与实现状态以[实施路线图](./implementation-roadmap.md)和[文档入口与当前任务](./README.md)为准。
+燃料组件、冷/热冷却剂和生产来源已实现，当前使用独立注册身份及已验收资源；早期原版纹理占位合同只在历史归档中保留。原版煤炭、木炭、熔岩和水不充当本模组燃料组件或冷却剂的运行时别名。
 
 ### 3.4 工具、防护与设备物品
 
@@ -184,10 +171,10 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | :--- | :--- | :--- | :--- | :--- |
 | `P1` | `enrichment_centrifuge` | 富集离心机 | 铀料浆 → 低浓缩铀粉 + 贫化铀粉 + 工艺水 | 消耗稳定 Create 转速和应力完成铀富集；转速不稳降低效率 |
 | `P1` | `fuel_sintering_furnace` | 燃料烧结炉 | 生燃料芯块 → 烧结燃料芯块 | 单格无GUI、底部普通热源、顶进四侧出，1件烧结400有效tick；整格八棱外观、工作台/高炉制造；02A/02B全部手测通过并合入main，见[最终验收](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md) |
-| `P1` | `shielded_assembly_station` | 屏蔽装配台 | 芯块/包壳/焊料/格架8/4/2/1 → 1新组件；封存与再生燃料另批 | [02E已合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)：2×2×2、四周漏斗物流、21格制造和动画分件；`shielded_assembly_part`为无独立物品/库存代理，不提前实现屏蔽机械臂 |
+| `P1` | `shielded_assembly_station` | 屏蔽装配台 | 芯块/包壳/焊料/格架8/4/2/1 → 1新组件；另支持已验收的乏燃料灌封装桶；再生燃料后置 | [02E已合入main](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)：2×2×2、四周漏斗物流、21格制造和动画分件；`shielded_assembly_part`为无独立物品/库存代理，不提前实现屏蔽机械臂 |
 | `P1` | `nuclear_heat_exchanger` | 换热器 | 热复合冷却剂→复合冷却剂；蒸汽+冷源→水 | 核热/冷凝互斥，拒收超临界蒸汽；核热默认最高18锅炉热级，冷凝不供热；工作盆供热另批 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体端口 | 水、循环能力和热乏燃料 → 冷却状态 | 后置玩法；首发不实现热/冷转换、乏燃料池冷却或相关流体路线 |
-| `P1` | `dry_storage_rack` | 干式贮存架 | 已封装乏燃料桶 → 贮存位置状态 | STORE-01候选已实现、待联合手测：单格无GUI，默认16单件槽，保留完整桶记录；不消除辐射物质 |
+| `P1` | `dry_storage_rack` | 干式贮存架 | 已封装乏燃料桶 → 贮存位置状态 | STORE-01已验收合入main：单格无GUI，默认16单件槽，保留完整桶记录；不消除辐射物质 |
 | `P3` | `shielded_disassembler` | 屏蔽拆解机 | 冷却乏燃料组件 → 乏燃料棒 + 受污染格架 | 在屏蔽环境拆解乏燃料，禁止普通机械手直接处理 |
 | `P3` | `sealed_reprocessor` | 密闭再处理器 | 乏燃料棒 + 处理介质 → 再生燃料粉末 + 高放残渣 + 受污染包壳 | 回收部分燃料价值，并保证同步产生不可消除的高放废物 |
 | `P3` | `shielded_manipulator` | 屏蔽机械臂 | 危险物品搬运 | 在热室和屏蔽机器之间自动转移高辐射物品，不执行加工配方 |
@@ -205,7 +192,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | 阶段 | 所属结构 | 可放置组成方块（注册 ID） | 各类部件作用 |
 | :--- | :--- | :--- | :--- |
 | `P1` | 专用高压锅炉 | `high_pressure_boiler_casing`、`high_pressure_boiler_window`、`high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port`、`high_pressure_boiler_hot_coolant_port`、`high_pressure_boiler_cold_coolant_port`、`boiler_safety_valve`、`boiler_heat_exchange_section`、`high_pressure_boiler_controller` | 外壳/观察窗封闭锅炉；热/冷口统一供回内置核换热器冷却剂；再加热段构成分区隔层；给水口进水，汽口按选择输出对应库存；安全阀泄压，控制器保存整炉账本 |
-| `P1` | 超临界汽轮机 | 七件：`turbine_casing`、`turbine_rotor`、`turbine_inlet`、`turbine_exhaust`、`turbine_output_shaft`、`turbine_controller`、`turbine_window`；后续保留 `turbine_governor`、`turbine_brake` | 01B候选自动门通过：侧控制器、双端独立输出轴、透明窗和薄壳叶片；未通过新结构人工门。调速器、制动器仍属后续规划 |
+| `P1` | 超临界汽轮机 | 七件：`turbine_casing`、`turbine_rotor`、`turbine_inlet`、`turbine_exhaust`、`turbine_output_shaft`、`turbine_controller`、`turbine_window`；后续保留 `turbine_governor`、`turbine_brake` | 三档机组、侧控制器、双端共享应力、透明窗和薄壳叶片均已验收。调速器、制动器仍属后续规划 |
 | `P3` | 屏蔽热室 | `hot_cell_casing`、`hot_cell_window`、`hot_cell_item_port`、`hot_cell_fluid_port`、`hot_cell_controller` | 外壳/观察窗提供辐射屏蔽；物品口和流体口限定危险物流；控制器检查屏蔽完整性并允许内部机械臂工作 |
 
 ## 5. 多方块结构
@@ -219,7 +206,7 @@ G1/G2 前置注册与占位素材合同已经定义；当前临时 PNG 来源固
 | `P2` | `variable_reactor` | 可变尺寸反应堆 | 5×5×5 至 11×11×15 | 从固定实验堆扩展；有效燃料长度受限 | 结构自由度和规模化产热 |
 | `P3` | `shielded_hot_cell` | 屏蔽热室 | 屏蔽外壳、观察窗、机械臂、物品/流体端口 | 屏蔽完整，危险物料不能从非端口穿过 | 高放废物灌封与处理 |
 
-**核换热器现行边界（2026-10-08）：** `nuclear_heat_exchanger`显示名“核换热器”，核热→Create锅炉、专用锅炉及[01D定向直列](./superpowers/plans/2026-10-04-ext-b-exchanger-01d.md)均已验收。顶供热、前冷出后热入，最多16台同向首尾相连共享库存，各台贡献双4000mB容量、独立储热与NBT份额；左右/底面不提供流体能力。配方不变，无GUI。[冷凝回水01](./superpowers/plans/2026-10-05-ext-b-condense-01.md)已实现并[联合验收合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)，各台顶部接触水源、雪块、冰、浮冰或蓝冰，按实际冷凝量融水/蒸发。超临界蒸汽降级供热已取消，工作盆核热接入排在汽轮机思索之后。
+**核换热器现行边界（2026-10-08）：** `nuclear_heat_exchanger`显示名“核换热器”，核热→Create锅炉、专用锅炉及[01D定向直列](archive/2026-10-08-completed-plans/2026-10-04-ext-b-exchanger-01d.md)均已验收。顶供热、前冷出后热入，最多16台同向首尾相连共享库存，各台贡献双4000mB容量、独立储热与NBT份额；左右/底面不提供流体能力。配方不变，无GUI。[冷凝回水01](archive/2026-10-08-completed-plans/2026-10-05-ext-b-condense-01.md)已实现并[联合验收合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)，各台顶部接触水源、雪块、冰、浮冰或蓝冰，按实际冷凝量融水/蒸发。超临界蒸汽降级供热已取消，工作盆核热接入排在汽轮机思索之后。
 
 **2026-10-08范围修订：** 用户取消换热器超临界蒸汽输入，原降级供热模式及9级热值规划撤销。现有入口本来只接受热复合冷却剂或 `steam`，本次不修改运行代码。工作盆供热排在汽轮机思索验收之后，见[接续排期](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)。
 
@@ -229,9 +216,9 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 
 ## 6. 第一批素材清单
 
-**2026-09-29 制作方式更新：** 用户授权美术重绘采用 Agent 绘制像素 SVG 源稿，再确定性导出游戏使用的 16×16 PNG，不直接使用生图模型。用户现已批准青金石粉、铅锭、铅矿石、钢板四张样稿风格，并明确将现有全部 51 张 PNG（含反应堆平面纹理）按此重绘。源稿保留在开发资产目录，候选游戏接入按 [EXT-ART-02](./superpowers/plans/2026-09-29-ext-art-02.md) 审核及客户端验收；四张 flow 保留现有 16×64 布局。具体合同见 [启动计划](./superpowers/plans/2026-09-29-resources-production-art-start-plan.md)。该授权提前基础贴图工作，不提前复杂设备模型或动画。
+**2026-09-29 制作方式更新：** 用户授权美术重绘采用 Agent 绘制像素 SVG 源稿，再确定性导出游戏使用的 16×16 PNG，不直接使用生图模型。用户现已批准青金石粉、铅锭、铅矿石、钢板四张样稿风格，并明确将现有全部 51 张 PNG（含反应堆平面纹理）按此重绘。源稿保留在开发资产目录，候选游戏接入按 [EXT-ART-02](archive/2026-10-08-completed-plans/2026-09-29-ext-art-02.md) 审核及客户端验收；四张 flow 保留现有 16×64 布局。具体合同见 [启动计划](archive/2026-10-08-completed-plans/2026-09-29-resources-production-art-start-plan.md)。该授权提前基础贴图工作，不提前复杂设备模型或动画。
 
-**同日客户端反馈修订：** 用户认可其他新素材，要求两种冷却剂恢复重绘前外观。因此当前采用 43 张新 SVG 贴图与 8 张保留原始 PNG 的冷却剂贴图（block/fluid 各含冷/热 still/flow）。冷却剂原图例外由 [EXT-ART-02A](./superpowers/plans/2026-09-29-ext-art-02a-coolant-restore.md) 管理，批量导出不得重新覆盖为撤回的新外观；流体渲染、颜色和行为不变。
+**同日客户端反馈修订：** 用户认可其他新素材，要求两种冷却剂恢复重绘前外观。因此当前采用 43 张新 SVG 贴图与 8 张保留原始 PNG 的冷却剂贴图（block/fluid 各含冷/热 still/flow）。冷却剂原图例外由 [EXT-ART-02A](archive/2026-10-08-completed-plans/2026-09-29-ext-art-02a-coolant-restore.md) 管理，批量导出不得重新覆盖为撤回的新外观；流体渲染、颜色和行为不变。
 
 **2026-10-01 板材与粒素材验收：** EXT-ART-03增加两板、03A按用户反馈方正化、04增加铅粒/锡粒，当前游戏PNG共55张，历史基线仍为51项。原51图保持，新增四图已随铅锡加工通过客户端清单验收并合入main。后续优先主线功能，不在本批继续扩展美术范围。
 
@@ -263,7 +250,7 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 - 已进入可游玩版本的注册 ID 不再改名。
 ## 8. 当前状态与文档入口
 
-首发燃料组件、持久化 `fuel_assembly` 数据组件、冷/热冷却剂及其 P1 运行接入已完成，验收见 [P1 最终交接](./archive/P1-VERIFY-03.md)；完整生产来源和后续热端仍未完成，当前进度由路线图维护。首发耗尽终态直接使用 `COOLED_SPENT`；`HOT_SPENT` 仅为未来热态路线保留命名，首发不注册、不生成、不依赖。煤炭、木炭、熔岩和水只作为占位纹理来源，不能作为配方输入、燃料别名、流体能力或运行时存档身份。
+基础生产来源、燃料组件、冷/热冷却剂、锅炉及汽轮机回水闭环均已按批验收；证据统一见[路线图](./implementation-roadmap.md)。首发耗尽终态为`COOLED_SPENT`；`HOT_SPENT`仅为未来热态路线保留命名，首发不注册、不生成、不依赖。
 
 当前执行顺序见 [实施路线图](./implementation-roadmap.md)，活动计划见 `docs/superpowers/plans/`，已验收计划见 [文档归档索引](./archive/README.md)。
 
@@ -278,15 +265,15 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 
 ## 10. Create Ponder（“思索”）覆盖合同
 
-Ponder 是首发完整版本中所有可玩内容的教学入口，不是开发者调试工具。每个已注册且对玩家有主动交互、结构搭建、物流连接、运行控制或安全意义的 ID 都必须有独立入口；语义相同的ID可复用场景。固定实验堆原11项入口保留；初版播放发现缺少布局信息与冷热口遮挡，按[02-R1](./superpowers/plans/2026-10-06-device-ponder-02-r1.md)补自由布局、多口、可见管路，并新增棒列关系情景。用户2026-10-06要求暂停主线，现有设备思索按台验收；[离心机](./superpowers/plans/2026-10-06-device-ponder-01-centrifuge.md)仍待播放，不自动推进其他设备。玩家文案聚焦设备操作与规则，技术说明留在源码注释/报告。[事故后教学计划](./superpowers/plans/2026-09-12-post-accident-ponder-plan.md)继续约束未实现事故与发布总验收；不得用假设备、假配方或未实现事故演示填充当前教程。
+已实现设备基础教学逐台验收，具体事故教学后置。当前离心机一幕、反应堆四幕、高压锅炉三幕已通过，汽轮机三幕正在本台候选；先完成工作盆核热功能再制作换热器多情景教学。原11项反应堆入口保留，相似构件可以共用情景；只演示实际已实现规则，不用假设备或未来事故填充。
 
 ### 10.1 多方块结构
 
 | 阶段 | 结构 ID | Ponder 必须演示的内容 |
 | :--- | :--- | :--- |
-| `DEVICE-PONDER-02-R1`四情景整改；事故后补齐 | `experimental_reactor`及三个独立情景 | [本批任务](./superpowers/plans/2026-10-06-device-ponder-02-r1.md)：搭建、棒列关系、运行与停机、装料与换料分别选择；包括自由布局、多冷热口、并联超频、四向控制及平均插深、未受控列无法中止、可见冷却回路、红石停机/恢复、余热冷却及玩家/动力机械臂装卸。保留11项入口，待真实播放；损伤、维修、卡死、融毁与具体事故教学按后置计划补齐。 |
-| `P2` | `high_pressure_boiler` | 密闭结构、水口、换热段、烈焰人辅助热源、超临界蒸汽出口、安全阀泄压与缺水/出口阻塞的安全停机 |
-| `P2` | `supercritical_steam_turbine` | 预设规格选择、各档搭建与性能差异、成型后整体多边形外观、连续转子、进汽/排汽、主轴输出、调速器、制动器、超速风险和蒸汽回路连接 |
+| `已验收`四情景；事故后补齐 | `experimental_reactor`及三个独立情景 | [本批任务](archive/2026-10-08-completed-plans/2026-10-06-device-ponder-02-r1.md)：搭建、棒列关系、运行与停机、装料与换料分别选择；包括自由布局、多冷热口、并联超频、四向控制及平均插深、未受控列无法中止、可见冷却回路、红石停机/恢复、余热冷却及玩家/动力机械臂装卸。保留11项入口，已通过播放；损伤、维修、卡死、融毁与具体事故教学按后置计划补齐。 |
+| `已验收`三幕 | `high_pressure_boiler` | 搭建内置换热/汽水分区、可见管路运行、双汽库存与汽口过滤/调压；辅助热与具体事故后补 |
+| `04候选待播放`三幕 | `supercritical_steam_turbine` | 核心先行包壳、三档尺寸、可见进排汽、双轴共享应力及实际流量/效率；调速器、制动器、超速风险不提前教学 |
 | `暂缓` | `spent_fuel_pool` | 水池内衬、循环端口、储存格和后置状态；首发不实现热/冷转换 |
 | `P2` | `variable_reactor` | 尺寸边界、燃料有效高度、控制棒邻接、局部反馈和多端口布置 |
 | `P3` | `shielded_hot_cell` | 屏蔽完整性、观察窗、物品/流体端口、屏蔽机械臂和危险物流边界 |
@@ -295,7 +282,7 @@ Ponder 是首发完整版本中所有可玩内容的教学入口，不是开发�
 
 | 阶段 | 注册 ID | Ponder 必须演示的内容 |
 | :--- | :--- | :--- |
-| `DEVICE-PONDER-01`待播放验收 | `enrichment_centrifuge` | [本台候选](./reviews/2026-10-06/ponder-01/CANDIDATE.md)：两格放置、底部动力、顶部进浆、水平面双粉/回水与黄铜过滤、稳定转速/输出堵塞暂停、停转轴承维修；当前失稳行为为暂停，不展示未实现的效率曲线 |
+| `已验收`基础教学 | `enrichment_centrifuge` | [联合验收](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)：两格放置、底部动力、顶部进浆、水平面双粉/回水与黄铜过滤、稳定转速/输出堵塞暂停、停转轴承维修；当前失稳行为为暂停，不展示未实现的效率曲线 |
 | `P2` | `fuel_sintering_furnace` | 生燃料芯块输入、密闭高温烧结、烧结燃料芯块输出，说明普通鼓风加热不可替代 |
 | `P2` | `shielded_assembly_station` | 芯块/包壳/焊料/格架直接装配组件、屏蔽边界、燃料组件和危险物品装配限制 |
 | `P2` | `nuclear_heat_exchanger` | 核热换热与供热、普通蒸汽冷凝回水、顶部冷源和定向直列；工作盆核热接入定稿后独立教学。拒收超临界蒸汽，不演示取消的降级供热路线；数值可由配置覆盖 |

@@ -1,6 +1,6 @@
 # 汽轮机01B候选交付
 
-**状态：2026-10-05搭建与外观人工反馈未通过，由01C整改。** 用户指出未成型设备呈现散乱薄板，要求实际研究AeroEngine的搭建与成型。只读复核确认独立外壳方向/扳手未落实，以及模型顶板、碰撞底板不一致；用户已确认[核心先行＋辅助包壳](../../../superpowers/plans/2026-10-05-turbine-assembly-experience-proposal.md)，[01C任务](../../../superpowers/plans/2026-10-05-ext-b-turbine-01c.md)正在实施。下列自动证据仍是历史有效结果，但不足以证明搭建体验通过，原“无未解决阻断项”的交付判断已被本次反馈取代。
+**状态：2026-10-05搭建与外观人工反馈未通过，由01C整改。** 用户指出未成型设备呈现散乱薄板，要求实际研究AeroEngine的搭建与成型。只读复核确认独立外壳方向/扳手未落实，以及模型顶板、碰撞底板不一致；用户已确认[核心先行＋辅助包壳](../../../archive/2026-10-08-completed-plans/2026-10-05-turbine-assembly-experience-proposal.md)，[01C任务](../../../archive/2026-10-08-completed-plans/2026-10-05-ext-b-turbine-01c.md)正在实施。下列自动证据仍是历史有效结果，但不足以证明搭建体验通过，原“无未解决阻断项”的交付判断已被本次反馈取代。
 
 功能只在主工程同级候选 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，尚未合入main。当前启动使用本目录的 `./gradlew.bat runClient`；主工程只同步文档。本轮调查未改动游戏实现，不要求用户重复测试同一版本。
 

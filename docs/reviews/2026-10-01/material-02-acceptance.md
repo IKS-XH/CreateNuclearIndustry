@@ -22,4 +22,4 @@
 
 两工作区运行test产生的根目录跟踪日志已分别备份到本地本轮报告，再只恢复logs/debug.log和logs/latest.log。未启动游戏、删除工作树、迁移存档或清理首轮服务器事故现场；原候选继续保留，供后续已批准主线任务复用。
 
-PM实际使用minecraft-modding、minecraft-testing、minecraft-ci-release及分支收尾/完成前验证流程；按用户既有自动整合授权执行，无发布、推送或技术栈升级。下一步按[材料03方案](../../superpowers/plans/2026-10-01-mainline-material-03-proposal.md)核对碳粉—钢锭—钢板，未批准的产率、投入及加工参数单独列为决策，不重复询问已确认工序。
+PM实际使用minecraft-modding、minecraft-testing、minecraft-ci-release及分支收尾/完成前验证流程；按用户既有自动整合授权执行，无发布、推送或技术栈升级。下一步按[材料03方案](../../archive/2026-10-08-completed-plans/2026-10-01-mainline-material-03-proposal.md)核对碳粉—钢锭—钢板，未批准的产率、投入及加工参数单独列为决策，不重复询问已确认工序。

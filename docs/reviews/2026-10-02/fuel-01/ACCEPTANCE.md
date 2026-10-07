@@ -20,4 +20,4 @@
 
 主工程`E:/MyMC/NewMod/Create_NuclearIndustry`和同级候选目录都可运行`.\gradlew.bat runClient`。两个目录各自的run世界独立，不自动复制存档。保留候选工作树供下一批使用。
 
-下一段为生芯块与专用烧结炉；最低普通加热已批准，设备布局/制造数量、吞吐和运行细节见待确认的[02A方案](../../../superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)。在这些新取舍确认前不派发功能实现，不推进后续燃料棒/组件或其他辅助任务。
+下一段为生芯块与专用烧结炉；最低普通加热已批准，设备布局/制造数量、吞吐和运行细节见待确认的[02A方案](../../../archive/2026-10-08-completed-plans/2026-10-02-fuel-sintering-furnace-proposal.md)。在这些新取舍确认前不派发功能实现，不推进后续燃料棒/组件或其他辅助任务。

@@ -1,6 +1,6 @@
 # 燃料02A：生芯块与燃料烧结炉
 
-**状态：2026-10-03用户确认02A四组手测及02B两项复测全部通过，已一并合入main，见[最终验收](../../2026-10-03/fuel-02b/ACCEPTANCE.md)。** 原运行验收保留，制造及炉体尺寸以[02B任务](../../../superpowers/plans/2026-10-03-ext-a-fuel-02b.md)为准；下文制造成本和原模型说明是02A历史交付。已批准合同见[方案](../../../superpowers/plans/2026-10-02-fuel-sintering-furnace-proposal.md)和[任务卡](../../../superpowers/plans/2026-10-02-ext-a-fuel-02a.md)。本页只覆盖低浓缩铀粉→生燃料芯块→烧结燃料芯块，后续包壳、燃料棒和组件尚未实施。
+**状态：2026-10-03用户确认02A四组手测及02B两项复测全部通过，已一并合入main，见[最终验收](../../2026-10-03/fuel-02b/ACCEPTANCE.md)。** 原运行验收保留，制造及炉体尺寸以[02B任务](../../../archive/2026-10-08-completed-plans/2026-10-03-ext-a-fuel-02b.md)为准；下文制造成本和原模型说明是02A历史交付。已批准合同见[方案](../../../archive/2026-10-08-completed-plans/2026-10-02-fuel-sintering-furnace-proposal.md)和[任务卡](../../../archive/2026-10-08-completed-plans/2026-10-02-ext-a-fuel-02a.md)。本页只覆盖低浓缩铀粉→生燃料芯块→烧结燃料芯块，后续包壳、燃料棒和组件尚未实施。
 
 ## 启动与人工门
 
