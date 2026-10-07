@@ -21,6 +21,8 @@
 
 ## 锅炉
 
+**01F最新候选（已实现，待手测）：** [双汽库存](./superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)替代下文01B/01D整炉瞬时切种规则。两种汽各自保存真实mB/HU，共用`steamCapacityPerCellMb`计算的一份总容量；新批次按实际温压归类，库存不自动换种，各口只取所选库存。`supercriticalPressure`用于新批次定种，已有SC仍须已付热合格，低于该生产门槛可排至公共出汽压力下限。配置键与默认数值均不增加、不改变；下文自动验证数字仅是历史证据，本批状态见候选说明。
+
 **2026-10-07重构候选：** [内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)全套默认值已实现，下列实际字段经定向自动验证与审查，尚待人工、未合入main。候选状态与人工清单见[本批说明](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。主目录仍为此前已验收固定锅炉，历史参数见[01A配置化合同](./superpowers/plans/2026-10-04-ext-b-turbine-01a.md)。
 
 文件：`create_nuclear_industry-boiler.toml`。所有键在文件顶层。
@@ -28,14 +30,14 @@
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |
 | `dimensionRange` | `[5, 11]` | 三边分别允许的整数闭区间；恰好两值，5≤min≤max≤32 |
-| `waterCapacityPerCellMb` / `steamCapacityPerCellMb` | 各2000 | 每个有效水区/汽区格的mB容量 |
+| `waterCapacityPerCellMb` / `steamCapacityPerCellMb` | 各2000 | 每个有效水区/汽区格的mB容量；01F两种汽共用汽区总容量 |
 | `portFlowMbPerTick` | 256 | 每个水、汽、热液、冷液口的独立mB/t额度，主动/被动共用 |
 | `pairHeatHuPerTick` | 18 | 每有效换热器/再加热段配对的HU/t上限 |
 | `boilingTemperature` / `supercriticalTemperature` | 1 / 2 | 归一游戏温度，后者须大于前者 |
 | `wallHeatCapacityHuPerWaterCell` | 1600 | 每个水区格提供的炉壁热容，HU/温升 |
 | `waterSpecificHeatHuPerMb` / `steamSpecificHeatHuPerMb` | 0.1 / 0.2 | 水/汽比热，HU/mB/温升 |
 | `vaporizationLatentHeatHuPerMb` | 0.7 | 汽化追加潜热，HU/mB |
-| `supercriticalPressure` | 0.5 | 超临界资格的归一炉压门槛 |
+| `supercriticalPressure` | 0.5 | 01F新增批次归为超临界汽的归一炉压门槛；不重标已有库存 |
 | `outputMinPressure` | 0.6 | 默认出汽压力下限，合法范围[0,1]，控件按0～100%逐整数设置 |
 | `valveOpenPressure` / `valveClosePressure` | 0.9 / 0.8 | 阀开/关炉压，开启线也用于堵阀保护 |
 | `valveFlowPerSteamCellMbPerTick` | 32 | 每汽区格提供的泄放速率，mB/t |
@@ -44,11 +46,11 @@
 
 冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；32为工程扫描封顶，不代表最大规模已完成客户端性能验收。
 
-用户手测后确认[01B整改](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)：删除汽种开关与两模式默认项，采用上述单一默认；显式机器出汽压力下限独立保存，不由默认配置覆盖。汽种按实际汽温/炉压自动决定，温压均达超临界资格输出超临界蒸汽，否则输出蒸汽。压力下限可设100%，可能因安全阀先泄放而停止正常出汽，这是合法操作，不改变阀值。炉压由汽量、汽区容量和汽温共同决定，与Create管网运输压力分开，护目镜按百分数显示。默认5³居中隔层上下各9格、水汽各18000mB；热工目标仍为超临界温度2、下限0.6时保留10800mB启动汽量。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出携带HU均实际扣账，自动换种不免费升级库存、不删除外部异种流体。简化散热不扣潜热、不模拟炉内凝水，安全阀正常排放仍消耗工质和热量。
+控制器沿用01B单一出汽压力下限，显式机器设置独立保存，不由默认配置覆盖。01F新批次按实际批次汽温及加量后的共同炉压归类，已有两种库存不变身份；炉压由两种汽量和各自实际汽温共同决定，与Create运输压力分开。压力下限可设100%，可能因安全阀先泄放而停止正常出汽；它不是目标炉压，也不强制产生普通汽。默认5³居中隔层上下各9格、水汽各18000mB，汽容量由两种共用；全部汽温为2时，下限0.6对应保留10800mB。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出HU均实际扣账，普通汽不因再热变SC，欠热SC等待再热。散热不扣潜热、不模拟炉内凝水，安全阀排放仍消耗工质和热量。
 
 旧`waterCapacityMb`、`steamCapacityMb`、`sectionHeatHuPerTick`、`steamHuPerMb`、`warmHuPerSection`、`coolingHuPerSectionPerTick`、`reheatFraction`、`valveOpenFraction`、`valveCloseFraction`及`valveFlowMbPerTick`不再控制重构候选。既有配置文件和用户世界不由本次文档整理删除。
 
-**01D汽口选择（候选待手测）：** 每个蒸汽出口使用Create原生选项控件，选择“蒸汽 / 超临界蒸汽”、默认超临界，当前选择各口独立保存。只过滤上述实际温压决定的汽种，不降级转换；不匹配时该口不出汽，出汽压力下限和安全阀仍按配置执行。不新增热工数值或分立汽种库存，也不改写外部异种流体。[本批任务](./superpowers/plans/2026-10-07-boiler-steam-port-selection.md)4项定向GameTest、增量assemble及一次合并审查通过，客户端门保留。控制器不重新增加汽种开关。
+**汽口选择（01F候选）：** 沿用01D原生选项“蒸汽 / 超临界蒸汽”，默认超临界，各口独立保存。每个口只抽所选的真实库存，无对应库存、欠热或无保压余量时等待；已有SC在低于生产炉压门槛后仍可按公共下限输出。两种可同时经各自独立管路交付，不降级、混装、转换或清除外部异种流体。控制器不增加汽种开关，所有配置数值保持原值。01D历史4项证据保留，本批25项账本/11个不同真实用例及独立审查见候选说明，客户端门尚未关闭。
 
 ## 换热器
 

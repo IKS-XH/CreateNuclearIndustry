@@ -36,4 +36,4 @@ R1定向场景在持续63HU/t这一测试参数下复现：蒸汽口短暂匹配
 
 验证遵循治理5.1：同一R1两项红→绿，必要的缓存守恒/堵塞/改选/当前保存生命周期合同，以及受影响的01C/01D管路合同；实现稳定后一次增量打包、一次合并审查与集中客户端验收。未变汽轮机、热工和其他历史证据复用，不机械重复全量测试。
 
-依据：[窗口与交易分析](../../../reviews/2026-10-07/boiler-rework-01/multiport-pressure-r1-analysis.md)、[稳定保存现场](../../../reviews/2026-10-07/boiler-rework-01/multiport-pressure-r1-site.md)、[独立技术复核](../../../reviews/2026-10-07/boiler-rework-01/multiport-pressure-r1-review.md)。版本锁定Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280；评审实际应用minecraft-modding、minecraft-testing、systematic-debugging与brainstorming技能，用户既有治理与精简验证规则优先。
+依据：[窗口与交易分析](../../reviews/2026-10-07/boiler-rework-01/multiport-pressure-r1-analysis.md)、[稳定保存现场](../../reviews/2026-10-07/boiler-rework-01/multiport-pressure-r1-site.md)、[独立技术复核](../../reviews/2026-10-07/boiler-rework-01/multiport-pressure-r1-review.md)。版本锁定Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280；评审实际应用minecraft-modding、minecraft-testing、systematic-debugging与brainstorming技能，用户既有治理与精简验证规则优先。
