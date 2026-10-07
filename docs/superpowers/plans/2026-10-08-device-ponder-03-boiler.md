@@ -1,13 +1,23 @@
-# 高压锅炉四情景思索实施计划
+# 高压锅炉思索实施计划（三情景定稿）
 
 > **For agentic workers:** 使用 `superpowers:subagent-driven-development`；本卡由项目经理派发执行者实现。执行者禁止 Git 写操作和核心文档修改。用户已确认四情景并要求开始，不重复请求计划批准。
 
-**Goal:** 为现行分区温压高压锅炉提供四个可独立播放的教学情景，帮助玩家搭建、接管、调压及排查停机。
-**Architecture:** 新建独立 `BoilerPonderScenes`，由现有 Ponder 插件挂接九种已注册锅炉部件；四份完整 NBT 模板由独立 Python 工具生成。仅操作 Ponder 客户端临时世界，复用原有资源、方块和交互，不改生产机制。
+**Goal:** 为现行分区温压高压锅炉提供三个可独立播放的教学情景，帮助玩家搭建、接管和调压。用户已确认前三幕播放效果，删除重复的“停机与排查”幕。
+**Architecture:** 独立 `BoilerPonderScenes`由现有Ponder插件挂接九种已注册锅炉部件，定稿只保留三份完整NBT模板及生成入口。仅操作Ponder客户端临时世界，复用原有资源、方块和交互，不改生产机制。
 **Tech Stack:** Minecraft 1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6；版本和依赖不变。
 **Spec:** 用户于2026-10-08批准四情景方案并明确“好，开始吧”；现行玩法以 [锅炉重构](./2026-10-07-ext-b-boiler-rework-01.md)、[底层热口](./2026-10-07-boiler-hot-inlet-layer-fix.md)、[双汽库存01F](./2026-10-07-boiler-dual-steam-inventory-01f.md)及其实际实现为准。
 
 ## 任务合同
+
+### R3：移除重复教学并收尾（2026-10-08，当前合同）
+
+用户明确“删掉停机与排查这一页吧，该说的前面几页都说了，其他的都挺好”。前三幕搭建、接通运行、蒸汽输出调压按本次用户反馈记录播放通过；第四幕不再属于交付范围，不重复要求播放。此条优先于下方初版四幕及R2待播放描述，后者保留历史含义。
+
+- **实现：** 在同级候选移除第四故事板绑定、场景方法及仅其使用的常量/import、生成器分支、`high_pressure_boiler_shutdown.nbt`和对应中英文Ponder键；更新现有合同测试的故事板列表/数量/分支及相关中文注释。前三幕、R2时序和其他设备教学不得改写，不把第四幕内容重新塞入前三幕。
+- **写集：** `BoilerPonderScenes.java`、`P1PonderPlugin.java`、`BoilerPonderContractTest.java`、`tools/ponder/boiler_scenes.py`；删除第四幕NBT；两语言仅删除第四幕键；执行者追加本批 `implementation.md`，审查者追加 `review.md`。PM负责其余文档、状态与Git。
+- **验证：** 三份剩余NBT字节不变，核对九入口只有三个故事板、没有第四幕引用和翻译；只跑原 `BoilerPonderContractTest` 四项一次，不新增镜像测试或重新生成未变的三模板。候选不重复assemble，最终合入main后由执行者做一次增量assemble和三模板/双语/场景class的必要封包核对；不得全量、clean、GameTest或启动用户客户端。
+- **技能：** 实际应用minecraft-modding、minecraft-testing及receiving-code-review，版本仍MC1.21.1/Java21/NeoForge21.1.219/Create6.0.10/Ponder1.0.82。执行者禁止Git写、核心文档修改和子派发。
+- **收尾：** 独立审查仅看R3删减差异和已有证据；PM无冲突整合本台已验收三幕及R1/R2修正至main，同步入口/验收记录。前三幕人工证据来自用户，不冒充代理实际播放；删除一幕不另设人工门。不自动接下一台教学或其他主线。
 
 ### R2：首次进入思索崩溃整改（2026-10-08）
 
@@ -21,12 +31,12 @@
 - **审核与交付：** PM核对源码/锁定Ponder实现及定向证据，由原审查者仅复核本次崩溃整改；修正进入同级候选后，用户重新按W并继续原四幕清单。未通过播放不合入main，不接其他任务。
 
 - **任务ID：** DEVICE-PONDER-03-BOILER。
-- **状态：** R2修正候选待客户端播放；首次W崩溃已按锁定Ponder生命周期修正，功能提交`92f6d07`。新增回归先红后绿、四项定向检查和一次增量assemble通过，独立复核无遗留问题；尚未实际重试W或通过四幕播放门，原失败与R1证据保留。
+- **状态：** 已完成；前三幕获用户播放认可，R3删页`064fae9`定稿与R2修正已整合main`58a965e`，一次定向检查及唯一main增量打包通过。[验收记录](../../reviews/2026-10-08/boiler-ponder-03/ACCEPTANCE.md)关闭本批，原失败与历史证据保留，不重复人工门、不自动接下一项。
 - **维护者：** 用户任命的现任项目经理；实现和合并规格/质量审查分别由执行者承担。
 - **前置：** 锅炉REWORK-01～01F集中手测与main合入已完成；离心机、反应堆教学已独立通过，不重复验收。
 - **执行根：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支 `codex/ore-acquisition`，基准 `b18c41c`；main当前 `b04a37c`。两根源码、思索工具及项目文档相同，使用已有同级候选，不创建新工作树。
 - **既有改动：** 候选 `logs/debug.log`、`logs/latest.log` 和三个工具 `__pycache__` 保留，不暂存、不删除。不改用户世界及运行配置。
-- **人工门：** 完成后只交付本台四情景集中播放清单；未获用户确认不合入教学功能、不派下一台设备或其他主线。
+- **人工门：** 前三幕按本次用户反馈关闭，第四幕撤销；R3删减不另建播放门。完成收尾后不自动派其他设备或主线。
 
 ## 必读与技能
 
@@ -64,7 +74,7 @@
 5. 临时填罐、窗口液位、压力/状态演示只限客户端教学；不调用服务端热工/库存交易、不修改正式世界。技术说明只放中文注释与报告。
 6. 所有新增或修改手写代码与非显然演示算法写准确中文注释；无GUI，不新增设备、机制、事故或辐射演示。
 
-## 四情景与玩家知识
+## 初版四情景与玩家知识（第四幕已由R3撤销）
 
 四个story ID / Java入口分别为：
 
@@ -112,9 +122,9 @@
 
 ## 入口与资源契约
 
-九个锅炉部件均挂接上述四故事板，保持顺序：`high_pressure_boiler_casing`、`high_pressure_boiler_window`、`high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port`、`high_pressure_boiler_hot_coolant_port`、`high_pressure_boiler_cold_coolant_port`、`boiler_safety_valve`、`boiler_heat_exchange_section`、`high_pressure_boiler_controller`。不纳入未实现烈焰加热口，不提前接换热器独立教学。现有11个反应堆入口、四故事板及离心机绑定保持原样。
+九个锅炉部件均挂接R3保留的前三故事板，保持顺序：`high_pressure_boiler_casing`、`high_pressure_boiler_window`、`high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port`、`high_pressure_boiler_hot_coolant_port`、`high_pressure_boiler_cold_coolant_port`、`boiler_safety_valve`、`boiler_heat_exchange_section`、`high_pressure_boiler_controller`。不纳入未实现烈焰加热口，不提前接换热器独立教学。现有11个反应堆入口、四故事板及离心机绑定保持原样。
 
-生成器需可重复生成四模板并检查NBT尺寸、唯一位置、palette/state索引与合法部件层位/外向方向，以及管路不占炉腔。报告记录每幕布局、文字顺序与等待时序；测试检查绑定到存在模板、双语key齐全及结构布局，不写逐句镜像或全量负例。
+生成器定稿可重复生成三模板并检查NBT尺寸、唯一位置、palette/state索引与合法部件层位/外向方向，以及管路不占炉腔。报告记录每幕布局、文字顺序与等待时序；测试检查绑定到存在模板、双语key齐全及结构布局，不写逐句镜像或全量负例。
 
 ## Review Focus
 
@@ -132,15 +142,16 @@
 - [x] 唯一构建执行者运行定向 `test --tests '*BoilerPonderContractTest' --tests '*P1Ponder01ContractTest'` 和最终一次增量 `assemble --console=plain`，保存原始日志、退出码与JAR。若新变化/失败，只补对应检查；不跑GameTest、clean或热端全量。
 - [x] 一轮独立合并规格/质量审查，读差异、模板和已有证据，不重复运行测试；必要整改后仅复查实际差异。
 - [x] PM核对写集、证据和打包资源，保存中文候选提交及交付说明。
-- [ ] 用户集中播放四情景：可见IO、合法分区、汽种与调压含义、停机排查、字幕及回放均正常；这项只能由用户确认。
+- [x] 用户认可前三情景播放，要求删除重复第四幕；前三幕按总体反馈关闭播放门，未另附逐项操作日志，不冒充代理播放。
+- [x] R3删减、定向核对、main整合及唯一增量打包完成；PM读取实际日志/制品并记录最终版本。
 
 ## 交付
 
 报告包括实际技能应用、文件清单、四幕默认镜头/接口布局、文字起止时序、临时客户端状态边界、必要验证命令/退出码/结果、JAR及证据位置、仍需人工验证的视觉范围。区分静态/编译通过与用户播放通过。
 
-最终仅停在本台播放门。启动候选：在 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition` 使用 `.\gradlew.bat runClient`。主目录保持已验收生产功能，待本批播放通过再合入教学。
+前三幕已通过播放；当前按R3删减后合入main，不因纯删页重复人工门。候选和用户世界保留，不自动开始下一台。
 
-## 当前候选交付（2026-10-08）
+## 初版/R1候选交付（2026-10-08，历史证据）
 
 功能提交 `c113447`，见[交付入口](../../reviews/2026-10-08/boiler-ponder-03/README.md)、[实施及R1](../../reviews/2026-10-08/boiler-ponder-03/implementation.md)、[独立审查及复核](../../reviews/2026-10-08/boiler-ponder-03/review.md)、[唯一播放清单](../../reviews/2026-10-08/boiler-ponder-03/PLAYBACK.md)。初版9项定向检查通过；审查发现剖视返回值、故障时序、调压演示、实际NBT占位验证及启动顺序五项问题，已在同批修复，R1仅新跑锅炉3项，未变P1六项复用。最后0～100文案补回仅静态核对和增量打包，不重跑JUnit。原失败与制品保留，未启动客户端。
 
