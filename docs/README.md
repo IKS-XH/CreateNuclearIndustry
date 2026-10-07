@@ -1,6 +1,8 @@
 # 项目文档入口
 
-**当前锅炉整改（2026-10-07）：** [连续流动与动力联动01C](./superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)已复现并修复快速跨汽种后原生来源缓存失效，专用5项GameTest、增量assemble及一次合并审查通过，功能快照`050afe3`。中/大型及空罐持续接汽、守恒与双端回接停开定向通过；用户现场0SU持续残转尚未复现，保留同次现场复测，不声称全部问题已修复。最新同级候选见[交付页](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，未人工验收或合入main；原[单控件与自动汽种01B](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)及01A未变规则保留，不自动接下一项。
+**最新现场整改（2026-10-07）：** [01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)已局部修复汽轮机当前实体恢复后的断汽残转路径，功能快照`5ced309`，17项定向GameTest、增量assemble及独立审查通过，等待客户端复测。锅炉共管调压停流仍未定位；用户确认目标控制器`(28,-59,-11)`且已拆除创造储罐，需恢复原支路保留故障现场继续排查。[最新候选和集中复测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)仅在同级工作树，不合入未验收功能，不接下一主线/教学。
+
+**历史锅炉整改（01C，2026-10-07）：** [连续流动与动力联动01C](./superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)已复现并修复快速跨汽种后原生来源缓存失效，专用5项GameTest、增量assemble及一次合并审查通过，功能快照`050afe3`。当时中/大型及空罐持续接汽、守恒与双端回接停开定向通过，持续残转尚未复现；该描述仅保留当时证据，当前排查与局部修复以01E为准。原[单控件与自动汽种01B](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)及01A未变规则保留。
 
 **当前进度（2026-10-05）：** 用户明确“所有测试项都通过了”，三档汽轮机的搭建/外观、双端共享容量、流量效率/微周转、断汽停机，蒸汽冷凝回水闭环及护目镜显示已完成[联合验收并合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。主目录`.\gradlew.bat runClient`包含现行实现；同级候选与原测试世界保留。未变实现复用各批定向验证，只新做一次合入增量打包。
 
@@ -16,7 +18,7 @@
 
 ## 当前工作
 
-**锅炉当前整改：** 用户未能复现汽轮机持续残转，该项排查暂缓。[01D蒸汽口独立汽种选择](./superpowers/plans/2026-10-07-boiler-steam-port-selection.md)已交付功能快照`99a526c`：每口原生控件选蒸汽/超临界蒸汽、默认超临界，只过滤实际汽种，不降级；不匹配时停流，已有外部异种库存不清除。最终4项定向GameTest、唯一增量assemble和一次合并审查通过，现[等待集中手测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，主目录尚无新锅炉功能源码。
+**锅炉当前整改：** [01D蒸汽口独立汽种选择](./superpowers/plans/2026-10-07-boiler-steam-port-selection.md)已交付功能快照`99a526c`：每口原生控件选蒸汽/超临界蒸汽、默认超临界，只过滤实际汽种，不降级；不匹配时停流，已有外部异种库存不清除。此前4项定向GameTest、唯一增量assemble和一次合并审查证据保留；新增汇流和断汽现场失败由[01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)接续整改，主目录尚无新锅炉功能源码。
 
 **本批已收尾：** 高压锅炉首期与01B～01D整改、强化钢板配方、换热器定向共享直列及01E翻译全部人工通过并合入main，见[最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。主目录runClient可直接使用；候选测试世界仍在原目录。
 

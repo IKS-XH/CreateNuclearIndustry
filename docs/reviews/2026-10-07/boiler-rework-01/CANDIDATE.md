@@ -1,6 +1,8 @@
 # 分区温压锅炉：候选与集中手测
 
-**状态：[01D蒸汽口独立汽种过滤](../../../superpowers/plans/2026-10-07-boiler-steam-port-selection.md)已实现；最终4项定向GameTest、唯一一次增量assemble及一次合并审查通过，功能快照`99a526c97697e9de134cbd090674927c2147c2bd`。用户未能复现持续残转，该项排查暂缓；锅炉集中人工门仍保留，未合入main。** [01C来源缓存修复](../../../superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)快照`050afe3e4eb70789804697b2880b7c76281ca8d7`继续包含；原[01B](../../../superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)、[REWORK-01](../../../superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)和[01A](../../../superpowers/plans/2026-10-07-boiler-hot-inlet-layer-fix.md)的未变部分继续适用。01B自动任意汽种输出由01D逐口纯过滤替代，历史证据不改写。主目录仅同步文档与候选制品，新源码须从同级候选启动。
+**最新现场结果（01E）：** 汽轮机当前实体恢复后的断汽残转路径已局部修复，功能快照`5ced309a46b85b3c0de7e98069bb1bf90f67e53f`，17项定向GameTest、一次增量assemble与独立审查通过，等待客户端复测。锅炉共管调压停流仍未定位，没有新增锅炉生产修复。用户确认目标控制器`(28,-59,-11)`且已拆除创造储罐，当前管路不能代替原故障拓扑；须恢复原支路并保留异常现场。[01E计划与边界](../../../superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)。下方01D自动通过与暂缓说明为历史证据，不表示本次人工通过；主线/教学继续停止。
+
+**历史状态（01D）：[蒸汽口独立汽种过滤](../../../superpowers/plans/2026-10-07-boiler-steam-port-selection.md)已实现；最终4项定向GameTest、唯一一次增量assemble及一次合并审查通过，功能快照`99a526c97697e9de134cbd090674927c2147c2bd`。当时用户未能复现持续残转，排查暂缓；随后反馈及现阶段局部修复以01E为准。锅炉集中人工门仍保留，未合入main。** [01C来源缓存修复](../../../superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)快照`050afe3e4eb70789804697b2880b7c76281ca8d7`继续包含；原[01B](../../../superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)、[REWORK-01](../../../superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)和[01A](../../../superpowers/plans/2026-10-07-boiler-hot-inlet-layer-fix.md)的未变部分继续适用。01B自动任意汽种输出由01D逐口纯过滤替代，历史证据不改写。主目录仅同步文档与候选制品，新源码须从同级候选启动。
 
 锅炉重构仍在`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录尚未应用新版锅炉。[离心机R3和反应堆02-R1](../ponder-acceptance-01/ACCEPTANCE.md)已获用户明确手测确认并单独合入main；这次教学验收不覆盖本页锅炉清单，锅炉独立人工门继续保留。
 
@@ -14,7 +16,9 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 
 请按下方新搭法搭建锅炉；原底部外置热源结构不属于本候选搭法。默认尺寸范围为`[5,11]`，热工、容量、逐口流量与压力阈值均在`create_nuclear_industry-boiler.toml`中配置，准确字段和实际生效路径见[配置指南](../../../server-config.md#锅炉)。显式机器保压设置由各机器保存。两类新口及再加热段成本见[配方表](../../../recipes.md#14-专用高压锅炉部件)。
 
-[最新01D候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01D/client-candidate/create_nuclear_industry-0.1.0-boiler-steam-selection.jar)：2,227,784字节，内部版本仍为`0.1.0`；SHA-256为`C699C2A97E84D318CFBDA33A79A4409AD3ED0D88C038DD5E33678620A72A5412`。两目录保存相同制品；PM独立核对本批11个生产class、两语言及NBT与实际编译输出/资源逐字节一致，新GameTest类已封包，记录见同目录`pm-artifact-validation.json`。开发启动读取源码和资源，须重启客户端加载新代码。依赖保持MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。
+[最新01E候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01E/client-candidate/create_nuclear_industry-0.1.0-boiler-multiport-stop.jar)：2,247,712字节，内部版本仍为`0.1.0`；SHA-256 `080A09302E7D5E596F30CB6D75E0E2D42093227A409597AADDA9B35263CF03FB`。两目录保存相同制品；PM独立核对本批生产class、测试class及两NBT与实际编译输出/资源一致，记录见同目录`pm-artifact-validation.json`。开发启动读取源码和资源，须重启客户端加载新代码。依赖保持MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。
+
+原[01D候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01D/client-candidate/create_nuclear_industry-0.1.0-boiler-steam-selection.jar)：2,227,784字节，SHA-256 `C699C2A97E84D318CFBDA33A79A4409AD3ED0D88C038DD5E33678620A72A5412`，封包核对记录继续保留。
 
 原[01C候选JAR](../../../../build/reports/extension/EXT-B-BOILER-REWORK-01C/client-candidate/create_nuclear_industry-0.1.0-boiler-flow.jar)（2,207,578字节，SHA-256 `B3BF640B296561533EA1FDBAC802DBEAC11AFCA530C58879940325DA76E6E911`）继续保留。
 
@@ -24,6 +28,7 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 
 | 证据 | 结果 |
 | :--- | :--- |
+| 01E残转与多口诊断 | 最终17/17、GameTest exit0、assemble exit0，独立审查允许局部汽轮机候选进入人工测试。正常本版本实体恢复后中/大型自然残转红测由局部初始化修复关闭，合法外源对照保留；原生范围内四SC/16回路/中型/创造罐共同支路通过并守恒。锅炉原现场故障仍未定位，完整客户端保存重进也不由实体重建证据代替。 |
 | 01D逐口汽种过滤 | 最终4/4、GameTest exit0/实际19.79秒，服务端正常保存退出；唯一assemble exit0/实际5.42秒，一次独立合并审查无阻断。原生选项/当前NBT/客户端快照、拒绝降级、SIMULATE、逐口额度与HU、真实双路管/直接相邻泵切换、冷液持续及外部异种背压通过。最后仅遥测分支和槽位布局由assemble核对，实际客户端点击/显示仍待人工。 |
 | 01C持续供热及联动 | 专用5/5、GameTest/Gradle exit0/24秒，增量assemble exit0/1秒，一次独立合并审查无阻断；持续大型/中型/空罐、自然快速切种、实际汽量/HU边界、异种背压及同机双端四齿轮箱回接停开均通过。持续残转没有复现，不据此关闭现场项。 |
 | 01B单控件与自动汽种定向验证 | 新BoilerStateTest 15/15，专用真实GameTest 3/3，增量assemble exit0。原生数值包17/43/70/0/100提交、冷液真实泵跨调压/汽种保持原句柄、蒸汽原管自动换种且质量/HU守恒均通过。首轮夹具快照错误及修复证据保留；一次合并审查通过，未发现确定性阻断缺陷。 |
@@ -51,6 +56,8 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 
 ## 集中手测清单
 
+**本次只集中复测两项：** 重启同级候选，汽轮机正常运行后重复切断供汽，确认实际轴和转速表停止；恢复锅炉原共管创造储罐支路，调压60→10，若仍停流，保留完整布置并保存退出，提供护目镜温压/汽种和库存现场继续定位。下表保留既有总合同，不要求机械重做已通过项目。
+
 | 项目 | 操作与预期 |
 | :--- | :--- |
 | 搭建与分区 | 按参考5³搭建；热液入口放在底层四边的非角点格，与换热器同层，允许成型并进液；再搭一个偶数长方体并改变隔层高度。护目镜显示正确尺寸、分区容量与有效配对。把热液口移高、放在角点或朝向炉内，其他棱边换成端口、隔层留缺口或任一区无空气层时，不应成型。 |
@@ -65,4 +72,4 @@ $env:JAVA_HOME = 'C:/Program Files/Java/jdk-21'
 
 本次只重点复测汽口选择：重启同级候选，给两个出口设置不同选择；不匹配口应等待，不把超临界汽降级。保持供热与冷液回流，将一个口切换为不匹配再切回匹配，原管道/泵无需拆放即恢复，另一个口不受此选择连带撤销。确认接管后的上缘控件与护目镜清楚可操作，再保存退出重进核对独立选择。外部已有另一种汽的管路/储罐需由玩家排空或分设；本功能不把异种存量自动转换。设置10仍是出汽压力下限，不是目标炉压或强制普通汽；纯过滤不匹配及供热超过吞吐时仍可积汽/按原阀值泄放。
 
-用户反馈汽轮机持续残转未能复现；本轮暂缓该项排查，不要求专项复现或采集轴数据，也不认定故障已修复。01D已完成上述候选交付，停止自动推进等待锅炉集中人工验收；已确认基础项不要求机械重复全表。
+01D时期用户反馈汽轮机持续残转未能复现，曾暂缓排查；该历史状态已由本页顶部01E局部修复与复测要求替代。停止自动推进等待锅炉集中人工验收；已确认基础项不要求机械重复全表。
