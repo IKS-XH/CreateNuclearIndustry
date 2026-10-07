@@ -1,8 +1,8 @@
 # 项目文档入口
 
-**01F当前候选（2026-10-07）：双汽库存已实现并通过独立审查，等待集中手测。** 功能快照`fcb4b6d`，两种蒸汽分别保存真实mB/HU、共用总容量，各口只取对应库存，已有汽不自动换种。25项账本检查及11个不同真实用例（10＋1证据复用）、唯一增量assemble通过；原13管支路实际收到46633mB蒸汽。见[任务与边界](./superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)、[候选和精简复测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。源码仅在同级候选，main未合入新版锅炉；参数不变，不接其他主线/教学。
+**最新验收（2026-10-08）：分区温压锅炉及01F双汽库存已手测通过并合入main。** 两种蒸汽分别记录真实mB/HU、共用总容量，各口只取对应库存，已有汽不自动换种。整合`611d3ca`的65个源码/资源/美术源路径与最终候选一致；复用已审定向证据，唯一一次main增量assemble和24项封包核对通过。主目录runClient包含新版锅炉，见[验收记录](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。其余主线和下一台思索不自动开启。
 
-**上一轮01E候选（2026-10-07）：** [01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)局部汽轮机修复快照`5ced309`，17项定向GameTest、增量assemble及独立审查证据保留；本轮用户残转未复现反馈及锅炉稳定现场以R1为准，旧恢复创造罐的操作清单不再作为当前要求。[候选与当前门槛](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)仅在同级工作树，不合入未验收功能，不接下一主线/教学。
+**历史01E候选（2026-10-07）：** [01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)局部汽轮机停转修复及17项定向GameTest证据保留；最终实现随本次锅炉验收合入main。本次人工确认覆盖已列锅炉清单，不扩展为全部动力场景。
 
 **历史锅炉整改（01C，2026-10-07）：** [连续流动与动力联动01C](./superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)已复现并修复快速跨汽种后原生来源缓存失效，专用5项GameTest、增量assemble及一次合并审查通过，功能快照`050afe3`。当时中/大型及空罐持续接汽、守恒与双端回接停开定向通过，持续残转尚未复现；该描述仅保留当时证据，当前排查与局部修复以01E为准。原[单控件与自动汽种01B](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)及01A未变规则保留。
 
@@ -10,9 +10,9 @@
 
 **首发前范围（2026-10-05）：** 完成首个可发布版本前不研究旧存档兼容，不安排跨版本迁移及其验收门；当前版本自身的保存与加载仍做必要检查，见[治理5.2](./project-governance.md#52-首发前的存档验证边界2026-10-05起生效)。
 
-**指定重构（2026-10-07）：** [锅炉内置换热、汽水分区、可变尺寸与温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)已按整组确认参数实现。候选29项单测、15项真实GameTest、增量assemble及合并审查通过，现[等待集中手测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，尚未合入main。尺寸范围和热工参数均配置化；本锅炉人工门独立于已验收的两台思索。
+**锅炉现行实现：** [内置换热、汽水分区、可变尺寸与温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)及01A～01F整改已[验收合入main](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。默认三边范围[5,11]，水/汽容量按各区容积计算，冷热液共享，唯一压力下限控件与逐口汽种选择；数值均配置化。
 
-**当前进度（2026-10-07）：** 用户明确离心机、反应堆思索手动测试通过，离心机R1/R2/R3与反应堆02-R1四情景已[联合验收并单独合入main](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)。主目录runClient含这两台教学；锅炉重构仍在同级候选等待自己的手测，不合入未验收锅炉、不自动推进其他主线或教学。
+**两台思索验收（2026-10-07）：** 离心机R1/R2/R3及反应堆02-R1四情景已[单独验收合入main](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)。锅炉随后于2026-10-08另行通过本轮手测；教学与锅炉的历史证据各自保留。
 
 **整理日期：2026-09-29。** P1 固定实验反应堆已完成最终交接。下一阶段优先矿物获取、原材料与零件、设备制备及燃料生产。当前进度维护在[实施路线图](./implementation-roadmap.md)，本页负责导航。
 
@@ -20,7 +20,7 @@
 
 ## 当前工作
 
-**锅炉当前整改：** [01D蒸汽口独立汽种选择](./superpowers/plans/2026-10-07-boiler-steam-port-selection.md)已交付功能快照`99a526c`：每口原生控件选蒸汽/超临界蒸汽、默认超临界，只过滤实际汽种，不降级；不匹配时停流，已有外部异种库存不清除。此前4项定向GameTest、唯一增量assemble和一次合并审查证据保留；新增汇流和断汽现场失败由[01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)接续整改，主目录尚无新锅炉功能源码。
+**锅炉逐口选择：** [01D蒸汽口选择](./superpowers/plans/2026-10-07-boiler-steam-port-selection.md)保留原生控件、默认超临界、纯过滤、不降级和不清外部异种库存；01F改为每口读取对应真实库存，已有汽不自动切换。最终状态见[本次验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。
 
 **本批已收尾：** 高压锅炉首期与01B～01D整改、强化钢板配方、换热器定向共享直列及01E翻译全部人工通过并合入main，见[最终验收](./reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。主目录runClient可直接使用；候选测试世界仍在原目录。
 
@@ -36,7 +36,7 @@
 
 **已完成生产段：** 三矿、铅锡、钢材、锡条与传感器、石英粉/耐火砖/重型轴承，以及铀洗矿/制浆/两格离心机、生芯块/烧结炉均已完成各批人工验收并合入main。普通钢材名称简称“钢”，铅锡水洗副产物暂缓；主目录runClient已包含烧结炉。历史验证按各批报告保留，不重复全量。
 
-**当前安排：** 两台思索已验收合入main；新版分区温压锅炉继续等待[集中手测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。其余主线及下一台教学继续暂停；无GUI规则保留，未实现事故/辐射不提前演示。
+**当前安排：** 两台思索和新版分区温压锅炉均已验收合入main；本轮收尾完毕，其余主线及下一台教学等待另行安排。无GUI规则保留，未实现事故/辐射不提前演示。
 
 **2026-10-04运行整改已验收：** 同一Create管网的多冷端共享容量损失已修复，自适应供热与保存恢复获用户手测确认。复用候选30项定向JUnit和15项真实GameTest，本次main仅新跑一次增量assemble，见[验收证据](./reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)。
 
@@ -44,12 +44,12 @@
 
 **验证方式：** 沿用治理5.1，同一实现的已审定向测试不重复执行；制造批次历史证据见[冷却剂与实验堆验收](./reviews/2026-10-03/reactor-01/ACCEPTANCE.md)，换热器本次集成证据单列。
 
-**当前优先级（2026-10-07）：** 先完成锅炉重构的独立人工门；两台思索已通过，不重复播放验收。反应堆可变结构、工作盆加热、辅助热、二级耐压、事故/辐射与02E动画仍后置，发布出口另行验证。
+**当前优先级（2026-10-08）：** 本轮锅炉人工门已关闭，既有两台思索不重复验收。反应堆可变结构、工作盆加热、辅助热、二级耐压、事故/辐射与02E动画仍后置，其他设备教学及发布出口另行安排。
 
 | 入口 | 用途与状态 |
 | :--- | :--- |
 | [首发扩展准备计划](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 主线入口：已确认决策、材料与设备依赖、未决参数和任务骨架；骨架不是派发授权 |
-| [锅炉重构REWORK-01](./superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md) | 29项单测、15项真实GameTest、增量构建及审查通过；[同级候选待人工](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，未合入main |
+| [锅炉重构REWORK-01](./superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md) | 分区温压、可变尺寸和01A～01F整改已[验收合入main](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)；主目录runClient可用 |
 | [锅炉01D按层三格端口](./superpowers/plans/2026-10-04-ext-b-boiler-01d.md) | 全部手测通过并合入main；第2层最多11给水口、第4层最多12汽口，每口独立256mB/t |
 | [换热器01E护目镜翻译](./superpowers/plans/2026-10-04-ext-b-exchanger-01e.md) | 语言资源及用户显示确认通过，已合入main；专用供热显示“向高压锅炉供热” |
 | [首台富集离心机实施](./superpowers/plans/2026-10-02-ext-a-fuel-01.md) | 全部人工门通过、已合入main，见[最终验收](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |

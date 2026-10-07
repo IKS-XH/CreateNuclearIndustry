@@ -21,9 +21,9 @@
 
 ## 锅炉
 
-**01F最新候选（已实现，待手测）：** [双汽库存](./superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)替代下文01B/01D整炉瞬时切种规则。两种汽各自保存真实mB/HU，共用`steamCapacityPerCellMb`计算的一份总容量；新批次按实际温压归类，库存不自动换种，各口只取所选库存。`supercriticalPressure`用于新批次定种，已有SC仍须已付热合格，低于该生产门槛可排至公共出汽压力下限。配置键与默认数值均不增加、不改变；下文自动验证数字仅是历史证据，本批状态见候选说明。
+**01F现行配置（2026-10-08已验收合入main）：** [双汽库存](./superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)替代下文01B/01D整炉瞬时切种规则。两种汽各自保存真实mB/HU，共用`steamCapacityPerCellMb`计算的一份总容量；新批次按实际温压归类，库存不自动换种，各口只取所选库存。`supercriticalPressure`用于新批次定种，已有SC仍须已付热合格，低于该生产门槛可排至公共出汽压力下限。配置键与默认数值不增加、不改变，见[验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。
 
-**2026-10-07重构候选：** [内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)全套默认值已实现，下列实际字段经定向自动验证与审查，尚待人工、未合入main。候选状态与人工清单见[本批说明](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。主目录仍为此前已验收固定锅炉，历史参数见[01A配置化合同](./superpowers/plans/2026-10-04-ext-b-turbine-01a.md)。
+**锅炉版本边界：** [内置换热、分区、可变尺寸及温压](./superpowers/plans/2026-10-07-high-pressure-boiler-rework-proposal.md)和01A～01F整改已于2026-10-08验收合入main。下列字段适用于新版锅炉，主目录runClient已包含实现；此前固定锅炉数值仅保留为[历史合同](./superpowers/plans/2026-10-04-ext-b-turbine-01a.md)。主目录与同级候选仍分别读取自己的运行配置。
 
 文件：`create_nuclear_industry-boiler.toml`。所有键在文件顶层。
 
