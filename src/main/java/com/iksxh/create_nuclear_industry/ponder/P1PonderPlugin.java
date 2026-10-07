@@ -48,6 +48,17 @@ public final class P1PonderPlugin implements PonderPlugin {
             "high_pressure_boiler_controller"
     );
 
+    /** 三条汽轮机故事线按搭建、通汽输出、流量效率顺序注册。 */
+    public static final List<String> TURBINE_SCENE_IDS = List.of(
+            "steam_turbine_build", "steam_turbine_operation", "steam_turbine_efficiency"
+    );
+
+    /** 七种汽轮机构件分别挂接本批三幕教学。 */
+    public static final List<String> TURBINE_ENTRY_IDS = List.of(
+            "turbine_casing", "turbine_rotor", "turbine_inlet", "turbine_exhaust",
+            "turbine_output_shaft", "turbine_controller", "turbine_window"
+    );
+
     /**
      * P1 条目列表故意排除 P0 探针、保留的样例外壳、纯材料和不可直接放置的控制棒组件。
      */
@@ -99,6 +110,16 @@ public final class P1PonderPlugin implements PonderPlugin {
                 BoilerPonderScenes::highPressureBoilerOperation);
         boilerEntries.addStoryBoard(componentId(BOILER_SCENE_IDS.get(2)),
                 BoilerPonderScenes::highPressureBoilerSteam);
+
+        var turbineEntries = helper.forComponents(TURBINE_ENTRY_IDS.stream()
+                .map(P1PonderPlugin::componentId)
+                .toList());
+        turbineEntries.addStoryBoard(componentId(TURBINE_SCENE_IDS.get(0)),
+                TurbinePonderScenes::steamTurbineBuild);
+        turbineEntries.addStoryBoard(componentId(TURBINE_SCENE_IDS.get(1)),
+                TurbinePonderScenes::steamTurbineOperation);
+        turbineEntries.addStoryBoard(componentId(TURBINE_SCENE_IDS.get(2)),
+                TurbinePonderScenes::steamTurbineEfficiency);
     }
 
     /** 将 P1 内容路径转换为本模组命名空间下的 Ponder 组件 ID。 */
