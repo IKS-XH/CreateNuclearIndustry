@@ -83,3 +83,33 @@
 读取最终实施报告的R1附录及`build/reports/extension/DEVICE-PONDER-03-BOILER-R1/`：`targeted-test.log`/退出码0，JUnit XML为锅炉3项、0失败/错误/跳过；`assemble.log`/退出码0。0～100文案补回后仅读取`assemble-final.log`/退出码0的增量打包证据，没有重跑JUnit。旧反应堆6项与未改模板/生成器证据复用首轮，本轮不冒充重新运行。最终候选为`create_nuclear_industry-0.1.0-R1-final.jar`，2,283,254字节；最终实施报告记录SHA-256 `A5EA3E8B371FB542CB171B4017392AF58981A2B37CA43347E198AF2FBD33FD3A`，旧R1与首轮制品保留。
 
 **本轮只有静态/编译/定向证据，不是客户端播放通过。** 动态剖视实际视线、端口与储罐区分、窗口/流体显示、原生控件外观、故障恢复动画、字幕及关键帧回放仍由用户集中播放确认。结论仅允许进入本台播放候选，不改变任务状态、不授权合入main或推进下一台教学。
+
+## R2首次进入崩溃的定向复核（2026-10-08）
+
+**结论：本次R2源码修正与锁定Ponder的调度/合并语义一致，未发现本次差异仍需整改的问题，可交付修正候选供用户重新按W进入及播放验证。** 基线为`90aa89d61615e72bcda1f06c4ee3fa2bba0e06e9`。仅读取本次两代码文件差异、当前显隐调用及R2报告/证据；未重复整轮审查、运行测试、构建、生成器或客户端，未Git写入、子派发或改存档，仅追加此报告。重新阅读当前AGENTS及任务要求，并沿用已读的`minecraft-modding`/`minecraft-testing`，实际核对本机Ponder1.0.82源码。
+
+原始崩溃报告`run/crash-reports/crash-2026-10-08_03.06.39-client.txt`及R2快照中的堆栈明确为`PonderScene.tick`→`hideSection`回调→`WorldSectionElementImpl.erase`，其中`section == null`。旧搭建幕首批指令仅排入基础板显示，随后立即擦除尚未显示的整炉；`showSection`不是立刻初始化基础区段。R2删除该次`hideSection(whole, ...)`，符合模板默认未展示的生命周期，不需要先显示整炉再擦除。
+
+### 15tick合并边界的实际源码依据
+
+- `PonderSceneBuilder.showSection`（sources.jar第428～429行）排入`DisplayWorldSectionInstruction(15, ...)`，该指令非阻塞。
+- `TickingInstruction.tick`（第33～37行）每次调用将`remainingTicks`减1；第15次tick降到0。`DisplayWorldSectionInstruction.tick`（第45～49行）在同次tick看到0后调用`element.mergeOnto(baseWorldSection)`；`WorldSectionElementImpl.mergeOnto`（第92～97行）若基础区段为空则`set(section)`，否则`add(section)`。
+- `idle(15)`实际是`DelayInstruction`，它是15tick的阻塞指令。`PonderScene.tick`（第311～321行）按原顺序tick指令，处理完成的阻塞等待后仍会`break`结束当前调度循环。因此第15次tick先完成显示合并、再完成等待并退出；其后的hide回调到第16次tick才执行。这里15足够，不存在第15次tick先erase再merge的边界竞争。
+
+### 显隐、选择及回放核对
+
+`BoilerPonderScenes.java:57～66`的新基础板选择由四个首尾衔接且不重叠的Y=0矩形组成：z=0～2、z=10～12各39格，z=3～9的x=0～2、x=10～12各21格，总120格；与炉底x/z=3～9的49格不相交。四段通过完整链式`add`表达式赋给`basePlate`，没有丢弃`Simple.add`返回值；后续不修改此选择。该结论是选择覆盖，未把模板中空气坐标误称为新增实体地板。基础板与炉底同时淡入只覆盖各自坐标，炉底仅显示一次。
+
+搭建幕水区`71～74`、隔层`81～84`、汽区`90～93`均在对应显示后等待15，再隐藏其正面子集。上一层剖面恢复与下一层显示不重叠；新等待让两段都完成合并后再剖视。顶层显示后8tick即开始文字没有后续erase，仍可完成淡入，不构成此次空基础区段问题。删除整炉隐藏后仍按底层→水区→隔层→汽区→屋顶顺序展示，没有提前把上层全部显现。
+
+同时核对本文件其余hide：运行幕`133`位于整炉显示、12tick等待及95tick正文的115tick等待之后；停机幕给水`314`、冷回收`325`、汽路`336`位于开场显示和长等待/正文之后。三处故障恢复均继续保留20tick等待，各被隐藏的实际选择已在基础区段完成合并；没有新增未展示选择先erase的问题。
+
+回放方面，`PonderScene.begin`（第225～245行）会重置全部指令计数、恢复世界、清除元素/链接，并将基础区段置空；`DisplayWorldSectionInstruction.firstTick`重新以`initialSelection`复制设置临时显示元素。`WorldSectionElementImpl.set`使用选择副本，基础区段的add/substract不会改写本场景的初始选择。`PonderUI.seekToTime`向后跳转会先`replay()`→`begin()`，向前seek通过原`tick()`循环推进，保留阻塞顺序。因此本次删除初始erase并等待合并的修法在静态语义上也覆盖重播/关键帧恢复，不依赖上一轮已初始化的基础区段。这仍不是实际回放体验证据。
+
+### R2现有证据与人工门
+
+已读取`build/reports/extension/DEVICE-PONDER-03-BOILER-R2/`的最终合同红版`targeted-test-red-contract.log`/exit1（4项中新增生命周期断言失败，未显示整炉初始擦除）、`targeted-test-green.log`/exit0、JUnit XML（4项，0失败/错误/跳过）及`assemble.log`/exit0（增量2秒）。较早初步红版保留，未将它与最终合同红绿混淆。读取最终R2实施附录：候选`create_nuclear_industry-0.1.0-R2.jar`为2,283,313字节，实施报告记录SHA-256 `9EC12EB5F923697D9D1D24A6140BB169180915C8BA6FF4CC2DA8F6C8F23FA17F`。
+
+新增回归只从当前搭建源码提取明确选择坐标和指令等待，能捕获本次已知初始erase、底板重叠及不足等待的回退；它没有实际驱动`PonderScene.tick`/渲染，也不能替代所有可能写法的生命周期验证。本轮以锁定依赖源码的实际顺序推导补充了这一静态证据，未为此追加模拟器、全量测试或客户端运行。
+
+**当前状态是R2静态修正/定向合同/编译证据通过，用户尚须重新进入并集中播放。** 必须确认按W首次进入不再崩溃，四幕可完整播放，以及搭建切层、重播和关键帧跳转正常；此前R1“可进入候选”不代表这项真实客户端门已通过。本结论不宣称客户端崩溃已获用户确认修复，不授权合入main或继续其他教学/主线。

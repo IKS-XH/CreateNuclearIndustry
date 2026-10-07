@@ -53,19 +53,23 @@ public final class BoilerPonderScenes {
         scene.title("high_pressure_boiler_build", "High-pressure boiler: Build and zones");
         scene.configureBasePlate(0, 0, 13);
         scene.scaleSceneView(0.72F);
-        scene.showBasePlate();
+        // 基础板绕开与炉底同处Y=0的7×7占位，避免底板和炉底重复淡入。
+        Selection basePlate = util.select().fromTo(0, 0, 0, 12, 0, 2)
+                .add(util.select().fromTo(0, 0, 10, 12, 0, 12))
+                .add(util.select().fromTo(0, 0, 3, 2, 0, 9))
+                .add(util.select().fromTo(10, 0, 3, 12, 0, 9));
+        scene.world().showSection(basePlate, Direction.UP);
         Selection whole = util.select().fromTo(OX, OY, OZ, OX + 6, OY + 6, OZ + 6);
-        scene.world().hideSection(whole, Direction.DOWN);
 
         Selection bottom = util.select().fromTo(OX, OY, OZ, OX + 6, OY, OZ + 6);
         scene.world().showSection(bottom, Direction.UP);
-        scene.idle(10);
+        scene.idle(15);
         note(scene, bottom, util.vector().centerOf(6, 0, 6), 90,
                 "By default, length, width, and height are each 5–11 blocks and can be adjusted separately. This example is 7×7×7.");
 
         Selection water = util.select().fromTo(OX, 1, OZ, OX + 6, 2, OZ + 6);
         scene.world().showSection(water, Direction.DOWN);
-        scene.idle(8);
+        scene.idle(15);
         Selection waterFace = frontCasing(util, 1, 2);
         scene.world().hideSection(waterFace, Direction.SOUTH);
         fillWindow(scene, new BlockPos(5, 1, FRONT), .65F);
@@ -75,7 +79,7 @@ public final class BoilerPonderScenes {
 
         Selection partition = util.select().fromTo(OX, 3, OZ, OX + 6, 3, OZ + 6);
         scene.world().showSection(partition, Direction.DOWN);
-        scene.idle(8);
+        scene.idle(15);
         Selection partitionFace = frontCasing(util, 3, 3);
         scene.world().hideSection(partitionFace, Direction.SOUTH);
         note(scene, partition, util.vector().centerOf(6, 3, 6), 90,
@@ -84,7 +88,7 @@ public final class BoilerPonderScenes {
 
         Selection steam = util.select().fromTo(OX, 4, OZ, OX + 6, 5, OZ + 6);
         scene.world().showSection(steam, Direction.DOWN);
-        scene.idle(8);
+        scene.idle(15);
         Selection steamFace = frontCasing(util, 4, 5);
         scene.world().hideSection(steamFace, Direction.SOUTH);
         note(scene, steam, util.vector().centerOf(6, 5, 6), 90,

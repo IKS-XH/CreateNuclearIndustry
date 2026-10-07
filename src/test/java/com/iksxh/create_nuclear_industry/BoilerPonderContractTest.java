@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -26,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /** 验证锅炉Ponder入口、双语资源、完整模板索引及合法端口布局。 */
 class BoilerPonderContractTest {
     private static final Path RESOURCES = Path.of("src", "main", "resources");
+    private static final Path PONDER_SCENES = Path.of("src", "main", "java", "com", "iksxh",
+            "create_nuclear_industry", "ponder", "BoilerPonderScenes.java");
     private static final Set<String> BOILER_PARTS = Set.of(
             "create_nuclear_industry:high_pressure_boiler_casing",
             "create_nuclear_industry:high_pressure_boiler_window",
@@ -54,6 +58,61 @@ class BoilerPonderContractTest {
         for (String id : SCENES) {
             assertTrue(Files.exists(RESOURCES.resolve("assets/create_nuclear_industry/ponder/" + id + ".nbt")),
                     "缺少独立锅炉故事线模板: " + id);
+        }
+    }
+
+    @Test
+    void buildSceneRespectsDisplayedSectionsBeforeHidingCutaways() throws IOException {
+        String source = Files.readString(PONDER_SCENES);
+        int methodStart = source.indexOf("public static void highPressureBoilerBuild(");
+        assertTrue(methodStart >= 0, "搭建幕入口缺失");
+        int methodEnd = source.indexOf("\n    /**", methodStart);
+        assertTrue(methodEnd > methodStart, "搭建幕方法边界缺失");
+        String buildScene = source.substring(methodStart, methodEnd);
+        assertFalse(buildScene.contains("scene.world().hideSection(whole, Direction.DOWN)"),
+                "模板默认不可见，不应先擦除尚未显示的整炉");
+        assertTrue(buildScene.contains("scene.world().showSection(basePlate, Direction.UP)"),
+                "基础板应避开炉底占位后再显示");
+        assertBottomFootprintExcluded(buildScene);
+
+        assertMergedBeforeHide(buildScene, "water", "waterFace");
+        assertMergedBeforeHide(buildScene, "partition", "partitionFace");
+        assertMergedBeforeHide(buildScene, "steam", "steamFace");
+    }
+
+    private static void assertMergedBeforeHide(String source, String section, String cutaway) {
+        String show = "scene.world().showSection(" + section + ", Direction.DOWN);";
+        String hide = "scene.world().hideSection(" + cutaway + ", Direction.SOUTH);";
+        int showIndex = source.indexOf(show);
+        int hideIndex = source.indexOf(hide);
+        assertTrue(showIndex >= 0 && hideIndex > showIndex, "切面必须先显示再隐藏: " + cutaway);
+        Matcher waits = Pattern.compile("scene\\.idle\\((\\d+)\\);")
+                .matcher(source.substring(showIndex + show.length(), hideIndex));
+        int elapsedTicks = 0;
+        while (waits.find()) elapsedTicks += Integer.parseInt(waits.group(1));
+        assertTrue(elapsedTicks >= 15, "隐藏切面前必须等显示区段完成15tick合并: " + cutaway);
+    }
+
+    private static void assertBottomFootprintExcluded(String source) {
+        Matcher selection = Pattern.compile("Selection basePlate\\s*=\\s*(.*?);", Pattern.DOTALL).matcher(source);
+        assertTrue(selection.find(), "基础板应使用独立选择以避开锅炉底层");
+        Matcher cuboids = Pattern.compile("fromTo\\((\\d+),\\s*(\\d+),\\s*(\\d+),\\s*(\\d+),\\s*(\\d+),\\s*(\\d+)\\)")
+                .matcher(selection.group(1));
+        boolean[][] covered = new boolean[13][13];
+        while (cuboids.find()) {
+            int x1 = Integer.parseInt(cuboids.group(1));
+            int y1 = Integer.parseInt(cuboids.group(2));
+            int z1 = Integer.parseInt(cuboids.group(3));
+            int x2 = Integer.parseInt(cuboids.group(4));
+            int y2 = Integer.parseInt(cuboids.group(5));
+            int z2 = Integer.parseInt(cuboids.group(6));
+            assertEquals(0, y1, "基础板选择必须处于Y=0");
+            assertEquals(0, y2, "基础板选择必须处于Y=0");
+            for (int x = x1; x <= x2; x++) for (int z = z1; z <= z2; z++) covered[x][z] = true;
+        }
+        for (int x = 0; x < 13; x++) for (int z = 0; z < 13; z++) {
+            boolean boilerBottom = x >= 3 && x <= 9 && z >= 3 && z <= 9;
+            assertEquals(!boilerBottom, covered[x][z], "基础板和锅炉底层不能重叠，且周围地面须完整: " + x + "," + z);
         }
     }
 
