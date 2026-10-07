@@ -1,6 +1,8 @@
 # 分区温压锅炉：候选与集中手测
 
-**最新现场结果（01E）：** 汽轮机当前实体恢复后的断汽残转路径已局部修复，功能快照`5ced309a46b85b3c0de7e98069bb1bf90f67e53f`，17项定向GameTest、一次增量assemble与独立审查通过，等待客户端复测。锅炉共管调压停流仍未定位，没有新增锅炉生产修复。用户确认目标控制器`(28,-59,-11)`且已拆除创造储罐，当前管路不能代替原故障拓扑；须恢复原支路并保留异常现场。[01E计划与边界](../../../superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)。下方01D自动通过与暂缓说明为历史证据，不表示本次人工通过；主线/教学继续停止。
+**当前状态：01F双汽库存方案已确认，正在实现。** 用户选择两种库存各自记录、共用总容量，各口只取对应库存。见[01F任务](../../../superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)。已有汽不随温压重标，新产汽按温压分类，SC仍须已付热合格才能输出。R1长管短窗饥饿及失败单点修复记录保留；周转缓存建议已撤下，尚无01F新JAR。当前不要求另一次手测，不合入main、不接下一项。
+
+**上一轮01E候选：** 汽轮机当前实体恢复后的断汽残转路径局部修复，功能快照`5ced309a46b85b3c0de7e98069bb1bf90f67e53f`，17项定向GameTest、一次增量assemble与独立审查通过。此轮用户报告残转没有复现；不扩写为全部动力场景验收。当时锅炉原始共管停流未定位、创造罐已拆除，旧非稳定快照不能代替故障现场；最新稳定拓扑和短窗复现以本页R1为准，旧恢复支路清单不继续作为当前操作要求。[01E计划与边界](../../../superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)。下方01D自动通过与暂缓说明为历史证据，不表示本次人工通过；主线/教学继续停止。
 
 **历史状态（01D）：[蒸汽口独立汽种过滤](../../../superpowers/plans/2026-10-07-boiler-steam-port-selection.md)已实现；最终4项定向GameTest、唯一一次增量assemble及一次合并审查通过，功能快照`99a526c97697e9de134cbd090674927c2147c2bd`。当时用户未能复现持续残转，排查暂缓；随后反馈及现阶段局部修复以01E为准。锅炉集中人工门仍保留，未合入main。** [01C来源缓存修复](../../../superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)快照`050afe3e4eb70789804697b2880b7c76281ca8d7`继续包含；原[01B](../../../superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)、[REWORK-01](../../../superpowers/plans/2026-10-07-ext-b-boiler-rework-01.md)和[01A](../../../superpowers/plans/2026-10-07-boiler-hot-inlet-layer-fix.md)的未变部分继续适用。01B自动任意汽种输出由01D逐口纯过滤替代，历史证据不改写。主目录仅同步文档与候选制品，新源码须从同级候选启动。
 

@@ -1,6 +1,8 @@
 # 项目文档入口
 
-**最新现场整改（2026-10-07）：** [01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)已局部修复汽轮机当前实体恢复后的断汽残转路径，功能快照`5ced309`，17项定向GameTest、增量assemble及独立审查通过，等待客户端复测。锅炉共管调压停流仍未定位；用户确认目标控制器`(28,-59,-11)`且已拆除创造储罐，需恢复原支路保留故障现场继续排查。[最新候选和集中复测](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)仅在同级工作树，不合入未验收功能，不接下一主线/教学。
+**01F当前工作（2026-10-07）：双汽库存已获用户确认，进入实现。** 两种蒸汽分别保存真实mB/HU、共用总容量，各口只取对应库存，已有汽不自动换种。见[01F任务](./superpowers/plans/2026-10-07-boiler-dual-steam-inventory-01f.md)。R1长管短资格窗已复现，失败单点候选已撤回，原始证据保留；汽口周转缓存建议已撤下。沿用所有配置数值，在同级候选完成定向验证后集中手测，不接其他主线或教学。
+
+**上一轮01E候选（2026-10-07）：** [01E](./superpowers/plans/2026-10-07-boiler-multiport-turbine-stop-01e.md)局部汽轮机修复快照`5ced309`，17项定向GameTest、增量assemble及独立审查证据保留；本轮用户残转未复现反馈及锅炉稳定现场以R1为准，旧恢复创造罐的操作清单不再作为当前要求。[候选与当前门槛](./reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)仅在同级工作树，不合入未验收功能，不接下一主线/教学。
 
 **历史锅炉整改（01C，2026-10-07）：** [连续流动与动力联动01C](./superpowers/plans/2026-10-07-boiler-turbine-continuous-flow-fix.md)已复现并修复快速跨汽种后原生来源缓存失效，专用5项GameTest、增量assemble及一次合并审查通过，功能快照`050afe3`。当时中/大型及空罐持续接汽、守恒与双端回接停开定向通过，持续残转尚未复现；该描述仅保留当时证据，当前排查与局部修复以01E为准。原[单控件与自动汽种01B](./superpowers/plans/2026-10-07-boiler-controls-automatic-output-fix.md)及01A未变规则保留。
 
