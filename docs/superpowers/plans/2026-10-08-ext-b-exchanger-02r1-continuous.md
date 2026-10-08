@@ -1,6 +1,6 @@
 # EXCHANGER-02R1：工作盆持续超级加热
 
-**状态：** 用户2026-10-08明确纠正上一版按配方/批次收费的理解，并确认固定消耗及断流规则。实现及对应整改复核通过，功能候选`ab91356`，当前停在与汽轮机分别记录的集中客户端验收。实现前文档基线`8dbb9b6`（旧功能基线`bb5c0d7`），路径`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`；main只同步文档，未合入供热功能。
+**状态：** 功能`ab91356`实现及整改复核通过，用户2026-10-09明确确认工作盆供热手测通过，见[验收](../../reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)。汽轮机取景复看独立保留。实现前文档基线`8dbb9b6`（旧功能基线`bb5c0d7`），实施路径`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`；PM单独整合已验收供热净功能，不合入未验收教学。
 
 ## 已确认合同
 
