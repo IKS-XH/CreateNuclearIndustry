@@ -2,9 +2,14 @@
 
 **授权来源：** 用户2026-10-09直接任命“美术负责人：贴图、建模与动画”新对话，可在三项美术范围制定任务和派发执行，跨逻辑与主项目经理对话协调。
 
-**创建状态：** 正在准备独立工作树和对话；创建后补记实际对话ID与基线。  
-**工作区：** `E:/MyMC/NewMod/Create_NuclearIndustry-art-studio`（主工程同级）。  
-**逻辑候选：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，仅供读取当前实现，不在该目录写美术。  
+**创建状态：** 对话已创建，ID `01a11c6b-f440-77c1-9275-5b2dca5cfa0f`，本机运行；初始任务为资源盘点与首台方案。
+
+**工作区：** `E:/MyMC/NewMod/Create_NuclearIndustry-art-studio`（主工程同级），分支`codex/art-studio`，功能基线`5e10d0e`。
+
+**对话入口：** 挂在现有工程Local入口，初始界面cwd可能为主目录；实际读写、命令和子Agent必须显式使用美术工作树绝对路径。此为PM建立的Git工作树，非应用自动创建的C盘托管工作树。
+
+**逻辑候选：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，仅供读取当前实现，不在该目录写美术。
+
 **主工程：** `E:/MyMC/NewMod/Create_NuclearIndustry`，仅供读取已验收实现和全局文档。
 
 ## 职责与文件边界
