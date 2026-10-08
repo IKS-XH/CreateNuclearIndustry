@@ -1,13 +1,13 @@
 # 项目文档入口
 
-**更新：2026-10-08。** 当前进行汽轮机三情景思索；主线暂缓，按设备逐台播放验收。离心机、反应堆和锅炉教学已经通过。汽轮机教学通过后，先补换热器工作盆供热，再制作换热器分情景教学。
+**更新：2026-10-08。** 汽轮机三情景思索已交候选；按用户最新要求先补换热器工作盆供热，下班后一并手测，各自记录验收。离心机、反应堆和锅炉教学已经通过；其他主线暂缓。
 
 ## 当前执行与接续
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
 | 汽轮机思索04 | [三情景实施卡](./superpowers/plans/2026-10-08-device-ponder-04-turbine.md)已完成实现与复核，等待同级[播放候选](./reviews/2026-10-08/turbine-ponder-04/CANDIDATE.md)验收 |
-| 换热器工作盆供热 | [接续排期](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)、[技术准备](./superpowers/plans/2026-10-04-heat-exchanger-basin-preparation.md)；汽轮机教学验收后讨论未决耗热/热级规则，不提前派发 |
+| 换热器工作盆供热 | [具体建议](./superpowers/plans/2026-10-08-heat-exchanger-basin-proposal.md)待新增费用/断供规则确认；[技术核查](./superpowers/plans/2026-10-04-heat-exchanger-basin-preparation.md)已完成，确认后实现，与汽轮机一起手测 |
 | 换热器分情景思索 | 工作盆功能验收后，分别介绍独立供热、高压锅炉内置换热、工作盆和蒸汽冷凝回水 |
 
 候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`。在该目录执行 `./gradlew.bat runClient`播放新教学；主目录提供已验收版本，两目录分别使用自己的运行配置和世界。

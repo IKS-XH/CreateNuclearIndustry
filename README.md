@@ -21,7 +21,7 @@
 
 基础材料和燃料制造、固定实验反应堆、核换热与蒸汽回水闭环、三档汽轮机、轻量乏燃料封存及可变尺寸温压锅炉已按批验收合入main。反应堆具体事故世界效果、辐射和复杂再处理仍后置；当前完成范围与证据见[实施路线图](docs/implementation-roadmap.md)。
 
-离心机、反应堆和高压锅炉的思索教学已通过播放验收。当前汽轮机三情景在同级候选中实现，尚待本台播放；使用`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`的`runClient`查看。下一步为换热器工作盆供热，再制作换热器各用途教学，见[当前任务入口](docs/README.md)。
+离心机、反应堆和高压锅炉的思索教学已通过播放验收。汽轮机三情景已交同级候选，尚待播放；用户要求先补换热器工作盆供热，再使用`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`的`runClient`一并手测。两项通过后制作换热器各用途教学，见[当前任务入口](docs/README.md)。
 
 ## 设计方向
 
