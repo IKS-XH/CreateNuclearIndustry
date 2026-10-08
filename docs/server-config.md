@@ -69,7 +69,7 @@
 
 工质密度继续使用原 P1 SERVER 配置中的 `coolantAbsorptionHuPerMb`（默认0.5HU/mB），不新增第二份密度。它同时影响反应堆冷却语义，不能当作只调整换热器的局部参数。
 
-**工作盆增量（2026-10-08整改中，尚待手测）：** [EXCHANGER-02R1](./superpowers/plans/2026-10-08-ext-b-exchanger-02r1-continuous.md)改为持续超级加热，在同一配置文件顶层使用下列一键；旧两个批次等效tick键撤下，主目录尚未合入功能。新候选就绪后与汽轮机思索按[集中清单](./reviews/2026-10-08/exchanger-basin-02/MANUAL.md)验收。
+**工作盆增量（2026-10-08候选，尚待手测）：** [EXCHANGER-02R1](./superpowers/plans/2026-10-08-ext-b-exchanger-02r1-continuous.md)候选`ab91356`改为持续超级加热，在同一配置文件顶层使用下列一键；旧两个批次等效tick键撤下，主目录尚未合入功能。与汽轮机思索按[集中清单](./reviews/2026-10-08/exchanger-basin-02/MANUAL.md)验收。
 
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |

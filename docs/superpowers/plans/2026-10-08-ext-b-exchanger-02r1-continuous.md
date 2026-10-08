@@ -1,6 +1,6 @@
 # EXCHANGER-02R1：工作盆持续超级加热
 
-**状态：** 用户2026-10-08明确纠正上一版按配方/批次收费的理解，并确认固定消耗及断流规则；可自动派发。候选基线`bb5c0d7`，路径`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`；main`29ded1d`只同步文档，未合入供热功能。汽轮机思索继续待播放，仍与本项集中手测。
+**状态：** 用户2026-10-08明确纠正上一版按配方/批次收费的理解，并确认固定消耗及断流规则。实现及对应整改复核通过，功能候选`ab91356`，当前停在与汽轮机分别记录的集中客户端验收。实现前文档基线`8dbb9b6`（旧功能基线`bb5c0d7`），路径`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`；main只同步文档，未合入供热功能。
 
 ## 已确认合同
 
@@ -31,3 +31,7 @@
 一次定向`./gradlew.bat test --tests '*HeatExchangerStateTest' assemble`；一次隔离`./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_ext_b_basin -PgameTestDirectory=build/gametest-ext-b-basin-r1`。同一实现者持有构建进程，失败先诊断，只因实质改动或用例失败复跑受影响范围；不clean、不全量、不机械重跑。
 
 报告列实际技能、删除/修改路径、配置与消耗公式、精确用例/退出状态及最新制品哈希。实现冻结后单轮合并规格/质量审查，必要整改仅对应复核；审查者不重跑测试。PM提交同级候选、更新集中清单，停在工作盆与汽轮机分别手测，不自动接下一台教学或主线。旧02按批次的实现/审查证据仅保留历史，不作为新行为已通过。
+
+## 候选交付
+
+定向账本21/21、真实GameTest7/7及增量打包通过；[实施记录](../../reviews/2026-10-08/exchanger-basin-02r1/IMPLEMENTATION.md)保留命令、退出码与日志限制，[复核记录](../../reviews/2026-10-08/exchanger-basin-02r1/REVIEW.md)关闭执行顺序和跨用途储热两项问题并保留初审历史。最终制品和客户端步骤统一在[集中清单](../../reviews/2026-10-08/exchanger-basin-02/MANUAL.md)，本卡交付不表示手测已通过。
