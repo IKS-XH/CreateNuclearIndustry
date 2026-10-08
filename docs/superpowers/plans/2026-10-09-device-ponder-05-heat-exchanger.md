@@ -1,10 +1,10 @@
-# 核换热器思索实施计划（四情景）
+# 核换热器思索实施计划（五情景整改）
 
 > **For agentic workers:** 使用`superpowers:subagent-driven-development`，由用户任命的PM派发执行者。仓库权限、精简验证和用户已确认排期优先于通用技能。执行者仅交未提交改动，不执行Git写操作。
 
-**任务ID / 状态：** DEVICE-PONDER-05-EXCHANGER / 候选`8c8f0a5`已提交，等待[四幕播放](../../reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)。首轮/R1缺口已按同卡R1/R2修复，最终3/3定向合同、模板证据、增量构建及独立复审通过；本台人工门尚未通过。执行者`/root/exchanger_ponder_impl`、审查者`/root/exchanger_ponder_review`均为gpt-6-luna高思考，实施基线`f650aa7`。
-**Goal:** 四个独立情景介绍现有核换热器的用途，玩家能看清流体方向、顶部负载与锅炉内置位置，不改变设备机制。
-**Architecture:** 新建`HeatExchangerPonderScenes`、四份NBT及可复现生成工具，在现有`P1PonderPlugin`中仅为`nuclear_heat_exchanger`绑定四幕。所有显示只操作Ponder客户端临时世界；正式热账本、流体能力、配置和注册保持。
+**任务ID / 状态：** DEVICE-PONDER-05-EXCHANGER / 用户已播放候选`8c8f0a5`并指出三幕展示缺陷，R3按本卡自动整改，人工门未通过。当前执行基线`9b5bb3a`，原执行者`/root/exchanger_ponder_impl`和审查者`/root/exchanger_ponder_review`继续负责；新增首幕本体与串联，共五幕。此前自动结果只代表R1/R2，不替代本轮视觉反馈。
+**Goal:** 五个独立情景先介绍换热器本体与串联，再介绍现有用途，玩家能看清流体方向、顶部负载与锅炉内置位置，并看到Create锅炉由受热到输出动力的过程，不改变设备机制。
+**Architecture:** 在现有`HeatExchangerPonderScenes`、四份NBT和生成工具上整改，新增一份本体模板；`P1PonderPlugin`仅为`nuclear_heat_exchanger`按五幕顺序绑定。所有显示只操作Ponder客户端临时世界；正式热账本、流体能力、配置和注册保持。
 **Tech Stack:** Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6，核对实际Gradle文件，不升级。
 **Spec:** 用户要求汽轮机思索后补齐换热器加工热源，再分场景介绍其用途；2026-10-09明确确认工作盆、烧结炉及汽轮机思索手测通过并要求开始下一步。权威边界为[接续排期](./2026-10-08-turbine-exchanger-ponder-sequence.md)、[02R1](./2026-10-08-ext-b-exchanger-02r1-continuous.md)、[03](./2026-10-09-ext-b-exchanger-03-sintering.md)、现行源码与配置。该卡细化既有教学授权，不提出新玩法。
 
@@ -18,20 +18,21 @@
 
 ## 全局约束与允许写集
 
-- `src/main/java/com/iksxh/create_nuclear_industry/ponder/HeatExchangerPonderScenes.java`（新）：四幕客户端演示；中文职责、坐标、时序和纯演示边界注释。
-- 同目录`P1PonderPlugin.java`：增加换热器四故事板ID及绑定，保留其他教学的入口、顺序和行为；更新相关注释。
-- `src/main/resources/assets/create_nuclear_industry/ponder/nuclear_heat_exchanger_{heating,boiler,processing,condensation}.nbt`（四个新文件），无其他模板改动。
-- `tools/ponder/heat_exchanger_scenes.py`（新）：仅生成/校验上述四模板，必要时只读导入既有模板工具；禁止修改其他生成器、模型/纹理工具及构建脚本。
-- `src/main/resources/assets/create_nuclear_industry/lang/{zh_cn,en_us}.json`：只增加这四幕`ponder.nuclear_heat_exchanger_*`相关标题和文本键；保留其他键、顺序及格式，不全文件重排。
-- `src/test/java/com/iksxh/create_nuclear_industry/HeatExchangerPonderContractTest.java`（新）：少量有意义静态合同验证，关注四模板、注册入口、真实接口坐标/方向及正文时序。禁止变成照抄每句文案或每个实现细节的测试。
+- `src/main/java/com/iksxh/create_nuclear_industry/ponder/HeatExchangerPonderScenes.java`：五幕客户端演示；中文职责、坐标、时序和纯演示边界注释。
+- 同目录`P1PonderPlugin.java`：增加换热器首幕故事板ID及绑定，保留其他教学的入口、顺序和行为；更新相关注释。
+- `src/main/resources/assets/create_nuclear_industry/ponder/nuclear_heat_exchanger_{introduction,heating,boiler,processing,condensation}.nbt`：新增本体模板并整改受影响模板，不改其他设备模板。
+- `tools/ponder/heat_exchanger_scenes.py`：仅生成/校验上述五模板，必要时只读导入既有模板工具；禁止修改其他生成器、模型/纹理工具及构建脚本。
+- `src/main/resources/assets/create_nuclear_industry/lang/{zh_cn,en_us}.json`：仅本批`ponder.nuclear_heat_exchanger_*`相关标题和文本键；保留其他键、顺序及格式，不全文件重排。
+- `src/test/java/com/iksxh/create_nuclear_industry/HeatExchangerPonderContractTest.java`：复用少量静态合同验证，关注五模板、注册入口、真实接口坐标/方向及正文时序；新增断言仅覆盖本次用户报告的几何/状态风险，禁止照抄每句文案或每个实现细节。
 - 唯一实施报告`docs/reviews/2026-10-09/heat-exchanger-ponder-05/IMPLEMENTATION.md`；原始证据`build/reports/extension/DEVICE-PONDER-05-EXCHANGER/`。审查报告路径由PM另授审查者，不改其他核心文档。
 - 不改热工、配置、配方、服务端/正式流体库存、设备碰撞、模型/贴图、动画接口或注册；不增加GUI，不实现取消的超临界蒸汽输入，不提前演示事故/辐射。首发前不研究旧存档兼容。
 
-## 四幕与玩家文案
+## 当前五幕与玩家文案
 
 | 故事板 | 画面和教学要点 |
 | :--- | :--- |
-| `nuclear_heat_exchanger_heating` | 小型Create储罐锅炉、核换热器和清晰分开的冷热管路。橙色背面进热液、蓝色正面出冷液，顶部供热；演示同向首尾直列从两端接管、共享冷热库存而各台供热。简短说明供液稳定才能持续供热，实际供热随热液流量变化。无需重教泵/锅炉基础。 |
+| `nuclear_heat_exchanger_introduction` | 首幕无遮挡展示单台换热器，分别介绍背面热液入口、正面冷液出口及顶部供热面；随后展示同向首尾串联、两端接管、共用冷热库存且各台供热。先讲设备本身，不放锅炉或加工负载遮挡。 |
+| `nuclear_heat_exchanger_heating` | 单独演示Create储罐锅炉：先显示无遮挡换热器和冷热管路，再显出并正确启用锅炉；剖开/移开遮挡储罐展示供热位置。连接蒸汽机、动力活塞和可见输出轴，表现通热液后锅炉受热、活塞工作、轴转动，断热后停止或余热衰减符合已实现行为。不重复首幕本体/串联文案。 |
 | `nuclear_heat_exchanger_boiler` | 复用现行合法最小锅炉尺寸思路，仅展示底部非边框换热器、上方再加热隔层和可见冷热口。分层揭开前壁看见两部件形成有效热力回路；数量由二者较少者决定。热口与换热器同层、冷口在隔层。只讲换热器内置角色，不复制锅炉完整搭建/调压教学。 |
 | `nuclear_heat_exchanger_processing` | 紧凑场景依次演示顶部工作盆+搅拌器，再换成燃料烧结炉，同一热冷回路始终可见。盆持续超级加热，炉可烧结芯块；设备存在即持续耗热、空设备也耗热，热液耗尽或回液受阻立即停热，恢复液路后加工恢复。必要默认数值须明确是默认，避免硬编码文案伪称所有配置。两种顶部负载不同时占同一格。 |
 | `nuclear_heat_exchanger_condensation` | 独立普通蒸汽入口与回水出口，顶部直接接触冷源。依次清楚展示水源、雪块/冰/浮冰、蓝冰：雪/冰/浮冰融为水源，水源最终蒸发，蓝冰不消耗。流水不作为冷源，回水受阻或冷源消失暂停。普通蒸汽1:1回水为默认；不演示超临界蒸汽直接输入。 |
@@ -42,7 +43,7 @@
 
 ## 审查关注点
 
-1. 四幕NBT能加载、方块/方块实体ID与属性有效；Ponder不会调用错误类型实体或崩溃。
+1. 五幕NBT能加载、方块/方块实体ID与属性有效；Ponder不会调用错误类型实体或崩溃。
 2. 锅炉内置布局符合现行结构，独立换热器热后进冷前出，冷凝蒸汽后进水前出；箭头/罐变化和文案一致。
 3. 正文含淡出生命周期，每次一段，前段完全退出后再显示下段；缩放/位移与高亮、文字锚点一致。
 4. 顶部负载互斥，连续耗热及立即停热准确；不误演示原40tick锅炉余热给盆/炉续热，不改变真实状态。
@@ -54,7 +55,7 @@
 - [x] 生成工具运行并验证四模板、JSON/注册/生命周期；定向`./gradlew.bat test --tests '*HeatExchangerPonderContractTest'`及增量`./gradlew.bat assemble`。R1b/R2命令、退出码、3个用例和原始日志保存，未把零用例算通过。
 - [x] 冻结差异后独立合并审查规格+质量；R1/R2仅复看实质整改及对应验证证据，审查者未重跑Gradle。本批未启动GameTest、全套回归或旧存档测试。
 - [x] PM核对差异及证据，提交同级候选并记录状态。
-- [ ] 用户从核换热器按W播放四幕，检查接管可见、顶部负载完整、文案不重叠、无错误方块/崩溃，各幕播完。
+- [ ] 用户从核换热器按W播放五幕，检查本体串联、Create锅炉出力、内置换热器高亮、正确搅拌间距、文案及取景，各幕播完。
 
 交付停在本台集中播放门，未播放前不合main或自动接其他设备/主线。用户视觉验收不能被静态几何或自动断言代替。自动通过与用户已验收的前置分别记录。
 
@@ -82,3 +83,17 @@ R1复审核实四罐共同控制器、蒸汽机挂装和九格隔层已修复；
 - 既有三个定向合同用例增加冷源显示区域的必要检查并同步正文数量，不追加全量。NBT和生成器未改时复用R1b生成证据，仅运行定向测试和增量assemble，使用`*-r2`日志/退出码；保存R1b XML与R2 XML、最终制品哈希。
 
 写集不扩大，原执行者实施、原审查者只复看本节差异及证据。通过后才提交候选并交四幕集中播放门，不再核验已通过功能。
+
+## 同批R3：用户播放反馈与首幕拆分（2026-10-09）
+
+用户明确报告：Create锅炉不成型/缺少受热输出动力过程且罐体挡住换热器；内置锅炉下沉一格、换热器不可见且未单独高亮；加工幕搅拌器与盆少一格空隙；首幕应介绍本体输入输出面及串联。这是已明确的教学整改，不改玩法或再问相同授权。上方当前五幕表与本节覆盖早期四幕合同，R1/R2保留历史过程。
+
+1. 新增`introduction`并置于第一个故事板，原`heating`仅讲Create锅炉供热。单台的前、后、顶部面分别可见和高亮，必要时有目的转动镜头；随后同向串联从两外端接管，库存共用与每台顶部供热准确。输入输出罐与教学目标错开，镜头稳定，无上部负载遮挡。
+2. Create锅炉不能仅放罐块就称成型。核对本地Create6.0.10-280的原生蒸汽机Ponder、`FluidTankBlockEntity`/锅炉数据接口，正确设置罐组控制器、宽高、容量、锅炉启用/供水/热级和渲染状态，配套合法蒸汽机、动力活塞与输出轴。状态变化使用Ponder临时世界/API，先受热再展示活塞和轴出力，不能只放孤立蒸汽机或设置不相连轴转速。既有热液减少/等量冷液增加继续可见；供热位置讲解时剖开或移出挡视线的罐格，并恢复完整成型外观。不增加开发示意文案。
+3. 内置锅炉本体及关联管路/罐统一上移一格，地台`y=0`、结构最低`y=1`，所有Java常量/NBT/高亮坐标一致。以真正揭开可见正面与必要遮挡底板的剖视展示底部换热器，不只移动文字锚点。先单独高亮换热器并留足可读时长，再高亮隔层/再加热段；热口仍与换热器同层、冷口在隔层，完整壳体先加载、讲后恢复，不永久破坏合法结构。
+4. 加工幕`mixer.y = basin.y + 2`，中间一格为空，转轴随之上移；教学显示区域和更换烧结炉时清理范围同步，搅拌杆/盆/热源没有穿插。保留盆/炉互斥、空设备持续耗热、等量回冷液、缺液立即停热的已验收语义。
+5. 首幕/重分后的玩家正文依次简短、一次一段；Java fallback与双语键同序同义。原冷凝场景机制保持，不借此新增功能或回头重测所有设备。
+
+**必要验证：** 修改完运行一次五模板生成/校验，定向`test --tests '*HeatExchangerPonderContractTest'`及增量`assemble`，保留历史证据，使用`*-r3`日志/退出码/XML及最终制品哈希。既有三个用例同步入口/结构/时序，覆盖本轮最低高度、搅拌间距、锅炉启用及可见动力链的高风险合同，避免只断言某一字符串存在。原审查者仅做R3差异与证据的一轮复核，不运行测试。根因未涉及正式设备，不跑全量build/GameTest、存档、配方或旧教学复测。
+
+**交付门：** PM核对后提交候选，更新五幕集中播放清单，尚不合main。用户仅复看本批五幕的顺序和上述整改画面；静态合同不冒充锅炉活塞、剖面及镜头的实际客户端验收。
