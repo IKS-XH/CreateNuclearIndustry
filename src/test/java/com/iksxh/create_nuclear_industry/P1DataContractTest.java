@@ -1,5 +1,9 @@
 package com.iksxh.create_nuclear_industry;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.iksxh.create_nuclear_industry.content.P1ContentIds;
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +11,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -131,30 +138,118 @@ class P1DataContractTest {
         try (var files = Files.walk(recipeDirectory)) {
             files.filter(path -> path.toString().endsWith(".json")).forEach(path -> {
                 try {
-                    String source = Files.readString(path);
-                    // 只放行已批准的钢板压片、组件装配和冷态冷却剂配方；其他P1路线仍受保护。
-                    boolean approvedSteelPress = path.equals(recipeDirectory.resolve("pressing/steel_plate.json"));
-                    boolean approvedFuelAssembly = path.equals(recipeDirectory.resolve("shielded_assembly/fresh_fuel_assembly.json"));
-                    boolean approvedColdCoolant = path.equals(recipeDirectory.resolve("mixing/compound_coolant.json"));
-                    for (String id : List.of(
-                            P1ContentIds.FRESH_FUEL_ASSEMBLY_ID,
-                            P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID,
-                            P1ContentIds.STEEL_PLATE_ID,
-                            P1ContentIds.COMPOUND_COOLANT_ID,
-                            P1ContentIds.HOT_COMPOUND_COOLANT_ID,
-                            "contaminated_compound_coolant",
-                            "coolant_purifier"
-                    )) {
-                        if (approvedSteelPress && P1ContentIds.STEEL_PLATE_ID.equals(id)) continue;
-                        if (approvedFuelAssembly && P1ContentIds.FRESH_FUEL_ASSEMBLY_ID.equals(id)) continue;
-                        if (approvedColdCoolant && P1ContentIds.COMPOUND_COOLANT_ID.equals(id)) continue;
-                        assertFalse(source.contains(id), "P1 recipe route was added for " + id + " in " + path);
+                    JsonElement recipe = JsonParser.parseString(Files.readString(path));
+                    Path relativePath = recipeDirectory.relativize(path);
+                    Map<Path, Set<String>> approvedProductionReferences = Map.of(
+                            Path.of("pressing", "steel_plate.json"),
+                            Set.of(registryId(P1ContentIds.STEEL_PLATE_ID)),
+                            Path.of("shielded_assembly", "fresh_fuel_assembly.json"),
+                            Set.of(registryId(P1ContentIds.FRESH_FUEL_ASSEMBLY_ID)),
+                            Path.of("mixing", "compound_coolant.json"),
+                            Set.of(registryId(P1ContentIds.COMPOUND_COOLANT_ID)));
+                    Set<String> protectedIds = Set.of(
+                            registryId(P1ContentIds.FRESH_FUEL_ASSEMBLY_ID),
+                            registryId(P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID),
+                            registryId(P1ContentIds.STEEL_PLATE_ID),
+                            registryId(P1ContentIds.COMPOUND_COOLANT_ID),
+                            registryId(P1ContentIds.HOT_COMPOUND_COOLANT_ID),
+                            registryId("contaminated_compound_coolant"),
+                            registryId("coolant_purifier"),
+                            registryId(P1ContentIds.REMOVED_ALLOY_STEEL_PLATE_ALIAS)
+                    );
+                    Set<String> approvedHere = approvedProductionReferences.getOrDefault(relativePath, Set.of());
+                    boolean approvedCaskConsumption = relativePath.equals(
+                            Path.of("shielded_assembly", "sealed_spent_fuel_cask.json"));
+                    for (String id : protectedIds) {
+                        boolean expected = approvedHere.contains(id)
+                                || (approvedCaskConsumption
+                                && id.equals(registryId(P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID)));
+                        assertEquals(expected, containsExactString(recipe, id),
+                                "P1 recipe reference must match the approved route exactly: " + id + " in " + path);
                     }
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);
                 }
             });
         }
+
+        String steelPlateId = registryId(P1ContentIds.STEEL_PLATE_ID);
+        JsonObject steelPress = JsonParser.parseString(Files.readString(
+                recipeDirectory.resolve("pressing/steel_plate.json"))).getAsJsonObject();
+        assertTrue(steelPress.getAsJsonArray("results").asList().stream().anyMatch(result ->
+                        result.isJsonObject() && result.getAsJsonObject().has("id")
+                                && steelPlateId.equals(result.getAsJsonObject().get("id").getAsString())),
+                "钢板压片路线必须在results[].id产出钢板");
+
+        String freshAssemblyId = registryId(P1ContentIds.FRESH_FUEL_ASSEMBLY_ID);
+        JsonObject freshAssembly = JsonParser.parseString(Files.readString(
+                recipeDirectory.resolve("shielded_assembly/fresh_fuel_assembly.json"))).getAsJsonObject();
+        assertTrue(freshAssembly.has("result") && freshAssembly.getAsJsonObject("result").has("id")
+                        && freshAssemblyId.equals(freshAssembly.getAsJsonObject("result").get("id").getAsString()),
+                "新燃料组件装配路线必须在result.id产出批准组件");
+
+        String coldCoolantId = registryId(P1ContentIds.COMPOUND_COOLANT_ID);
+        JsonObject coldCoolant = JsonParser.parseString(Files.readString(
+                recipeDirectory.resolve("mixing/compound_coolant.json"))).getAsJsonObject();
+        assertTrue(coldCoolant.getAsJsonArray("results").asList().stream().anyMatch(result ->
+                        result.isJsonObject() && result.getAsJsonObject().has("id")
+                                && coldCoolantId.equals(result.getAsJsonObject().get("id").getAsString())),
+                "冷态冷却剂配方必须在results[].id产出批准流体");
+
+        Path sealedCaskPath = recipeDirectory.resolve("shielded_assembly/sealed_spent_fuel_cask.json");
+        JsonObject sealedCask = JsonParser.parseString(Files.readString(sealedCaskPath)).getAsJsonObject();
+        String cooledAssemblyId = registryId(P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID);
+        JsonArray inputs = sealedCask.getAsJsonArray("inputs");
+        boolean cooledAssemblyIsInput = false;
+        for (JsonElement input : inputs) {
+            if (input.isJsonObject() && input.getAsJsonObject().has("ingredient")) {
+                JsonObject ingredient = input.getAsJsonObject().getAsJsonObject("ingredient");
+                if (ingredient.has("item") && cooledAssemblyId.equals(ingredient.get("item").getAsString())) {
+                    cooledAssemblyIsInput = true;
+                    break;
+                }
+            }
+        }
+        assertTrue(cooledAssemblyIsInput,
+                "冷却后乏燃料组件只允许作为已批准灌封配方的输入");
+        assertFalse(containsExactString(sealedCask.getAsJsonObject("result"), cooledAssemblyId),
+                "灌封配方不得把冷却后乏燃料组件作为产物");
+        for (String similarSteelPlateId : List.of(
+                "create_nuclear_industry:reinforced_steel_plate",
+                "create_nuclear_industry:incomplete_reinforced_steel_plate")) {
+            assertFalse(containsExactString(JsonParser.parseString("\"" + similarSteelPlateId + "\""),
+                            steelPlateId),
+                    "强化钢板的完整注册 ID 不得被识别成钢板: " + similarSteelPlateId);
+        }
+        assertTrue(containsExactString(JsonParser.parseString(
+                        "{\"item\":\"create_nuclear_industry:hot_compound_coolant\"}"),
+                        registryId(P1ContentIds.HOT_COMPOUND_COOLANT_ID)),
+                "禁止路线扫描必须识别item字段中的精确注册 ID");
+        assertTrue(containsExactString(JsonParser.parseString(
+                        "{\"tag\":\"create_nuclear_industry:hot_compound_coolant\"}"),
+                        registryId(P1ContentIds.HOT_COMPOUND_COOLANT_ID)),
+                "禁止路线扫描必须识别tag字段中的精确注册 ID");
+    }
+
+    private static String registryId(String path) {
+        return "create_nuclear_industry:" + path;
+    }
+
+    /** 递归检查 JSON 字符串值是否与完整注册 ID 精确相等，避免相似名称误命中。 */
+    private static boolean containsExactString(JsonElement element, String expected) {
+        if (element.isJsonPrimitive()) {
+            return element.getAsJsonPrimitive().isString()
+                    && expected.equals(element.getAsString());
+        }
+        if (element.isJsonArray()) {
+            return element.getAsJsonArray().asList().stream()
+                    .anyMatch(value -> containsExactString(value, expected));
+        }
+        if (element.isJsonObject()) {
+            return element.getAsJsonObject().entrySet().stream()
+                    .anyMatch(entry -> containsExactString(entry.getValue(), expected));
+        }
+        return false;
     }
 
     @Test

@@ -112,12 +112,19 @@ class TurbinePonderContractTest {
         int decayWait = source.indexOf("scene.idle(40);");
         int stopAxes = source.indexOf("scene.world().setKineticSpeed(axles, 0);");
         assertTrue(decayWait >= 0 && stopAxes > decayWait, "断汽后须先完整等待40tick窗口再清零两端轴速");
+        assertEquals(3, countOccurrences(build, "showTier(scene, util,"), "尺寸对比必须逐档展示三台独立机组");
         String showTier = method(source, "private static void showTier(", "private static Selection machine(");
-        int show = showTier.indexOf("scene.world().showSection(tier.add(pad");
-        int hide = showTier.indexOf("scene.world().hideSection(tier, Direction.SOUTH);");
-        assertTrue(show >= 0 && hide > show, "尺寸示例必须先显示再隐藏");
-        assertTrue(showTier.substring(show, hide).contains("scene.idle(15);"), "隐藏前须完成15tick区段合并");
-        assertTrue(showTier.substring(hide).contains("scene.idle(15);"), "切换尺寸前须完成淡出");
+        int show = showTier.indexOf("var section = scene.world().showIndependentSection(tier, Direction.DOWN);");
+        int mergeWait = showTier.indexOf("scene.idle(15);", show);
+        int move = showTier.indexOf("scene.world().moveSection(section, ", mergeWait);
+        int moveWait = showTier.indexOf("scene.idle(15);", move);
+        int body = showTier.indexOf("noteWithBounds(scene, framedBounds, 75, text);", moveWait);
+        int hide = showTier.indexOf("scene.world().hideIndependentSection(section, Direction.SOUTH);", body);
+        int fadeWait = showTier.indexOf("scene.idle(15);", hide);
+        assertTrue(show >= 0 && mergeWait > show && move > mergeWait && moveWait > move
+                        && body > moveWait && hide > body && fadeWait > hide,
+                "尺寸示例必须使用同一区段句柄，按显示、合并、移动、正文、隐藏和淡出时序执行");
+        assertTrue(showTier.substring(move, moveWait).contains(", 15);"), "移动动画须保留15tick时长");
         assertFalse(source.contains("scene.world().hideSection(input"), "断汽应保持完整管路并清空临时汽罐");
         assertTrue(source.contains("setTankFluid(scene, OP_INPUT_TANK, FluidStack.EMPTY);"), "停机阶段应清空临时进汽罐");
     }
@@ -241,6 +248,16 @@ class TurbinePonderContractTest {
         int finish = source.indexOf(end, begin);
         assertTrue(begin >= 0 && finish > begin, "场景方法边界缺失: " + start);
         return source.substring(begin, finish);
+    }
+
+    private static int countOccurrences(String source, String searched) {
+        int count = 0;
+        int index = 0;
+        while ((index = source.indexOf(searched, index)) >= 0) {
+            count++;
+            index += searched.length();
+        }
+        return count;
     }
 
     private record BlockState(String id, Map<String, String> properties) {}
