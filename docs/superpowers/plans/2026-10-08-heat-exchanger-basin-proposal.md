@@ -1,5 +1,7 @@
 # 换热器工作盆供热：具体建议
 
+> **历史方案（2026-10-08已被用户纠正）：** 现行需求为顶部有工作盆即持续超级加热，不检测工作状态；固定消耗和断流规则见[02R1](./2026-10-08-ext-b-exchanger-02r1-continuous.md)。下文的配方探测、按批次收费及待机储热合同不再用于实现/验收。
+
 **状态（2026-10-08）：** 用户已确认整组方案，并补充要求数值与已有换热器加热原版Create锅炉平衡。按同热级锅炉40tick的等效费用执行，默认仍40/80HU，实际费用随既有`huPerLevel`同步；实现见[EXT-B-EXCHANGER-02实施卡](./2026-10-08-ext-b-exchanger-02-basin.md)。与汽轮机思索一并手测，未提前认定通过。
 
 **技术基线：** Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82。候选基线86f217b，目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`；主目录保留已验收功能。源码审计报告在候选`build/reports/extension/EXT-B-EXCHANGER-02-PREP.md`，属于静态证据。
