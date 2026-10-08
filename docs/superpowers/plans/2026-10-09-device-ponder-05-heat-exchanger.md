@@ -2,7 +2,7 @@
 
 > **For agentic workers:** 使用`superpowers:subagent-driven-development`，由用户任命的PM派发执行者。仓库权限、精简验证和用户已确认排期优先于通用技能。执行者仅交未提交改动，不执行Git写操作。
 
-**任务ID / 状态：** DEVICE-PONDER-05-EXCHANGER / 待派发。
+**任务ID / 状态：** DEVICE-PONDER-05-EXCHANGER / 执行中；`/root/exchanger_ponder_impl`（gpt-6-luna，高思考）已实际启动，基线`f650aa7`。PM已核对四幕布局与玩家文案边界；静态审查和新教学播放门尚未通过。
 **Goal:** 四个独立情景介绍现有核换热器的用途，玩家能看清流体方向、顶部负载与锅炉内置位置，不改变设备机制。
 **Architecture:** 新建`HeatExchangerPonderScenes`、四份NBT及可复现生成工具，在现有`P1PonderPlugin`中仅为`nuclear_heat_exchanger`绑定四幕。所有显示只操作Ponder客户端临时世界；正式热账本、流体能力、配置和注册保持。
 **Tech Stack:** Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6，核对实际Gradle文件，不升级。

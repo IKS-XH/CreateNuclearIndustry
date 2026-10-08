@@ -206,7 +206,7 @@ P1核心反应堆已经交接，基础生产、锅炉、汽轮机与轻量封存
 | `P2` | `variable_reactor` | 可变尺寸反应堆 | 5×5×5 至 11×11×15 | 从固定实验堆扩展；有效燃料长度受限 | 结构自由度和规模化产热 |
 | `P3` | `shielded_hot_cell` | 屏蔽热室 | 屏蔽外壳、观察窗、机械臂、物品/流体端口 | 屏蔽完整，危险物料不能从非端口穿过 | 高放废物灌封与处理 |
 
-**核换热器现行边界（2026-10-09）：** `nuclear_heat_exchanger`显示名“核换热器”，核热→Create锅炉、专用锅炉及[01D定向直列](archive/2026-10-08-completed-plans/2026-10-04-ext-b-exchanger-01d.md)均已验收。顶供热、前冷出后热入，最多16台同向首尾相连共享库存，各台贡献双4000mB容量、独立储热与NBT份额；左右/底面不提供流体能力。配方不变，无GUI。[冷凝回水01](archive/2026-10-08-completed-plans/2026-10-05-ext-b-condense-01.md)已实现并[联合验收合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)，各台顶部接触水源、雪块、冰、浮冰或蓝冰，按实际冷凝量融水/蒸发。工作盆02R1持续核热已通过用户手测；本轮补齐顶部烧结炉使用同一持续热源。
+**核换热器现行边界（2026-10-09）：** `nuclear_heat_exchanger`显示名“核换热器”，核热→Create锅炉、专用锅炉及[01D定向直列](archive/2026-10-08-completed-plans/2026-10-04-ext-b-exchanger-01d.md)均已验收。顶供热、前冷出后热入，最多16台同向首尾相连共享库存，各台贡献双4000mB容量、独立储热与NBT份额；左右/底面不提供流体能力。配方不变，无GUI。[冷凝回水01](archive/2026-10-08-completed-plans/2026-10-05-ext-b-condense-01.md)已实现并[联合验收合入main](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)，各台顶部接触水源、雪块、冰、浮冰或蓝冰，按实际冷凝量融水/蒸发。工作盆02R1与顶部烧结炉03持续核热均已通过用户手测并整合main，使用同一持续热源及配置。
 
 **范围修订：** 用户取消换热器超临界蒸汽输入，原降级供热模式及9级热值规划撤销。入口只接受热复合冷却剂或 `steam`。工作盆已验收，新增[烧结炉03](./superpowers/plans/2026-10-09-ext-b-exchanger-03-sintering.md)可在汽轮机取景复看期间实施，见[接续排期](./superpowers/plans/2026-10-08-turbine-exchanger-ponder-sequence.md)。
 
@@ -285,7 +285,7 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 | `已验收`基础教学 | `enrichment_centrifuge` | [联合验收](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)：两格放置、底部动力、顶部进浆、水平面双粉/回水与黄铜过滤、稳定转速/输出堵塞暂停、停转轴承维修；当前失稳行为为暂停，不展示未实现的效率曲线 |
 | `P2` | `fuel_sintering_furnace` | 生燃料芯块输入、密闭高温烧结、烧结燃料芯块输出，说明普通鼓风加热不可替代 |
 | `P2` | `shielded_assembly_station` | 芯块/包壳/焊料/格架直接装配组件、屏蔽边界、燃料组件和危险物品装配限制 |
-| `P2` | `nuclear_heat_exchanger` | 核热换热与供热、普通蒸汽冷凝回水、顶部冷源和定向直列；工作盆核热接入定稿后独立教学。拒收超临界蒸汽，不演示取消的降级供热路线；数值可由配置覆盖 |
+| `P2` | `nuclear_heat_exchanger` | [四幕05](./superpowers/plans/2026-10-09-device-ponder-05-heat-exchanger.md)执行中：独立供热/直列、锅炉内置、盆/炉持续核热、蒸汽冷凝；拒收超临界蒸汽，不演示取消的降级供热路线，交付后独立播放验收 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体接口和后置状态，不展示首发不存在的冷却转换 |
 | `P2` | `dry_storage_rack` | 已封装乏燃料桶的装架、完整性检查和“贮存不等于消除辐射” |
 | `P2` | `blaze_reactor_manager` | 烈焰人燃烧室安装、仪表绑定、逐棒调节、红色阈值向 `reactor_instrument_port` 输出 SCRAM 信号 |
