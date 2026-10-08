@@ -7,7 +7,7 @@
 **Tech Stack:** Minecraft 1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6，保持现有依赖。
 **Spec:** 用户2026-10-08明确“开始实现汽轮机的思索教学吧，完工后整理一下文档”。后续顺序见[接续排期](./2026-10-08-turbine-exchanger-ponder-sequence.md)，现有机制以实际 `TurbineAssembly`、`TurbineGeometry`、`TurbineStructure`、`TurbineState` 与 `TurbineConfig` 为准；文案准则继承已验收离心机、反应堆和锅炉教学。
 
-**交付状态：** 三幕实现、同卡R1/R2整改及独立复核已完成；最后文案仅做JSON/键序与增量打包，复用已通过的3项结构合同。PM已完成[文档整理](../../reviews/2026-10-08/docs-cleanup/REPORT.md)。新教学保留同级[播放候选](../../reviews/2026-10-08/turbine-ponder-04/CANDIDATE.md)，本台人工门尚未通过，不合入功能或启动工作盆实现。
+**交付状态：已完成。** 三幕实现、R1/R2及04-FRAMING取景整改、独立复核和用户2026-10-09播放确认通过，见[验收](../../reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)，净教学整合main。原结构合同与增量打包证据复用；[文档整理](../../reviews/2026-10-08/docs-cleanup/REPORT.md)保持独立记录。
 
 ## 全局约束
 
