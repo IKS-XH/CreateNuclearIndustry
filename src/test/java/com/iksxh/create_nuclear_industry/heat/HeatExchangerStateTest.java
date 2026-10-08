@@ -19,6 +19,127 @@ final class HeatExchangerStateTest {
         assertEquals(0, source.claimDedicated(2, 40, boosted));
     }
 
+    @Test void basinContinuouslyPaysFixedHuAndSameTickCallsCannotDoubleConvert() {
+        var state = new HeatExchangerState();
+        var config = new HeatExchangerState.Settings(18, 1, 40, .5, 4000, 4000, 16, 2);
+        state.fillHot(40, false);
+
+        state.tickBasin(1, true, config, localExchange(state));
+        assertEquals(18, state.heat());
+        assertTrue(state.basinHeatingAt(1));
+        assertEquals(4, state.converted());
+        assertTrue(state.basinHeatingAt(2), "搅拌器先于热源执行时可读到最近一次真实付款");
+        assertFalse(state.basinHeatingAt(3), "已超过相邻tick的旧付款不得延长热级");
+        state.tickBasin(1, true, config, localExchange(state));
+        assertEquals(4, state.cold(), "同一服务端tick的重复结算不得重复扣液");
+        assertTrue(state.basinHeatingAt(1), "纯查询不改变已付款热级");
+
+        state.tickBasin(2, true, config, localExchange(state));
+        state.tickBasin(3, true, config, localExchange(state));
+        assertEquals(12, state.cold());
+        assertEquals(28, state.hot());
+        assertEquals(0, state.reserve(), 1e-9, "工作盆不使用锅炉储热或余热");
+    }
+
+    @Test void basinScalesWithHuPerLevelAndKeepsInvalidBasinCostOutOfBoilerValidity() {
+        var state = new HeatExchangerState();
+        var scaled = new HeatExchangerState.Settings(2, 2, 40, .5, 4000, 4000, 16, 2);
+        assertEquals(4, scaled.basinHeatCost(), 1e-9);
+        state.fillHot(16, false);
+        state.tickBasin(1, true, scaled, localExchange(state));
+        assertEquals(2, state.heat());
+        assertEquals(8, state.converted(), "4HU/t ÷ 0.5HU/mB应等于8mB/t");
+
+        var invalid = new HeatExchangerState.Settings(1, 2, 40, .5, 4000, 4000, 16, 2);
+        assertTrue(invalid.valid(), "盆路径约束不能使既有锅炉配置整体失效");
+        assertFalse(HeatExchangerState.validBasinSettings(invalid));
+        state.tickBasin(2, true, invalid, localExchange(state));
+        assertEquals(-1, state.heat());
+        assertEquals(0, state.converted());
+        assertEquals("basin_config_invalid", state.status());
+    }
+
+    @Test void basinCarriesFractionalMillibucketsWithoutInterruptingContinuousHeat() {
+        var state = new HeatExchangerState();
+        var config = new HeatExchangerState.Settings(18, 1, 40, .3, 4000, 4000, 16, 2);
+        state.fillHot(20, false);
+        state.tickBasin(1, true, config, localExchange(state));
+        assertEquals(7, state.converted());
+        assertTrue(state.basinHeatingAt(1), "不足整mB时向上结算并以不足1mB等效余额维持连续供热");
+        assertTrue(state.reserve() < config.density(), "舍入余额必须小于1mB等效HU");
+        state.tickBasin(2, true, config, localExchange(state));
+        assertEquals(7, state.converted());
+        assertTrue(state.basinHeatingAt(2), "连续有效负载的舍入余额不得造成周期性停热");
+        assertTrue(state.reserve() < config.density(), "累计余额仍必须小于1mB等效HU");
+        state.tickBasin(3, true, config, localExchange(state));
+        assertEquals(6, state.converted());
+        assertTrue(state.basinHeatingAt(3));
+        assertEquals(20, state.cold(), "三tick总换液应等于6.666…mB/t的目标总量");
+        assertEquals(0, state.reserve(), 1e-9);
+        state.tickBasin(4, true, config, localExchange(state));
+        assertFalse(state.basinHeatingAt(4), "断流后不得依靠舍入余额续热");
+        assertEquals(0, state.reserve(), 1e-9);
+    }
+
+    @Test void enteringBasinDiscardsOrdinaryBoilerReserveAndFlowTail() {
+        var state = new HeatExchangerState();
+        var dense = new HeatExchangerState.Settings(18, 1, 40, 5, 4000, 4000, 16, 2);
+        state.fillHot(100, false);
+        state.tick(1, true, dense);
+        assertEquals(15, state.reserve(), 1e-9, "普通锅炉tick应先产生远大于1mB的HU储备");
+        assertEquals(3, state.cold());
+
+        state.tickBasin(2, true, dense, localExchange(state));
+        assertTrue(state.basinHeatingAt(2));
+        assertEquals(1, state.converted(), "2HU费用、5HU/mB时必须由本tick转液付款");
+        assertEquals(4, state.cold(), "热液转冷液必须等量守恒");
+        assertEquals(96, state.hot());
+        assertEquals(3, state.reserve(), 1e-9, "仅可保留本盆tick形成的小于1mB等效舍入额");
+        assertTrue(state.reserve() < dense.density());
+    }
+
+    @Test void basinStopsAtNearFullColdTankAndResumesAfterReturnSpaceOpens() {
+        var state = new HeatExchangerState();
+        var saved = state.save();
+        saved.putInt("Hot", 8);
+        saved.putInt("Cold", 3998);
+        state.load(saved);
+        var config = new HeatExchangerState.Settings(18, 1, 40, .5, 4000, 4000, 16, 2);
+
+        state.tickBasin(1, true, config, localExchange(state));
+        assertEquals(-1, state.heat(), "2mB回流空间不足本tick完整4mB费用时应立即停热");
+        assertEquals(0, state.converted());
+        assertEquals(8, state.hot());
+        assertEquals(3998, state.cold());
+
+        state.drainCold(2, false);
+        state.tickBasin(2, true, config, localExchange(state));
+        assertTrue(state.basinHeatingAt(2));
+        assertEquals(4, state.converted());
+        assertEquals(4000, state.cold());
+
+        state.tickBasin(3, true, config, localExchange(state));
+        assertFalse(state.basinHeatingAt(3), "回流罐满后的下一设备tick不得续烧");
+        assertEquals(0, state.converted());
+        assertEquals(0, state.reserve(), 1e-9, "冷罐满时舍入余额不能维持热级");
+        state.drainCold(4, false);
+        state.tickBasin(4, true, config, localExchange(state));
+        assertTrue(state.basinHeatingAt(4), "恢复冷液回流后应立即恢复付款供热");
+    }
+
+    private static HeatExchangerState.Exchange localExchange(HeatExchangerState state) {
+        return new HeatExchangerState.Exchange() {
+            @Override public int hot() { return state.hot(); }
+            @Override public int coldSpace() { return state.coldCapacity() - state.cold(); }
+            @Override public int convert(int amount) {
+                int moved = state.takeHotForConversion(amount);
+                int accepted = state.putColdFromConversion(moved);
+                if (accepted != moved) throw new AssertionError("预检后的核热换液必须等体积提交");
+                return moved;
+            }
+        };
+    }
+
     @Test void smallerHotAndColdCapacitiesPreserveOldInventoryAndLimitNewTransactions() {
         var state = new HeatExchangerState();
         var old = new CompoundTag();

@@ -12,6 +12,7 @@ public final class HeatExchangerConfig {
     public static final ModConfigSpec.IntValue HEAT_LEVEL;
     public static final ModConfigSpec.DoubleValue HU_PER_LEVEL;
     public static final ModConfigSpec.IntValue BUFFER_TICKS;
+    public static final ModConfigSpec.IntValue BASIN_HEAT_LEVEL_EQUIVALENT;
     public static final ModConfigSpec.IntValue HOT_CAPACITY_MB, COLD_CAPACITY_MB, MAX_LINE_LENGTH;
     public static final ModConfigSpec.IntValue CONDENSATION_RATE, CONDENSATION_RECOVERY,
             CONDENSATION_STEAM_CAPACITY, CONDENSATION_WATER_CAPACITY,
@@ -21,6 +22,8 @@ public final class HeatExchangerConfig {
         HEAT_LEVEL = b.comment("Create 整数锅炉热等级；18 等效 9 个超级燃烧室。").defineInRange("heatLevel", 18, 1, 18);
         HU_PER_LEVEL = b.comment("每个热等级每 tick 支付 HU。").defineInRange("huPerLevel", 1D, .000001D, 1_000_000D);
         BUFFER_TICKS = b.comment("预热储备及余热上限，单位 tick。").defineInRange("bufferTicks", 40, 1, 1200);
+        BASIN_HEAT_LEVEL_EQUIVALENT = b.comment("工作盆持续超级加热的等效锅炉热等级，消耗该值×huPerLevel HU/t。")
+                .defineInRange("basinHeatLevelEquivalent", 2, 1, 18);
         HOT_CAPACITY_MB = b.comment("每台热液罐容量，单位 mB；下降时保留既存液量。")
                 .defineInRange("hotCapacityMb", 4000, 1, 1_000_000);
         COLD_CAPACITY_MB = b.comment("每台冷液罐容量，单位 mB；下降时保留既存液量。")
@@ -54,7 +57,7 @@ public final class HeatExchangerConfig {
     public static HeatExchangerState.Settings settings() {
         return new HeatExchangerState.Settings(HEAT_LEVEL.get(), HU_PER_LEVEL.get(), BUFFER_TICKS.get(),
                 P1ServerConfig.VALUES.coolantAbsorptionHuPerMb.get(), HOT_CAPACITY_MB.get(),
-                COLD_CAPACITY_MB.get(), MAX_LINE_LENGTH.get());
+                COLD_CAPACITY_MB.get(), MAX_LINE_LENGTH.get(), BASIN_HEAT_LEVEL_EQUIVALENT.get());
     }
     /** 冷凝与核热参数独立，不复用工质密度或HU窗口解释蒸汽。 */
     public static CondensationState.Settings condensationSettings() {

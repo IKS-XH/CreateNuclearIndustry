@@ -69,11 +69,11 @@
 
 工质密度继续使用原 P1 SERVER 配置中的 `coolantAbsorptionHuPerMb`（默认0.5HU/mB），不新增第二份密度。它同时影响反应堆冷却语义，不能当作只调整换热器的局部参数。
 
-**工作盆增量（2026-10-08候选，尚待手测）：** [EXCHANGER-02R1](./superpowers/plans/2026-10-08-ext-b-exchanger-02r1-continuous.md)候选`ab91356`改为持续超级加热，在同一配置文件顶层使用下列一键；旧两个批次等效tick键撤下，主目录尚未合入功能。与汽轮机思索按[集中清单](./reviews/2026-10-08/exchanger-basin-02/MANUAL.md)验收。
+**持续加工热源（2026-10-09）：** 工作盆02R1已经[用户手测验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)，在同一配置文件顶层使用下列一键；旧两个批次等效tick键撤下。[烧结炉供热03](./superpowers/plans/2026-10-09-ext-b-exchanger-03-sintering.md)沿用此键与费用，独立实施/手测，不新增一份费用配置。
 
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |
-| `basinHeatLevelEquivalent` | 2 | 持续超级加热的锅炉等效热级，1～18；每tick费用为此值×`huPerLevel`，不改变提供给盆的超级热等级 |
+| `basinHeatLevelEquivalent` | 2 | 工作盆及本批烧结炉持续供热的锅炉等效热级，1～18；每tick费用为此值×`huPerLevel`，不改变已付持续热等级或烧结工时 |
 
 原生超级燃烧室的锅炉热级为2，因此默认固定消耗2HU/t，即4mB热液/t转成等量冷液。只要顶部有工作盆，即使空盆、无搅拌器、停转或加工受阻也照常耗热；供液不足或冷液满立即停止加热，不使用`bufferTicks`余热续烧。修改`huPerLevel`会同步改变锅炉与盆的持续耗热，固定成本超过`heatLevel × huPerLevel`额定转换能力时仅停用盆路径并提示。整数mB尾差有界累计，不截断丢失工质；查询不耗热，不按批次加收费用。
 
