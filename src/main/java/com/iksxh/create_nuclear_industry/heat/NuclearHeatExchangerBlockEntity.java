@@ -53,6 +53,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     private int sizeLimit, waterLimit, viewHeat = -1, viewFlow;
     private double nominalFlow;
     private int viewLineCount = 1, viewLineHot, viewLineCold;
+    private double viewBasinDemand;
     private int viewHotCapacity = HeatExchangerState.CAPACITY, viewColdCapacity = HeatExchangerState.CAPACITY;
     private String viewStatus = "no_load";
     private HeatExchangerMode viewMode = HeatExchangerMode.NUCLEAR;
@@ -187,8 +188,14 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
             level.invalidateCapabilities(pos);
         }
         if (line.conflict()) {
-            machine.ledger.pauseMode(level.getGameTime(), "mode_conflict");
-            machine.finishCondensationView(line, "mode_conflict");
+            if (level.hasChunkAt(pos.above()) && level.getBlockEntity(pos.above()) instanceof
+                    com.simibubi.create.content.processing.basin.BasinBlockEntity) {
+                machine.ledger.tickBasin(level.getGameTime(), 0, HeatExchangerConfig.settings(), line);
+                machine.updateBasinView(null, "basin_mode_conflict");
+            } else {
+                machine.ledger.pauseMode(level.getGameTime(), "mode_conflict");
+                machine.finishCondensationView(line, "mode_conflict");
+            }
             return;
         }
         if (line.displayMode() == HeatExchangerMode.CONDENSATION) {
@@ -206,6 +213,14 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         }
         line.adoptMode(HeatExchangerMode.NUCLEAR);
         machine.viewMode = HeatExchangerMode.NUCLEAR;
+        if (level.hasChunkAt(pos.above()) && level.getBlockEntity(pos.above()) instanceof
+                com.simibubi.create.content.processing.basin.BasinBlockEntity) {
+            if (state.getValue(NuclearHeatExchangerBlock.LIT))
+                level.setBlock(pos, state.setValue(NuclearHeatExchangerBlock.LIT, false), 3);
+            HeatExchangerBoilerBridge.track(machine, false);
+            HeatExchangerBasinBridge.tick(machine, HeatExchangerConfig.settings(), line);
+            return;
+        }
         var controller = HeatExchangerBoilerBridge.controller(level, pos);
         BlockPos nextController = controller == null ? null : controller.getBlockPos();
         int previous = machine.viewHeat;
@@ -366,6 +381,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         view.putInt("LineCold", viewLineCold);
         view.putInt("HotCapacity", viewHotCapacity);
         view.putInt("ColdCapacity", viewColdCapacity);
+        view.putDouble("BasinDemand", viewBasinDemand);
         view.putString("Mode", viewMode.name());
         tag.put("View", view);
         return tag;
@@ -378,6 +394,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         viewLineHot = tag.getInt("LineHot"); viewLineCold = tag.getInt("LineCold");
         viewHotCapacity = tag.contains("HotCapacity") ? tag.getInt("HotCapacity") : HeatExchangerState.CAPACITY;
         viewColdCapacity = tag.contains("ColdCapacity") ? tag.getInt("ColdCapacity") : HeatExchangerState.CAPACITY;
+        viewBasinDemand = tag.getDouble("BasinDemand");
     }
     @Override public ClientboundBlockEntityDataPacket getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
     @Override public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
@@ -407,11 +424,33 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         else tooltip.add(Component.translatable(prefix + "line_tanks", viewLineCount, viewLineHot, viewLineCold,
                 viewLineCount * viewHotCapacity, viewLineCount * viewColdCapacity));
         tooltip.add(Component.translatable(prefix + "state." + viewStatus));
+        if (viewStatus.startsWith("basin_")) {
+            tooltip.add(Component.translatable(prefix + "basin_storage", String.format(java.util.Locale.ROOT, "%.2f", ledger.reserve()),
+                    String.format(java.util.Locale.ROOT, "%.2f", viewBasinDemand)));
+            return true;
+        }
         tooltip.add(Component.translatable(prefix + "flow", viewFlow, String.format(java.util.Locale.ROOT, "%.2f", nominalFlow)));
         tooltip.add(Component.translatable(prefix + "heat", Math.max(0, viewHeat), ledger.remainingTicks()));
         tooltip.add(Component.translatable(prefix + "limits", sizeLimit, waterLimit));
         tooltip.add(Component.translatable(prefix + "rated"));
         return true;
+    }
+
+    /** 工作盆状态单独显示储备与当前批门槛，避免把HU金额误报为锅炉等级。 */
+    void updateBasinView(Double demandHu) {
+        updateBasinView(demandHu, ledger.status());
+    }
+
+    void updateBasinView(Double demandHu, String status) {
+        int previous = viewHeat;
+        viewHeat = -1;
+        viewFlow = ledger.converted();
+        nominalFlow = HeatExchangerConfig.settings().rate() / HeatExchangerConfig.settings().density();
+        viewBasinDemand = demandHu == null ? 0 : demandHu;
+        viewStatus = status;
+        updateLineView(HeatExchangerLine.find(this));
+        setChanged();
+        if (previous != viewHeat || level.getGameTime() % 5 == 0) syncView();
     }
 
     private final class Port implements IFluidHandler, SharedFluidReceiver {

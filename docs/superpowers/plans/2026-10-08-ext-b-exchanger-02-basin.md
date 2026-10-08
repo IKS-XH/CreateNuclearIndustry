@@ -24,7 +24,7 @@
 - 修改`heat/NuclearHeatExchangerBlockEntity.java`：盆负载分支、只读可用性、状态同步与生命周期；冷热共享库存沿用`HeatExchangerLine`事务，不修改该类。
 - 修改`config/HeatExchangerConfig.java`：两项等效tick配置及费用快照，不改旧参数默认值。
 - 新建`heat/HeatExchangerBasinBridge.java`：限定设备、源可用性、原生候选探测、费用/热级、原生提交事务；必要辅助类型只放`heat/basin/`。
-- 新建`mixin/BasinHeatLevelMixin.java`、`mixin/BasinRecipeHeatMixin.java`及必要`mixin/BasinOperatingAccessor.java`、`mixin/MechanicalMixerAccessor.java`；访问器仅暴露需求检查所需原生状态，不重写配方引擎。
+- 新建`mixin/BasinHeatLevelMixin.java`、`mixin/BasinRecipeHeatMixin.java`、`mixin/BasinOperatingMixin.java`及必要`mixin/BasinOperatingAccessor.java`、`mixin/MechanicalMixerAccessor.java`；访问器仅暴露需求检查所需原生状态，不重写配方引擎。PM于2026-10-08核对后明确增加`BasinOperatingMixin.java`：仅将原生候选匹配调用导向盆底换热器的短作用域探测，保留Create的候选排序和过滤，非本设备原样调用。
 - 新建`gametest/ExtensionHeatExchangerBasinGameTests.java`，相关独立测试域模板只可放`src/main/resources/data/create_nuclear_industry_ext_b_basin/structure/`。
 - 修改`src/main/resources/create_nuclear_industry.mixins.json`及`assets/create_nuclear_industry/lang/zh_cn.json`、`en_us.json`，只添加本批注册及玩家提示。
 - 修改`src/test/java/com/iksxh/create_nuclear_industry/heat/HeatExchangerStateTest.java`；必要新测试限`HeatExchangerBasinTest.java`（同目录）。

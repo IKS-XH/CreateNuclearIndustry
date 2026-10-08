@@ -19,6 +19,70 @@ final class HeatExchangerStateTest {
         assertEquals(0, source.claimDedicated(2, 40, boosted));
     }
 
+    @Test void basinDemandConvertsOnlyToBatchCostAndIdleKeepsPaidReserve() {
+        var state = new HeatExchangerState();
+        var config = new HeatExchangerState.Settings(18, 1, 40, .5, 4000, 4000, 16, 40, 40);
+        state.fillHot(1000, false);
+        state.tickBasin(1, config.basinHeatedCost(), config, localExchange(state));
+        state.tickBasin(2, config.basinHeatedCost(), config, localExchange(state));
+        state.tickBasin(3, config.basinHeatedCost(), config, localExchange(state));
+        assertEquals(40, state.reserve(), 1e-9);
+        assertEquals(80, state.cold());
+        state.tickBasin(4, 0, config, localExchange(state));
+        assertEquals(40, state.reserve(), 1e-9);
+        assertEquals(0, state.converted());
+    }
+
+    @Test void basinBatchReservationReleasesFailedApplyAndChargesSuccessfulBatchOnce() {
+        var state = new HeatExchangerState();
+        var config = new HeatExchangerState.Settings(18, 2, 40, .5, 4000, 4000, 16, 40, 40);
+        state.fillHot(1000, false);
+        state.tickBasin(1, config.basinSuperheatedCost(), config, localExchange(state));
+        state.tickBasin(2, config.basinSuperheatedCost(), config, localExchange(state));
+        state.tickBasin(3, config.basinSuperheatedCost(), config, localExchange(state));
+        state.tickBasin(4, config.basinSuperheatedCost(), config, localExchange(state));
+        state.tickBasin(5, config.basinSuperheatedCost(), config, localExchange(state));
+        assertEquals(160, state.reserve(), 1e-9);
+        assertTrue(state.reserveBasinBatch(config.basinSuperheatedCost()));
+        state.releaseBasinBatch(config.basinSuperheatedCost());
+        assertEquals(160, state.reserve(), 1e-9);
+        assertTrue(state.reserveBasinBatch(config.basinSuperheatedCost()));
+        assertFalse(state.reserveBasinBatch(config.basinSuperheatedCost()));
+        assertEquals(0, state.reserve(), 1e-9);
+        assertEquals(80, config.basinHeatedCost(), 1e-9);
+        assertEquals(160, config.basinSuperheatedCost(), 1e-9);
+        var undersizedBuffer = new HeatExchangerState.Settings(1, 1, 1, .5, 4000, 4000, 16, 40, 40);
+        assertTrue(undersizedBuffer.valid(), "盆批费超过储备上限不得使既有锅炉账本整体失效");
+        assertTrue(undersizedBuffer.basinSuperheatedCost() > undersizedBuffer.capacity());
+    }
+
+    @Test void impossibleBasinBatchCostStopsWithoutConvertingHotCoolant() {
+        var state = new HeatExchangerState();
+        var config = new HeatExchangerState.Settings(1, 1, 40, .5, 4000, 4000, 16, 40, 40);
+        state.fillHot(200, false);
+
+        state.tickBasin(1, config.basinSuperheatedCost(), config, localExchange(state));
+
+        assertEquals(200, state.hot());
+        assertEquals(0, state.cold());
+        assertEquals(0, state.reserve(), 1e-9);
+        assertEquals(0, state.converted());
+        assertEquals("basin_cost_invalid", state.status());
+    }
+
+    private static HeatExchangerState.Exchange localExchange(HeatExchangerState state) {
+        return new HeatExchangerState.Exchange() {
+            @Override public int hot() { return state.hot(); }
+            @Override public int coldSpace() { return state.coldCapacity() - state.cold(); }
+            @Override public int convert(int amount) {
+                int moved = state.takeHotForConversion(amount);
+                int accepted = state.putColdFromConversion(moved);
+                if (accepted != moved) throw new AssertionError("预检后的核热换液必须等体积提交");
+                return moved;
+            }
+        };
+    }
+
     @Test void smallerHotAndColdCapacitiesPreserveOldInventoryAndLimitNewTransactions() {
         var state = new HeatExchangerState();
         var old = new CompoundTag();

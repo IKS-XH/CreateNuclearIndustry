@@ -47,13 +47,21 @@ public final class HeatExchangerState {
 
     /** 有界配置快照；密度复用 P1 的 HU/mB，不把 Create 数值热等级当作物理单位。 */
     public record Settings(int heatLevel, double huPerLevel, int bufferTicks, double density,
-                           int hotCapacityMb, int coldCapacityMb, int maxLineLength) {
+                           int hotCapacityMb, int coldCapacityMb, int maxLineLength,
+                           int basinHeatedEquivalentTicks, int basinSuperheatedEquivalentTicks) {
         public Settings(int heatLevel, double huPerLevel, int bufferTicks, double density) {
-            this(heatLevel, huPerLevel, bufferTicks, density, CAPACITY, CAPACITY, 16);
+            this(heatLevel, huPerLevel, bufferTicks, density, CAPACITY, CAPACITY, 16, 40, 40);
+        }
+        public Settings(int heatLevel, double huPerLevel, int bufferTicks, double density,
+                        int hotCapacityMb, int coldCapacityMb, int maxLineLength) {
+            this(heatLevel, huPerLevel, bufferTicks, density, hotCapacityMb, coldCapacityMb,
+                    maxLineLength, 40, 40);
         }
         public double rate() { return heatLevel * huPerLevel; }
         public double capacity() { return rate() * bufferTicks; }
         public double levelReserve() { return huPerLevel * bufferTicks; }
+        public double basinHeatedCost() { return basinHeatedEquivalentTicks * huPerLevel; }
+        public double basinSuperheatedCost() { return basinSuperheatedEquivalentTicks * 2 * huPerLevel; }
         public boolean valid() {
             return heatLevel >= 1 && heatLevel <= 18 && Double.isFinite(huPerLevel)
                     && huPerLevel > 0 && huPerLevel <= 1_000_000 && bufferTicks >= 1 && bufferTicks <= 1200
@@ -70,6 +78,60 @@ public final class HeatExchangerState {
     public int heat() { return heat; }
     public int converted() { return converted; }
     public double reserve() { return reserve; }
+    /** 盆路径只补可由当前容量完整支付的批次；费用过大时停用，且不触发锅炉余热期限。 */
+    public void tickBasin(long now, double demandHu, Settings cfg, Exchange exchange) {
+        if (mode == HeatExchangerMode.CONDENSATION || now == lastTick) return;
+        setSettings(cfg);
+        heat = -1;
+        converted = 0;
+        if (!cfg.valid() || !Double.isFinite(demandHu) || demandHu < 0) {
+            lastTick = now;
+            status = "invalid";
+            return;
+        }
+        if (demandHu > cfg.capacity()) {
+            lastTick = now;
+            heat = -1;
+            converted = 0;
+            status = "basin_cost_invalid";
+            return;
+        }
+        if (lastTick >= 0 && now < lastTick) {
+            reserve = 0;
+            flowFraction = 0;
+        }
+        // 盆储热是持久HU，不继承锅炉的断流扣费和余热倒计时。
+        lastTick = now;
+        lastRate = cfg.rate();
+        reserve = Math.min(reserve, cfg.capacity());
+        double missing = Math.max(0, demandHu - reserve);
+        if (demandHu == 0) { status = "basin_waiting"; return; }
+        if (missing <= 0) { status = "basin_ready"; return; }
+        if (exchange.hot() <= 0) { status = "basin_empty"; return; }
+        if (exchange.coldSpace() <= 0) { status = "basin_blocked"; return; }
+        double requestedMb = Math.min(cfg.rate(), missing) / cfg.density() + flowFraction;
+        int amount = (int) Math.floor(requestedMb);
+        flowFraction = requestedMb - amount;
+        int headroom = (int) Math.min(settings.coldCapacityMb(),
+                Math.ceil(Math.max(0, demandHu - reserve) / cfg.density()));
+        converted = exchange.convert(Math.min(amount, Math.min(headroom,
+                Math.min(exchange.hot(), exchange.coldSpace()))));
+        reserve = Math.min(cfg.capacity(), reserve + converted * cfg.density());
+        status = reserve >= demandHu ? "basin_ready" : converted > 0 ? "basin_warming" : "basin_waiting";
+    }
+
+    /** 同步原生apply前锁定整批HU；仅原生方法正常返回false时调用方归还。 */
+    public boolean reserveBasinBatch(double amount) {
+        if (!Double.isFinite(amount) || amount <= 0 || reserve + 1e-9 < amount) return false;
+        reserve = Math.max(0, reserve - amount);
+        return true;
+    }
+
+    /** 仅原生apply失败时归还已锁定批费，成功时保持已扣状态。 */
+    public void releaseBasinBatch(double amount) {
+        if (Double.isFinite(amount) && amount > 0)
+            reserve = Math.min(settings.capacity(), reserve + amount);
+    }
     /** 锅炉接管成功后清空已转移的核库存与储热，不再发放给独立供热路径。 */
     public void relinquishToBoiler() {
         if (activeMode() == HeatExchangerMode.CONDENSATION) throw new IllegalStateException("冷凝工质不能转入核锅炉");

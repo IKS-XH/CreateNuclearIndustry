@@ -6,7 +6,11 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "FluidNetworkSharedFillMixin",
-    "BoilerPipePressureMixin"
+    "BoilerPipePressureMixin",
+    "BasinHeatLevelMixin",
+    "BasinRecipeHeatMixin",
+    "BasinOperatingAccessor",
+    "BasinOperatingMixin"
   ],
   "injectors": {
     "defaultRequire": 1
