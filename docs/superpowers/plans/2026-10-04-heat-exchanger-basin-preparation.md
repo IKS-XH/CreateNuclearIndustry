@@ -1,6 +1,6 @@
 # EXT-B-EXCHANGER-02-PREP：工作盆供热接入核查
 
-**状态（2026-10-08）：** 用户已要求提前做工作盆供热，与汽轮机思索下班后一并手测，见[接续排期](./2026-10-08-turbine-exchanger-ponder-sequence.md)。基于候选86f217b的只读核查已完成；[具体费用与断供建议](./2026-10-08-heat-exchanger-basin-proposal.md)已提交集中确认，当前尚未派发功能实现。静态审计不代表功能运行或人工验收。
+**状态（2026-10-08）：** 基于候选86f217b的只读核查已完成；用户已确认[费用与断供方案](./2026-10-08-heat-exchanger-basin-proposal.md)，并要求与原版Create锅炉供热平衡，功能接[EXCHANGER-02](./2026-10-08-ext-b-exchanger-02-basin.md)。本报告冻结为技术准备证据，不代表功能运行或人工验收。
 
 2026-10-04只读核查属于历史基线，已由当前排期取代其“转入锅炉、继续后置”状态；原文字见[整理前快照](../../archive/2026-10-08-document-snapshots/2026-10-04-heat-exchanger-basin-preparation.md)。下文保留技术核查范围，不按旧提交号直接实现。
 
