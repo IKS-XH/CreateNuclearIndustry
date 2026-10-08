@@ -15,7 +15,7 @@
 
 ## 项目治理
 
-- 用户于2026-10-09明确确认换热器工作盆持续供热手测通过，按[02R1验收](docs/reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)关闭该人工门，净功能已合main；汽轮机取景复看独立保留。随后指定的烧结炉供热按[EXCHANGER-03](docs/superpowers/plans/2026-10-09-ext-b-exchanger-03-sintering.md)实现与审查通过，候选`094a925`，沿用持续负载及配置，原烧结工时和燃烧室热源保留。停在[烧结炉手测](docs/reviews/2026-10-09/exchanger-sintering-03/CANDIDATE.md)，本功能未合main，不授权自动接教学或其他主线。
+- 用户于2026-10-09确认工作盆持续供热及随后烧结炉供热手测通过，分别按[02R1验收](docs/reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)与[EXCHANGER-03验收](docs/reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)关闭人工门，净功能整合main。持续负载及配置共用，原烧结工时和燃烧室热源保留。用户要求开始下一步，按既定排期接换热器分情景思索；汽轮机取景复看范围独立核实，其他主线暂缓。
 
 - 用户于2026-10-09明确任命新建的“美术负责人：贴图、建模与动画”对话为美术负责人，可在贴图、建模、动画范围制定任务和派发执行，跨逻辑改动与本项目经理对话协调。这是用户直接授予的专项权限，非本PM转授；只适用于该具体对话，不授予其子Agent负责人权限。美术计划与报告写于`docs/art/`，全局治理、玩法和Git集成仍由本PM管理；工作在主工程同级独立工作树。详见[美术并行协作入口](docs/art/README.md)及治理1.2节。
 - 汽轮机思索播放反馈的三档取景及排汽措辞按[04-FRAMING](docs/superpowers/plans/2026-10-09-device-ponder-04-framing-fix.md)整改；这两页定向复看并入原人工门，不重复全量测试或重开已通过教学。

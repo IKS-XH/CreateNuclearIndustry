@@ -22,7 +22,7 @@ public final class HeatExchangerConfig {
         HEAT_LEVEL = b.comment("Create 整数锅炉热等级；18 等效 9 个超级燃烧室。").defineInRange("heatLevel", 18, 1, 18);
         HU_PER_LEVEL = b.comment("每个热等级每 tick 支付 HU。").defineInRange("huPerLevel", 1D, .000001D, 1_000_000D);
         BUFFER_TICKS = b.comment("预热储备及余热上限，单位 tick。").defineInRange("bufferTicks", 40, 1, 1200);
-        BASIN_HEAT_LEVEL_EQUIVALENT = b.comment("工作盆持续超级加热的等效锅炉热等级，消耗该值×huPerLevel HU/t。")
+        BASIN_HEAT_LEVEL_EQUIVALENT = b.comment("工作盆与燃料烧结炉顶部负载持续供热的等效锅炉热等级，消耗该值×huPerLevel HU/t。")
                 .defineInRange("basinHeatLevelEquivalent", 2, 1, 18);
         HOT_CAPACITY_MB = b.comment("每台热液罐容量，单位 mB；下降时保留既存液量。")
                 .defineInRange("hotCapacityMb", 4000, 1, 1_000_000);

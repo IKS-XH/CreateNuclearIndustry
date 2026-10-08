@@ -2,6 +2,8 @@ package com.iksxh.create_nuclear_industry.production;
 
 import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
+import com.iksxh.create_nuclear_industry.heat.HeatExchangerBasinBridge;
+import com.iksxh.create_nuclear_industry.heat.NuclearHeatExchangerBlockEntity;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
@@ -20,7 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 
-/** 单格炉的服务端库存与工时所有者；客户端仅接收视图，真实热级逐 tick 从下方 Create 方块读取。 */
+/** 单格炉的服务端库存与工时所有者；客户端仅接收视图，热源由下方烈焰人或核换热器提供。 */
 public final class FuelSinteringBlockEntity extends BlockEntity implements IHaveGoggleInformation {
     private final FuelSinteringState state = new FuelSinteringState();
     private boolean removalHandled;
@@ -39,6 +41,9 @@ public final class FuelSinteringBlockEntity extends BlockEntity implements IHave
     }
 
     public boolean heated() {
+        if (level != null && level.hasChunkAt(worldPosition.below())
+                && level.getBlockEntity(worldPosition.below()) instanceof NuclearHeatExchangerBlockEntity)
+            return HeatExchangerBasinBridge.sinteringHeated(this);
         return level != null && HeatCondition.HEATED.testBlazeBurner(
                 BlazeBurnerBlock.getHeatLevelOf(level.getBlockState(worldPosition.below())));
     }

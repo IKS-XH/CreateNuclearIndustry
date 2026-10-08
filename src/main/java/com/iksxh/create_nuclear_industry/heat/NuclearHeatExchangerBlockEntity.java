@@ -4,6 +4,7 @@ import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.config.HeatExchangerConfig;
 import com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity;
 import com.iksxh.create_nuclear_industry.boiler.BoilerStructure;
+import com.iksxh.create_nuclear_industry.production.FuelSinteringBlockEntity;
 import com.iksxh.create_nuclear_industry.compat.create.SharedFluidReceiver;
 import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
@@ -200,6 +201,10 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
                 machine.ledger.tickBasin(level.getGameTime(), false, HeatExchangerConfig.settings(), line);
                 boolean statusChanged = machine.updateBasinView(null, "basin_mode_conflict");
                 HeatExchangerBasinBridge.scheduleMixerUpdate(machine, statusChanged);
+            } else if (level.hasChunkAt(pos.above())
+                    && level.getBlockEntity(pos.above()) instanceof FuelSinteringBlockEntity) {
+                machine.ledger.tickBasin(level.getGameTime(), false, HeatExchangerConfig.settings(), line);
+                machine.updateSinteringView(HeatExchangerConfig.settings().basinHeatCost(), "basin_mode_conflict");
             } else {
                 machine.ledger.pauseMode(level.getGameTime(), "mode_conflict");
                 machine.finishCondensationView(line, "mode_conflict");
@@ -221,8 +226,10 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         }
         line.adoptMode(HeatExchangerMode.NUCLEAR);
         machine.viewMode = HeatExchangerMode.NUCLEAR;
-        if (level.hasChunkAt(pos.above()) && level.getBlockEntity(pos.above()) instanceof
-                com.simibubi.create.content.processing.basin.BasinBlockEntity) {
+        // 工作盆和烧结炉顶部负载都走同一付款账本；不把本设备伪装成Create燃烧室属性。
+        if (level.hasChunkAt(pos.above()) && (level.getBlockEntity(pos.above()) instanceof
+                com.simibubi.create.content.processing.basin.BasinBlockEntity
+                || level.getBlockEntity(pos.above()) instanceof FuelSinteringBlockEntity)) {
             if (state.getValue(NuclearHeatExchangerBlock.LIT))
                 level.setBlock(pos, state.setValue(NuclearHeatExchangerBlock.LIT, false), 3);
             HeatExchangerBoilerBridge.track(machine, false);
@@ -438,8 +445,10 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         else tooltip.add(Component.translatable(prefix + "line_tanks", viewLineCount, viewLineHot, viewLineCold,
                 viewLineCount * viewHotCapacity, viewLineCount * viewColdCapacity));
         tooltip.add(Component.translatable(prefix + "state." + viewStatus));
-        if (viewStatus.startsWith("basin_")) {
-            tooltip.add(Component.translatable(prefix + "basin_rate", String.format(java.util.Locale.ROOT, "%.2f", viewBasinDemand), viewFlow));
+        if (viewStatus.startsWith("basin_") || viewStatus.startsWith("sintering_")) {
+            String loadKey = viewStatus.startsWith("sintering_") ? "sintering_rate" : "basin_rate";
+            tooltip.add(Component.translatable(prefix + loadKey,
+                    String.format(java.util.Locale.ROOT, "%.2f", viewBasinDemand), viewFlow));
             return true;
         }
         tooltip.add(Component.translatable(prefix + "flow", viewFlow, String.format(java.util.Locale.ROOT, "%.2f", nominalFlow)));
@@ -464,8 +473,44 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         viewStatus = status;
         updateLineView(HeatExchangerLine.find(this));
         setChanged();
-        if (previous != viewHeat || level.getGameTime() % 5 == 0) syncView();
+        if (previous != viewHeat || !java.util.Objects.equals(previousStatus, status)
+                || level.getGameTime() % 5 == 0) syncView();
         return previous != viewHeat || !java.util.Objects.equals(previousStatus, status);
+    }
+
+    /** 烧结炉共用工作盆的单tick账本；仅视图状态和玩家措辞按实际负载区分。 */
+    void updateSinteringView(Double costHuPerTick) {
+        updateSinteringView(costHuPerTick, ledger.status());
+    }
+
+    /** 客户端只接收服务端同步的热级与状态，不读取本地未同步账本推算。 */
+    void updateSinteringView(Double costHuPerTick, String ledgerStatus) {
+        int previousHeat = viewHeat;
+        String previousStatus = viewStatus;
+        viewHeat = ledger.basinHeatingAt(level.getGameTime()) ? ledger.heat() : -1;
+        viewFlow = ledger.converted();
+        var settings = HeatExchangerConfig.settings();
+        nominalFlow = settings.valid() ? settings.rate() / settings.density() : 0;
+        viewBasinDemand = costHuPerTick == null ? 0 : costHuPerTick;
+        viewStatus = switch (ledgerStatus) {
+            case "basin_heating" -> "sintering_heating";
+            case "basin_rounding" -> "sintering_rounding";
+            case "basin_waiting" -> "sintering_waiting";
+            case "basin_empty" -> "sintering_empty";
+            case "basin_blocked" -> "sintering_blocked";
+            case "basin_config_invalid" -> "sintering_config_invalid";
+            case "basin_mode_conflict" -> "sintering_mode_conflict";
+            default -> "sintering_waiting";
+        };
+        updateLineView(HeatExchangerLine.find(this));
+        setChanged();
+        if (previousHeat != viewHeat || !java.util.Objects.equals(previousStatus, viewStatus)
+                || level.getGameTime() % 5 == 0) syncView();
+    }
+
+    /** 烧结炉客户端读取的同步快照；服务端实际加工仍校验唯一账本的付款tick。 */
+    public boolean publishedSinteringHeat() {
+        return viewStatus.equals("sintering_heating") && viewHeat > 0;
     }
 
     private final class Port implements IFluidHandler, SharedFluidReceiver {
