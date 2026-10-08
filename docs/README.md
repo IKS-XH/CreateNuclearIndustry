@@ -6,7 +6,7 @@
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
-| 汽轮机思索04 | [取景与文案整改](./superpowers/plans/2026-10-09-device-ponder-04-framing-fix.md)执行中；原三情景保留，同级候选定向复看两页 |
+| 汽轮机思索04 | [取景与文案整改](./superpowers/plans/2026-10-09-device-ponder-04-framing-fix.md)候选`a94f2ea`实现与静态复核通过；原三情景保留，同级候选定向复看两页 |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
 | 换热器工作盆供热 | [EXCHANGER-02R1实施卡](./superpowers/plans/2026-10-08-ext-b-exchanger-02r1-continuous.md)候选`ab91356`实现及整改复核通过：持续超级加热，默认4mB/t，缺液或冷满立即停热；按[集中清单](./reviews/2026-10-08/exchanger-basin-02/MANUAL.md)与汽轮机手测 |
 | 换热器分情景思索 | 工作盆功能验收后，分别介绍独立供热、高压锅炉内置换热、工作盆和蒸汽冷凝回水 |
