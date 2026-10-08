@@ -11,6 +11,8 @@ public final class HeatExchangerState {
     private Settings settings = new Settings(18, 1, 40, .5);
     private int hot, cold, heat = -1, converted;
     private double reserve, flowFraction, lastRate;
+    private double basinFlowFraction;
+    private long basinHeatTick = -1;
     private long lastTick = -1;
     private long noFlowDeadlineTick = -1;
     private boolean legacyDeadlinePending;
@@ -48,20 +50,19 @@ public final class HeatExchangerState {
     /** 有界配置快照；密度复用 P1 的 HU/mB，不把 Create 数值热等级当作物理单位。 */
     public record Settings(int heatLevel, double huPerLevel, int bufferTicks, double density,
                            int hotCapacityMb, int coldCapacityMb, int maxLineLength,
-                           int basinHeatedEquivalentTicks, int basinSuperheatedEquivalentTicks) {
+                           int basinHeatLevelEquivalent) {
         public Settings(int heatLevel, double huPerLevel, int bufferTicks, double density) {
-            this(heatLevel, huPerLevel, bufferTicks, density, CAPACITY, CAPACITY, 16, 40, 40);
+            this(heatLevel, huPerLevel, bufferTicks, density, CAPACITY, CAPACITY, 16, 2);
         }
         public Settings(int heatLevel, double huPerLevel, int bufferTicks, double density,
                         int hotCapacityMb, int coldCapacityMb, int maxLineLength) {
             this(heatLevel, huPerLevel, bufferTicks, density, hotCapacityMb, coldCapacityMb,
-                    maxLineLength, 40, 40);
+                    maxLineLength, 2);
         }
         public double rate() { return heatLevel * huPerLevel; }
         public double capacity() { return rate() * bufferTicks; }
         public double levelReserve() { return huPerLevel * bufferTicks; }
-        public double basinHeatedCost() { return basinHeatedEquivalentTicks * huPerLevel; }
-        public double basinSuperheatedCost() { return basinSuperheatedEquivalentTicks * 2 * huPerLevel; }
+        public double basinHeatCost() { return basinHeatLevelEquivalent * huPerLevel; }
         public boolean valid() {
             return heatLevel >= 1 && heatLevel <= 18 && Double.isFinite(huPerLevel)
                     && huPerLevel > 0 && huPerLevel <= 1_000_000 && bufferTicks >= 1 && bufferTicks <= 1200
@@ -78,64 +79,107 @@ public final class HeatExchangerState {
     public int heat() { return heat; }
     public int converted() { return converted; }
     public double reserve() { return reserve; }
-    /** 盆路径只补可由当前容量完整支付的批次；费用过大时停用，且不触发锅炉余热期限。 */
-    public void tickBasin(long now, double demandHu, Settings cfg, Exchange exchange) {
+    /** 有盆时按固定HU/t换液；只用本tick付款及小于1mB等效的连续舍入余额发布热级。 */
+    public void tickBasin(long now, boolean active, Settings cfg, Exchange exchange) {
         if (mode == HeatExchangerMode.CONDENSATION || now == lastTick) return;
-        setSettings(cfg);
-        heat = -1;
-        converted = 0;
-        if (!cfg.valid() || !Double.isFinite(demandHu) || demandHu < 0) {
-            lastTick = now;
-            status = "invalid";
-            return;
-        }
-        if (demandHu > cfg.capacity()) {
-            lastTick = now;
-            heat = -1;
-            converted = 0;
-            status = "basin_cost_invalid";
-            return;
-        }
-        if (lastTick >= 0 && now < lastTick) {
+        long previousTick = lastTick;
+        boolean continuingBasin = status.startsWith("basin_") && previousTick >= 0 && now - previousTick == 1;
+        if (!continuingBasin) {
+            // 普通锅炉余热和流量尾差不能被新盆负载当成已付舍入余额。
             reserve = 0;
             flowFraction = 0;
+            basinFlowFraction = 0;
         }
-        // 盆储热是持久HU，不继承锅炉的断流扣费和余热倒计时。
+        setSettings(cfg);
         lastTick = now;
-        lastRate = cfg.rate();
-        reserve = Math.min(reserve, cfg.capacity());
-        double missing = Math.max(0, demandHu - reserve);
-        if (demandHu == 0) { status = "basin_waiting"; return; }
-        if (missing <= 0) { status = "basin_ready"; return; }
-        if (exchange.hot() <= 0) { status = "basin_empty"; return; }
-        if (exchange.coldSpace() <= 0) { status = "basin_blocked"; return; }
-        double requestedMb = Math.min(cfg.rate(), missing) / cfg.density() + flowFraction;
-        int amount = (int) Math.floor(requestedMb);
-        flowFraction = requestedMb - amount;
-        int headroom = (int) Math.min(settings.coldCapacityMb(),
-                Math.ceil(Math.max(0, demandHu - reserve) / cfg.density()));
-        converted = exchange.convert(Math.min(amount, Math.min(headroom,
-                Math.min(exchange.hot(), exchange.coldSpace()))));
-        reserve = Math.min(cfg.capacity(), reserve + converted * cfg.density());
-        status = reserve >= demandHu ? "basin_ready" : converted > 0 ? "basin_warming" : "basin_waiting";
+        heat = -1;
+        converted = 0;
+        basinHeatTick = -1;
+        noFlowDeadlineTick = -1;
+        legacyDeadlinePending = false;
+        if (previousTick >= 0 && now - previousTick > 1) {
+            basinFlowFraction = 0;
+            reserve = 0;
+        }
+        if (!validBasinSettings(cfg)) {
+            basinFlowFraction = 0;
+            reserve = 0;
+            status = "basin_config_invalid";
+            return;
+        }
+        if (!active) {
+            basinFlowFraction = 0;
+            reserve = 0;
+            status = "basin_waiting";
+            return;
+        }
+        if (exchange.hot() <= 0) {
+            basinFlowFraction = 0;
+            reserve = 0;
+            status = "basin_empty";
+            return;
+        }
+        if (exchange.coldSpace() <= 0) {
+            basinFlowFraction = 0;
+            reserve = 0;
+            status = "basin_blocked";
+            return;
+        }
+        double requestedMb = cfg.basinHeatCost() / cfg.density() + basinFlowFraction;
+        if (!Double.isFinite(requestedMb) || Math.abs(requestedMb) > Integer.MAX_VALUE) {
+            basinFlowFraction = 0;
+            reserve = 0;
+            status = "basin_config_invalid";
+            return;
+        }
+        int requested = Math.max(0, (int) Math.floor(requestedMb));
+        double roundingBalance = reserve;
+        if (roundingBalance + requested * cfg.density() + 1e-9 < cfg.basinHeatCost()) requested++;
+        basinFlowFraction = requestedMb - requested;
+        // 只允许不足1mB等效HU的舍入余额维持连续付款；不够本tick费用时向上补整mB。
+        if (requested > 0 && (exchange.hot() < requested || exchange.coldSpace() < requested)) {
+            basinFlowFraction = 0;
+            reserve = 0;
+            status = exchange.hot() < requested ? "basin_empty" : "basin_blocked";
+            return;
+        }
+        converted = requested == 0 ? 0 : exchange.convert(requested);
+        if (converted != requested) {
+            basinFlowFraction = 0;
+            reserve = 0;
+            status = "basin_blocked";
+            return;
+        }
+        double paid = reserve + converted * cfg.density();
+        if (paid + 1e-9 >= cfg.basinHeatCost()) {
+            reserve = Math.max(0, paid - cfg.basinHeatCost());
+            heat = cfg.heatLevel();
+            basinHeatTick = now;
+            status = "basin_heating";
+        } else {
+            reserve = 0;
+            status = "basin_rounding";
+        }
     }
 
-    /** 同步原生apply前锁定整批HU；仅原生方法正常返回false时调用方归还。 */
-    public boolean reserveBasinBatch(double amount) {
-        if (!Double.isFinite(amount) || amount <= 0 || reserve + 1e-9 < amount) return false;
-        reserve = Math.max(0, reserve - amount);
-        return true;
+    /** 只允许当前服务端tick结算后查询已付款超级热；不改变账本或缓存热级。 */
+    public boolean basinHeatingAt(long now) {
+        return heat > 0 && basinHeatTick >= 0 && now >= basinHeatTick && now - basinHeatTick <= 1;
     }
 
-    /** 仅原生apply失败时归还已锁定批费，成功时保持已扣状态。 */
-    public void releaseBasinBatch(double amount) {
-        if (Double.isFinite(amount) && amount > 0)
-            reserve = Math.min(settings.capacity(), reserve + amount);
+    /** 独立校验盆配置，不把盆成本约束并入锅炉及普通核热的共享配置有效性。 */
+    public static boolean validBasinSettings(Settings cfg) {
+        double cost = cfg.basinHeatCost();
+        double millibuckets = cost / cfg.density();
+        return cfg.valid() && cfg.basinHeatLevelEquivalent() >= 1 && cfg.basinHeatLevelEquivalent() <= 18
+                && Double.isFinite(cost) && cost > 0 && cost <= cfg.rate()
+                && Double.isFinite(millibuckets) && millibuckets <= Integer.MAX_VALUE;
     }
     /** 锅炉接管成功后清空已转移的核库存与储热，不再发放给独立供热路径。 */
     public void relinquishToBoiler() {
         if (activeMode() == HeatExchangerMode.CONDENSATION) throw new IllegalStateException("冷凝工质不能转入核锅炉");
-        hot = cold = 0; reserve = flowFraction = 0; converted = 0; heat = -1;
+        hot = cold = 0; reserve = flowFraction = basinFlowFraction = 0;
+        basinHeatTick = -1; converted = 0; heat = -1;
         noFlowDeadlineTick = -1; legacyDeadlinePending = false; status = "in_boiler";
     }
     public String status() { return status; }
@@ -171,6 +215,7 @@ public final class HeatExchangerState {
         }
         status = reason;
         heat = -1;
+        basinHeatTick = -1;
     }
 
     /** 服务端库存能力与热账本共用此快照；密度或窗口变动后丢弃无法复用的尾差及余热历史。 */
@@ -185,6 +230,8 @@ public final class HeatExchangerState {
             noFlowDeadlineTick = -1;
             legacyDeadlinePending = false;
             heat = -1;
+            basinFlowFraction = 0;
+            basinHeatTick = -1;
         }
         settings = next;
     }
@@ -231,11 +278,7 @@ public final class HeatExchangerState {
         return added;
     }
 
-    /**
-     * 每个世界 tick 最多执行一次。服务端先按已储HU决定档位并实付，再转换补储；
-     * 因此发布热始终有足额已付款，热冷转换体积相等，且储备不超过配置上限。
-     * 连续无实际转换达到bufferTicks后撤销供热并散去余热；普通查询和模拟不调用结算。
-     */
+    /** 锅炉路径每世界tick最多执行一次；盆专用尾差在进入普通负载前清除。 */
     public void tick(long now, boolean load, Settings cfg) {
         tick(now, load, cfg, localExchange);
     }
@@ -244,6 +287,9 @@ public final class HeatExchangerState {
     public void tick(long now, boolean load, Settings cfg, Exchange exchange) {
         if (mode == HeatExchangerMode.CONDENSATION) return;
         if (now == lastTick) return;
+        if (status.startsWith("basin_")) reserve = 0;
+        basinHeatTick = -1;
+        basinFlowFraction = 0;
         setSettings(cfg);
         heat = -1;
         converted = 0;
@@ -351,6 +397,11 @@ public final class HeatExchangerState {
     public void tickCondensation(long now, CondensationState.Source source,
                                  CondensationState.Settings cfg, Exchange exchange) {
         if (now == lastTick) return;
+        if (status.startsWith("basin_")) {
+            reserve = 0;
+            basinFlowFraction = 0;
+            basinHeatTick = -1;
+        }
         condensationSettings = cfg;
         lastTick = now;
         heat = -1;
@@ -394,14 +445,14 @@ public final class HeatExchangerState {
         return tick + delta;
     }
 
-    /** 精确保存HU、分数流量、最后世界tick与绝对断流期限；携物不刷新余热窗口。 */
+    /** 精确保存HU、锅炉分数流量、最后世界tick与绝对断流期限；盆供热只记本tick付款。 */
     public CompoundTag save() {
         var tag = new CompoundTag();
         tag.putInt("Hot", hot);
         tag.putInt("Cold", cold);
         tag.putString("Mode", mode.name());
         tag.put("Condensation", condensation.save());
-        tag.putDouble("ReserveHu", reserve);
+        tag.putDouble("ReserveHu", status.startsWith("basin_") ? 0 : reserve);
         tag.putDouble("FlowFraction", flowFraction);
         tag.putDouble("LastRate", lastRate);
         tag.putDouble("SettingsDensity", settings.density());
@@ -420,12 +471,15 @@ public final class HeatExchangerState {
         condensation.load(tag.getCompound("Condensation"));
         reserve = finite(tag.getDouble("ReserveHu"), 21_600_000_000D);
         flowFraction = finite(tag.getDouble("FlowFraction"), Math.nextDown(1D));
+        basinFlowFraction = 0;
+        basinHeatTick = -1;
         lastRate = finite(tag.getDouble("LastRate"), 18_000_000D);
         double savedDensity = tag.contains("SettingsDensity") ? tag.getDouble("SettingsDensity") : settings.density();
         int savedBuffer = tag.contains("SettingsBufferTicks") ? tag.getInt("SettingsBufferTicks") : settings.bufferTicks();
         if (Double.isFinite(savedDensity) && savedDensity > 0 && savedBuffer > 0)
             settings = new Settings(settings.heatLevel(), settings.huPerLevel(), savedBuffer,
-                    savedDensity, settings.hotCapacityMb(), settings.coldCapacityMb(), settings.maxLineLength());
+                    savedDensity, settings.hotCapacityMb(), settings.coldCapacityMb(), settings.maxLineLength(),
+                    settings.basinHeatLevelEquivalent());
         lastTick = tag.contains("LastTick") ? Math.max(-1, tag.getLong("LastTick")) : -1;
         legacyDeadlinePending = !tag.contains("NoFlowDeadlineTick");
         noFlowDeadlineTick = legacyDeadlinePending ? -1 : Math.max(-1, tag.getLong("NoFlowDeadlineTick"));

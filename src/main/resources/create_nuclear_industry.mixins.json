@@ -7,10 +7,7 @@
   "mixins": [
     "FluidNetworkSharedFillMixin",
     "BoilerPipePressureMixin",
-    "BasinHeatLevelMixin",
-    "BasinRecipeHeatMixin",
-    "BasinOperatingAccessor",
-    "BasinOperatingMixin"
+    "BasinHeatLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

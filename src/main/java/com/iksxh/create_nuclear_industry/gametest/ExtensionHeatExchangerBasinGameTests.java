@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.content.HeatExchangeContent;
+import com.iksxh.create_nuclear_industry.heat.HeatExchangerBasinBridge;
 import com.iksxh.create_nuclear_industry.heat.NuclearHeatExchangerBlockEntity;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -24,7 +25,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** 用真实Create搅拌器与原生配方验证普通/超级盆热的批费和产物。 */
+/** 用真实工作盆验证无搅拌器持续供热、超级热加工及资源中断恢复。 */
 @GameTestHolder("create_nuclear_industry_ext_b_basin")
 @PrefixGameTestTemplate(false)
 public final class ExtensionHeatExchangerBasinGameTests {
@@ -37,52 +38,89 @@ public final class ExtensionHeatExchangerBasinGameTests {
 
     private ExtensionHeatExchangerBasinGameTests() {}
 
-    /** 原生shielded_glass批次应先积足40HU，再产出并只扣一批费用。 */
-    @GameTest(template = TEMPLATE, timeoutTicks = 430)
-    public static void heatedRecipeUsesPaidBatchHeat(GameTestHelper helper) {
-        BasinBlockEntity basin = setup(helper, 100);
-        basin.getFilter().setFilter(new ItemStack(Items.DIRT));
-        basin.getInputInventory().setItem(0, new ItemStack(item("lead_ingot")));
-        basin.getInputInventory().setItem(1, new ItemStack(Items.GLASS));
-        basin.notifyChangeOfContents();
-        helper.runAfterDelay(20, () -> {
+    /** 空盆且无搅拌器仍是持续负载，并在已付款的当前tick发布SEETHING。 */
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void emptyBasinHeatsWithoutMixer(GameTestHelper helper) {
+        BasinBlockEntity basin = setupWithoutMixer(helper, 100);
+        helper.runAfterDelay(10, () -> {
             NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
-            helper.assertTrue(exchanger.ledger().cold() == 0 && count(basin.getOutputInventory(), item("shielded_glass")) == 0,
-                    "Create原生盆过滤拒绝时仍在充热或产出");
-            basin.getFilter().setFilter(ItemStack.EMPTY);
-            ((CreativeMotorBlockEntity) helper.getBlockEntity(MOTOR)).generatedSpeed.setValue(0);
-        });
-        helper.runAfterDelay(35, () -> {
-            NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
-            helper.assertTrue(exchanger.ledger().cold() == 0
-                            && count(basin.getInputInventory(), item("lead_ingot")) == 1,
-                    "真实停转阶段仍在充热或消耗原料");
-            ((CreativeMotorBlockEntity) helper.getBlockEntity(MOTOR)).generatedSpeed.setValue(256);
-        });
-        helper.runAfterDelay(140, () -> {
-            Item shieldedGlass = item("shielded_glass");
-            helper.assertTrue(count(basin.getOutputInventory(), shieldedGlass) == 1,
-                    "过滤与停转恢复后原生heated配方没有产出shielded_glass");
-            NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
-            helper.assertTrue(exchanger.ledger().cold() == 80 && exchanger.ledger().reserve() < 1e-9,
-                    "普通批次未按40HU结算或热冷转换不是80mB");
+            helper.assertTrue(exchanger.ledger().cold() >= 32 && exchanger.ledger().cold() <= 40,
+                    "空盆没有按持续费用将核热液等量转成冷液");
+            helper.assertTrue(HeatExchangerBasinBridge.heatLevel(basin) == HeatLevel.SEETHING,
+                    "无搅拌器的空盆未读取已付款超级热");
             helper.succeed();
         });
     }
 
-    /** 原生lava_from_cobble批次应达到SEETHING条件并只结算80HU。 */
+    /** 盆存在但热液耗尽时停热，补液后下一tick恢复，不借用HU余热。 */
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void coolantInterruptionStopsAndRestoresBasinHeat(GameTestHelper helper) {
+        BasinBlockEntity basin = setupWithoutMixer(helper, 8);
+        helper.runAfterDelay(8, () -> {
+            NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
+            helper.assertTrue(exchanger.ledger().cold() == 8 && exchanger.ledger().hot() == 0,
+                    "断流测试夹具未耗尽已输入热液");
+            helper.assertTrue(HeatExchangerBasinBridge.heatLevel(basin) == HeatLevel.NONE,
+                    "热液断流后仍用余热发布热级");
+            helper.assertTrue(exchanger.ledger().fillHot(8, false) == 8, "恢复供液未进入热罐");
+        });
+        helper.runAfterDelay(10, () -> {
+            NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
+            helper.assertTrue(exchanger.ledger().cold() > 8 && exchanger.ledger().cold() <= 16
+                            && HeatExchangerBasinBridge.heatLevel(basin) == HeatLevel.SEETHING,
+                    "恢复供液后未在实际换液付款tick恢复超级热");
+            helper.succeed();
+        });
+    }
+
+    /** 有效加工中持续换液，不按普通热级或批次储备发布。 */
     @GameTest(template = TEMPLATE, timeoutTicks = 180)
-    public static void superheatedRecipeUsesPaidBatchHeat(GameTestHelper helper) {
-        BasinBlockEntity basin = setup(helper, 160);
-        basin.getInputInventory().setItem(0, new ItemStack(Items.COBBLESTONE, 64));
+    public static void heatedRecipeUsesContinuousSuperheat(GameTestHelper helper) {
+        BasinBlockEntity basin = setup(helper, 1000);
+        basin.getInputInventory().setItem(0, new ItemStack(item("lead_ingot")));
+        basin.getInputInventory().setItem(1, new ItemStack(Items.GLASS));
+        basin.notifyChangeOfContents();
+        helper.runAfterDelay(100, () -> {
+            Item shieldedGlass = item("shielded_glass");
+            helper.assertTrue(count(basin.getOutputInventory(), shieldedGlass) == 1,
+                    "SEETHING未能执行Create原生heated配方");
+            NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
+            helper.assertTrue(exchanger.ledger().cold() == 400 && exchanger.ledger().reserve() < 1e-9,
+                    "默认2HU/t在100tick未持续转液400mB或错误使用了锅炉储备");
+            helper.succeed();
+        });
+    }
+
+    /** 先登记盆与搅拌器、最后登记热源，验证Create先tick操作器时仍可读取最近已付款热级。 */
+    @GameTest(template = TEMPLATE, timeoutTicks = 180)
+    public static void mixerRegisteredBeforeSourceProcessesHeatedRecipe(GameTestHelper helper) {
+        BasinBlockEntity basin = setupMixerBeforeSource(helper, 1000);
+        basin.getInputInventory().setItem(0, new ItemStack(item("lead_ingot")));
+        basin.getInputInventory().setItem(1, new ItemStack(Items.GLASS));
+        basin.notifyChangeOfContents();
+        helper.runAfterDelay(100, () -> {
+            NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
+            helper.assertTrue(count(basin.getOutputInventory(), item("shielded_glass")) == 1,
+                    "搅拌器先于热源登记后，Create原生heated加工仍未完成");
+            helper.assertTrue(exchanger.ledger().cold() == 400,
+                    "反向ticker顺序下热源未持续按固定费用等量换液");
+            helper.succeed();
+        });
+    }
+
+    /** 单个Create超级热配方输入仍只产原生50mB；换热器负载连续运行。 */
+    @GameTest(template = TEMPLATE, timeoutTicks = 180)
+    public static void superheatedRecipeUsesContinuousSuperheat(GameTestHelper helper) {
+        BasinBlockEntity basin = setup(helper, 1000);
+        basin.getInputInventory().setItem(0, new ItemStack(Items.COBBLESTONE));
         basin.notifyChangeOfContents();
         helper.runAfterDelay(100, () -> {
             FluidStack output = basin.getTanks().getSecond().getCapability().getFluidInTank(0);
             NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
             helper.assertTrue(output.is(Fluids.LAVA) && output.getAmount() == 50,
-                    "原生superheated配方没有产出50mB熔岩");
-            helper.assertTrue(exchanger.ledger().cold() == 160 && exchanger.ledger().reserve() < 1e-9,
-                    "超级批次未按80HU结算或热冷转换不是160mB");
+                    "持续SEETHING没有执行原生create:lava_from_cobble配方");
+            helper.assertTrue(exchanger.ledger().cold() == 400 && exchanger.ledger().reserve() < 1e-9,
+                    "超级热加工期间未按固定2HU/t持续转换等量冷液");
             helper.succeed();
         });
     }
@@ -134,6 +172,29 @@ public final class ExtensionHeatExchangerBasinGameTests {
         ((CreativeMotorBlockEntity) helper.getBlockEntity(MOTOR)).generatedSpeed.setValue(256);
         NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
         helper.assertTrue(exchanger.ledger().fillHot(hotMb, false) == hotMb, "换热器未接收测试热液库存");
+        return (BasinBlockEntity) helper.getBlockEntity(BASIN);
+    }
+
+    private static BasinBlockEntity setupWithoutMixer(GameTestHelper helper, int hotMb) {
+        helper.setBlock(EXCHANGER, HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get().defaultBlockState());
+        helper.setBlock(BASIN, AllBlocks.BASIN.get());
+        NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
+        helper.assertTrue(exchanger.ledger().fillHot(hotMb, false) == hotMb, "换热器未接收测试热液库存");
+        return (BasinBlockEntity) helper.getBlockEntity(BASIN);
+    }
+
+    private static BasinBlockEntity setupMixerBeforeSource(GameTestHelper helper, int hotMb) {
+        helper.setBlock(BASIN, AllBlocks.BASIN.get());
+        helper.setBlock(MIXER, AllBlocks.MECHANICAL_MIXER.get());
+        helper.setBlock(COG, AllBlocks.COGWHEEL.getDefaultState()
+                .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Y));
+        helper.setBlock(MOTOR, AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.DOWN));
+        ((CreativeMotorBlockEntity) helper.getBlockEntity(MOTOR)).generatedSpeed.setValue(256);
+        helper.setBlock(EXCHANGER, HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get().defaultBlockState());
+        NuclearHeatExchangerBlockEntity exchanger = exchanger(helper);
+        helper.assertTrue(exchanger.ledger().fillHot(hotMb, false) == hotMb,
+                "搅拌器先登记用例未接收测试热液库存");
         return (BasinBlockEntity) helper.getBlockEntity(BASIN);
     }
 

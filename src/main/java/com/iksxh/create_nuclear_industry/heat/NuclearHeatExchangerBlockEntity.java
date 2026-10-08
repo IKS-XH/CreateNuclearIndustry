@@ -48,6 +48,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     private Object inventoryIdentity = new Object();
     private boolean tickPaused;
     private boolean topologyReady;
+    private Object lastBasinOperator;
     private BlockPos lastController;
     private BlockPos boilerOwner;
     private int sizeLimit, waterLimit, viewHeat = -1, viewFlow;
@@ -64,6 +65,12 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         super(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER_BE.get(), pos, state);
     }
     public HeatExchangerState ledger() { return ledger; }
+    /** 追踪当前Create操作器实例，仅在首次接入时额外唤醒其原生检查。 */
+    boolean observeBasinOperator(Object operator) {
+        if (lastBasinOperator == operator) return false;
+        lastBasinOperator = operator;
+        return operator != null;
+    }
     /** 炉内归属改变先撤销独立能力及 Create 热贡献，库存由接管事务另行转移。 */
     public void setBoilerOwner(BoilerControllerBlockEntity owner) {
         BlockPos next = owner == null ? null : owner.getBlockPos();
@@ -190,8 +197,9 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         if (line.conflict()) {
             if (level.hasChunkAt(pos.above()) && level.getBlockEntity(pos.above()) instanceof
                     com.simibubi.create.content.processing.basin.BasinBlockEntity) {
-                machine.ledger.tickBasin(level.getGameTime(), 0, HeatExchangerConfig.settings(), line);
-                machine.updateBasinView(null, "basin_mode_conflict");
+                machine.ledger.tickBasin(level.getGameTime(), false, HeatExchangerConfig.settings(), line);
+                boolean statusChanged = machine.updateBasinView(null, "basin_mode_conflict");
+                HeatExchangerBasinBridge.scheduleMixerUpdate(machine, statusChanged);
             } else {
                 machine.ledger.pauseMode(level.getGameTime(), "mode_conflict");
                 machine.finishCondensationView(line, "mode_conflict");
@@ -221,6 +229,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
             HeatExchangerBasinBridge.tick(machine, HeatExchangerConfig.settings(), line);
             return;
         }
+        machine.observeBasinOperator(null);
         var controller = HeatExchangerBoilerBridge.controller(level, pos);
         BlockPos nextController = controller == null ? null : controller.getBlockPos();
         int previous = machine.viewHeat;
@@ -294,16 +303,19 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
 
     /** 先让热回调与旧流体句柄不可用，再刷新跨区块控制器；本方法重复调用安全。 */
     public void suspend() {
+        boolean basinWasActive = viewStatus.startsWith("basin_");
         BoilerStructure.invalidateNearby(level, worldPosition);
         available = false;
         topologyReady = false;
         capabilityEpoch++;
         inventoryIdentity = new Object();
         viewHeat = -1;
+        viewStatus = "line_unavailable";
         HeatExchangerBoilerBridge.unregisterLoaded(this);
         topologyChanged(level, worldPosition);
         HeatExchangerBoilerBridge.track(this, false);
         HeatExchangerBoilerBridge.refresh(level, lastController);
+        if (basinWasActive) HeatExchangerBasinBridge.scheduleMixerUpdate(this, true);
     }
 
     /**
@@ -312,6 +324,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
      */
     void pauseHeat() {
         if (tickPaused) return;
+        boolean basinWasActive = viewStatus.startsWith("basin_");
         tickPaused = true;
         topologyReady = false;
         capabilityEpoch++;
@@ -321,6 +334,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         topologyChanged(level, worldPosition);
         if (level != null && !level.isClientSide) level.invalidateCapabilities(worldPosition);
         HeatExchangerBoilerBridge.refresh(level, lastController);
+        if (basinWasActive) HeatExchangerBasinBridge.scheduleMixerUpdate(this, true);
     }
     @Override public void onChunkUnloaded() { suspend(); super.onChunkUnloaded(); }
     @Override public void setRemoved() { suspend(); super.setRemoved(); }
@@ -425,8 +439,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
                 viewLineCount * viewHotCapacity, viewLineCount * viewColdCapacity));
         tooltip.add(Component.translatable(prefix + "state." + viewStatus));
         if (viewStatus.startsWith("basin_")) {
-            tooltip.add(Component.translatable(prefix + "basin_storage", String.format(java.util.Locale.ROOT, "%.2f", ledger.reserve()),
-                    String.format(java.util.Locale.ROOT, "%.2f", viewBasinDemand)));
+            tooltip.add(Component.translatable(prefix + "basin_rate", String.format(java.util.Locale.ROOT, "%.2f", viewBasinDemand), viewFlow));
             return true;
         }
         tooltip.add(Component.translatable(prefix + "flow", viewFlow, String.format(java.util.Locale.ROOT, "%.2f", nominalFlow)));
@@ -436,21 +449,23 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         return true;
     }
 
-    /** 工作盆状态单独显示储备与当前批门槛，避免把HU金额误报为锅炉等级。 */
-    void updateBasinView(Double demandHu) {
-        updateBasinView(demandHu, ledger.status());
+    /** 工作盆显示固定HU/t成本与本tick实际等量换液，避免展示不存在的预热储备。 */
+    boolean updateBasinView(Double costHuPerTick) {
+        return updateBasinView(costHuPerTick, ledger.status());
     }
 
-    void updateBasinView(Double demandHu, String status) {
+    boolean updateBasinView(Double costHuPerTick, String status) {
         int previous = viewHeat;
+        String previousStatus = viewStatus;
         viewHeat = -1;
         viewFlow = ledger.converted();
         nominalFlow = HeatExchangerConfig.settings().rate() / HeatExchangerConfig.settings().density();
-        viewBasinDemand = demandHu == null ? 0 : demandHu;
+        viewBasinDemand = costHuPerTick == null ? 0 : costHuPerTick;
         viewStatus = status;
         updateLineView(HeatExchangerLine.find(this));
         setChanged();
         if (previous != viewHeat || level.getGameTime() % 5 == 0) syncView();
+        return previous != viewHeat || !java.util.Objects.equals(previousStatus, status);
     }
 
     private final class Port implements IFluidHandler, SharedFluidReceiver {
