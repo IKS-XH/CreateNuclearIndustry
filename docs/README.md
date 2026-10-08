@@ -9,7 +9,7 @@
 | 汽轮机思索04 | [取景与文案整改](./superpowers/plans/2026-10-09-device-ponder-04-framing-fix.md)候选`a94f2ea`实现与静态复核通过；原三情景保留，同级候选定向复看两页 |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
 | 换热器工作盆供热 | `ab91356`实现及复核通过，用户手测通过，见[验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)；持续超级加热，默认4mB/t，缺液或冷满立即停热 |
-| 换热器烧结炉供热 | [EXCHANGER-03](./superpowers/plans/2026-10-09-ext-b-exchanger-03-sintering.md)：复用持续热源及共用配置，烧结工时/物流不变，本批独立手测 |
+| 换热器烧结炉供热 | [EXCHANGER-03](./superpowers/plans/2026-10-09-ext-b-exchanger-03-sintering.md)候选`094a925`实现/复核及3/3真实测试通过，工时/物流不变；停在[独立手测](./reviews/2026-10-09/exchanger-sintering-03/CANDIDATE.md)，未合main |
 | 换热器分情景思索 | 工作盆功能验收后，分别介绍独立供热、高压锅炉内置换热、工作盆和蒸汽冷凝回水 |
 
 候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`。在该目录执行 `./gradlew.bat runClient`测试新供热并播放汽轮机教学；主目录提供已验收版本，两目录分别使用自己的运行配置和世界。
