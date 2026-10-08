@@ -7,7 +7,7 @@
 | 工作 | 状态与入口 |
 | :--- | :--- |
 | 汽轮机思索04 | [三情景实施卡](./superpowers/plans/2026-10-08-device-ponder-04-turbine.md)已完成实现与复核，等待同级[播放候选](./reviews/2026-10-08/turbine-ponder-04/CANDIDATE.md)验收 |
-| 换热器工作盆供热 | [具体建议](./superpowers/plans/2026-10-08-heat-exchanger-basin-proposal.md)待新增费用/断供规则确认；[技术核查](./superpowers/plans/2026-10-04-heat-exchanger-basin-preparation.md)已完成，确认后实现，与汽轮机一起手测 |
+| 换热器工作盆供热 | [EXCHANGER-02实施卡](./superpowers/plans/2026-10-08-ext-b-exchanger-02-basin.md)已获确认，自动派发；费用按同热级锅炉40tick平衡，默认40/80HU、随huPerLevel同步，与汽轮机一起手测 |
 | 换热器分情景思索 | 工作盆功能验收后，分别介绍独立供热、高压锅炉内置换热、工作盆和蒸汽冷凝回水 |
 
 候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`。在该目录执行 `./gradlew.bat runClient`播放新教学；主目录提供已验收版本，两目录分别使用自己的运行配置和世界。
