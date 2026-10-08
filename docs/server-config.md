@@ -69,6 +69,15 @@
 
 工质密度继续使用原 P1 SERVER 配置中的 `coolantAbsorptionHuPerMb`（默认0.5HU/mB），不新增第二份密度。它同时影响反应堆冷却语义，不能当作只调整换热器的局部参数。
 
+**工作盆增量（2026-10-08候选，尚待手测）：** [EXCHANGER-02](./superpowers/plans/2026-10-08-ext-b-exchanger-02-basin.md)复用上述额定功率和HU储备，在同一配置文件顶层新增两键；主目录尚未合入功能。与汽轮机思索按[集中清单](./reviews/2026-10-08/exchanger-basin-02/MANUAL.md)验收。
+
+| 键 | 默认 | 含义 |
+| :--- | ---: | :--- |
+| `basinHeatedEquivalentTicks` | 40 | 普通加热每批的锅炉等效供热tick数，1～1200；批费为此值×`huPerLevel` |
+| `basinSuperheatedEquivalentTicks` | 40 | 超级加热每批的锅炉等效供热tick数，1～1200；批费为此值×2×`huPerLevel` |
+
+原生普通/超级燃烧室的锅炉热级为1/2，因此默认每成功批次收40/80HU，等效同热级供热40tick；默认密度下80/160mB热液转成等量冷液。修改`huPerLevel`会同步改变锅炉耗热与盆批费，修改`heatLevel`只改变盆充热速率，实际搅拌速度仍由Create决定。无热配方和盆压片不收费；待料、停转或堵塞不继续充热。费用超过`heatLevel × huPerLevel × bufferTicks`储热上限时停用对应加热并提示，不影响其他用途的配置有效性。
+
 **冷凝增量（2026-10-05，已通过联合手测并合入main）：** [冷凝回水01](archive/2026-10-08-completed-plans/2026-10-05-ext-b-condense-01.md)在同一文件顶层追加下表，不改变现有核热字段的含义。默认8字段及非默认回收率/容量已由真实SERVER断言核对，证据见[候选交付](./reviews/2026-10-05/condense-01/README.md)；最终运行验收见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。
 
 | 键 | 默认 | 含义 |
