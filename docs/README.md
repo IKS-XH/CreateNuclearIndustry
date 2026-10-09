@@ -1,17 +1,22 @@
 # 项目文档入口
 
-**更新：2026-10-09。** 汽轮机思索按截图整改三档取景与排汽措辞；换热器持续工作盆供热仍待手测，两项分别记录。用户任命独立美术负责人开展贴图、建模和动画并行工作；离心机、反应堆和锅炉教学已经通过，其他主线暂缓。
+**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，下一台准备屏蔽装配台教学。反应堆连接纹理在美术同级工作树定向整改，独立视觉门未通过，其他主线暂缓。
 
 ## 当前执行与接续
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
-| 汽轮机思索04 | [取景与文案整改](./superpowers/plans/2026-10-09-device-ponder-04-framing-fix.md)执行中；原三情景保留，同级候选定向复看两页 |
+| 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
+| 屏蔽装配台思索07 | [三幕准备计划](./superpowers/plans/2026-10-10-device-ponder-07-assembly.md)：搭建与接口、新燃料装配、乏燃料封装；前置已通过，尚未派发实现，不新增玩法 |
+| 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
-| 换热器工作盆供热 | [EXCHANGER-02R1实施卡](./superpowers/plans/2026-10-08-ext-b-exchanger-02r1-continuous.md)候选`ab91356`实现及整改复核通过：持续超级加热，默认4mB/t，缺液或冷满立即停热；按[集中清单](./reviews/2026-10-08/exchanger-basin-02/MANUAL.md)与汽轮机手测 |
-| 换热器分情景思索 | 工作盆功能验收后，分别介绍独立供热、高压锅炉内置换热、工作盆和蒸汽冷凝回水 |
+| 反应堆运行动画共享前置 | 用户直接确认动画及按库存连续混色；[L2实物API/写集交付](./reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)自动与独立审查通过，main `cb123c9`、美术净同步`4cb0d7f`；美术按边界接运行消费者，动画与02R1视觉门独立保留 |
+| 成型反应堆连接纹理 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)已净同步；[02B候选登记](./reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)自动证据保留。用户反馈成型材质与窗组内部框需整改，[02R1范围补充](./art/ART-REACTOR-02R1-COORDINATION.md)已实际同步美术树，视觉门未通过，源码未合main；教学验收不覆盖该门 |
+| 换热器工作盆供热 | `ab91356`实现及复核通过，用户手测通过，见[验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)；持续超级加热，默认4mB/t，缺液或冷满立即停热 |
+| 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
+| 换热器分情景思索 | 五幕及R4剖面复看[用户手测通过](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，复用定向合同、增量打包及独立复核；main净教学提交`b036776` |
 
-候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`。在该目录执行 `./gradlew.bat runClient`测试新供热并播放汽轮机教学；主目录提供已验收版本，两目录分别使用自己的运行配置和世界。
+主目录现提供已验收供热及离心机、反应堆、锅炉、汽轮机、换热器、烧结炉教学。逻辑候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`保留本批实现及历史证据；美术候选使用`E:/MyMC/NewMod/Create_NuclearIndustry-art-studio`，各目录分别使用自己的运行配置和世界。
 
 ## 权威文档
 
