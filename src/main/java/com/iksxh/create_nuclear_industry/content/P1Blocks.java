@@ -39,7 +39,9 @@ public final class P1Blocks {
             P1ContentIds.REACTOR_HOT_PORT_ID, ReactorPortBlock::new);
     public static final DeferredBlock<Block> REACTOR_REFUELING_PORT = registerBlock(
             P1ContentIds.REACTOR_REFUELING_PORT_ID, ReactorPortBlock::new);
-    public static final DeferredBlock<Block> REACTOR_FUEL_ROD = registerBlock(P1ContentIds.REACTOR_FUEL_ROD_ID);
+    // 内部模型需穿过燃料格可见；只撤销完整遮挡，仍保留原生完整碰撞、选框与默认阻光 1。
+    public static final DeferredBlock<Block> REACTOR_FUEL_ROD = registerBlock(
+            P1ContentIds.REACTOR_FUEL_ROD_ID, properties -> new Block(properties.noOcclusion()));
     public static final DeferredBlock<Block> CONTROL_ROD_DRIVE = registerBlock(
             P1ContentIds.CONTROL_ROD_DRIVE_ID, ControlRodDriveBlock::new);
 
