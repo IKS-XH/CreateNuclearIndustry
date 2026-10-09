@@ -283,7 +283,7 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 | 阶段 | 注册 ID | Ponder 必须演示的内容 |
 | :--- | :--- | :--- |
 | `已验收`基础教学 | `enrichment_centrifuge` | [联合验收](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)：两格放置、底部动力、顶部进浆、水平面双粉/回水与黄铜过滤、稳定转速/输出堵塞暂停、停转轴承维修；当前失稳行为为暂停，不展示未实现的效率曲线 |
-| `P2` | `fuel_sintering_furnace` | 生燃料芯块输入、密闭高温烧结、烧结燃料芯块输出，说明普通鼓风加热不可替代 |
+| `候选`两幕，待播放 | `fuel_sintering_furnace` | [06候选](./reviews/2026-10-10/fuel-sintering-ponder-06/CANDIDATE.md)：底部供热、顶部生芯块、一进一出、断热保留进度；溜槽进料、四侧成品及核换热器热源。自动/独立审查通过，未整合main。 |
 | `P2` | `shielded_assembly_station` | 芯块/包壳/焊料/格架直接装配组件、屏蔽边界、燃料组件和危险物品装配限制 |
 | `已验收`五幕 | `nuclear_heat_exchanger` | [05播放验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)：本体/直列、Create锅炉供热、锅炉内置、盆/炉持续核热、蒸汽冷凝；拒收超临界蒸汽，不演示取消的降级供热路线 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体接口和后置状态，不展示首发不存在的冷却转换 |
