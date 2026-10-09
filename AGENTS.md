@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 美术消费报告L2真暂停租约缺陷，主PM实际核实锁定1.21.1客户端Pre在pause检查前触发；按[R2窄修](docs/superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)仅冻结真暂停租约年龄，保留世界/卸载/坏包撤销及公开ABI。原R1自动/独立证据保留，美术消费者可继续，最终候选绑定实际R2同步；本修复未提前关闭视觉门或推进07。
+
 - 主PM已核实美术对话中用户2026-10-10直接要求反应堆内部模型/运行动画并确认按实际冷热库存连续混色。按[ART03-L2合同](docs/art/ART-REACTOR-03-INTERFACE.md)与[共享接口实施卡](docs/superpowers/plans/2026-10-10-reactor-runtime-display-02.md)完成必要只读运行投影及仅燃料noOcclusion显示适配；原批24/24定向JUnit及1/1真实仪表正常退出，R1生命周期6/6及独立窄复审关闭唯一P2，净源码main `cb123c9`、美术树`4cb0d7f`。按[实际API/消费写集HANDOFF](docs/reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)接续美术消费；前置不改反应堆玩法/L1/CT，不追认02R1或动画视觉通过，屏蔽装配台教学07仍已准备未派发。
 
 - 用户于2026-10-10明确报告“烧结炉的思索也测试通过了”，按[06验收](docs/reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)关闭烧结与自动化两幕播放门，main净教学提交`57763f8`。8个集成路径与已审`e76c8d9`及冻结源SHA一致，复用3/3定向JUnit、增量assemble与一次独立窄审，不重复已验收供热或教学。按用户此前确认的先烧结炉、后屏蔽装配台、逐台验收顺序，下一项准备[07装配台教学](docs/superpowers/plans/2026-10-10-device-ponder-07-assembly.md)；仅讲已有规则，其他工程主线暂缓。美术连接纹理整改视觉门保持未通过，不由教学验收覆盖。
