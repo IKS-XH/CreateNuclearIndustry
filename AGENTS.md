@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 主PM已核实美术对话中用户2026-10-10直接要求反应堆内部模型/运行动画并确认按实际冷热库存连续混色。按[ART03-L2合同](docs/art/ART-REACTOR-03-INTERFACE.md)与[共享接口实施卡](docs/superpowers/plans/2026-10-10-reactor-runtime-display-02.md)安排必要只读运行投影及仅燃料noOcclusion显示适配；实际编译API与净源码交付前美术不派发运行消费。该前置不改反应堆玩法、不改L1/CT，不追认02R1视觉通过；屏蔽装配台教学07仍已准备未派发。
+
 - 用户于2026-10-10明确报告“烧结炉的思索也测试通过了”，按[06验收](docs/reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)关闭烧结与自动化两幕播放门，main净教学提交`57763f8`。8个集成路径与已审`e76c8d9`及冻结源SHA一致，复用3/3定向JUnit、增量assemble与一次独立窄审，不重复已验收供热或教学。按用户此前确认的先烧结炉、后屏蔽装配台、逐台验收顺序，下一项准备[07装配台教学](docs/superpowers/plans/2026-10-10-device-ponder-07-assembly.md)；仅讲已有规则，其他工程主线暂缓。美术连接纹理整改视觉门保持未通过，不由教学验收覆盖。
 
 - ART-REACTOR-02B已由美术负责人冻结交付，主PM按[候选登记](docs/reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)核对11/11定向JUnit、增量JAR、一次独立审查与14图集来源/安装/打包一致性。美术树保留未提交源码与ART01/02A输入，待用户客户端视觉观察；未合main，不改变固定5×5×5反应堆玩法。换热器教学本批已独立验收，不关闭美术视觉门，其他主线暂缓。
