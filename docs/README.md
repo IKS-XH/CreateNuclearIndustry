@@ -9,7 +9,7 @@
 | 燃料烧结炉思索06 | 用户2026-10-10确认开始，[两幕任务](./superpowers/plans/2026-10-10-device-ponder-06-sintering.md)在同级逻辑树执行；已有烧结规则不变，完成后单独播放验收，再安排装配台 |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
-| 成型反应堆连接纹理 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)已净同步；[02B候选登记](./reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)通过11/11定向JUnit、增量JAR、一次独立审查及14图集一致性核对，美术树待客户端视觉观察，源码未合main；本次教学验收不关闭该门 |
+| 成型反应堆连接纹理 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)已净同步；[02B候选登记](./reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)自动证据保留。用户反馈成型材质与窗组内部框需整改，[02R1范围补充](./art/ART-REACTOR-02R1-COORDINATION.md)已实际同步美术树，视觉门未通过，源码未合main；教学验收不覆盖该门 |
 | 换热器工作盆供热 | `ab91356`实现及复核通过，用户手测通过，见[验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)；持续超级加热，默认4mB/t，缺液或冷满立即停热 |
 | 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
 | 换热器分情景思索 | 五幕及R4剖面复看[用户手测通过](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，复用定向合同、增量打包及独立复核；main净教学提交`b036776` |
