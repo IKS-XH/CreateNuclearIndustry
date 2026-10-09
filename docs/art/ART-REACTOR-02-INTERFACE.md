@@ -1,6 +1,6 @@
 # ART-REACTOR-02：成型连接纹理接入合同
 
-日期：2026-10-09。维护者：主逻辑PM。状态：消费语义、资源路径与分工写集确定；逻辑前置尚未派发或实现，美术当前只做02A资产准备。
+日期：2026-10-09。维护者：主逻辑PM。状态：消费语义、资源路径与分工写集确定；[逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)成卡，实际启动/交付以任务状态与报告为准，美术02A资产准备独立继续。
 
 ## 来源、前置与边界
 
@@ -38,7 +38,7 @@
 
 ### 客户端只读消费
 
-预留客户端入口`structure.client.ReactorSurfaceSnapshots.capture()`，返回不可变`ReactorSurfaceSnapshot`。公共查询为`ReactorSurfaceSnapshot.findSurface(BlockPos, Direction)`，返回`Optional<ReactorSurfaceSnapshot.Member>`；命中项提供上述结构身份、bounds、revision和预期方块ID。缺少当前世界数据时捕获空快照，查询返回空，不用null代替快照。
+预留客户端入口`structure.client.ReactorSurfaceSnapshots.capture()`，返回不可变`ReactorSurfaceSnapshot`。模型消费新增必要的上下文入口`capture(BlockAndTintGetter)`；无参入口不能作为旧/新世界区块工作任务或Ponder临时世界的关联证据。上下文入口须用锁定API实际验证所属会话，无法证明适用时返回空，不能只比较局部同坐标/同方块。公共查询为`ReactorSurfaceSnapshot.findSurface(BlockPos, Direction)`，返回`Optional<ReactorSurfaceSnapshot.Member>`；命中项提供上述结构身份、bounds、revision和预期方块ID。缺少当前世界数据时捕获空快照，查询返回空，不用null代替快照。
 
 模型重建的一次调用只使用一个快照；不得每个邻接点重新捕获不同版本。快照和其成员均不保存Level、BE或可变NBT，不从模型工作线程访问远处仪表、客户端可变Map或扫描世界。发布由客户端游戏线程完成，通过原子替换只读索引供工作线程读取；刷新必须在发布之后执行。世界会话与模型重建上下文的关联在逻辑实现中验证，不能把新世界索引用于旧世界尚未结束的任务。
 
@@ -83,4 +83,4 @@ BE更新是优先传输路线。如果只依此路线无法满足成员区块重
 3. 逻辑交付以编译后的公共类型/签名和生命周期证据冻结消费API，美术再接入CT包装。消费语义不得自行改变，模型加载时机和专用服务端隔离须验证。
 4. 成型/拆坏/相邻独立结构、各面拐角与功能孔、跨区块和重新进入游戏的显示由最终候选定向验证；用户视觉门另记，不重复全部设备玩法测试。
 
-本次只完成接口与分工文档，不运行构建或修改代码，不推进逻辑实施。文件可供美术负责人只读接续；没有借收到协调消息向另一聊天发送回信。
+初次协调只完成接口与分工文档；随后PM直接核实美术对话中用户“好”的确认，明确该显示接口是已批准美术任务的必要前置，按并行授权另卡L1实施。02A随后提交224SVG/224图块/14图集及独立审查，资产冻结不代表游戏接入验收；美术预检确认无参快照不足以排除旧世界延迟构建与Ponder上下文，故本合同增加必须实证的上下文入口。Create本版本`getModelData`为final，美术拟在`gatherModelData`作用域固定一次快照并finally恢复/清理，逻辑不得仅用猜测的API交付。换热器五幕待播放门与美术最终视觉门保持。文件与后续共享HANDOFF供美术负责人只读接续；未借收到协调消息向另一聊天发送回信。
