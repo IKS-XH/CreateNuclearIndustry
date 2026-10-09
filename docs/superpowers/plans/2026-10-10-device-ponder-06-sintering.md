@@ -1,6 +1,6 @@
 # 燃料烧结炉思索实施计划
 
-**任务ID / 状态：** DEVICE-PONDER-06-SINTERING / 候选`e76c8d9`自动与独立审查通过，待用户逐幕播放；尚未净整合main。用户2026-10-10回复“开始吧”，接续PM提出的先烧结炉、后屏蔽装配台、逐台播放验收顺序。本批只实现烧结炉教学，其他主线保持暂缓。
+**任务ID / 状态：** DEVICE-PONDER-06-SINTERING / 用户2026-10-10报告“烧结炉的思索也测试通过了”，两幕播放门关闭，main净教学提交`57763f8`；原候选`e76c8d9`自动与独立审查证据复用。用户此前回复“开始吧”已确认先烧结炉、后屏蔽装配台、逐台播放验收顺序。见[最终验收](../../reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)；其他主线保持暂缓。
 
 **目标：** 玩家看懂生芯块的烧结、底部热源、顶部投料和水平取成品；画面紧凑，热源及接口可见，正文一次一段。沿用已验收设备规则，不新增配方、参数、GUI或服务端行为。
 
@@ -51,8 +51,8 @@
 - [x] 最终定向`test --tests '*FuelSinteringPonderContractTest' assemble`退出0，实际JUnit3/3、0失败/错误/跳过；模板、场景class与双语进入JAR。首版green后调整窗口溜槽/上方投料容器，按实际变更必要复验；未运行全量、GameTest或旧功能复测。
 - [x] 一次独立合并规格+质量窄审通过，读取本地API及已有证据，没有重跑Gradle或修改实现。
 - [x] PM核对准确写集、冻结8路径SHA/最终XML/制品及报告；10路径源码/报告候选`e76c8d9`已提交，集中[播放入口](../../reviews/2026-10-10/fuel-sintering-ponder-06/CANDIDATE.md)已整理。main仅登记候选，不含新教学实现。
-- [ ] 用户逐幕播放确认热源、进出料、暂停/恢复及取景/文案，之后才净教学整合main。等待本台人工门时不自动派发装配台或其他主线。
+- [x] 用户逐幕播放确认热源、进出料、暂停/恢复及取景/文案，main净教学整合`57763f8`，8路径Git内容及冻结源SHA一致；不重复跑测。下一台进入07准备，其他主线暂缓。
 
 **冲突扫描：** 插件、语言与两个模板交同一执行者顺序维护；美术树禁止Ponder/语言修改，本批不进入CT/素材写集。未发现新玩法取舍或前置缺失。保留已验收教学门关闭状态。
 
-**PM交付收据：** 执行者`/root/fuel_sintering_ponder_impl`、独立审查者`/root/fuel_sintering_ponder_review`；报告见[实施](../../reviews/2026-10-10/fuel-sintering-ponder-06/IMPLEMENTATION.md)及[审查](../../reviews/2026-10-10/fuel-sintering-ponder-06/REVIEW.md)。源码候选与最终冻结证据一致，JAR SHA256 `0aead57d60b796e17c461a98bdeee2e7721d413a6cffbabcbe45af3986ab5206`；PM复制冻结JAR并复核哈希，没有重构建。既有日志、pycache及独立美术差异保留，用户本台播放门尚未关闭。
+**PM交付收据：** 执行者`/root/fuel_sintering_ponder_impl`、独立审查者`/root/fuel_sintering_ponder_review`；报告见[实施](../../reviews/2026-10-10/fuel-sintering-ponder-06/IMPLEMENTATION.md)及[审查](../../reviews/2026-10-10/fuel-sintering-ponder-06/REVIEW.md)。源码候选与最终冻结证据一致，JAR SHA256 `0aead57d60b796e17c461a98bdeee2e7721d413a6cffbabcbe45af3986ab5206`；PM复制冻结JAR并复核哈希，没有重构建。用户本台播放门已按[验收](../../reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)关闭；既有日志、pycache及独立美术差异保留，美术视觉门不由本批覆盖。

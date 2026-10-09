@@ -1,12 +1,13 @@
 # 项目文档入口
 
-**更新：2026-10-10。** 已验收供热及教学保持整合main；燃料烧结炉两幕新候选待播放。反应堆连接纹理在美术同级工作树定向整改，独立视觉门未通过，其他主线暂缓。
+**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，下一台准备屏蔽装配台教学。反应堆连接纹理在美术同级工作树定向整改，独立视觉门未通过，其他主线暂缓。
 
 ## 当前执行与接续
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
-| 燃料烧结炉思索06 | [两幕候选](./reviews/2026-10-10/fuel-sintering-ponder-06/CANDIDATE.md)`e76c8d9`：3/3定向检查、增量assemble及一次独立审查通过；同级逻辑树待用户播放，尚未整合main，通过后再安排装配台 |
+| 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
+| 屏蔽装配台思索07 | [三幕准备计划](./superpowers/plans/2026-10-10-device-ponder-07-assembly.md)：搭建与接口、新燃料装配、乏燃料封装；前置已通过，尚未派发实现，不新增玩法 |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
 | 成型反应堆连接纹理 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)已净同步；[02B候选登记](./reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)自动证据保留。用户反馈成型材质与窗组内部框需整改，[02R1范围补充](./art/ART-REACTOR-02R1-COORDINATION.md)已实际同步美术树，视觉门未通过，源码未合main；教学验收不覆盖该门 |
@@ -14,7 +15,7 @@
 | 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
 | 换热器分情景思索 | 五幕及R4剖面复看[用户手测通过](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，复用定向合同、增量打包及独立复核；main净教学提交`b036776` |
 
-主目录现提供已验收供热及离心机、反应堆、锅炉、汽轮机、换热器教学。逻辑候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`保留本批实现及历史证据；美术候选使用`E:/MyMC/NewMod/Create_NuclearIndustry-art-studio`，各目录分别使用自己的运行配置和世界。
+主目录现提供已验收供热及离心机、反应堆、锅炉、汽轮机、换热器、烧结炉教学。逻辑候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`保留本批实现及历史证据；美术候选使用`E:/MyMC/NewMod/Create_NuclearIndustry-art-studio`，各目录分别使用自己的运行配置和世界。
 
 ## 权威文档
 
