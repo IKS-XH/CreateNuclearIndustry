@@ -39,3 +39,7 @@
 - `C:/Users/IKSXH/.codex/skills/minecraft-resource-pack/SKILL.md`
 
 MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6保持不变。技能通用步骤服从用户授权、治理权限、精简验证和首发前存档边界。
+
+## 反应堆成型连接纹理协调
+
+美术负责人转交用户已确认的ART-REACTOR-02需求后，主PM于2026-10-09核对并保存[最小展示接口与写集合同](./ART-REACTOR-02-INTERFACE.md)。02A资产可独立准备；真实CT接入等待逻辑侧只读表面快照交付，不给普通外壳添加BE，不扩展固定5×5×5玩法。当前仅完成接口规划，逻辑前置尚未派发，换热器五幕待播放状态及各美术人工门保持。
