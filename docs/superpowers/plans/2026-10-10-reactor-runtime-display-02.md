@@ -41,7 +41,7 @@ ControlRodDriveBE、L1类/测试/AT、CT、反应堆模拟、其他注册、模�
 
 ## 单一实现任务与检查
 
-**输出入口：** 以合同的capture/findOwner/findControlRod/runtimeDescriptor为准；完整信封公开字段在报告和javap实物表登记，后续消费者不能猜字段。
+**输出入口：** 以合同的capture/findOwner/findControlRod/findControlOwner/runtimeDescriptor为准；findControlOwner与同cap的列必须来自同一完整信封，歧义为空，避免客户端插值跨owner/代次延续。完整信封公开字段在报告和javap实物表登记，后续消费者不能猜字段。美术预检提出此最小补充，PM已批准，未增加同步字段/扫描或写集。
 
 - [ ] 写少量行为red：真实Result一致投影，实际/目标卡死、耗尽tick、EMPTY+CONTROL空间/零容量、不可变样本；坏NBT类型/超限/重复/非有限拒收；生命周期旧包/同sample不续20tick租约。保留初始失败，基础设施异常不当作red。
 - [ ] 实现信封/工厂、BE成功提交与内部结算作用域、独立客户端会话/索引/心跳。无需在write时计算或保存运行信封到持久NBT；初次加载等待成功样本。按合同保留正式提交顺序，明确失败和成功零变化。

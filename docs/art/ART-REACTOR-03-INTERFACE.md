@@ -29,6 +29,7 @@
 - `ReactorRuntimeSnapshot.empty()` → `ReactorRuntimeSnapshot`。
 - `snapshot.findOwner(BlockPos ownerPos)` → `Optional<ReactorRuntimeDescriptor>`。
 - `snapshot.findControlRod(BlockPos capPos)` → `Optional<ReactorRuntimeDescriptor.ControlRodColumn>`。
+- `snapshot.findControlOwner(BlockPos capPos)` → `Optional<ReactorRuntimeDescriptor>`：同一次capture取得棒列归属身份；与findControlRod同龄，歧义/不可用为空，同cap换owner/代次不能跨身份延续插值。仅从既有owners索引构建，不增加同步字段或扫描。
 
 一次绘制只捕获一次，不保留Level/BE/NBT或可变集合；消费者还须按预期ID检查当次本地可见方块，矛盾时撤下相应动画，不能用自己扫描补全缺失投影。
 
