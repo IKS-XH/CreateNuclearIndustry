@@ -4,6 +4,8 @@
 
 **最新R2已交付：** 美术消费期间发现真正暂停仍触发客户端Pre而令租约到期，本PM核实本地1.21.1控制流后按[窄修卡](../../../superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)完成整改、独立窄审及实际同步。实现提交`d51c2b4bcb4ef6363b7fe84bd7e525d2ecd6c4a3`，main净源码`93d0a20a950d1e9eac5c7b77aa8fb767c3d320d3`，美术净源码`2bece5b09bf90951d158f45f068a81b38bf774e8`。消费者可据此执行最终定向测试/打包，公开入口与字段完全保持。下方R1证据作为历史保留，最终源清单改用本节R2。
 
+**后续消费交付（2026-10-10）：** 美术已基于本R2完成03运行消费者的最终定向测试和打包，主PM按[03候选登记](../reactor-animation-03/HANDOFF.md)实际核对冻结清单、候选JAR及12/12共享源码。下方“最终动画JAR尚待打包”为R2交付时记录，已由本次消费交付接续；main的R1历史制品仍不能作为03动画候选。03与02R1客户端视觉门继续独立保持。
+
 - R2只改Events和LifecycleTest：真暂停只冻结租约年龄，onTick仍同步世界、reconcile及发布；多人菜单未真暂停时正常计时，卸载/换槽/坏包/会话切换仍撤销，暂停不续租或复活旧样本。
 - 真实断言red为1/1失败，唯一green为10/10生命周期及增量assemble退出0，独立窄审无剩余问题。其他10源SHA未改，原服务端/投影/GameTest证据复用，未再构建或启动客户端。
 - 最新冻结入口在显示树`build/reports/art/ART-REACTOR-03-L2/R2/final-freeze-r2.json`，源码清单为`source-sha256-r2.json`；R2冻结JAR `create_nuclear_industry-0.1.0-R2.jar` SHA256 `c4b3ef4c55135017071deada00f52bef25faa87f2e80a1ecb36a35a3e3d9ad3e`。原API文本SHA仍为`177de2fc074b2fe9ffde92c8af1134466f9fc3d7ff3a351b2f1acb93e68a013a`；额外Events/State公共签名R1/R2也逐字节相同，SHA `1c0d96e2cf7a86f871a2713f43ad1297b692b4879fbc2623e16454b6e846a246`。
