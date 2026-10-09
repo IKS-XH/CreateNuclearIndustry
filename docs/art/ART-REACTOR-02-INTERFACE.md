@@ -1,5 +1,7 @@
 # ART-REACTOR-02：成型连接纹理接入合同
 
+**2026-10-10窗口整改补充：** 用户视觉反馈后的02R1按[PM范围补充](./ART-REACTOR-02R1-COORDINATION.md)执行。仅窗口改为原生八向OMNIDIRECTIONAL/128×128图集；下文原窗口全四向、固定64×64及中央8×8透明限制在该范围被替代，其他13项和L1不变量不变。最终视觉门仍未通过。
+
 日期：2026-10-09。维护者：主逻辑PM。状态：[逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)自动与独立审查门通过，main `c5e5fc3`、美术树`8b83a1a`已净同步实际API，见[交付](../reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)。02A资产及审查独立记录，02B可按预留写集接续；最终CT/视觉门仍未关闭。
 
 ## 来源、前置与边界

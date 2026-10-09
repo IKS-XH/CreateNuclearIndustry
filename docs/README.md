@@ -6,6 +6,7 @@
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
+| 燃料烧结炉思索06 | 用户2026-10-10确认开始，[两幕任务](./superpowers/plans/2026-10-10-device-ponder-06-sintering.md)在同级逻辑树执行；已有烧结规则不变，完成后单独播放验收，再安排装配台 |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
 | 成型反应堆连接纹理 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)已净同步；[02B候选登记](./reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)通过11/11定向JUnit、增量JAR、一次独立审查及14图集一致性核对，美术树待客户端视觉观察，源码未合main；本次教学验收不关闭该门 |
