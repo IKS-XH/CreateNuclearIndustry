@@ -1,6 +1,6 @@
 # 项目文档入口
 
-**更新：2026-10-09。** 工作盆、烧结炉供热及汽轮机思索均已通过用户手测，净功能/教学整合main。换热器思索按播放反馈完成R3/R3c五幕整改，候选已通过自动检查及独立复核，等待集中播放；美术负责人在同级工作树并行开展贴图、建模和动画，其他主线暂缓。
+**更新：2026-10-09。** 工作盆、烧结炉供热及汽轮机思索均已通过用户手测，净功能/教学整合main。换热器锅炉剖面R4修正已通过定向测试和独立复审，候选待本幕播放；美术负责人在同级工作树并行开展贴图、建模和动画，其他主线暂缓。
 
 ## 当前执行与接续
 
@@ -11,7 +11,7 @@
 | 成型反应堆显示前置 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)通过26/26定向JUnit、1/1真实仪表服和独立审查，main与美术树净同步；02B可在既定写集接续，最终视觉及换热器播放门保持 |
 | 换热器工作盆供热 | `ab91356`实现及复核通过，用户手测通过，见[验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)；持续超级加热，默认4mB/t，缺液或冷满立即停热 |
 | 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
-| 换热器分情景思索 | [同卡R3/R3c](./superpowers/plans/2026-10-09-device-ponder-05-heat-exchanger.md)候选`f4aa143`通过五模板、3/3定向合同、增量打包与独立复核；[五幕集中播放入口](./reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)，待用户复看，未合main |
+| 换热器分情景思索 | [R4局部整改](./superpowers/plans/2026-10-09-device-ponder-05-boiler-cutaway-fix.md)候选`d6e17c7`通过4/4定向合同、增量打包及独立窄复核；[只复看锅炉内置幕](./reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)，未合main |
 
 候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`。换热器新教学在该目录交付播放、尚未合main；主目录提供已验收供热及汽轮机教学，两目录分别使用自己的运行配置和世界。
 

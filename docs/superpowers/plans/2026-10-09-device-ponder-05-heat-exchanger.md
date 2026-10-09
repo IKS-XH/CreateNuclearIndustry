@@ -2,7 +2,7 @@
 
 > **For agentic workers:** 使用`superpowers:subagent-driven-development`，由用户任命的PM派发执行者。仓库权限、精简验证和用户已确认排期优先于通用技能。执行者仅交未提交改动，不执行Git写操作。
 
-**任务ID / 状态：** DEVICE-PONDER-05-EXCHANGER / 用户前次播放`8c8f0a5`提出的反馈已按R3/R3c整改，五幕候选`f4aa143`通过五模板校验、3/3定向合同、增量打包及独立复核，等待用户集中复看，未合main。实施基线`9b5bb3a`，计划基线`737e0e7`；原执行者`/root/exchanger_ponder_impl`与审查者`/root/exchanger_ponder_review`完成本轮，历史失败和证据保留。自动检查不代替实际客户端画面。
+**任务ID / 状态：** DEVICE-PONDER-05-EXCHANGER / 用户报告R3剖面遮挡后，R4候选`d6e17c7`已通过4/4定向合同、增量打包和独立窄复审，等待仅复看锅炉内置幕，未合main。历史失败及证据保留，自动检查不代替客户端画面。
 **Goal:** 五个独立情景先介绍换热器本体与串联，再介绍现有用途，玩家能看清流体方向、顶部负载与锅炉内置位置，并看到Create锅炉由受热到输出动力的过程，不改变设备机制。
 **Architecture:** 在现有`HeatExchangerPonderScenes`、四份NBT和生成工具上整改，新增一份本体模板；`P1PonderPlugin`仅为`nuclear_heat_exchanger`按五幕顺序绑定。所有显示只操作Ponder客户端临时世界；正式热账本、流体能力、配置和注册保持。
 **Tech Stack:** Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6，核对实际Gradle文件，不升级。
@@ -103,3 +103,9 @@ R1复审核实四罐共同控制器、蒸汽机挂装和九格隔层已修复；
 独立复核确认首幕管道选择含第二台换热器坐标，导致串联阶段提前揭示。原执行者仅将后段管道选择改从`(5,1,7)`开始，第二台`(5,1,6)`保留后续单独显示；同一合同补充选择范围与调用顺序断言。未改模板，复用R3五模板生成证据；`test-r3c`与`assemble-r3c`退出0，XML为3/3通过，原审查者窄复核关闭唯一阻断。
 
 PM只读核对API、差异、原始日志/XML、哈希及写集并通过定向`git diff --check`，未修改代码或重跑Gradle。实现/报告提交`f4aa143`；JAR为2330388字节，SHA-256为`365EDED031B8E8F589F3E58FB0EA256DBE210E57922A457F7A6237CC04860DE7`。现停在[五幕集中播放门](../../reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)，main仅同步计划、状态和交付报告，教学实现尚未整合。既有日志、pycache与美术文件保留。
+
+## R4用户剖面反馈（2026-10-09）
+
+用户复看明确报告锅炉剖面仍未展示换热器。R3/R3c自动与审查结论保留，但不能视为本幕视觉成功；按[R4窄修正卡](./2026-10-09-device-ponder-05-boiler-cutaway-fix.md)派发`/root/exchanger_cutaway_r4_impl`核对真实Ponder行为与遮挡后实施。本轮只修锅炉内置幕，完成后只复看该幕，设备功能和其他教学不重测，候选仍不合main。
+
+R4已交候选`d6e17c7`，真实Ponder选区及54条核心射线合同、4/4定向测试、增量打包与原审查者窄复核通过。仅剖面/本幕双语与相应合同变更，模板及其他四幕未变；详见R4卡收据及[本幕复看入口](../../reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)。PM未编写功能或测试，也未重复运行Gradle。

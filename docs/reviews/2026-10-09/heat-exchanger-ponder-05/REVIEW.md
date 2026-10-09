@@ -100,3 +100,16 @@ R3 按任务卡末节复核五幕差异与保留证据，没有修改功能/测�
 - **复用证据核对。** `test-r3c.exit=0`，`test-r3c.xml` 记录 3 tests、0 failures、0 errors、0 skipped；`assemble-r3c.exit=0`，日志显示成功打包。生成器及模板未在 R3c 修改，复用 `generator-r3.exit=0` 的五模板校验与 gzip 往返证据。当前 JAR SHA-256 为 `365EDED031B8E8F589F3E58FB0EA256DBE210E57922A457F7A6237CC04860DE7`。
 
 **R3c 结论：定向静态复核通过，可进入用户五幕集中播放门。** 本次只确认首幕选择范围与顺序断言及其日志/XML/哈希；没有播放候选。Create 锅炉的实际活塞/轴输出、内置锅炉剖视、高亮与镜头、字幕裁切/重叠及五幕播放完整性仍由用户客户端验收，未记为通过。
+
+## R4 锅炉剖面定向复审（2026-10-09）
+
+本轮按 R4 卡只复核内置锅炉幕、对应双语正文、合同测试差异及已保存证据。实现冻结基线为 `7abf411`；没有修改实现、测试、模板或 Git 状态，没有重跑 Gradle、测试或生成器。R1/R2/R3/R3c历史及首审失败记录均保留。
+
+- **Ponder 隐藏行为和剖面遮挡：**复核 Ponder `1.0.82` 本地 API 字节码：`hideSection` 对当前 WorldSection 的 Selection 执行 `erase`，更新 mask 后排队重绘；mask 外的 `PonderLevel.getBlockState` 返回空气，故移除的邻块不再参与可见方块渲染/遮挡。新剖面选择涵盖东北镜头近侧北壁、东壁、顶盖、锅炉控制器及内部非核心壳格；没有包含 `(7,1,7)` 换热器或 `(7,3,7)` 再加热段。实际模板方块几何采样从 R3 的底层 19/27、再热段 13/27 条射线受阻，降至两核心各 0/27。远侧墙和底边仍保留作层位参照。
+- **讲解与恢复顺序：**先显示完整锅炉并停留35 tick；之后隐藏剖口、两端管线及储罐，分别高亮原位换热器和再加热段。两段正文各显示95 tick，统一注释辅助方法额外留20 tick；轮廓时长115 tick。两核心讲完后才恢复端口、管线和罐，最后恢复剖口除端口外的部分。新增测试反射调用生产 `boilerCutaway` 得到真实 Ponder `Selection`，通过该 Selection 的 `forEach`、`copy`、`substract` 验证核心未隐藏、射线净空、阶段恢复及最终锅炉区块集合一致；不是另一套自造选择实现。几何采样是保守方块遮挡检查，不是 Minecraft 客户端渲染或镜头验收。
+- **红色轮廓与正文轮廓：**核对 `PonderOverlayInstructions.showOutlineWithText`、`TextInstruction`、`OutlineSelectionInstruction` 和 `Outliner`。显式红色轮廓以新建 `Object` 为 slot，正文自带轮廓以目标 `Selection` 为 slot，两个不同条目会并存，不会互相替换或清除；正文默认白色，因此正文期间会与红色轮廓同几何叠加。Ponder API 未见轮廓覆盖故障；叠加后的实际颜色观感需随客户端播放观察，本审查不将其记为已视觉通过。红色轮廓的115 tick寿命比正文95 tick多20 tick。
+- **语言与范围：**锅炉幕第一、第三段 fallback 和 `zh_cn` 一致，`en_us` 对应同义内容；第一段去掉无操作信息的剖面可见性表述，第三段指出热液口与底层换热器同层、冷液口位于隔层侧面。未改模板、其他四幕、正式设备或美术资产。
+
+**R4 证据：**`test-r4.exit=0`；保存的 `test-r4.xml` 为4 tests、0 failures、0 errors、0 skipped。`assemble-r4.exit=0` 且原始日志为 `BUILD SUCCESSFUL`。当前 JAR SHA-256 为 `C9DD6BD4423D71CA3FB1D55620134AFCFC3B97F3ACABF11315FC723A2C9B8604`，与实施记录一致。锅炉模板和生成器未改，复用 `generator-r3.exit=0` 的五模板检查。API反编译、几何采样、测试和构建日志/XML均保留在 `build/reports/extension/DEVICE-PONDER-05-EXCHANGER/`。
+
+**R4 结论：定向静态复审通过，可进入本台锅炉内置幕播放门。** 通过范围仅为 Ponder API、生产选区、恢复合同、双语与留存自动证据；镜头实际观感、剖面内换热器/再热段是否易辨、高亮与白色正文轮廓的叠加效果、正文裁切及最终恢复仍待用户客户端播放确认。本次没有把几何或自动化证据记为视觉验收。

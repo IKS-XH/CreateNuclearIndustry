@@ -17,7 +17,7 @@
 
 - 用户于2026-10-09确认工作盆持续供热及随后烧结炉供热手测通过，分别按[02R1验收](docs/reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)与[EXCHANGER-03验收](docs/reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)关闭人工门，净功能整合main。持续负载及配置共用，原烧结工时和燃烧室热源保留。用户要求开始下一步，按既定排期接换热器分情景思索；汽轮机取景复看范围独立核实，其他主线暂缓。
 - 用户随后明确确认上述手测也包括汽轮机思索，按[04验收](docs/reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)关闭三幕及取景复看门，净教学整合main。换热器各项供热功能前置已满足，自动接续分情景思索；只教学已实现功能，待本台播放验收，其他主线暂缓。
-- [换热器思索05](docs/superpowers/plans/2026-10-09-device-ponder-05-heat-exchanger.md)按用户R2播放反馈完成R3/R3c五幕整改，候选`f4aa143`已通过五模板校验、3/3定向合同、增量打包及独立复核。新增本体/串联首幕，补齐Create锅炉原生动力显示，修正内置锅炉高度/换热器剖视高亮和搅拌间距；仅客户端临时世界教学，不改正式设备或美术资产。[五幕集中播放入口](docs/reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)待用户复看，尚未合main，其他主线暂缓；历史证据保留。
+- [换热器思索05](docs/superpowers/plans/2026-10-09-device-ponder-05-heat-exchanger.md)的R3候选自动检查通过，但用户随后报告锅炉剖面未露出换热器；按[R4局部整改](docs/superpowers/plans/2026-10-09-device-ponder-05-boiler-cutaway-fix.md)核实控制器/近侧墙/顶盖遮挡，候选`d6e17c7`已通过4/4定向合同、增量打包与独立窄复审。[交付后只复看锅炉内置幕](docs/reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)，尚未合main，其他主线暂缓。仅客户端教学，正式功能及其他四幕未改；历史证据保留，不冒充视觉验收。
 
 - 用户于2026-10-09明确任命新建的“美术负责人：贴图、建模与动画”对话为美术负责人，可在贴图、建模、动画范围制定任务和派发执行，跨逻辑改动与本项目经理对话协调。这是用户直接授予的专项权限，非本PM转授；只适用于该具体对话，不授予其子Agent负责人权限。美术计划与报告写于`docs/art/`，全局治理、玩法和Git集成仍由本PM管理；工作在主工程同级独立工作树。详见[美术并行协作入口](docs/art/README.md)及治理1.2节。
 - PM直接核实美术对话中用户确认成型连接纹理设计后，按并行授权完成必要的[只读显示接口L1](docs/superpowers/plans/2026-10-09-reactor-surface-display-01.md)：26/26定向JUnit、1/1真实仪表服、增量打包及独立审查通过，main `c5e5fc3`、美术树`8b83a1a`净同步[编译API/02B写集](docs/reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)。只新增展示同步/快照/刷新，不扩展固定5×5×5玩法；美术02B可接续，最终视觉与换热器播放门保持。

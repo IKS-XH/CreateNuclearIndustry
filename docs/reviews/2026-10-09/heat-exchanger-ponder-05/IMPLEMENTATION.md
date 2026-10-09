@@ -128,3 +128,40 @@ R3未运行GameTest、全量测试或客户端播放。自动合同通过只确�
 | 增量JAR SHA-256 | `365EDED031B8E8F589F3E58FB0EA256DBE210E57922A457F7A6237CC04860DE7` | `build/libs/create_nuclear_industry-0.1.0.jar` |
 
 R3c未重跑模板生成器、GameTest、全量测试或客户端播放；R3/R2历史证据均保留。本修复候选未提交，等待对该窄差异的静态复核及用户客户端播放。
+
+## R4锅炉剖面局部整改（2026-10-09）
+
+任务 `DEVICE-PONDER-05-EXCHANGER-R4`，实际工作树 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，HEAD `7abf4117964a7132f75aca5f146af4ed361d05da`。本轮仅修改内置锅炉幕、其专属选区方法、对应双语第一/第三段正文和定向合同；没有Git写操作或派发子Agent。
+
+实际读取并应用 `minecraft-modding`（确认实际版本及客户端边界）、`minecraft-testing`（JUnit/NBT和定向验证）、`minecraft-resource-pack`（资源模型、面剔除与语言键边界）、`systematic-debugging`（先核实实际API及几何根因再修复）；读取根AGENTS、治理5.1/5.2、五幕现行合同和R4卡。锁定Minecraft 1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82，不升级技术栈。
+
+### 根因与实际API证据
+
+对照用户截图并反编译本地锁定Ponder JAR：`hideSection`通过 `WorldSectionElement.erase` 从base selection扣除隐藏区，`applyNewSelection`调用`queueRedraw`。`WorldSectionElementImpl.buildBuffers`给PonderLevel设置选区mask，`PonderLevel.getBlockState`对mask外返回AIR。因此原问题不是隐藏失效，也不是隐藏块仍持续参与本区方块面剔除。
+
+默认镜头俯仰-35°、偏航145°，从东北上方看向场景。R3选区只去掉北壁部分壳以及中心附近底层/隔层邻壳，保留近侧控制器、端口、东墙和顶盖。实际模板的保守实心方块射线复现显示：底层中心三可见面27个采样中19个被 `(8,2,5)` 控制器或 `(9,2,6)` / `(9,3,6)` 东墙遮挡；再加热段27个采样中13个被顶盖/东墙遮挡。截图的狭窄剖口与此一致。热液口及管路也是近侧保留物，但此次采样明确命中的主要阻挡为控制器、东墙和顶盖。
+
+原始证据位于 `build/reports/extension/DEVICE-PONDER-05-EXCHANGER/`：`api-r4.txt`（Selection、显隐、重绘）、`level-api-r4.txt`（mask/AIR与替换API）、`camera-api-r4.txt`（镜头默认值与矩阵）、`geometry-r4.txt`（R3/R4采样结果）。几何检查只验证方块净空，不代表实际渲染/字幕/客户端验收。
+
+### 实施
+
+- 新专属 `boilerCutaway` 选区移开两面近墙（包括原保留端口/控制器）、顶盖及中心周围底层/隔层邻壳。保留西/南远侧墙和底边作为层位参照；换热器 `(7,1,7)` 与再加热段 `(7,3,7)` 不移位。
+- 完整合法锅炉先显示：15 tick显现动画后额外停留20 tick。核心讲解前，选区连同近侧管路/储罐隐藏；隐藏动画结束后单独红色高亮本体，再蓝色高亮上方再加热段。两段各95 tick正文，复用20 tick段间净空及115 tick轮廓，结束后才恢复冷热端口/管路讲第三段回路。
+- 末尾恢复其余剖面选区。使用真实Selection的 `copy` 防止可变Compound选区被合并/扣除误改；全程仅显隐，不替换临时世界方块、不改NBT或正式设备。
+- 第一段删除无操作信息的“剖面中可看清”表述；第三段补充热口与底层换热器同层，再说冷口在隔层及分别连接管路。中文fallback与两种语言资源一致；其他正文键未改。
+- 删除无效的旧hideSection字符串存在性断言；新增一项用锁定Ponder真实Selection及生产私有选区的空间合同：核心原位排除、控制器侧墙顶盖净空、两个核心三面共54条射线、远墙/底边参照、两阶段恢复完整模板锅炉及copy不误改原选区。现有其余有效合同保留。
+
+### 精简验证与交付边界
+
+| 检查 | 数字与结果 | 原始证据 |
+| :--- | :--- | :--- |
+| 几何复现 | R3底层19/27、再热段13/27受遮挡；R4均0/27 | `geometry-r4.txt` |
+| 一轮定向 `test --tests '*HeatExchangerPonderContractTest'` | 退出码0；4 tests、0 failures、0 errors、0 skipped；26秒，8 tasks（4 executed、4 up-to-date） | `test-r4.log`、`test-r4.exit`、`test-r4.xml` |
+| 一轮增量 `assemble` | 退出码0；2秒，4 tasks（2 executed、2 up-to-date） | `assemble-r4.log`、`assemble-r4.exit` |
+| JAR SHA-256 | `C9DD6BD4423D71CA3FB1D55620134AFCFC3B97F3ACABF11315FC723A2C9B8604` | `build/libs/create_nuclear_industry-0.1.0.jar` |
+| 允许写集差异空白检查 | 退出码0 | Java、测试、双语四文件 `git diff --check -- ...` |
+| 模板生成 | 未重跑，NBT与生成器未改；复用R3五模板证据 | `generator-r3.log`、`generator-r3.exit` |
+
+测试后仅把完整外观停留由15改35 tick、将第三段合并目标改用ports.copy；几何选区与测试未改变。最终源码经上述assemble重新编译；未机械重跑空间合同。测试会写既有logs，因此先在证据目录保留 `debug-before-r4.log` / `latest-before-r4.log`，结束后准确恢复，两个当前日志与原始备份SHA-256均为 `D2858AD5937AC413D9C52AD44C267DA55D3126F9C392ED584F26A38E51D6B15A`。三个既有__pycache__目录保留。其他四幕源码/模板/生成器、模型纹理、正式设备和配置未改，未运行全量、服务端/GameTest、旧存档或客户端播放。
+
+R4候选保持未提交并冻结，等待规格+质量窄审查。客户端视觉尚未验收：只需复看“锅炉内置”的完整外观→底层本体原位可辨识并高亮→上方再加热段→回路及完整恢复。其他四幕及已通过设备功能不重开。
