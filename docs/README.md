@@ -8,6 +8,7 @@
 | :--- | :--- |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
+| 成型反应堆显示前置 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)通过26/26定向JUnit、1/1真实仪表服和独立审查，main与美术树净同步；02B可在既定写集接续，最终视觉及换热器播放门保持 |
 | 换热器工作盆供热 | `ab91356`实现及复核通过，用户手测通过，见[验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)；持续超级加热，默认4mB/t，缺液或冷满立即停热 |
 | 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
 | 换热器分情景思索 | [同卡R3/R3c](./superpowers/plans/2026-10-09-device-ponder-05-heat-exchanger.md)候选`f4aa143`通过五模板、3/3定向合同、增量打包与独立复核；[五幕集中播放入口](./reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)，待用户复看，未合main |

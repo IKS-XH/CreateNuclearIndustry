@@ -42,4 +42,4 @@ MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywhee
 
 ## 反应堆成型连接纹理协调
 
-美术负责人转交用户已确认的ART-REACTOR-02需求后，主PM于2026-10-09核对并保存[最小展示接口与写集合同](./ART-REACTOR-02-INTERFACE.md)，直接核实用户在美术对话中的确认，按并行授权安排[独立逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)。02A资产独立准备；真实CT接入等待编译后的只读表面快照交付，不给普通外壳添加BE，不扩展固定5×5×5玩法。换热器五幕待播放状态及各美术人工门保持；成卡/派发不等于API已可用。
+美术负责人转交用户已确认的ART-REACTOR-02需求后，主PM直接核实确认并按并行授权完成[独立逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)。26/26定向JUnit、1/1真实仪表专用服及增量打包通过，独立审查无阻断；main `c5e5fc3`、美术树`8b83a1a`已净同步[编译API与02B写集交付](../reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)。02A资产独立记录，02B可消费带上下文快照接续；不给外壳添加BE、不扩展固定5×5×5玩法。换热器五幕待播放状态及美术最终视觉门保持。

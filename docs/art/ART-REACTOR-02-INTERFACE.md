@@ -1,6 +1,6 @@
 # ART-REACTOR-02：成型连接纹理接入合同
 
-日期：2026-10-09。维护者：主逻辑PM。状态：[逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)已在`E:/MyMC/NewMod/Create_NuclearIndustry-reactor-display`实际启动，基线`000f8e8`，执行者`/root/reactor_surface_display_impl`；尚未交付可消费API。交付位置预定`docs/reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md`。美术02A资产准备与审查独立进行，02B等待实际接口门。
+日期：2026-10-09。维护者：主逻辑PM。状态：[逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)自动与独立审查门通过，main `c5e5fc3`、美术树`8b83a1a`已净同步实际API，见[交付](../reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)。02A资产及审查独立记录，02B可按预留写集接续；最终CT/视觉门仍未关闭。
 
 ## 来源、前置与边界
 
@@ -51,6 +51,7 @@
 - 有效描述变化或收到失效描述：原子替换成员索引，再标记旧/new bounds的并集及外扩一格的相关渲染区段重建。
 - owner移除、BE卸载、成员区块卸载：及时撤销受影响的有效索引并重建仍可见的相关面；不能继续用最后一次有效快照假装成型。
 - 区块重新加载：重新建立加载状态，只有可靠的当前owner描述及成员证据齐备时恢复。首次BE更新早于客户端`onLoad`的情况也必须处理，不能要求玩家拆放仪表才能恢复。
+- 当前客户端部分缓存覆盖/视距调整路径缺少Unload事件，逻辑侧可在tick核对已知描述所需的有限去重ChunkPos真实加载实例；不读方块/扫描世界或强加载。BE明确区分卸载暂停与真正拆除退休，检查不到可靠区块时先撤销，不把`ClientLevel.hasChunk`当证据。
 - 退出/换世界：清空该会话索引、旧generation与待刷新项；重复/过期revision不得使旧归属复活。
 - 同一个描述随仪表遥测重发时可以复用不可变对象；没有几何/有效性变化不得每tick重建整个反应堆模型。
 
@@ -65,6 +66,7 @@ BE更新是优先传输路线。如果只依此路线无法满足成员区块重
 - `src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java`：仅新增表面描述生成、BE同步及加载/失效通知；不改变运行、流体、燃料、控制、维护事务或原护目镜合同。
 - 新建`structure/ReactorSurfaceDescriptor.java`、`ReactorSurfaceDescriptorFactory.java`、`ReactorSurfaceSyncEvents.java`：不可变展示合同、扫描结果投影和不加载客户端类的通知桥。
 - 新建`structure/client/ReactorSurfaceSnapshot.java`、`ReactorSurfaceSnapshots.java`、`ReactorSurfaceClientEvents.java`：客户端发布/成员索引、世界/区块生命周期及区段刷新。
+- 锁定API审计后的最小补充：`META-INF/accesstransformer.cfg`仅公开`RenderChunkRegion.level`，必要时构建只接入此文件。上下文捕获据真实所属ClientLevel关联会话；未知包装层、Ponder及旧世界降级空快照，不能用被委托的light-engine身份替代。
 - 相应定向测试只验证描述编解码、几何/归属、revision、不可变发布和撤销；报告路径另卡明确。若需要修改上述之外的生命周期或注册文件，先报告PM。
 
 **美术侧资产准备02A（当前可继续）：** 按已确认设计维护`tools/art-assets/reactor-ct/`源稿、导出器、mapping和generated及专属报告；不覆盖ART-REACTOR-01。RECTANGLE每格16×16、4×4图集共64×64，原sprite保持。
@@ -72,6 +74,7 @@ BE更新是优先传输路线。如果只依此路线无法满足成员区块重
 **美术侧真实客户端接入预留写集（逻辑接口交付后另卡）：**
 
 - 新建`structure/client/ReactorConnectedTextureBehaviour.java`、`ReactorConnectedTextures.java`、`ReactorConnectedTextureClientEvents.java`，只消费已交付快照、映射实际sprite并包装原baked model。
+- 消费侧允许新增专属`src/test/java/com/iksxh/create_nuclear_industry/structure/client/ReactorConnectedTextureTest.java`：只测空/可靠上下文快照、跨owner、预期ID、六面连接及ThreadLocal嵌套/异常恢复；不修改L1公共API/测试，不重复L1生命周期或02A资产矩阵。这是02B前置通过后任务卡的预留写集，不代表现在已派发。
 - 14张目标图固定为`src/main/resources/assets/create_nuclear_industry/textures/block/reactor_ct/<原sprite名>.png`，对应源sprite为原`block/<原sprite名>`：`reactor_casing_side/top/bottom`、`reactor_hot_port_side/top`、`reactor_cold_port_side/top`、`reactor_window`、`reactor_instrument_port_side/top`、`reactor_refueling_port_side/top`、`control_rod_drive_side/top`。
 - 不修改`CreateNuclearIndustry.java`、`P1Blocks.java`、注册ID、现有blockstate/model JSON、语言、碰撞、流体、热工、Ponder或配置。客户端事件独立注册；需要共享入口时先协调。
 - 映射必须匹配原模型真实sprite，保留窗口透明区、功能孔/法兰及既有局部标识；是否跨壳体/窗口/端口连接背景由美术材质表决定，结构归属由逻辑接口决定。
