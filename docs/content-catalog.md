@@ -284,7 +284,7 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 | :--- | :--- | :--- |
 | `已验收`基础教学 | `enrichment_centrifuge` | [联合验收](./reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)：两格放置、底部动力、顶部进浆、水平面双粉/回水与黄铜过滤、稳定转速/输出堵塞暂停、停转轴承维修；当前失稳行为为暂停，不展示未实现的效率曲线 |
 | `已验收`两幕 | `fuel_sintering_furnace` | [06播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)：底部供热、顶部生芯块、一进一出、断热保留进度；溜槽进料、四侧成品及核换热器热源。main整合`57763f8`。 |
-| `实施中`三幕，待交付播放 | `shielded_assembly_station` | [07计划](./superpowers/plans/2026-10-10-device-ponder-07-assembly.md)：2×2×2整台放置、底部动力、外侧物流；8/4/2/1装配新组件；枯竭组件、基材和铅桶一次封装。不提前教授辐射或再生燃料。 |
+| `候选`三幕，待播放验收 | `shielded_assembly_station` | [07计划](./superpowers/plans/2026-10-10-device-ponder-07-assembly.md)：2×2×2整台放置、底部动力、外侧物流；8/4/2/1装配新组件；枯竭组件、基材和铅桶一次封装。3/3定向合同、增量打包与独立审查通过，[候选`d6fd20a`](./reviews/2026-10-10/shielded-assembly-ponder-07/CANDIDATE.md)待本台播放，尚未合main。不提前教授辐射或再生燃料。 |
 | `已验收`五幕 | `nuclear_heat_exchanger` | [05播放验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)：本体/直列、Create锅炉供热、锅炉内置、盆/炉持续核热、蒸汽冷凝；拒收超临界蒸汽，不演示取消的降级供热路线 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体接口和后置状态，不展示首发不存在的冷却转换 |
 | `P2` | `dry_storage_rack` | 已封装乏燃料桶的装架、完整性检查和“贮存不等于消除辐射” |
