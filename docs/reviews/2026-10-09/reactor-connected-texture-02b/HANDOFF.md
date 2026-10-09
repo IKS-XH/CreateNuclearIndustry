@@ -24,3 +24,5 @@
 在美术候选目录复看成型/拆坏与修复、六面边角和混合窗口/端口、相邻不同owner、管道遮挡及远近/光照、区块恢复和退出重进、F3+T及Ponder无权威描述回退。以候选说明的预期记录实际视觉；自动结果和离线预览不替代该门。
 
 换热器锅炉剖面R4位于另一个[逻辑候选](/E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/docs/reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)，只待“锅炉内置”幕复看。两份候选、两项人工门分别记录，既有设备功能和已通过教学不重开；其他主线暂缓。收到视觉反馈后再由主PM管理整改或净集成，不因候选登记自动推进下一台设备。
+
+**后续更新（2026-10-09）：** 用户已明确确认换热器思索手动测试通过，五幕及R4剖面门按[05验收](/E:/MyMC/NewMod/Create_NuclearIndustry/docs/reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)关闭并净合main `b036776`。上段是本登记时的历史状态；ART-REACTOR-02B客户端视觉门仍待用户独立确认，冻结美术制品和源码不因教学验收改动。
