@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- ART-REACTOR-02B已由美术负责人冻结交付，主PM按[候选登记](docs/reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)核对11/11定向JUnit、增量JAR、一次独立审查与14图集来源/安装/打包一致性。美术树保留未提交源码与ART01/02A输入，待用户客户端视觉观察；未合main，不改变固定5×5×5反应堆玩法。换热器锅炉剖面R4播放门独立保持，其他主线暂缓。
+
 - 用户于2026-10-09确认工作盆持续供热及随后烧结炉供热手测通过，分别按[02R1验收](docs/reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)与[EXCHANGER-03验收](docs/reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)关闭人工门，净功能整合main。持续负载及配置共用，原烧结工时和燃烧室热源保留。用户要求开始下一步，按既定排期接换热器分情景思索；汽轮机取景复看范围独立核实，其他主线暂缓。
 - 用户随后明确确认上述手测也包括汽轮机思索，按[04验收](docs/reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)关闭三幕及取景复看门，净教学整合main。换热器各项供热功能前置已满足，自动接续分情景思索；只教学已实现功能，待本台播放验收，其他主线暂缓。
 - [换热器思索05](docs/superpowers/plans/2026-10-09-device-ponder-05-heat-exchanger.md)的R3候选自动检查通过，但用户随后报告锅炉剖面未露出换热器；按[R4局部整改](docs/superpowers/plans/2026-10-09-device-ponder-05-boiler-cutaway-fix.md)核实控制器/近侧墙/顶盖遮挡，候选`d6e17c7`已通过4/4定向合同、增量打包与独立窄复审。[交付后只复看锅炉内置幕](docs/reviews/2026-10-09/heat-exchanger-ponder-05/CANDIDATE.md)，尚未合main，其他主线暂缓。仅客户端教学，正式功能及其他四幕未改；历史证据保留，不冒充视觉验收。
