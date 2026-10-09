@@ -484,5 +484,13 @@
   "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.header": "Nuclear heat exchanger: Steam condensation",
   "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_1": "Steam enters from the rear and condensed water leaves the front; steam and recovered water change 1:1 by default.",
   "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_2": "Direct contact with snow, ice, or packed ice condenses steam and melts into water; the water source eventually evaporates. Flowing water is invalid.",
-  "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_3": "Blue ice supplies cold indefinitely without being consumed; condensation pauses if it is removed or the water return is blocked."
+  "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_3": "Blue ice supplies cold indefinitely without being consumed; condensation pauses if it is removed or the water return is blocked.",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.header": "Fuel Sintering Furnace: Sintering and Heat",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.text_1": "Supply heat from below and insert green fuel pellets from the top.",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.text_2": "Each green fuel pellet becomes one sintered fuel pellet.",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.text_3": "Sintering pauses when heat is lost and continues when heating resumes.",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.header": "Fuel Sintering Furnace: Automation and Nuclear Heat",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_1": "Feed green fuel pellets through a chute on top.",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_2": "All four horizontal sides allow sintered fuel pellets to be extracted. Use a funnel to send them into a receiving container.",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_3": "A nuclear heat exchanger can also supply heat from below: hot coolant enters at the rear, and an equal amount of cold coolant leaves at the front. Maintain the hot coolant supply and keep the cold coolant outlet clear."
 }

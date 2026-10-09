@@ -484,5 +484,13 @@
   "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.header": "核换热器：蒸汽冷凝",
   "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_1": "蒸汽从后侧进入，冷凝水从前侧排出；默认蒸汽与回水按 1:1 变化。",
   "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_2": "顶部直接接触雪块、冰或浮冰即可冷凝并融水；水源用尽后蒸发消失。流水无效。",
-  "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_3": "蓝冰持续提供冷量且不会消耗；移除冷源或冷凝水回流受阻时，冷凝暂停。"
+  "create_nuclear_industry.ponder.nuclear_heat_exchanger_condensation.text_3": "蓝冰持续提供冷量且不会消耗；移除冷源或冷凝水回流受阻时，冷凝暂停。",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.header": "燃料烧结炉：烧结与供热",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.text_1": "在底部供热，从顶部投入生芯块。",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.text_2": "每个生芯块烧结为一个烧结芯块。",
+  "create_nuclear_industry.ponder.fuel_sintering_operation.text_3": "断热会暂停烧结，恢复加热后继续。",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.header": "燃料烧结炉：自动化与核热",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_1": "通过顶部溜槽送入生芯块。",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_2": "四个水平面都能取出烧结芯块；用漏斗取出，送入承接容器。",
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_3": "核换热器也能从底部供热：后侧接入热液，前侧排出等量冷液。保持热液供应和冷液出口畅通。"
 }

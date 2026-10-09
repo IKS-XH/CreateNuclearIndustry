@@ -66,6 +66,11 @@ public final class P1PonderPlugin implements PonderPlugin {
             "nuclear_heat_exchanger_condensation"
     );
 
+    /** 燃料烧结炉两幕按手工烧结、自动物流与核热供热顺序注册。 */
+    public static final List<String> FUEL_SINTERING_SCENE_IDS = List.of(
+            "fuel_sintering_operation", "fuel_sintering_automation"
+    );
+
     /**
      * P1 条目列表故意排除 P0 探针、保留的样例外壳、纯材料和不可直接放置的控制棒组件。
      */
@@ -89,7 +94,7 @@ public final class P1PonderPlugin implements PonderPlugin {
         return CreateNuclearIndustry.MOD_ID;
     }
 
-    /** 保留原教学绑定，并仅将换热器方块挂接到本批五条故事线。 */
+    /** 保留原教学绑定，在独立烧结炉入口追加本批两条故事线。 */
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         var reactorEntries = helper.forComponents(DIRECT_ENTRY_IDS.stream()
@@ -139,6 +144,12 @@ public final class P1PonderPlugin implements PonderPlugin {
                 HeatExchangerPonderScenes::nuclearHeatExchangerProcessing);
         heatExchanger.addStoryBoard(componentId(HEAT_EXCHANGER_SCENE_IDS.get(4)),
                 HeatExchangerPonderScenes::nuclearHeatExchangerCondensation);
+
+        var sintering = helper.forComponents(componentId("fuel_sintering_furnace"));
+        sintering.addStoryBoard(componentId(FUEL_SINTERING_SCENE_IDS.get(0)),
+                FuelSinteringPonderScenes::fuelSinteringOperation);
+        sintering.addStoryBoard(componentId(FUEL_SINTERING_SCENE_IDS.get(1)),
+                FuelSinteringPonderScenes::fuelSinteringAutomation);
     }
 
     /** 将 P1 内容路径转换为本模组命名空间下的 Ponder 组件 ID。 */
