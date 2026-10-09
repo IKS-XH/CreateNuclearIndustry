@@ -4,15 +4,15 @@
 
 **执行目录：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`
 
-**分支与基线：** `codex/ore-acquisition`，`f650aa7`
+**分支与基线：** `codex/ore-acquisition`；初次执行基线 `f650aa7`，R3功能基线 `9b5bb3a`，执行时HEAD `737e0e7`
 
-**状态：** R2候选已实现且定向验证通过，等待对应差异复核与客户端播放；未提交。
+**状态：** R3c候选已实现且定向验证通过，等待对应差异复核与客户端播放；未提交。
 
 ## 实施范围
 
-为 `nuclear_heat_exchanger` 增加四条独立 Ponder 故事线：独立供热与同向直列、5×5×5 最小锅炉内置、工作盆/燃料烧结炉持续供热、普通蒸汽冷凝回水。所有演示只操作 Ponder 客户端临时世界，没有改动正式换热账本、流体能力、配置或设备注册。
+当前候选包含五条独立 Ponder 故事线：本体端口与同向串联、Create储罐锅炉供热、锅炉内置、工作盆/燃料烧结炉持续供热、普通蒸汽冷凝回水。所有演示只操作 Ponder 客户端临时世界，没有改动正式换热账本、流体能力、配置或设备注册。
 
-独立供热场景将两台朝北的换热器放在 `(7,1,5)` 与 `(7,1,6)`。北侧 `(7,1,1)` 是冷液出口罐，南侧 `(7,1,10)` 是热液入口罐；两台上方放 Create 储罐，入口/出口箭头分别指向后侧和前侧。锅炉场景采用 `x/z=5..9、y=0..4` 的合法最小壳体，换热器在底层 `(7,0,7)`，隔层 `(7,2,7)`，热液口位于底边非角点 `(7,0,5)`，冷液口位于隔层侧面 `(6,2,5)`。隐藏正面壳格前先完整加载锅炉和管路，讲解后恢复壳体。
+本体幕以`(5,1,5)`与`(5,1,6)`展示同向直列；供热幕将两台换热器放在`(7,1,5/6)`，Create的2×2储罐组位于`x=6..7,z=5..6,y=2`，上方锅炉由下方换热器供热。内置锅炉模板的合法壳体范围为`x/z=5..9、y=1..5`，换热器在`(7,1,7)`，隔层再加热段在`(7,3,7)`，热液口位于底层边缘，冷液口位于隔层侧面。教学先加载完整锅炉，再暂时隐藏前壁和遮挡内部壳格，展示后恢复壳体。
 
 加工场景保留同一台换热器与冷热管线，先显示顶部工作盆、搅拌器和轴，再通过 Ponder 1.0.82 的 `WorldInstructions.setBlock` 将顶部设备换成燃料烧结炉。正文说明持续耗热、默认 `4 mB/t`，以及热液耗尽或冷液回流受阻后下一 tick 停热。冷凝场景让蒸汽从北向换热器后侧进入、冷凝水从前侧排出；顶部依次显示雪块、冰、浮冰、水源和蓝冰。中英文文案说明默认 `1:1` 回水、流水无效、有限冷源融水后水源最终蒸发，以及蓝冰不会消耗。
 
@@ -21,18 +21,18 @@
 ## 技能与版本
 
 - 已阅读并应用 `C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`：先按 `gradle.properties` 核对 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82 与 Flywheel 1.0.6；场景职责限于客户端临时世界。
-- 已阅读并应用 `C:/Users/IKSXH/.codex/skills/minecraft-testing/SKILL.md`：使用一个定向 JUnit 合同测试验证四幕入口、模板布局、端口方向、双语键和场景切换，不把它扩展成复制每句文案的测试。
+- 已阅读并应用 `C:/Users/IKSXH/.codex/skills/minecraft-testing/SKILL.md`：使用一个定向 JUnit 合同测试验证五幕入口、模板布局、端口方向、双语键、Create动力链和场景切换，不把它扩展成复制每句文案的测试。
 - 已阅读 `C:/Users/IKSXH/.codex/skills/minecraft-resource-pack/SKILL.md`：沿用模组 `assets/<namespace>/lang` 与 Ponder 资源路径，只添加双语文本和 NBT 模板；本批不制作或修改贴图、模型、声音或独立资源包，因此未运行资源包校验器。
 - 从实际 Ponder 1.0.82 依赖 JAR 检查 `WorldInstructions` API，确认存在 `setBlock(BlockPos, BlockState, boolean)`、`showSection`、`hideSection` 和 `modifyBlockEntity`，并据此实现临时世界设备替换、剖面及 Create 储罐展示。
 
 ## 修改文件
 
-- 新增 `src/main/java/com/iksxh/create_nuclear_industry/ponder/HeatExchangerPonderScenes.java`；在 `P1PonderPlugin.java` 仅新增换热器四幕绑定。
-- 新增 `src/main/resources/assets/create_nuclear_industry/ponder/nuclear_heat_exchanger_{heating,boiler,processing,condensation}.nbt` 与 `tools/ponder/heat_exchanger_scenes.py`。
-- `zh_cn.json`、`en_us.json` 仅增加本批四个故事线的标题和正文键。
+- 新增 `src/main/java/com/iksxh/create_nuclear_industry/ponder/HeatExchangerPonderScenes.java`；在 `P1PonderPlugin.java` 仅新增换热器五幕绑定。
+- 新增 `src/main/resources/assets/create_nuclear_industry/ponder/nuclear_heat_exchanger_{introduction,heating,boiler,processing,condensation}.nbt` 与 `tools/ponder/heat_exchanger_scenes.py`。
+- `zh_cn.json`、`en_us.json` 仅增加本批五个故事线的标题和正文键。
 - 新增 `src/test/java/com/iksxh/create_nuclear_industry/HeatExchangerPonderContractTest.java`。
 
-## 验证证据
+## 初始候选验证证据（历史；R1、R2及R3结果见后续记录）
 
 | 检查 | 结果 |
 | :--- | :--- |
@@ -43,7 +43,7 @@
 
 增量 JAR `build/libs/create_nuclear_industry-0.1.0.jar` 的 SHA-256：`6BE78E490E8A4C21C7C3DFBA2F17E2A406018835E601F0600C70073C08E3FC89`。
 
-本批为纯教学改动，未运行 GameTest、全量测试、旧存档专项或客户端播放。Ponder 实际资源加载、四幕顺序、不同缩放下的端口可见性、文字遮挡和方块渲染仍由独立审查及用户客户端播放验收确认；静态检查不代替该人工门。
+初始候选为纯教学改动，未运行 GameTest、全量测试、旧存档专项或客户端播放。Ponder 实际资源加载、故事线顺序、不同缩放下的端口可见性、文字遮挡和方块渲染仍由独立审查及用户客户端播放验收确认；静态检查不代替该人工门。
 
 ## 交付状态
 
@@ -92,3 +92,39 @@
 | 增量JAR SHA-256 | `24B30A7E9B8485FBB3BEF46A70B93BBD7D78E4B902D89D0DA0764E0946D2EC47` | `build/libs/create_nuclear_industry-0.1.0.jar` |
 
 R1首轮/R1b报告、历史哈希、日志和失败经过均保留。R2自动验证通过不代表客户端人工验收；本候选仍未提交，冻结等待原审查者复核差异及用户客户端播放。
+
+## R3整改与复验（2026-10-09）
+
+根据用户播放反馈将故事线扩展为五幕：先说明本体端口与同向串联，再展示核换热器为Create储罐锅炉供热，后续为内置锅炉、加工供热和蒸汽冷凝。所有更改仍限于Ponder客户端临时世界；没有改正式设备、模型、配置或服务端运行逻辑。执行时功能基线为`9b5bb3a`，计划文档提交后的HEAD为`737e0e76d3778be24df727b3c33f3b11ad8a0f62`。
+
+- 新增本体与串联首幕模板及绑定。窄地台上的两台同向换热器从串联外端接入冷热管路，首段分开展示后侧热液输入、前侧冷液输出与顶部受热面；正文短且逐段显示。
+- 供热幕保留真实Create最小2×2储罐组，锅炉储罐紧邻合法壁挂蒸汽机；通过本地Create 6.0.10-280 API计算蒸汽机轴位，以垂直轴`PoweredShaftBlockEntity`关联蒸汽机，设置罐组锅炉供水、热级及引擎数据。锅炉热数据启用后，Ponder将动力速度写到同一关联轴，展示蒸汽机活塞往复和轴输出；先隐藏储罐组让底部换热器可见，再恢复罐组。耗尽热液后保留既有40 tick余热窗口，然后关闭锅炉数据和动力轴。蒸汽机/活塞的实际画面仍须客户端播放确认。
+- 内置锅炉底面和顶面均在`y=1`与`y=5`，内部隔层在`y=3`，换热器位于`(7,1,7)`，对应Java锚点与模板同步。完整外壳先加载，教学阶段临时隐藏前壁、隔层八格外壳和底部八格遮挡壳，单独用红色轮廓持续高亮换热器，再显示上方再加热段并恢复结构。
+- 加工幕保留盆与烧结炉互斥；盆位于换热器上一格、搅拌器位于盆上两格，中间一格为空，清理范围和轴位置相应上移。场景继续展示空设备受热、热液下降/冷液等量回升、生芯块与烧结成品演示及冷液循环恢复。普通蒸汽冷凝幕的冷源语义和分段库存变化保持。
+- Java fallback与中英资源按五幕顺序对齐；首幕和供热幕正文已同步，未将开发用配置字段加入玩家文字。定向测试中的一项首轮失败是罐组API源代码断言仍查旧参数名`setController(controller)`；实际代码通过已核对的`setController(CREATE_TANK_CONTROLLER)`设置控制罐。保留该失败日志/XML，仅更新断言以匹配事实实现后重跑。
+
+**R3验证：**
+
+| 检查 | 退出码与结果 | 原始证据 |
+| :--- | :--- | :--- |
+| 五模板生成及gzip往返 | `generator-r3.exit=0`；五模板通过，锅炉258格 | `build/reports/extension/DEVICE-PONDER-05-EXCHANGER/generator-r3.log` |
+| 定向合同测试（首轮） | `test-r3.exit=1`；3用例中1项因旧API参数名断言漂移失败，保留原日志与XML | `test-r3.log`、`test-r3.exit`、`test-r3-failed.xml` |
+| 定向合同测试（断言校正后） | `test-r3b.exit=0`；3 tests、0 failures、0 errors、0 skipped | `test-r3b.log`、`test-r3b.exit`、`test-r3b.xml` |
+| 增量`assemble` | `assemble-r3.exit=0`；构建成功，Java与资源任务为最新，JAR任务成功 | `assemble-r3.log`、`assemble-r3.exit` |
+| 增量JAR SHA-256 | `3C5214CAB3EF7B1B5AC6D66840EF926B6733846D754F200A8907063F3B3C0D48` | `build/libs/create_nuclear_industry-0.1.0.jar` |
+
+R3未运行GameTest、全量测试或客户端播放。自动合同通过只确认模板、接口调用坐标和内容结构；Create锅炉实际渲染、活塞运动、剖面取景和字幕可读性等待原审查者复核及用户按W播放。R1/R2历史日志、失败XML和历史哈希均保留。改动未提交；`logs/debug.log`、`logs/latest.log`及三个既有`__pycache__`目录保留未动。
+
+## R3c窄整改与复验（2026-10-09）
+
+按R3独立复审唯一阻断修复首幕揭示顺序：前后管道选择的后段由`z=6..10`改为`z=7..10`，排除位于`(5,1,6)`的第二台换热器，使其仍在首台端口段后通过独立`showSection`出现。没有改其他镜头、文案、模板或玩法。
+
+既有合同测试增加窄断言：管道选择范围必须从`z=7`开始，不得使用包含`z=6`的旧范围，并确认第二台换热器的单独显示调用发生在管路/储罐显示之后。模板未变，复用`generator-r3.log`及退出码0。
+
+| 检查 | 退出码与结果 | 原始证据 |
+| :--- | :--- | :--- |
+| 定向合同测试 | `test-r3c.exit=0`；3 tests、0 failures、0 errors、0 skipped | `build/reports/extension/DEVICE-PONDER-05-EXCHANGER/test-r3c.log`、`test-r3c.exit`、`test-r3c.xml` |
+| 增量`assemble` | `assemble-r3c.exit=0`；构建成功，JAR任务成功 | `build/reports/extension/DEVICE-PONDER-05-EXCHANGER/assemble-r3c.log`、`assemble-r3c.exit` |
+| 增量JAR SHA-256 | `365EDED031B8E8F589F3E58FB0EA256DBE210E57922A457F7A6237CC04860DE7` | `build/libs/create_nuclear_industry-0.1.0.jar` |
+
+R3c未重跑模板生成器、GameTest、全量测试或客户端播放；R3/R2历史证据均保留。本修复候选未提交，等待对该窄差异的静态复核及用户客户端播放。
