@@ -64,3 +64,30 @@
 - 本轮重新计算两条当前源码 SHA：State `f11c0262b57b45dd85d8fcc4ed7b9ed350ceae7076872339948affe2b3c71022`，LifecycleTest `e830863d1154e79f1d9f1c8f34b35b0cbad6619e485f939459e4cf8f6a357d62`，均匹配 R1 清单。当前 build/libs JAR 与 R1 冻结副本均为 `b4c56788146d672d7130a1231d0bce64f54afc91baba53a408d5f92ceaff83df`。
 - 初版/R1 实际 javap API 文本 SHA 均为 `177de2fc074b2fe9ffde92c8af1134466f9fc3d7ff3a351b2f1acb93e68a013a`，与 api-comparison.json 的逐字节一致/退出 0 记录相符。无 ABI、同步字段或消费者入口变化。
 - 受改范围只客户端 State 与对应测试；BE/common、投影、协议、GameTest、燃料注册等仍对应首轮冻结源码，复用首轮其他 19 个 JUnit 及 1/1 真实仪表/正常退出证据，不重开未变场景。原失败、原日志、初版清单与 PM 文档继续保留。审查者本次仍只追加本文件，无代码修复、Git 写或子 Agent。
+
+## R2 真暂停租约规格与质量窄审（2026-10-10）
+
+**结论：未发现 Critical、Important 或 Minor 项；R2 冻结候选可由 PM 净同步 main 与美术树。** 本结论只覆盖真暂停租约窄修，不改变任务状态或替代客户端人工观察。上文初版和 R1 历史完整保留。冻结入口为 `build/reports/art/ART-REACTOR-03-L2/R2/final-freeze-r2.json`，基线 HEAD 为 `18e2524a053f9ff997e66ae96085efa32f0897a3`。
+
+### 实际合同及控制流核对
+
+- 已读当前 AGENTS、治理 5.1/5.2、R2 窄修卡、ART03-L2 合同及实施报告。实际应用 `C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`，以及 superpowers `requesting-code-review` 的 reviewer 模板和 `verification-before-completion`；`using-superpowers` 的 SUBAGENT-STOP 适用。核对 gradle.properties/build.gradle 的 MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。按治理复用原运行，未重跑 Gradle、服务器或客户端，未派 Agent 或执行 Git 写操作；唯一写入为本节追加。
+- 直接读取本地锁定 `build/moddev/artifacts/neoforge-21.1.219-sources.jar`。`Minecraft.java:1152`、1159～1161 的 timer/循环继续调用 tick；1787 在1789 的 pause 判断前发布 Pre，`ClientHooks.java:1069`～1070 直接 post。`DeltaTracker.java:61`～70 的活动 tick 计算没有 paused 判断，88～101、114～118 处理暂停残余及 partial。`Minecraft.java:1228`～1235 的 pause 依赖单人服务端、暂停界面且未公开到 LAN；2556～2557 的 isPaused 返回该实际状态。`IntegratedServer.java:93` 读取相同状态，102～110 有连接且真暂停时走 tickPaused，否则 super.tickServer。因此根因与修复判据均由本地实际版本控制流支持；多人菜单不会仅因打开界面而冻结租约。
+- 生产位置 `ReactorRuntimeClientEvents.java:42`～54：onTick 先 synchronizeWorld，再 null guard，再以实际 isPaused 调用私有 advanceLease；只有 `!paused` 调用原 State.tick，随后 reconcile/publish 无条件照旧。直接只读 R2 冻结 JAR 的 `javap -c -p`（JDK21，退出0）确认 onTick 的调用顺序与 advanceLease 的 `ifne` 跳过时钟已进入编译实物。没有整段暂停 return、公共入口变更或服务器时钟变更；中文注释准确区分物理客户端、活动 tick 单位与持续撤销边界。
+- State、包接收、owner/chunk/world 事件未改。暂停仍核实真实 chunk，卸载/替换可撤销 active；坏包及旧会话规则继续保留，publish 仍反映 snapshot 的三索引。snapshot 的原20tick条件与 sample 水位未动，冻结年龄不能续样本或使到期/撤销显示复活。
+
+### 差异、行为与冻结证据
+
+- 两份 before.java 的实际 SHA 分别匹配 R1 Events `78df9024...bc5d3d`、LifecycleTest `e830863d...357d62`。本轮真实 `git diff --no-index` 的全部 hunk 与两份冻结 `.diff` 一致（差异退出1），不是只读交付摘要。实际 Git 只有这两条源码/测试路径变化，其他 dirty 文档及历史日志保留；R1/R2 完整12项清单逐项比较也仅这两项变化，其余10/10相同，未机械重审未变源码。
+- 当前两条源码 SHA 与 R2 冻结相符：Events `5be1544adf5ee8ac31c3a43554c7ceefd33b78a07a7df13ed5b825b5b85fc43b`，LifecycleTest `7eb5c181dff7dccc476b24aee95b5b8073a08b9fbb69a0ff26a350f4a1aec953`。IMPLEMENTATION.md 实际 SHA 为冻结值 `52146fa88639a565dc3f13ca1d3278faf0e519b05a6f411ebf4fd9bb60323577`；已读取 source-baseline、changed-sources、final-consistency 和日志原字节恢复记录，未覆盖旧证据。
+- `ReactorRuntimeLifecycleTest.java:113`～178 的四个新用例经反射调用实际生产私有适配和真实 State fixture，未另写镜像计时逻辑。先7活动tick、40次真暂停后三索引仍同份可靠；恢复12tick仍可见，第20累计活动tick到期，重复样本不续期，到期后40次暂停及重复投递不能复活。其余用例验证暂停期间错 dimension 坏包、成员卸载/换槽、世界切换的撤销与恢复不复活。原六个用例保留，原助手改为 Optional 直接断言未弱化三索引要求；即时错维度撤销的原R1用例仍覆盖。
+- 实际原始 `red-assertion-lifecycle.xml` 是1个用例、1 failure、0 error/skip，类型为 AssertionFailedError，期望可靠 Optional 而实际为空；`red-assertion.log` 与 command.json 记录测试失败/退出1。首次 NoSuchElementException red 另有保留，没有混同断言 red。`green-lifecycle.xml` 实际列出10个用例、failure/error/skip全0；`green-assemble.log` 同次 test/assemble 为 BUILD SUCCESSFUL，green-command.json 退出0。以上为实施者原运行的独立核验与复用，非本审查新跑测试，也不冒充真实客户端生命周期/视觉验证。
+- 当前 build/libs JAR 与 R2 冻结副本实际 SHA 同为 `c4b3ef4c55135017071deada00f52bef25faa87f2e80a1ecb36a35a3e3d9ad3e`。完整 R1/R2 javap 公共API文本实际 SHA 均 `177de2fc074b2fe9ffde92c8af1134466f9fc3d7ff3a351b2f1acb93e68a013a`；额外 Events/State 公共文本实际 SHA 均 `1c0d96e2cf7a86f871a2713f43ad1297b692b4879fbc2623e16454b6e846a246`，与 api-comparison 的字节一致/退出0记录相符。私有适配没有扩展公共ABI。
+- 未改服务端/common/协议/燃料注册、L1/CT及资源，复用原自动证据与 `gametest-second.log`：明确1/1 required通过、三维度保存、Game test server shutting down、BUILD SUCCESSFUL；没有因客户端计时窄修重复真实仪表或旧全量验证。
+
+### 本轮明确不裁决的范围
+
+- ART03动画、透明排序及真暂停/恢复客户端视觉：由美术最终候选绑定实际R2同步后观察，JUnit和源码控制流不足以关闭人工门。
+- ART-REACTOR-02R1视觉：独立候选及观察门，不由L2暂停修复覆盖。
+- 已验收Ponder/玩法、07装配台教学、旧存档迁移：未改或未派发；治理5.1/5.2与本任务写集不允许本审查重开、扩测或推进。
+- Git净整合与main/美术树实际同步：由PM执行；本次审查结论允许进行该步骤，不宣称已同步。
