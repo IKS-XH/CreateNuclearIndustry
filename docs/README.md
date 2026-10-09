@@ -10,7 +10,7 @@
 | 屏蔽装配台思索07 | [三幕准备计划](./superpowers/plans/2026-10-10-device-ponder-07-assembly.md)：搭建与接口、新燃料装配、乏燃料封装；前置已通过，尚未派发实现，不新增玩法 |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
-| 反应堆运行动画共享前置 | 用户已在美术对话直接确认动画及按库存连续混色；主PM按[ART03-L2合同](./art/ART-REACTOR-03-INTERFACE.md)、[实施卡](./superpowers/plans/2026-10-10-reactor-runtime-display-02.md)派发只读运行投影，编译实物HANDOFF前美术不接运行消费者；独立视觉门保留 |
+| 反应堆运行动画共享前置 | 用户直接确认动画及按库存连续混色；[L2实物API/写集交付](./reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)自动与独立审查通过，main `cb123c9`、美术净同步`4cb0d7f`；美术按边界接运行消费者，动画与02R1视觉门独立保留 |
 | 成型反应堆连接纹理 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)已净同步；[02B候选登记](./reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)自动证据保留。用户反馈成型材质与窗组内部框需整改，[02R1范围补充](./art/ART-REACTOR-02R1-COORDINATION.md)已实际同步美术树，视觉门未通过，源码未合main；教学验收不覆盖该门 |
 | 换热器工作盆供热 | `ab91356`实现及复核通过，用户手测通过，见[验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)；持续超级加热，默认4mB/t，缺液或冷满立即停热 |
 | 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |

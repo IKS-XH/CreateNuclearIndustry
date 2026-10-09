@@ -2,7 +2,7 @@
 
 > **执行者：** 使用superpowers:subagent-driven-development。PM派发一个实现执行者、一次合并规格与质量的独立审查；执行者不派发子Agent、不写Git或核心文档。已确认需求及必要显示前置依既有自动授权推进。
 
-**任务ID / 状态：** ART-REACTOR-03-L2 / 合同已冻结，待执行。
+**任务ID / 状态：** ART-REACTOR-03-L2 / 自动与独立审查门通过，唯一P2经R1窄复审闭合；净源码提交`ff3bacb`、main `cb123c9`、美术前置同步`4cb0d7f`。实际编译API、精确消费写集及证据见[HANDOFF](../../reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)。动画接入与视觉门仍由美术卡独立完成，不启动07或其他主线。
 
 **目标：** 为美术运行动画提供真实结算数据及可靠生命周期，不修改反应堆玩法。
 
@@ -14,8 +14,8 @@
 
 ## 全局边界与隔离
 
-- 复用`E:/MyMC/NewMod/Create_NuclearIndustry-reactor-display`，HEAD `c5f29f02e30e2d1f7244c0619d0d53c35a9ca8b3`、分支`codex/reactor-surface-display`。PM已核实git-dir为主工程`.git/worktrees/Create_NuclearIndustry-reactor-display`，common-dir为主工程`.git`，非子模块；相关仪表/控制/结构/反应堆/注册与依赖Git内容和main `670ddd3`一致，只净同步任务路径，不整体合并旧树。
-- 原有L1未提交PM文档、HANDOFF及logs保留。当前AGENTS/本合同/本卡由PM同步；源实现只在显示树，未进入美术树。不得启动客户端、改写用户世界或清理旧证据。
+- 复用`E:/MyMC/NewMod/Create_NuclearIndustry-reactor-display`，开工HEAD `c5f29f02e30e2d1f7244c0619d0d53c35a9ca8b3`、分支`codex/reactor-surface-display`。PM已核实git-dir为主工程`.git/worktrees/Create_NuclearIndustry-reactor-display`，common-dir为主工程`.git`，非子模块；开工相关仪表/控制/结构/反应堆/注册与依赖Git内容和main `670ddd3`一致，只净同步任务路径，不整体合并旧树。
+- 原有L1未提交PM文档、HANDOFF及logs保留。当前AGENTS/本合同/本卡由PM同步；源实现先只在显示树，经R1审查后已按上方净提交进入main及美术树。不得启动客户端、改写用户世界或清理旧证据。
 - 实际读取AGENTS、治理5.1/5.2、合同，以及`C:/Users/IKSXH/.codex/skills/minecraft-{modding,testing}/SKILL.md`、适用TDD/实施/验证技能；按锁定本地API，不升级依赖。中文注释覆盖单位、权威/客户端边界及非显然提交/失效分支。
 - 5成功tick心跳、20客户端tick租约为本次显示技术策略；不写配置或影响模拟。协议预算64边长/256列/4096body仅用于防坏包；实际扫描尺寸不变。
 
