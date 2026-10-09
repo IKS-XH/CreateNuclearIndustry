@@ -32,6 +32,9 @@ import com.iksxh.create_nuclear_industry.structure.ReactorInstrumentStructureSum
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureScanner;
 import com.iksxh.create_nuclear_industry.structure.ReactorDisassemblyPlan;
+import com.iksxh.create_nuclear_industry.structure.ReactorSurfaceDescriptor;
+import com.iksxh.create_nuclear_industry.structure.ReactorSurfaceDescriptorFactory;
+import com.iksxh.create_nuclear_industry.structure.ReactorSurfaceSyncEvents;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -61,6 +64,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private static final String SNAPSHOT_KEY = "ReactorSnapshot";
     private static final String STRUCTURE_SUMMARY_KEY = "InstrumentStructureSummary";
     private static final String TELEMETRY_KEY = "InstrumentTelemetry";
+    private static final String SURFACE_KEY = "ReactorSurface";
     private static final String LEGACY_FUEL_MIGRATION_KEY = "LegacyFuelMigration";
     private static final String GOGGLE_KEY_PREFIX = "goggle.create_nuclear_industry.reactor.";
     private static final int TELEMETRY_SYNC_INTERVAL_TICKS = 5;
@@ -84,6 +88,10 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private Map<CoreColumnPosition, FuelAssemblyState> pendingLegacyFuelAssemblies = Map.of();
     private BlockPos structureOrigin;
     private long structureScanCount;
+    /** 每次新建 BE 具有独立展示身份，不持久化到库存或热工快照。 */
+    private final java.util.UUID surfaceGeneration = java.util.UUID.randomUUID();
+    private ReactorSurfaceDescriptor surfaceDescriptor;
+    private boolean surfaceChunkUnloaded;
     private final Set<ReactorPortBlockEntity> boundPorts =
             Collections.newSetFromMap(new IdentityHashMap<>());
 
@@ -191,7 +199,23 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         } else {
             clearPortBindings(true);
         }
+        updateSurfaceDescriptor(scan);
         invalidateTelemetry();
+    }
+
+    /** 返回当前实例最近收到或生成的不可变显示信封；未知数据以 Optional.empty 表示。 */
+    public java.util.Optional<ReactorSurfaceDescriptor> surfaceDescriptor() {
+        return java.util.Optional.ofNullable(surfaceDescriptor);
+    }
+
+    /** 仅扫描缓存变化驱动表面投影；相同几何保留对象及版本，避免遥测触发模型全域刷新。 */
+    private void updateSurfaceDescriptor(ReactorStructureScanner.WorldScanResult scan) {
+        if (level == null || level.isClientSide) return;
+        long revision = surfaceDescriptor == null ? 0 : surfaceDescriptor.revision();
+        ReactorSurfaceDescriptor next = ReactorSurfaceDescriptorFactory.project(
+                level, worldPosition, surfaceGeneration, revision, scan);
+        if (next.sameGeometry(surfaceDescriptor)) return;
+        surfaceDescriptor = next.withRevision(revision + 1);
     }
 
     public ControlRodScramResult updateRedstoneScram(boolean powered) {
@@ -1308,9 +1332,19 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     @Override
     public void onLoad() {
         super.onLoad();
+        surfaceChunkUnloaded = false;
+        ReactorSurfaceSyncEvents.publish(this, false);
         if (level != null && !level.isClientSide) {
             ReactorStructureLifecycle.scheduleRescanAround(level, worldPosition);
         }
+    }
+
+    /** 客户端清理区块先调用此钩子再 setRemoved；显式保留卸载原因，不依赖事件总线次序。 */
+    @Override
+    public void onChunkUnloaded() {
+        surfaceChunkUnloaded = true;
+        ReactorSurfaceSyncEvents.publish(this, true, true);
+        super.onChunkUnloaded();
     }
 
     /**
@@ -1321,11 +1355,16 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      */
     @Override
     public void invalidate() {
+        ReactorSurfaceSyncEvents.publish(this, true, surfaceChunkUnloaded);
         // 区块卸载不是安全重扫，不能借生命周期事件改变未成型取料锁。
         clearPortBindings(false);
         clearControlRodTelemetry();
         structureScan = ReactorStructureDefinition.ScanResult.notScanned();
         structureOrigin = null;
+        if (level != null && !level.isClientSide && surfaceDescriptor != null && surfaceDescriptor.valid()) {
+            surfaceDescriptor = ReactorSurfaceDescriptor.unavailable(level.dimension().location().toString(),
+                    worldPosition, surfaceGeneration, surfaceDescriptor.revision() + 1);
+        }
         super.invalidate();
     }
 
@@ -1388,6 +1427,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (clientPacket) {
             tag.put(STRUCTURE_SUMMARY_KEY, structureSummary().writeSyncTag());
             tag.put(TELEMETRY_KEY, ReactorInstrumentTelemetryNbtCodec.encode(telemetry));
+            if (surfaceDescriptor != null) tag.put(SURFACE_KEY, surfaceDescriptor.encode());
         }
     }
 
@@ -1431,6 +1471,10 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                             : null);
             clientTelemetry = ReactorInstrumentTelemetryNbtCodec.decode(
                     tag.contains(TELEMETRY_KEY) ? tag.getCompound(TELEMETRY_KEY) : null);
+            surfaceDescriptor = ReactorSurfaceDescriptor.decode(
+                    tag.contains(SURFACE_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND)
+                            ? tag.getCompound(SURFACE_KEY) : null).orElse(null);
+            ReactorSurfaceSyncEvents.publish(this, false);
         }
     }
 
@@ -1440,6 +1484,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         tag.put(SNAPSHOT_KEY, ReactorSnapshotNbtCodec.encode(snapshot));
         tag.put(STRUCTURE_SUMMARY_KEY, structureSummary().writeSyncTag());
         tag.put(TELEMETRY_KEY, ReactorInstrumentTelemetryNbtCodec.encode(telemetry));
+        if (surfaceDescriptor != null) tag.put(SURFACE_KEY, surfaceDescriptor.encode());
         return tag;
     }
 
