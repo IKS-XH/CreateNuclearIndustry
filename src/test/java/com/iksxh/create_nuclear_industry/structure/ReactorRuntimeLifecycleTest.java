@@ -109,11 +109,72 @@ class ReactorRuntimeLifecycleTest {
         assertTrue(captured.findControlRod(cap).isEmpty());
         assertTrue(captured.findControlOwner(cap).isEmpty());
     }
+    /** 真实 Pre 在单人暂停仍触发；只冻结租约年龄，恢复后按累计活动 tick 到期。 */
+    @Test void truePausePreservesThreeIndexesAndResumesOriginalLeaseAge() throws ReflectiveOperationException {
+        ready(); var cap=controlCap();
+        for(int i=0;i<7;i++) advanceLease(false);
+        for(int i=0;i<40;i++) advanceLease(true);
+        assertIndexesPresent(first,cap);
+        assertFalse(state.receive(world,token,first,ReactorRuntimeProjectionTest.geometry(first.ownerGeneration(),3)));
+        for(int i=0;i<12;i++) advanceLease(false);
+        assertIndexesPresent(first,cap);
+        advanceLease(false);
+        assertIndexesAbsent(cap);
+        for(int i=0;i<40;i++) advanceLease(true);
+        assertIndexesAbsent(cap);
+        assertFalse(state.receive(world,token,first,ReactorRuntimeProjectionTest.geometry(first.ownerGeneration(),3)));
+        assertIndexesAbsent(cap);
+    }
+    /** 暂停不能掩盖当前 owner 的坏包撤销，也不能借重复样本复活旧显示。 */
+    @Test void badPacketDuringTruePauseStillRevokesThreeIndexes() throws ReflectiveOperationException {
+        ready(); var cap=controlCap(); advanceLease(true);
+        var geometry=ReactorRuntimeProjectionTest.geometry(first.ownerGeneration(),3);
+        var wrongTag=ReactorRuntimeProjectionTest.sample(2,2).encode();
+        wrongTag.putString("Dimension","minecraft:the_nether");
+        assertFalse(state.receive(world,token,ReactorRuntimeDescriptor.decode(wrongTag).orElseThrow(),geometry));
+        for(int i=0;i<40;i++) advanceLease(true);
+        assertIndexesAbsent(cap);
+        assertFalse(state.receive(world,token,first,geometry)); advanceLease(false);
+        assertIndexesAbsent(cap);
+    }
+    /** 暂停中的成员卸载或换槽照常撤销，重加载与恢复计时都不自动恢复旧样本。 */
+    @Test void chunkUnloadOrReplacementDuringTruePauseStillRevokesThreeIndexes() throws ReflectiveOperationException {
+        for(boolean unload:new boolean[]{true,false}) {
+            ready(); var cap=controlCap(); advanceLease(true);
+            var chunk=ReactorRuntimeSnapshots.State.required(first,first.ownerPos()).stream()
+                .filter(p->!p.equals(new ChunkPos(first.ownerPos()))).findFirst().orElseThrow();
+            state.chunk(world,chunk,unload?null:new Object());
+            assertIndexesAbsent(cap);
+            if(unload) state.chunk(world,chunk,new Object());
+            for(int i=0;i<40;i++) advanceLease(true);
+            assertIndexesAbsent(cap);
+            assertFalse(state.receive(world,token,first,ReactorRuntimeProjectionTest.geometry(first.ownerGeneration(),3)));
+            advanceLease(false); assertIndexesAbsent(cap);
+        }
+    }
+    /** 世界切换清掉旧会话；真暂停不能让旧世界包或旧实例重新开租约。 */
+    @Test void worldSwitchDuringTruePauseStillRejectsOldSession() throws ReflectiveOperationException {
+        ready(); var cap=controlCap(); advanceLease(true);
+        state.begin(new Object(),first.dimension());
+        for(int i=0;i<40;i++) advanceLease(true);
+        assertIndexesAbsent(cap);
+        assertFalse(state.receive(world,token,first,ReactorRuntimeProjectionTest.geometry(first.ownerGeneration(),3)));
+        advanceLease(false); assertIndexesAbsent(cap);
+    }
+    private net.minecraft.core.BlockPos controlCap() {
+        return first.columns().stream().filter(ReactorRuntimeDescriptor.ControlRodColumn.class::isInstance)
+            .findFirst().orElseThrow().capPos();
+    }
+    /** 反射调用生产私有适配，使用真实 State fixture；不创建 Minecraft 或模拟原生 tick。 */
+    private void advanceLease(boolean paused) throws ReflectiveOperationException {
+        var method=ReactorRuntimeClientEvents.class.getDeclaredMethod("advanceLease",ReactorRuntimeSnapshots.State.class,boolean.class);
+        method.setAccessible(true); method.invoke(null,state,paused);
+    }
     private void assertIndexesPresent(ReactorRuntimeDescriptor expected,net.minecraft.core.BlockPos cap) {
         var captured=state.snapshot();
-        assertEquals(expected,captured.findOwner(first.ownerPos()).orElseThrow());
-        assertEquals(expected,captured.findControlOwner(cap).orElseThrow());
+        assertEquals(java.util.Optional.of(expected),captured.findOwner(first.ownerPos()));
+        assertEquals(java.util.Optional.of(expected),captured.findControlOwner(cap));
         assertEquals(expected.columns().stream().filter(ReactorRuntimeDescriptor.ControlRodColumn.class::isInstance)
-            .findFirst().orElseThrow(),captured.findControlRod(cap).orElseThrow());
+            .findFirst().map(ReactorRuntimeDescriptor.ControlRodColumn.class::cast),captured.findControlRod(cap));
     }
 }

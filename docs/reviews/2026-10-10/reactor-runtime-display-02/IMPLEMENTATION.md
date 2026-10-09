@@ -77,3 +77,25 @@ JAR：`build/libs/create_nuclear_industry-0.1.0.jar`，SHA-256 `a45c8047bf939c37
 - R1 root 自动日志先保留为 `R1/junit-debug.log`/`R1/junit-latest.log`。按原 PM 窄允许，从既已核实的 original-debug.log.gz/original-latest.log.gz 原字节恢复；本轮恢复前两文件 SHA `9acd7dd35c3ed676941042d8c25be8fd38b5691d3af1eaf056ed95c40785017d`，恢复后均为原 `1b3cf6b9ffbe10093c4c2a0ba33a3be74c03117c9bbed6b83b0e5518e97a6368`。详见 `R1/history-log-before.json` 与 `R1/history-log-restoration.json`，轮转证据保留。
 
 实际补读 receiving-code-review 技能，核实审查控制流后实施，沿用此前 TDD/验证与 Minecraft 技能。只读 diff/SHA/API 窄自审通过，未执行 Git 写操作、派发或改变任务状态。等待同一独立审查者只复审 R1 差异及对应证据。
+
+## R2：真暂停冻结租约年龄（2026-10-10）
+
+按 `2026-10-10-reactor-runtime-display-02-pause.md` 与 PM 窄派发，基线 `18e2524a053f9ff997e66ae96085efa32f0897a3`。只修改 `ReactorRuntimeClientEvents.java` 和 `ReactorRuntimeLifecycleTest.java`，本节为唯一报告追加。开工 12/12 源 SHA 与 R1 冻结一致，见 `R2/source-baseline.json`。实际读取 AGENTS、治理及 ART03-L2 合同；本地锁定 sources.jar 的 Minecraft.tick 1785～1789 行确认 Pre 在 pause 检查前发布。
+
+事件入口仍先 `synchronizeWorld()`，存在当前世界时把实际 `Minecraft.isPaused()` 传入私有 `advanceLease(State, boolean)`。只有 true 跳过 `State.tick()`；`reconcile()`、`publish()`及既有包/卸载/会话撤销路径继续执行。暂停不续样本、不复活旧显示；false 累计满 20 活动 tick 照常到期，恢复不补计暂停时间。State、公开签名、服务端、协议、L1/CT、注册及资源均未修改。
+
+四个新增行为用例反射调用实际生产私有计时适配和既有真实 State fixture；没有创建或 mock Minecraft。覆盖先活动 7tick、真暂停 40 次仍保留同份三索引，随后 12 活动 tick 仍可靠、第 20 活动 tick 到期；重复样本不续期，到期后再暂停 40 次和投递旧样本也不复活。其他用例在暂停期间执行合法类型错 dimension 包、成员卸载/换槽、世界切换，验证三索引撤销、恢复计时及旧包均不能复活。原六个生命周期用例保留。原三索引助手改用 Optional 直接断言，避免缺索引只以 `orElseThrow()` 异常呈现。真实事件查询/发布控制流由本次窄差异检查覆盖；JUnit 不代表客户端生命周期或视觉人工通过。
+
+全部本次证据独占 `build/reports/art/ART-REACTOR-03-L2/R2/`，原批与 R1 证据未覆盖：
+
+- 首次 red：`red.log`、`red-command.json`、`red-initial-lifecycle.xml`；行为等价的无条件 tick 私有适配导致暂停后三索引缺失，1/1 失败、Gradle 1，以原助手 `NoSuchElementException` 呈现。该记录保留，未用它冒充断言 red。
+- 明确行为 red：`red-assertion.log`、`red-assertion-command.json`、`red-assertion-lifecycle.xml`；同一唯一暂停用例直接断言得到 `AssertionFailedError`，1/1 failure、0 error/skip、Gradle 1。此后才加入唯一 `if (!paused)` 修复。两次实际 red 命令均为 `./gradlew.bat test --tests '*ReactorRuntimeLifecycleTest.truePausePreservesThreeIndexesAndResumesOriginalLeaseAge'`。
+- 唯一 green：`./gradlew.bat test --tests '*ReactorRuntimeLifecycleTest' assemble`，`green-assemble.log`、`green-command.json`、`green-lifecycle.xml` 与 `junit-summary.json`；Gradle 0，生命周期 **10/10，failure/error/skip 全 0**，增量 assemble 同次退出 0。仅有既有 Gradle 10 兼容弃用提示。未运行 common 投影、GameTest、全量或客户端。
+- 源冻结：`source-sha256-r2.json` 完整 12 路径；`changed-sources.json` 仅上述两路径变化，其他 **10/10** 与 R1 相同。Events SHA `5be1544adf5ee8ac31c3a43554c7ceefd33b78a07a7df13ed5b825b5b85fc43b`；LifecycleTest SHA `7eb5c181dff7dccc476b24aee95b5b8073a08b9fbb69a0ff26a350f4a1aec953`。两份 before.java 与精确 `.diff` 保留；完整交付冻结入口 `final-freeze-r2.json` 另含报告 SHA。
+- R2 JAR 冻结为 `create_nuclear_industry-0.1.0-R2.jar`，SHA `c4b3ef4c55135017071deada00f52bef25faa87f2e80a1ecb36a35a3e3d9ad3e`，见 `jar-sha256-r2.json`。没有覆盖 R1 JAR 副本。
+- `C:/Program Files/Java/jdk-21/bin/javap.exe` 21.0.7 从实际 R2 JAR运行 `-public -s`，退出 0；`javap-api-r2.txt` 与 R1 公共文本逐字节一致，SHA均 `177de2fc074b2fe9ffde92c8af1134466f9fc3d7ff3a351b2f1acb93e68a013a`。另补读实际 R1/R2 JAR的 Events 与 State 公共入口，`javap-lifecycle-r1.txt`/`javap-lifecycle-r2.txt` 也逐字节一致，SHA均 `1c0d96e2cf7a86f871a2713f43ad1297b692b4879fbc2623e16454b6e846a246`，三个 javap 命令退出 0，见 `api-comparison.json`。
+- 两份 dirty 历史日志在任何 JUnit 前复制原字节到 `original-debug.log`/`original-latest.log`，本轮自动日志保留为 `junit-debug.log`/`junit-latest.log`。仅从本次原字节备份恢复 root 的两个日志，恢复后 SHA均为开工值 `1b3cf6b9ffbe10093c4c2a0ba33a3be74c03117c9bbed6b83b0e5518e97a6368`，见 `history-log-before.json`/`history-log-restoration.json`；未 Git restore、未删轮转证据。
+
+实际使用 `minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`，位于 `C:/Users/IKSXH/.codex/skills/`；并读取应用 superpowers systematic-debugging、test-driven-development（含 writing-good-tests）、verification-before-completion，位于 `C:/Users/IKSXH/.codex/plugins/cache/openai-curated-remote/superpowers/6.4.2/skills/`。核对 MC1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6；治理 5.1 与明确写集优先于通用技能全量、Git、额外工作区及派发流程。
+
+本执行者未执行 Git 写操作、改治理/活动计划或派发子 Agent；交付未提交差异，等待 PM 一次独立窄审与实际同步 main/美术树。客户端真暂停/恢复和动画视觉门仍未验收。

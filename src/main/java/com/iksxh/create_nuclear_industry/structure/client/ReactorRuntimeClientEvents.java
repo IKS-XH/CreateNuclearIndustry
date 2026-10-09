@@ -42,7 +42,14 @@ public final class ReactorRuntimeClientEvents {
     public static void onTick(ClientTickEvent.Pre event) {
         synchronizeWorld();
         if (currentWorld == null) return;
-        STATE.tick(); reconcile(); publish();
+        advanceLease(STATE, Minecraft.getInstance().isPaused()); reconcile(); publish();
+    }
+    /**
+     * 1.21.1 的物理客户端 Pre 在真暂停检查前仍触发；租约只累计非暂停的活动游戏 tick。
+     * 暂停仅跳过时钟，不续样本或复活旧显示；当前世界核查、撤销和发布仍由事件入口执行。
+     */
+    private static void advanceLease(ReactorRuntimeSnapshots.State state, boolean paused) {
+        if (!paused) state.tick();
     }
     @SubscribeEvent
     public static void onWorldUnload(LevelEvent.Unload event) {
