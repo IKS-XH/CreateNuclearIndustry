@@ -17,7 +17,7 @@
 
 成功恢复/失效立即同步，正常运行每5个成功tick最多一次完整心跳；稳定库存和零产热也要续期。客户端20tick租约按新sample本地收到时间计算，重复/旧sample不续期；过期撤下，后续新可靠样本恢复。它仅是显示保险，不影响服务器运行或动力。
 
-真暂停边界（R2）：仅Minecraft.isPaused为true时冻结本地租约年龄，不续样本、不复活已失效显示；当前世界同步、区块核查、坏包及卸载撤销仍执行。非真暂停的多人菜单正常计时，恢复后累计活动tick满20仍到期。已核实本地Pre在真暂停仍触发，按[窄修卡](../superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)完成实际同步后供最终美术候选使用；不改公共API或服务器。
+真暂停边界（R2）：仅Minecraft.isPaused为true时冻结本地租约年龄，不续样本、不复活已失效显示；当前世界同步、区块核查、坏包及卸载撤销仍执行。非真暂停的多人菜单正常计时，恢复后累计活动tick满20仍到期。已核实本地Pre在真暂停仍触发，[窄修卡](../superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)自动/独立审查通过并净同步main `93d0a20`、美术`2bece5b`，最终源/API入口见HANDOFF最新R2；公共API与服务器不改，视觉观察仍独立。
 
 客户端独立订阅既有`ReactorSurfaceSyncEvents.Update`及必要世界/区块事件，不修改L1。capture必须验证当前真实ClientLevel或既有AT公开所属世界的原生RenderChunkRegion；Ponder、未知包装、旧世界返回空。相关区块只用非加载查询，并记录真实chunk实例：卸载、替换、视距缩小、owner更换/拆坏、世界切换立即撤销，恢复要求新可靠样本。保留代次/revision水位，拒绝过期包和歧义归属。
 

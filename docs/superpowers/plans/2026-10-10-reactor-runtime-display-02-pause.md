@@ -1,10 +1,12 @@
 # ART-REACTOR-03-L2-R2 真暂停租约整改
 
-2026-10-10，主PM。状态：已核实根因，派发窄修；R1既有审查/自动证据保留，不重开动画或02R1视觉门。美术消费者可继续独立实现，最终候选在本次实际同步后绑定。
+2026-10-10，主PM。状态：自动与独立窄审通过，已净同步。实现`d51c2b4`、main `93d0a20`、美术`2bece5b`；10/10生命周期与一次增量assemble退出0，12/12源SHA及4/4净提交路径一致。实际入口见[HANDOFF最新R2](../../reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)。R1既有审查/自动证据保留，真暂停/恢复并入03视觉观察，02R1门保持独立。美术消费者可绑定本次已同步前置最终打包。
 
 ## 依据与目标
 
 美术负责人报告单人真正暂停时Pre tick仍推进20tick租约。本PM实际读取本地`build/moddev/artifacts/neoforge-21.1.219-sources.jar`：`Minecraft.java`1152、1159～1161行仍调用timer及tick，1785～1789行先无条件fireClientTickPre再检查pause，2556～2557行isPaused返回实际pause；`DeltaTracker.java`61～69及88～101、114～118行只在partial路径使用paused；`ClientHooks.java`1069～1070行直接发布Pre。现有`ReactorRuntimeClientEvents.onTick`无条件调用STATE.tick，服务端真暂停不续样本，确实可令可靠显示到期。此结论是本地控制流核实，尚非客户端人工复现。
+
+同一锁定来源中`net/minecraft/client/server/IntegratedServer.java`91～110行直接读取Minecraft.isPaused，有连接且暂停时走tickPaused而非super.tickServer，确认服务端结算与客户端Pre的时钟分离。
 
 只在`Minecraft.getInstance().isPaused()==true`时停止推进L2租约时钟。仍同步当前世界、执行reconcile、发布快照，卸载/换槽、坏包、owner失效和会话切换继续立即撤销。多人菜单isPaused为false仍正常计时。暂停不续样本、不复活过期或已撤销owner；恢复后从原租约年龄继续，非暂停累计满20tick到期，不补计暂停时长。
 

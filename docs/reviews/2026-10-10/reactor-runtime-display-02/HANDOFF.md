@@ -2,7 +2,13 @@
 
 2026-10-10，主逻辑PM。**L2自动验证、独立组合审查及唯一P2的R1窄复审通过；已审净源码已实际同步main及美术树，美术负责人可在本页写集内派发运行消费。** 此结论不关闭03动画或02R1视觉门，不启动装配台07教学或其他工程主线。
 
-后续R2：美术消费期间发现真正暂停仍触发客户端Pre而令租约到期。本PM已核实本地1.21.1控制流，按[真暂停租约窄修](../../../superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)实施；旧R1证据与公开API保持，消费者可继续独立实现，最终候选须绑定实际交付的R2。当前R2尚未通过审查/同步，不提前声称修复或客户端通过。
+**最新R2已交付：** 美术消费期间发现真正暂停仍触发客户端Pre而令租约到期，本PM核实本地1.21.1控制流后按[窄修卡](../../../superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)完成整改、独立窄审及实际同步。实现提交`d51c2b4bcb4ef6363b7fe84bd7e525d2ecd6c4a3`，main净源码`93d0a20a950d1e9eac5c7b77aa8fb767c3d320d3`，美术净源码`2bece5b09bf90951d158f45f068a81b38bf774e8`。消费者可据此执行最终定向测试/打包，公开入口与字段完全保持。下方R1证据作为历史保留，最终源清单改用本节R2。
+
+- R2只改Events和LifecycleTest：真暂停只冻结租约年龄，onTick仍同步世界、reconcile及发布；多人菜单未真暂停时正常计时，卸载/换槽/坏包/会话切换仍撤销，暂停不续租或复活旧样本。
+- 真实断言red为1/1失败，唯一green为10/10生命周期及增量assemble退出0，独立窄审无剩余问题。其他10源SHA未改，原服务端/投影/GameTest证据复用，未再构建或启动客户端。
+- 最新冻结入口在显示树`build/reports/art/ART-REACTOR-03-L2/R2/final-freeze-r2.json`，源码清单为`source-sha256-r2.json`；R2冻结JAR `create_nuclear_industry-0.1.0-R2.jar` SHA256 `c4b3ef4c55135017071deada00f52bef25faa87f2e80a1ecb36a35a3e3d9ad3e`。原API文本SHA仍为`177de2fc074b2fe9ffde92c8af1134466f9fc3d7ff3a351b2f1acb93e68a013a`；额外Events/State公共签名R1/R2也逐字节相同，SHA `1c0d96e2cf7a86f871a2713f43ad1297b692b4879fbc2623e16454b6e846a246`。
+- PM实际核对main与美术各12/12源码/测试/模板SHA匹配R2，净提交4/4路径一致，证据留于main `build/reports/art/ART-REACTOR-03-L2/R2/pm-sync-verification.json`。美术六消费者、素材、其他候选未暂存或覆盖；最终动画JAR尚待美术按本R2前置一次打包。main `build/libs`仍为下方R1历史制品，源同步未机械重复打包，不当作R2动画候选。
+- 真暂停/恢复客户端观察并入03动画最终视觉门，02R1独立视觉门保持未通过；本接口自动与独立窄审不关闭这两门，不重复已验收功能/Ponder或推进07。
 
 ## 源码与证据
 
