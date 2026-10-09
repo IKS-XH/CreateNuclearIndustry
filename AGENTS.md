@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- ART-REACTOR-03内部运行动画已由美术负责人冻结交付，主PM按[03候选登记](docs/reviews/2026-10-10/reactor-animation-03/HANDOFF.md)核对63/63冻结文件、16/16定向JUnit、唯一增量JAR、19项安装/打包资源及12/12共享R2源码，并复用一次独立规格/质量审查。候选留在美术树，源码与资源未合main；真实功率蓝辉、完整控制棒升降、库存液位/连续混色及真暂停恢复等待用户客户端观察，02R1材质连窗门独立保留。登记不关闭视觉门、不推进07或工程主线。
+
 - 美术消费报告L2真暂停租约缺陷，主PM核实锁定1.21.1客户端Pre在pause检查前触发后，按[R2窄修](docs/superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)完成自动与独立窄审：10/10生命周期、一次增量assemble及12/12源核对，main `93d0a20`、美术净同步`2bece5b`。真暂停只冻结租约年龄，世界/卸载/坏包撤销及公开ABI保持；原R1证据保留，最新冻结/API见HANDOFF R2，美术可绑定最终候选。暂停/恢复并入03视觉观察，不关闭02R1门或推进07。
 
 - 主PM已核实美术对话中用户2026-10-10直接要求反应堆内部模型/运行动画并确认按实际冷热库存连续混色。按[ART03-L2合同](docs/art/ART-REACTOR-03-INTERFACE.md)与[共享接口实施卡](docs/superpowers/plans/2026-10-10-reactor-runtime-display-02.md)完成必要只读运行投影及仅燃料noOcclusion显示适配；原批24/24定向JUnit及1/1真实仪表正常退出，R1生命周期6/6及独立窄复审关闭唯一P2，净源码main `cb123c9`、美术树`4cb0d7f`。按[实际API/消费写集HANDOFF](docs/reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)接续美术消费；前置不改反应堆玩法/L1/CT，不追认02R1或动画视觉通过，屏蔽装配台教学07仍已准备未派发。

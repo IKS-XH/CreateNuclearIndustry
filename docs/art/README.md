@@ -45,3 +45,9 @@ MC1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywhee
 美术负责人转交用户已确认的ART-REACTOR-02需求后，主PM直接核实确认并按并行授权完成[独立逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)。26/26定向JUnit、1/1真实仪表专用服及增量打包通过，独立审查无阻断；main `c5e5fc3`、美术树`8b83a1a`已净同步[编译API与02B写集交付](../reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)。02A资产独立记录，02B消费带上下文快照；不给外壳添加BE、不扩展固定5×5×5玩法。美术最终视觉门独立保持。
 
 ART-REACTOR-02B现已完成冻结交付，主PM已核对11/11定向JUnit、增量JAR、一次独立审查与14图集的来源/安装/打包一致性，见[候选登记](../reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)。源码与ART01/02A源稿保留在美术工作树的未提交候选，尚未合main；以美术候选说明进行客户端视觉观察。换热器五幕及R4已独立验收，不因该教学结果关闭美术视觉门。
+
+## 反应堆内部运行动画候选
+
+ART-REACTOR-03已基于[L2及真暂停R2](../reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)冻结运行消费，见[主PM候选登记](../reviews/2026-10-10/reactor-animation-03/HANDOFF.md)。主PM核对63/63冻结文件、16/16定向JUnit、唯一增量JAR、19项资源和12/12共享源码，复用一次独立规格/质量审查；未重复构建或启动客户端。
+
+候选源码、素材源与安装资源仍保留在美术树，未合main。按美术树`docs/art/ART-REACTOR-03-CANDIDATE.md`观察真实功率蓝辉、完整控制棒升降、库存液位与连续混色、透窗及暂停恢复。03动画与02R1材质连窗分别记录用户反馈，自动检查和已通过教学不代替视觉验收。

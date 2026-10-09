@@ -1,6 +1,6 @@
 # 项目文档入口
 
-**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，下一台准备屏蔽装配台教学。反应堆连接纹理在美术同级工作树定向整改，独立视觉门未通过，其他主线暂缓。
+**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，下一台准备屏蔽装配台教学。反应堆内部运行动画候选已登记，动画与材质连窗分别等待用户视觉观察，其他主线暂缓。
 
 ## 当前执行与接续
 
@@ -10,6 +10,7 @@
 | 屏蔽装配台思索07 | [三幕准备计划](./superpowers/plans/2026-10-10-device-ponder-07-assembly.md)：搭建与接口、新燃料装配、乏燃料封装；前置已通过，尚未派发实现，不新增玩法 |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
+| 反应堆内部运行动画03 | [候选登记](./reviews/2026-10-10/reactor-animation-03/HANDOFF.md)：63/63冻结文件、16/16定向JUnit、增量JAR和19项资源绑定一致，独立审查通过；真实功率蓝辉、完整棒体升降和库存混色待客户端观察，未合main，02R1视觉门独立保留 |
 | 反应堆运行动画共享前置 | 用户直接确认动画及按库存连续混色；[L2实物API/写集交付](./reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)自动与独立审查通过，main `cb123c9`、美术净同步`4cb0d7f`；美术按边界接运行消费者，动画与02R1视觉门独立保留 |
 | L2真暂停租约窄修 | [R2任务](./superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)自动与独立窄审通过，main `93d0a20`、美术净同步`2bece5b`；10/10定向生命周期、一次增量assemble和12/12源核对；最新冻结/API见HANDOFF R2，暂停/恢复观察并入美术视觉门 |
 | 成型反应堆连接纹理 | [L1实际API交付](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)已净同步；[02B候选登记](./reviews/2026-10-09/reactor-connected-texture-02b/HANDOFF.md)自动证据保留。用户反馈成型材质与窗组内部框需整改，[02R1范围补充](./art/ART-REACTOR-02R1-COORDINATION.md)已实际同步美术树，视觉门未通过，源码未合main；教学验收不覆盖该门 |
