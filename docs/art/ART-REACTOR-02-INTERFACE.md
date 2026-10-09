@@ -1,6 +1,6 @@
 # ART-REACTOR-02：成型连接纹理接入合同
 
-日期：2026-10-09。维护者：主逻辑PM。状态：消费语义、资源路径与分工写集确定；[逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)成卡，实际启动/交付以任务状态与报告为准，美术02A资产准备独立继续。
+日期：2026-10-09。维护者：主逻辑PM。状态：[逻辑前置L1](../superpowers/plans/2026-10-09-reactor-surface-display-01.md)已在`E:/MyMC/NewMod/Create_NuclearIndustry-reactor-display`实际启动，基线`000f8e8`，执行者`/root/reactor_surface_display_impl`；尚未交付可消费API。交付位置预定`docs/reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md`。美术02A资产准备与审查独立进行，02B等待实际接口门。
 
 ## 来源、前置与边界
 

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** 用户任命的PM依`superpowers:subagent-driven-development`派发一个实现任务及一轮独立审查；执行者只交未提交改动。仓库权限、精简验证与首发前存档边界优先于技能中的提交/全量测试步骤。
 
-**任务ID / 状态：** ART-REACTOR-02-L1 / 待实际派发；本卡与美术02A独立执行，不改变换热器五幕待播放门。
+**任务ID / 状态：** ART-REACTOR-02-L1 / 已派发并启动执行者`/root/reactor_surface_display_impl`，`gpt-6.1-sol/high`（跨BE同步、客户端生命周期与模型线程，提升审计强度）；工作树HEAD `000f8e8`。本卡与美术02A独立执行，不改变换热器五幕待播放门；尚未交付可消费API。
 **Goal:** 交付美术CT接入需要的服务端权威表面描述与模型线程安全只读快照，成型可连接、失效及卸载及时撤销。
 **Architecture:** 从现有扫描缓存投影表面，搭载仪表现有BE更新；客户端按世界会话发布不可变成员索引并刷新受影响区段。不增设外壳BE、不另造结构扫描、不改反应堆运行规则。
 **Tech Stack:** Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6，锁定依赖不变。
