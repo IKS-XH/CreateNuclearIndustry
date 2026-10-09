@@ -35,6 +35,8 @@ import com.iksxh.create_nuclear_industry.structure.ReactorDisassemblyPlan;
 import com.iksxh.create_nuclear_industry.structure.ReactorSurfaceDescriptor;
 import com.iksxh.create_nuclear_industry.structure.ReactorSurfaceDescriptorFactory;
 import com.iksxh.create_nuclear_industry.structure.ReactorSurfaceSyncEvents;
+import com.iksxh.create_nuclear_industry.structure.ReactorRuntimeDescriptor;
+import com.iksxh.create_nuclear_industry.structure.ReactorRuntimeDescriptorFactory;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -91,6 +93,13 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /** 每次新建 BE 具有独立展示身份，不持久化到库存或热工快照。 */
     private final java.util.UUID surfaceGeneration = java.util.UUID.randomUUID();
     private ReactorSurfaceDescriptor surfaceDescriptor;
+    private static final String RUNTIME_KEY = "ReactorRuntime";
+    private ReactorRuntimeDescriptor runtimeDescriptor;
+    private long runtimeRevision;
+    private long runtimeSample;
+    private int runtimeTicksSinceLastSync;
+    /** 正式结算内的 hydrate/setSnapshot 只能发送旧完整样本；外部写入必须撤销。 */
+    private boolean runtimeSettlementInProgress;
     private boolean surfaceChunkUnloaded;
     private final Set<ReactorPortBlockEntity> boundPorts =
             Collections.newSetFromMap(new IdentityHashMap<>());
@@ -110,6 +119,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             throw new IllegalStateException("reactor state can only be changed on the server");
         }
         this.snapshot = Objects.requireNonNull(snapshot, "reactor snapshot is required");
+        if (!runtimeSettlementInProgress) invalidateRuntimeDescriptor();
         setChanged();
         if (level != null && !level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
@@ -185,6 +195,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             throw new IllegalStateException("structure cache can only be changed on the server");
         }
         clearControlRodTelemetry();
+        invalidateRuntimeDescriptor();
         structureScan = scan.contract();
         structureOrigin = scan.origin();
         structureScanCount++;
@@ -206,6 +217,23 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /** 返回当前实例最近收到或生成的不可变显示信封；未知数据以 Optional.empty 表示。 */
     public java.util.Optional<ReactorSurfaceDescriptor> surfaceDescriptor() {
         return java.util.Optional.ofNullable(surfaceDescriptor);
+    }
+
+    /** 服务端最新完整结算或客户端最近收到信封；不可用样本不能用于动画，不触发计算。 */
+    public java.util.Optional<ReactorRuntimeDescriptor> runtimeDescriptor() {
+        return java.util.Optional.ofNullable(runtimeDescriptor);
+    }
+
+    /** 撤销仅影响 L2，保留权威快照、旧遥测和 L1；重复早退不重复发送相同失效。 */
+    private void invalidateRuntimeDescriptor() {
+        if (runtimeDescriptor == null || !runtimeDescriptor.available()) return;
+        if (level != null && level.isClientSide) { runtimeDescriptor = null; return; }
+        runtimeDescriptor = ReactorRuntimeDescriptor.unavailable(runtimeDescriptor.dimension(), worldPosition,
+                surfaceGeneration, ++runtimeRevision, surfaceDescriptor == null ? 0 : surfaceDescriptor.revision(),
+                runtimeSample, level == null ? runtimeDescriptor.serverGameTime() : Math.max(0, level.getGameTime()));
+        runtimeTicksSinceLastSync = 0;
+        if (level != null && !level.isClientSide)
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
     }
 
     /** 仅扫描缓存变化驱动表面投影；相同几何保留对象及版本，避免遥测触发模型全域刷新。 */
@@ -484,57 +512,89 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
 
     /** 执行一个服务端 tick 的完整 P1 反应堆权威循环。 */
     public boolean tickReactor() {
-        if (level == null || level.isClientSide || !structureScan.valid()
-                || !snapshotMatchesStructure()) {
-            return false;
-        }
-        if (!hydrateFuelProjectionsFromPorts()) {
-            return false;
-        }
-        Map<CoreColumnPosition, ItemStack> beforePortItems = captureFuelPortItems();
-        if (beforePortItems == null) {
-            return false;
-        }
-        ReactorSimulationParameters parameters = simulationParameters();
-        ReactorServerTick.Result result = ReactorServerTick.advance(
-                snapshot,
-                parameters,
-                coolantInput()
-        );
-        Map<CoreColumnPosition, ItemStack> nextPortItems = prepareFuelPortCommit(
-                beforePortItems, result.snapshot());
-        if (nextPortItems == null) {
-            return false;
-        }
-        // 只有从未完成状态跨入 COMPLETE 才允许发布；持久化标记覆盖重复 tick 和重载。
-        boolean enteredComplete = !snapshot.meltdownEventPublished()
-                && snapshot.meltdownProgressTicks() < parameters.meltdownCountdownTicks()
-                && result.meltdown().status() == MeltdownStatus.COMPLETE;
-        ReactorSnapshot nextSnapshot = enteredComplete
-                ? result.snapshot().withMeltdownEventPublished(true)
-                : result.snapshot();
-        boolean stateChanged = !nextSnapshot.equals(snapshot);
-        boolean portChanged = !sameFuelPortItems(beforePortItems, nextPortItems);
-        for (Map.Entry<CoreColumnPosition, ItemStack> entry : nextPortItems.entrySet()) {
-            ReactorPortBlockEntity port = findRefuelingPort(entry.getKey());
-            if (port != null) {
-                port.setFuelAssembly(entry.getValue());
+        boolean previousSettlementScope = runtimeSettlementInProgress;
+        runtimeSettlementInProgress = true;
+        try {
+            if (level == null || level.isClientSide || !structureScan.valid()
+                    || !snapshotMatchesStructure()) {
+                invalidateRuntimeDescriptor();
+                return false;
             }
-        }
-        if (stateChanged) {
-            setSnapshot(nextSnapshot);
-        }
-        if (enteredComplete) {
-            ReactorMeltdownEvents.publish(
-                    ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE,
-                    level,
-                    structureOrigin,
-                    worldPosition,
-                    nextSnapshot
+            if (!hydrateFuelProjectionsFromPorts()) {
+                invalidateRuntimeDescriptor();
+                return false;
+            }
+            Map<CoreColumnPosition, ItemStack> beforePortItems = captureFuelPortItems();
+            if (beforePortItems == null) {
+                invalidateRuntimeDescriptor();
+                return false;
+            }
+            ReactorSimulationParameters parameters = simulationParameters();
+            ReactorServerTick.CoolantInput tickCoolantInput = coolantInput();
+            ReactorServerTick.Result result = ReactorServerTick.advance(
+                    snapshot,
+                    parameters,
+                    tickCoolantInput
             );
+            Map<CoreColumnPosition, ItemStack> nextPortItems = prepareFuelPortCommit(
+                    beforePortItems, result.snapshot());
+            if (nextPortItems == null) {
+                invalidateRuntimeDescriptor();
+                return false;
+            }
+            // 只有从未完成状态跨入 COMPLETE 才允许发布；持久化标记覆盖重复 tick 和重载。
+            boolean enteredComplete = !snapshot.meltdownEventPublished()
+                    && snapshot.meltdownProgressTicks() < parameters.meltdownCountdownTicks()
+                    && result.meltdown().status() == MeltdownStatus.COMPLETE;
+            ReactorSnapshot nextSnapshot = enteredComplete
+                    ? result.snapshot().withMeltdownEventPublished(true)
+                    : result.snapshot();
+            boolean stateChanged = !nextSnapshot.equals(snapshot);
+            boolean portChanged = !sameFuelPortItems(beforePortItems, nextPortItems);
+            for (Map.Entry<CoreColumnPosition, ItemStack> entry : nextPortItems.entrySet()) {
+                ReactorPortBlockEntity port = findRefuelingPort(entry.getKey());
+                if (port != null) {
+                    port.setFuelAssembly(entry.getValue());
+                }
+            }
+            if (stateChanged) {
+                setSnapshot(nextSnapshot);
+            }
+            if (enteredComplete) {
+                ReactorMeltdownEvents.publish(
+                        ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE,
+                        level,
+                        structureOrigin,
+                        worldPosition,
+                        nextSnapshot
+                );
+            }
+            // 提交和事件保持原顺序；只有全部正式阶段完成才冻结同龄样本，write 永远不拼装字段。
+            boolean runtimeRecovered = runtimeDescriptor == null || !runtimeDescriptor.available();
+            try {
+                ReactorRuntimeDescriptor nextRuntime = ReactorRuntimeDescriptorFactory.project(surfaceDescriptor, structureScan, result,
+                        tickCoolantInput, runtimeRevision + 1, runtimeSample + 1, Math.max(0, level.getGameTime()));
+                runtimeDescriptor = nextRuntime;
+                runtimeRevision = nextRuntime.revision();
+                runtimeSample = nextRuntime.sample();
+                runtimeTicksSinceLastSync++;
+            } catch (RuntimeException displayFailure) {
+                // 协议预算或投影缺口只撤销显示，不能把已提交正式 tick 变成玩法失败。
+                invalidateRuntimeDescriptor();
+            }
+            publishTelemetry(ReactorInstrumentTelemetry.from(result));
+            // 原遥测包已经携带新完整样本时无需追加；零变化成功 tick 仍按五成功 tick 续租。
+            if (runtimeTicksSinceLastSync > 0 && (runtimeRecovered || runtimeTicksSinceLastSync >= 5)) {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                runtimeTicksSinceLastSync = 0;
+            }
+            return stateChanged || portChanged;
+        } catch (RuntimeException exception) {
+            invalidateRuntimeDescriptor();
+            throw exception;
+        } finally {
+            runtimeSettlementInProgress = previousSettlementScope;
         }
-        publishTelemetry(ReactorInstrumentTelemetry.from(result));
-        return stateChanged || portChanged;
     }
 
     /**
@@ -567,6 +627,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         lastSentTelemetry = telemetry;
         telemetryTicksSinceLastSync = 0;
         if (level != null && !level.isClientSide) {
+            runtimeTicksSinceLastSync = 0;
             setChanged();
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
@@ -1342,6 +1403,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /** 客户端清理区块先调用此钩子再 setRemoved；显式保留卸载原因，不依赖事件总线次序。 */
     @Override
     public void onChunkUnloaded() {
+        invalidateRuntimeDescriptor();
         surfaceChunkUnloaded = true;
         ReactorSurfaceSyncEvents.publish(this, true, true);
         super.onChunkUnloaded();
@@ -1355,6 +1417,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      */
     @Override
     public void invalidate() {
+        invalidateRuntimeDescriptor();
         ReactorSurfaceSyncEvents.publish(this, true, surfaceChunkUnloaded);
         // 区块卸载不是安全重扫，不能借生命周期事件改变未成型取料锁。
         clearPortBindings(false);
@@ -1428,6 +1491,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             tag.put(STRUCTURE_SUMMARY_KEY, structureSummary().writeSyncTag());
             tag.put(TELEMETRY_KEY, ReactorInstrumentTelemetryNbtCodec.encode(telemetry));
             if (surfaceDescriptor != null) tag.put(SURFACE_KEY, surfaceDescriptor.encode());
+            if (runtimeDescriptor != null) tag.put(RUNTIME_KEY, runtimeDescriptor.encode());
         }
     }
 
@@ -1474,7 +1538,13 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             surfaceDescriptor = ReactorSurfaceDescriptor.decode(
                     tag.contains(SURFACE_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND)
                             ? tag.getCompound(SURFACE_KEY) : null).orElse(null);
+            runtimeDescriptor = ReactorRuntimeDescriptor.decode(
+                    tag.contains(RUNTIME_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND)
+                            ? tag.getCompound(RUNTIME_KEY) : null).orElse(null);
             ReactorSurfaceSyncEvents.publish(this, false);
+        } else {
+            // 服务端加载仅恢复权威状态，显示需等待本实例新的成功结算。
+            runtimeDescriptor = null;
         }
     }
 
@@ -1485,6 +1555,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         tag.put(STRUCTURE_SUMMARY_KEY, structureSummary().writeSyncTag());
         tag.put(TELEMETRY_KEY, ReactorInstrumentTelemetryNbtCodec.encode(telemetry));
         if (surfaceDescriptor != null) tag.put(SURFACE_KEY, surfaceDescriptor.encode());
+        if (runtimeDescriptor != null) tag.put(RUNTIME_KEY, runtimeDescriptor.encode());
         return tag;
     }
 
