@@ -59,6 +59,13 @@ public final class P1PonderPlugin implements PonderPlugin {
             "turbine_output_shaft", "turbine_controller", "turbine_window"
     );
 
+    /** 核换热器五幕依次介绍本体串联、Create锅炉供热、锅炉内置、加工和蒸汽冷凝。 */
+    public static final List<String> HEAT_EXCHANGER_SCENE_IDS = List.of(
+            "nuclear_heat_exchanger_introduction", "nuclear_heat_exchanger_heating",
+            "nuclear_heat_exchanger_boiler", "nuclear_heat_exchanger_processing",
+            "nuclear_heat_exchanger_condensation"
+    );
+
     /**
      * P1 条目列表故意排除 P0 探针、保留的样例外壳、纯材料和不可直接放置的控制棒组件。
      */
@@ -82,7 +89,7 @@ public final class P1PonderPlugin implements PonderPlugin {
         return CreateNuclearIndustry.MOD_ID;
     }
 
-    /** 保留离心机和反应堆原有绑定，并将锅炉部件挂接到本批三条独立故事线。 */
+    /** 保留原教学绑定，并仅将换热器方块挂接到本批五条故事线。 */
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         var reactorEntries = helper.forComponents(DIRECT_ENTRY_IDS.stream()
@@ -120,6 +127,18 @@ public final class P1PonderPlugin implements PonderPlugin {
                 TurbinePonderScenes::steamTurbineOperation);
         turbineEntries.addStoryBoard(componentId(TURBINE_SCENE_IDS.get(2)),
                 TurbinePonderScenes::steamTurbineEfficiency);
+
+        var heatExchanger = helper.forComponents(componentId("nuclear_heat_exchanger"));
+        heatExchanger.addStoryBoard(componentId(HEAT_EXCHANGER_SCENE_IDS.get(0)),
+                HeatExchangerPonderScenes::nuclearHeatExchangerIntroduction);
+        heatExchanger.addStoryBoard(componentId(HEAT_EXCHANGER_SCENE_IDS.get(1)),
+                HeatExchangerPonderScenes::nuclearHeatExchangerHeating);
+        heatExchanger.addStoryBoard(componentId(HEAT_EXCHANGER_SCENE_IDS.get(2)),
+                HeatExchangerPonderScenes::nuclearHeatExchangerBoiler);
+        heatExchanger.addStoryBoard(componentId(HEAT_EXCHANGER_SCENE_IDS.get(3)),
+                HeatExchangerPonderScenes::nuclearHeatExchangerProcessing);
+        heatExchanger.addStoryBoard(componentId(HEAT_EXCHANGER_SCENE_IDS.get(4)),
+                HeatExchangerPonderScenes::nuclearHeatExchangerCondensation);
     }
 
     /** 将 P1 内容路径转换为本模组命名空间下的 Ponder 组件 ID。 */
