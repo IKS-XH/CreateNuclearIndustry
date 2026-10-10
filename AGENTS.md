@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 用户2026-10-10明确报告“屏蔽装配台的思索手动测试通过了”，按[07-R1验收](/E:/MyMC/NewMod/Create_NuclearIndustry/docs/reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)关闭仅搭建与接口一页的播放门，main净教学提交`3f17657`。7个集成路径与已审单页候选`0a4e1e5`的Git内容及冻结源SHA一致，复用3/3定向合同、一次增量assemble和一次独立窄审，不重跑构建/测试。原三幕候选与证据保留为历史，两页具体配方场景已删除；后续思索只介绍用法，不讲具体配方。其他工程主线暂缓，独立美术视觉/鼠标门不由本教学验收关闭。
+
 - ART-REACTOR-03R3液体浸泡及顶面控件组合已由主PM按[03R3登记](docs/reviews/2026-10-10/reactor-animation-03/HANDOFF.md#03r3组合候选登记)绑定：6交付＋77证据＋12只读依赖、17生产class及19来源/安装/JAR一致，23/23最终原始JUnit、18秒exit0，复用唯一独立规格/质量窄审，无必改项。按[共享补充](docs/art/ART-REACTOR-03R3-COORDINATION.md)仅六面法向移到真实0/1面，共享非几何逐字保持；液体只扩显示包络与顶点alpha/合法采光，不增容量或改变库存。未重复实现/测试/构建，源码仍未合main。游戏液体/Font/GPU/顶面鼠标待用户复看，02R1与装配台07-R1单页门独立；旧03/R1/R2候选证据保持。
 
 - ART-REACTOR-03R2方杆/滑块组合候选已由主PM按[03登记补充](docs/reviews/2026-10-10/reactor-animation-03/HANDOFF.md#03r2组合候选登记)绑定：41交付文件、两OBJ及三个class/JAR、6/6最终原始JUnit和13共享保护一致，复用一次独立组合窄审，无必改项。按[共享补充](docs/art/ART-REACTOR-03R2-COORDINATION.md)仅改变0.6格方杆及显示/命中同源几何，六面和0..100/权威提交/锁定保持；源码仍未合main，未重复实现、测试或构建。03R2真实六面视觉/鼠标、03R1液体及02R1材质门独立待验；装配台07仍仅待三幕播放，其他主线暂缓。
