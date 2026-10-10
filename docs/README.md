@@ -1,13 +1,13 @@
 # 项目文档入口
 
-**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，屏蔽装配台三幕教学已交[播放候选](./reviews/2026-10-10/shielded-assembly-ponder-07/CANDIDATE.md)，等待本台观察。反应堆运行动画根据用户视觉反馈做03R1定向整改，材质连窗另待验收，其他主线暂缓。
+**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，屏蔽装配台按用户要求删去两页配方场景，只保留搭建与接口；[07-R1单页候选](./reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)已通过定向检查和独立审查，等待本页播放。反应堆运行动画根据用户视觉反馈做03R1定向整改，材质连窗另待验收，其他主线暂缓。
 
 ## 当前执行与接续
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
 | 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
-| 屏蔽装配台思索07 | [三幕实施计划](./superpowers/plans/2026-10-10-device-ponder-07-assembly.md)：搭建与接口、新燃料装配、乏燃料封装；3/3定向合同、增量打包与独立审查通过，[候选`d6fd20a`](./reviews/2026-10-10/shielded-assembly-ponder-07/CANDIDATE.md)待本台播放，尚未合main，不新增玩法 |
+| 屏蔽装配台思索07-R1 | [单页整改](./superpowers/plans/2026-10-10-device-ponder-07-assembly-usage-only.md)：仅保留搭建与接口，思索只讲用法、不讲具体配方；3/3定向合同、增量打包与独立窄审通过，[候选`0a4e1e5`](./reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)待本页播放，尚未合main |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
 | 反应堆内部运行动画03 | [03R2组合候选登记](./reviews/2026-10-10/reactor-animation-03/HANDOFF.md#03r2组合候选登记)：0.6格方杆与滑块避让，6/6定向检查、增量JAR及一次独立窄审通过；41交付与5个JAR条目绑定一致。源码未合main，03R2六面操作、03R1液体及02R1材质视觉门独立待验；历史候选证据保留 |
