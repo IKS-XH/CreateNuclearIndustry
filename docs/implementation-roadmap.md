@@ -40,7 +40,7 @@
 
 6. 用户2026-10-11明确要求合并美术，按[集成计划](./superpowers/plans/2026-10-11-art-integration.md)合入ART01、02R1、03R3和04，main `fba424fc`；原定向检查与独立审查复用，仅新增一次assemble和JAR绑定。主工程较新的功能/教学保留，主目录JAR更新；本项是用户授权集成，不改写原客户端视觉记录或触发下一项工程工作。
 
-7. 用户2026-10-11明确开始[干式贮存架思索08](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)，单页讲存取、漏斗、占用与满架，复用正式贮存功能。实施与一次独立窄审后交单页播放，不讲配方、不改其他教学或推进工程主线。
+7. 用户2026-10-11明确开始[干式贮存架思索08](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)，单页讲存取、漏斗、占用与满架，复用正式贮存功能。净候选`f87185a`的10/10定向检查、最终增量assemble及一次独立窄审通过；已交[单页播放](./reviews/2026-10-11/dry-storage-ponder-08/CANDIDATE.md)，尚未合main，不讲配方、不改其他教学或推进工程主线。
 
 用户授权PM自动派发已确认且范围清楚的任务；遇新玩法决策或人工门保存证据并停止推进，不自动改做辅助项目。本批候选目录复用 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration`，其他同级树保留历史；主目录保留已验收功能。
 
