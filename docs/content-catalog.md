@@ -289,7 +289,7 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 | `已验收`一页 | `shielded_assembly_station` | [07-R1播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)：仅讲2×2×2整台放置、主控底部动力及四周/顶部物流接口；两页具体配方场景已删除。复用3/3定向合同、增量打包与独立窄审，main净教学提交`3f17657`，7路径与冻结候选一致。正式配方与加工规则保持。 |
 | `已验收`五幕 | `nuclear_heat_exchanger` | [05播放验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)：本体/直列、Create锅炉供热、锅炉内置、盆/炉持续核热、蒸汽冷凝；拒收超临界蒸汽，不演示取消的降级供热路线 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体接口和后置状态，不展示首发不存在的冷却转换 |
-| `P2` | `dry_storage_rack` | 已封装乏燃料桶的装架、完整性检查和“贮存不等于消除辐射” |
+| `实施中`一页 | `dry_storage_rack` | [08单页用法计划](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)：封装桶手持右击存入、空手右击取出、顶部/四侧输入与底部只输出、护目镜占用及满架等待。只教现有用法，不讲具体配方或未实现辐射效果；独立审查后待播放验收。 |
 | `P2` | `blaze_reactor_manager` | 烈焰人燃烧室安装、仪表绑定、逐棒调节、红色阈值向 `reactor_instrument_port` 输出 SCRAM 信号 |
 | `P3` | `shielded_disassembler` | 屏蔽环境、冷却乏燃料组件输入、乏燃料棒/受污染格架输出及普通机械手拒绝 |
 | `P3` | `sealed_reprocessor` | 处理介质、乏燃料输入、再生燃料与高放废物/受污染包壳同步产出 |
