@@ -66,3 +66,19 @@ PM实核证据保存于主树`build/reports/art/ART-REACTOR-03R2/pm-candidate-bi
 ## 03R3用户反馈与共享窄修
 
 2026-10-10用户反馈控件只在侧面、成型后无法调节，以及液体过透明且燃料没有浸泡感。主PM核实真实Create的最终框/文字位移后确认R2顶面中心内缩造成遮挡，原6/6未覆盖最终绘制深度；上文R2内部检查和冻结记录保留，不能据此关闭本次视觉门。按[03R3共享补充](../../../art/ART-REACTOR-03R3-COORDINATION.md)只续批原几何及专属测试路径；本批整改候选尚未交，不合main。液体消费由美术既有权限定向整改，不改L2、容量、实际库存或资源。
+
+## 03R3组合候选登记
+
+2026-10-10，美术负责人交付液体浸泡感及顶面控件整改组合，主PM完成来源登记。**本节为当前03R3候选；原03/03R1/03R2的冻结、检查和制品一致结论保留为历史，不代表当前build/libs仍等于旧JAR。** 本次源码仍在美术树，尚未合main；真实客户端视觉与操作门未通过。
+
+- 美术冻结及本次登记前HEAD为`a6792e6dc55aebc4b6c856ada591aaf8d7838847`，仅PM前序文档同步；后续纯登记文档提交不改变实现身份。
+- [当前候选与定向复看](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/ART-REACTOR-03R3-CANDIDATE.md)、[本批任务](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/tasks/ART-REACTOR-03R3.md)、[实施报告](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/reports/ART-REACTOR-03R3.md)、[唯一独立组合窄审](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/reports/ART-REACTOR-03R3-REVIEW.md)。规格与内部质量通过、必改项无；审查报告SHA256 `b30be9699608794be39af509c61fa2dd232706b22eea29fba5362aba61d37758`。
+- [冻结清单](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-REACTOR-03R3/frozen-manifest.json)：6交付、77证据、12只读依赖，共95项，SHA256 `4de2f5595eb8ec8fc6bfbbc4c850504f3d297759bf4f4b539eae5e4ebdbdfc61`。
+- [冻结JAR](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-REACTOR-03R3/candidate/create_nuclear_industry-0.1.0-ART-REACTOR-03R3.jar)：2,477,690字节，SHA256 `3a52c6cb61ed422ce94faa92a959ca0d272d7710388f8de099d1d02ca3bcce04`，登记时与美术树build/libs一致。
+- PM实际读取合同、实施及独立报告、最终日志/退出值和两份XML；最终为液体15＋控件8＝23项、0失败/错误/跳过，唯一最终增量test+jar18秒exit0。实时核95项冻结SHA、3生产源/17编译class与JAR、19来源/安装/打包以及共享非几何逐字保持。111保护和1056资源保持结论复用唯一独立审查；未重跑其矩阵、旧套件、构建或预览，没有另作视觉审查。PM记录在主树`.superpowers/sdd/2026-10-10-art-reactor-03r3/pm-binding-check.json`。
+
+本批仅两液体客户端类、共享Behaviour六面法向坐标及两专属测试。液体alpha提高、依原合法格分层液位扩展燃料视觉包络，再合并裁去内部面；采光取同层合法空气格的当前世界光，不增库存容量、不强制全亮。共享显示/命中锚点落到真实0/1面，原切向、尺度、六面、范围0..100、权威提交及锁定保持。旧材质/模型/SVG、服务端库存、热工、L2和鼠标协议不变。
+
+完整TextValueBox在无Minecraft单例的JUnit环境有实际NPE证据；定向断言调用生产transform并按锁定原生后置Pose矩阵核框角及文字基线深度，不代表真实Font/GPU渲染或鼠标体验通过。三张离线图的规格/质量观察复用唯一审查，游戏透窗排序、光照、浸泡边界及顶面实际操作仍待用户。
+
+请按美术候选说明重启该树现有客户端，观察满/部分液位、冷热混色和燃料露出分界，以及完整外壳下的驱动器顶面角落文字/调节；02R1材质连窗与屏蔽装配台07-R1单页教学各自独立。登记只写PM文档/Git，未修改或提交美术实现、素材、负责人计划、客户端或存档；不推进其他工程主线。

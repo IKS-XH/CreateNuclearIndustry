@@ -15,7 +15,7 @@
 
 ## 项目治理
 
-- 主PM已直接核实用户2026-10-10反馈顶面控件被遮挡，按[03R3共享窄修](docs/art/ART-REACTOR-03R3-COORDINATION.md)仅将原Behaviour的CornerTransform六面法向坐标与原专属测试继续派给同一美术执行者；真实面0/1锚点修复native后置绘制深度，切向/scale/原命中/0..100/权威提交/锁定保持。原03R2green/候选完整保留但不证明此缺陷解决，视觉门未通过；美术液体显示不改L2/capacity/实际库存，独立教学07-R1只待其单页门。
+- ART-REACTOR-03R3液体浸泡及顶面控件组合已由主PM按[03R3登记](docs/reviews/2026-10-10/reactor-animation-03/HANDOFF.md#03r3组合候选登记)绑定：6交付＋77证据＋12只读依赖、17生产class及19来源/安装/JAR一致，23/23最终原始JUnit、18秒exit0，复用唯一独立规格/质量窄审，无必改项。按[共享补充](docs/art/ART-REACTOR-03R3-COORDINATION.md)仅六面法向移到真实0/1面，共享非几何逐字保持；液体只扩显示包络与顶点alpha/合法采光，不增容量或改变库存。未重复实现/测试/构建，源码仍未合main。游戏液体/Font/GPU/顶面鼠标待用户复看，02R1与装配台07-R1单页门独立；旧03/R1/R2候选证据保持。
 
 - 用户2026-10-10要求屏蔽装配台思索删除后两页配方场景，只介绍用法；按[07-R1定向整改](docs/superpowers/plans/2026-10-10-device-ponder-07-assembly-usage-only.md)仅保留搭建与接口一页，两幕代码/双语/模板/生成路径已清除。3/3定向合同、一次增量assemble和一次独立窄审通过，6源、保留模板及5个JAR入口绑定一致；[单页候选`0a4e1e5`](docs/reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)留在逻辑树，尚未合main，只待本页播放。旧三幕候选与证据保留，独立美术门与其他主线状态保持。后续思索不讲具体配方，本批不自动重做其他已验收教学。
 
