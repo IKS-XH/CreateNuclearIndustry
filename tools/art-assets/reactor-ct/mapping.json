@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "ct_type": "RECTANGLE",
+  "tile_size": 16,
+  "sheet_size": 4,
+  "isolated_index": 12,
+  "contexts": [
+    {
+      "index": 0,
+      "column": 0,
+      "row": 0,
+      "up": false,
+      "down": true,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 1,
+      "column": 1,
+      "row": 0,
+      "up": false,
+      "down": true,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 2,
+      "column": 2,
+      "row": 0,
+      "up": false,
+      "down": true,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 3,
+      "column": 3,
+      "row": 0,
+      "up": false,
+      "down": true,
+      "left": true,
+      "right": false
+    },
+    {
+      "index": 4,
+      "column": 0,
+      "row": 1,
+      "up": true,
+      "down": true,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 5,
+      "column": 1,
+      "row": 1,
+      "up": true,
+      "down": true,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 6,
+      "column": 2,
+      "row": 1,
+      "up": true,
+      "down": true,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 7,
+      "column": 3,
+      "row": 1,
+      "up": true,
+      "down": true,
+      "left": true,
+      "right": false
+    },
+    {
+      "index": 8,
+      "column": 0,
+      "row": 2,
+      "up": true,
+      "down": false,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 9,
+      "column": 1,
+      "row": 2,
+      "up": true,
+      "down": false,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 10,
+      "column": 2,
+      "row": 2,
+      "up": true,
+      "down": false,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 11,
+      "column": 3,
+      "row": 2,
+      "up": true,
+      "down": false,
+      "left": true,
+      "right": false
+    },
+    {
+      "index": 12,
+      "column": 0,
+      "row": 3,
+      "up": false,
+      "down": false,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 13,
+      "column": 1,
+      "row": 3,
+      "up": false,
+      "down": false,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 14,
+      "column": 2,
+      "row": 3,
+      "up": false,
+      "down": false,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 15,
+      "column": 3,
+      "row": 3,
+      "up": false,
+      "down": false,
+      "left": true,
+      "right": false
+    }
+  ],
+  "assets": [
+    {
+      "name": "reactor_casing_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_casing_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_casing_side",
+      "source_directory": "sources/reactor_casing_side",
+      "atlas": "generated/reactor_casing_side_ct.png"
+    },
+    {
+      "name": "reactor_casing_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_casing_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_casing_top",
+      "source_directory": "sources/reactor_casing_top",
+      "atlas": "generated/reactor_casing_top_ct.png"
+    },
+    {
+      "name": "reactor_casing_bottom",
+      "original_sprite": "create_nuclear_industry:block/reactor_casing_bottom",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_casing_bottom",
+      "source_directory": "sources/reactor_casing_bottom",
+      "atlas": "generated/reactor_casing_bottom_ct.png"
+    },
+    {
+      "name": "reactor_hot_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_hot_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_hot_port_side",
+      "source_directory": "sources/reactor_hot_port_side",
+      "atlas": "generated/reactor_hot_port_side_ct.png"
+    },
+    {
+      "name": "reactor_hot_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_hot_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_hot_port_top",
+      "source_directory": "sources/reactor_hot_port_top",
+      "atlas": "generated/reactor_hot_port_top_ct.png"
+    },
+    {
+      "name": "reactor_cold_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_cold_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_cold_port_side",
+      "source_directory": "sources/reactor_cold_port_side",
+      "atlas": "generated/reactor_cold_port_side_ct.png"
+    },
+    {
+      "name": "reactor_cold_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_cold_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_cold_port_top",
+      "source_directory": "sources/reactor_cold_port_top",
+      "atlas": "generated/reactor_cold_port_top_ct.png"
+    },
+    {
+      "name": "reactor_window",
+      "original_sprite": "create_nuclear_industry:block/reactor_window",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_window",
+      "source_directory": "sources/reactor_window",
+      "atlas": "generated/reactor_window_ct.png"
+    },
+    {
+      "name": "reactor_instrument_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_instrument_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_instrument_port_side",
+      "source_directory": "sources/reactor_instrument_port_side",
+      "atlas": "generated/reactor_instrument_port_side_ct.png"
+    },
+    {
+      "name": "reactor_instrument_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_instrument_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_instrument_port_top",
+      "source_directory": "sources/reactor_instrument_port_top",
+      "atlas": "generated/reactor_instrument_port_top_ct.png"
+    },
+    {
+      "name": "reactor_refueling_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_refueling_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_refueling_port_side",
+      "source_directory": "sources/reactor_refueling_port_side",
+      "atlas": "generated/reactor_refueling_port_side_ct.png"
+    },
+    {
+      "name": "reactor_refueling_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_refueling_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_refueling_port_top",
+      "source_directory": "sources/reactor_refueling_port_top",
+      "atlas": "generated/reactor_refueling_port_top_ct.png"
+    },
+    {
+      "name": "control_rod_drive_side",
+      "original_sprite": "create_nuclear_industry:block/control_rod_drive_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/control_rod_drive_side",
+      "source_directory": "sources/control_rod_drive_side",
+      "atlas": "generated/control_rod_drive_side_ct.png"
+    },
+    {
+      "name": "control_rod_drive_top",
+      "original_sprite": "create_nuclear_industry:block/control_rod_drive_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/control_rod_drive_top",
+      "source_directory": "sources/control_rod_drive_top",
+      "atlas": "generated/control_rod_drive_top_ct.png"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# 本项目原创候选；资源ID供后续正式安装解析。
+newmtl control_rod
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/reactor_animation/control_rod

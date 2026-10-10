@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- reactor_casing_top，RECTANGLE格14：上0下0左1右1；仅面外沿加钢框。 -->
+  <rect x="0" y="0" width="16" height="16" fill="#898B86"/>
+  <rect x="0" y="0" width="16" height="16" fill="#898B86"/>
+  <rect x="0" y="8" width="16" height="1" fill="#66696A"/>
+  <rect x="0" y="9" width="16" height="1" fill="#A5AAA1"/>
+  <rect x="0" y="0" width="16" height="1" fill="#303638"/>
+  <rect x="0" y="1" width="16" height="1" fill="#A5AAA1"/>
+  <rect x="0" y="14" width="16" height="1" fill="#4B5351"/>
+  <rect x="0" y="15" width="16" height="1" fill="#303638"/>
+</svg>

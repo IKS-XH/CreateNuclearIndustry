@@ -1,0 +1,470 @@
+{
+  "schema_version": 2,
+  "phase": "complete14",
+  "tile_size": 16,
+  "rectangle_contexts": [
+    {
+      "index": 0,
+      "up": false,
+      "down": true,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 1,
+      "up": false,
+      "down": true,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 2,
+      "up": false,
+      "down": true,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 3,
+      "up": false,
+      "down": true,
+      "left": true,
+      "right": false
+    },
+    {
+      "index": 4,
+      "up": true,
+      "down": true,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 5,
+      "up": true,
+      "down": true,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 6,
+      "up": true,
+      "down": true,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 7,
+      "up": true,
+      "down": true,
+      "left": true,
+      "right": false
+    },
+    {
+      "index": 8,
+      "up": true,
+      "down": false,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 9,
+      "up": true,
+      "down": false,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 10,
+      "up": true,
+      "down": false,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 11,
+      "up": true,
+      "down": false,
+      "left": true,
+      "right": false
+    },
+    {
+      "index": 12,
+      "up": false,
+      "down": false,
+      "left": false,
+      "right": false
+    },
+    {
+      "index": 13,
+      "up": false,
+      "down": false,
+      "left": false,
+      "right": true
+    },
+    {
+      "index": 14,
+      "up": false,
+      "down": false,
+      "left": true,
+      "right": true
+    },
+    {
+      "index": 15,
+      "up": false,
+      "down": false,
+      "left": true,
+      "right": false
+    }
+  ],
+  "assets": [
+    {
+      "name": "reactor_casing_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_casing_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_casing_side",
+      "source_directory": "sources/reactor_casing_side",
+      "atlas": "generated/reactor_casing_side_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_casing_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_casing_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_casing_top",
+      "source_directory": "sources/reactor_casing_top",
+      "atlas": "generated/reactor_casing_top_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_casing_bottom",
+      "original_sprite": "create_nuclear_industry:block/reactor_casing_bottom",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_casing_bottom",
+      "source_directory": "sources/reactor_casing_bottom",
+      "atlas": "generated/reactor_casing_bottom_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_hot_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_hot_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_hot_port_side",
+      "source_directory": "sources/reactor_hot_port_side",
+      "atlas": "generated/reactor_hot_port_side_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_hot_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_hot_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_hot_port_top",
+      "source_directory": "sources/reactor_hot_port_top",
+      "atlas": "generated/reactor_hot_port_top_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_cold_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_cold_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_cold_port_side",
+      "source_directory": "sources/reactor_cold_port_side",
+      "atlas": "generated/reactor_cold_port_side_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_cold_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_cold_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_cold_port_top",
+      "source_directory": "sources/reactor_cold_port_top",
+      "atlas": "generated/reactor_cold_port_top_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_instrument_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_instrument_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_instrument_port_side",
+      "source_directory": "sources/reactor_instrument_port_side",
+      "atlas": "generated/reactor_instrument_port_side_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_instrument_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_instrument_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_instrument_port_top",
+      "source_directory": "sources/reactor_instrument_port_top",
+      "atlas": "generated/reactor_instrument_port_top_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_refueling_port_side",
+      "original_sprite": "create_nuclear_industry:block/reactor_refueling_port_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_refueling_port_side",
+      "source_directory": "sources/reactor_refueling_port_side",
+      "atlas": "generated/reactor_refueling_port_side_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_refueling_port_top",
+      "original_sprite": "create_nuclear_industry:block/reactor_refueling_port_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_refueling_port_top",
+      "source_directory": "sources/reactor_refueling_port_top",
+      "atlas": "generated/reactor_refueling_port_top_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "control_rod_drive_side",
+      "original_sprite": "create_nuclear_industry:block/control_rod_drive_side",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/control_rod_drive_side",
+      "source_directory": "sources/control_rod_drive_side",
+      "atlas": "generated/control_rod_drive_side_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "control_rod_drive_top",
+      "original_sprite": "create_nuclear_industry:block/control_rod_drive_top",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/control_rod_drive_top",
+      "source_directory": "sources/control_rod_drive_top",
+      "atlas": "generated/control_rod_drive_top_ct.png",
+      "ct_type": "RECTANGLE",
+      "sheet_size": 4,
+      "isolated_index": 12
+    },
+    {
+      "name": "reactor_window",
+      "original_sprite": "create_nuclear_industry:block/reactor_window",
+      "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_window",
+      "source_directory": "sources/reactor_window",
+      "atlas": "generated/reactor_window_ct.png",
+      "ct_type": "OMNIDIRECTIONAL",
+      "sheet_size": 8,
+      "isolated_index": 0
+    }
+  ],
+  "window_contexts": [
+    {
+      "mask": 0,
+      "index": 0
+    },
+    {
+      "mask": 1,
+      "index": 1
+    },
+    {
+      "mask": 2,
+      "index": 2
+    },
+    {
+      "mask": 3,
+      "index": 3
+    },
+    {
+      "mask": 4,
+      "index": 8
+    },
+    {
+      "mask": 5,
+      "index": 9
+    },
+    {
+      "mask": 6,
+      "index": 10
+    },
+    {
+      "mask": 7,
+      "index": 11
+    },
+    {
+      "mask": 8,
+      "index": 16
+    },
+    {
+      "mask": 9,
+      "index": 17
+    },
+    {
+      "mask": 10,
+      "index": 18
+    },
+    {
+      "mask": 11,
+      "index": 19
+    },
+    {
+      "mask": 12,
+      "index": 24
+    },
+    {
+      "mask": 13,
+      "index": 25
+    },
+    {
+      "mask": 14,
+      "index": 26
+    },
+    {
+      "mask": 15,
+      "index": 27
+    },
+    {
+      "mask": 21,
+      "index": 12
+    },
+    {
+      "mask": 23,
+      "index": 33
+    },
+    {
+      "mask": 29,
+      "index": 48
+    },
+    {
+      "mask": 31,
+      "index": 29
+    },
+    {
+      "mask": 41,
+      "index": 20
+    },
+    {
+      "mask": 43,
+      "index": 41
+    },
+    {
+      "mask": 45,
+      "index": 49
+    },
+    {
+      "mask": 47,
+      "index": 28
+    },
+    {
+      "mask": 61,
+      "index": 50
+    },
+    {
+      "mask": 63,
+      "index": 30
+    },
+    {
+      "mask": 70,
+      "index": 13
+    },
+    {
+      "mask": 71,
+      "index": 32
+    },
+    {
+      "mask": 78,
+      "index": 56
+    },
+    {
+      "mask": 79,
+      "index": 35
+    },
+    {
+      "mask": 87,
+      "index": 34
+    },
+    {
+      "mask": 95,
+      "index": 37
+    },
+    {
+      "mask": 111,
+      "index": 36
+    },
+    {
+      "mask": 127,
+      "index": 38
+    },
+    {
+      "mask": 138,
+      "index": 21
+    },
+    {
+      "mask": 139,
+      "index": 40
+    },
+    {
+      "mask": 142,
+      "index": 57
+    },
+    {
+      "mask": 143,
+      "index": 43
+    },
+    {
+      "mask": 159,
+      "index": 45
+    },
+    {
+      "mask": 171,
+      "index": 42
+    },
+    {
+      "mask": 175,
+      "index": 44
+    },
+    {
+      "mask": 191,
+      "index": 46
+    },
+    {
+      "mask": 206,
+      "index": 58
+    },
+    {
+      "mask": 207,
+      "index": 51
+    },
+    {
+      "mask": 223,
+      "index": 53
+    },
+    {
+      "mask": 239,
+      "index": 52
+    },
+    {
+      "mask": 255,
+      "index": 54
+    }
+  ],
+  "window_fallback_indices": [
+    4,
+    5,
+    6,
+    7,
+    14,
+    15,
+    22,
+    23,
+    31,
+    39,
+    47,
+    55,
+    59,
+    60,
+    61,
+    62,
+    63
+  ]
+}

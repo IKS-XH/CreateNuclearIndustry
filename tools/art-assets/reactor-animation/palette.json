@@ -1,0 +1,39 @@
+{
+  "fuel_rod_steel": {
+    "color_00": "#2D383B",
+    "color_01": "#404C50",
+    "color_02": "#556268",
+    "color_03": "#69777B",
+    "color_04": "#879295",
+    "color_05": "#ACB5B5",
+    "color_06": "#1D272A"
+  },
+  "fuel_rod_glow": {
+    "color_00": "#145D9A",
+    "color_01": "#268ECE",
+    "color_02": "#67BEED",
+    "color_03": "#AADDF2"
+  },
+  "control_rod": {
+    "color_00": "#29343A",
+    "color_01": "#414C52",
+    "color_02": "#637078",
+    "color_03": "#849095",
+    "color_04": "#AD8B42",
+    "color_05": "#D1B864",
+    "color_06": "#6D512E",
+    "color_07": "#B2B8B5"
+  },
+  "coolant_cold": {
+    "color_00": "#237E91",
+    "color_01": "#2A8798",
+    "color_02": "#348FA1",
+    "color_03": "#459AA9"
+  },
+  "coolant_hot": {
+    "color_00": "#A84C23",
+    "color_01": "#B75425",
+    "color_02": "#C75C29",
+    "color_03": "#D36B32"
+  }
+}

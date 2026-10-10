@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "model_units_per_block": 16,
+  "fuel": {
+    "plate_xz": [
+      0,
+      16
+    ],
+    "bottom_y": [
+      0,
+      2
+    ],
+    "top_y": [
+      14,
+      16
+    ],
+    "centers_xz": [
+      4,
+      8,
+      12
+    ],
+    "tube_diameter": 3.5,
+    "tube_y": [
+      2,
+      14
+    ],
+    "sides": 8
+  },
+  "control": {
+    "axis_xz": [
+      8,
+      8
+    ],
+    "shaft_y_blocks": [
+      0,
+      1
+    ],
+    "sides": 4,
+    "head_y_units": [
+      0,
+      3
+    ],
+    "pivot_blocks": [
+      0.5,
+      0,
+      0.5
+    ],
+    "consumer": "方杆X/Z0.2..0.8、边长0.6方块；仅单位杆身按真实body行程Y缩放一次，方箍X/Z0.175..0.825、固定厚3/16不缩放。杆底capY-travel*actualDepth，head从杆顶起，target不驱动。",
+    "shape": "square",
+    "shaft_side_blocks": 0.6,
+    "shaft_xz_blocks": [
+      0.2,
+      0.8
+    ],
+    "head_side_blocks": 0.65,
+    "head_xz_blocks": [
+      0.175,
+      0.825
+    ]
+  },
+  "glow": {
+    "radial_bias_blocks": 0.0005,
+    "consumer": "0.0005方块径向偏置已烘焙到每根辉光管的半径，九轴心不变；消费者只变亮度/alpha，无需再次缩放。板不发光；示意alpha不是正式HU/t映射。",
+    "radial_bias_baked": true
+  },
+  "fluid": {
+    "frame_count": 8,
+    "frame_pixels": [
+      16,
+      16
+    ],
+    "sheet_pixels": [
+      16,
+      128
+    ],
+    "phase_step_pixels": 2,
+    "consumer": "一个合法内部空间网格；total/capacity统一液位，hot/total连续混色，无上下分层。0库存/不可用容量不画；转换mB/t仅控制示意纹相位活跃。"
+  }
+}
