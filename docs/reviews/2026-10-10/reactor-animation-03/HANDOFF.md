@@ -41,3 +41,24 @@ PM核对证据留于主树`build/reports/art/ART-REACTOR-03B/pm-candidate-bindin
 美术负责人按[其树03R1任务](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/tasks/ART-REACTOR-03R1.md)在原六客户端类/两测试、19安装资源及专属SVG工具范围整改厚度、材质与实际采光；继续核实冷却液不可见根因，不从存档历史库存推定截图实时值，不改变世界光照、L2、服务端库存/容量/热工或碰撞。发现需共享写集时另行协调，当前未追加跨逻辑实现授权。
 
 新的03R1定向证据、候选及用户复看另行登记；02R1材质连窗门保持独立。用户已单独要求开始装配台07教学，该教学继续实施，不因本美术整改停止或越过本台播放门。
+
+## 03R2组合候选登记
+
+2026-10-10。美术负责人交付0.6格方杆和原生滑块避让的组合候选，主PM只追加来源与制品绑定。**本节对应最新03R2增量；上文原03/03R1状态与原build/libs相等结论均为历史记录，不宣称当前美术树仍等于旧JAR。** 03R1既有自动/审查作为本批前置复用，其冷却液客户端视觉门仍未通过；本次不重审整套03R1、不改世界或启动客户端。
+
+- 美术冻结HEAD `6631353d4a5cfc4d635572ae37e63f3d4de2ae33`，源码与素材仍为未提交候选。后续纯PM文档提交不改变冻结实现身份。
+- [最新候选说明](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/ART-REACTOR-03R2-CANDIDATE.md)、[任务及六面坐标](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/tasks/ART-REACTOR-03R2.md)、[实施报告](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/reports/ART-REACTOR-03R2.md)、[一次独立组合审查](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/reports/ART-REACTOR-03R2-REVIEW.md)。审查规格/内部质量均通过，无必改项；复用其实际四图、151冻结、75保护和4只读依赖检查，不另派审查或重跑矩阵。
+- [冻结清单](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-REACTOR-03R2/frozen-manifest.json)41交付+110证据，SHA256 `a502efc1f4843b6aedf0b1f09b3ea41f694af58af2cba02be7b853519396ef56`；独立审查报告SHA256 `0d3eb6fdbeca571cf92a070854b1d46898f8be746c90da695dfca379c369eef9`。
+- [冻结JAR](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-REACTOR-03R2/candidate/create_nuclear_industry-0.1.0-ART-REACTOR-03R2.jar)，2,475,501字节，SHA256 `20b7223f899f7b75b56cdfb7d8374c7c7b629b26384add13202939ebc92e97ba`。实际与本次美术build/libs一致；两OBJ生成源/安装/JAR及三个生产class/JAR均逐字节一致，测试替身未入JAR。
+
+PM实际读取生产Behaviour、原共享基线与来源映射，核对41/41交付SHA、候选/任务/独立报告及主PM授权SHA、13/13服务端/协议等共享保护、非几何方法逐字保持。控件显示与点击使用同一坐标和尺度，切面同步Create缓存，0..100、服务端提交、锁定、SCRAM及原BE未改。
+
+最终专属原始XML为6项，failure/error/skip均0；确认退出0及`BUILD SUCCESSFUL in 14s`。增量JAR复用本批未变生产输出，最终确认仅重测变化的测试夹具；首三组环境失败及两组成功原证据保留，环境失败不作为业务行为red。未重跑此前18项动画/L2/协议检查或再次构建。
+
+PM实核证据保存于主树`build/reports/art/ART-REACTOR-03R2/pm-candidate-binding.json`，包含上述直接核对及复用界限。两OBJ变化、1054非目标assets、31未变generated的字节/mtime、19SVG和旧03R1制品保护均复用冻结独立审查，不宣称PM重复执行全部矩阵。仍是含既有美术候选的工作区JAR，不是main发布包。
+
+### 本次客户端门
+
+退出旧Minecraft后重新启动美术树，按最新候选说明在既有测试世界复看：0.6格方杆完整升降；驱动器顶/底及四侧控件的数字、遮挡与真实鼠标点击/滚动。离线旋转、命中与包围盒检查不证明游戏文字或手感。03R2门、03R1液体显示门及02R1材质连窗门各自记录，不互相覆盖；主树未合本批美术源码，装配台07三幕播放门保持独立。
+
+本轮应用已读Minecraft模组/测试/资源技能及完成前验证，按锁定版本与精简验证治理执行；仅登记PM文档，不改功能/测试/构建代码、美术计划或用户存档，不重复实施、构建或独立审查。
