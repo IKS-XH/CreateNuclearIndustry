@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，屏蔽装配台按用户要求删去两页配方场景，只保留搭建与接口；[07-R1单页候选](./reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)已通过定向检查和独立审查，等待本页播放。换热器五幕及R4剖面按[05验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)关闭播放门；美术连接纹理与运行动画分别待视觉验收，其他主线暂缓。
+**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，屏蔽装配台按用户要求删去两页配方场景，只保留搭建与接口；[07-R1单页播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)已通过，净教学整合main `3f17657`。换热器五幕及R4剖面按[05验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)关闭播放门；美术连接纹理与运行动画分别待视觉验收，其他主线暂缓。
 
 技术基线：Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。版本仍为0.1.0 Alpha，当前完成批次不等于首个可发布版本出口已完成。
 
@@ -24,6 +24,7 @@
 | 汽轮机思索 | 搭建、通汽与输出、流量与效率三幕；三档取景与排汽文案整改通过 | [播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md) |
 | 换热器思索 | 本体串联、Create锅炉供热、锅炉内置剖视、盆/炉持续供热、蒸汽冷凝五幕 | [播放验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，main整合`b036776` |
 | 燃料烧结炉思索 | 烧结与供热、自动化与核热两幕；断热暂停及恢复、顶进侧出和底部热源可见 | [播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)，main整合`57763f8` |
+| 屏蔽装配台思索 | 仅搭建与接口一页，整台放置、主控底轴、四周物流和顶部只进料；不含具体配方 | [07-R1播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)，main整合`3f17657` |
 | 工作盆持续核热 | 有盆即持续超级加热，默认4mB热液/t转等量冷液，缺液/回液堵塞立即停热 | [02R1验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)，用户手测已通过 |
 | 烧结炉持续核热 | 顶炉即持续耗热，共用工作盆成本及配置；原烧结工时、物流和燃烧室热源保留 | [EXCHANGER-03验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)，用户手测已通过 |
 
@@ -35,7 +36,7 @@
 2. 换热器烧结炉供热：`094a925`实现与复核、增量打包及隔离真实GameTest3/3通过，复用21/21账本；用户[本批手测](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main，不重复工作盆7项或已通过人工门。
 3. 换热器思索：五幕及R4剖面[用户播放通过](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，main净教学提交`b036776`。复用R3五模板、R4的4项定向合同/增量构建及独立复核；11集成路径与已审候选一致，不重复已验收功能或旧教学。
 4. 燃料烧结炉两幕思索06已于2026-10-10[用户播放通过](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)，main净教学提交`57763f8`；8路径与已审候选一致，复用3/3定向检查、增量assemble和独立审查。
-5. 屏蔽装配台07按用户最新要求完成[单页整改](./superpowers/plans/2026-10-10-device-ponder-07-assembly-usage-only.md)，删除新燃料装配和乏燃料封装配方页，仅保留搭建与接口。3/3定向合同、一次增量打包与独立窄审通过；[候选`0a4e1e5`](./reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)留在逻辑树，只待本页播放，尚未合main。旧三幕证据保留，后续思索只讲用法；其他工程主线及独立美术视觉门保持。
+5. 屏蔽装配台07-R1仅保留搭建与接口，用法不含具体配方。用户2026-10-10[单页播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)通过，main净教学提交`3f17657`；7路径与已审`0a4e1e5`及冻结源SHA一致，复用3/3定向合同、一次增量打包及独立窄审，不重测已验收功能。旧三幕证据保留，后续思索只讲用法；其他工程主线暂缓，独立美术视觉/鼠标门保持。
 
 用户授权PM自动派发已确认且范围清楚的任务；遇新玩法决策或人工门保存证据并停止推进，不自动改做辅助项目。当前候选目录为 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，主目录保留已验收功能。
 

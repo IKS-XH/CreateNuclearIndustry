@@ -1,6 +1,6 @@
 # 屏蔽装配台思索07-R1：仅保留用法
 
-**状态：** 已完成删页、3/3定向合同、一次增量assemble及一次独立规格/质量窄审。净候选`0a4e1e58efb8070db891acccdc7ac1ff5264f159`留在逻辑树，只待单页播放，尚未合main；见[07-R1候选](../../reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)。旧三幕候选与证据保留。
+**状态：** 用户2026-10-10明确报告手动测试通过，单页播放门已关闭，main净教学提交`3f17657846095b7e34e6a7c82481b3cf9ac1d6f4`；见[验收](../../reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)。7集成路径与已审单页候选及冻结源SHA一致，复用3/3定向合同、增量assemble和独立窄审。旧三幕候选与证据保留，不扩记为独立美术视觉通过。
 
 **任务：** DEVICE-PONDER-07-ASSEMBLY-R1。复用同级逻辑树`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，开工HEAD`d6ecac2aaadc7e9b46c32a1d9821fd97bd397d0a`。主PM只写文档/审核/Git；沿用原实现执行者与原独立审查者，禁止执行者Git写或派发。参考[原卡](./2026-10-10-device-ponder-07-assembly.md)的八格归属、接口、镜头和正文净空约束，以下新范围替代其中三幕、配比/工时与加工快照要求。
 

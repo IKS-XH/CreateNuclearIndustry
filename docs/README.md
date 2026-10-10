@@ -1,13 +1,13 @@
 # 项目文档入口
 
-**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，屏蔽装配台按用户要求删去两页配方场景，只保留搭建与接口；[07-R1单页候选](./reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)已通过定向检查和独立审查，等待本页播放。反应堆03R3液体浸泡与顶面控件整改已交冻结候选，等待游戏视觉/操作复看；材质连窗另待验收，其他主线暂缓。
+**更新：2026-10-10。** 燃料烧结炉两幕播放通过并净整合main，屏蔽装配台按用户要求删去两页配方场景，只保留搭建与接口；[07-R1单页播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)已通过，净教学整合main `3f17657`。反应堆03R3液体浸泡与顶面控件整改已交冻结候选，等待游戏视觉/操作复看；材质连窗另待验收，其他主线暂缓。
 
 ## 当前执行与接续
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
 | 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
-| 屏蔽装配台思索07-R1 | [单页整改](./superpowers/plans/2026-10-10-device-ponder-07-assembly-usage-only.md)：仅保留搭建与接口，思索只讲用法、不讲具体配方；3/3定向合同、增量打包与独立窄审通过，[候选`0a4e1e5`](./reviews/2026-10-10/shielded-assembly-ponder-07/R1-CANDIDATE.md)待本页播放，尚未合main |
+| 屏蔽装配台思索07-R1 | [单页播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)通过：仅搭建与接口，不讲具体配方；7路径与已审候选及冻结源SHA一致，复用3/3定向合同、增量打包与独立窄审，main净教学提交`3f17657` |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
 | 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
 | 反应堆内部运行动画03 | [03R3组合候选登记](./reviews/2026-10-10/reactor-animation-03/HANDOFF.md#03r3组合候选登记)：提高液体可见度、按原液位补燃料浸泡显示及顶面控件出面；23/23原始检查、唯一增量JAR及独立窄审通过，95冻结项与17class/19资源绑定一致。源码未合main，游戏液体/顶面操作和02R1材质门独立待验；旧候选证据保持 |
@@ -18,7 +18,7 @@
 | 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
 | 换热器分情景思索 | 五幕及R4剖面复看[用户手测通过](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，复用定向合同、增量打包及独立复核；main净教学提交`b036776` |
 
-主目录现提供已验收供热及离心机、反应堆、锅炉、汽轮机、换热器、烧结炉教学。逻辑候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`保留本批实现及历史证据；美术候选使用`E:/MyMC/NewMod/Create_NuclearIndustry-art-studio`，各目录分别使用自己的运行配置和世界。
+主目录现提供已验收供热及离心机、反应堆、锅炉、汽轮机、换热器、烧结炉和屏蔽装配台教学。逻辑候选目录`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`保留本批来源与历史证据；美术候选使用`E:/MyMC/NewMod/Create_NuclearIndustry-art-studio`，各目录分别使用自己的运行配置和世界。
 
 ## 权威文档
 
