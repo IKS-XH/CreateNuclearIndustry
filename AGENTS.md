@@ -15,7 +15,7 @@
 
 ## 项目治理
 
-- 用户2026-10-11报告主分支runClient加注冷却液后控制棒棒体消失，按[REACTOR-ROD-COOLANT-01](docs/superpowers/plans/2026-10-11-reactor-rod-coolant-01.md)核实原生批次/深度顺序并修复：main `79ca4e4`、美术净同步`eef4f18`，仅原液体入口、新客户端缓冲辅助及专属测试。最终29/29定向检查、增量JAR及同一独立差异复核通过，首轮辉光排序P2已关闭；主目录制品更新并与冻结JAR一致，见[候选交接](docs/reviews/2026-10-11/reactor-rod-coolant-01/CANDIDATE.md)。等待用户主分支空/部分/满液位、棒体升降和运行蓝辉复看；自动证据不关闭GPU视觉门，其他主线暂缓。
+- 用户2026-10-11报告主分支runClient加注冷却液后控制棒棒体消失，按[REACTOR-ROD-COOLANT-01](docs/superpowers/plans/2026-10-11-reactor-rod-coolant-01.md)核实原生批次/深度顺序并修复：main `79ca4e4`、美术净同步`eef4f18`，仅原液体入口、新客户端缓冲辅助及专属测试。最终29/29定向检查、增量JAR及同一独立差异复核通过，首轮辉光排序P2已关闭。用户随后回复“这次对了”，按[验收](docs/reviews/2026-10-11/reactor-rod-coolant-01/ACCEPTANCE.md)关闭本故障视觉门；原证据复用，主目录制品仍与冻结JAR一致，不重复测试/构建或覆盖其他美术视觉记录，其他主线暂缓。
 
 - 用户2026-10-11报告主分支完整build失败，按[MAIN-BUILD-01](docs/superpowers/plans/2026-10-11-main-build-01.md)修复美术测试输出目录依赖：main `8fa6363`、美术净同步`3e3045f`，仅原测试新增四行，不改断言或生产逻辑。修改前定向RED复现相同两处缺目录失败；修复后唯一主目录完整build退出0，454/454项、零错误/跳过，一次独立窄审通过，见[验收](docs/reviews/2026-10-11/main-build-01/ACCEPTANCE.md)。该次生产JAR增量复用，制品身份在验收中保留为历史；不重复素材/客户端测试或改变既有人工门，其他主线仍暂缓。
 
