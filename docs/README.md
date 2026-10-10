@@ -4,6 +4,8 @@
 
 ## 当前执行与接续
 
+主分支完整build故障已按[MAIN-BUILD-01验收](./reviews/2026-10-11/main-build-01/ACCEPTANCE.md)关闭：main `8fa6363`修复测试报告目录依赖，454项全部通过，美术净同步`3e3045f`。当前制品身份见该验收，原集成打包记录保持历史。
+
 | 工作 | 状态与入口 |
 | :--- | :--- |
 | 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
