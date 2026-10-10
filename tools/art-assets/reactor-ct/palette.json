@@ -1,0 +1,162 @@
+{
+  "reactor_casing_side": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#77817C",
+    "color_04": "#898B86",
+    "color_05": "#94948D",
+    "color_06": "#A5AAA1",
+    "color_07": "#B8B5A9",
+    "color_08": "#D2D1C4",
+    "color_09": "#D5D2C4"
+  },
+  "reactor_casing_top": {
+    "color_00": "#303638",
+    "color_01": "#4B5351",
+    "color_02": "#66696A",
+    "color_03": "#77817C",
+    "color_04": "#898B86",
+    "color_05": "#A5AAA1",
+    "color_06": "#D2D1C4"
+  },
+  "reactor_casing_bottom": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#66696A",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#A5AAA1",
+    "color_07": "#D2D1C4"
+  },
+  "reactor_hot_port_side": {
+    "color_00": "#202526",
+    "color_01": "#303638",
+    "color_02": "#4B5351",
+    "color_03": "#643D38",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#9F5548",
+    "color_07": "#A5AAA1",
+    "color_08": "#CE7A61",
+    "color_09": "#D2D1C4"
+  },
+  "reactor_hot_port_top": {
+    "color_00": "#202526",
+    "color_01": "#303638",
+    "color_02": "#4B5351",
+    "color_03": "#643D38",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#9F5548",
+    "color_07": "#A5AAA1",
+    "color_08": "#CE7A61",
+    "color_09": "#D2D1C4"
+  },
+  "reactor_cold_port_side": {
+    "color_00": "#173F4E",
+    "color_01": "#202526",
+    "color_02": "#303638",
+    "color_03": "#30778D",
+    "color_04": "#4B5351",
+    "color_05": "#62B4BD",
+    "color_06": "#77817C",
+    "color_07": "#898B86",
+    "color_08": "#A5AAA1",
+    "color_09": "#D2D1C4"
+  },
+  "reactor_cold_port_top": {
+    "color_00": "#173F4E",
+    "color_01": "#202526",
+    "color_02": "#303638",
+    "color_03": "#30778D",
+    "color_04": "#4B5351",
+    "color_05": "#62B4BD",
+    "color_06": "#77817C",
+    "color_07": "#898B86",
+    "color_08": "#A5AAA1",
+    "color_09": "#D2D1C4"
+  },
+  "reactor_window": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#77817C",
+    "color_04": "#898B86",
+    "color_05": "#A5AAA1",
+    "color_06": "#D2D1C4"
+  },
+  "reactor_instrument_port_side": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#52A2AD",
+    "color_04": "#66696A",
+    "color_05": "#715035",
+    "color_06": "#77817C",
+    "color_07": "#898B86",
+    "color_08": "#A5AAA1",
+    "color_09": "#BC714A",
+    "color_10": "#D2A359",
+    "color_11": "#D2D1C4"
+  },
+  "reactor_instrument_port_top": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#66696A",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#A5AAA1",
+    "color_07": "#D2A359",
+    "color_08": "#D2D1C4"
+  },
+  "reactor_refueling_port_side": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#715035",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#A5AAA1",
+    "color_07": "#AD7A42",
+    "color_08": "#D2A359",
+    "color_09": "#D2D1C4"
+  },
+  "reactor_refueling_port_top": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#715035",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#A5AAA1",
+    "color_07": "#D2A359",
+    "color_08": "#D2D1C4",
+    "color_09": "#F0CF87"
+  },
+  "control_rod_drive_side": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#66696A",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#A5AAA1",
+    "color_07": "#AD7A42",
+    "color_08": "#D2A359",
+    "color_09": "#D2D1C4"
+  },
+  "control_rod_drive_top": {
+    "color_00": "#303638",
+    "color_01": "#45494B",
+    "color_02": "#4B5351",
+    "color_03": "#715035",
+    "color_04": "#77817C",
+    "color_05": "#898B86",
+    "color_06": "#A5AAA1",
+    "color_07": "#D2A359",
+    "color_08": "#D2D1C4"
+  }
+}

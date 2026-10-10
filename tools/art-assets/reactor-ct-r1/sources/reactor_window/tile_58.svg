@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- 原生OMNIDIRECTIONAL索引58，canonical mask 206；47个有效上下文之一。全连接内窗仅透明，不写占位色。 -->
+  <rect x="0" y="0" width="16" height="1" fill="#28353A"/>
+  <rect x="0" y="1" width="16" height="1" fill="#A3B7B8"/>
+  <rect x="0" y="2" width="16" height="1" fill="#3E5058"/>
+  <rect x="0" y="3" width="16" height="1" fill="#A3B7B8"/>
+</svg>

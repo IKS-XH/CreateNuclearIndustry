@@ -1,0 +1,11 @@
+{
+  "loader": "neoforge:obj",
+  "model": "create_nuclear_industry:models/block/reactor_animation/mesh/fuel_rod_glow.obj",
+  "textures": {
+    "particle": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow"
+  },
+  "automatic_culling": false,
+  "shade_quads": false,
+  "flip_v": false,
+  "emissive_ambient": true
+}

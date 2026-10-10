@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "namespace": "create_nuclear_industry",
+  "models": [
+    {
+      "name": "reactor_fuel_rod",
+      "target_model": "create_nuclear_industry:block/reactor_fuel_rod",
+      "obj": "create_nuclear_industry:models/block/reactor_animation/mesh/reactor_fuel_rod.obj",
+      "material": "fuel_rod_steel"
+    },
+    {
+      "name": "fuel_rod_glow",
+      "target_model": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "obj": "create_nuclear_industry:models/block/reactor_animation/mesh/fuel_rod_glow.obj",
+      "material": "fuel_rod_glow",
+      "radial_bias_baked_blocks": 0.0005,
+      "consumer_radial_scale": 1
+    },
+    {
+      "name": "control_rod_shaft",
+      "target_model": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "obj": "create_nuclear_industry:models/block/reactor_animation/mesh/control_rod_shaft.obj",
+      "material": "control_rod"
+    },
+    {
+      "name": "control_rod_head",
+      "target_model": "create_nuclear_industry:block/reactor_animation/control_rod_head",
+      "obj": "create_nuclear_industry:models/block/reactor_animation/mesh/control_rod_head.obj",
+      "material": "control_rod"
+    }
+  ],
+  "textures": [
+    {
+      "name": "fuel_rod_steel",
+      "target_sprite": "create_nuclear_industry:block/reactor_animation/fuel_rod_steel",
+      "source": "sources/fuel_rod_steel.svg",
+      "output": "generated/textures/fuel_rod_steel.png"
+    },
+    {
+      "name": "fuel_rod_glow",
+      "target_sprite": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "source": "sources/fuel_rod_glow.svg",
+      "output": "generated/textures/fuel_rod_glow.png"
+    },
+    {
+      "name": "control_rod",
+      "target_sprite": "create_nuclear_industry:block/reactor_animation/control_rod",
+      "source": "sources/control_rod.svg",
+      "output": "generated/textures/control_rod.png"
+    }
+  ],
+  "fluids": [
+    {
+      "name": "coolant_cold",
+      "target_sprite": "create_nuclear_industry:block/reactor_animation/coolant_cold",
+      "source_pattern": "sources/coolant_cold/frame_{index:02d}.svg",
+      "sheet": "generated/textures/coolant_cold.png",
+      "frames": 8,
+      "frame_width": 16,
+      "frame_height": 16,
+      "frametime_ticks": 2,
+      "interpolate": true,
+      "animation_metadata": {
+        "animation": {
+          "width": 16,
+          "height": 16,
+          "frametime": 2,
+          "interpolate": true,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "name": "coolant_hot",
+      "target_sprite": "create_nuclear_industry:block/reactor_animation/coolant_hot",
+      "source_pattern": "sources/coolant_hot/frame_{index:02d}.svg",
+      "sheet": "generated/textures/coolant_hot.png",
+      "frames": 8,
+      "frame_width": 16,
+      "frame_height": 16,
+      "frametime_ticks": 2,
+      "interpolate": true,
+      "animation_metadata": {
+        "animation": {
+          "width": 16,
+          "height": 16,
+          "frametime": 2,
+          "interpolate": true,
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    }
+  ]
+}

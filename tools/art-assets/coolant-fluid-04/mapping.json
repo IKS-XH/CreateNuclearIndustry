@@ -1,0 +1,132 @@
+{
+  "task": "ART-COOLANT-04",
+  "producer": "tools/art-assets/coolant-fluid-04/producer.py",
+  "priority_note": "这八个目标由本专用producer管理；禁止旧pipeline的全量install恢复RETAINED_ORIGINALS旧图。",
+  "sources": {
+    "cold": [
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_00.svg",
+        "sha256": "35af15e5a761bb096a46fc661fc77b2110ecdc15cc8beba6aa18e9165f3d00f7"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_01.svg",
+        "sha256": "2b4d8812525b45dadfacb1d4a49cadb1056dae5e439756800ea56921608a6063"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_02.svg",
+        "sha256": "6d7b02c230f3550e716dfeb46bfe1e9cc2ecb89344bf19b59997bddea543a194"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_03.svg",
+        "sha256": "0012ff891c4ea4ed59f5b003e972da6831cf37127cad1545698e058c3b808bff"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_04.svg",
+        "sha256": "e5fed35b00fb93b8df34358dbefff35a87318c0a46107df384983d5f5908bb0b"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_05.svg",
+        "sha256": "2780c160897c382b953b4ef0d00672a975ed4eb53b2f60a38d9c30dd7204f4d4"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_06.svg",
+        "sha256": "90010b621351ac1a9cbc51b118191ec1d80cf1624e1a3dabbdc28a15828c3d09"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_cold/frame_07.svg",
+        "sha256": "c342229c682cac57c1a18c2ac1fb4572c70e797e57d617186c4b19c038347fa8"
+      }
+    ],
+    "hot": [
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_00.svg",
+        "sha256": "8f96e6741fc95b33f7dac20e840fcbeaded7609fc059297b9839ce67399f7ae5"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_01.svg",
+        "sha256": "e6822619a73fee9cf5065ef37b961862d75d71c9cca2156fc4702a77ac510c3e"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_02.svg",
+        "sha256": "aed8f01ebca6a7c601ead91dd9f884cdc5502d4294f7e92244a378d1471f3b99"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_03.svg",
+        "sha256": "66b5f60af0770a20e4e1012c55a2528db727178489cb8903cd719fbc9ba79282"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_04.svg",
+        "sha256": "7766e576f0f3779d70252b353a543b998f663a6f0648542e97e418bd4368fd03"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_05.svg",
+        "sha256": "7be158accbcdff512fa2189f5f017e5389750c96041b084789cd6987aea57f19"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_06.svg",
+        "sha256": "fd01b5d3a45fbb1b50a824df53ebe568f1a2e762b8fbd3634fccae9184b9e3d5"
+      },
+      {
+        "path": "tools/art-assets/reactor-animation/sources/coolant_hot/frame_07.svg",
+        "sha256": "4e08ee5c651932755b3c3fc1b14ed0c4820b300e91d09e340f50aa02348a2049"
+      }
+    ]
+  },
+  "sprites": [
+    {
+      "name": "compound_coolant_still",
+      "kind": "cold",
+      "flow": false,
+      "frame_size": 16,
+      "target_sprite": "create_nuclear_industry:block/compound_coolant_still",
+      "targets": [
+        "src/main/resources/assets/create_nuclear_industry/textures/block/compound_coolant_still.png",
+        "src/main/resources/assets/create_nuclear_industry/textures/fluid/compound_coolant_still.png"
+      ]
+    },
+    {
+      "name": "compound_coolant_flow",
+      "kind": "cold",
+      "flow": true,
+      "frame_size": 32,
+      "target_sprite": "create_nuclear_industry:block/compound_coolant_flow",
+      "targets": [
+        "src/main/resources/assets/create_nuclear_industry/textures/block/compound_coolant_flow.png",
+        "src/main/resources/assets/create_nuclear_industry/textures/fluid/compound_coolant_flow.png"
+      ]
+    },
+    {
+      "name": "hot_compound_coolant_still",
+      "kind": "hot",
+      "flow": false,
+      "frame_size": 16,
+      "target_sprite": "create_nuclear_industry:block/hot_compound_coolant_still",
+      "targets": [
+        "src/main/resources/assets/create_nuclear_industry/textures/block/hot_compound_coolant_still.png",
+        "src/main/resources/assets/create_nuclear_industry/textures/fluid/hot_compound_coolant_still.png"
+      ]
+    },
+    {
+      "name": "hot_compound_coolant_flow",
+      "kind": "hot",
+      "flow": true,
+      "frame_size": 32,
+      "target_sprite": "create_nuclear_industry:block/hot_compound_coolant_flow",
+      "targets": [
+        "src/main/resources/assets/create_nuclear_industry/textures/block/hot_compound_coolant_flow.png",
+        "src/main/resources/assets/create_nuclear_industry/textures/fluid/hot_compound_coolant_flow.png"
+      ]
+    }
+  ],
+  "playback": {
+    "frames": 8,
+    "frametime_ticks": 2,
+    "interpolate": true,
+    "alpha": 255,
+    "mode": "普通atlas固定循环；不执行内部真实库存混色/调速"
+  },
+  "registration_source": {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/content/ModFluids.java",
+    "sha256": "cf07edfdd3acb3f867ca329ed61591c6ef5c80416d9184aa1114c47166ef8679"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "loader": "neoforge:obj",
+  "model": "create_nuclear_industry:models/block/reactor_animation/mesh/control_rod_head.obj",
+  "textures": {
+    "particle": "create_nuclear_industry:block/reactor_animation/control_rod"
+  },
+  "automatic_culling": false,
+  "shade_quads": true,
+  "flip_v": false,
+  "emissive_ambient": false
+}

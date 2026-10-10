@@ -1,0 +1,147 @@
+{
+  "reactor_casing_side": {
+    "outline": "#303638",
+    "shadow": "#4B5351",
+    "steel": "#77817C",
+    "steel_light": "#A5AAA1",
+    "steel_glint": "#D2D1C4",
+    "lead_dark": "#45494B",
+    "lead": "#66696A",
+    "lead_light": "#898B86",
+    "concrete": "#B8B5A9",
+    "concrete_light": "#D5D2C4",
+    "concrete_shadow": "#94948D"
+  },
+  "reactor_casing_top": {
+    "outline": "#303638",
+    "shadow": "#4B5351",
+    "steel": "#77817C",
+    "steel_light": "#A5AAA1",
+    "steel_glint": "#D2D1C4",
+    "lead_dark": "#45494B",
+    "lead": "#66696A",
+    "lead_light": "#898B86"
+  },
+  "reactor_casing_bottom": {
+    "outline": "#303638",
+    "shadow": "#4B5351",
+    "steel": "#77817C",
+    "steel_light": "#A5AAA1",
+    "steel_glint": "#D2D1C4",
+    "lead_dark": "#45494B",
+    "lead": "#66696A",
+    "lead_light": "#898B86"
+  },
+  "reactor_hot_port_side": {
+    "outline": "#303638",
+    "shadow": "#4B5351",
+    "steel": "#77817C",
+    "steel_light": "#A5AAA1",
+    "steel_glint": "#D2D1C4",
+    "seal": "#202526",
+    "hot_dark": "#643D38",
+    "hot": "#9F5548",
+    "hot_light": "#CE7A61"
+  },
+  "reactor_hot_port_top": {
+    "outline": "#303638",
+    "shadow": "#4B5351",
+    "steel": "#77817C",
+    "steel_light": "#A5AAA1",
+    "steel_glint": "#D2D1C4",
+    "seal": "#202526",
+    "hot_dark": "#643D38",
+    "hot": "#9F5548",
+    "hot_light": "#CE7A61"
+  },
+  "reactor_cold_port_side": {
+    "outline": "#303638",
+    "shadow": "#4B5351",
+    "steel": "#77817C",
+    "steel_light": "#A5AAA1",
+    "steel_glint": "#D2D1C4",
+    "seal": "#202526",
+    "cold_dark": "#173F4E",
+    "cold": "#30778D",
+    "cold_light": "#62B4BD"
+  },
+  "reactor_cold_port_top": {
+    "outline": "#303638",
+    "shadow": "#4B5351",
+    "steel": "#77817C",
+    "steel_light": "#A5AAA1",
+    "steel_glint": "#D2D1C4",
+    "seal": "#202526",
+    "cold_dark": "#173F4E",
+    "cold": "#30778D",
+    "cold_light": "#62B4BD"
+  },
+  "reactor_instrument_port_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#BC714A",
+    "color_08": "#52A2AD"
+  },
+  "reactor_instrument_port_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "reactor_refueling_port_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#AD7A42"
+  },
+  "reactor_refueling_port_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#F0CF87",
+    "color_07": "#5B7078"
+  },
+  "control_rod_drive_side": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078",
+    "color_07": "#AD7A42"
+  },
+  "control_rod_drive_top": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  },
+  "reactor_window": {
+    "color_00": "#28353A",
+    "color_01": "#A3B7B8",
+    "color_02": "#788E94",
+    "color_03": "#D2A359",
+    "color_04": "#715035",
+    "color_05": "#3E5058",
+    "color_06": "#5B7078"
+  }
+}
