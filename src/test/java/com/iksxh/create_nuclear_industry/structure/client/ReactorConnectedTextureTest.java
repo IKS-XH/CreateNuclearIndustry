@@ -364,6 +364,8 @@ class ReactorConnectedTextureTest {
         assertEquals(17,canonicalToIndex.get(9));assertEquals(20,canonicalToIndex.get(41));
         String json="[\n"+canonicalToIndex.entrySet().stream().map(e->"  {\"mask\":"+e.getKey()+",\"index\":"+e.getValue()+"}")
                 .collect(java.util.stream.Collectors.joining(",\n"))+"\n]\n";
+        // 离线映射报告自行准备父目录，不依赖旧美术工作区已有的输出目录。
+        Files.createDirectories(Path.of("build/reports/art/ART-REACTOR-02R1"));
         Files.writeString(Path.of("build/reports/art/ART-REACTOR-02R1/native-window-contexts.json"),json);
         // 实际离线交付表必须与本次Create输出相等，不能仅让两个离线公式互证。
         var mapping=com.google.gson.JsonParser.parseString(Files.readString(Path.of("tools/art-assets/reactor-ct-r1/mapping.json"))).getAsJsonObject();
@@ -463,6 +465,8 @@ class ReactorConnectedTextureTest {
             }
             output.add("{\"name\":\""+scene[0]+"\",\"width\":"+w+",\"height\":"+h+",\"cells\":["+String.join(",",cells)+"]}");
         }
+        // 每项场景测试独立准备父目录，单独运行时也能保存原始离线预览证据。
+        Files.createDirectories(Path.of("build/reports/art/ART-REACTOR-02R1"));
         Files.writeString(Path.of("build/reports/art/ART-REACTOR-02R1/native-window-scenes.json"),"[\n"+String.join(",\n",output)+"\n]\n");
     }
 
