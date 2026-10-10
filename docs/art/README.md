@@ -65,3 +65,9 @@ ART-REACTOR-03已基于[L2及真暂停R2](../reviews/2026-10-10/reactor-runtime-
 用户新反馈表明03R2顶面控件仍被遮挡、液体透明且没有浸泡感。主PM已核真实native后置绘制链，按[03R3共享补充](./ART-REACTOR-03R3-COORDINATION.md)仅续批两共享几何/专属测试路径，实际复制美术树后生效；同一组合候选与一次独立窄审，不重复两侧构建。旧证据保留但视觉未过，液体仍为客户端显示包络，不增加容量或修改实际库存。单页装配台07-R1整改独立。
 
 03R3现已冻结并完成[主PM组合登记](../reviews/2026-10-10/reactor-animation-03/HANDOFF.md#03r3组合候选登记)：23/23原始定向检查、唯一增量JAR和独立窄审通过，无必改项，95冻结项、17class与19资源绑定一致；共享非几何保持。当前候选只待真实液体浸泡/透窗及成型顶面鼠标复看，源码未合main；02R1材质与装配台07-R1单页门独立，旧候选证据保留。
+
+## 普通冷热冷却剂同源材质与循环04
+
+2026-10-10美术负责人按用户指定交付ART-COOLANT-04，主PM完成[来源登记](../reviews/2026-10-10/coolant-fluid-art-04/HANDOFF.md)。75冻结项、16资源生成/安装/build/JAR逐字一致；复用一次4秒exit0增量jar和唯一独立规格/质量窄审，不重复生成、测试、构建或旧保护矩阵。原内部16份SVG导出四种sprite，block/fluid双路径共8PNG替换与8mcmeta新增；普通atlas固定八帧循环、alpha255，不修改Java、渲染层、注册或真实库存。
+
+当前资源候选保留在美术树，未合main；储罐、透明管、桶、冷液世界面及F3+T重载按[美术候选说明](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/ART-COOLANT-04-CANDIDATE.md)复看。普通材质循环不代表每堆库存混色或实际转换量调速；本批专用producer管理八目标，避免旧pipeline全量安装覆盖。03R3原JAR/冻结保留，浸泡/顶面与02R1材质连窗仍各自待验。屏蔽装配台07-R1单页用法教学已独立验收并合main，不因新美术候选重开。
