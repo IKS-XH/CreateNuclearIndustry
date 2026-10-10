@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.resources.ResourceLocation;
 import static com.iksxh.create_nuclear_industry.structure.client.ReactorAnimationVisualState.*;
 
 /** 仪表owner唯一绘制内部辉光和液体显示并集；燃料包络不增容量，一次capture覆盖绘制，未知数据不保留。 */
@@ -52,8 +53,12 @@ public final class ReactorInternalRenderer implements BlockEntityRenderer<Reacto
         // 更新纹理必须先于这个owner任何液体顶点；槽满只撤液，不撤燃料或棒体。
         var texture=ReactorAnimationMaterials.texture(key,phase(key,time,owner.convertedCoolantMbPerTick()),
                 hotRatio(owner.coldCoolantMb(),owner.hotCoolantMb()),CLOCK.tick());if(texture==null)return;
-        VertexConsumer vertex=buffers.getBuffer(RenderType.entityTranslucent(texture));
+        VertexConsumer vertex=liquidBuffer(buffers,texture);
         for(Face face:mesh) submitFace(vertex,pose.last(),face,base,p->LevelRenderer.getLightColor(level,p),owner.origin().getY(),owner.maxInclusive().getY());
+    }
+    /** 液体生产取缓冲入口；测试直接调用同一路径，不替换原生缓冲调度。 */
+    static VertexConsumer liquidBuffer(MultiBufferSource buffers,ResourceLocation texture) {
+        return buffers.getBuffer(ReactorInternalRenderBuffers.layer(texture));
     }
     /** 生产液面按缓存的同层合法空气坐标读取当前世界光；燃料包络不能采实体、floor到外壳或复用宿主光。 */
     static void submitFace(VertexConsumer vertex,PoseStack.Pose pose,Face face,BlockPos base,ToIntFunction<BlockPos> lighting,int minY,int maxY) {
