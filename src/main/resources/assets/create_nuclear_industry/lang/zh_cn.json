@@ -492,5 +492,9 @@
   "create_nuclear_industry.ponder.fuel_sintering_automation.header": "燃料烧结炉：自动化与核热",
   "create_nuclear_industry.ponder.fuel_sintering_automation.text_1": "通过顶部溜槽送入生芯块。",
   "create_nuclear_industry.ponder.fuel_sintering_automation.text_2": "四个水平面都能取出烧结芯块；用漏斗取出，送入承接容器。",
-  "create_nuclear_industry.ponder.fuel_sintering_automation.text_3": "核换热器也能从底部供热：后侧接入热液，前侧排出等量冷液。保持热液供应和冷液出口畅通。"
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_3": "核换热器也能从底部供热：后侧接入热液，前侧排出等量冷液。保持热液供应和冷液出口畅通。",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.header": "屏蔽装配台：搭建与接口",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_1": "预留2×2×2空间，一件装配台放出整台设备。",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_2": "只从主控底部动力轴驱动，至少32RPM。",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_3": "四周可输入材料或取出成品；顶部只进料，底面不通物品。"
 }

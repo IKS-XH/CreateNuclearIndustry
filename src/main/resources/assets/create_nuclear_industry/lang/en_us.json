@@ -492,5 +492,9 @@
   "create_nuclear_industry.ponder.fuel_sintering_automation.header": "Fuel Sintering Furnace: Automation and Nuclear Heat",
   "create_nuclear_industry.ponder.fuel_sintering_automation.text_1": "Feed green fuel pellets through a chute on top.",
   "create_nuclear_industry.ponder.fuel_sintering_automation.text_2": "All four horizontal sides allow sintered fuel pellets to be extracted. Use a funnel to send them into a receiving container.",
-  "create_nuclear_industry.ponder.fuel_sintering_automation.text_3": "A nuclear heat exchanger can also supply heat from below: hot coolant enters at the rear, and an equal amount of cold coolant leaves at the front. Maintain the hot coolant supply and keep the cold coolant outlet clear."
+  "create_nuclear_industry.ponder.fuel_sintering_automation.text_3": "A nuclear heat exchanger can also supply heat from below: hot coolant enters at the rear, and an equal amount of cold coolant leaves at the front. Maintain the hot coolant supply and keep the cold coolant outlet clear.",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.header": "Shielded Assembly Station: Placement and Ports",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_1": "Leave a 2×2×2 space. Placing one station item creates the complete machine.",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_2": "Drive only the shaft below the master block, at a minimum of 32 RPM.",
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_3": "The horizontal sides accept materials or release products. The top accepts inputs only, and the bottom has no item port."
 }

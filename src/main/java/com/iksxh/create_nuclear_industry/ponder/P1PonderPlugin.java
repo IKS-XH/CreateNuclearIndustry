@@ -71,6 +71,11 @@ public final class P1PonderPlugin implements PonderPlugin {
             "fuel_sintering_operation", "fuel_sintering_automation"
     );
 
+    /** 屏蔽装配台仅注册搭建与接口用法，具体配方交由已有查询功能展示。 */
+    public static final List<String> SHIELDED_ASSEMBLY_SCENE_IDS = List.of(
+            "shielded_assembly_placement"
+    );
+
     /**
      * P1 条目列表故意排除 P0 探针、保留的样例外壳、纯材料和不可直接放置的控制棒组件。
      */
@@ -150,6 +155,9 @@ public final class P1PonderPlugin implements PonderPlugin {
                 FuelSinteringPonderScenes::fuelSinteringOperation);
         sintering.addStoryBoard(componentId(FUEL_SINTERING_SCENE_IDS.get(1)),
                 FuelSinteringPonderScenes::fuelSinteringAutomation);
+
+        var assembly = helper.forComponents(componentId("shielded_assembly_station"));
+        assembly.addStoryBoard(componentId(SHIELDED_ASSEMBLY_SCENE_IDS.get(0)), ShieldedAssemblyPonderScenes::placement);
     }
 
     /** 将 P1 内容路径转换为本模组命名空间下的 Ponder 组件 ID。 */
