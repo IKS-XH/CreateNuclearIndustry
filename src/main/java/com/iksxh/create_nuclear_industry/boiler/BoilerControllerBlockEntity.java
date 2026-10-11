@@ -49,6 +49,9 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     private double paidView, waterTemperatureView, steamTemperatureView, normalTemperatureView, scTemperatureView, pressureView, minimumView;
     private boolean available, formDirty = true, scanning;
     private BoilerStructure.Form cachedForm;
+    private final java.util.UUID surfaceGeneration = java.util.UUID.randomUUID();
+    private BoilerSurfaceDescriptor surfaceDescriptor;
+    private boolean surfaceChunkUnloaded;
     private final Set<ChunkPos> missingChunks = new HashSet<>();
     private BoilerState.Settings lastGeometrySettings;
     private final Set<BlockPos> dirtyPorts = new HashSet<>();
@@ -62,6 +65,20 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         pressureControl = new BoilerControls.PressureBehaviour(this); behaviours.add(pressureControl);
     }
     public BoilerState ledger() { return ledger; }
+    /** 返回已冻结显示投影，服务端/客户端均不触发成型扫描或读取运行库存。 */
+    public java.util.Optional<BoilerSurfaceDescriptor> surfaceDescriptor() {
+        return java.util.Optional.ofNullable(surfaceDescriptor);
+    }
+    /** 仅服务端在原缓存决策之后投影一次；同几何遥测不推进版本，也不追加运行状态判定。 */
+    private void updateSurfaceDescriptor(BoilerStructure.Form form) {
+        if (level == null || level.isClientSide) return;
+        long revision = surfaceDescriptor == null ? 0 : surfaceDescriptor.revision();
+        var next = BoilerSurfaceDescriptorFactory.project(level.dimension().location().toString(), worldPosition,
+                surfaceGeneration, revision, form);
+        if (next.sameGeometry(surfaceDescriptor)) return;
+        surfaceDescriptor = next.withRevision(revision + 1);
+        sendData();
+    }
     /** 只对本包围盒内的方块更新失效；外侧运输管道变化不触发体积重扫。 */
     public boolean affectedBy(BlockPos pos) { return cachedForm == null || cachedForm.contains(pos); }
     /** 仅已成型快照需要被后来发现的实交结构撤销，防止两份失败缓存互相逐tick置脏。 */
@@ -97,6 +114,8 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             for (BlockPos p : old.windows()) if (level.hasChunkAt(p)
                     && level.getBlockEntity(p) instanceof BoilerWindowBlockEntity window) window.setFill(0);
         }
+        // 客户端 onLoad 也调用原失效入口，不能清除先到达的首包。
+        updateSurfaceDescriptor(null);
     }
     /** 无事件时仅检查区块可用性；全体积验证不放入正常 tick 循环。 */
     public BoilerStructure.Form currentForm() {
@@ -121,6 +140,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
                         if (!level.hasChunk(x, z)) missingChunks.add(new ChunkPos(x, z));
             }
         } finally { scanning = false; }
+        updateSurfaceDescriptor(cachedForm);
         return cachedForm;
     }
     /** 成型接管先全组预检，再无外部回调地逐机转移，空成员重复认领不会增量。 */
@@ -326,12 +346,23 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     }
     public CompoundTag savePortableData() { CompoundTag tag = new CompoundTag(); tag.put("Ledger", ledger.save()); return tag; }
     public void loadPortableData(CompoundTag tag) { ledger.load(tag.getCompound("Ledger")); synchronizeControls(); setChanged(); if (level != null) sendData(); }
-    @Override public void onLoad() { super.onLoad(); available = true; BoilerStructure.register(level, this); invalidateForm(); }
-    @Override public void invalidate() { available = false; invalidateForm(); BoilerStructure.forget(level, this); super.invalidate(); }
-    @Override public void onChunkUnloaded() { available = false; invalidateForm(); BoilerStructure.forget(level, this); super.onChunkUnloaded(); }
+    @Override public void onLoad() {
+        super.onLoad(); available = true; surfaceChunkUnloaded = false;
+        BoilerStructure.register(level, this); invalidateForm(); BoilerSurfaceSyncEvents.publish(this, false);
+    }
+    @Override public void invalidate() {
+        BoilerSurfaceSyncEvents.publish(this, true, surfaceChunkUnloaded);
+        available = false; invalidateForm(); BoilerStructure.forget(level, this); super.invalidate();
+    }
+    /** 卸载先暂停显示，后续 Create invalidate 保留卸载原因；真正拆除才退休该实例身份。 */
+    @Override public void onChunkUnloaded() {
+        surfaceChunkUnloaded = true; BoilerSurfaceSyncEvents.publish(this, true, true);
+        available = false; invalidateForm(); BoilerStructure.forget(level, this); super.onChunkUnloaded();
+    }
     @Override protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket); tag.put("Boiler", ledger.save());
         if (clientPacket) {
+            if (surfaceDescriptor != null) tag.put("BoilerSurface", surfaceDescriptor.encode());
             tag.putString("Status", status); tag.putInt("Produced", producedView); tag.putInt("Vented", ventedView); tag.putDouble("Paid", paidView);
             tag.putInt("Width", widthView); tag.putInt("Height", heightView); tag.putInt("Depth", depthView); tag.putInt("Pairs", pairsView);
             tag.putInt("WaterCapacity", ledger.waterCapacity()); tag.putInt("SteamCapacity", ledger.steamCapacity());
@@ -345,6 +376,8 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     @Override protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket); ledger.load(tag.getCompound("Boiler")); synchronizeControls();
         if (clientPacket) {
+            surfaceDescriptor = BoilerSurfaceDescriptor.decode(tag.getCompound("BoilerSurface")).orElse(null);
+            BoilerSurfaceSyncEvents.publish(this, false);
             steamKindView = tag.getInt("SteamKind"); status = tag.getString("Status"); producedView = tag.getInt("Produced"); ventedView = tag.getInt("Vented"); paidView = tag.getDouble("Paid");
             widthView = tag.getInt("Width"); heightView = tag.getInt("Height"); depthView = tag.getInt("Depth"); pairsView = tag.getInt("Pairs");
             waterCapacityView = tag.getInt("WaterCapacity"); steamCapacityView = tag.getInt("SteamCapacity");
