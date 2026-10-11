@@ -12,6 +12,7 @@
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
+| 锅炉汽雾容量读数前置 | 用户已在美术对话批准06；[单getter任务](./superpowers/plans/2026-10-11-boiler-steam-capacity-view-01.md)仅公开已有同步容量，实际ABI后美术消费；不扩网络或追认05B视觉通过 |
 | 锅炉美术共享显示前置 | [实际HANDOFF](./reviews/2026-10-11/boiler-surface-display-01/HANDOFF.md)已交：29/29、1/1真实探针及独立窄审通过，main `eb3ec43`、美术`53d699b`，05B可接独立CT消费者；玩法及最终视觉门保持 |
 | 干式贮存架思索08 | [单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)通过，手动存取、漏斗自动化、占用及满架等待；main净教学提交`d2b9345`，原自动检查与独立窄审复用 |
 | 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
