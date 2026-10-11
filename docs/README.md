@@ -12,6 +12,7 @@
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
+| 锅炉美术共享显示前置 | 用户已在美术对话批准A连接方案；[表面接口01](./superpowers/plans/2026-10-11-boiler-surface-display-01.md)纯投影现有Form，实物HANDOFF后美术接消费者，不改变锅炉玩法或关闭视觉门 |
 | 干式贮存架思索08 | [单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)通过，手动存取、漏斗自动化、占用及满架等待；main净教学提交`d2b9345`，原自动检查与独立窄审复用 |
 | 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
 | 屏蔽装配台思索07-R1 | [单页播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)通过：仅搭建与接口，不讲具体配方；7路径与已审候选及冻结源SHA一致，复用3/3定向合同、增量打包与独立窄审，main净教学提交`3f17657` |
