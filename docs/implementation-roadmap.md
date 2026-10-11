@@ -8,8 +8,11 @@
 
 ## 1. 已验收范围
 
+锅炉美术05B＋06R1已由用户整体验收，并净合main `81a161e`；[本次集成](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)绑定连接外观、观察窗、汽雾和蒸汽动画，以及更新后的主目录JAR。原测试/审查复用，仅新增一次增量打包，其他工程主线仍暂停。
+
 | 批次 | 现行结果 | 证据 |
 | :--- | :--- | :--- |
+| 锅炉美术05B＋06R1 | A横箍压力舱连接外观、去内框观察窗、真实汽区雾效/库存浓度混色与两种蒸汽同源循环；用户整体视觉验收通过 | [验收与主分支集成](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)，main `81a161e` |
 | P0 / P1核心反应堆 | 固定5×5×5、逐列热工/燃耗/损伤、控制棒与SCRAM、多口冷却、换料维修及危险拆除事件；具体事故世界效果未实现 | [P1最终交接](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
 | 矿物及基础材料 | 三矿自然生成/采集、铅锡原生加工、制钢、两类传感器、耐火砖/重型轴承与SVG素材 | [三矿](./reviews/2026-10-01/ore-art-acceptance.md)、[铅锡](./reviews/2026-10-01/material-02-acceptance.md)、[钢材](./reviews/2026-10-01/material-03b/README.md)、[传感器](./reviews/2026-10-01/material-04/ACCEPTANCE.md)、[材料05](./reviews/2026-10-02/material-05/ACCEPTANCE.md) |
 | 铀加工与离心机 | 铀选矿/制浆，两格高、顶进浆、底动力、水平物流与维修 | [燃料01](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |

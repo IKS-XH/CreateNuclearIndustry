@@ -4,14 +4,17 @@
 
 ## 当前执行与接续
 
+用户2026-10-11确认锅炉美术重置验收通过并要求合入：05B连接外观/观察窗与06R1汽雾、两种蒸汽动画已净合main `81a161e`，见[验收与合入](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)。唯一4秒增量assemble通过，主目录JAR已更新，原包备份；本批整体视觉门关闭，其他工程主线暂停。
+
 用户2026-10-11报告“存储架的思索也测试通过了”，[干式贮存架思索08](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)已[单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)并净合main `d2b9345`。七路径与已审候选`f87185a`一致，复用原10/10定向检查、最终增量打包及一次独立窄审；主目录JAR已更新，原制品留作备份。本页只讲存取与自动化用法，正式贮存功能不改，其他工程主线仍暂缓。
 
 主分支加液遮挡控制棒故障已按[REACTOR-ROD-COOLANT-01验收](./reviews/2026-10-11/reactor-rod-coolant-01/ACCEPTANCE.md)关闭：修复main `79ca4e4`，29/29定向检查、增量JAR及独立差异复核通过，用户2026-10-11回复“这次对了”确认本故障视觉正确。原证据复用，未重复测试/构建，不覆盖其他独立美术视觉记录。
 
-主分支完整build故障已按[MAIN-BUILD-01验收](./reviews/2026-10-11/main-build-01/ACCEPTANCE.md)关闭：main `8fa6363`修复测试报告目录依赖，454项全部通过，美术净同步`3e3045f`。该次制品身份与原集成打包记录保持历史；当前JAR身份以[锅炉汽容量接口交接](./reviews/2026-10-11/boiler-steam-capacity-view-01/HANDOFF.md)为准。
+主分支完整build故障已按[MAIN-BUILD-01验收](./reviews/2026-10-11/main-build-01/ACCEPTANCE.md)关闭：main `8fa6363`修复测试报告目录依赖，454项全部通过，美术净同步`3e3045f`。该次制品身份与原集成打包记录保持历史；当前JAR身份以[锅炉美术集成验收](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md#当前制品)为准。
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
+| 锅炉美术05B＋06R1 | 用户整体视觉验收通过，连接外观、观察窗、加浓汽雾及两种蒸汽动画已[合入main](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md) `81a161e`；原测试/窄审复用，仅新增一次增量打包 |
 | 锅炉汽雾容量读数前置 | [实际HANDOFF](./reviews/2026-10-11/boiler-steam-capacity-view-01/HANDOFF.md)已交：仅公开已有同步容量，唯一3秒jar、ABI/字节码及窄审通过，main `eb196c6`、美术 `a3540b2`；06可接通，不扩网络或追认视觉通过 |
 | 锅炉美术共享显示前置 | [实际HANDOFF](./reviews/2026-10-11/boiler-surface-display-01/HANDOFF.md)已交：29/29、1/1真实探针及独立窄审通过，main `eb3ec43`、美术`53d699b`，05B可接独立CT消费者；玩法及最终视觉门保持 |
 | 干式贮存架思索08 | [单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)通过，手动存取、漏斗自动化、占用及满架等待；main净教学提交`d2b9345`，原自动检查与独立窄审复用 |
