@@ -65,6 +65,12 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         pressureControl = new BoilerControls.PressureBehaviour(this); behaviours.add(pressureControl);
     }
     public BoilerState ledger() { return ledger; }
+    /**
+     * 读取已有同步汽容量，单位 mB，仅用于客户端显示；首包前的初始化值不证明已同步或成型。
+     * 生产消费须在原 clientPacket 读取完成后核实当前 owner、有效 descriptor 及 L1 的同一世界、
+     * generation/revision/min/max/partition，且容量为正才可作分母；服务端容量权威仍为 ledger。
+     */
+    public int syncedSteamCapacityMb() { return steamCapacityView; }
     /** 返回已冻结显示投影，服务端/客户端均不触发成型扫描或读取运行库存。 */
     public java.util.Optional<BoilerSurfaceDescriptor> surfaceDescriptor() {
         return java.util.Optional.ofNullable(surfaceDescriptor);
