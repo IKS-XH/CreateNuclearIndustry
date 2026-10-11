@@ -2,6 +2,8 @@
 
 2026-10-12，PM核验。实现和自动审查完成，停在本批集中人工门；不表示客户端玩法、视觉或操作已经验收。源码未合main，主目录正式反应堆仍5×5×5，主目录制品未被本候选覆盖。
 
+当前组合补充：共享库存显示修复`209cd81`和双面铅灰观察窗`fe30e83727fe6125690ee84a0a4f46855355740d`已精确接入本候选，见[ART08组合记录](ART08-INTEGRATION.md)。当前JAR为2,667,047字节、SHA256 `0940bddc9a8c6d991a3d3bbd7b42e0dd3382c6d9ca3fa0f0d482682aaea8958b`，必要组合assemble exit0/8秒；下方31源/50class清单与`794a9ca…4cef`包为原变量尺寸冻结历史，均已保留，不能当作当前包身份。
+
 ## 实际工作区与来源
 
 - 候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-art-integration`。
@@ -37,7 +39,7 @@
 
 细节、RED记录与公式见[实现报告](./IMPLEMENTATION.md)。最终[冻结清单](E:/MyMC/NewMod/Create_NuclearIndustry-art-integration/build/reports/reactor-variable-size/final-identity.json)绑定31源、50生产class及4资源的源码/安装/JAR身份；清单SHA256：`67e417661cba142195779555747b756ff0c1c80ec0daa849457994fd01f20b3b`。
 
-实际候选[JAR](E:/MyMC/NewMod/Create_NuclearIndustry-art-integration/build/libs/create_nuclear_industry-0.1.0.jar)：2659488字节，SHA256：`794a9ca78ec091116c5500be70999ac0082d1f219357cbe62ab9be66f18c4cef`。main未拿此包替换，完整build时的旧包身份仅为历史。
+原变量尺寸冻结JAR：2659488字节，SHA256：`794a9ca78ec091116c5500be70999ac0082d1f219357cbe62ab9be66f18c4cef`，现保留在`build/reports/reactor-variable-size/shared-window-08-integration/before-combination.jar`。main未拿此包替换；当前组合[JAR](E:/MyMC/NewMod/Create_NuclearIndustry-art-integration/build/libs/create_nuclear_industry-0.1.0.jar)及补充身份以上方记录为准。
 
 ## 世界与手测
 

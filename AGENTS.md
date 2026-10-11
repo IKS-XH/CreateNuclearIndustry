@@ -15,7 +15,7 @@
 
 ## 项目治理
 
-- 用户2026-10-12在已任命美术负责人对话报告库存变化时“整片液体短暂消失再出现”。主PM已核原消息与普通FluidHandler→setSnapshot→L2撤销链，按[REACTOR-RUNTIME-COOLANT-03](docs/superpowers/plans/2026-10-12-reactor-runtime-coolant-03.md)完成共享窄修：专门纯库存服务端入口保留原可靠完整样本及年龄，真正失效仍撤销；不拼接新旧字段、不改客户端或热工。真实GREEN1/1、原相关JUnit17/17、唯一增量assemble及一次独立窄审通过，净同步main`b110867`、美术`f787aa4`、可变候选`209cd81`，见[HANDOFF](docs/reviews/2026-10-12/reactor-runtime-coolant-03/HANDOFF.md)。原RED保存停滞边界保留，主目录制品复用同源冻结JAR；窗口08净集成另记，液面视觉并入ART08。可变尺寸01仍独立停在人工门，不以本协调推进其他主线。
+- 用户2026-10-12在已任命美术负责人对话报告库存变化时“整片液体短暂消失再出现”。主PM已核原消息与普通FluidHandler→setSnapshot→L2撤销链，按[REACTOR-RUNTIME-COOLANT-03](docs/superpowers/plans/2026-10-12-reactor-runtime-coolant-03.md)完成共享窄修：专门纯库存服务端入口保留原可靠完整样本及年龄，真正失效仍撤销；不拼接新旧字段、不改客户端或热工。真实GREEN1/1、原相关JUnit17/17、唯一增量assemble及一次独立窄审通过，净同步main`b110867`、美术`f787aa4`、可变候选`209cd81`，见[HANDOFF](docs/reviews/2026-10-12/reactor-runtime-coolant-03/HANDOFF.md)。原RED保存停滞边界保留，主目录制品复用同源冻结JAR；已审窗口08另精确同步候选`fe30e83`，必要组合assemble exit0/8秒，原变量证据保留，见[集成补充](docs/reviews/2026-10-12/reactor-variable-size/ART08-INTEGRATION.md)，窗口08未合main。液面/窗口视觉并入ART08与尺寸集中复看，可变尺寸01仍独立停在人工门，不以本协调推进其他主线。
 
 - 用户2026-10-12明确开始反应堆可变尺寸：三边各5～16格，允许跨区块，棒列规则和既定容量/热工保持。按[REACTOR-VARIABLE-SIZE-01](docs/superpowers/plans/2026-10-12-reactor-variable-size-01.md)已完成候选`0840906`，保留在同级`Create_NuclearIndustry-art-integration`的`codex/reactor-variable-size`；[候选说明](docs/reviews/2026-10-12/reactor-variable-size/CANDIDATE.md)绑定514/514完整build、审查窄修后51/51回归、1/1安全探针、最终增量JAR和一次独立规格/质量审查。原2/2业务断言后保存挂起的限制保持，不冒称进程成功。主世界27文件已携带并备份，停在[集中人工门](docs/reviews/2026-10-12/reactor-variable-size/CLIENT-CHECKLIST.md)；源码未合main、主目录正式功能仍5³，其他主线暂停。每列仍一个燃料组件，高度线性放大产热/燃耗、维修量反比，不新增燃料库存；缺区块安全保护和无强载整改已关闭，自动证据不代替客户端视觉/操作验收。
 
