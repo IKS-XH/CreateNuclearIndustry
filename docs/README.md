@@ -4,14 +4,15 @@
 
 ## 当前执行与接续
 
-用户已要求开始[干式贮存架思索08](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)：单页存取与自动化教学只讲用法，正式贮存功能不改。净候选`f87185a`完成10/10定向检查、最终增量打包与一次独立窄审，现交[单页播放](./reviews/2026-10-11/dry-storage-ponder-08/CANDIDATE.md)；源码仍留在同级隔离树，未验收前不合main、不接新主线。
+用户2026-10-11报告“存储架的思索也测试通过了”，[干式贮存架思索08](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)已[单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)并净合main `d2b9345`。七路径与已审候选`f87185a`一致，复用原10/10定向检查、最终增量打包及一次独立窄审；主目录JAR已更新，原制品留作备份。本页只讲存取与自动化用法，正式贮存功能不改，其他工程主线仍暂缓。
 
 主分支加液遮挡控制棒故障已按[REACTOR-ROD-COOLANT-01验收](./reviews/2026-10-11/reactor-rod-coolant-01/ACCEPTANCE.md)关闭：修复main `79ca4e4`，29/29定向检查、增量JAR及独立差异复核通过，用户2026-10-11回复“这次对了”确认本故障视觉正确。原证据复用，未重复测试/构建，不覆盖其他独立美术视觉记录。
 
-主分支完整build故障已按[MAIN-BUILD-01验收](./reviews/2026-10-11/main-build-01/ACCEPTANCE.md)关闭：main `8fa6363`修复测试报告目录依赖，454项全部通过，美术净同步`3e3045f`。该次制品身份与原集成打包记录保持历史；当前JAR身份以以上修复候选为准。
+主分支完整build故障已按[MAIN-BUILD-01验收](./reviews/2026-10-11/main-build-01/ACCEPTANCE.md)关闭：main `8fa6363`修复测试报告目录依赖，454项全部通过，美术净同步`3e3045f`。该次制品身份与原集成打包记录保持历史；当前JAR身份以[贮存架08验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)为准。
 
 | 工作 | 状态与入口 |
 | :--- | :--- |
+| 干式贮存架思索08 | [单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)通过，手动存取、漏斗自动化、占用及满架等待；main净教学提交`d2b9345`，原自动检查与独立窄审复用 |
 | 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
 | 屏蔽装配台思索07-R1 | [单页播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)通过：仅搭建与接口，不讲具体配方；7路径与已审候选及冻结源SHA一致，复用3/3定向合同、增量打包与独立窄审，main净教学提交`3f17657` |
 | 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
@@ -25,7 +26,7 @@
 | 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
 | 换热器分情景思索 | 五幕及R4剖面复看[用户手测通过](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，复用定向合同、增量打包及独立复核；main净教学提交`b036776` |
 
-主目录现提供已验收供热、上述七类设备教学及本批合入美术；可直接使用主目录`build/libs/create_nuclear_industry-0.1.0.jar`。逻辑与美术工作树保留来源及历史证据，各目录仍分别使用自己的运行配置和世界。
+主目录现提供已验收供热、八类设备教学及本批合入美术；可直接使用主目录`build/libs/create_nuclear_industry-0.1.0.jar`。逻辑与美术工作树保留来源及历史证据，各目录仍分别使用自己的运行配置和世界，不自动回写候选存档。
 
 ## 权威文档
 

@@ -25,6 +25,7 @@
 | 换热器思索 | 本体串联、Create锅炉供热、锅炉内置剖视、盆/炉持续供热、蒸汽冷凝五幕 | [播放验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，main整合`b036776` |
 | 燃料烧结炉思索 | 烧结与供热、自动化与核热两幕；断热暂停及恢复、顶进侧出和底部热源可见 | [播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)，main整合`57763f8` |
 | 屏蔽装配台思索 | 仅搭建与接口一页，整台放置、主控底轴、四周物流和顶部只进料；不含具体配方 | [07-R1播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)，main整合`3f17657` |
+| 干式贮存架思索 | 存取与自动化一页，手动存取、漏斗路径、占用和满架等待；不含具体配方 | [08播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)，main整合`d2b9345` |
 | 工作盆持续核热 | 有盆即持续超级加热，默认4mB热液/t转等量冷液，缺液/回液堵塞立即停热 | [02R1验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)，用户手测已通过 |
 | 烧结炉持续核热 | 顶炉即持续耗热，共用工作盆成本及配置；原烧结工时、物流和燃烧室热源保留 | [EXCHANGER-03验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)，用户手测已通过 |
 
@@ -40,9 +41,9 @@
 
 6. 用户2026-10-11明确要求合并美术，按[集成计划](./superpowers/plans/2026-10-11-art-integration.md)合入ART01、02R1、03R3和04，main `fba424fc`；原定向检查与独立审查复用，仅新增一次assemble和JAR绑定。主工程较新的功能/教学保留，主目录JAR更新；本项是用户授权集成，不改写原客户端视觉记录或触发下一项工程工作。
 
-7. 用户2026-10-11明确开始[干式贮存架思索08](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)，单页讲存取、漏斗、占用与满架，复用正式贮存功能。净候选`f87185a`的10/10定向检查、最终增量assemble及一次独立窄审通过；已交[单页播放](./reviews/2026-10-11/dry-storage-ponder-08/CANDIDATE.md)，尚未合main，不讲配方、不改其他教学或推进工程主线。
+7. 用户2026-10-11明确报告贮存架思索测试通过，按[08单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)净合main `d2b9345`，单页讲存取、漏斗、占用与满架，复用正式贮存功能。七路径与已审候选`f87185a`一致，复用10/10定向检查、最终增量assemble及一次独立窄审，主目录JAR同步冻结制品；不讲配方、不改其他教学或推进工程主线。
 
-用户授权PM自动派发已确认且范围清楚的任务；遇新玩法决策或人工门保存证据并停止推进，不自动改做辅助项目。本批候选目录复用 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration`，其他同级树保留历史；主目录保留已验收功能。
+用户授权PM自动派发已确认且范围清楚的任务；遇新玩法决策或人工门保存证据并停止推进，不自动改做辅助项目。本批来源目录 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration`与其他同级树保留历史证据和各自世界；主目录提供已验收功能及八类设备教学。
 
 ## 3. 有效后续范围
 
