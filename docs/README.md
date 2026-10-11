@@ -4,6 +4,8 @@
 
 ## 当前执行与接续
 
+用户2026-10-12指定[换料端口枯竭组件快捷替换](./superpowers/plans/2026-10-12-refueling-quick-swap-01.md)，在现有可变尺寸候选树实施；仍有耐久者禁止替换，空槽装料和机械臂规则保持。当前实现进行中，独立人工门待验收。
+
 用户2026-10-12要求的[反应堆可变尺寸01](./superpowers/plans/2026-10-12-reactor-variable-size-01.md)已交[候选`0840906`](./reviews/2026-10-12/reactor-variable-size/CANDIDATE.md)：宽高深各5～16整数，允许跨区块，棒列规则及既定容量/热工保持。完整514/514、审查窄修后51/51与真实安全探针通过，独立审查已关闭必改项；主世界已备份并携带。请从同级候选目录按[集中检查单](./reviews/2026-10-12/reactor-variable-size/CLIENT-CHECKLIST.md)启动；main正式功能仍5³，源码待本批人工验收后合入，其他主线暂停。
 
 用户2026-10-11确认锅炉美术重置验收通过并要求合入：05B连接外观/观察窗与06R1汽雾、两种蒸汽动画已净合main `81a161e`，见[验收与合入](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)。唯一4秒增量assemble通过，主目录JAR已更新，原包备份；本批整体视觉门关闭，其他工程主线暂停。
