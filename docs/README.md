@@ -4,7 +4,7 @@
 
 ## 当前执行与接续
 
-用户2026-10-12明确开始[反应堆可变尺寸01](./superpowers/plans/2026-10-12-reactor-variable-size-01.md)：宽高深各5～16整数，允许跨区块，棒列规则及既定容量/热工保持。本批复用同级隔离树、备份并携带主世界；自动验证与独立审查后等待集中人工门，main正式功能暂仍5³，其他主线暂停。
+用户2026-10-12要求的[反应堆可变尺寸01](./superpowers/plans/2026-10-12-reactor-variable-size-01.md)已交[候选`0840906`](./reviews/2026-10-12/reactor-variable-size/CANDIDATE.md)：宽高深各5～16整数，允许跨区块，棒列规则及既定容量/热工保持。完整514/514、审查窄修后51/51与真实安全探针通过，独立审查已关闭必改项；主世界已备份并携带。请从同级候选目录按[集中检查单](./reviews/2026-10-12/reactor-variable-size/CLIENT-CHECKLIST.md)启动；main正式功能仍5³，源码待本批人工验收后合入，其他主线暂停。
 
 用户2026-10-11确认锅炉美术重置验收通过并要求合入：05B连接外观/观察窗与06R1汽雾、两种蒸汽动画已净合main `81a161e`，见[验收与合入](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)。唯一4秒增量assemble通过，主目录JAR已更新，原包备份；本批整体视觉门关闭，其他工程主线暂停。
 
@@ -51,7 +51,7 @@
 
 ## 仍有效的后置工作
 
-- 反应堆可变尺寸、辅助热、二级耐压、自动控制、具体事故与辐射、其他设备动画及发布完善，按路线图安排；未实现行为不提前教学。
+- 反应堆可变尺寸已到候选人工门；辅助热、二级耐压、自动控制、具体事故与辐射、其他设备动画及发布完善仍按路线图安排，未实现行为不提前教学。
 - [事故教学与发布总验收](./superpowers/plans/2026-09-12-post-accident-ponder-plan.md)继续保留；已有设备基础教学无需等待事故实现。
 - [损伤倍率模拟器02B](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)和[三维辅助工具](./superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)未完成整体验收，不阻塞近期任务，不在人工门等待期间自行接续。
 - [生产成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md)保留核算口径；旧比较值不是未批准的新配方授权。铅锡洗矿副产物议题仍暂缓。

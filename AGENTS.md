@@ -15,7 +15,7 @@
 
 ## 项目治理
 
-- 用户2026-10-12明确开始反应堆可变尺寸：三边各5～16格，允许跨区块，棒列规则和既定容量/热工保持。按[REACTOR-VARIABLE-SIZE-01](docs/superpowers/plans/2026-10-12-reactor-variable-size-01.md)复用同级隔离树并携带主世界，PM可直接派发已确认实现、审查，候选完成后停在人工成型/运行/视觉门；main正式功能在验收前仍为5³，其他主线暂停。每列仍一个燃料组件，高度线性放大产热/燃耗、维修量反比；局部设计旧“库存随高度增长”表述按现行核心合同统一，不新增燃料库存。
+- 用户2026-10-12明确开始反应堆可变尺寸：三边各5～16格，允许跨区块，棒列规则和既定容量/热工保持。按[REACTOR-VARIABLE-SIZE-01](docs/superpowers/plans/2026-10-12-reactor-variable-size-01.md)已完成候选`0840906`，保留在同级`Create_NuclearIndustry-art-integration`的`codex/reactor-variable-size`；[候选说明](docs/reviews/2026-10-12/reactor-variable-size/CANDIDATE.md)绑定514/514完整build、审查窄修后51/51回归、1/1安全探针、最终增量JAR和一次独立规格/质量审查。原2/2业务断言后保存挂起的限制保持，不冒称进程成功。主世界27文件已携带并备份，停在[集中人工门](docs/reviews/2026-10-12/reactor-variable-size/CLIENT-CHECKLIST.md)；源码未合main、主目录正式功能仍5³，其他主线暂停。每列仍一个燃料组件，高度线性放大产热/燃耗、维修量反比，不新增燃料库存；缺区块安全保护和无强载整改已关闭，自动证据不代替客户端视觉/操作验收。
 
 - 用户2026-10-11明确“锅炉的美术重置通过验收了，合并到主分支吧”。按[集成计划](docs/superpowers/plans/2026-10-11-boiler-art-integration.md)关闭05B＋06R1整体视觉门，458已审来源路径净合main `81a161e`，见[验收与合入](docs/reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)。复用原10/10、11/11、R1受影响2/2与独立窄审，只新增一次4秒exit0增量assemble；62资源、29客户端class、20思索模板及2Controller class与集成JAR一致。主目录JAR更新且原件备份，锅炉玩法/库存/温压不改；美术树当前汽轮机工作及无关改动保留，原候选待验描述为历史，不补记用户未报告的逐项观察，其他工程主线暂停。
 
