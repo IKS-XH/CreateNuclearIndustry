@@ -25,7 +25,7 @@
 - 唯一实现树 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration`，分支 `codex/reactor-variable-size`，基线 `31554094f6b8c2ae3726d4c60fd83c0872eb80a7`。复用已携带存档的现有隔离树，不新建分支、不读写/复制用户世界；可变尺寸、ART08/09各自人工门保持。
 - root已按 using-git-worktrees 核实 linked worktree；既有候选证据复用，不重复开工全量测试。
 - 执行者实际阅读根AGENTS、本卡及 `C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`、`C:/Users/IKSXH/.codex/plugins/cache/openai-curated-remote/superpowers/6.4.2/skills/test-driven-development/SKILL.md`。技术栈以本卡锁定值为准。
-- 只允许三个生产Java：`block/ReactorPortBlock.java`、`blockentity/ReactorPortBlockEntity.java`、`reactor/FuelRefuelingTransaction.java`；原 `reactor/FuelRefuelingTransactionTest.java`；新增 `gametest/RefuelingQuickSwapGameTests.java`（可复用正式 `p0_probe_empty` 模板，不改构建入口）；zh_cn/en_us仅本次换料消息键。
+- 只允许三个生产Java：`block/ReactorPortBlock.java`、`blockentity/ReactorPortBlockEntity.java`、`reactor/FuelRefuelingTransaction.java`；原 `reactor/FuelRefuelingTransactionTest.java`；新增 `gametest/RefuelingQuickSwapGameTests.java`（独立域模板 `src/main/resources/data/create_nuclear_industry_quick_refuel/structure/p0_probe_empty.nbt` 逐字复制正式原空模板，不改原模板或构建入口）；zh_cn/en_us仅本次换料消息键。
 - Java路径以 `src/main/java/com/iksxh/create_nuclear_industry/` 为根，测试以 `src/test/java/com/iksxh/create_nuclear_industry/` 为根；语言在 `src/main/resources/assets/create_nuclear_industry/lang/`。
 - 执行者报告仅 `docs/reviews/2026-10-12/refueling-quick-swap-01/IMPLEMENTATION.md` 与本计划 `.superpowers/sdd/refueling-quick-swap-01/task-1-report.md`，日志/冻结身份写 `build/reports/refueling-quick-swap-01/`。审查者仅同目录 `REVIEW.md`。其他docs、Git、世界、PNG/OBJ/SVG、共享控件、生命周期/热工修改禁止，必要写集外改动先报告PM。
 
@@ -41,15 +41,21 @@
 
 **接口：** 纯事务新增 `replaceExhausted(FuelColumnState current, ItemStack incoming, double currentFissionHeatHu, ItemStack exactStoredFuel)`，返回原 Result 合同；新增替换成功/目标未枯竭状态并正确扩展 success。端口新增 `tryReplaceExhaustedFuel(ItemStack incoming)`，复用原提交前二次校验及 rollback。玩家仅在手持正式新组件且目标已有组件时走替换；不得改变机械臂的现有接口含义。
 
-- [ ] RED：以现有玩家右击入口写独立域真实场景，实际期待枯竭产物返回并装入新燃料；先在现有生产代码上运行，确认因仍拒绝已占用槽而失败，不以缺方法编译错误作为行为RED。
-- [ ] GREEN：添加纯事务、端口原子提交及玩家返回路由；新增本地化“已替换枯竭燃料组件”“燃料尚未耗尽，无法直接替换”（英文同步），不硬编码玩家提示。
-- [ ] 纯事务定向覆盖：枯竭成功且只消耗一件；剩余一耐久拒绝；错物品/耗尽输入/裂变中拒绝；旧组件自定义数据保持；列热/完整度保持且失败输入不变。机械臂原insert/extract断言保留。
-- [ ] 独立真实GameTest覆盖：主/副手实际入口；一件输入回手、多件输入入包/满包掉落守恒；未耗尽拒绝、空槽仍可装入与未成型拒绝；使用非5尺寸结构验证坐标及尺寸/余热/其他列不变。可合并有限场景，禁止复制大量完整夹具。
-- [ ] 最终必要检查：`./gradlew.bat test --tests '*FuelRefuelingTransactionTest'`，新增独立域 `./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_quick_refuel -PgameTestDirectory=build/gametest-refueling-quick-swap-01`，最后唯一增量 `assemble`。执行者独占Gradle，本批不完整build、不clean、不强制重跑、不跑无关GameTest。
-- [ ] 写报告：实际技能/变更、RED/GREEN原日志与退出码、JUnit与真实用例数、源及class/语言/JAR身份、待人工范围。已知保存退出停滞若出现，区分业务断言与命令退出，不把前者冒充全程成功；不重复已通过业务。
-- [ ] 独立审查：同一diff一次合并规格/质量，读原证据不重跑。整改交原执行者，仅受影响证据复验。
+- [x] RED：以现有玩家右击入口写独立域真实场景，实际期待枯竭产物返回并装入新燃料；先在现有生产代码上运行，确认因仍拒绝已占用槽而失败，不以缺方法编译错误作为行为RED。
+- [x] GREEN：添加纯事务、端口原子提交及玩家返回路由；新增本地化“已替换枯竭燃料组件”“燃料尚未耗尽，无法直接替换”（英文同步），不硬编码玩家提示。
+- [x] 纯事务定向覆盖：枯竭成功且只消耗一件；剩余一耐久拒绝；错物品/耗尽输入/裂变中拒绝；旧组件自定义数据保持；列热/完整度保持且失败输入不变。机械臂原insert/extract断言保留。
+- [x] 独立真实GameTest覆盖：主/副手实际入口；一件输入回手、多件输入入包/满包掉落守恒；未耗尽拒绝、空槽仍可装入与未成型拒绝；使用非5尺寸结构验证坐标及尺寸/余热/其他列不变。可合并有限场景，禁止复制大量完整夹具。
+- [x] 最终必要检查：`./gradlew.bat test --tests '*FuelRefuelingTransactionTest'`，新增独立域 `./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_quick_refuel -PgameTestDirectory=build/gametest-refueling-quick-swap-01`，最后唯一增量 `assemble`。执行者独占Gradle，本批不完整build、不clean、不强制重跑、不跑无关GameTest。
+- [x] 写报告：实际技能/变更、RED/GREEN原日志与退出码、JUnit与真实用例数、源及class/语言/JAR身份、待人工范围。已知保存退出停滞若出现，区分业务断言与命令退出，不把前者冒充全程成功；不重复已通过业务。
+- [x] 独立审查：同一diff一次合并规格/质量，读原证据不重跑。整改交原执行者，仅受影响证据复验。
 - [ ] PM内容核对后提交候选，手测前不合main；保留所有无关改动和历史制品。用户确认本功能后才能关闭它的人工门，不顺带关闭尺寸/美术。
 
 ## PM接续
 
 2026-10-12：直接落实用户指定功能；返还路线与可用新燃料耐久沿用现有交互语义，是实现默认值，不新增玩法选择。本批不新开分支，不触碰已经携带的存档，ART09美术树无三个生产Java写集交叉。
+
+2026-10-12执行核实：锁定NeoForge按模板namespace筛选；首次exit0但零测试不算RED/GREEN。允许新增上述单个独立域空模板逐字副本，原模板SHA保持，无构建/功能扩范围。
+
+2026-10-12收尾发现实际边界：原版Inventory.add在创造模式满包会清零未接收输出。PM批准增加此真实RED并在原玩家返还写集整改，复验仅真实GameTest；原12/12事务与ART09证据复用。首次组合assemble降为中间证据并备份，按治理5.1实际故障触发条件允许修复后的必要增量assemble作为最终冻结；保留原日志，不用有吞物品疑点的制品交人工。
+
+2026-10-12候选交付：功能提交d811f841c89331ac19564ab80d94a331706ecaf7；ART09净接入26f4ba25ff71085009bf799ded418e9b796c141d。最终12/12事务、1/1真实玩家有限场景、必要增量assemble退出0，独立审查无必改项，源/class/资源/JAR身份已核。PM已提交候选，最后用户手测/合main步骤仍未完成，各项人工门独立保持；证据和启动见本批CANDIDATE。

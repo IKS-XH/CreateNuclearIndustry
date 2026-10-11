@@ -15,9 +15,9 @@
 
 ## 项目治理
 
-- 用户2026-10-12要求手持新燃料组件右击换料端口直接替换枯竭组件，剩余耐久者禁止替换，按[REFUEL-QUICK-SWAP-01](docs/superpowers/plans/2026-10-12-refueling-quick-swap-01.md)自动派发。仅新增原子替换与玩家返还路径，机械臂/空槽/维修保持；复用可变尺寸候选树，不开新分支或搬动存档，不关闭尺寸及美术人工门。当前需求已确定，实现与检查进行中，未合main。
+- 用户2026-10-12要求手持新燃料组件右击换料端口直接替换枯竭组件，剩余耐久者禁止替换，按[REFUEL-QUICK-SWAP-01](docs/superpowers/plans/2026-10-12-refueling-quick-swap-01.md)自动派发。仅新增原子替换与玩家返还路径，机械臂/空槽/维修保持；复用可变尺寸候选树，不开新分支或搬动存档，不关闭尺寸及美术人工门。已交功能候选`d811f84`：12/12事务、最终1/1真实服务端与必要增量assemble退出0，独立窄审无必改项；同包ART09净接入`26f4ba2`及其原9/9证据复用，见[候选与启动](docs/reviews/2026-10-12/refueling-quick-swap-01/CANDIDATE.md)。未合main，各项人工门保持。
 
-- 用户2026-10-12在已任命美术负责人对话直接反馈驱动器/换料口密集排列难区分、顶面深度控件字小且不好操作。主PM核原消息、三树共享源及锁定Create绘制/命中链后，按[ART09共享补充](docs/art/ART-REACTOR-09-COORDINATION.md)仅临时批准原CornerTransform与原TransformTest两路径，由美术原消费者同批扩大顶底字体/本格命中并避让棒体；四侧、0..100及权威提交保持。素材仍由美术09卡独立SVG工具管理；一位执行者持有必要定向验证及最终组合assemble，同一次窄审，净集成由PM负责。当前仅范围生效，未实现/验收，不复用03R2/R3旧临时权限；可变尺寸01及ART08人工门保持，其他主线暂停。
+- 用户2026-10-12在已任命美术负责人对话直接反馈驱动器/换料口密集排列难区分、顶面深度控件字小且不好操作。主PM核原消息、三树共享源及锁定Create绘制/命中链后，按[ART09共享补充](docs/art/ART-REACTOR-09-COORDINATION.md)仅临时批准原CornerTransform与原TransformTest两路径，由美术原消费者同批扩大顶底字体/本格命中并避让棒体；四侧、0..100及权威提交保持。素材仍由美术09卡独立SVG工具管理；一位执行者持有必要定向验证及最终组合assemble，同一次窄审，净集成由PM负责。ART09已内部9/9定向检查、唯一美术打包及一次独立组合窄审通过；99净来源已接入可变候选`26f4ba2`，与快捷换料最终JAR绑定，未合main。原03R2/R3临时权限不沿用；09真实字体/鼠标、可变尺寸01及ART08人工门保持，其他主线暂停。
 
 - 用户2026-10-12在已任命美术负责人对话报告库存变化时“整片液体短暂消失再出现”。主PM已核原消息与普通FluidHandler→setSnapshot→L2撤销链，按[REACTOR-RUNTIME-COOLANT-03](docs/superpowers/plans/2026-10-12-reactor-runtime-coolant-03.md)完成共享窄修：专门纯库存服务端入口保留原可靠完整样本及年龄，真正失效仍撤销；不拼接新旧字段、不改客户端或热工。真实GREEN1/1、原相关JUnit17/17、唯一增量assemble及一次独立窄审通过，净同步main`b110867`、美术`f787aa4`、可变候选`209cd81`，见[HANDOFF](docs/reviews/2026-10-12/reactor-runtime-coolant-03/HANDOFF.md)。原RED保存停滞边界保留，主目录制品复用同源冻结JAR；已审窗口08另精确同步候选`fe30e83`，必要组合assemble exit0/8秒，原变量证据保留，见[集成补充](docs/reviews/2026-10-12/reactor-variable-size/ART08-INTEGRATION.md)，窗口08未合main。液面/窗口视觉并入ART08与尺寸集中复看，可变尺寸01仍独立停在人工门，不以本协调推进其他主线。
 
