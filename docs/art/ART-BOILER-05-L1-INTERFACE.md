@@ -36,4 +36,4 @@ generation为每个服务端控制器实例新UUID，不复用能力epoch、不�
 
 执行范围和必要检查见[实施卡](../superpowers/plans/2026-10-11-boiler-surface-display-01.md)。仅一次锅炉表面定向JUnit＋原BoilerStateTest回归及增量assemble，一次专属namespace真实控制器探针，一次独立规格/质量窄审。原反应堆L1 API/加载次序和锅炉玩法证据复用，不跑全量、管网/汽轮机、旧存档或已验收教学。
 
-主PM核实实物API与源/class/JAR绑定后，净合main并只同步共享精确写集到美术树；不覆盖美术dirty docs/素材/窗口模型，不重复美术最终assemble。美术负责人依HANDOFF继续其批准消费者，最终视觉仍由用户复看。
+主PM核实实物API与源/class/JAR绑定后，净合main并只同步共享精确写集到美术树；不覆盖美术dirty docs/素材/窗口模型，不重复美术最终assemble。现已交[实际API与准许消费者写集](../reviews/2026-10-11/boiler-surface-display-01/HANDOFF.md)：main `eb3ec43`、美术净同步`53d699b`，29/29及1/1真实探针、独立窄审通过。美术负责人依HANDOFF继续其批准消费者，最终视觉仍由用户复看。
