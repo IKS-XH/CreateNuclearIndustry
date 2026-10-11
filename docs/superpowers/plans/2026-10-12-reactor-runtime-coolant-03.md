@@ -23,12 +23,12 @@
 
 ## 顺序任务与写集
 
-1. 写一个独立域`ReactorRuntimeCoolantGameTests`，真实成型仪表/端口调用普通冷热capability并解码实际update packet。先RED复现fill/drain撤销，再验证普通事务的权威mB变化而L2完整对象冻结；下一正式成功tick产生同龄新样本并包含真实库存。SIMULATE/零量不变、通用外部setter仍撤销、正式早退/结构失效不复活均须检查。可复用已有runtime display完整命名模板，避免增加空模板或改原测试。
+1. 写一个独立域`ReactorRuntimeCoolantGameTests`，真实成型仪表/端口调用普通冷热capability并解码实际update packet。先RED复现fill/drain撤销，再验证普通事务的权威mB变化而L2完整对象冻结；下一正式成功tick产生同龄新样本并包含真实库存。SIMULATE/零量不变、通用外部setter仍撤销、正式早退/结构失效不复活均须检查。实际NeoForge注册按template namespace过滤，跨域复用无法单独运行本批，因此只将已有`data/reactor_runtime_display_probe/structure/empty.nbt`逐字复制到`data/reactor_runtime_coolant_probe/structure/empty.nbt`，不生成新内容、不改原测试。两次启动排错日志不计为行为RED或通过。
 2. 最小修改`blockentity/ReactorInstrumentPortBlockEntity.java`和`reactor/ReactorCoolantFluidHandler.java`；中文职责/单位/服务端/不变量注释。专门库存入口内部保持原持久化和同步，只在可靠条件成立时免撤L2。
 3. 定向运行已有`ReactorRuntimeLifecycleTest`、`ReactorRuntimeDescriptorTest`、`ReactorRuntimeProjectionTest`，覆盖重复sample不续租、20tick到期、卸载/坏包/几何拒绝与真暂停原边界；不改其断言来放宽合同。真实独立域只跑本批新用例，记录命令/exit/断言与保存进程结果。唯一最终增量assemble并冻结净源码、class/资源/JAR身份；不clean/rerun。
 4. 执行者写`docs/reviews/2026-10-12/reactor-runtime-coolant-03/IMPLEMENTATION.md`及build本批证据。一次独立合并规格/质量审查，读原证据，不重复测试构建。报告不可把自动状态/包检查写成液面视觉通过。
 
-允许代码写集仅上述两个生产Java、新`gametest/ReactorRuntimeCoolantGameTests.java`及必要专属测试（若需要须先报告精确路径）；复用现有NBT只读，禁止新增API依赖、改通用setter其他语义/玩法/注册/配方/美术/用户存档。主目录、可变候选及美术树源只读，跨树同步由PM管理；如Git应用有代码冲突，PM只确定写集，执行者修复。
+允许代码写集仅上述两个生产Java、新`gametest/ReactorRuntimeCoolantGameTests.java`、原模板逐字复制的`src/main/resources/data/reactor_runtime_coolant_probe/structure/empty.nbt`及必要专属测试（若需要须先报告精确路径）；原NBT只读，禁止新增API依赖、改通用setter其他语义/玩法/注册/配方/美术/用户存档。主目录、可变候选及美术树源只读，跨树同步由PM管理；如Git应用有代码冲突，PM只确定写集，执行者修复。
 
 ## 集成和人工边界
 
