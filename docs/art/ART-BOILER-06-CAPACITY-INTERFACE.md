@@ -2,7 +2,7 @@
 
 2026-10-11。主PM已读取美术对话原始新需求及用户批准的蒸汽视觉短设计；必要共享前置为[单getter任务](../superpowers/plans/2026-10-11-boiler-steam-capacity-view-01.md)，不新增玩法或再次选稿。
 
-预计唯一公开入口为`BoilerControllerBlockEntity.syncedSteamCapacityMb()`，返回int，单位mB；纯读取既有`steamCapacityView`，不从客户端DEFAULT Settings重算，不增网络/缓存/flag或改变原窗口水位。编译签名与净同步以最终HANDOFF为准。
+已编译并净同步的唯一公开入口为`BoilerControllerBlockEntity.syncedSteamCapacityMb()`，实际签名`public int syncedSteamCapacityMb()`，单位mB；纯读取既有`steamCapacityView`，不从客户端DEFAULT Settings重算，不增网络/缓存/flag或改变原窗口水位。main `eb196c6`、美术 `a3540b2`，实际ABI、冻结源/制品与独立消费者写集见[HANDOFF](../reviews/2026-10-11/boiler-steam-capacity-view-01/HANDOFF.md)。美术06可接通该实际接口，不再等待推测签名。
 
 该方法仅用于客户端显示，原字段初始化值18000不是已收服务器数据的证明；方法自身不声称已同步或当前成型。生产消费必须在完成原clientPacket读取之后，核同一世界/当前真实owner对象、有效surfaceDescriptor及当前L1同generation/revision/min/max/partition，再读两真实库存与该容量一次。未知/撤销/对象冲突/非正容量不绘制或不作分母；不得调用currentForm、BoilerStructure或按Fill/SteamKind猜库存。服务端容量权威仍为原ledger及配置，不用该显示读数做模拟。
 
