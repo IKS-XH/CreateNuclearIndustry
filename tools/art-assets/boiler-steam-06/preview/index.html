@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>锅炉蒸汽材质与汽区预览</title>
+<style>
+:root{color-scheme:dark;font-family:"Segoe UI","Microsoft YaHei",sans-serif;background:#171b1d;color:#e9ecea}
+body{max-width:1180px;margin:28px auto;padding:0 20px}
+h1{font-size:25px;margin:0 0 8px}h2{font-size:18px;margin:26px 0 10px}
+.note{color:#b9c1c0;line-height:1.55}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:12px}
+.card{background:#242a2c;border:1px solid #3b4547;border-radius:7px;padding:12px}
+.card h3{font-size:15px;margin:0 0 8px}
+canvas{image-rendering:pixelated;display:block;background:#14191b;border:1px solid #526064;border-radius:4px}
+.frame{width:128px;height:128px;max-width:100%;margin:auto}
+.label{font-size:12px;color:#bdc6c4;margin-top:7px}
+.controls{display:flex;gap:20px;flex-wrap:wrap;margin:12px 0}
+label{display:flex;gap:10px;align-items:center;color:#dce1df}
+input[type=range]{width:220px}
+.demo{display:grid;grid-template-columns:repeat(2,minmax(250px,1fr));gap:14px}
+.window{width:100%;height:auto}
+small{color:#aeb8b7}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(120px,1fr))}.demo{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>锅炉蒸汽材质与汽区示意</h1>
+<p class="note">普通蒸汽采用乳白灰，超临界蒸汽采用青白。对应材质共用同一像素遮罩和细节，颜色占比可连续混合；内部透明程度由顶点控制。动画只表现缓慢翻卷与上升感。</p>
+<h2>still / flow 循环</h2>
+<div class="grid">
+  <section class="card"><h3>普通蒸汽 · still</h3><canvas id="normalStill" class="frame" width="16" height="16"></canvas><div class="label">柔和团雾，轻微翻卷</div></section>
+  <section class="card"><h3>普通蒸汽 · flow</h3><canvas id="normalFlow" class="frame" width="16" height="16"></canvas><div class="label">沿对角烟道向上舒展</div></section>
+  <section class="card"><h3>超临界蒸汽 · still</h3><canvas id="superStill" class="frame" width="16" height="16"></canvas><div class="label">同形状、青白材质</div></section>
+  <section class="card"><h3>超临界蒸汽 · flow</h3><canvas id="superFlow" class="frame" width="16" height="16"></canvas><div class="label">同向上流动纹理、青白材质</div></section>
+</div>
+<h2>汽区混色与浓度示意</h2>
+<p class="note">以下为透窗材质预览：左侧示低库存浓度，右侧示高库存浓度。色彩比例单独调节；变化只作资源预览，不代表真实锅炉库存界面或已验收的游戏渲染。</p>
+<div class="controls">
+  <label>超临界库存占比 <input id="ratio" type="range" min="0" max="100" value="48"><span id="ratioText">48%</span></label>
+  <label>纹样 <select id="kind"><option value="flow">flow 上升纹</option><option value="still">still 团雾</option></select></label>
+</div>
+<div class="demo">
+  <section class="card"><h3>低浓度 · 透窗</h3><canvas id="lowWindow" class="window" width="300" height="210"></canvas><div class="label">浓度预览 22%</div></section>
+  <section class="card"><h3>高浓度 · 透窗</h3><canvas id="highWindow" class="window" width="300" height="210"></canvas><div class="label">浓度预览 82%</div></section>
+</div>
+<p class="note"><small>帧组每 2 tick 推进一帧；低分辨率画面采用清晰像素边缘。正式材质已安装；运行渲染已接通，实际透窗与管/罐动画仍待客户端复看。</small></p>
+<script>
+const canvases={normalStill:"still",normalFlow:"flow",superStill:"still",superFlow:"flow"};
+const cache={};
+function source(material,kind,index){return "../generated/internal/textures/boiler_steam/"+material+"/"+kind+"_"+index+".png";}
+function getImage(material,kind,index){
+  const key=material+"_"+kind+"_"+index;
+  if(!cache[key]){cache[key]=new Image();cache[key].src=source(material,kind,index);}
+  return cache[key];
+}
+function drawCards(){
+  const phase=Math.floor(Date.now()/100)%8;
+  Object.keys(canvases).forEach(function(id){
+    const canvas=document.getElementById(id), ctx=canvas.getContext("2d");
+    const material=id.indexOf("super")===0?"supercritical":"normal";
+    ctx.clearRect(0,0,16,16);
+    const image=getImage(material,canvases[id],phase);
+    if(image.complete)ctx.drawImage(image,0,0);
+  });
+}
+function blendedFrame(kind,phase,ratio,density){
+  const a=getImage("normal",kind,phase), b=getImage("supercritical",kind,phase);
+  if(!a.complete||!b.complete)return null;
+  const ca=document.createElement("canvas"), cb=document.createElement("canvas");
+  ca.width=cb.width=16;ca.height=cb.height=16;
+  const xa=ca.getContext("2d"), xb=cb.getContext("2d");
+  xa.drawImage(a,0,0);xb.drawImage(b,0,0);
+  const da=xa.getImageData(0,0,16,16), db=xb.getImageData(0,0,16,16);
+  const out=xa.createImageData(16,16);
+  for(let i=0;i<out.data.length;i+=4){
+    const alpha=da.data[i+3];
+    if(alpha===0)continue;
+    for(let c=0;c<3;c++)out.data[i+c]=Math.round(da.data[i+c]*(1-ratio)+db.data[i+c]*ratio);
+    out.data[i+3]=Math.round(alpha*density);
+  }
+  xa.putImageData(out,0,0);
+  return ca;
+}
+function drawBoiler(id,density,ratio,kind,phase){
+  const c=document.getElementById(id),x=c.getContext("2d");
+  x.clearRect(0,0,c.width,c.height);
+  x.fillStyle="#202628";x.fillRect(0,0,300,210);
+  x.fillStyle="#535b5d";x.fillRect(24,18,252,174);
+  x.fillStyle="#778082";x.fillRect(32,28,236,5);x.fillRect(32,177,236,5);
+  x.fillStyle="#3c4446";x.fillRect(32,36,236,8);x.fillRect(32,166,236,8);
+  x.fillStyle="#272e30";x.fillRect(72,48,156,108);
+  x.fillStyle="#aeb4b2";x.fillRect(92,55,116,94);
+  x.fillStyle="#171d1f";x.fillRect(98,61,104,82);
+  x.fillStyle="#263034";x.fillRect(102,65,96,74);
+  x.fillStyle="#7e8989";x.fillRect(98,65,104,2);
+  x.fillStyle="#9da5a3";x.fillRect(94,52,112,4);x.fillRect(94,147,112,4);
+  const mixed=blendedFrame(kind,phase,ratio,density);
+  if(mixed){x.imageSmoothingEnabled=false;x.drawImage(mixed,112,78,80,56);}
+  x.fillStyle="#cad0cd";x.fillRect(34,83,29,4);x.fillRect(237,83,29,4);
+  x.fillStyle="#343b3d";x.fillRect(37,87,23,18);x.fillRect(240,87,23,18);
+  x.fillStyle="#9ba3a0";x.fillRect(45,90,7,12);x.fillRect(248,90,7,12);
+  x.fillStyle="#bbc2bf";x.fillRect(104,67,2,70);x.fillRect(196,67,2,70);
+}
+function updateDemo(){
+  const ratio=Number(document.getElementById("ratio").value)/100;
+  const kind=document.getElementById("kind").value;
+  document.getElementById("ratioText").textContent=Math.round(ratio*100)+"%";
+  const phase=Math.floor(Date.now()/100)%8;
+  drawBoiler("lowWindow",0.22,ratio,kind,phase);
+  drawBoiler("highWindow",0.82,ratio,kind,phase);
+}
+document.getElementById("ratio").addEventListener("input",updateDemo);
+document.getElementById("kind").addEventListener("change",updateDemo);
+function tick(){drawCards();updateDemo();requestAnimationFrame(tick);}
+tick();
+</script>
+</body>
+</html>

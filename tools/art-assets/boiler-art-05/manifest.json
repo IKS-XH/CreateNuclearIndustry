@@ -1,0 +1,21 @@
+{
+  "task": "ART-BOILER-05B",
+  "design": "A横箍压力舱",
+  "tile_size": 16,
+  "base_asset_count": 12,
+  "connected_target_ids": [
+    "create_nuclear_industry:block/boiler_ct/side",
+    "create_nuclear_industry:block/boiler_ct/top",
+    "create_nuclear_industry:block/boiler_ct/partition_side",
+    "create_nuclear_industry:block/boiler_ct/water_port_face",
+    "create_nuclear_industry:block/boiler_ct/steam_port_face",
+    "create_nuclear_industry:block/boiler_ct/controller_face",
+    "create_nuclear_industry:block/boiler_ct/hot_coolant_port",
+    "create_nuclear_industry:block/boiler_ct/cold_coolant_port",
+    "create_nuclear_industry:block/boiler_ct/window_frame"
+  ],
+  "source_mapping": "mapping.json",
+  "palette": "palette.json",
+  "source_policy": "基础造型沿用05A作者SVG，新增图格为本批整数rect SVG；只读R1真实Create索引表",
+  "game_install": false
+}
