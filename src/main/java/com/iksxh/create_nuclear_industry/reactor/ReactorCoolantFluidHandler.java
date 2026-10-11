@@ -149,8 +149,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
         int accepted = flowBudget.reserve(currentServerTick(), requested,
                 configuredFlowLimitMbPerTick(), action == FluidAction.EXECUTE);
         if (accepted > 0 && action == FluidAction.EXECUTE) {
-            owner.setSnapshot(snapshot.withCoolantInventories(
-                    snapshot.coldCoolantMb() + accepted, snapshot.hotCoolantMb()));
+            owner.setCoolantInventories(snapshot.coldCoolantMb() + accepted, snapshot.hotCoolantMb());
         }
         return accepted;
     }
@@ -177,8 +176,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
         }
         if (action == FluidAction.EXECUTE) {
             ReactorSnapshot snapshot = owner.snapshot();
-            owner.setSnapshot(snapshot.withCoolantInventories(
-                    snapshot.coldCoolantMb(), snapshot.hotCoolantMb() - drained));
+            owner.setCoolantInventories(snapshot.coldCoolantMb(), snapshot.hotCoolantMb() - drained);
         }
         return new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), drained);
     }

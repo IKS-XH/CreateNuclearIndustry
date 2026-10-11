@@ -98,7 +98,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private long runtimeRevision;
     private long runtimeSample;
     private int runtimeTicksSinceLastSync;
-    /** 正式结算内的 hydrate/setSnapshot 只能发送旧完整样本；外部写入必须撤销。 */
+    /** 正式结算内的 hydrate/setSnapshot 只能发送旧完整样本；通用外部快照写入必须撤销。 */
     private boolean runtimeSettlementInProgress;
     private boolean surfaceChunkUnloaded;
     private final Set<ReactorPortBlockEntity> boundPorts =
@@ -125,6 +125,48 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             syncControlRodDrives();
         }
+    }
+
+    /**
+     * 仅供服务端普通流体事务替换共享冷/热库存，输入单位 mB；不接收列、控制、热工或容量。
+     *
+     * <p>可靠 L1 与已有可用 L2 仍匹配当前结构和 owner 时，完整保留上一正式结算信封，
+     * 不推进 sample/revision/time，也不把新库存拼入旧热工。客户端重复样本不续租，
+     * 已过期显示不能因此复活；下一正式成功结算才投影完整新样本。其他情况仍撤销 L2，
+     * 原权威库存持久化、更新包及控制棒同步保持。</p>
+     *
+     * @param coldCoolantMb 替换后的非负冷液库存，单位 mB
+     * @param hotCoolantMb 替换后的非负热液库存，单位 mB
+     */
+    public void setCoolantInventories(long coldCoolantMb, long hotCoolantMb) {
+        if (level != null && level.isClientSide) {
+            throw new IllegalStateException("reactor state can only be changed on the server");
+        }
+        boolean retainCompletedSample = canRetainRuntimeSampleForInventory();
+        snapshot = snapshot.withCoolantInventories(coldCoolantMb, hotCoolantMb);
+        if (!retainCompletedSample) invalidateRuntimeDescriptor();
+        setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            syncControlRodDrives();
+        }
+    }
+
+    /** 只核对现有服务端缓存和信封身份，不重扫、不查加载区块，也不恢复不可用样本。 */
+    private boolean canRetainRuntimeSampleForInventory() {
+        if (!(level instanceof ServerLevel) || isRemoved() || !structureScan.valid()
+                || !snapshotMatchesStructure() || structureOrigin == null
+                || surfaceDescriptor == null || !surfaceDescriptor.valid()
+                || runtimeDescriptor == null || !runtimeDescriptor.available()) return false;
+        String dimension = level.dimension().location().toString();
+        return surfaceDescriptor.dimension().equals(dimension) && runtimeDescriptor.dimension().equals(dimension)
+                && surfaceDescriptor.ownerPos().equals(worldPosition) && runtimeDescriptor.ownerPos().equals(worldPosition)
+                && surfaceDescriptor.ownerGeneration().equals(surfaceGeneration)
+                && runtimeDescriptor.ownerGeneration().equals(surfaceGeneration)
+                && runtimeDescriptor.geometryRevision() == surfaceDescriptor.revision()
+                && surfaceDescriptor.origin().equals(structureOrigin)
+                && runtimeDescriptor.origin().equals(surfaceDescriptor.origin())
+                && runtimeDescriptor.maxInclusive().equals(surfaceDescriptor.maxInclusive());
     }
 
     public ReactorStructureDefinition.ScanResult structureScan() {
