@@ -17,6 +17,8 @@
 
 成功恢复/失效立即同步，正常运行每5个成功tick最多一次完整心跳；稳定库存和零产热也要续期。客户端20tick租约按新sample本地收到时间计算，重复/旧sample不续期；过期撤下，后续新可靠样本恢复。它仅是显示保险，不影响服务器运行或动力。
 
+普通冷热库存事务窄修（2026-10-12，待共享交付）：按[REACTOR-RUNTIME-COOLANT-03](../superpowers/plans/2026-10-12-reactor-runtime-coolant-03.md)将真实FluidHandler的纯mB写入交给专门服务端入口。仅可靠L1和可用L2匹配当前所有者/代次/几何/有效结构时保留上一次已完成的完整对象及其原年龄；该包不改sample/revision/time/库存/HU/columns，不续租，不把当前库存拼进旧样本。下一正式成功结算仍完整更新；通用setSnapshot（含外部同值调用）和其他真正失效保持原撤销。客户端公开API、字段与租约规则不变，精确服务端签名以本批HANDOFF为准，库存变化视觉并入美术08复看。
+
 真暂停边界（R2）：仅Minecraft.isPaused为true时冻结本地租约年龄，不续样本、不复活已失效显示；当前世界同步、区块核查、坏包及卸载撤销仍执行。非真暂停的多人菜单正常计时，恢复后累计活动tick满20仍到期。已核实本地Pre在真暂停仍触发，[窄修卡](../superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)自动/独立审查通过并净同步main `93d0a20`、美术`2bece5b`，最终源/API入口见HANDOFF最新R2；公共API与服务器不改，视觉观察仍独立。
 
 客户端独立订阅既有`ReactorSurfaceSyncEvents.Update`及必要世界/区块事件，不修改L1。capture必须验证当前真实ClientLevel或既有AT公开所属世界的原生RenderChunkRegion；Ponder、未知包装、旧世界返回空。相关区块只用非加载查询，并记录真实chunk实例：卸载、替换、视距缩小、owner更换/拆坏、世界切换立即撤销，恢复要求新可靠样本。保留代次/revision水位，拒绝过期包和歧义归属。
