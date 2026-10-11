@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 用户2026-10-12明确开始反应堆可变尺寸：三边各5～16格，允许跨区块，棒列规则和既定容量/热工保持。按[REACTOR-VARIABLE-SIZE-01](docs/superpowers/plans/2026-10-12-reactor-variable-size-01.md)复用同级隔离树并携带主世界，PM可直接派发已确认实现、审查，候选完成后停在人工成型/运行/视觉门；main正式功能在验收前仍为5³，其他主线暂停。每列仍一个燃料组件，高度线性放大产热/燃耗、维修量反比；局部设计旧“库存随高度增长”表述按现行核心合同统一，不新增燃料库存。
+
 - 用户2026-10-11明确“锅炉的美术重置通过验收了，合并到主分支吧”。按[集成计划](docs/superpowers/plans/2026-10-11-boiler-art-integration.md)关闭05B＋06R1整体视觉门，458已审来源路径净合main `81a161e`，见[验收与合入](docs/reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)。复用原10/10、11/11、R1受影响2/2与独立窄审，只新增一次4秒exit0增量assemble；62资源、29客户端class、20思索模板及2Controller class与集成JAR一致。主目录JAR更新且原件备份，锅炉玩法/库存/温压不改；美术树当前汽轮机工作及无关改动保留，原候选待验描述为历史，不补记用户未报告的逐项观察，其他工程主线暂停。
 
 - 用户2026-10-11在美术对话批准锅炉上部汽区雾效与两种蒸汽SVG同源动画，主PM已核原消息。按[汽容量显示接口01](docs/superpowers/plans/2026-10-11-boiler-steam-capacity-view-01.md)完成必要单getter：唯一3秒exit0增量jar、实际ABI/字节码及独立窄审通过，main `eb196c6`、美术净同步 `a3540b2`。仅公开已有同步steamCapacityView，网络/库存/规则不改；复用L1原29+1及原审查，原四件冻结备份保持。按[实际HANDOFF与独立消费者写集](docs/reviews/2026-10-11/boiler-steam-capacity-view-01/HANDOFF.md)美术06可接通真实容量；主JAR更新且原件备份，05B/06独立素材/报告和视觉门保持，其他主线暂停。

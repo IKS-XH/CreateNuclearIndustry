@@ -1,0 +1,65 @@
+# REACTOR-VARIABLE-SIZE-01：反应堆可变尺寸
+
+状态：用户需求已确认，准备派发；主目录当前正式实现仍为5×5×5。PM管理文档与Git，执行者实现代码、测试与报告，自动验证和独立审查后停在客户端人工门。
+
+## 已确认合同
+
+用户要求最小5×5×5、最大16×16×16，棒列高度与摆放延续现有规则，容量和热工沿用既定设定；随后明确只限制外尺寸，允许跨区块。本批扩大现有实验反应堆，不新增设备或配方。
+
+1. 完整长方体外尺寸的宽、高、深分别为整数[5,16]；允许偶数、不同边长及跨区块。SERVER配置`reactor.minDimension`、`reactor.maxDimension`默认5、16；有效组合满足5≤min≤max≤16。非法组合拒绝成型并给出诊断，不以静默扩大范围补救。
+2. 棱边/转角只放外壳；原合法观察窗和侧面接口推广到实际边界的非棱边格。唯一仪表所有者、至少一燃料列与冷热端各至少一个；多个冷热端继续每口独立限流。控制接口可选规则不变。
+3. 内部截面为(width−2)×(depth−2)，每列主体高度为height−2。燃料列必须竖直填满并有顶部换料端口；控制棒列只在顶部有驱动器，内部保持空气；空列保持现行盖板规则。水平四向邻接只按列计算一次。成型默认全插棒；没有相邻控制棒的已装料列仍不能靠SCRAM停热。
+4. 每燃料列仍只持有一个燃料组件，唯一真实ItemStack在该列换料端口。列产热和燃耗乘实际内部高度；一格高度、满功率无超频时3小时耗尽的锚点保持。单件钢板维修量为0.25/实际内部高度。高度不增加燃料库存。
+5. 冷却剂容量=空列及控制棒列的实际内部主体格数×每格配置容量，默认1000mB/格；冷热共用总容量，插棒不改变容量。燃料格、外壳、接口、顶盖不计容积。上限乘积用long预检且可由IFluidHandler的int无损表示；16³且至少一燃料列时最多2730个可计格。配置缩小时已有库存保留、拒收超额输入，不凭空增减流体。
+6. 现有逐列热工、燃耗、余热、损伤、反馈超频、传播及融毁/SCRAM公式不变，只用实际高度/列图。全堆汇总、限幅后向上取整一次，零仍为零；整数mB换热余数保留，不误伤。没有新增锅炉式温度/压力、全堆流量上限或高度效率奖励。
+7. 一次有效结构缓存贯穿权威快照、端口归属、列绑定、热工、维修、摘要、表面/运行投影。正常tick、capability与护目镜查询不重扫世界；结构变化/可用性恢复才扫描。扫描工程封顶16，不暴力枚举所有尺寸和原点，不强制加载区块；缺区块等待，恢复后重新绑定且拒绝旧handler。远端拆件仍能撤销所有者，安全/危险拆除语义不变，不允许热重组成型保留库存的旁路。
+8. 当前版本尺寸与列图正常NBT往返、卸载/恢复；不安排旧版本迁移或兼容专项。客户端按实际包围盒、列高度渲染连接表面、棒体、液位、顶面控件；不重新设计素材。描述符现有传输预算足以容纳196列/2744主体格，不能把传输工程上限当作玩法上限。
+9. 反应堆思索保留5³例子，只把固定三格措辞改为“填满内部高度”，补充可变范围；只讲用法，不讲配方，不重构其他已验收教程。
+
+## 工作区与技能
+
+- 基线main `5019dbecd0a3b1e9a14d23a22c0f718d0387d207`；既有同级`E:/MyMC/NewMod/Create_NuclearIndustry-art-integration`与main Git内容一致，复用它并新建`codex/reactor-variable-size`，不操作美术树。先备份目标世界，完整复制主目录`run/saves/`并核对；不回写主世界。
+- 实际技能入口：`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`；流程应用brainstorming、writing-plans、using-git-worktrees、subagent-driven-development与verification-before-completion。执行者另读test-driven-development。用户/治理的自动派发、PM不写代码、单轮合并规格质量审查及增量验证优先于通用技能提交/重复测试步骤。
+- 栈固定Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82；禁止升级依赖、改许可证/发布入口。
+
+## 执行任务（同一执行者顺序完成）
+
+### 1. 尺寸与纯结构模型
+
+在`structure`新增不可变实际尺寸模型，先以5³、6×8×7、16³、越界4/17、偶数/偏心仪表和不完整列的行为用例暴露固定尺寸限制；修改`ReactorStructureDefinition`、`CoreColumnPosition`和`ReactorCoolantCapacity`使几何/列坐标/容量由实际尺寸决定。默认5³模板入口可保留供原固定测试使用，禁止机械改大现有fixture常量。列坐标最大内径14，必须按实际列图区分矩形边界、隔行邻接和断开的燃料簇。
+
+### 2. 快照、热工和配置
+
+实际尺寸进入`ReactorSnapshot`与`ReactorSnapshotNbtCodec`并随所有纯转换保留；更新裂变和两种维修事务的实际高度引用；检查传播/融毁/SCRAM/燃料事务中的九列限制。`config/P1ServerConfig.java`新增上述两键及联合校验，容量每格安全上限按最大可计格重算。高度3/14的无超频产热和燃耗线性比例、固定一组件、维修反比例、全堆只取整一次和冷却量守恒必须有断言；不增加第二燃料权威副本。
+
+### 3. 世界扫描、所有权与生命周期
+
+修改扫描器、结构生命周期、仪表缓存和列绑定：从已加载结构表面有限寻边并验证完整包围盒，缓存读过的坐标，避免按每个候选重复全体积扫描；多个相邻结构、多个仪表、缺角/非法框架不得误成型。远端变更/跨区块可用性恢复有界通知已加载所有者，不用每tick枚举31³邻域。不假设仪表有FACING，保留现有合法位置自由度。检查`ControlRodSliderService`、驱动器/换料端口的坐标查找、维护与能力失效；新尺寸不能绕过危险拆除或唯一所有者。
+
+### 4. 客户端与用法文案
+
+结构摘要/goggles显示实际宽高深和列/容量；`ReactorSurfaceDescriptorFactory`与运行工厂投影实际边界。审计客户端棒长、流体包围盒、采光/缓冲顺序和六面控件命中，保留已验收加液棒体修复。反应堆思索仅调整既有搭建字幕对应中英文键及fallback，将5³标为例子、棒列填满实际内部高度，不夹带其他教学改动。
+
+### 5. 验证与交付
+
+执行者独占本批Gradle/GameTest运行。先相关RED→GREEN，最终稳定后公共快照/生命周期影响较广，执行一轮增量完整`build`（复用缓存，不clean/强制重跑）。新增隔离域真实GameTest，覆盖非5尺寸成型及远端维护、实际端口/燃料/控制绑定、跨区块缺失/恢复与当前版本保存加载。必要时使用`-PgameTestNamespace=create_nuclear_industry_variable_reactor -PgameTestDirectory=build/gametest-reactor-variable-size`；实际注册入口先核锁定API。明示断言通过后若出现已知保存退出停滞，保留本轮日志并处理仅本轮自有进程，不重复业务测试。
+
+给出一份`docs/reviews/2026-10-12/reactor-variable-size/IMPLEMENTATION.md`，索引原始日志、实际改动、公式锚点、JAR身份和待人工范围。独立审查者合并规格/质量检查一次，读原证据不重跑构建。PM审核并提交本批候选，保持main正式功能不变，停在同级候选客户端门。
+
+## 执行者写集
+
+允许：`src/main/java/com/iksxh/create_nuclear_industry/{reactor,structure}/`中与本合同直接相关类（含必要客户端几何消费）；`config/P1ServerConfig.java`；`control/ControlRodSliderService.java`；`blockentity/{ReactorInstrumentPortBlockEntity,ReactorPortBlockEntity,ControlRodDriveBlockEntity}.java`；`block/{ReactorInstrumentPortBlock,ReactorPortBlock,ControlRodDriveBlock}.java`中必要绑定/通知；`gametest/ReactorVariableSizeGameTests.java`及独立模板；上述类受影响JUnit；`ponder/P1PonderScenes.java`及zh_cn/en_us反应堆搭建相关键；本批IMPLEMENTATION报告和build下本批测试证据。新类只为本尺寸合同服务。
+
+禁止：执行Git写、修改本计划/核心docs/AGENTS、修改用户存档和其配置、PNG/OBJ/SVG美术、其他设备逻辑/教程、配方/注册/构建脚本/依赖。新增必要的写集外调用者先向PM报告并继续无依赖工作，不擅自扩范围。不要机械改写旧测试的固定5³fixture或删除失败断言。
+
+## Review Focus与人工门
+
+- 扫描推断：偶数、不等轴、仪表靠边但非棱边、双仪表/相邻结构、空列和燃料列不能误判外墙；缺区块不会被强制加载或销毁真实状态。
+- 几何传播：最大坐标13与实际高度14进入热工/维修/NBT/控件/渲染，所有with/恢复路径保持尺寸；不混淆宽高深。
+- 守恒与安全：冷热共容积和每口额度；一列一组件；whole-ceil量化余数；热拆/安全拆、远端变更和旧handler拒绝。
+- 性能：一次扫描读数有界，不枚举上千尺寸再全体积重读；日常cap/goggles/tick复用缓存。
+- 视觉：不以自动描述符测试宣称游戏显示通过；人工只集中检查5³原例、一个偶数长方体、16³跨区块结构的成型/棒体/顶面控件与实际供热、远端拆件及保存重进。确认后才合main，不推进其他工程主线。
+
+## PM记录
+
+2026-10-12：需求直接入合同，不重复要求方案授权。局部热工文档旧“燃料库存随高度增长”与现行核心策划及真实一列一组件冲突，统一为后者；热工/维修数值保持原批准公式。这是文档一致性修正，不新增量产、寿命或燃料槽玩法。

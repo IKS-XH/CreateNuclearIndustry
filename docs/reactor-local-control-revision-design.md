@@ -17,7 +17,7 @@
 
 ## 2. 自动成型与运行条件
 
-反应堆 P1 固定为 **5×5×5** 成型尺寸，不实现可变面积或高度。第一版没有“组装”“启动”“停止”“功率设定”按钮。仪表接口自动检测合法结构；成型后的每根控制棒默认完全插入。反应堆模拟 NBT 由仪表端口持有，各燃料组件实体 `ItemStack` 由对应换料端口持有；两者共同构成持久化运行状态，但同一字段不得双写。运行状态只由以下两项决定：
+2026-10-12批准[可变尺寸实现](superpowers/plans/2026-10-12-reactor-variable-size-01.md)：完整长方体三边各5～16，允许跨区块，内部宽高深各减2；候选验收前main正式实现仍为5³。没有“组装”“启动”“停止”“功率设定”按钮。仪表接口自动检测合法结构；成型后的每根控制棒默认完全插入。反应堆模拟 NBT 由仪表端口持有，各燃料组件实体 `ItemStack` 由对应换料端口持有；两者共同构成持久化运行状态，但同一字段不得双写。运行状态只由以下两项决定：
 
 1. 当前仍有可用核燃料；
 2. 局部控制棒深度计算出的有效裂变强度是否大于零。
@@ -77,7 +77,7 @@ effectiveBurnIntensity(f) = controlledIntensity(f) × burnFeedbackMultiplier(f)
 
 ## 5. 总产热与燃耗
 
-设每个垂直燃料棒方块的额定产热和额定消耗分别为 `baseHeatPerFuel`、`baseBurnPerFuel`，结构内部高度为 `internalHeight`。局部邻接仍按整列在水平截面中只计算一次，但一整列的产热、燃耗和可装燃料库存均随内部高度线性增长：
+设每个垂直燃料棒方块的额定产热和额定消耗分别为 `baseHeatPerFuel`、`baseBurnPerFuel`，结构内部高度为 `internalHeight`。局部邻接仍按整列在水平截面中只计算一次，一整列的产热和燃耗随内部高度线性增长；每列真实燃料库存始终为一个组件，不随高度扩容：
 
 ```text
 damage(f) = 1 - clamp(fuelColumnIntegrity(f), 0, 1)
@@ -93,14 +93,14 @@ totalHeat = ceil(limitedHeat)
 settledColumnHeat(f) = columnHeat(f) × totalHeat / rawHeat
 
 totalBurn = Σ columnBurn(f)
-fuelCapacity(f) = fuelCapacityPerBlock × internalHeight
+fuelCapacity(f) = 一个组件的固定耐久度
 ```
 
 **2026-10-06用户确认：** 每座反应堆每tick的新生裂变热在汇总和限幅之后只向上取整一次，单位HU/t；零产热保持零，不逐列取整。`rawHeat = 0`时所有列结算热为零，不执行除法。正产热列按原比例分配整数总量并校正浮点尾差，因此各列之和与总量一致。整数不变，取整增量小于1HU/t，限幅后的最高结算量为`ceil(heatCap)`。正式冷却和遥测使用同一总量；已缓存的热量与整数mB换热余数保持原值，不反复取整。燃耗仍按原式，不随产热取整增加。本规则由[总产热取整任务](archive/2026-10-08-completed-plans/2026-10-06-reactor-heat-rounding-01.md)实现，自动验证及人工确认均已通过并合入main；模拟器未据此宣称同步。
 
 数值锚点：`internalHeight = 1`、满功率、无超频时，一个组件必须在 3 小时后耗尽。按 20 tick/秒换算，`baseBurnPerFuel` 的基准量级为 `1 / (3 × 3600 × 20)` 每格高度，再由实际强度、超频燃耗倍率和配置单位折算；该反推结果必须作为数值平衡验收记录。玩家可修改 `baseBurnPerFuel` 或等价的 `burnHoursPerBlock` 配置项。
 
-孤立燃料的 `heatEquivalent` 与 `burnEquivalent` 均等于 `controlledIntensity`。超频燃料以同一个 `controlledIntensity` 分别乘配置化热反馈倍率和燃耗反馈倍率；完整度损伤再分别以 `heatDamageMultiplier` 和 `burnDamageMultiplier` 作用于该列发热和燃耗，后者随损伤增长更快。高度只放大每列包含的有效燃料棒方块数，不重复叠加超频倍率。总产热受 `totalHeatMultiplierCap` 截断；燃耗不随产热截断而回退，防止用低上限无成本承受危险相邻布局。同样装满且控制深度相同的不同高度反应堆，其总库存与燃耗速率同比增长，因此理论满载续航不因高度单独改变。
+孤立燃料的 `heatEquivalent` 与 `burnEquivalent` 均等于 `controlledIntensity`。超频燃料以同一个 `controlledIntensity` 分别乘配置化热反馈倍率和燃耗反馈倍率；完整度损伤再分别以 `heatDamageMultiplier` 和 `burnDamageMultiplier` 作用于该列发热和燃耗，后者随损伤增长更快。高度只放大每列包含的有效燃料棒方块数，不重复叠加超频倍率。总产热受 `totalHeatMultiplierCap` 截断；燃耗不随产热截断而回退，防止用低上限无成本承受危险相邻布局。每列仍是一个固定耐久组件，相同控制/反馈/损伤下，内部高度增加会线性加快燃耗并缩短每列续航；本段统一原先与现行一列一组件合同冲突的库存表述。
 
 当某根燃料库存耗尽时，该列从下一 tick 起不再视为有效燃料，不再产热、燃耗、触发相邻超频或作为失效传播源；邻接关系随之局部重算。`fuelColumnIntegrity` 归零不采用该停止规则：只要组件尚有耐久，该列仍是有效燃料，产热和燃耗分别使用配置的满损伤倍率（默认 2.0 与 3.0），继续受控制棒和相邻超频规则影响，并以当前总热量执行四向失效传播。
 
@@ -148,7 +148,7 @@ fuelCapacity(f) = fuelCapacityPerBlock × internalHeight
 
 ### 5.4 布局派生共享冷却剂容量（2026-09-13 确认）
 
-P1 固定实验堆内部高度为 3。有效结构扫描已经把 `3×3` 堆芯平面的每列分类为 `FUEL`、`CONTROL_ROD` 或 `EMPTY`，并保存该列三个内部 `bodyPositions`。容量只计算 `CONTROL_ROD` 和 `EMPTY` 的内部位置；燃料列、顶盖、换料端口、驱动器、外壳、观察窗及侧面端口均不计入。控制棒只是驱动器方块实体渲染的无碰撞模型，插入深度不改变方块空间，因此不动态改变容量。
+可变尺寸结构将实际(width−2)×(depth−2)平面的每列分类为`FUEL`、`CONTROL_ROD`或`EMPTY`，保存该列height−2个内部`bodyPositions`；5³例子仍为3×3截面、三格主体。容量只计算 `CONTROL_ROD` 和 `EMPTY` 的内部位置；燃料列、顶盖、换料端口、驱动器、外壳、观察窗及侧面端口均不计入。控制棒只是驱动器方块实体渲染的无碰撞模型，插入深度不改变方块空间，因此不动态改变容量。
 
 ```text
 coolantSpaceBlockCount = Σ bodyPositions.size
@@ -185,7 +185,8 @@ coldCoolantMb + hotCoolantMb <= coolantCapacityMb
 - `totalHeatMultiplierCap`，默认 `20.0`。
 - `coolantAbsorptionHuPerMb`，每单位冷却剂可带走的热量；
 - `coolantMaxFlowPerPort`，单个冷端/热端的基础流量上限；
-- `coolantCapacityPerEmptyBlockMb`，每个可计内部空气格贡献的共享容量，默认 `1000 mB`，允许为零；上限必须保证固定 P1 最多 24 个可计空气格的乘积可由 `IFluidHandler` 的整数容量安全表示；
+- `minDimension`/`maxDimension`，三边共用尺寸下限/上限，默认5/16，满足5≤min≤max≤16；
+- `coolantCapacityPerEmptyBlockMb`，每个可计内部空气格贡献的共享容量，默认 `1000 mB`，允许为零；上限必须保证16³且至少一燃料列时最多2730个可计格的乘积可由`IFluidHandler`的整数容量安全表示；
 - `fuelColumnDamageHeatThreshold` 和 `fuelColumnDamageRate`，燃料列有效热负荷损伤阈值与速率；
 - `fuelColumnDamageHeatMultiplier`，满损伤时的产热倍率，默认 `2.0`；
 - `fuelColumnDamageBurnMultiplier`，满损伤时的燃耗倍率，默认 `3.0`；两个配置值表示曲线终点，不是斜率，须成对验证第 5.3 节的不变量；

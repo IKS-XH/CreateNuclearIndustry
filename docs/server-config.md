@@ -8,6 +8,8 @@
 
 ## 文件位置与修改方式
 
+**反应堆可变尺寸（2026-10-12批准，实施中）：** [本批合同](./superpowers/plans/2026-10-12-reactor-variable-size-01.md)在已有P1 SERVER配置的`reactor`节新增`minDimension=5`、`maxDimension=16`，三边分别受同一范围约束，允许跨区块；组合需满足5≤min≤max≤16。既有产热、燃耗、吸热、每口流量和每格容量数值保持，只按实际内部高度/列图计算；空列及控制棒列的主体格×每格容量为冷热共用容量。每列仍一个燃料组件。本批尚未通过候选人工门，不把配置计划当作main已实现。
+
 配置类型为 NeoForge SERVER。当前锁定的 NeoForge 21.1.219 默认在实例的 `config/` 目录生成；世界的 `serverconfig/` 中已有同名文件时，该世界优先使用覆盖文件：
 
 - `create_nuclear_industry-boiler.toml`：高压锅炉。
