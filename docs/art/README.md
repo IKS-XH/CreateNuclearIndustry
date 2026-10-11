@@ -81,3 +81,7 @@ ART-REACTOR-03已基于[L2及真暂停R2](../reviews/2026-10-10/reactor-runtime-
 2026-10-10美术负责人按用户指定交付ART-COOLANT-04，主PM完成[来源登记](../reviews/2026-10-10/coolant-fluid-art-04/HANDOFF.md)。75冻结项、16资源生成/安装/build/JAR逐字一致；复用一次4秒exit0增量jar和唯一独立规格/质量窄审，不重复生成、测试、构建或旧保护矩阵。原内部16份SVG导出四种sprite，block/fluid双路径共8PNG替换与8mcmeta新增；普通atlas固定八帧循环、alpha255，不修改Java、渲染层、注册或真实库存。
 
 当前资源候选保留在美术树，未合main；储罐、透明管、桶、冷液世界面及F3+T重载按[美术候选说明](/E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/ART-COOLANT-04-CANDIDATE.md)复看。普通材质循环不代表每堆库存混色或实际转换量调速；本批专用producer管理八目标，避免旧pipeline全量安装覆盖。03R3原JAR/冻结保留，浸泡/顶面与02R1材质连窗仍各自待验。屏蔽装配台07-R1单页用法教学已独立验收并合main，不因新美术候选重开。
+
+## 顶盖辨识与深度控件09整改
+
+2026-10-12主PM已直接核实用户在美术对话的新反馈，按[09共享补充](ART-REACTOR-09-COORDINATION.md)临时批准原消费者仅在两个几何/专属测试路径扩大顶底文字和本格操作区，保留四侧、原生长按、百分比与权威控制。八目标贴图使用美术卡的新SVG生产器，旧来源不重导；单一消费者持有本批定向检查与唯一美术组合打包，同一次组合窄审。当前尚未实现或验收，可变尺寸与ART08原人工门继续保留。
