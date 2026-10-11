@@ -1,0 +1,53 @@
+{
+  "task": "ART-BOILER-05A",
+  "png_created": 0,
+  "formal_resources_replaced": false,
+  "tile_size": "16x16",
+  "styles": {
+    "A": {
+      "directory": "01-horizontal-hoop",
+      "tile_count": 9,
+      "materials": "深钢壳与横向压力箍"
+    },
+    "B": {
+      "directory": "02-refractory-jacket",
+      "tile_count": 9,
+      "materials": "耐火砖护套与钢收边"
+    },
+    "C": {
+      "directory": "03-steel-frame",
+      "tile_count": 9,
+      "materials": "强化钢骨架与内凹板件"
+    }
+  },
+  "connected_supplement": {
+    "svg_count": 16,
+    "connected_tile_count": 12,
+    "board_count": 3,
+    "overview": "connected/overview.svg",
+    "styles": {
+      "A": "连续横箍与窄耐火嵌片",
+      "B": "暖砖错缝与外周钢框",
+      "C": "深凹板与疏朗整体斜筋"
+    },
+    "dimensions": [
+      "5x5x7",
+      "7x5x9"
+    ],
+    "window_world_y": [
+      4,
+      5
+    ],
+    "port_world_y": {
+      "water": 1,
+      "controller": 1,
+      "coolant_return": 3,
+      "steam": "height-2",
+      "hot": 0
+    },
+    "game_resources_integrated": false,
+    "png_created": 0,
+    "visual_review": "负责人浏览器复看通过；用户尚未选稿",
+    "check_result": "build/reports/art/ART-BOILER-05A-CT/check-result.json"
+  }
+}

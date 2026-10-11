@@ -1,0 +1,28 @@
+{
+  "task": "ART-BOILER-06",
+  "candidate_only": true,
+  "frame_size": [16, 16],
+  "frame_count": 8,
+  "playback": {"frametime_ticks": 2, "interpolate": true, "frames": [0, 1, 2, 3, 4, 5, 6, 7], "fluid_alpha": [0, 255], "internal_transparency": "渲染顶点控制"},
+  "palette": {
+    "normal": ["#A4A9A8", "#D5D7D3", "#F7F4EC"],
+    "supercritical": ["#76B7BD", "#B1E1E3", "#F0FFFA"]
+  },
+  "source_rule": "normal与supercritical对应同kind同index使用相同坐标遮罩和亮度等级，仅替换乳白灰/青白色板。",
+  "sprites": [
+    {"material":"normal","kind":"still","source_pattern":"sources/normal/still/frame_{00..07}.svg","registered_sprite":"create_nuclear_industry:fluid/steam_still","candidate_atlas":"generated/atlas/steam_still.png","candidate_mcmeta":"generated/atlas/steam_still.png.mcmeta","eventual_target":"src/main/resources/assets/create_nuclear_industry/textures/fluid/steam_still.png"},
+    {"material":"normal","kind":"flow","source_pattern":"sources/normal/flow/frame_{00..07}.svg","registered_sprite":"create_nuclear_industry:fluid/steam_flow","candidate_atlas":"generated/atlas/steam_flow.png","candidate_mcmeta":"generated/atlas/steam_flow.png.mcmeta","eventual_target":"src/main/resources/assets/create_nuclear_industry/textures/fluid/steam_flow.png"},
+    {"material":"supercritical","kind":"still","source_pattern":"sources/supercritical/still/frame_{00..07}.svg","registered_sprite":"create_nuclear_industry:fluid/supercritical_steam_still","candidate_atlas":"generated/atlas/supercritical_steam_still.png","candidate_mcmeta":"generated/atlas/supercritical_steam_still.png.mcmeta","eventual_target":"src/main/resources/assets/create_nuclear_industry/textures/fluid/supercritical_steam_still.png"},
+    {"material":"supercritical","kind":"flow","source_pattern":"sources/supercritical/flow/frame_{00..07}.svg","registered_sprite":"create_nuclear_industry:fluid/supercritical_steam_flow","candidate_atlas":"generated/atlas/supercritical_steam_flow.png","candidate_mcmeta":"generated/atlas/supercritical_steam_flow.png.mcmeta","eventual_target":"src/main/resources/assets/create_nuclear_industry/textures/fluid/supercritical_steam_flow.png"}
+  ],
+  "internal_frames": {
+    "source": "the same 32 SVG frames listed above",
+    "candidate_pattern": "generated/internal/textures/boiler_steam/{normal,supercritical}/{still,flow}_0..7.png",
+    "consumer_path_pattern": "textures/boiler_steam/{normal,supercritical}/{still,flow}_0..7.png",
+    "frame_size": [16, 16],
+    "alpha": [0, 255],
+    "notes": "流体atlas与内部雾效共用SVG源；内部半透明由顶点控制，不把alpha烘进PNG。", "consumer_note": "消费端按固定材质权重将同类型still/flow源合成为单个16×16动态纹理，再按真实超临界库存占比连续混色；权重仅用于材质表现。"
+  },
+  "preview": "preview/index.html"
+}
+
