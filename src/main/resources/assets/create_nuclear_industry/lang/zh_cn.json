@@ -496,5 +496,12 @@
   "create_nuclear_industry.ponder.shielded_assembly_placement.header": "屏蔽装配台：搭建与接口",
   "create_nuclear_industry.ponder.shielded_assembly_placement.text_1": "预留2×2×2空间，一件装配台放出整台设备。",
   "create_nuclear_industry.ponder.shielded_assembly_placement.text_2": "只从主控底部动力轴驱动，至少32RPM。",
-  "create_nuclear_industry.ponder.shielded_assembly_placement.text_3": "四周可输入材料或取出成品；顶部只进料，底面不通物品。"
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_3": "四周可输入材料或取出成品；顶部只进料，底面不通物品。",
+  "create_nuclear_industry.ponder.dry_storage_usage.header": "干式贮存架：存取与自动化",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_1": "手持封装乏燃料桶右击贮存架，每次存入一桶。",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_2": "空手右击取出一桶；背包满时，桶仍留在架内。",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_3": "顶部和四侧可输入，各面可输出；底部只可输出。东侧漏斗送入，底部漏斗向南取出。",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_4": "占用随存入增加，护目镜查看已用/容量。默认16桶，容量可配置；当前已用16/16。",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_5": "满架不再接收，额外的一桶留在上游漏斗等待。",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_6": "取出一桶腾出空位后，上游继续存入；取出的桶留在南侧承接桶中。"
 }

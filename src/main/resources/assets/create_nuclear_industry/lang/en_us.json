@@ -496,5 +496,12 @@
   "create_nuclear_industry.ponder.shielded_assembly_placement.header": "Shielded Assembly Station: Placement and Ports",
   "create_nuclear_industry.ponder.shielded_assembly_placement.text_1": "Leave a 2×2×2 space. Placing one station item creates the complete machine.",
   "create_nuclear_industry.ponder.shielded_assembly_placement.text_2": "Drive only the shaft below the master block, at a minimum of 32 RPM.",
-  "create_nuclear_industry.ponder.shielded_assembly_placement.text_3": "The horizontal sides accept materials or release products. The top accepts inputs only, and the bottom has no item port."
+  "create_nuclear_industry.ponder.shielded_assembly_placement.text_3": "The horizontal sides accept materials or release products. The top accepts inputs only, and the bottom has no item port.",
+  "create_nuclear_industry.ponder.dry_storage_usage.header": "Dry Storage Rack: Storage and Automation",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_1": "Right-click the rack while holding a sealed spent fuel cask to store one cask at a time.",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_2": "Right-click with an empty hand to retrieve one cask. If your inventory is full, the cask stays in the rack.",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_3": "The top and four sides accept inputs; every face allows outputs. The bottom only allows outputs. The east hopper feeds the rack, and the bottom hopper extracts southward.",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_4": "Occupancy rises as casks arrive. Goggles show used slots and capacity. The default is 16 casks and can be configured; this rack currently holds 16/16.",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_5": "A full rack rejects further inputs. The extra cask waits in the upstream hopper.",
+  "create_nuclear_industry.ponder.dry_storage_usage.text_6": "Removing one cask frees a slot, allowing the upstream cask to enter. The retrieved cask remains in the southern receiving barrel."
 }

@@ -158,6 +158,8 @@ public final class P1PonderPlugin implements PonderPlugin {
 
         var assembly = helper.forComponents(componentId("shielded_assembly_station"));
         assembly.addStoryBoard(componentId(SHIELDED_ASSEMBLY_SCENE_IDS.get(0)), ShieldedAssemblyPonderScenes::placement);
+        helper.forComponents(componentId("dry_storage_rack"))
+                .addStoryBoard(componentId("dry_storage_usage"), DryStoragePonderScenes::usage);
     }
 
     /** 将 P1 内容路径转换为本模组命名空间下的 Ponder 组件 ID。 */
