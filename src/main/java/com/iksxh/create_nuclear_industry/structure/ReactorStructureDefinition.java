@@ -16,7 +16,7 @@ import java.util.TreeSet;
 /**
  * 首个 P1 反应堆的加载器无关结构坐标契约。
  *
- * <p>局部原点是 5×5×5 结构的西北下角；X 向东递增、Y 向上递增、Z 向南递增。
+ * <p>局部原点是实际长方体结构的西北下角；X 向东递增、Y 向上递增、Z 向南递增。
  * 本类只处理带命名空间的方块 ID，不直接依赖 {@code BlockState}，因此世界扫描器
  * 可以适配 Minecraft 世界而不改变坐标契约。</p>
  */
@@ -68,11 +68,14 @@ public final class ReactorStructureDefinition {
     }
 
     /** 枚举完整 5×5×5 体积内的全部局部坐标。 */
-    public static Set<LocalPosition> allPositions() {
+    public static Set<LocalPosition> allPositions() { return allPositions(ReactorDimensions.DEFAULT); }
+
+    /** 枚举实际包围盒，最多读取16³格。 */
+    public static Set<LocalPosition> allPositions(ReactorDimensions dimensions) {
         TreeSet<LocalPosition> positions = new TreeSet<>();
-        for (int x = 0; x < SIZE; x++) {
-            for (int y = 0; y < SIZE; y++) {
-                for (int z = 0; z < SIZE; z++) {
+        for (int x = 0; x < dimensions.width(); x++) {
+            for (int y = 0; y < dimensions.height(); y++) {
+                for (int z = 0; z < dimensions.depth(); z++) {
                     positions.add(new LocalPosition(x, y, z));
                 }
             }
@@ -97,13 +100,14 @@ public final class ReactorStructureDefinition {
     public static Map<LocalPosition, String> templateFor(
             Map<CoreColumnPosition, ColumnType> columns
     ) {
+        ReactorDimensions dimensions = ReactorDimensions.DEFAULT;
         if (columns == null || columns.size() != CoreColumnPosition.GRID_SIZE * CoreColumnPosition.GRID_SIZE) {
             throw new IllegalArgumentException("all nine P1 core column roles are required");
         }
 
         TreeMap<CoreColumnPosition, ColumnType> orderedColumns = new TreeMap<>();
-        for (int x = 0; x < CoreColumnPosition.GRID_SIZE; x++) {
-            for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+        for (int x = 0; x < dimensions.internalWidth(); x++) {
+            for (int z = 0; z < dimensions.internalDepth(); z++) {
                 CoreColumnPosition position = new CoreColumnPosition(x, z);
                 ColumnType type = columns.get(position);
                 if (type == null) {
@@ -138,15 +142,15 @@ public final class ReactorStructureDefinition {
             int localZ = core.z() + INTERNAL_MIN;
             switch (entry.getValue()) {
                 case FUEL -> {
-                    for (int y = INTERNAL_MIN; y <= INTERNAL_MAX; y++) {
+                    for (int y = INTERNAL_MIN; y <= dimensions.internalHeight(); y++) {
                         blocks.put(new LocalPosition(localX, y, localZ), id(P1ContentIds.REACTOR_FUEL_ROD_ID));
                     }
-                    blocks.put(new LocalPosition(localX, SIZE - 1, localZ),
+                    blocks.put(new LocalPosition(localX, dimensions.height() - 1, localZ),
                             id(P1ContentIds.REACTOR_REFUELING_PORT_ID));
                 }
-                case CONTROL_ROD -> blocks.put(new LocalPosition(localX, SIZE - 1, localZ),
+                case CONTROL_ROD -> blocks.put(new LocalPosition(localX, dimensions.height() - 1, localZ),
                         id(P1ContentIds.CONTROL_ROD_DRIVE_ID));
-                case EMPTY -> blocks.put(new LocalPosition(localX, SIZE - 1, localZ),
+                case EMPTY -> blocks.put(new LocalPosition(localX, dimensions.height() - 1, localZ),
                         id(P1ContentIds.REACTOR_CASING_ID));
             }
         }
@@ -154,10 +158,27 @@ public final class ReactorStructureDefinition {
     }
 
     /**
-     * 扫描完整的 5×5×5 局部快照。缺失坐标、体积外坐标、错误的外壳/端口/观察窗
-     * 位置，以及不一致的燃料列/控制棒列都会被拒绝。
+     * 从完整局部快照的最大坐标取得三边尺寸，再验证边界和列。缺格、负坐标以及
+     * 不一致列都会被拒绝；已知外尺寸的世界扫描器应使用显式尺寸重载。
      */
     public static ScanResult scan(Map<LocalPosition, String> blocks) {
+        if (blocks == null || blocks.isEmpty()) return ScanResult.invalid(DiagnosticCode.STRUCTURE_BLOCKS, "block snapshot is required");
+        try {
+            ReactorDimensions dimensions = new ReactorDimensions(
+                    blocks.keySet().stream().mapToInt(LocalPosition::x).max().orElse(-1) + 1,
+                    blocks.keySet().stream().mapToInt(LocalPosition::y).max().orElse(-1) + 1,
+                    blocks.keySet().stream().mapToInt(LocalPosition::z).max().orElse(-1) + 1);
+            return scan(dimensions, blocks);
+        } catch (IllegalArgumentException exception) {
+            return ScanResult.invalid(DiagnosticCode.STRUCTURE_BLOCKS, exception.getMessage());
+        }
+    }
+
+    /** 根据确定的实际外尺寸验证完整列和边界，不从内部空气或燃料猜测外墙。 */
+    public static ScanResult scan(ReactorDimensions dimensions, Map<LocalPosition, String> blocks) {
+        Set<LocalPosition> ALL_POSITIONS = allPositions(dimensions);
+        Set<LocalPosition> SIDE_PORT_SLOTS = sidePortSlots(dimensions);
+        Map<LocalPosition, String> FIXED_BLOCKS = fixedCasingBlocks(dimensions);
         if (blocks == null) {
             return ScanResult.invalid(DiagnosticCode.GENERIC_FAILURE, "block snapshot is required");
         }
@@ -239,12 +260,12 @@ public final class ReactorStructureDefinition {
 
         TreeMap<CoreColumnPosition, ColumnMapping> columns = new TreeMap<>();
         int fuelCount = 0;
-        for (int x = 0; x < CoreColumnPosition.GRID_SIZE; x++) {
-            for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+        for (int x = 0; x < dimensions.internalWidth(); x++) {
+            for (int z = 0; z < dimensions.internalDepth(); z++) {
                 CoreColumnPosition core = new CoreColumnPosition(x, z);
                 int localX = x + INTERNAL_MIN;
                 int localZ = z + INTERNAL_MIN;
-                LocalPosition cap = new LocalPosition(localX, SIZE - 1, localZ);
+                LocalPosition cap = new LocalPosition(localX, dimensions.height() - 1, localZ);
                 String capId = blocks.get(cap);
                 ColumnType type;
                 String bodyId;
@@ -267,8 +288,8 @@ public final class ReactorStructureDefinition {
                     }
                 }
 
-                List<LocalPosition> bodyPositions = new ArrayList<>(INTERNAL_HEIGHT);
-                for (int y = INTERNAL_MIN; y <= INTERNAL_MAX; y++) {
+                List<LocalPosition> bodyPositions = new ArrayList<>(dimensions.internalHeight());
+                for (int y = INTERNAL_MIN; y <= dimensions.internalHeight(); y++) {
                     LocalPosition body = new LocalPosition(localX, y, localZ);
                     bodyPositions.add(body);
                     if (!bodyId.equals(blocks.get(body))) {
@@ -288,7 +309,7 @@ public final class ReactorStructureDefinition {
             return ScanResult.invalid(DiagnosticCode.NO_FUEL,
                     "reactor must contain at least one fuel column");
         }
-        return ScanResult.valid(columns, ports);
+        return ScanResult.valid(dimensions, columns, ports);
     }
 
     private static boolean isPortId(String id) {
@@ -301,29 +322,26 @@ public final class ReactorStructureDefinition {
         return "create_nuclear_industry:" + path;
     }
 
-    private static Map<LocalPosition, String> fixedCasingBlocks() {
+    private static Map<LocalPosition, String> fixedCasingBlocks() { return fixedCasingBlocks(ReactorDimensions.DEFAULT); }
+    private static Map<LocalPosition, String> fixedCasingBlocks(ReactorDimensions dimensions) {
         Map<LocalPosition, String> fixed = new LinkedHashMap<>();
-        for (LocalPosition position : ALL_POSITIONS) {
-            if (position.isBoundary() && !isColumnCap(position) && !isSidePortSlot(position)) {
+        for (LocalPosition position : allPositions(dimensions)) {
+            if (dimensions.boundary(position) && !dimensions.columnCap(position) && !dimensions.sideSlot(position)) {
                 fixed.put(position, id(P1ContentIds.REACTOR_CASING_ID));
             }
         }
         return Collections.unmodifiableMap(fixed);
     }
 
-    private static Set<LocalPosition> buildSidePortSlots() {
+    private static Set<LocalPosition> buildSidePortSlots() { return sidePortSlots(ReactorDimensions.DEFAULT); }
+    /** 返回实际四个侧面的非棱边槽位，顶部列帽另行验证。 */
+    public static Set<LocalPosition> sidePortSlots(ReactorDimensions dimensions) {
         TreeSet<LocalPosition> slots = new TreeSet<>();
-        for (int y = INTERNAL_MIN; y <= INTERNAL_MAX; y++) {
-            for (int alongFace = INTERNAL_MIN; alongFace <= INTERNAL_MAX; alongFace++) {
-                slots.add(new LocalPosition(0, y, alongFace));
-                slots.add(new LocalPosition(SIZE - 1, y, alongFace));
-                slots.add(new LocalPosition(alongFace, y, 0));
-                slots.add(new LocalPosition(alongFace, y, SIZE - 1));
-            }
+        for (LocalPosition position : allPositions(dimensions)) {
+            if (dimensions.sideSlot(position)) slots.add(position);
         }
         return Collections.unmodifiableSet(slots);
     }
-
     private static boolean isSidePortSlot(LocalPosition position) {
         boolean xFace = (position.x() == 0 || position.x() == SIZE - 1)
                 && position.z() >= INTERNAL_MIN && position.z() <= INTERNAL_MAX;
@@ -339,9 +357,10 @@ public final class ReactorStructureDefinition {
     }
 
     private static Map<CoreColumnPosition, ColumnType> defaultColumns() {
+        ReactorDimensions dimensions = ReactorDimensions.DEFAULT;
         TreeMap<CoreColumnPosition, ColumnType> columns = new TreeMap<>();
-        for (int x = 0; x < CoreColumnPosition.GRID_SIZE; x++) {
-            for (int z = 0; z < CoreColumnPosition.GRID_SIZE; z++) {
+        for (int x = 0; x < dimensions.internalWidth(); x++) {
+            for (int z = 0; z < dimensions.internalDepth(); z++) {
                 columns.put(new CoreColumnPosition(x, z),
                         x == 1 && z == 1 ? ColumnType.EMPTY : ColumnType.FUEL);
             }
@@ -365,6 +384,8 @@ public final class ReactorStructureDefinition {
         MISSING_HOT_PORT("missing_hot_port"),
         COLUMN_LAYOUT("column_layout"),
         NO_FUEL("no_fuel"),
+        DIMENSIONS("dimensions"),
+        CHUNKS_UNAVAILABLE("chunks_unavailable"),
         GENERIC_FAILURE("generic_failure");
 
         private final String translationSuffix;
@@ -426,9 +447,11 @@ public final class ReactorStructureDefinition {
             String failureReason,
             DiagnosticCode diagnosticCode,
             Map<CoreColumnPosition, ColumnMapping> columns,
-            Map<PortType, List<LocalPosition>> ports
+            Map<PortType, List<LocalPosition>> ports,
+            ReactorDimensions dimensions
     ) {
         public ScanResult {
+            if (dimensions == null) throw new IllegalArgumentException("structure dimensions are required");
             if (diagnosticCode == null) {
                 throw new IllegalArgumentException("structure diagnostic code is required");
             }
@@ -440,15 +463,22 @@ public final class ReactorStructureDefinition {
             ports = Collections.unmodifiableMap(copiedPorts);
         }
 
+        /** 原五格调用形式只用于固定示例与尚未成型的诊断信封。 */
+        public ScanResult(boolean valid, String reason, DiagnosticCode code,
+                Map<CoreColumnPosition, ColumnMapping> columns, Map<PortType, List<LocalPosition>> ports) {
+            this(valid, reason, code, columns, ports, ReactorDimensions.DEFAULT);
+        }
+
         private static ScanResult valid(
+                ReactorDimensions dimensions,
                 Map<CoreColumnPosition, ColumnMapping> columns,
                 Map<PortType, List<LocalPosition>> ports
         ) {
-            return new ScanResult(true, "", DiagnosticCode.VALID, columns, ports);
+            return new ScanResult(true, "", DiagnosticCode.VALID, columns, ports, dimensions);
         }
 
         private static ScanResult invalid(DiagnosticCode diagnosticCode, String reason) {
-            return new ScanResult(false, reason, diagnosticCode, Map.of(), Map.of());
+            return new ScanResult(false, reason, diagnosticCode, Map.of(), Map.of(), ReactorDimensions.DEFAULT);
         }
 
         public static ScanResult notScanned() {

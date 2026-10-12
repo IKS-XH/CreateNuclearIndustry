@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>反应堆驱动器与换料口候选</title>
+<style>
+body{margin:24px auto;padding:0 18px;max-width:1240px;background:#202526;color:#e4e5dd;font:16px/1.5 "Segoe UI","Microsoft YaHei",sans-serif}
+h1,h2{color:#f0cf87}section{margin:28px 0;padding:16px;background:#303638;border:1px solid #59615e;border-radius:8px}
+.pair,.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(390px,1fr));gap:16px}
+img{max-width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;background:#45494b}
+.tile{width:192px;height:192px}.atlas{width:256px;height:256px}.arrayNear{width:min(768px,100%)}.arrayFar{width:min(384px,100%)}
+.label{color:#bfc7c0;font-size:14px}.warning{border-left:3px solid #d2a359;padding-left:12px}
+@media(max-width:620px){body{margin:10px;padding:0 8px}}
+</style>
+<body>
+<h1>控制棒驱动器与反应堆换料口 · SVG候选</h1>
+<p class="warning">本页为SVG/PNG离线材质与阵列示意，不是Minecraft截图或客户端验收。八张PNG已获授权安装试用；游戏内外观仍待验收。顶/底操作位置按09共享补充冻结；椭圆只显示命中椭球X/Z投影。</p>
+<section><h2>基础16×16：原稿与新稿</h2><div class="pair">
+<div><h3>驱动器顶面</h3><img class="tile" src="../references/original/base/control_rod_drive_top.png"><img class="tile" src="../generated/base/control_rod_drive_top.png"></div>
+<div><h3>驱动器侧面</h3><img class="tile" src="../references/original/base/control_rod_drive_side.png"><img class="tile" src="../generated/base/control_rod_drive_side.png"></div>
+<div><h3>换料舱盖顶面</h3><img class="tile" src="../references/original/base/reactor_refueling_port_top.png"><img class="tile" src="../generated/base/reactor_refueling_port_top.png"></div>
+<div><h3>换料口侧面</h3><img class="tile" src="../references/original/base/reactor_refueling_port_side.png"><img class="tile" src="../generated/base/reactor_refueling_port_side.png"></div>
+</div><p class="label">每组左侧为本批保存的原版只读快照（SHA见mapping.json），右侧为候选SVG导出。</p></section>
+<section><h2>12×12密集混排与近远读性</h2><p class="label">混排含驱动器、换料舱盖和原反应堆钢外壳；外缘引用现行只读CT钢壳图。</p><img class="arrayNear" src="mixed-array.svg"><p>近景 · 4倍最近邻放大</p><img class="arrayFar" src="mixed-array.svg"><p>远景 · 2倍最近邻缩放</p></section>
+<section><h2>顶面驱动器：方杆遮挡对照</h2><img src="rod-occlusion.svg" style="width:min(900px,100%)"><p class="label">方杆截面0.6格、端箍0.65格；虚线椭圆仅示顶/底本格命中椭球的X/Z投影（X半轴0.35、Z半轴0.075），法向半轴0.10不在此二维图中显示。</p></section>
+<section><h2>RECTANGLE CT 4×4图集</h2><div class="four">
+<div><h3>驱动器顶面</h3><img class="atlas" src="../generated/reactor_ct/control_rod_drive_top.png"></div>
+<div><h3>驱动器侧面</h3><img class="atlas" src="../generated/reactor_ct/control_rod_drive_side.png"></div>
+<div><h3>换料舱盖顶面</h3><img class="atlas" src="../generated/reactor_ct/reactor_refueling_port_top.png"></div>
+<div><h3>换料口侧面</h3><img class="atlas" src="../generated/reactor_ct/reactor_refueling_port_side.png"></div>
+</div><p class="label">索引0–15沿用Create RECTANGLE 4×4布局，孤立格index12；八张PNG已安装试用，客户端外观尚未验收。</p></section>
+</body></html>

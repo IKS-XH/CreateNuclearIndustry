@@ -1,0 +1,60 @@
+{
+  "task": "ART-REACTOR-09",
+  "source_of_truth": "四张基础16x16 SVG与64张RECTANGLE上下文SVG",
+  "tile_size": 16,
+  "ct_type": "RECTANGLE",
+  "sheet_size": 4,
+  "isolated_index": 12,
+  "targets": [
+    {
+      "name": "control_rod_drive_top",
+      "base_source": "sources/base/control_rod_drive_top.svg",
+      "base_generated": "generated/base/control_rod_drive_top.png",
+      "base_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/control_rod_drive_top.png",
+      "ct_source_directory": "sources/ct/control_rod_drive_top",
+      "ct_generated": "generated/reactor_ct/control_rod_drive_top.png",
+      "ct_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_ct/control_rod_drive_top.png"
+    },
+    {
+      "name": "control_rod_drive_side",
+      "base_source": "sources/base/control_rod_drive_side.svg",
+      "base_generated": "generated/base/control_rod_drive_side.png",
+      "base_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/control_rod_drive_side.png",
+      "ct_source_directory": "sources/ct/control_rod_drive_side",
+      "ct_generated": "generated/reactor_ct/control_rod_drive_side.png",
+      "ct_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_ct/control_rod_drive_side.png"
+    },
+    {
+      "name": "reactor_refueling_port_top",
+      "base_source": "sources/base/reactor_refueling_port_top.svg",
+      "base_generated": "generated/base/reactor_refueling_port_top.png",
+      "base_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_refueling_port_top.png",
+      "ct_source_directory": "sources/ct/reactor_refueling_port_top",
+      "ct_generated": "generated/reactor_ct/reactor_refueling_port_top.png",
+      "ct_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_ct/reactor_refueling_port_top.png"
+    },
+    {
+      "name": "reactor_refueling_port_side",
+      "base_source": "sources/base/reactor_refueling_port_side.svg",
+      "base_generated": "generated/base/reactor_refueling_port_side.png",
+      "base_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_refueling_port_side.png",
+      "ct_source_directory": "sources/ct/reactor_refueling_port_side",
+      "ct_generated": "generated/reactor_ct/reactor_refueling_port_side.png",
+      "ct_formal": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_ct/reactor_refueling_port_side.png"
+    }
+  ],
+  "installation": "负责人已授权并完成八张PNG试用安装；客户端实机视觉尚未验收",
+  "read_only_inputs": [
+    "tools/art-assets/sources/block",
+    "tools/art-assets/generated/block",
+    "tools/art-assets/reactor-ct-r1",
+    "src/main/resources/assets/create_nuclear_industry/models/block",
+    "src/main/resources/assets/create_nuclear_industry/data"
+  ],
+  "original_base_snapshots": {
+    "references/original/base/control_rod_drive_top.png": "59019ef11bca92f500235d7ea192d435291dbcd3d40a363285c400404a80d2f8",
+    "references/original/base/control_rod_drive_side.png": "c7af42e1479f3b9654c0ea9f72db044a76c1679d6e601038a221a1beaaa63f0f",
+    "references/original/base/reactor_refueling_port_top.png": "3c118ff4e38fb2d751130dfb0c921969ade5c1a084f143bca123a2b3f03b50fd",
+    "references/original/base/reactor_refueling_port_side.png": "43c0ffd4241f80f0522aac7572d847dc6ec3b47ad6668747485e2f14045afbc6"
+  }
+}

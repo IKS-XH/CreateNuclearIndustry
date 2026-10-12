@@ -3,7 +3,7 @@ package com.iksxh.create_nuclear_industry.reactor;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * 燃料列的服务端原子取放事务。
+ * 燃料列的服务端原子取放与枯竭替换事务。
  *
  * <p>事务只计算新状态和物品转移结果，不直接修改输入 {@link ItemStack}，也不拥有
  * 反应堆库存。调用方必须在 {@link Result#success()} 为真时一次性提交
@@ -43,18 +43,18 @@ public final class FuelRefuelingTransaction {
             return nextColumn;
         }
 
-        /** 取出事务的输出；装入事务和失败事务返回空栈。 */
+        /** 取出或替换事务的旧组件输出；装入事务和失败事务返回空栈。 */
         public ItemStack output() {
             return output.copy();
         }
 
-        /** 装入事务消费一个组件后的输入余量；取出事务返回空栈。 */
+        /** 装入或替换事务消费一个组件后的输入余量；取出事务返回空栈。 */
         public ItemStack remainingInput() {
             return remainingInput.copy();
         }
 
         public boolean success() {
-            return status == Status.INSERTED || status == Status.REMOVED;
+            return status == Status.INSERTED || status == Status.REMOVED || status == Status.REPLACED;
         }
     }
 
@@ -62,6 +62,8 @@ public final class FuelRefuelingTransaction {
     public enum Status {
         INSERTED("inserted"),
         REMOVED("removed_fuel"),
+        REPLACED("replaced"),
+        TARGET_NOT_EXHAUSTED("target_not_exhausted"),
         COLUMN_OCCUPIED("column_occupied"),
         COLUMN_EMPTY("column_empty"),
         COLUMN_ACTIVE("column_active"),
@@ -123,6 +125,56 @@ public final class FuelRefuelingTransaction {
                 ItemStack.EMPTY,
                 remaining
         );
+    }
+
+    /**
+     * 计算停止裂变且已耗尽列的一次原子替换，不公开中间空槽。
+     *
+     * <p>精确旧栈必须与本次列投影一致；仍剩一单位耐久也必须拒绝。旧组件输出沿用
+     * 现有取料转换规则，新组件只消费一件并保留输入数据；列完整度、余热和安全热余数
+     * 保持，上一组件的小数燃耗余量按既有装料语义清零。玩家库存只由服务端调用方在
+     * 成功提交后修改，机械臂的独立装入入口不调用本方法。</p>
+     *
+     * @param current 服务端当前列投影，不修改输入状态
+     * @param incoming 正式新燃料栈；只要求尚有耐久，不要求零损伤
+     * @param currentFissionHeatHu 服务端只读计算的当前裂变发热，单位 HU/t
+     * @param exactStoredFuel 端口保存的单件完整旧栈，不修改任何数据组件
+     * @return 成功时同时提供新列、旧组件和输入余量；失败时保留输入和原列
+     */
+    public static Result replaceExhausted(FuelColumnState current, ItemStack incoming,
+                                          double currentFissionHeatHu, ItemStack exactStoredFuel) {
+        requireColumn(current);
+        requireHeat(currentFissionHeatHu);
+        if (currentFissionHeatHu > HEAT_EPSILON) {
+            return failure(Status.COLUMN_ACTIVE, current, incoming);
+        }
+        if (!current.fuelAssembly().present()) {
+            return failure(Status.COLUMN_EMPTY, current, incoming);
+        }
+        if (!current.fuelAssembly().exhausted()) {
+            return failure(Status.TARGET_NOT_EXHAUSTED, current, incoming);
+        }
+        if (!FuelAssemblyItemCodec.isValidStoredFuel(exactStoredFuel)
+                || !FuelAssemblyItemCodec.simulationState(exactStoredFuel).equals(current.fuelAssembly())) {
+            return failure(Status.WRONG_FUEL_ITEM, current, incoming);
+        }
+        if (incoming == null || incoming.isEmpty()) {
+            return failure(Status.EMPTY_INPUT, current, incoming);
+        }
+        if (!FuelAssemblyItemCodec.isFreshFuel(incoming)) {
+            return failure(Status.WRONG_FUEL_ITEM, current, incoming);
+        }
+        FuelAssemblyState incomingState = FuelAssemblyItemCodec.readFreshFuel(incoming);
+        if (incomingState.exhausted()) {
+            return failure(Status.EXHAUSTED_FUEL_INPUT, current, incoming);
+        }
+        Result removal = extract(current, currentFissionHeatHu, exactStoredFuel);
+        if (!removal.success()) {
+            return failure(removal.status(), current, incoming);
+        }
+        ItemStack remaining = incoming.copy();
+        remaining.shrink(1);
+        return new Result(Status.REPLACED, current.withFuelAssembly(incomingState), removal.output(), remaining);
     }
 
     /**

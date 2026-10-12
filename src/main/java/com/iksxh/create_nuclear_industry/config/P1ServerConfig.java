@@ -38,8 +38,15 @@ public final class P1ServerConfig {
         modContainer.registerConfig(ModConfig.Type.SERVER, SPEC);
     }
 
+    /** 尺寸键必须联合满足5≤min≤max≤16；非法组合拒绝成型，不改写配置或扩大范围。 */
+    public static boolean validReactorDimensionRange(int min, int max) {
+        return min >= 5 && min <= max && max <= 16;
+    }
+
     /** 配置值的稳定访问入口；构造过程只负责建立 NeoForge 配置规格。 */
     public static final class Values {
+        public final ModConfigSpec.IntValue minDimension;
+        public final ModConfigSpec.IntValue maxDimension;
         public final ModConfigSpec.DoubleValue baseHeatPerFuelBlockHuPerTick;
         public final ModConfigSpec.DoubleValue fuelBurnTimeHours;
         public final ModConfigSpec.DoubleValue coolantAbsorptionHuPerMb;
@@ -62,11 +69,15 @@ public final class P1ServerConfig {
 
         private Values(ModConfigSpec.Builder builder) {
             builder.push("reactor");
+            minDimension = builder.comment("反应堆三边共用外尺寸下限，需与上限联合满足5≤min≤max≤16。")
+                    .defineInRange("minDimension", 5, 5, 16);
+            maxDimension = builder.comment("反应堆三边共用外尺寸上限，允许偶数、长方体和跨区块。")
+                    .defineInRange("maxDimension", 16, 5, 16);
             baseHeatPerFuelBlockHuPerTick = builder
                     .comment("每个燃料方块每 tick 产生的基础热量。")
                     .defineInRange("baseHeatPerFuelBlockHuPerTick", 1.0D, 0.0D, 1_000_000.0D);
             fuelBurnTimeHours = builder
-                    .comment("一根新燃料组件的燃烧时长，单位为小时。")
+                    .comment("内部高度1、满功率无超频时一个新燃料组件的寿命锚点，单位为小时；实际燃耗乘内部高度。")
                     .defineInRange("fuelBurnTimeHours", 3.0D, 0.001D, 1_000_000.0D);
             coolantAbsorptionHuPerMb = builder
                     .comment("一毫桶复合冷却剂吸收的热量。")

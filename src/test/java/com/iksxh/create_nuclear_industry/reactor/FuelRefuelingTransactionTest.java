@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** 验证燃料物品耐久、单列取放事务、耗尽产物和多列隔离。 */
+/** 验证燃料物品耐久、单列取放与快捷替换事务、耗尽产物和多列隔离。 */
 class FuelRefuelingTransactionTest {
     private static final int MAX_DAMAGE = ModItems.FRESH_FUEL_ASSEMBLY_MAX_DURABILITY;
     private static final CoreColumnPosition FIRST = new CoreColumnPosition(0, 0);
@@ -131,6 +131,93 @@ class FuelRefuelingTransactionTest {
         assertFalse(after.fuelColumns().get(FIRST).fuelAssembly().present());
         assertFalse(after.fuelColumns().get(SECOND).fuelAssembly().present());
         assertEquals(FuelColumnState.empty(), after.fuelColumns().get(SECOND));
+    }
+
+    @Test
+    void exhaustedReplacementConsumesOneAndPreservesExactComponentsAndStructuralState() {
+        FuelColumnState exhausted = new FuelColumnState(
+                FuelAssemblyState.installed(MAX_DAMAGE, MAX_DAMAGE), 0.63D, 9.0D, 0.2D, 0.4D);
+        ItemStack stored = FuelAssemblyItemCodec.createCooledSpentFuel();
+        stored.set(DataComponents.CUSTOM_NAME, Component.literal("精确旧组件"));
+        ItemStack input = freshFuel(123, 3);
+        input.set(DataComponents.CUSTOM_NAME, Component.literal("新组件标记"));
+
+        var result = FuelRefuelingTransaction.replaceExhausted(exhausted, input, 0.0D, stored);
+
+        assertEquals(FuelRefuelingTransaction.Status.REPLACED, result.status());
+        assertTrue(result.success());
+        assertTrue(ItemStack.matches(stored, result.output()));
+        assertTrue(ItemStack.matches(input.copyWithCount(2), result.remainingInput()));
+        assertEquals(3, input.getCount());
+        assertEquals(exhausted.withFuelAssembly(FuelAssemblyItemCodec.readFreshFuel(input)), result.nextColumn());
+        assertEquals(0.0D, result.nextColumn().fuelBurnRemainder());
+    }
+
+    @Test
+    void stoppedButOneDurabilityRemainingCannotBeReplaced() {
+        ItemStack stored = freshFuel(MAX_DAMAGE - 1, 1);
+        FuelColumnState current = new FuelColumnState(FuelAssemblyItemCodec.readFreshFuel(stored), 0.8D, 3.0D);
+        ItemStack incoming = freshFuel(0, 2);
+
+        assertReplacementFailure(FuelRefuelingTransaction.Status.TARGET_NOT_EXHAUSTED,
+                current, incoming, 0.0D, stored);
+    }
+
+    @Test
+    void replacementRejectsWrongExhaustedEmptyAndActiveInputsWithoutMutation() {
+        FuelColumnState exhausted = new FuelColumnState(
+                FuelAssemblyState.installed(MAX_DAMAGE, MAX_DAMAGE), 0.7D, 8.0D);
+        ItemStack stored = FuelAssemblyItemCodec.createCooledSpentFuel();
+        assertReplacementFailure(FuelRefuelingTransaction.Status.WRONG_FUEL_ITEM,
+                exhausted, stored, 0.0D, stored);
+        assertReplacementFailure(FuelRefuelingTransaction.Status.EXHAUSTED_FUEL_INPUT,
+                exhausted, freshFuel(MAX_DAMAGE, 2), 0.0D, stored);
+        assertReplacementFailure(FuelRefuelingTransaction.Status.EMPTY_INPUT,
+                exhausted, ItemStack.EMPTY, 0.0D, stored);
+        assertReplacementFailure(FuelRefuelingTransaction.Status.COLUMN_ACTIVE,
+                exhausted, freshFuel(0, 2), 1.0D, stored);
+        assertReplacementFailure(FuelRefuelingTransaction.Status.COLUMN_EMPTY,
+                FuelColumnState.empty(), freshFuel(0, 2), 0.0D, ItemStack.EMPTY);
+    }
+
+    @Test
+    void exhaustedFreshShapeUsesExistingCooledExtractionRule() {
+        ItemStack stored = freshFuel(MAX_DAMAGE, 1);
+        FuelColumnState exhausted = new FuelColumnState(FuelAssemblyItemCodec.readFreshFuel(stored), 1.0D, 0.0D);
+
+        var result = FuelRefuelingTransaction.replaceExhausted(exhausted, freshFuel(1, 1), 0.0D, stored);
+
+        assertTrue(result.success());
+        assertTrue(ItemStack.matches(FuelRefuelingTransaction.extract(exhausted, 0.0D, stored).output(), result.output()));
+        assertTrue(FuelAssemblyItemCodec.isCooledSpentFuel(result.output()));
+        assertTrue(result.remainingInput().isEmpty());
+    }
+
+    @Test
+    void replacementRejectsExactItemAndColumnProjectionMismatch() {
+        FuelColumnState exhausted = new FuelColumnState(
+                FuelAssemblyState.installed(MAX_DAMAGE, MAX_DAMAGE), 1.0D, 0.0D);
+        assertReplacementFailure(FuelRefuelingTransaction.Status.WRONG_FUEL_ITEM,
+                exhausted, freshFuel(0, 1), 0.0D, freshFuel(MAX_DAMAGE - 1, 1));
+        assertReplacementFailure(FuelRefuelingTransaction.Status.WRONG_FUEL_ITEM,
+                exhausted, freshFuel(0, 1), 0.0D, ItemStack.EMPTY);
+        assertReplacementFailure(FuelRefuelingTransaction.Status.WRONG_FUEL_ITEM,
+                exhausted, freshFuel(0, 1), 0.0D, FuelAssemblyItemCodec.createCooledSpentFuel().copyWithCount(2));
+    }
+
+    /** 失败结果必须保留输入、列和精确旧栈，且不得产生可返还输出。 */
+    private static void assertReplacementFailure(FuelRefuelingTransaction.Status expected, FuelColumnState current,
+                                                 ItemStack incoming, double heatHu, ItemStack stored) {
+        ItemStack originalInput = incoming.copy();
+        ItemStack originalStored = stored.copy();
+        var result = FuelRefuelingTransaction.replaceExhausted(current, incoming, heatHu, stored);
+        assertEquals(expected, result.status());
+        assertFalse(result.success());
+        assertEquals(current, result.nextColumn());
+        assertTrue(result.output().isEmpty());
+        assertTrue(ItemStack.matches(originalInput, incoming));
+        assertTrue(ItemStack.matches(originalInput, result.remainingInput()));
+        assertTrue(ItemStack.matches(originalStored, stored));
     }
 
     private static ItemStack freshFuel(int damage, int count) {

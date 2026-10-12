@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
+import com.iksxh.create_nuclear_industry.structure.ReactorDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -9,7 +10,7 @@ import java.util.TreeMap;
 
 /** P1 反应堆权威快照的版本化 NBT 适配器。 */
 public final class ReactorSnapshotNbtCodec {
-    public static final int FORMAT_VERSION = 5;
+    public static final int FORMAT_VERSION = 6;
     private static final int FUEL_PROJECTION_FREE_FORMAT_VERSION = 4;
 
     private static final String FORMAT_VERSION_KEY = "FormatVersion";
@@ -26,6 +27,9 @@ public final class ReactorSnapshotNbtCodec {
         }
         CompoundTag root = new CompoundTag();
         root.putInt(FORMAT_VERSION_KEY, FORMAT_VERSION);
+        root.putInt("Width", snapshot.dimensions().width());
+        root.putInt("Height", snapshot.dimensions().height());
+        root.putInt("Depth", snapshot.dimensions().depth());
         root.putLong("ColdCoolantMb", snapshot.coldCoolantMb());
         root.putLong("HotCoolantMb", snapshot.hotCoolantMb());
         root.putLong("MeltdownProgressTicks", snapshot.meltdownProgressTicks());
@@ -83,13 +87,17 @@ public final class ReactorSnapshotNbtCodec {
         }
         int formatVersion = root.contains(FORMAT_VERSION_KEY)
                 ? root.getInt(FORMAT_VERSION_KEY) : 0;
+        // 当前版本实际尺寸与列状态同属一个快照；无尺寸的原五格入口保留既有读取行为。
+        ReactorDimensions dimensions = root.contains("Width") && root.contains("Height") && root.contains("Depth")
+                ? new ReactorDimensions(root.getInt("Width"), root.getInt("Height"), root.getInt("Depth"))
+                : ReactorDimensions.DEFAULT;
         Map<CoreColumnPosition, FuelColumnState> fuelColumns = new TreeMap<>();
         Map<CoreColumnPosition, FuelAssemblyState> legacyFuelAssemblies = new TreeMap<>();
         ListTag fuelList = root.getList(FUEL_COLUMNS_KEY, Tag.TAG_COMPOUND);
         for (int index = 0; index < fuelList.size(); index++) {
             CompoundTag entry = fuelList.getCompound(index);
             CoreColumnPosition position = readPosition(entry);
-            if (position == null) {
+            if (position == null || !dimensions.containsColumn(position)) {
                 continue;
             }
             FuelAssemblyState assembly;
@@ -127,7 +135,7 @@ public final class ReactorSnapshotNbtCodec {
         for (int index = 0; index < controlList.size(); index++) {
             CompoundTag entry = controlList.getCompound(index);
             CoreColumnPosition position = readPosition(entry);
-            if (position == null || fuelColumns.containsKey(position)) {
+            if (position == null || !dimensions.containsColumn(position) || fuelColumns.containsKey(position)) {
                 continue;
             }
             controlColumns.put(position, new ControlRodColumnState(
@@ -166,7 +174,7 @@ public final class ReactorSnapshotNbtCodec {
                 started,
                 scramSavedTargets,
                 scramRequested,
-                meltdownEventPublished
+                meltdownEventPublished, dimensions
         );
         return new DecodedSnapshot(snapshot, legacyFuelAssemblies, formatVersion);
     }

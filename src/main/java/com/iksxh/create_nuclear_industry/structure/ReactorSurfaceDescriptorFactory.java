@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/** 只投影已经有效的权威扫描，固定 SIZE 仅出现在适配层；不重判成型、不加载缺失区块。 */
+/** 只投影已经有效的权威扫描与实际尺寸；不重判成型、不加载缺失区块。 */
 public final class ReactorSurfaceDescriptorFactory {
     private ReactorSurfaceDescriptorFactory() { }
 
@@ -18,8 +18,8 @@ public final class ReactorSurfaceDescriptorFactory {
         var unavailable = ReactorSurfaceDescriptor.unavailable(dimension, owner, generation, revision);
         if (level.isClientSide || scan == null || !scan.valid() || scan.origin() == null) return unavailable;
         BlockPos origin = scan.origin();
-        BlockPos max = origin.offset(ReactorStructureDefinition.SIZE - 1,
-                ReactorStructureDefinition.SIZE - 1, ReactorStructureDefinition.SIZE - 1);
+        BlockPos max = origin.offset(scan.contract().dimensions().width() - 1,
+                scan.contract().dimensions().height() - 1, scan.contract().dimensions().depth() - 1);
         var members = new ArrayList<ReactorSurfaceDescriptor.SurfaceMember>();
         try {
             for (BlockPos mutable : BlockPos.betweenClosed(origin, max)) {

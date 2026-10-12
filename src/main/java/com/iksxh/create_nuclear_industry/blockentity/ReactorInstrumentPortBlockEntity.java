@@ -75,6 +75,11 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private ReactorSnapshot snapshot = ReactorSnapshot.empty();
+    /** 最后已验证的占据证据只供缺区块拆除防护；不能用于成型、库存或客户端显示。 */
+    private ReactorSurfaceDescriptor breakSafetySurface;
+    private java.util.Set<CoreColumnPosition> breakSafetyFuelColumns = java.util.Set.of();
+    /** 当前NBT的占据证据须等首次有效扫描确认，不能用FULL可用性或失败扫描提前撤销。 */
+    private boolean breakSafetyAwaitingRestoreScan;
     private ReactorInstrumentTelemetry telemetry =
             ReactorInstrumentTelemetry.unavailable(TELEMETRY_UNAVAILABLE_REASON);
     private ReactorInstrumentTelemetry clientTelemetry =
@@ -182,7 +187,21 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     }
 
     public boolean structureValid() {
-        return structureScan.valid();
+        return structureScan.valid() && structureChunksAvailable();
+    }
+
+    /** 仅检查缓存包围盒相交的至多四个区块是否可读，不访问方块或强制加载。 */
+    public boolean structureChunksAvailable() {
+        if (level == null || level.isClientSide || structureOrigin == null) return true;
+        var dimensions = structureScan.dimensions();
+        for (int x = structureOrigin.getX() >> 4;
+             x <= (structureOrigin.getX() + dimensions.width() - 1) >> 4; x++) {
+            for (int z = structureOrigin.getZ() >> 4;
+                 z <= (structureOrigin.getZ() + dimensions.depth() - 1) >> 4; z++) {
+                if (!level.hasChunk(x, z)) return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -242,6 +261,19 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         structureOrigin = scan.origin();
         structureScanCount++;
         if (structureScan.valid()) {
+            // 首次成型的空状态采用实际尺寸；已有状态只能按其持久化尺寸恢复，不能借重扫热重组。
+            if (!snapshot.dimensions().equals(structureScan.dimensions())) {
+                if (!snapshot.equals(ReactorSnapshot.empty())) {
+                    structureScan = new ReactorStructureDefinition.ScanResult(false,
+                            "existing reactor state dimensions differ; destructive maintenance is required",
+                            ReactorStructureDefinition.DiagnosticCode.DIMENSIONS, Map.of(), Map.of());
+                    clearPortBindings(true);
+                    updateSurfaceDescriptor(new ReactorStructureScanner.WorldScanResult(null, structureScan));
+                    invalidateTelemetry();
+                    return;
+                }
+                setSnapshot(snapshot.withDimensions(structureScan.dimensions()));
+            }
             initializeAndSyncControlRods();
             reconcilePortBindings();
             migratePendingFuelAssemblies();
@@ -253,7 +285,46 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             clearPortBindings(true);
         }
         updateSurfaceDescriptor(scan);
+        if (structureScan.valid() && surfaceDescriptor != null && surfaceDescriptor.valid()) {
+            breakSafetySurface = surfaceDescriptor;
+            breakSafetyAwaitingRestoreScan = false;
+            breakSafetyFuelColumns = structureScan.columns().entrySet().stream()
+                    .filter(entry -> entry.getValue().type() == ReactorStructureDefinition.ColumnType.FUEL)
+                    .map(Map.Entry::getKey).collect(java.util.stream.Collectors.toUnmodifiableSet());
+            setChanged();
+        }
         invalidateTelemetry();
+    }
+
+    /**
+     * 缺FULL或尚未完成恢复扫描时，原验证组件只能保守拒绝拆除；不读取其他区块。
+     * 当前NBT恢复的证据必须匹配本仪表坐标、维度及权威外尺寸，绝不据此宣告成型。
+     */
+    public boolean protectsUnavailableComponent(BlockPos pos, BlockState state) {
+        var geometry = breakSafetySurface;
+        if (level == null || level.isClientSide || geometry == null || !geometry.valid()
+                || !geometry.ownerPos().equals(worldPosition)
+                || !geometry.dimension().equals(level.dimension().location().toString())) return false;
+        var origin = geometry.origin();
+        var max = geometry.maxInclusive();
+        var dimensions = snapshot.dimensions();
+        if (max.getX() - origin.getX() + 1 != dimensions.width()
+                || max.getY() - origin.getY() + 1 != dimensions.height()
+                || max.getZ() - origin.getZ() + 1 != dimensions.depth()) return false;
+        boolean available = true;
+        for (int x = origin.getX() >> 4; x <= max.getX() >> 4; x++) {
+            for (int z = origin.getZ() >> 4; z <= max.getZ() >> 4; z++) available &= level.hasChunk(x, z);
+        }
+        if (available && (structureScan.valid() || !breakSafetyAwaitingRestoreScan
+                && structureScan.diagnosticCode() != ReactorStructureDefinition.DiagnosticCode.CHUNKS_UNAVAILABLE)) return false;
+        String actualId = blockId(state);
+        if (geometry.members().stream().anyMatch(member -> member.pos().equals(pos)
+                && member.expectedBlockId().equals(actualId))) return true;
+        int x = pos.getX() - origin.getX(), y = pos.getY() - origin.getY(), z = pos.getZ() - origin.getZ();
+        return x > 0 && x < dimensions.width() - 1 && z > 0 && z < dimensions.depth() - 1
+                && y > 0 && y < dimensions.height() - 1
+                && id(P1ContentIds.REACTOR_FUEL_ROD_ID).equals(actualId)
+                && breakSafetyFuelColumns.contains(new CoreColumnPosition(x - 1, z - 1));
     }
 
     /** 返回当前实例最近收到或生成的不可变显示信封；未知数据以 Optional.empty 表示。 */
@@ -448,6 +519,16 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         }
     }
 
+    /** 所有拆除计划提交、后检和事件发布均成功后才撤销保护，失败回滚保留原证据。 */
+    public void finishDisassemblySafetyEvidence(ReactorDisassemblyPlan plan) {
+        if (plan.owner() != this || plan.action() != ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET
+                || !snapshot.equals(plan.nextSnapshot())) throw new IllegalArgumentException("invalid completed shutdown reset");
+        breakSafetySurface = null;
+        breakSafetyFuelColumns = java.util.Set.of();
+        breakSafetyAwaitingRestoreScan = false;
+        setChanged();
+    }
+
     /** 验证提交后的计划状态，确认没有留下半清空快照或端口物品。 */
     public boolean verifyDisassemblyPlan(ReactorDisassemblyPlan plan) {
         if (plan == null || plan.owner() != this) {
@@ -541,7 +622,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (level != null && level.isClientSide) {
             return false;
         }
-        if (!structureScan.valid()) {
+        if (!structureValid()) {
             return false;
         }
         ReactorSnapshot next = ReactorControlRodTick.advance(snapshot);
@@ -557,7 +638,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         boolean previousSettlementScope = runtimeSettlementInProgress;
         runtimeSettlementInProgress = true;
         try {
-            if (level == null || level.isClientSide || !structureScan.valid()
+            if (level == null || level.isClientSide || !structureValid()
                     || !snapshotMatchesStructure()) {
                 invalidateRuntimeDescriptor();
                 return false;
@@ -736,9 +817,10 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         }
     }
 
-    /** 结构编辑后，列状态可能残留；列角色不匹配当前结构时暂不推进模拟。 */
+    /** 结构编辑后，列状态可能残留；实际尺寸或列角色不匹配缓存时暂不推进模拟。 */
     private boolean snapshotMatchesStructure() {
-        return snapshot.fuelColumns().keySet().stream().allMatch(position ->
+        return snapshot.dimensions().equals(structureScan.dimensions())
+                && snapshot.fuelColumns().keySet().stream().allMatch(position ->
                 structureScan.columns().get(position) != null
                         && structureScan.columns().get(position).type()
                         == ReactorStructureDefinition.ColumnType.FUEL)
@@ -990,12 +1072,15 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         int localZ = brokenPos.getZ() - structureOrigin.getZ();
         ReactorStructureDefinition.LocalPosition local =
                 new ReactorStructureDefinition.LocalPosition(localX, localY, localZ);
-        if (!local.isInside()) {
+        if (!structureScan.dimensions().contains(local)) {
             return null;
         }
 
-        if (ReactorStructureDefinition.windowPositions().contains(local)) {
-            return id(P1ContentIds.REACTOR_WINDOW_ID);
+        if (structureScan.dimensions().boundary(local) && surfaceDescriptor != null && surfaceDescriptor.valid()) {
+            // 使用同次成型冻结的表面ID，合法窗口不局限于原五格示例位置。
+            for (var member : surfaceDescriptor.members()) {
+                if (member.pos().equals(brokenPos)) return member.expectedBlockId();
+            }
         }
         for (Map.Entry<ReactorStructureDefinition.PortType, List<ReactorStructureDefinition.LocalPosition>> entry
                 : structureScan.ports().entrySet()) {
@@ -1020,7 +1105,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 };
             }
         }
-        return local.isBoundary() ? id(P1ContentIds.REACTOR_CASING_ID) : null;
+        return structureScan.dimensions().boundary(local) ? id(P1ContentIds.REACTOR_CASING_ID) : null;
     }
 
     private static String blockId(BlockState state) {
@@ -1378,7 +1463,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                     entry.getValue().capPosition().x(),
                     entry.getValue().capPosition().y(),
                     entry.getValue().capPosition().z());
-            if (level.getBlockEntity(drivePos) instanceof ControlRodDriveBlockEntity drive) {
+            if (level.hasChunkAt(drivePos) && level.getBlockEntity(drivePos) instanceof ControlRodDriveBlockEntity drive) {
                 drive.setServerControlRodIntegrity(null);
             }
         }
@@ -1438,6 +1523,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         surfaceChunkUnloaded = false;
         ReactorSurfaceSyncEvents.publish(this, false);
         if (level != null && !level.isClientSide) {
+            ReactorStructureLifecycle.registerOwner(this);
             ReactorStructureLifecycle.scheduleRescanAround(level, worldPosition);
         }
     }
@@ -1445,6 +1531,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /** 客户端清理区块先调用此钩子再 setRemoved；显式保留卸载原因，不依赖事件总线次序。 */
     @Override
     public void onChunkUnloaded() {
+        ReactorStructureLifecycle.unregisterOwner(this);
         invalidateRuntimeDescriptor();
         surfaceChunkUnloaded = true;
         ReactorSurfaceSyncEvents.publish(this, true, true);
@@ -1459,6 +1546,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      */
     @Override
     public void invalidate() {
+        ReactorStructureLifecycle.unregisterOwner(this);
         invalidateRuntimeDescriptor();
         ReactorSurfaceSyncEvents.publish(this, true, surfaceChunkUnloaded);
         // 区块卸载不是安全重扫，不能借生命周期事件改变未成型取料锁。
@@ -1529,6 +1617,16 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             snapshotTag.put(LEGACY_FUEL_MIGRATION_KEY, migration);
         }
         tag.put(SNAPSHOT_KEY, snapshotTag);
+        if (!clientPacket && breakSafetySurface != null) {
+            tag.put("BreakSafetySurface", breakSafetySurface.encode());
+            var fuelColumns = new net.minecraft.nbt.ListTag();
+            for (var column : breakSafetyFuelColumns) {
+                var entry = new CompoundTag();
+                entry.putInt("X", column.x()); entry.putInt("Z", column.z());
+                fuelColumns.add(entry);
+            }
+            tag.put("BreakSafetyFuelColumns", fuelColumns);
+        }
         if (clientPacket) {
             tag.put(STRUCTURE_SUMMARY_KEY, structureSummary().writeSyncTag());
             tag.put(TELEMETRY_KEY, ReactorInstrumentTelemetryNbtCodec.encode(telemetry));
@@ -1545,6 +1643,22 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         ReactorSnapshotNbtCodec.DecodedSnapshot decoded =
                 ReactorSnapshotNbtCodec.decodeWithMigration(snapshotTag);
         snapshot = decoded.snapshot().withoutFuelAssemblies();
+        if (!clientPacket) {
+            breakSafetySurface = ReactorSurfaceDescriptor.decode(tag.contains("BreakSafetySurface")
+                    ? tag.getCompound("BreakSafetySurface") : null).orElse(null);
+            breakSafetyAwaitingRestoreScan = breakSafetySurface != null;
+            var protectedColumns = new java.util.HashSet<CoreColumnPosition>();
+            var list = tag.getList("BreakSafetyFuelColumns", net.minecraft.nbt.Tag.TAG_COMPOUND);
+            if (list.size() <= snapshot.dimensions().columnCount()) {
+                for (int index = 0; index < list.size(); index++) {
+                    var entry = list.getCompound(index);
+                    int x = entry.getInt("X"), z = entry.getInt("Z");
+                    if (x >= 0 && x < snapshot.dimensions().internalWidth()
+                            && z >= 0 && z < snapshot.dimensions().internalDepth()) protectedColumns.add(new CoreColumnPosition(x, z));
+                }
+            }
+            breakSafetyFuelColumns = java.util.Set.copyOf(protectedColumns);
+        }
         TreeMap<CoreColumnPosition, FuelAssemblyState> pending =
                 new TreeMap<>(decoded.legacyFuelAssemblies());
         if (snapshotTag != null && snapshotTag.contains(LEGACY_FUEL_MIGRATION_KEY)) {

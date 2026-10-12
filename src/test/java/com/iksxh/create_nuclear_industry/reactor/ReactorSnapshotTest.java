@@ -123,7 +123,9 @@ class ReactorSnapshotTest {
     @Test
     void rejectsInvalidDurabilityColumnRangesLedgersAndMeltdownProgress() {
         assertThrows(IllegalArgumentException.class, () -> new CoreColumnPosition(-1, 0));
-        assertThrows(IllegalArgumentException.class, () -> new CoreColumnPosition(3, 0));
+        assertThrows(IllegalArgumentException.class, () -> new CoreColumnPosition(14, 0));
+        assertThrows(IllegalArgumentException.class, () -> ReactorSnapshot.singleFuelColumn(
+                new CoreColumnPosition(3, 0), FuelColumnState.empty()));
         assertThrows(IllegalArgumentException.class, () -> FuelAssemblyState.installed(0, 0));
         assertThrows(IllegalArgumentException.class, () -> FuelAssemblyState.installed(100, -1));
         assertThrows(IllegalArgumentException.class, () -> FuelAssemblyState.installed(100, 101));

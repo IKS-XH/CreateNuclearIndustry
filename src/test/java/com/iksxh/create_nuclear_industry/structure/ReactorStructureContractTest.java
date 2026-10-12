@@ -222,7 +222,7 @@ class ReactorStructureContractTest {
 
     private static void assertInvalid(Map<ReactorStructureDefinition.LocalPosition, String> blocks,
                                       String expectedReason) {
-        ReactorStructureDefinition.ScanResult result = ReactorStructureDefinition.scan(blocks);
+        ReactorStructureDefinition.ScanResult result = ReactorStructureDefinition.scan(ReactorDimensions.DEFAULT, blocks);
         assertFalse(result.valid(), "expected invalid structure");
         assertTrue(result.failureReason().contains(expectedReason),
                 () -> "expected reason containing '" + expectedReason + "', got '"

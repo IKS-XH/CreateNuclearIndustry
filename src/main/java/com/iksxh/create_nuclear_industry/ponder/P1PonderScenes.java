@@ -100,7 +100,7 @@ public final class P1PonderScenes {
                 .add(util.select().fromTo(2, 1, 3, 2, 3, 3));
         scene.world().showSection(util.select().layer(0), Direction.UP);
         scene.idle(10);
-        caption(scene, util, "Build the 5×5×5 casing frame; every edge must use reactor casing.",
+        caption(scene, util, "This 5×5×5 example can extend to 5–16 blocks on each side; every edge must use reactor casing.",
                 new BlockPos(0, 0, 0), 80);
 
         Selection walls = util.select().fromTo(0, 1, 0, 4, 3, 4).substract(innerColumns);
@@ -118,7 +118,7 @@ public final class P1PonderScenes {
 
         scene.overlay().showOutline(PonderPalette.GREEN, new Object(), fuelBodies, 70);
         scene.overlay().showOutline(PonderPalette.GREEN, new Object(), fuelPorts, 70);
-        caption(scene, util, "Stack three fuel rods vertically in each column and cap it with a refueling port.",
+        caption(scene, util, "Fill each fuel column through the full internal height and cap it with a refueling port.",
                 new BlockPos(2, 2, 2), 80);
 
         scene.idle(10);

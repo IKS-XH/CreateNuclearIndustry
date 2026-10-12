@@ -72,7 +72,7 @@ public final class FuelColumnRepairTransaction {
     /**
      * 尝试用一块 {@code steel_plate} 修复燃料列。
      *
-     * <p>维修量固定为单个燃料棒额定完整度的 25%，当前固定三格有效高度因此换算为
+     * <p>维修量固定为单个燃料棒额定完整度的 25%，此默认示例入口以三格有效高度换算为
      * {@code 0.25 / ReactorSnapshot.INTERNAL_HEIGHT}。只检查当前 tick 的新生裂变热，
      * 不把缓存余热当作仍在放热；缓存余热、燃耗余量和组件耐久均原样保留。</p>
      *
@@ -86,6 +86,12 @@ public final class FuelColumnRepairTransaction {
             ItemStack incoming,
             double currentFissionHeatHu
     ) {
+        return repair(current, incoming, currentFissionHeatHu, ReactorSnapshot.INTERNAL_HEIGHT);
+    }
+
+    /** 按权威快照的实际内部高度修复；一次仍只消耗一块钢板，缓存热与组件不变。 */
+    public static Result repair(FuelColumnState current, ItemStack incoming, double currentFissionHeatHu, int internalHeight) {
+        if (internalHeight < 3 || internalHeight > 14) throw new IllegalArgumentException("internal height must be in [3, 14]");
         requireColumn(current);
         requireHeat(currentFissionHeatHu);
         if (incoming == null || incoming.isEmpty()) {
@@ -101,7 +107,7 @@ public final class FuelColumnRepairTransaction {
             return failure(Status.COLUMN_FULL, current, incoming);
         }
 
-        double repairAmount = REPAIR_PER_FUEL_ROD / ReactorSnapshot.INTERNAL_HEIGHT;
+        double repairAmount = REPAIR_PER_FUEL_ROD / internalHeight;
         FuelColumnState repaired = current.withIntegrity(
                 Math.min(1.0D, current.integrity() + repairAmount));
         ItemStack remaining = incoming.copy();

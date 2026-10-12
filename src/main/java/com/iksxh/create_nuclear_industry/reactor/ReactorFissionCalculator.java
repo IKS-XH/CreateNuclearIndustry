@@ -28,7 +28,7 @@ public final class ReactorFissionCalculator {
             if (!fuel.hasUsableFuel()) {
                 continue;
             }
-            double meanDepth = position.cardinalNeighbours().stream()
+            double meanDepth = position.cardinalNeighbours(snapshot.dimensions()).stream()
                     .map(snapshot.controlRodColumns()::get)
                     .filter(control -> control != null)
                     .mapToDouble(ControlRodColumnState::actualDepth)
@@ -37,7 +37,7 @@ public final class ReactorFissionCalculator {
             double controlledIntensity = Math.pow(
                     clamp01(1.0D - meanDepth), parameters.controlResponseExponent());
             controlled.put(position, controlledIntensity);
-            overclocked.put(position, position.cardinalNeighbours().stream()
+            overclocked.put(position, position.cardinalNeighbours(snapshot.dimensions()).stream()
                     .map(snapshot.fuelColumns()::get)
                     .anyMatch(neighbour -> neighbour != null && neighbour.hasUsableFuel()));
         }
@@ -61,7 +61,7 @@ public final class ReactorFissionCalculator {
                     nextBurn.put(position, controlled.get(position));
                     continue;
                 }
-                double signal = position.cardinalNeighbours().stream()
+                double signal = position.cardinalNeighbours(snapshot.dimensions()).stream()
                         .filter(controlled::containsKey)
                         .mapToDouble(neighbour -> currentHeatIntensity.getOrDefault(neighbour, 1.0D))
                         .sum();
@@ -107,9 +107,9 @@ public final class ReactorFissionCalculator {
             double damageBurnMultiplier = 1.0D
                     + (parameters.fuelColumnDamageBurnMultiplier() - 1.0D) * damageFraction;
             double columnHeat = finiteNonNegative(parameters.baseHeatPerFuelBlockHuPerTick()
-                    * ReactorSnapshot.INTERNAL_HEIGHT * heatIntensity.get(position) * damageHeatMultiplier);
+                    * snapshot.dimensions().internalHeight() * heatIntensity.get(position) * damageHeatMultiplier);
             double columnBurn = finiteNonNegative(parameters.baseBurnPerFuelBlockPerTick()
-                    * ReactorSnapshot.INTERNAL_HEIGHT * burnIntensity.get(position) * damageBurnMultiplier);
+                    * snapshot.dimensions().internalHeight() * burnIntensity.get(position) * damageBurnMultiplier);
             rawResults.put(position, new FuelColumnFissionResult(
                     controlled.get(position),
                     heatIntensity.get(position),
@@ -125,7 +125,7 @@ public final class ReactorFissionCalculator {
         }
 
         double heatCap = parameters.baseHeatPerFuelBlockHuPerTick()
-                * ReactorSnapshot.INTERNAL_HEIGHT
+                * snapshot.dimensions().internalHeight()
                 * installedFuelColumns
                 * parameters.totalHeatMultiplierCap();
         // 服务端每 tick 只对限幅后的全堆新生热取整一次；诊断原始热和燃耗均保留原公式。

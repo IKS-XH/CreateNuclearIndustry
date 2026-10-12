@@ -81,7 +81,7 @@ class ReactorCoolantCapacityTest {
         ReactorCoolantCapacity.Derived maximum = derive(layoutWith(
                 ReactorStructureDefinition.ColumnType.EMPTY),
                 ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB);
-        assertEquals((long) Integer.MAX_VALUE / 24 * 24, maximum.coolantCapacityMb());
+        assertEquals((long) ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB * 24, maximum.coolantCapacityMb());
     }
 
     @Test
@@ -98,7 +98,7 @@ class ReactorCoolantCapacityTest {
                 () -> ReactorCoolantCapacity.fromScan(scan,
                         ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB + 1L));
         assertThrows(IllegalArgumentException.class,
-                () -> ReactorCoolantCapacity.capacityFor(25, 1_000L));
+                () -> ReactorCoolantCapacity.capacityFor(2731, 1_000L));
         assertThrows(IllegalArgumentException.class,
                 () -> ReactorCoolantCapacity.capacityFor(-1, 1_000L));
     }

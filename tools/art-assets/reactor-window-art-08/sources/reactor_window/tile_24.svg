@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- ART-REACTOR-08候选：原生索引24，mask=12；透明窗格填充铅灰#66696A，alpha64/255；原框/角矩形保持。 -->
+  <rect x="0" y="4" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="5" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="6" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="7" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="8" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="9" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="10" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="11" width="16" height="1" fill="#66696A" fill-opacity="0.25098039215686275" />
+  <rect x="0" y="0" width="16" height="1" fill="#28353A" />
+  <rect x="0" y="1" width="16" height="1" fill="#A3B7B8" />
+  <rect x="0" y="2" width="16" height="1" fill="#3E5058" />
+  <rect x="0" y="3" width="16" height="1" fill="#A3B7B8" />
+  <rect x="0" y="12" width="16" height="1" fill="#3E5058" />
+  <rect x="0" y="13" width="16" height="1" fill="#3E5058" />
+  <rect x="0" y="14" width="16" height="1" fill="#28353A" />
+  <rect x="0" y="15" width="16" height="1" fill="#28353A" />
+</svg>

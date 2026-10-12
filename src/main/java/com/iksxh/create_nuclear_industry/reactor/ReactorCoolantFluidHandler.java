@@ -25,6 +25,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
 
     private final ReactorInstrumentPortBlockEntity owner;
     private final ReactorPortBlockEntity sourcePort;
+    private final long bindingGeneration;
     private final boolean coldInput;
     private final ReactorCoolantPortFlowBudget flowBudget;
     private final Long capacityOverrideMb;
@@ -41,6 +42,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
             throw new IllegalArgumentException("reactor owner, flow budget and capacity are required");
         }
         this.sourcePort = sourcePort;
+        this.bindingGeneration = sourcePort == null ? 0L : sourcePort.bindingGeneration();
         this.owner = owner;
         this.coldInput = coldInput;
         this.flowBudget = flowBudget;
@@ -193,8 +195,9 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
         ReactorPortBlockEntity.BindingType expectedType = coldInput
                 ? ReactorPortBlockEntity.BindingType.COLD_COOLANT
                 : ReactorPortBlockEntity.BindingType.HOT_COOLANT;
-        if (sourcePort.isRemoved() || owner.isRemoved()
+        if (sourcePort.bindingGeneration() != bindingGeneration || sourcePort.isRemoved() || owner.isRemoved()
                 || sourcePort.getLevel() == null
+                || !sourcePort.getLevel().hasChunkAt(sourcePort.getBlockPos())
                 || sourcePort.getLevel().getBlockEntity(sourcePort.getBlockPos()) != sourcePort) {
             return false;
         }

@@ -35,6 +35,8 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     private static final String UNFORMED_EXTRACTION_ALLOWED_KEY = "UnformedExtractionAllowed";
     private Binding binding;
     private ReactorInstrumentPortBlockEntity boundOwner;
+    /** 每次绑定身份变化递增；旧capability即使同一端口恢复也不能复活，不持久化。 */
+    private long bindingGeneration;
     private ItemStack fuelAssembly = ItemStack.EMPTY;
     private boolean unformedExtractionAllowed;
     private boolean serverFuelColumnBound;
@@ -50,6 +52,9 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     public Binding binding() {
         return binding;
     }
+
+    /** 返回仅供服务端capability验证的当前绑定代数。 */
+    public long bindingGeneration() { return bindingGeneration; }
 
     /** 返回端口是否已经绑定到一个有效的仪表端口。 */
     public boolean isBound() {
@@ -190,6 +195,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
         boolean changed = !isBoundTo(owner, expectedType, column);
         binding = new Binding(owner.getBlockPos(), expectedType, column);
         boundOwner = owner;
+        if (changed) bindingGeneration++;
         if (expectedType == BindingType.REFUELING) {
             setUnformedExtractionAllowed(owner.isSafeForUnformedFuelExtraction());
         }
@@ -228,6 +234,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
             }
             binding = null;
             boundOwner = null;
+            if (changed) bindingGeneration++;
             serverFuelColumnBound = false;
             serverFuelColumnTelemetry = null;
             if (previousOwner != null) {
@@ -274,6 +281,24 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
                 incoming,
                 incoming.copyWithCount(1),
                 result);
+    }
+
+    /**
+     * 仅服务端玩家路径尝试原子替换枯竭组件，输入栈由调用方在成功后转移。
+     * 新组件写入与旧组件移出共用既有提交前绑定/精确栈校验及双状态异常回滚；
+     * 不经过公开的取空和装入，不改变机械臂向空槽装入的含义。
+     */
+    public FuelRefuelingTransaction.Result tryReplaceExhaustedFuel(ItemStack incoming) {
+        FuelTransactionEvaluation evaluation = evaluateReplaceExhaustedFuel(incoming);
+        FuelRefuelingTransaction.Result result = evaluation.result();
+        if (!result.success()) {
+            return result;
+        }
+        if (!evaluation.owner().validateFuelColumnCommit(
+                this, evaluation.column(), evaluation.expectedStored(), result.nextColumn())) {
+            return FuelRefuelingTransaction.invalidPort(incoming);
+        }
+        return commitFuelTransaction(evaluation, incoming, incoming.copyWithCount(1), result);
     }
 
     /** 只计算机械臂取料结果，不修改端口物品或反应堆快照。 */
@@ -334,6 +359,23 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
                 boundOwner, before, column, fuelAssembly.copy(), result);
     }
 
+    /**
+     * 替换读阶段基于端口权威精确栈投影，只读计算本列裂变热，单位 HU/t。
+     * 运行快照可能尚未刷新，因此使用既有带列投影的热校验，避免刚转乏燃料时误判；
+     * 列结构状态仍来自完整原快照，提交和回滚保持实际尺寸及其他所有状态。
+     */
+    private FuelTransactionEvaluation evaluateReplaceExhaustedFuel(ItemStack incoming) {
+        if (!isRefuelingBindingUsable()) {
+            return FuelTransactionEvaluation.invalid(incoming);
+        }
+        ReactorSnapshot before = boundOwner.snapshot();
+        CoreColumnPosition column = binding.column();
+        FuelColumnState current = currentFuelColumn(before, column);
+        FuelRefuelingTransaction.Result result = FuelRefuelingTransaction.replaceExhausted(
+                current, incoming, boundOwner.currentFuelColumnFissionHeatHu(column, current), fuelAssembly);
+        return new FuelTransactionEvaluation(boundOwner, before, column, fuelAssembly.copy(), result);
+    }
+
     /** 根据当前服务端快照计算取料结果；计算阶段不产生任何世界副作用。 */
     private FuelTransactionEvaluation evaluateExtractFuel() {
         if (!isRefuelingBindingUsable()) {
@@ -360,14 +402,14 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
         FuelColumnRepairTransaction.Result result = FuelColumnRepairTransaction.repair(
                 current,
                 incoming,
-                boundOwner.currentFuelColumnFissionHeatHu(column, current));
+                boundOwner.currentFuelColumnFissionHeatHu(column, current), before.dimensions().internalHeight());
         return new FuelColumnRepairEvaluation(
                 boundOwner, before, column, fuelAssembly.copy(), current, result);
     }
 
     /**
      * 在所有提交前置条件已确认后一次性写入端口和快照；异常时恢复读阶段的两个状态。
-     * 机械臂只接收返回栈，因此失败不会吞掉输入或把半提交物品留在端口中。
+     * 调用方只在成功后转移输入和输出，因此失败不会吞掉输入或暴露半提交物品。
      */
     private FuelRefuelingTransaction.Result commitFuelTransaction(
             FuelTransactionEvaluation evaluation,
@@ -403,7 +445,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
         }
     }
 
-    /** 两阶段机械臂事务的读阶段快照；其中物品栈均只在内部使用副本。 */
+    /** 两阶段取放或替换事务的读阶段快照；其中物品栈均只在内部使用副本。 */
     private record FuelTransactionEvaluation(
             ReactorInstrumentPortBlockEntity owner,
             ReactorSnapshot before,

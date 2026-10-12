@@ -1,12 +1,13 @@
 package com.iksxh.create_nuclear_industry.reactor;
 
+import com.iksxh.create_nuclear_industry.structure.ReactorDimensions;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * 固定 P1 5×5×5 反应堆的不可变、加载器无关状态快照。
- * 3×3 内部映射中未出现的坐标代表空堆芯列；仪表端口拥有完整快照的权威副本。
+ * 实际尺寸反应堆的不可变、加载器无关状态快照。
+ * 实际内部映射中未出现的坐标代表空堆芯列；仪表端口拥有完整快照的权威副本。
  */
 public record ReactorSnapshot(
         Map<CoreColumnPosition, FuelColumnState> fuelColumns,
@@ -17,13 +18,15 @@ public record ReactorSnapshot(
         boolean meltdownCountdownStarted,
         Map<CoreColumnPosition, Double> scramSavedTargetDepths,
         boolean scramRequested,
-        boolean meltdownEventPublished
+        boolean meltdownEventPublished,
+        ReactorDimensions dimensions
 ) {
     public static final int OUTER_SIZE = 5;
     public static final int INTERNAL_HEIGHT = OUTER_SIZE - 2;
     public static final int MAX_CORE_COLUMNS = CoreColumnPosition.GRID_SIZE * CoreColumnPosition.GRID_SIZE;
 
     public ReactorSnapshot {
+        if (dimensions == null) throw new IllegalArgumentException("reactor dimensions are required");
         fuelColumns = immutableOrderedCopy(fuelColumns, "fuel columns");
         controlRodColumns = immutableOrderedCopy(controlRodColumns, "control rod columns");
         scramSavedTargetDepths = immutableTargetCopy(scramSavedTargetDepths);
@@ -33,8 +36,12 @@ public record ReactorSnapshot(
                 throw new IllegalArgumentException("a core position cannot contain both a fuel and control rod column");
             }
         }
-        if (fuelColumns.size() + controlRodColumns.size() > MAX_CORE_COLUMNS) {
-            throw new IllegalArgumentException("the fixed P1 core cannot contain more than 9 columns");
+        if (fuelColumns.size() + controlRodColumns.size() > dimensions.columnCount()) {
+            throw new IllegalArgumentException("the core contains more columns than its actual dimensions");
+        }
+        if (fuelColumns.keySet().stream().anyMatch(p -> !dimensions.containsColumn(p))
+                || controlRodColumns.keySet().stream().anyMatch(p -> !dimensions.containsColumn(p))) {
+            throw new IllegalArgumentException("column lies outside actual reactor dimensions");
         }
         if (coldCoolantMb < 0L || hotCoolantMb < 0L) {
             throw new IllegalArgumentException("coolant ledger amounts must be non-negative");
@@ -56,6 +63,21 @@ public record ReactorSnapshot(
         if (!scramRequested && !scramSavedTargetDepths.isEmpty()) {
             throw new IllegalArgumentException("inactive SCRAM cannot retain restore targets");
         }
+    }
+
+    /** 默认五格构造入口保留原示例；正式结构使用显式尺寸。 */
+    public ReactorSnapshot(Map<CoreColumnPosition, FuelColumnState> fuels,
+            Map<CoreColumnPosition, ControlRodColumnState> rods, long cold, long hot,
+            long progress, boolean started, Map<CoreColumnPosition, Double> targets,
+            boolean scram, boolean published) {
+        this(fuels, rods, cold, hot, progress, started, targets, scram, published, ReactorDimensions.DEFAULT);
+    }
+
+    /** 只为首次成型的空状态指定实际尺寸，不改变库存或列状态。 */
+    public ReactorSnapshot withDimensions(ReactorDimensions nextDimensions) {
+        return new ReactorSnapshot(fuelColumns, controlRodColumns, coldCoolantMb, hotCoolantMb,
+                meltdownProgressTicks, meltdownCountdownStarted, scramSavedTargetDepths,
+                scramRequested, meltdownEventPublished, nextDimensions);
     }
 
     /** 兼容没有 SCRAM 状态字段的旧快照构造形式。 */
@@ -110,9 +132,9 @@ public record ReactorSnapshot(
         return fuelColumns.size() + controlRodColumns.size();
     }
 
-    /** 判断 3×3 堆芯的九个列坐标是否都已有角色。 */
+    /** 判断实际截面内所有列坐标是否都已有燃料或控制棒角色。 */
     public boolean hasCompleteCoreColumnSet() {
-        return occupiedColumnCount() == MAX_CORE_COLUMNS;
+        return occupiedColumnCount() == dimensions.columnCount();
     }
 
     /**
@@ -129,7 +151,7 @@ public record ReactorSnapshot(
                 meltdownCountdownStarted,
                 scramSavedTargetDepths,
                 scramRequested,
-                meltdownEventPublished
+                meltdownEventPublished, dimensions
         );
     }
 
@@ -158,7 +180,7 @@ public record ReactorSnapshot(
                 meltdownCountdownStarted,
                 nextSavedTargetDepths,
                 scramRequested && !nextControlRodColumns.isEmpty(),
-                meltdownEventPublished
+                meltdownEventPublished, dimensions
         );
     }
 
@@ -184,7 +206,7 @@ public record ReactorSnapshot(
                 meltdownCountdownStarted,
                 scramSavedTargetDepths,
                 scramRequested,
-                meltdownEventPublished
+                meltdownEventPublished, dimensions
         );
     }
 
@@ -202,7 +224,7 @@ public record ReactorSnapshot(
                 meltdownCountdownStarted,
                 scramSavedTargetDepths,
                 scramRequested,
-                meltdownEventPublished
+                meltdownEventPublished, dimensions
         );
     }
 
@@ -217,7 +239,7 @@ public record ReactorSnapshot(
                 nextStarted,
                 scramSavedTargetDepths,
                 scramRequested,
-                nextStarted && meltdownEventPublished
+                nextStarted && meltdownEventPublished, dimensions
         );
     }
 
@@ -232,7 +254,7 @@ public record ReactorSnapshot(
                 meltdownCountdownStarted,
                 scramSavedTargetDepths,
                 scramRequested,
-                nextPublished
+                nextPublished, dimensions
         );
     }
 
@@ -250,7 +272,7 @@ public record ReactorSnapshot(
                 meltdownCountdownStarted,
                 nextSavedTargetDepths,
                 nextRequested,
-                meltdownEventPublished
+                meltdownEventPublished, dimensions
         );
     }
 

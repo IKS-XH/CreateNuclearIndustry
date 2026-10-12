@@ -141,7 +141,7 @@ public final class ReactorHeatPropagation {
             CoreColumnPosition source
     ) {
         List<CoreColumnPosition> targets = new ArrayList<>(4);
-        for (CoreColumnPosition position : source.cardinalNeighbours()) {
+        for (CoreColumnPosition position : source.cardinalNeighbours(snapshot.dimensions())) {
             if (containsColumn(snapshot, position)) {
                 targets.add(position);
             }

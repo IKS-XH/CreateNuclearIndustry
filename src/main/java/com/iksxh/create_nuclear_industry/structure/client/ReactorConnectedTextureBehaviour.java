@@ -33,25 +33,41 @@ public final class ReactorConnectedTextureBehaviour extends ConnectedTextureBeha
 
     @Override
     public CTType getDataType(BlockAndTintGetter world, BlockPos pos, BlockState state, Direction face) {
-        var member = ReactorConnectedTextures.currentSnapshot(world).findSurface(pos, face).orElse(null);
-        if (member == null) return null;
+        var snapshot = ReactorConnectedTextures.currentSnapshot(world);
         String localId = blockId(world.getBlockState(pos));
-        return localId.equals(blockId(state)) && isUsableMember(member, pos, face, localId)
-                ? (isWindow(localId) ? AllCTTypes.OMNIDIRECTIONAL : AllCTTypes.RECTANGLE) : null;
+        if (!localId.equals(blockId(state))) return null;
+        Direction surfaceFace = reliableSurfaceFace(snapshot, pos, face, localId);
+        return surfaceFace == null ? null
+                : (isWindow(localId) ? AllCTTypes.OMNIDIRECTIONAL : AllCTTypes.RECTANGLE);
     }
 
     @Override
     public boolean connectsTo(BlockState state, BlockState other, BlockAndTintGetter world,
                               BlockPos pos, BlockPos otherPos, Direction face) {
         var snapshot = ReactorConnectedTextures.currentSnapshot(world);
-        var a = snapshot.findSurface(pos, face).orElse(null);
-        var b = snapshot.findSurface(otherPos, face).orElse(null);
-        if (a == null || b == null) return false;
         // 原生buildContext可能使用appearance；仍须核对两格实际局部状态，不能让外观代理替代合法材质。
         String localA = blockId(world.getBlockState(pos));
         String localB = blockId(world.getBlockState(otherPos));
-        return localA.equals(blockId(state)) && localB.equals(blockId(other))
-                && canConnect(a, b, localA, localB, face);
+        if (!localA.equals(blockId(state)) || !localB.equals(blockId(other))) return false;
+        Direction surfaceFace = reliableSurfaceFace(snapshot, pos, face, localA);
+        if (surfaceFace == null) return false;
+        var a = snapshot.findSurface(pos, surfaceFace).orElse(null);
+        var b = snapshot.findSurface(otherPos, surfaceFace).orElse(null);
+        return canConnect(a, b, localA, localB, surfaceFace);
+    }
+
+    /**
+     * 实际外向面优先；仅窗口内面可引用其反向可靠外面，绝不把内面加入L1归属。
+     * 这里只选择校验平面；原生buildContext仍使用真实渲染face，自行处理内外八向朝向。
+     */
+    private static Direction reliableSurfaceFace(ReactorSurfaceSnapshot snapshot, BlockPos pos,
+                                                  Direction face, String localId) {
+        var outward = snapshot.findSurface(pos, face).orElse(null);
+        if (isUsableMember(outward, pos, face, localId)) return face;
+        if (!isWindow(localId)) return null;
+        Direction opposite = face.getOpposite();
+        var backing = snapshot.findSurface(pos, opposite).orElse(null);
+        return isUsableMember(backing, pos, opposite, localId) ? opposite : null;
     }
 
     /** 核对一格的真实位置、合法材质及inclusive外平面；无记录时保守降级。 */

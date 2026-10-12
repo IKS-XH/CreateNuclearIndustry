@@ -96,6 +96,12 @@ public final class ControlRodColumnRepairTransaction {
             ItemStack incoming,
             double failureThreshold
     ) {
+        return repair(current, incoming, failureThreshold, ReactorSnapshot.INTERNAL_HEIGHT);
+    }
+
+    /** 实际维修量为0.25/内部高度，卡死解除仍只依赖原失效阈值，不重置深度或热量。 */
+    public static Result repair(ControlRodColumnState current, ItemStack incoming, double failureThreshold, int internalHeight) {
+        if (internalHeight < 3 || internalHeight > 14) throw new IllegalArgumentException("internal height must be in [3, 14]");
         requireColumn(current);
         requireUnitInterval("control rod failure threshold", failureThreshold);
         if (incoming == null || incoming.isEmpty()) {
@@ -108,7 +114,7 @@ public final class ControlRodColumnRepairTransaction {
             return failure(Status.COLUMN_FULL, current, incoming);
         }
 
-        double repairAmount = REPAIR_PER_ROD / ReactorSnapshot.INTERNAL_HEIGHT;
+        double repairAmount = REPAIR_PER_ROD / internalHeight;
         ControlRodColumnState repaired = ControlRodStateTransitions.repairIntegrity(
                 current, repairAmount, failureThreshold);
         ItemStack remaining = incoming.copy();

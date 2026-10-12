@@ -119,7 +119,7 @@ public final class ControlRodSliderService {
                 ControlRodColumnRepairTransaction.repair(
                         current,
                         incoming,
-                        P1ServerConfig.VALUES.controlRodFailureThreshold.get());
+                        P1ServerConfig.VALUES.controlRodFailureThreshold.get(), before.dimensions().internalHeight());
         if (!result.success()) {
             return result;
         }
@@ -283,37 +283,32 @@ public final class ControlRodSliderService {
         }
 
         Target found = null;
-        for (int dx = -4; dx <= 4; dx++) {
-            for (int dy = -4; dy <= 4; dy++) {
-                for (int dz = -4; dz <= 4; dz++) {
-                    BlockEntity candidate = level.getBlockEntity(drivePos.offset(dx, dy, dz));
-                    if (!(candidate instanceof ReactorInstrumentPortBlockEntity owner)
-                            || !owner.structureValid()
-                            || owner.structureOrigin() == null) {
-                        continue;
-                    }
-                    for (Map.Entry<CoreColumnPosition, ReactorStructureDefinition.ColumnMapping> entry
-                            : owner.structureScan().columns().entrySet()) {
-                        ReactorStructureDefinition.ColumnMapping mapping = entry.getValue();
-                        if (mapping.type() != ReactorStructureDefinition.ColumnType.CONTROL_ROD) {
-                            continue;
-                        }
-                        BlockPos mappedDrive = owner.structureOrigin().offset(
-                                mapping.capPosition().x(), mapping.capPosition().y(), mapping.capPosition().z());
-                        if (!mappedDrive.equals(drivePos)) {
-                            continue;
-                        }
-                        ControlRodColumnState state = owner.snapshot().controlRodColumns().get(entry.getKey());
-                        if (state == null) {
-                            return null;
-                        }
-                        Target next = new Target(owner, drive, entry.getKey(), state);
-                        if (found != null && !found.sameOwner(next)) {
-                            return null;
-                        }
-                        found = next;
-                    }
+        // 查询已加载所有者索引与其缓存列图，远端驱动器不扫描世界邻域，也不重扫结构。
+        for (ReactorInstrumentPortBlockEntity owner : com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle.loadedOwnersNear(level, drivePos)) {
+            if (!owner.structureValid()
+                    || owner.structureOrigin() == null) {
+                continue;
+            }
+            for (Map.Entry<CoreColumnPosition, ReactorStructureDefinition.ColumnMapping> entry
+                    : owner.structureScan().columns().entrySet()) {
+                ReactorStructureDefinition.ColumnMapping mapping = entry.getValue();
+                if (mapping.type() != ReactorStructureDefinition.ColumnType.CONTROL_ROD) {
+                    continue;
                 }
+                BlockPos mappedDrive = owner.structureOrigin().offset(
+                        mapping.capPosition().x(), mapping.capPosition().y(), mapping.capPosition().z());
+                if (!mappedDrive.equals(drivePos)) {
+                    continue;
+                }
+                ControlRodColumnState state = owner.snapshot().controlRodColumns().get(entry.getKey());
+                if (state == null) {
+                    return null;
+                }
+                Target next = new Target(owner, drive, entry.getKey(), state);
+                if (found != null && !found.sameOwner(next)) {
+                    return null;
+                }
+                found = next;
             }
         }
         return found;
@@ -321,8 +316,8 @@ public final class ControlRodSliderService {
 
     private static boolean validColumnHint(int columnX, int columnZ) {
         return (columnX == -1 && columnZ == -1)
-                || (columnX >= 0 && columnX < CoreColumnPosition.GRID_SIZE
-                && columnZ >= 0 && columnZ < CoreColumnPosition.GRID_SIZE);
+                || (columnX >= 0 && columnX < CoreColumnPosition.MAX_GRID_SIZE
+                && columnZ >= 0 && columnZ < CoreColumnPosition.MAX_GRID_SIZE);
     }
 
     private static boolean matchesColumnHint(ControlRodSliderPayload payload, CoreColumnPosition column) {

@@ -85,7 +85,7 @@ public final class ReactorPortBlock extends P1EntityBlockBase {
                 .result();
     }
 
-    /** 在服务端执行一次玩家单列换料动作；交互手为空时取出，否则尝试装入一个组件。 */
+    /** 服务端单列交互：空手取出，新燃料对占用槽尝试枯竭替换，其余沿用装入和维修。 */
     private static ItemInteractionResult handlePlayerInteraction(
             Level level,
             BlockPos pos,
@@ -133,12 +133,32 @@ public final class ReactorPortBlock extends P1EntityBlockBase {
             return ItemInteractionResult.CONSUME;
         }
 
-        FuelRefuelingTransaction.Result result = port.tryInsertFuel(incoming);
+        FuelRefuelingTransaction.Result result = FuelAssemblyItemCodec.isFreshFuel(incoming)
+                && !port.fuelAssembly().isEmpty()
+                ? port.tryReplaceExhaustedFuel(incoming)
+                : port.tryInsertFuel(incoming);
         if (result.success()) {
             player.setItemInHand(hand, result.remainingInput());
+            if (result.status() == FuelRefuelingTransaction.Status.REPLACED) {
+                returnReplacedFuel(player, hand, result.output());
+            }
         }
         player.displayClientMessage(messageFor(result), true);
         return ItemInteractionResult.CONSUME;
+    }
+
+    /**
+     * 仅在端口与快照提交成功后返还一件旧组件，主副手均使用真实交互手。
+     * 单件输入消费后直接回空手；多件输入优先入包，包满只掉落未被接收的该件输出。
+     * 使用原版 placeItemBackInInventory 的有空位/掉落路径，避免 Inventory.add 在创造
+     * 模式满包时直接删除输出；创造模式仍沿用既有装料消耗规则，不额外复制组件。
+     */
+    private static void returnReplacedFuel(Player player, InteractionHand hand, ItemStack output) {
+        if (player.getItemInHand(hand).isEmpty()) {
+            player.setItemInHand(hand, output);
+        } else {
+            player.getInventory().placeItemBackInInventory(output);
+        }
     }
 
     /** 将事务结果转换为不依赖客户端状态的动作栏提示。 */

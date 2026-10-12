@@ -105,9 +105,9 @@ public record ReactorInstrumentStructureSummary(
         return new ReactorInstrumentStructureSummary(
                 true,
                 "",
-                ReactorStructureDefinition.SIZE,
-                ReactorStructureDefinition.SIZE,
-                ReactorStructureDefinition.SIZE,
+                scan.dimensions().width(),
+                scan.dimensions().height(),
+                scan.dimensions().depth(),
                 fuelColumns,
                 controlRodColumns,
                 coldPorts,
@@ -210,7 +210,7 @@ public record ReactorInstrumentStructureSummary(
                 scan.ports().getOrDefault(type, List.of());
         return (int) ports.stream()
                 .peek(position -> {
-                    if (position == null || !ReactorStructureDefinition.sidePortSlots().contains(position)) {
+                    if (position == null || !scan.dimensions().sideSlot(position)) {
                         throw new IllegalArgumentException("structure scan contains an invalid port position");
                     }
                 })

@@ -3,6 +3,7 @@ package com.iksxh.create_nuclear_industry.heat;
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -20,21 +21,45 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  */
 public final class HeatExchangerBoilerBridge {
     private static final Map<Level, Set<BlockPos>> PENDING = new WeakHashMap<>();
+    /** 两张弱表共用登记锁；仅保护结构修改和引用快照，不保护或执行任何世界操作。 */
+    private static final Object SOURCES_LOCK = new Object();
     private static final Set<NuclearHeatExchangerBlockEntity> ACTIVE = java.util.Collections.newSetFromMap(new WeakHashMap<>());
     private static final Set<NuclearHeatExchangerBlockEntity> LOADED = java.util.Collections.newSetFromMap(new WeakHashMap<>());
     private HeatExchangerBoilerBridge() {}
 
-    /** 仅登记本模组已经发布热的源，不追踪世界中的普通 Create 锅炉。 */
+    /** 仅登记具有服务端世界且已经发布热的本模组源；任一侧的撤销均须与快照互斥。 */
     static void track(NuclearHeatExchangerBlockEntity machine, boolean active) {
-        if (active) ACTIVE.add(machine); else ACTIVE.remove(machine);
+        if (active && !serverSource(machine)) return;
+        synchronized (SOURCES_LOCK) {
+            if (active) ACTIVE.add(machine); else ACTIVE.remove(machine);
+        }
     }
-    static void registerLoaded(NuclearHeatExchangerBlockEntity machine) { LOADED.add(machine); }
-    static void unregisterLoaded(NuclearHeatExchangerBlockEntity machine) { LOADED.remove(machine); }
+
+    /** 客户端onLoad和未附世界的实体不能进入服务端逐tick审计。 */
+    static void registerLoaded(NuclearHeatExchangerBlockEntity machine) {
+        if (!serverSource(machine)) return;
+        synchronized (SOURCES_LOCK) { LOADED.add(machine); }
+    }
+
+    /** 移除不依赖当前世界侧，以保证卸载或世界脱离后的生命周期通知仍能安全清理。 */
+    static void unregisterLoaded(NuclearHeatExchangerBlockEntity machine) {
+        synchronized (SOURCES_LOCK) { LOADED.remove(machine); }
+    }
+
+    private static boolean serverSource(NuclearHeatExchangerBlockEntity machine) {
+        Level level = machine.getLevel();
+        return level != null && !level.isClientSide;
+    }
+
+    /** 临时强引用只覆盖本次审计；复制完成即释放锁，允许世界/热回调重入登记撤销。 */
+    private static List<NuclearHeatExchangerBlockEntity> snapshot(Set<NuclearHeatExchangerBlockEntity> sources) {
+        synchronized (SOURCES_LOCK) { return List.copyOf(sources); }
+    }
 
     /** 非供热成员停 tick 也须撤销整列句柄，否则恢复时旧端点能力可能重活。 */
     private static void auditLoadedSources() {
-        for (var machine : java.util.List.copyOf(LOADED)) {
-            if (!machine.current()) LOADED.remove(machine);
+        for (var machine : snapshot(LOADED)) {
+            if (!machine.current()) unregisterLoaded(machine);
             else if (!machine.canTick()) machine.pauseHeat();
         }
     }
@@ -44,10 +69,10 @@ public final class HeatExchangerBoilerBridge {
      * 不能等永远不会运行的源端 ticker；集合采用弱引用并在失活/移除时清理。
      */
     private static void auditActiveSources() {
-        for (var machine : java.util.List.copyOf(ACTIVE)) {
+        for (var machine : snapshot(ACTIVE)) {
             if (!machine.current() || !machine.canTick() || HeatExchangerLine.find(machine) == null) {
                 machine.pauseHeat();
-                ACTIVE.remove(machine);
+                track(machine, false);
             }
         }
     }

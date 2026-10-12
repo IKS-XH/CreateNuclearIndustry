@@ -60,6 +60,117 @@ class ReactorConnectedTextureTest {
     }
 
     @Test
+    void windowInsideAndOutsideUseNativeCompleteContextsOnSixReliablePlanes() throws Exception {
+        var captured=new ArrayList<Map<String,Object>>();
+        BlockState window=registeredState("reactor_window");
+        var behaviour=new ReactorConnectedTextureBehaviour(id->null);
+        List<FacePair> planes=List.of(
+                new FacePair(Direction.NORTH,new BlockPos(12,22,30),null),
+                new FacePair(Direction.SOUTH,new BlockPos(12,22,37),null),
+                new FacePair(Direction.WEST,new BlockPos(10,22,33),null),
+                new FacePair(Direction.EAST,new BlockPos(15,22,33),null),
+                new FacePair(Direction.DOWN,new BlockPos(12,20,33),null),
+                new FacePair(Direction.UP,new BlockPos(12,24,33),null));
+        for(var plane:planes) {
+            var states=new HashMap<BlockPos,BlockState>();var members=new HashMap<BlockPos,ReactorSurfaceSnapshot.Member>();
+            for(int a=-1;a<=1;a++)for(int b=-1;b<=1;b++) {
+                BlockPos pos=switch(plane.face().getAxis()) {
+                    case X -> plane.from().offset(0,a,b);case Y -> plane.from().offset(a,0,b);case Z -> plane.from().offset(a,b,0);
+                };
+                states.put(pos,window);members.put(pos,member(pos,plane.face(),WINDOW));
+            }
+            FixtureLevel level=readableLevel(pos->states.getOrDefault(pos,Blocks.AIR.defaultBlockState()));
+            ReactorSurfaceSnapshots.publish(level,new ReactorSurfaceSnapshot(members));
+            ReactorConnectedTextures.withCapturedSnapshot(level,()->{
+                for(Direction renderFace:List.of(plane.face(),plane.face().getOpposite())) {
+                    assertSame(AllCTTypes.OMNIDIRECTIONAL,behaviour.getDataType(level,plane.from(),window,renderFace),renderFace.name());
+                    var context=behaviour.buildContext(level,plane.from(),window,renderFace,AllCTTypes.OMNIDIRECTIONAL.getContextRequirement());
+                    int index=AllCTTypes.OMNIDIRECTIONAL.getTextureIndex(context);
+                    assertEquals(54,index,renderFace.name());
+                    captured.add(Map.of("outward",plane.face().name(),"render_face",renderFace.name(),"index",index));
+                }
+                return null;
+            });
+        }
+        Files.createDirectories(Path.of("build/reports/art/ART-REACTOR-08/consumer"));
+        Files.writeString(Path.of("build/reports/art/ART-REACTOR-08/consumer/native-inner-outer-contexts.json"),
+                new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(captured)+"\n");
+    }
+
+    @Test
+    void insideWindowNativeConcaveCornerUsesActualRenderFaceOrientation() {
+        BlockPos center=new BlockPos(12,22,30);BlockState window=registeredState("reactor_window");
+        var behaviour=new ReactorConnectedTextureBehaviour(id->null);
+        // SOUTH内面：上为+Y，右为+X；不把NORTH外面的索引或左右结果直接复制过来。
+        int[][] offsets={{0,1},{0,-1},{-1,0},{1,0},{-1,1},{1,1},{-1,-1},{1,-1}};
+        for(int[] scenario:List.of(new int[]{255,54},new int[]{223,53},new int[]{9,17},new int[]{41,20},new int[]{32,0})) {
+            var states=new HashMap<BlockPos,BlockState>();var members=new HashMap<BlockPos,ReactorSurfaceSnapshot.Member>();
+            states.put(center,window);members.put(center,member(center,Direction.NORTH,WINDOW));
+            for(int bit=0;bit<8;bit++)if((scenario[0]&(1<<bit))!=0) {
+                BlockPos pos=center.offset(offsets[bit][0],offsets[bit][1],0);
+                states.put(pos,window);members.put(pos,member(pos,Direction.NORTH,WINDOW));
+            }
+            FixtureLevel level=readableLevel(pos->states.getOrDefault(pos,Blocks.AIR.defaultBlockState()));
+            ReactorSurfaceSnapshots.publish(level,new ReactorSurfaceSnapshot(members));
+            ReactorConnectedTextures.withCapturedSnapshot(level,()->{
+                assertSame(AllCTTypes.OMNIDIRECTIONAL,behaviour.getDataType(level,center,window,Direction.SOUTH));
+                var context=behaviour.buildContext(level,center,window,Direction.SOUTH,AllCTTypes.OMNIDIRECTIONAL.getContextRequirement());
+                assertEquals(scenario[1],AllCTTypes.OMNIDIRECTIONAL.getTextureIndex(context));return null;
+            });
+        }
+    }
+
+    @Test
+    void insideWindowRejectsForeignIdentityReplacementAndMissingOuterEvidence() {
+        BlockPos a=new BlockPos(12,22,30),b=a.east();BlockState window=registeredState("reactor_window");
+        var ma=member(a,Direction.NORTH,WINDOW);var mb=member(b,Direction.NORTH,WINDOW);
+        var behaviour=new ReactorConnectedTextureBehaviour(id->null);
+        List<ReactorSurfaceSnapshot.Member> rejected=List.of(
+                changed(mb,mb.dimension(),new BlockPos(15,21,31),mb.ownerGeneration(),mb.origin(),mb.maxInclusive()),
+                changed(mb,mb.dimension(),mb.ownerPos(),UUID.randomUUID(),mb.origin(),mb.maxInclusive()),
+                new ReactorSurfaceSnapshot.Member(mb.dimension(),mb.ownerPos(),mb.ownerGeneration(),5,mb.origin(),mb.maxInclusive(),WINDOW,b,mb.outwardFaces()),
+                changed(mb,mb.dimension(),mb.ownerPos(),mb.ownerGeneration(),mb.origin(),new BlockPos(14,24,37)));
+        for(var neighbour:rejected) {
+            FixtureLevel level=readableLevel(pos->window);
+            ReactorSurfaceSnapshots.publish(level,new ReactorSurfaceSnapshot(Map.of(a,ma,b,neighbour)));
+            ReactorConnectedTextures.withCapturedSnapshot(level,()->{
+                assertFalse(behaviour.connectsTo(window,window,level,a,b,Direction.SOUTH));return null;
+            });
+        }
+        for(int mode=0;mode<3;mode++) {
+            final int m=mode;FixtureLevel level=readableLevel(pos->m==1&&pos.equals(a)||m==2&&pos.equals(b)?registeredState("reactor_casing"):window);
+            ReactorSurfaceSnapshots.publish(level,new ReactorSurfaceSnapshot(mode==0?Map.of():Map.of(a,ma,b,mb)));
+            ReactorConnectedTextures.withCapturedSnapshot(level,()->{
+                if(m!=2)assertNull(behaviour.getDataType(level,a,window,Direction.SOUTH));
+                assertFalse(behaviour.connectsTo(window,window,level,a,b,Direction.SOUTH));return null;
+            });
+        }
+    }
+
+    @Test
+    void realCornerPlanesTakePriorityAndCasingInsideStillFallsBack() {
+        BlockPos a=ORIGIN,b=a.east();BlockState window=registeredState("reactor_window");
+        var ma=new ReactorSurfaceSnapshot.Member("minecraft:overworld",OWNER,GENERATION,4,ORIGIN,MAX,WINDOW,a,Set.of(Direction.NORTH,Direction.WEST,Direction.DOWN));
+        var mb=new ReactorSurfaceSnapshot.Member("minecraft:overworld",OWNER,GENERATION,4,ORIGIN,MAX,WINDOW,b,Set.of(Direction.NORTH,Direction.DOWN));
+        FixtureLevel level=readableLevel(pos->window);var behaviour=new ReactorConnectedTextureBehaviour(id->null);
+        ReactorSurfaceSnapshots.publish(level,new ReactorSurfaceSnapshot(Map.of(a,ma,b,mb)));
+        ReactorConnectedTextures.withCapturedSnapshot(level,()->{
+            assertTrue(behaviour.connectsTo(window,window,level,a,b,Direction.NORTH));
+            assertTrue(behaviour.connectsTo(window,window,level,a,b,Direction.SOUTH));
+            assertTrue(behaviour.connectsTo(window,window,level,a,b,Direction.DOWN));
+            assertTrue(behaviour.connectsTo(window,window,level,a,b,Direction.UP));
+            assertFalse(behaviour.connectsTo(window,window,level,a,b,Direction.EAST));return null;
+        });
+        BlockState casing=registeredState("reactor_casing");level.reader=pos->casing;
+        ReactorSurfaceSnapshots.publish(level,new ReactorSurfaceSnapshot(Map.of(a,member(a,Direction.NORTH,CASING),b,member(b,Direction.NORTH,CASING))));
+        ReactorConnectedTextures.withCapturedSnapshot(level,()->{
+            assertSame(AllCTTypes.RECTANGLE,behaviour.getDataType(level,a,casing,Direction.NORTH));
+            assertNull(behaviour.getDataType(level,a,casing,Direction.SOUTH));
+            assertFalse(behaviour.connectsTo(casing,casing,level,a,b,Direction.SOUTH));return null;
+        });
+    }
+
+    @Test
     void sameOwnerDifferentMaterialsConnectOnEachOfSixRealPlanes() {
         // 会捕获同block限制、世界Y套到所有面或写死五格的错误。
         List<FacePair> cases = List.of(
@@ -365,8 +476,8 @@ class ReactorConnectedTextureTest {
         String json="[\n"+canonicalToIndex.entrySet().stream().map(e->"  {\"mask\":"+e.getKey()+",\"index\":"+e.getValue()+"}")
                 .collect(java.util.stream.Collectors.joining(",\n"))+"\n]\n";
         // 离线映射报告自行准备父目录，不依赖旧美术工作区已有的输出目录。
-        Files.createDirectories(Path.of("build/reports/art/ART-REACTOR-02R1"));
-        Files.writeString(Path.of("build/reports/art/ART-REACTOR-02R1/native-window-contexts.json"),json);
+        Files.createDirectories(Path.of("build/reports/art/ART-REACTOR-08/consumer"));
+        Files.writeString(Path.of("build/reports/art/ART-REACTOR-08/consumer/native-window-contexts.json"),json);
         // 实际离线交付表必须与本次Create输出相等，不能仅让两个离线公式互证。
         var mapping=com.google.gson.JsonParser.parseString(Files.readString(Path.of("tools/art-assets/reactor-ct-r1/mapping.json"))).getAsJsonObject();
         Map<Integer,Integer> delivered=new TreeMap<>();
@@ -466,8 +577,8 @@ class ReactorConnectedTextureTest {
             output.add("{\"name\":\""+scene[0]+"\",\"width\":"+w+",\"height\":"+h+",\"cells\":["+String.join(",",cells)+"]}");
         }
         // 每项场景测试独立准备父目录，单独运行时也能保存原始离线预览证据。
-        Files.createDirectories(Path.of("build/reports/art/ART-REACTOR-02R1"));
-        Files.writeString(Path.of("build/reports/art/ART-REACTOR-02R1/native-window-scenes.json"),"[\n"+String.join(",\n",output)+"\n]\n");
+        Files.createDirectories(Path.of("build/reports/art/ART-REACTOR-08/consumer"));
+        Files.writeString(Path.of("build/reports/art/ART-REACTOR-08/consumer/native-window-scenes.json"),"[\n"+String.join(",\n",output)+"\n]\n");
     }
 
     /** 六面原模型夹具用于真实mask消费，输入列表不可变；非测试生产代码执行全部过滤。 */

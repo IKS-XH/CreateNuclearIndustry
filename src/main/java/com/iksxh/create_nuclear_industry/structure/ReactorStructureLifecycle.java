@@ -25,10 +25,81 @@ import java.util.Set;
 
 /** 仅在世界可能发生变化时安排结构重扫，并在服务端 tick 末端执行。 */
 public final class ReactorStructureLifecycle {
+    /** 仅存服务端已加载仪表实例；卸载、替换及世界关闭必须撤销，索引不成为持久化权威。 */
+    private static final Map<Level, Set<ReactorInstrumentPortBlockEntity>> OWNERS = new IdentityHashMap<>();
+    private static final Map<ReactorInstrumentPortBlockEntity, WaitingFrame> WAITING = new IdentityHashMap<>();
     private static final Map<ServerLevel, Set<BlockPos>> PENDING =
             Collections.synchronizedMap(new IdentityHashMap<>());
 
     private ReactorStructureLifecycle() {
+    }
+
+    /** 仪表onLoad登记，随后安排一次延后扫描以覆盖端口反向加载。 */
+    public static void registerOwner(ReactorInstrumentPortBlockEntity owner) {
+        if (!(owner.getLevel() instanceof ServerLevel)) return;
+        OWNERS.computeIfAbsent(owner.getLevel(), ignored -> new LinkedHashSet<>()).add(owner);
+    }
+    /** 删除实例身份，旧方块实体不得在相同坐标的新所有者恢复后重新入选。 */
+    public static void unregisterOwner(ReactorInstrumentPortBlockEntity owner) {
+        WAITING.remove(owner);
+        Set<ReactorInstrumentPortBlockEntity> owners = OWNERS.get(owner.getLevel());
+        if (owners != null) {
+            owners.remove(owner);
+            if (owners.isEmpty()) OWNERS.remove(owner.getLevel());
+        }
+    }
+    /** 只读过滤已加载实例，距变化格三轴各至多15；不枚举31³世界方块或加载区块。 */
+    public static List<ReactorInstrumentPortBlockEntity> loadedOwnersNear(Level level, BlockPos changed) {
+        if (level == null || changed == null || level.isClientSide) return List.of();
+        return OWNERS.getOrDefault(level, Set.of()).stream().filter(owner -> !owner.isRemoved()
+                && level.hasChunkAt(owner.getBlockPos()) && level.getBlockEntity(owner.getBlockPos()) == owner
+                && Math.abs((long) owner.getBlockPos().getX() - changed.getX()) <= 15
+                && Math.abs((long) owner.getBlockPos().getY() - changed.getY()) <= 15
+                && Math.abs((long) owner.getBlockPos().getZ() - changed.getZ()) <= 15).toList();
+    }
+    /** 区块可用性边沿只通知其有限可达仪表；失去远端区块立即撤销handler且保留模拟库存。 */
+    @SubscribeEvent
+    public static void onChunkLoad(net.neoforged.neoforge.event.level.ChunkEvent.Load event) {
+        if (event.getLevel() instanceof ServerLevel level) {
+            // FULL加载但尚未进入实体tick时onLoad可能延后；直接使用事件已有区块的NBT/实体
+            // 坐标，实例化本区块仪表并登记，禁止通过Level.getBlockEntity探测远端。
+            if (event.getChunk() instanceof net.minecraft.world.level.chunk.LevelChunk chunk) {
+                for (var pos : List.copyOf(chunk.getBlockEntitiesPos())) {
+                    if (chunk.getBlockEntity(pos) instanceof ReactorInstrumentPortBlockEntity owner) {
+                        registerOwner(owner);
+                        scheduleRescanAround(level, pos);
+                    }
+                }
+            }
+            notifyChunk(level, event.getChunk().getPos(), false);
+        }
+    }
+    @SubscribeEvent
+    public static void onChunkUnload(net.neoforged.neoforge.event.level.ChunkEvent.Unload event) {
+        if (event.getLevel() instanceof ServerLevel level) notifyChunk(level, event.getChunk().getPos(), true);
+    }
+    private static void notifyChunk(ServerLevel level, net.minecraft.world.level.ChunkPos chunk, boolean unloading) {
+        for (var owner : List.copyOf(OWNERS.getOrDefault(level, Set.of()))) {
+            BlockPos pos = owner.getBlockPos();
+            if (Math.abs((long) pos.getX() - (chunk.getMinBlockX() + 8)) > 23
+                    || Math.abs((long) pos.getZ() - (chunk.getMinBlockZ() + 8)) > 23) continue;
+            if (unloading && owner.structureValid() && owner.structureOrigin() != null) {
+                var origin = owner.structureOrigin();
+                var dimensions = owner.structureScan().dimensions();
+                if (chunk.getMaxBlockX() >= origin.getX() && chunk.getMinBlockX() < origin.getX() + dimensions.width()
+                        && chunk.getMaxBlockZ() >= origin.getZ() && chunk.getMinBlockZ() < origin.getZ() + dimensions.depth()) {
+                    waitForChunks(owner);
+                }
+            }
+            scheduleRescanAround(level, pos);
+        }
+    }
+    /** 世界退出清除临时索引和未消费通知，不让其他世界实例继承所有权。 */
+    @SubscribeEvent
+    public static void onLevelUnload(net.neoforged.neoforge.event.level.LevelEvent.Unload event) {
+        OWNERS.remove(event.getLevel());
+        WAITING.keySet().removeIf(owner -> owner.getLevel() == event.getLevel());
+        if (event.getLevel() instanceof ServerLevel level) PENDING.remove(level);
     }
 
     /**
@@ -38,6 +109,14 @@ public final class ReactorStructureLifecycle {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (!(event.getLevel() instanceof ServerLevel serverLevel) || event.isCanceled()) {
+            return;
+        }
+
+        // 可用性消失但Post尚未运行，以及当前NBT仅近端恢复时，都用原已验证占据证据
+        // 保守拒绝拆除。证据绑定具体仪表实例，不证明全堆停机，也不清任何权威状态。
+        if (loadedOwnersNear(serverLevel, event.getPos()).stream()
+                .anyMatch(owner -> owner.protectsUnavailableComponent(event.getPos(), event.getState()))) {
+            cancelBreak(event, event.getPlayer(), "not_fully_stopped");
             return;
         }
 
@@ -72,33 +151,12 @@ public final class ReactorStructureLifecycle {
             ServerLevel serverLevel,
             BlockEvent.BreakEvent event
     ) {
-        Set<BlockPos> candidates = new LinkedHashSet<>();
         BlockPos brokenPos = event.getPos();
-        int radius = ReactorStructureDefinition.SIZE - 1;
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dy = -radius; dy <= radius; dy++) {
-                for (int dz = -radius; dz <= radius; dz++) {
-                    BlockPos candidate = brokenPos.offset(dx, dy, dz);
-                    if (serverLevel.getBlockEntity(candidate)
-                            instanceof ReactorInstrumentPortBlockEntity) {
-                        candidates.add(candidate.immutable());
-                    }
-                }
-            }
-        }
-
         List<ReactorDisassemblyPlan> plans = new ArrayList<>();
-        for (BlockPos candidate : candidates) {
-            if (serverLevel.getBlockEntity(candidate)
-                    instanceof ReactorInstrumentPortBlockEntity instrument) {
-                ReactorDisassemblyPlan plan = instrument.prepareDisassemblyPlan(
-                        brokenPos, event.getState());
-                if (plan != null) {
-                    plans.add(plan);
-                }
-            }
-        }
-        return List.copyOf(plans);
+        for (ReactorInstrumentPortBlockEntity instrument : loadedOwnersNear(serverLevel, brokenPos)) {
+            ReactorDisassemblyPlan plan = instrument.prepareDisassemblyPlan(brokenPos, event.getState());
+            if (plan != null) plans.add(plan);
+        }        return List.copyOf(plans);
     }
 
     /** 所有预检成功后按固定顺序提交，危险状态和安全清空都仍发生在原方块存在时。 */
@@ -130,6 +188,10 @@ public final class ReactorStructureLifecycle {
                     throw new IllegalStateException("dangerous disassembly event publish failed");
                 }
             }
+        }
+        for (ReactorDisassemblyPlan plan : plans) {
+            if (plan.action() == ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET)
+                plan.owner().finishDisassemblySafetyEvidence(plan);
         }
     }
 
@@ -184,15 +246,45 @@ public final class ReactorStructureLifecycle {
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
         for (ServerLevel serverLevel : event.getServer().getAllLevels()) {
+            // FULL可读状态可能先于物理ChunkEvent.Unload消失；只查至多四个缓存区块，
+            // 立即冻结并撤销绑定。恢复边沿只安排一次扫描，平时不重读结构方块。
+            for (var owner : List.copyOf(OWNERS.getOrDefault(serverLevel, Set.of()))) {
+                if (owner.structureScan().valid() && !owner.structureChunksAvailable()) waitForChunks(owner);
+                WaitingFrame waiting = WAITING.get(owner);
+                if (waiting != null && waiting.available(serverLevel)) {
+                    WAITING.remove(owner);
+                    scheduleRescanAround(serverLevel, owner.getBlockPos());
+                }
+            }
             Set<BlockPos> changes = PENDING.remove(serverLevel);
             if (changes == null) {
                 continue;
             }
             synchronized (changes) {
-                for (BlockPos change : changes) {
-                    ReactorStructureScanner.rescanAround(serverLevel, change);
+                Set<ReactorInstrumentPortBlockEntity> owners = new LinkedHashSet<>();
+                for (BlockPos change : changes) owners.addAll(loadedOwnersNear(serverLevel, change));
+                for (var owner : owners) owner.updateStructureCache(
+                        ReactorStructureScanner.scanInstrumentPort(serverLevel, owner.getBlockPos()));
+            }
+        }
+    }
+
+    private static void waitForChunks(ReactorInstrumentPortBlockEntity owner) {
+        if (owner.structureOrigin() != null) WAITING.put(owner,
+                new WaitingFrame(owner.structureOrigin(), owner.structureScan().dimensions()));
+        owner.updateStructureCache(ReactorStructureScanner.WorldScanResult.invalid(
+                ReactorStructureDefinition.DiagnosticCode.CHUNKS_UNAVAILABLE, "reactor waits for loaded chunks"));
+    }
+
+    /** 只保存等待前的几何证据；库存仍留在仪表快照，区块恢复不成为重组旁路。 */
+    private record WaitingFrame(BlockPos origin, ReactorDimensions dimensions) {
+        private boolean available(ServerLevel level) {
+            for (int x = origin.getX() >> 4; x <= (origin.getX() + dimensions.width() - 1) >> 4; x++) {
+                for (int z = origin.getZ() >> 4; z <= (origin.getZ() + dimensions.depth() - 1) >> 4; z++) {
+                    if (!level.hasChunk(x, z)) return false;
                 }
             }
+            return true;
         }
     }
 
@@ -214,8 +306,10 @@ public final class ReactorStructureLifecycle {
         if (!(level instanceof ServerLevel serverLevel) || endpointPos == null) {
             return;
         }
+        if (!serverLevel.hasChunkAt(endpointPos)) return;
         for (Direction direction : Direction.values()) {
             BlockPos pipePos = endpointPos.relative(direction);
+            if (!serverLevel.hasChunkAt(pipePos)) continue;
             FluidTransportBehaviour pipe = FluidPropagator.getPipe(serverLevel, pipePos);
             if (pipe == null) {
                 continue;
@@ -237,6 +331,7 @@ public final class ReactorStructureLifecycle {
                 ReactorStructureScanner.scanInstrumentPort(serverLevel, instrumentPortPos);
         if (serverLevel.getBlockEntity(instrumentPortPos)
                 instanceof com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity instrument) {
+            registerOwner(instrument);
             instrument.updateStructureCache(scan);
         }
         return scan;

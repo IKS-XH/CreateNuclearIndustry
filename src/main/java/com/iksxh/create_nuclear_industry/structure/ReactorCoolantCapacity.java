@@ -3,15 +3,15 @@ package com.iksxh.create_nuclear_industry.structure;
 import java.util.Objects;
 
 /**
- * 固定 P1 反应堆冷却剂容量的纯派生模型。
+ * 反应堆实际列图冷却剂容量的纯派生模型。
  *
  * <p>容量只读取最近一次服务端有效结构扫描中的 {@code bodyPositions}，不持有世界对象，
  * 也不触发扫描。单位为 mB；每个空置或控制棒主体格的配置容量与最终共享容量均必须能由
  * NeoForge 的整数流体 capability 无损表示。</p>
  */
 public final class ReactorCoolantCapacity {
-    /** 固定 3×3 堆芯在至少一根燃料列存在时最多可计的空气格数量。 */
-    public static final int MAX_COOLANT_SPACE_BLOCK_COUNT = 24;
+    /** 最大14×14截面且至少一根燃料列时，195列各14格共同计容。 */
+    public static final int MAX_COOLANT_SPACE_BLOCK_COUNT = 2730;
     /** 共享容量必须适配 {@code IFluidHandler} 的 int 容量返回值。 */
     public static final int MAX_CAPACITY_PER_EMPTY_BLOCK_MB =
             Integer.MAX_VALUE / MAX_COOLANT_SPACE_BLOCK_COUNT;
@@ -66,7 +66,9 @@ public final class ReactorCoolantCapacity {
         }
         validateCapacityPerEmptyBlockMb(capacityPerEmptyBlockMb);
         try {
-            return Math.multiplyExact(coolantSpaceBlockCount, capacityPerEmptyBlockMb);
+            long capacity = Math.multiplyExact((long) coolantSpaceBlockCount, capacityPerEmptyBlockMb);
+            if (capacity > Integer.MAX_VALUE) throw new IllegalArgumentException("derived coolant capacity exceeds int capability");
+            return capacity;
         } catch (ArithmeticException exception) {
             throw new IllegalArgumentException("derived coolant capacity overflow", exception);
         }
