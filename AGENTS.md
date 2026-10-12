@@ -15,7 +15,7 @@
 
 ## 项目治理
 
-- 用户2026-10-12报告同级候选进入存档崩溃，实际服务器报告定位HeatExchangerBoilerBridge弱集合并发迭代。按[EXCHANGER-LOAD-CRASH-01](docs/superpowers/plans/2026-10-12-exchanger-load-crash-01.md)仅修复服务端登记边界及一致快照锁，原世界/热工/候选功能保持；同候选整改进行中，客户端故障门及此前各人工门保持，其他主线暂停。
+- 用户2026-10-12报告同级候选进入存档崩溃，实际服务器报告定位HeatExchangerBoilerBridge弱集合并发迭代。按[EXCHANGER-LOAD-CRASH-01](docs/superpowers/plans/2026-10-12-exchanger-load-crash-01.md)仅修复服务端登记边界及一致快照锁，原世界/热工/候选功能保持；已交窄修候选`5d01314`：30/30定向JUnit、真实Basin7/7与唯一增量assemble退出0，独立窄审无必改项；旧新JAR仅桥class变化，原34输入保持，见[重进存档入口](docs/reviews/2026-10-12/exchanger-load-crash-01/CANDIDATE.md)。未合main，客户端故障门及此前各人工门保持，其他主线暂停。
 
 - 用户2026-10-12要求手持新燃料组件右击换料端口直接替换枯竭组件，剩余耐久者禁止替换，按[REFUEL-QUICK-SWAP-01](docs/superpowers/plans/2026-10-12-refueling-quick-swap-01.md)自动派发。仅新增原子替换与玩家返还路径，机械臂/空槽/维修保持；复用可变尺寸候选树，不开新分支或搬动存档，不关闭尺寸及美术人工门。已交功能候选`d811f84`：12/12事务、最终1/1真实服务端与必要增量assemble退出0，独立窄审无必改项；同包ART09净接入`26f4ba2`及其原9/9证据复用，见[候选与启动](docs/reviews/2026-10-12/refueling-quick-swap-01/CANDIDATE.md)。未合main，各项人工门保持。
 
