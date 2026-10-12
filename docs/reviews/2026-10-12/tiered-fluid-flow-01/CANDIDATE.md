@@ -1,6 +1,6 @@
 # TIERED-FLUID-FLOW-01 管网候选与启动
 
-2026-10-12，主PM登记。功能源码候选`a5d1fe6`的自动及独立审查证据保留。用户发现新增管道缺图、泵流向不清与图标遮字，按[TIERED-FLOW-VISUAL-01](../../../superpowers/plans/2026-10-12-tiered-fluid-visual-01.md)在原树整改；当前制品包含Create原模型/调色、实流箭头与首行避让。停在本批集中客户端门，未合main。独立16³锅炉候选及其他已验收范围保持。
+2026-10-12，主PM登记。功能源码候选`a5d1fe6`的自动及独立审查证据保留，用户本次明确除四项外观问题外功能手测全部通过。原Create模型/调色609914f的孤立管/自由端/T中心及箭头缺陷已按[01R2](../../../superpowers/plans/2026-10-12-tiered-fluid-visual-01r2.md)在原树窄整改并交[新候选](../tiered-fluid-visual-01r2/CANDIDATE.md)；只保留这四项视觉复看，不重复功能测试，未合main。独立16³锅炉候选及其他已验收范围保持。
 
 ## 启动与制品
 
@@ -11,11 +11,13 @@ cd E:\MyMC\NewMod\Create_NuclearIndustry-fluid-network
 .\gradlew.bat runClient
 ```
 
-当前视觉整改JAR在本树`build/libs/create_nuclear_industry-0.1.0.jar`，2,853,790 bytes，SHA256：
+当前01R2整改JAR在本树`build/libs/create_nuclear_industry-0.1.0.jar`，2,857,489 bytes，SHA256：
 
-`be28ad02d98152532932595912dda375448bb46dce84abd183be0fb56db0d03b`
+`0c963bbd0726c74b6d7a4ffaab7f686feabe9f67b4c2926605ec574c8e1d1f7b`
 
 原功能包`364ec427…`保留于`build/reports/tiered-fluid-visual-01/pre-visual.jar`；首次视觉包和审查前后日志亦保留。当前世界直接留在原位，没有再次搬动、覆盖或回写。
+
+原be28视觉包保留在`build/reports/tiered-fluid-visual-01r2/baseline-visual.jar`。01R2实际8/8烘焙/资源/成本定向、唯一4秒增量assemble和独立窄审通过，18来源/14制品一致；没有把旧11项静态检查冒称为本次GPU失败的覆盖，具体见新候选与原日志。下方首次功能及视觉证据保留原时点。
 
 本批没有自动启动客户端或改写用户世界。只携带存档，未复制来源实例配置；本树首次启动生成自己的配置，世界内若有同名serverconfig仍优先。现有热液与SC管线需改用专用管及工业泵；水、冷冷却液及蒸汽仍允许原版输送。
 
