@@ -10,7 +10,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class BoilerConfig {
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.ConfigValue<List<? extends Integer>> DIMENSION_RANGE;
-    public static final ModConfigSpec.IntValue WATER_CAPACITY_PER_CELL_MB, STEAM_CAPACITY_PER_CELL_MB, PORT_FLOW_MB_PER_TICK, VALVE_FLOW_PER_STEAM_CELL;
+    public static final ModConfigSpec.IntValue WATER_CAPACITY_PER_CELL_MB, STEAM_CAPACITY_PER_CELL_MB, COOLANT_PORT_FLOW_MB_PER_TICK, WATER_STEAM_PORT_FLOW_MB_PER_TICK, VALVE_FLOW_PER_STEAM_CELL;
     public static final ModConfigSpec.DoubleValue PAIR_HEAT, BOILING_TEMPERATURE, SUPERCRITICAL_TEMPERATURE,
             WALL_HEAT_CAPACITY, WATER_SPECIFIC_HEAT, STEAM_SPECIFIC_HEAT, LATENT_HEAT,
             SUPERCRITICAL_PRESSURE, OUTPUT_MIN_PRESSURE,
@@ -21,7 +21,8 @@ public final class BoilerConfig {
                 .defineList("dimensionRange", List.of(5, 11), value -> value instanceof Integer n && n >= 5 && n <= 32);
         WATER_CAPACITY_PER_CELL_MB = b.comment("每格有效水区容量，单位 mB。") .defineInRange("waterCapacityPerCellMb", 2000, 1, 1_000_000);
         STEAM_CAPACITY_PER_CELL_MB = b.comment("每格有效汽区容量，单位 mB。") .defineInRange("steamCapacityPerCellMb", 2000, 1, 1_000_000);
-        PORT_FLOW_MB_PER_TICK = b.comment("每个物理口共用主动/被动额度，单位 mB/t。") .defineInRange("portFlowMbPerTick", 256, 1, 1_000_000);
+        COOLANT_PORT_FLOW_MB_PER_TICK = b.comment("每个冷热液物理口共用主被动及专用额度 mB/t。") .defineInRange("coolantPortFlowMbPerTick", 2048, 1, 1_000_000);
+        WATER_STEAM_PORT_FLOW_MB_PER_TICK = b.comment("每个给水及蒸汽物理口共用主被动及专用额度 mB/t。") .defineInRange("waterSteamPortFlowMbPerTick", 4096, 1, 1_000_000);
         PAIR_HEAT = positive(b, "pairHeatHuPerTick", 18, "每对换热器/再加热段的 HU/t 上限。");
         BOILING_TEMPERATURE = positive(b, "boilingTemperature", 1, "归一沸点温度。");
         SUPERCRITICAL_TEMPERATURE = positive(b, "supercriticalTemperature", 2, "新批次归类与SC库存已付热交付所需的归一汽温，必须高于沸点。");
@@ -51,7 +52,7 @@ public final class BoilerConfig {
     public static BoilerState.Settings settings() {
         List<? extends Integer> range = DIMENSION_RANGE.get();
         return new BoilerState.Settings(range.size() == 2 ? range.get(0) : 0, range.size() == 2 ? range.get(1) : 0,
-                WATER_CAPACITY_PER_CELL_MB.get(), STEAM_CAPACITY_PER_CELL_MB.get(), PORT_FLOW_MB_PER_TICK.get(), PAIR_HEAT.get(),
+                WATER_CAPACITY_PER_CELL_MB.get(), STEAM_CAPACITY_PER_CELL_MB.get(), COOLANT_PORT_FLOW_MB_PER_TICK.get(), WATER_STEAM_PORT_FLOW_MB_PER_TICK.get(), PAIR_HEAT.get(),
                 BOILING_TEMPERATURE.get(), SUPERCRITICAL_TEMPERATURE.get(), WALL_HEAT_CAPACITY.get(), WATER_SPECIFIC_HEAT.get(),
                 STEAM_SPECIFIC_HEAT.get(), LATENT_HEAT.get(), SUPERCRITICAL_PRESSURE.get(), OUTPUT_MIN_PRESSURE.get(), VALVE_OPEN_PRESSURE.get(), VALVE_CLOSE_PRESSURE.get(), VALVE_FLOW_PER_STEAM_CELL.get(), WATER_COOLING.get(), STEAM_COOLING.get());
     }

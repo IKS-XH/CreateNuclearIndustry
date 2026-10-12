@@ -310,7 +310,7 @@ public final class P1PonderScenes {
         scene.world().setKineticSpeed(coldDrive, 128);
         scene.world().setKineticSpeed(hotDrive, 128);
         scene.world().setKineticSpeed(util.select().position(OP_COLD_PUMP), -128);
-        scene.world().setKineticSpeed(util.select().position(OP_HOT_PUMP), -128);
+        scene.world().setKineticSpeed(util.select().position(OP_HOT_PUMP), 128);
         scene.effects().rotationSpeedIndicator(OP_COLD_PUMP);
         scene.effects().rotationSpeedIndicator(OP_HOT_PUMP);
         scene.overlay().showBigLine(PonderPalette.BLUE,

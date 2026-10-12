@@ -1,0 +1,7 @@
+{
+  "parent": "create:block/fluid_pipe/item",
+  "textures": {
+    "1": "create_nuclear_industry:block/industrial_fluid_visual_01/ceramic_pipes",
+    "particle": "create_nuclear_industry:block/industrial_fluid_visual_01/ceramic_pipes"
+  }
+}

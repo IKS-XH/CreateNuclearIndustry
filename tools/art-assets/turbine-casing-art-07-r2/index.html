@@ -1,0 +1,21 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>汽轮机机壳R2稀疏相位预览</title><style>
+body{margin:0;background:#11191d;color:#e7ece8;font:16px system-ui,sans-serif}main{max-width:1500px;margin:auto;padding:24px}h1{font-size:28px;margin:0 0 8px}p{color:#b9c6c7}.atlas{width:256px;image-rendering:pixelated;border:1px solid #697b80;background:#253238}section{margin:30px 0;padding:20px;border:1px solid #394b51;border-radius:12px;background:#182226}.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}.window-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}figure{margin:0;padding:10px;background:#0f1518;border-radius:8px}figcaption{margin:0 0 8px;color:#b9c6c7}object{display:block;width:100%;height:490px;background:#10171b} @media(max-width:900px){.pair,.window-grid{grid-template-columns:1fr}object{height:400px}}
+</style><main><h1>汽轮机中大型机壳疏线候选</h1><p>每档均为8格长真实OBJ组装，含front、6个middle与rear。d5周期2、d7周期3；每个atlas相位格为16×16，d3与R1端盖保持不变。</p><img class="atlas" src="generated/textures/turbine_casing_07_sparse.png" alt="64乘32稀疏钢壳atlas"><p>直接打开同目录SVG也可单独检查；稀疏纹理已安装试用，客户端视觉待复看。</p>
+<section><h2>d3：8格机壳</h2><p>轴向顺序：front → middle × 6 → rear。</p><div class="pair">
+<figure><figcaption>现行B</figcaption><object data="generated/d3-before.svg" type="image/svg+xml"></object></figure>
+<figure><figcaption>保持原样</figcaption><object data="generated/d3-after.svg" type="image/svg+xml"></object></figure>
+</div></section>
+<section><h2>d5：8格机壳</h2><p>轴向顺序：front → middle × 6 → rear。</p><div class="pair">
+<figure><figcaption>现行B</figcaption><object data="generated/d5-before.svg" type="image/svg+xml"></object></figure>
+<figure><figcaption>R2稀疏相位候选</figcaption><object data="generated/d5-after.svg" type="image/svg+xml"></object></figure>
+</div></section>
+<section><h2>d7：8格机壳</h2><p>轴向顺序：front → middle × 6 → rear。</p><div class="pair">
+<figure><figcaption>现行B</figcaption><object data="generated/d7-before.svg" type="image/svg+xml"></object></figure>
+<figure><figcaption>R2稀疏相位候选</figcaption><object data="generated/d7-after.svg" type="image/svg+xml"></object></figure>
+</div></section>
+<section><h2>观察窗：单窗与三窗沿轴向连接</h2><p>依据消费者交付的实际 d5 合法中段 mesh、UV 与 alpha。仅同尺寸窗口沿轴向相邻连接；游戏侧限制为同piece、同朝向、同成型状态的合法中段窗，端盖与其他部件会截断。</p><div class="window-grid">
+<figure><figcaption>1个合法中段单窗：原模型mesh</figcaption><object data="generated/windows/window-single.svg" type="image/svg+xml"></object></figure>
+<figure><figcaption>3个原模型：尚未连接</figcaption><object data="generated/windows/window-three-before.svg" type="image/svg+xml"></object></figure>
+<figure><figcaption>3个实际连接mesh：共享端框撤除、玻璃跨格</figcaption><object data="generated/windows/window-three-connected.svg" type="image/svg+xml"></object></figure>
+</div><p>预览使用消费者离线烘焙quad证据及原PNG纹理/顶点透明度，不等于客户端GPU截图或最终游戏视觉验收。</p></section></main></html>

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RPR",
+    "BBB",
+    " P "
+  ],
+  "key": {
+    "R": {
+      "item": "create_nuclear_industry:seal_ring"
+    },
+    "P": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    },
+    "B": {
+      "item": "create_nuclear_industry:steel_pipe_blank"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:reinforced_fluid_pipe",
+    "count": 8
+  }
+}

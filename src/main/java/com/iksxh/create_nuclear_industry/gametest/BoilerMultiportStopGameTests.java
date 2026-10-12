@@ -90,8 +90,9 @@ public final class BoilerMultiportStopGameTests {
         scPipes.add(new BlockPos(3, 6, 5));
         for (int x = 3; x <= 11; x++) scPipes.add(new BlockPos(x, 7, 5));
         scPipes.add(new BlockPos(11, 6, 5)); scPipes.add(new BlockPos(11, 5, 5));
-        for (BlockPos pipe : scPipes) h.setBlock(pipe, AllBlocks.FLUID_PIPE.get());
-        BlockPos sinkPos = ports.getFirst().west(2), normal = ports.getLast();
+        for (BlockPos pipe : scPipes) h.setBlock(pipe, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get());
+        poweredDedicatedNode(h, new BlockPos(3, 6, 5), Direction.UP);
+        BlockPos sinkPos = new BlockPos(5, 7, 6), normal = ports.getLast();
         h.setBlock(sinkPos, AllBlocks.CREATIVE_FLUID_TANK.get());
         BlockPos normalTank = direct ? normal.west() : new BlockPos(3, 3, 1);
         if (!direct) {
@@ -105,10 +106,6 @@ public final class BoilerMultiportStopGameTests {
                     .setValue(com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock.AXIS, Direction.Axis.X));
         }
         for (int y = 0; y < 7; y++) h.setBlock(normalTank.above(y), AllBlocks.FLUID_TANK.get());
-        // 原生包覆管固定E/N两面，避免直邻普通罐对照被相邻SC首管横向接入。
-        h.setBlock(ports.get(2).west(), AllBlocks.ENCASED_FLUID_PIPE.getDefaultState()
-                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.EAST, true)
-                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.NORTH, true));
         R1CreativeTank sink = new R1CreativeTank(h.absolutePos(sinkPos), h.getBlockState(sinkPos));
         h.getLevel().removeBlockEntity(h.absolutePos(sinkPos)); h.getLevel().setBlockEntity(sink);
         R1NormalTank receiver = new R1NormalTank(h.absolutePos(normalTank), h.getBlockState(normalTank));
@@ -127,8 +124,7 @@ public final class BoilerMultiportStopGameTests {
             ExtensionBoilerGameTests.seedInventories(tag, 0, 0, 24000, 24000); owner.ledger().load(tag);
             initialHu[0] = owner.ledger().totalHu(); counts[6] = 24000;
             // 在首次账本tick前实际提供本tick热液，避免无收热初始化先消耗预热墙体余热。
-            counts[1] += capability(h, BASE.offset(3, 0, 0), Direction.NORTH)
-                    .fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 126), IFluidHandler.FluidAction.EXECUTE);
+            counts[1] += IndustrialFluidNetworkGameTests.feed(h, BASE.offset(3, 0, 0), Direction.NORTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 126);
             h.assertTrue(receiver.getTankInventory().getCapacity() >= 56000, "R1观察普通罐未由原生正确成型为足够容量");
             firstCaps[0] = capability(h, ports.getFirst(), Direction.WEST); firstCaps[1] = capability(h, normal, Direction.WEST);
             active[0] = true;
@@ -139,8 +135,7 @@ public final class BoilerMultiportStopGameTests {
             if (!active[0]) return;
             var owner = ExtensionBoilerGameTests.owner(h); var s = owner.ledger();
             counts[0] += ExtensionBoilerGameTests.water(h).fill(new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE);
-            if (h.getTick() != 6) counts[1] += capability(h, BASE.offset(3, 0, 0), Direction.NORTH)
-                    .fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 126), IFluidHandler.FluidAction.EXECUTE);
+            if (h.getTick() != 6) counts[1] += IndustrialFluidNetworkGameTests.feed(h, BASE.offset(3, 0, 0), Direction.NORTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 126);
             counts[2] += capability(h, BASE.offset(3, 2, 0), Direction.NORTH).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
             var exhaust = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.exhaust(front, tier), Direction.EAST);
             if (exhaust != null) counts[3] += exhaust.drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
@@ -269,21 +264,15 @@ public final class BoilerMultiportStopGameTests {
         pipes.add(near.above()); pipes.add(near);
         BlockPos sinkPos = new BlockPos(10, 7, 6);
         if (creative) { pipes.add(sinkPos.south()); h.setBlock(sinkPos, AllBlocks.CREATIVE_FLUID_TANK.get()); }
-        for (BlockPos p : pipes) h.setBlock(p, AllBlocks.FLUID_PIPE.get());
+        for (BlockPos p : pipes) h.setBlock(p, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get());
+        if (!creative) { h.setBlock(ports.getLast().west(), AllBlocks.GLASS_FLUID_PIPE.getDefaultState().setValue(com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock.AXIS, Direction.Axis.X)); h.setBlock(ports.getLast().west(2), AllBlocks.FLUID_TANK.get()); }
         RecordingCreativeTank[] sink = {null};
         if (creative) {
             // 仍用原生创造罐和其原生能力，只计数super.fill的真实成交；保留无限接收行为。
             BlockPos world = h.absolutePos(sinkPos); h.getLevel().removeBlockEntity(world);
             sink[0] = new RecordingCreativeTank(world, h.getBlockState(sinkPos)); h.getLevel().setBlockEntity(sink[0]);
         }
-        if (powered) {
-            BlockPos pump = new BlockPos(8, 7, 8), cog = pump.south(), motor = cog.east(2);
-            h.setBlock(pump, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, Direction.EAST));
-            h.setBlock(cog, AllBlocks.COGWHEEL.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.X));
-            h.setBlock(cog.east(), AllBlocks.SHAFT.getDefaultState().setValue(ShaftBlock.AXIS, Direction.Axis.X));
-            h.setBlock(motor, AllBlocks.CREATIVE_MOTOR.getDefaultState().setValue(CreativeMotorBlock.FACING, Direction.WEST));
-            ((CreativeMotorBlockEntity) h.getBlockEntity(motor)).generatedSpeed.setValue(256);
-        }
+        poweredDedicatedNode(h, new BlockPos(8, 7, 8), Direction.EAST);
         BlockPos[] hot = {BASE.offset(3, 0, 0), BASE.offset(1, 0, 5), BASE.offset(2, 0, 5)};
         BlockPos[] cold = {BASE.offset(3, 2, 0), BASE.offset(1, 2, 5), BASE.offset(2, 2, 5)};
         for (int i = 1; i < hot.length; i++) {
@@ -305,7 +294,7 @@ public final class BoilerMultiportStopGameTests {
             counts[0] += capability(h, BASE.offset(2, 1, 0), Direction.NORTH).fill(new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE);
             for (int i = 0; i < hot.length; i++) {
                 Direction side = i == 0 ? Direction.NORTH : Direction.SOUTH;
-                counts[1] += capability(h, hot[i], side).fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256), IFluidHandler.FluidAction.EXECUTE);
+                counts[1] += IndustrialFluidNetworkGameTests.feedSeparated(h, hot[i], side, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
                 counts[2] += capability(h, cold[i], side).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
             }
             var exhaust = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.exhaust(front, tier), Direction.EAST);
@@ -348,11 +337,9 @@ public final class BoilerMultiportStopGameTests {
             h.setBlock(port, BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.WEST));
             h.setBlock(port.west(), direct ? AllBlocks.FLUID_TANK.get() : AllBlocks.FLUID_PIPE.get());
         }
-        BlockPos receiver = direct ? ports.getFirst().west() : BASE.offset(-1, 3, -1);
-        if (!direct) {
-            h.setBlock(BASE.offset(-1, 3, 0), AllBlocks.FLUID_PIPE.get());
-            h.setBlock(receiver, AllBlocks.FLUID_TANK.get());
-        }
+        java.util.List<BlockPos> receivers = new java.util.ArrayList<>();
+        for (int i = 0; i < 3; i++) receivers.add(IndustrialFluidNetworkGameTests.outletSeparated(h, ports.get(i), Direction.WEST));
+        BlockPos normal = ports.getLast(); h.setBlock(normal.west(), AllBlocks.GLASS_FLUID_PIPE.getDefaultState().setValue(com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock.AXIS, Direction.Axis.X)); h.setBlock(normal.west(2), AllBlocks.FLUID_TANK.get()); receivers.add(normal.west(2));
         int[] initial = {0}, moved = {0}; boolean[] active = {false};
         h.runAfterDelay(6, () -> {
             var owner = ExtensionBoilerGameTests.owner(h);
@@ -366,14 +353,14 @@ public final class BoilerMultiportStopGameTests {
             if (!active[0]) return;
             var owner = ExtensionBoilerGameTests.owner(h); var s = owner.ledger();
             capability(h, BASE.offset(2, 1, 0), Direction.NORTH).fill(new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE);
-            capability(h, BASE.offset(3, 0, 0), Direction.NORTH).fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256), IFluidHandler.FluidAction.EXECUTE);
+            IndustrialFluidNetworkGameTests.feed(h, BASE.offset(3, 0, 0), Direction.NORTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
             capability(h, BASE.offset(3, 2, 0), Direction.NORTH).drain(256, IFluidHandler.FluidAction.EXECUTE);
-            var fluid = capability(h, receiver, null).drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
-            moved[0] += fluid.getAmount();
+            int receivedNow = 0; for (BlockPos receiver : receivers) receivedNow += IndustrialFluidNetworkGameTests.consumeFixtureTank(h, receiver, Integer.MAX_VALUE);
+            moved[0] += receivedNow;
             if (h.getTick() == 80) { initial[0] = moved[0]; owner.selectMinimum(10); }
             if (h.getTick() % 20 == 0) {
                 System.out.println("[multiport] t=" + h.getTick() + " direct=" + direct + " steam=" + s.steam() + " HU=" + s.steamHu()
-                        + " pressure=" + s.pressure() + " Ts=" + s.steamTemperature() + " SC=" + s.outputQualified(SUPERCRITICAL) + " min=" + s.minimumPressure() + " received=" + moved[0] + " last=" + fluid);
+                        + " pressure=" + s.pressure() + " Ts=" + s.steamTemperature() + " SC=" + s.outputQualified(SUPERCRITICAL) + " min=" + s.minimumPressure() + " received=" + moved[0] + " last=" + receivedNow);
                 for (BlockPos p : ports) System.out.println("[multiport] port=" + p + " declared=" + capability(h, p, Direction.WEST).getFluidInTank(0)
                         + " sim=" + capability(h, p, Direction.WEST).drain(1, IFluidHandler.FluidAction.SIMULATE) + " " + pipe(h, p.west()));
             }
@@ -406,7 +393,7 @@ public final class BoilerMultiportStopGameTests {
         ((CreativeMotorBlockEntity) h.getBlockEntity(motorPos)).generatedSpeed.setValue(256);
         h.onEachTick(() -> {
             var input = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.inlet(front, tier), Direction.WEST);
-            if (h.getTick() < 60 && input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 108), IFluidHandler.FluidAction.EXECUTE);
+            if (h.getTick() < 60 && input != null) IndustrialFluidNetworkGameTests.feed(h, ExtensionTurbineGameTests.inlet(front, tier), Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), 108);
             var output = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.exhaust(front, tier), Direction.EAST);
             if (output != null) output.drain(256, IFluidHandler.FluidAction.EXECUTE);
         });
@@ -462,6 +449,16 @@ public final class BoilerMultiportStopGameTests {
         });
     }
 
+    /** 共SC干线的唯一实际专用泵；上行或水平轴均由独立Create马达驱动。 */
+    private static void poweredDedicatedNode(GameTestHelper h, BlockPos pump, Direction direction) {
+        h.setBlock(pump, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.PUMP.get().defaultBlockState().setValue(PumpBlock.FACING, direction));
+        BlockPos cog = direction.getAxis() == Direction.Axis.Y ? pump.west() : pump.south();
+        h.setBlock(cog, AllBlocks.COGWHEEL.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, direction.getAxis()));
+        h.setBlock(cog.relative(direction), AllBlocks.SHAFT.getDefaultState().setValue(ShaftBlock.AXIS, direction.getAxis()));
+        BlockPos motor = cog.relative(direction, 2); h.setBlock(motor, AllBlocks.CREATIVE_MOTOR.getDefaultState().setValue(CreativeMotorBlock.FACING, direction.getOpposite()));
+        ((CreativeMotorBlockEntity)h.getBlockEntity(motor)).generatedSpeed.setValue(-256 * direction.getOpposite().getAxisDirection().getStep());
+    }
+
     /** 三次自然运行/断汽，账本40tick平均窗口与实际周转量耗尽后检查两轴与真实外接轴。 */
     private static void turbine(GameTestHelper h, TurbineState.Tier tier, boolean saved) {
         BlockPos front = new BlockPos(7, 5, 3), rear = front.south(tier.length() - 1);
@@ -472,7 +469,7 @@ public final class BoilerMultiportStopGameTests {
         h.onEachTick(() -> {
             long t = h.getTick(); boolean supplying = t % 180 < 70;
             var input = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.inlet(front, tier), Direction.WEST);
-            if (supplying && input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), tier.ratedFlowMbPerTick()), IFluidHandler.FluidAction.EXECUTE);
+            if (supplying && input != null) IndustrialFluidNetworkGameTests.feed(h, ExtensionTurbineGameTests.inlet(front, tier), Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), tier.ratedFlowMbPerTick());
             var output = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.exhaust(front, tier), Direction.EAST);
             if (output != null) output.drain(tier.ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
             if (ExtensionTurbineGameTests.owner(h, front) == null) return;

@@ -1,11 +1,6 @@
 {
-  "loader": "neoforge:obj",
-  "model": "create_nuclear_industry:models/block/turbine/mesh/rotor_axle.obj",
   "textures": {
-    "particle": "create_nuclear_industry:block/turbine/turbine_output_shaft"
+    "particle": "create_nuclear_industry:block/turbine/turbine_10b_steel"
   },
-  "automatic_culling": true,
-  "shade_quads": true,
-  "flip_v": false,
-  "emissive_ambient": false
+  "elements": []
 }

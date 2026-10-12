@@ -1,0 +1,7 @@
+{
+  "parent": "create:block/fluid_valve/pointer",
+  "textures": {
+    "2": "create_nuclear_industry:block/industrial_fluid_visual_01/steel_fluid_valve",
+    "particle": "create_nuclear_industry:block/industrial_fluid_visual_01/steel_fluid_valve"
+  }
+}

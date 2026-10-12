@@ -76,13 +76,16 @@ class TurbinePonderContractTest {
             assertId(blocks, List.of(7, 2, 8), "create:shaft", scene + " 后端外接轴");
             assertId(blocks, List.of(12, 2, 5), "create:fluid_tank", scene + " 超临界蒸汽输入罐");
             assertId(blocks, List.of(2, 2, 4), "create:fluid_tank", scene + " 普通蒸汽排出罐");
-            for (int x = 9; x <= 11; x++) assertId(blocks, List.of(x, 2, 5), "create:fluid_pipe", scene + " 输入管");
+            for (int x = 9; x <= 11; x++) assertId(blocks, List.of(x, 2, 5), NS + (x == 10 ? "industrial_fluid_pump" : "reinforced_fluid_pipe"), scene + " 专用输入管泵");
             for (int x = 3; x <= 5; x++) assertId(blocks, List.of(x, 2, 4), "create:fluid_pipe", scene + " 排出管");
             for (int x = 1; x <= 13; x++) for (int z = 2; z <= 9; z++)
                 assertId(blocks, List.of(x, 0, z), "minecraft:polished_andesite", scene + " 承托地台");
             for (int x = 9; x <= 11; x++) {
-                assertEquals("true", blocks.get(List.of(x, 2, 5)).properties().get("east"));
-                assertEquals("true", blocks.get(List.of(x, 2, 5)).properties().get("west"));
+                if (x == 10) assertEquals("west", blocks.get(List.of(x, 2, 5)).properties().get("facing"));
+                else {
+                    assertEquals("true", blocks.get(List.of(x, 2, 5)).properties().get("east"));
+                    assertEquals("true", blocks.get(List.of(x, 2, 5)).properties().get("west"));
+                }
             }
             assertFalse(blocks.keySet().stream().anyMatch(pos -> pos.get(0) >= 6 && pos.get(0) <= 8
                     && pos.get(1) >= 1 && pos.get(1) <= 3 && pos.get(2) >= 3 && pos.get(2) <= 7

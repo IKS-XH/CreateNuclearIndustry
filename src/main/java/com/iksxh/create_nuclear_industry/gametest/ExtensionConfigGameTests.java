@@ -17,10 +17,14 @@ public final class ExtensionConfigGameTests {
         ExtensionBoilerGameTests.build(helper, 6, 6, 8, 2);
         helper.runAfterDelay(3, () -> {
             var range = BoilerConfig.DIMENSION_RANGE.get(); int wc = BoilerConfig.WATER_CAPACITY_PER_CELL_MB.get();
-            int sc = BoilerConfig.STEAM_CAPACITY_PER_CELL_MB.get(), flow = BoilerConfig.PORT_FLOW_MB_PER_TICK.get();
+            int sc = BoilerConfig.STEAM_CAPACITY_PER_CELL_MB.get(), coolantFlow = BoilerConfig.COOLANT_PORT_FLOW_MB_PER_TICK.get();
+            int waterSteamFlow = BoilerConfig.WATER_STEAM_PORT_FLOW_MB_PER_TICK.get();
             try {
                 BoilerConfig.DIMENSION_RANGE.set(List.of(6, 12)); BoilerConfig.WATER_CAPACITY_PER_CELL_MB.set(500);
-                BoilerConfig.STEAM_CAPACITY_PER_CELL_MB.set(600); BoilerConfig.PORT_FLOW_MB_PER_TICK.set(128);
+                BoilerConfig.STEAM_CAPACITY_PER_CELL_MB.set(600);
+                BoilerConfig.COOLANT_PORT_FLOW_MB_PER_TICK.set(64); BoilerConfig.WATER_STEAM_PORT_FLOW_MB_PER_TICK.set(128);
+                helper.assertTrue(BoilerConfig.settings().coolantPortFlowMbPerTick() == 64
+                        && BoilerConfig.settings().waterSteamPortFlowMbPerTick() == 128, "两类口配置不能互相覆盖");
                 var owner = ExtensionBoilerGameTests.owner(helper); owner.invalidateForm(); owner.tick();
                 var water = ExtensionBoilerGameTests.water(helper); var steam = ExtensionBoilerGameTests.steam(helper);
                 helper.assertTrue(owner.currentForm() != null && water != null && steam != null, "非默认范围拒绝合法偶数长方体");
@@ -31,7 +35,8 @@ public final class ExtensionConfigGameTests {
                 helper.assertTrue(owner.currentForm() == null, "反向范围未拒绝运行");
             } finally {
                 BoilerConfig.DIMENSION_RANGE.set(range); BoilerConfig.WATER_CAPACITY_PER_CELL_MB.set(wc);
-                BoilerConfig.STEAM_CAPACITY_PER_CELL_MB.set(sc); BoilerConfig.PORT_FLOW_MB_PER_TICK.set(flow);
+                BoilerConfig.STEAM_CAPACITY_PER_CELL_MB.set(sc);
+                BoilerConfig.COOLANT_PORT_FLOW_MB_PER_TICK.set(coolantFlow); BoilerConfig.WATER_STEAM_PORT_FLOW_MB_PER_TICK.set(waterSteamFlow);
             }
             helper.succeed();
         });

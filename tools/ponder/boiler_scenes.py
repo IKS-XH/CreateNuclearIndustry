@@ -135,9 +135,11 @@ def _operation_scene() -> dict[tuple[int, int, int], tuple[str, dict[str, str]]]
     # 给水与热液分别使用独立储罐、泵和可见短管；冷液回口接独立回收罐。
     for x, y in ((ox + 1, oy + 1), (ox + 5, oy)):
         _tank(blocks, x, y, 0)
-        _add(blocks, (x, y, 1), "create:mechanical_pump",
-             {"facing": "south", "waterlogged": "false"})
+        hot = x == ox + 5
+        _add(blocks, (x, y, 1), "create_nuclear_industry:industrial_fluid_pump" if hot else "create:mechanical_pump",
+             {"facing": "south"} if hot else {"facing": "south", "waterlogged": "false"})
         _pipe(blocks, x, y, 2)
+        if hot: blocks[(x, y, 2)] = ("create_nuclear_industry:reinforced_fluid_pipe", {"north": "true", "south": "true"})
         # 每台泵由相邻齿轮与动力马达驱动，动力与流体路线保持分离。
         _add(blocks, (x + 1, y, 1), "create:cogwheel", {"axis": "z"})
         _add(blocks, (x + 1, y, 0), "create:creative_motor", {"facing": "south"})
@@ -160,6 +162,10 @@ def _steam_scene() -> dict[tuple[int, int, int], tuple[str, dict[str, str]]]:
         for z in (oz - 1, oz - 2):
             _pipe(blocks, x, oy + 4, z)
         _tank(blocks, x, oy + 4, oz - 3)
+        blocks[(x, oy + 4, oz - 1)] = ("create_nuclear_industry:reinforced_fluid_pipe", {"north": "true", "south": "true"})
+        blocks[(x, oy + 4, oz - 2)] = ("create_nuclear_industry:industrial_fluid_pump", {"facing": "north"})
+        _add(blocks, (x + 1, oy + 4, oz - 2), "create:cogwheel", {"axis": "z"})
+        _add(blocks, (x + 1, oy + 4, oz - 3), "create:creative_motor", {"facing": "south"})
     return blocks
 
 
@@ -300,9 +306,9 @@ def _validate(raw: bytes, size: tuple[int, int, int],
             raise ValueError(f"steam port must be in the steam zone: {local}")
         if block_id.endswith("_controller") and local[1] >= 3:
             raise ValueError(f"controller must be in the water zone: {local}")
-        if block_id == "create:mechanical_pump":
+        if block_id in ("create:mechanical_pump", "create_nuclear_industry:industrial_fluid_pump"):
             expected_facing = "south" if (x, y, z) in {(4, 1, 1), (8, 0, 1)} else "north"
-            if (x, y, z) not in {(4, 1, 1), (8, 0, 1), (4, 3, 1), (8, 3, 1)}:
+            if (x, y, z) not in {(4, 1, 1), (8, 0, 1), (4, 3, 1), (8, 3, 1), (4, 4, 1), (8, 4, 1)}:
                 raise ValueError(f"pump is outside the demonstrated fluid routes: {(x, y, z)}")
             if properties.get("facing") != expected_facing:
                 raise ValueError(f"pump direction does not match its route: {(x, y, z)}")
@@ -311,7 +317,7 @@ def _validate(raw: bytes, size: tuple[int, int, int],
                 raise ValueError(f"external pipe intersects a boiler chamber: {(x, y, z)}")
     if len(entries) != len(positions):
         raise ValueError("duplicate block positions in NBT")
-    if len([block for block in blocks.values() if block[0] == "create:mechanical_pump"]) not in (0, 4):
+    if len([block for block in blocks.values() if block[0] in ("create:mechanical_pump", "create_nuclear_industry:industrial_fluid_pump")]) not in (0, 2, 4):
         raise ValueError("fluid-loop scenes must show all four driven pumps")
     return len(entries)
 

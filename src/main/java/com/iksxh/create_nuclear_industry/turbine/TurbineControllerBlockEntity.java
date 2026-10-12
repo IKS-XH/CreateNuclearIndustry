@@ -347,7 +347,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     /** 句柄带成型世代；卸载、拆件或换档后旧管路引用不能继续交易。 */
     public IFluidHandler port(BlockPos part, Direction side, boolean input) {
         if (!validPort(part, input) || level.getBlockState(part).getValue(TurbinePartBlock.OUTWARD) != side) return null;
-        return new Port(part.immutable(), side, input);
+        return com.iksxh.create_nuclear_industry.industrial.RestrictedFluidHandler.wrap(new Port(part.immutable(), side, input));
     }
     private final class Port implements IFluidHandler {
         private final BlockPos part;

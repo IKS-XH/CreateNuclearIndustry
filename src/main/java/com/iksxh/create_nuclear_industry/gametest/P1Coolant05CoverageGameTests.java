@@ -46,12 +46,10 @@ public final class P1Coolant05CoverageGameTests {
     @GameTest(template = TEMPLATE, timeoutTicks = 160)
     public static void multiplePortsRecoverTogetherWithIndependentBudgets(GameTestHelper helper) {
         buildStructure(helper, multiPortLayout());
-        long startTick = helper.getLevel().getGameTime();
+        BlockPos hotTank = IndustrialFluidNetworkGameTests.outlet(helper, HOT_PORT, Direction.SOUTH);
+        BlockPos extraHotTank = IndustrialFluidNetworkGameTests.outlet(helper, EXTRA_HOT_PORT, Direction.SOUTH);
 
-        helper.succeedWhen(() -> {
-            if (helper.getLevel().getGameTime() - startTick < 5L) {
-                return;
-            }
+        helper.runAfterDelay(8, () -> {
             ReactorInstrumentPortBlockEntity instrument = instrument(helper, INSTRUMENT);
             require(helper, instrument.structureValid(), "多端口测试的结构未成型");
 
@@ -90,32 +88,28 @@ public final class P1Coolant05CoverageGameTests {
                     "不同物理端口错误地共享同一个 capability handler");
 
             int configuredLimit = P1ServerConfig.VALUES.perPortFlowMbPerTick.get();
-            require(helper, configuredLimit == 128,
-                    "测试前提的逐端口流量上限不是 128 mB/t：" + configuredLimit);
+            require(helper, configuredLimit == 2048,
+                    "测试前提的逐端口流量上限不是 2048 mB/t：" + configuredLimit);
             int coldAccepted = coldHandler.fill(
-                    new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 512),
+                    new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 4096),
                     IFluidHandler.FluidAction.EXECUTE);
             int extraColdAccepted = extraColdHandler.fill(
-                    new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 512),
+                    new FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(), 4096),
                     IFluidHandler.FluidAction.EXECUTE);
-            require(helper, coldAccepted == 128 && extraColdAccepted == 128,
-                    "两个冷端没有分别获得 128 mB/t 配额："
+            require(helper, coldAccepted == 2048 && extraColdAccepted == 2048,
+                    "两个冷端没有分别获得 2048 mB/t 配额："
                             + coldAccepted + "/" + extraColdAccepted);
-            require(helper, instrument.snapshot().coldCoolantMb() == 256L,
+            require(helper, instrument.snapshot().coldCoolantMb() == 4096L,
                     "两个冷端写入共享库存的总量错误：" + instrument.snapshot().coldCoolantMb());
 
-            instrument.setSnapshot(instrument.snapshot().withCoolantInventories(256L, 512L));
-            int hotDrained = hotHandler.drain(512,
-                    IFluidHandler.FluidAction.EXECUTE).getAmount();
-            int extraHotDrained = extraHotHandler.drain(512,
-                    IFluidHandler.FluidAction.EXECUTE).getAmount();
-            require(helper, hotDrained == 128 && extraHotDrained == 128,
-                    "两个热端没有分别获得 128 mB/t 配额："
-                            + hotDrained + "/" + extraHotDrained);
-            require(helper, instrument.snapshot().hotCoolantMb()
-                            + hotDrained + extraHotDrained == 512L,
-                    "热库存与两个热端输出不守恒");
-
+            instrument.setSnapshot(instrument.snapshot().withCoolantInventories(4096L, 4096L));
+            require(helper, hotHandler.drain(4096, IFluidHandler.FluidAction.SIMULATE).isEmpty()
+                    && extraHotHandler.drain(4096, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "两个公开热口未标准禁运");
+            helper.runAfterDelay(1, () -> {
+                int hotDrained = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(hotTank), null).getFluidInTank(0).getAmount();
+                int extraHotDrained = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, helper.absolutePos(extraHotTank), null).getFluidInTank(0).getAmount();
+                require(helper, hotDrained == 2048 && extraHotDrained == 2048, "专用两热口未分别获得2048实际额度：" + hotDrained + "/" + extraHotDrained);
+                require(helper, instrument.snapshot().hotCoolantMb() + hotDrained + extraHotDrained == 4096L, "有限源与两热口收罐不守恒");
             helper.setBlock(FORMATION_GAP, Blocks.AIR.defaultBlockState());
             ReactorStructureLifecycle.rescanAroundNow(
                     helper.getLevel(), helper.absolutePos(FORMATION_GAP));
@@ -159,6 +153,7 @@ public final class P1Coolant05CoverageGameTests {
                     helper.getLevel(), helper.absolutePos(INSTRUMENT));
             assertBindingCounts(helper, instrument, 2, 2, 12);
             helper.succeed();
+            });
         });
     }
 

@@ -42,6 +42,11 @@
     "create_nuclear_industry:turbine_inlet",
     "create_nuclear_industry:turbine_exhaust",
     "create_nuclear_industry:turbine_window",
-    "create_nuclear_industry:dry_storage_rack"
+    "create_nuclear_industry:dry_storage_rack",
+    "create_nuclear_industry:reinforced_fluid_pipe",
+    "create_nuclear_industry:ceramic_fluid_pipe",
+    "create_nuclear_industry:industrial_fluid_pump",
+    "create_nuclear_industry:reinforced_fluid_valve",
+    "create_nuclear_industry:ceramic_fluid_valve"
   ]
 }

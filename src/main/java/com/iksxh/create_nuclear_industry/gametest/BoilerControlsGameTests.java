@@ -131,8 +131,7 @@ public final class BoilerControlsGameTests {
     @GameTest(template = "boiler_empty", timeoutTicks = 180)
     public static void nativeSteamPipeChangesTypeWithoutLossOrExternalRewrite(GameTestHelper h) {
         ExtensionBoilerGameTests.build(h, 5, 5, 5, 2);
-        BlockPos pipe = STEAM.west(), tank = STEAM.west(2);
-        h.setBlock(pipe, AllBlocks.FLUID_PIPE.get()); h.setBlock(tank, AllBlocks.FLUID_TANK.get());
+        BlockPos tank = IndustrialFluidNetworkGameTests.outletAtRate(h, STEAM, Direction.WEST, 128);
         int[] withdrawn = {0}; boolean[] tracking = {false}; int[] previousAmount = {0}; double[] previousHu = {0};
         h.runAfterDelay(4, () -> { submit(h, 0); BoilerSteamSelectionGameTests.submit(h, STEAM, 0); seed(h, 14000, 11200, 0, false); tracking[0] = true; previousAmount[0] = 14000; previousHu[0] = 11200; });
         // 每tick核对真实接收量；有汽种差异却被generic抽出后丢弃，会立刻破坏质量等式。
@@ -151,14 +150,14 @@ public final class BoilerControlsGameTests {
         });
         h.runAfterDelay(28, () -> {
             var target = handler(h, tank, Direction.EAST); var fluid = target.getFluidInTank(0);
-            h.assertTrue(fluid.is(TurbineContent.STEAM.get()) && fluid.getAmount() > 0, "原生管路未送普通蒸汽");
-            withdrawn[0] += target.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE).getAmount();
+            h.assertTrue(fluid.is(TurbineContent.STEAM.get()) && fluid.getAmount() > 0, "专用管路未送普通蒸汽");
+            withdrawn[0] += IndustrialFluidNetworkGameTests.consumeFixtureTank(h, tank, Integer.MAX_VALUE);
             var s = owner(h).ledger(); seed(h, s.steam(), s.steam() * 1.05, 0, true); previousHu[0] = s.steamHu(); previousAmount[0] = s.steam();
             BoilerSteamSelectionGameTests.submit(h, STEAM, 1);
         });
         h.runAfterDelay(65, () -> {
             var target = handler(h, tank, Direction.EAST); var fluid = target.getFluidInTank(0);
-            h.assertTrue(fluid.is(BoilerContent.SUPERCRITICAL_STEAM.get()) && fluid.getAmount() > 0, "汽种变化后原生管路未自行更新为超临界蒸汽");
+            h.assertTrue(fluid.is(BoilerContent.SUPERCRITICAL_STEAM.get()) && fluid.getAmount() > 0, "汽种变化后专用管路未自行更新为超临界蒸汽");
             // 保留外罐SC；仅替换本版本测试库存并显式选择普通汽，产品不得转换外部背压。
             submit(h, 0); var s = owner(h).ledger(); seed(h, s.steam(), s.steam() * .8, 0, false); previousHu[0] = s.steamHu(); previousAmount[0] = s.steam();
             BoilerSteamSelectionGameTests.submit(h, STEAM, 0);
@@ -167,12 +166,12 @@ public final class BoilerControlsGameTests {
             var target = handler(h, tank, Direction.EAST); var fluid = target.getFluidInTank(0);
             h.assertTrue(fluid.is(BoilerContent.SUPERCRITICAL_STEAM.get()) && fluid.getAmount() > 0, "自动汽种改写或删除了外罐异种流体");
             // 接收方真实抽取异种汽后腾出空间；测试与产品均不强制改写外罐。
-            withdrawn[0] += target.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE).getAmount(); submit(h, 0);
+            withdrawn[0] += IndustrialFluidNetworkGameTests.consumeFixtureTank(h, tank, Integer.MAX_VALUE); submit(h, 0);
         });
         h.runAfterDelay(115, () -> {
             var fluid = handler(h, tank, Direction.EAST).getFluidInTank(0);
             h.assertTrue(fluid.is(TurbineContent.STEAM.get()) && fluid.getAmount() > 0, "清空接收罐后管网未自动恢复普通汽");
-            System.out.println("[boiler-controls] selected steam native pipe steam->SC->steam without replacing pipe; every tick mass/HU checked; external SC retained until explicit receiver drain");
+            System.out.println("[boiler-controls] selected steam dedicated pump/pipe steam->SC->steam without replacing pipe; every tick mass/HU checked; external SC retained until explicit receiver drain");
             h.succeed();
         });
     }

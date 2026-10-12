@@ -74,7 +74,7 @@ public final class BoilerTurbineFlowGameTests {
         h.onEachTick(() -> {
             long tick = h.getTick(); int rate = tick < 70 || tick >= 150 && tick < 220 ? tier.ratedFlowMbPerTick() : 0;
             var input = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.inlet(front, tier), Direction.WEST);
-            if (input != null && rate > 0) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), rate), IFluidHandler.FluidAction.EXECUTE);
+            if (input != null && rate > 0) IndustrialFluidNetworkGameTests.feed(h, ExtensionTurbineGameTests.inlet(front, tier), Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), rate);
             var output = ExtensionTurbineGameTests.handler(h, ExtensionTurbineGameTests.exhaust(front, tier), Direction.EAST);
             if (output != null) output.drain(tier.ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
             if (tick % 10 == 0) System.out.println("[continuous-flow-loop] t=" + tick + " SU=" + ExtensionTurbineGameTests.owner(h, front).totalSu()
@@ -99,13 +99,14 @@ public final class BoilerTurbineFlowGameTests {
         BlockPos far = port.relative(outward, 3), tank = port.relative(outward, 4);
         BlockPos cog = left ? pump.west() : pump.east();
         BlockPos shaft = cog.relative(outward), motor = cog.relative(outward, 2);
+        boolean restricted = h.getBlockState(port).is(BoilerContent.HOT_PORT.get());
         h.setBlock(tank, AllBlocks.FLUID_TANK.get());
-        h.setBlock(near, AllBlocks.FLUID_PIPE.get()); h.setBlock(far, AllBlocks.FLUID_PIPE.get());
-        h.setBlock(pump, AllBlocks.MECHANICAL_PUMP.getDefaultState().setValue(PumpBlock.FACING, input ? outward.getOpposite() : outward));
+        h.setBlock(near, restricted ? com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get() : AllBlocks.FLUID_PIPE.get()); h.setBlock(far, restricted ? com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get() : AllBlocks.FLUID_PIPE.get());
+        h.setBlock(pump, (restricted ? com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.PUMP.get().defaultBlockState() : AllBlocks.MECHANICAL_PUMP.getDefaultState()).setValue(PumpBlock.FACING, input ? outward.getOpposite() : outward));
         h.setBlock(cog, AllBlocks.COGWHEEL.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
         h.setBlock(shaft, AllBlocks.SHAFT.getDefaultState().setValue(ShaftBlock.AXIS, Direction.Axis.Z));
         h.setBlock(motor, AllBlocks.CREATIVE_MOTOR.getDefaultState().setValue(CreativeMotorBlock.FACING, outward.getOpposite()));
-        ((CreativeMotorBlockEntity) h.getBlockEntity(motor)).generatedSpeed.setValue(256);
+        ((CreativeMotorBlockEntity) h.getBlockEntity(motor)).generatedSpeed.setValue(restricted ? -256 * outward.getOpposite().getAxisDirection().getStep() : 256);
         for (BlockPos p : new BlockPos[]{near, far}) FluidPropagator.propagateChangedPipe(h.getLevel(), h.absolutePos(p), h.getBlockState(p));
         return tank;
     }
@@ -177,7 +178,9 @@ public final class BoilerTurbineFlowGameTests {
             h.setBlock(front.south(tier.length()), AllBlocks.SHAFT.getDefaultState().setValue(ShaftBlock.AXIS, Direction.Axis.Z));
         }
         h.setBlock(receiver, AllBlocks.FLUID_TANK.get());
-        for (BlockPos p : pipes) h.setBlock(p, AllBlocks.FLUID_PIPE.get());
+        for (BlockPos p : pipes) h.setBlock(p, p.getZ() == 5 && p.getY() == 5 && p.getX() < (tier == null ? receiver.getX() : ExtensionTurbineGameTests.inlet(front, tier).getX()) ? com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get() : AllBlocks.FLUID_PIPE.get());
+        BlockPos scPump = STEAM.east(2); h.setBlock(scPump, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.PUMP.get().defaultBlockState().setValue(PumpBlock.FACING, Direction.EAST));
+        BlockPos scCog = scPump.above(); h.setBlock(scCog, AllBlocks.COGWHEEL.getDefaultState().setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.X)); h.setBlock(scCog.east(), AllBlocks.SHAFT.getDefaultState().setValue(ShaftBlock.AXIS, Direction.Axis.X)); h.setBlock(scCog.east(2), AllBlocks.CREATIVE_MOTOR.getDefaultState().setValue(CreativeMotorBlock.FACING, Direction.WEST)); ((CreativeMotorBlockEntity)h.getBlockEntity(scCog.east(2))).generatedSpeed.setValue(256);
         for (BlockPos p : pipes) FluidPropagator.propagateChangedPipe(h.getLevel(), h.absolutePos(p), h.getBlockState(p));
         String label = tier == null ? "tank" : "rotors" + tier.rotorCount();
         long[] totals = new long[5]; int[] zeroTicks = {0}, kindChanges = {0}, previousKind = {-1};
@@ -249,9 +252,9 @@ public final class BoilerTurbineFlowGameTests {
         });
     }
     private static int fill(GameTestHelper h, BlockPos p, Fluid fluid) {
-        var tank = handler(h, p); return tank == null ? 0 : tank.fill(new FluidStack(fluid, 8000), IFluidHandler.FluidAction.EXECUTE);
+        var tank = handler(h, p); return tank == null ? 0 : com.iksxh.create_nuclear_industry.industrial.RestrictionPolicy.restricted(new FluidStack(fluid, 1)) ? ((com.simibubi.create.content.fluids.tank.FluidTankBlockEntity)h.getBlockEntity(p)).getTankInventory().fill(new FluidStack(fluid, 8000), IFluidHandler.FluidAction.EXECUTE) : tank.fill(new FluidStack(fluid, 8000), IFluidHandler.FluidAction.EXECUTE);
     }
     private static int drain(GameTestHelper h, BlockPos p) {
-        var tank = handler(h, p); return tank == null ? 0 : tank.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE).getAmount();
+        var tank = handler(h, p); return tank == null ? 0 : com.iksxh.create_nuclear_industry.industrial.RestrictionPolicy.restricted(tank.getFluidInTank(0)) ? IndustrialFluidNetworkGameTests.consumeFixtureTank(h, p, Integer.MAX_VALUE) : tank.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE).getAmount();
     }
 }

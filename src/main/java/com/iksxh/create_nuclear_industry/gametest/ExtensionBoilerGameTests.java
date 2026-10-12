@@ -92,6 +92,7 @@ public final class ExtensionBoilerGameTests {
     @GameTest(template = "boiler_empty", timeoutTicks = 50)
     public static void sharedPortsSimulationPressureAndStaleHandles(GameTestHelper h) {
         build(h, 5, 5, 5, 2);
+        h.setBlock(CONTROL.north(), Blocks.REDSTONE_BLOCK);
         BlockPos second = BASE.offset(0, 3, 2);
         h.setBlock(second, BoilerContent.STEAM_PORT.get().defaultBlockState().setValue(BoilerPartBlock.FACING, Direction.WEST));
         BlockPos secondWater = BASE.offset(4, 1, 1), secondHot = BASE.offset(1, 0, 4), secondCold = BASE.offset(1, 2, 4);
@@ -103,10 +104,15 @@ public final class ExtensionBoilerGameTests {
             var waterB = handler(h, secondWater, Direction.EAST); var hotB = handler(h, secondHot, Direction.SOUTH); var coldB = handler(h, secondCold, Direction.SOUTH);
             var waterStack = new FluidStack(Fluids.WATER, 256); var hotStack = new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
             h.assertTrue(water(h).fill(waterStack, IFluidHandler.FluidAction.SIMULATE) == 256 && waterB.fill(waterStack, IFluidHandler.FluidAction.SIMULATE) == 256
-                    && hot(h).fill(hotStack, IFluidHandler.FluidAction.SIMULATE) == 256 && hotB.fill(hotStack, IFluidHandler.FluidAction.SIMULATE) == 256, "多个水/热口模拟额度错误");
+                    && hot(h).fill(hotStack, IFluidHandler.FluidAction.SIMULATE) == 0 && hotB.fill(hotStack, IFluidHandler.FluidAction.SIMULATE) == 0, "水口模拟或热口标准禁运错误");
             h.assertTrue(untouched.equals(ledger.save()), "多入口模拟写入账本");
             water(h).fill(waterStack, IFluidHandler.FluidAction.EXECUTE); waterB.fill(waterStack, IFluidHandler.FluidAction.EXECUTE);
-            hot(h).fill(hotStack, IFluidHandler.FluidAction.EXECUTE); hotB.fill(hotStack, IFluidHandler.FluidAction.EXECUTE);
+            IndustrialFluidNetworkGameTests.feed(h, HOT, Direction.NORTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
+            IndustrialFluidNetworkGameTests.feed(h, secondHot, Direction.SOUTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
+        });
+        h.runAfterDelay(9, () -> {
+            var ledger = owner(h).ledger(); var hotB = handler(h, secondHot, Direction.SOUTH); var coldB = handler(h, secondCold, Direction.SOUTH);
+            var hotStack = new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
             h.assertTrue(ledger.water() == 512 && ledger.hot() == 512, "不同物理入口未共享库存/独立限流");
             h.assertTrue(hotB.fill(hotStack, IFluidHandler.FluidAction.EXECUTE) == 0, "同tick重复热入口绕过额度");
             // 由实际热转冷付款生成冷库存，再验证两个冷口不能重复领取同一产物。
@@ -116,7 +122,8 @@ public final class ExtensionBoilerGameTests {
             h.assertTrue(cold(h).drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256 && coldB.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256, "多个冷口模拟错误");
             int removedCold = cold(h).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount() + coldB.drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
             h.assertTrue(removedCold == coldBefore && ledger.cold() == 0, "多冷口复制产物");
-            seedSteam(h, 11100, 11100, true); var a = steam(h); var b = handler(h, second, Direction.WEST);
+            seedSteam(h, 11100, 11100, false); BoilerSteamSelectionGameTests.submit(h, BASE.offset(0, 3, 1), 0); BoilerSteamSelectionGameTests.submit(h, second, 0);
+            var a = steam(h); var b = handler(h, second, Direction.WEST);
             var before = owner(h).ledger().save();
             h.assertTrue(a.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256 && b.drain(256, IFluidHandler.FluidAction.SIMULATE).getAmount() == 256, "模拟保压余量错误");
             h.assertTrue(before.equals(owner(h).ledger().save()), "模拟改变账本");
@@ -135,7 +142,9 @@ public final class ExtensionBoilerGameTests {
         h.runAfterDelay(2, () -> {
             var machine = (NuclearHeatExchangerBlockEntity) h.getBlockEntity(member);
             var old = machine.fluidPort(Direction.SOUTH);
-            h.assertTrue(old != null, "独立机初始入口不可用"); old.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 300), IFluidHandler.FluidAction.EXECUTE);
+            h.assertTrue(old != null, "独立机初始入口不可用");
+            IndustrialFluidNetworkGameTests.feed(h, member, Direction.SOUTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 300);
+            h.runAfterDelay(5, () -> {
             machine.ledger().claimDedicated(h.getLevel().getGameTime() + 1, 18, com.iksxh.create_nuclear_industry.config.HeatExchangerConfig.settings());
             build(h, 5, 5, 5, 2); owner(h).invalidateForm();
             h.runAfterDelay(3, () -> {
@@ -147,19 +156,20 @@ public final class ExtensionBoilerGameTests {
                 owner(h).tick(); h.assertTrue(owner(h).ledger().hot() == 264 && Math.abs(owner(h).ledger().coolantHu() - 18) < 1e-8, "重复接管复制或消耗无负载冷却剂");
                 h.succeed();
             });
+            });
         });
     }
     @GameTest(template = "boiler_empty", timeoutTicks = 700)
     public static void realContinuousCoolantWaterAndSteamLoop(GameTestHelper h) {
         build(h, 5, 5, 5, 2);
-        BlockPos tank = BASE.offset(-1, 3, 1); h.setBlock(tank, AllBlocks.FLUID_TANK.get());
+        BlockPos tank = IndustrialFluidNetworkGameTests.outlet(h, BASE.offset(0, 3, 1), Direction.WEST);
         long[] output = {0}; double[] heat = {0}; int[] converted = {0};
         h.onEachTick(() -> {
             if (water(h) == null || hot(h) == null || cold(h) == null) return;
             water(h).fill(new FluidStack(Fluids.WATER, 256), IFluidHandler.FluidAction.EXECUTE);
-            hot(h).fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256), IFluidHandler.FluidAction.EXECUTE);
+            IndustrialFluidNetworkGameTests.feed(h, HOT, Direction.NORTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
             converted[0] += cold(h).drain(256, IFluidHandler.FluidAction.EXECUTE).getAmount();
-            var t = handler(h, tank, Direction.EAST); if (t != null) output[0] += t.drain(1000, IFluidHandler.FluidAction.EXECUTE).getAmount();
+            var t = handler(h, tank, Direction.EAST); if (t != null) output[0] += IndustrialFluidNetworkGameTests.consumeFixtureTank(h, tank, 1000);
         });
         h.runAfterDelay(600, () -> {
             var s = owner(h).ledger(); h.assertTrue(output[0] > 10000, "持续补水/热液且已接输出仍无法充压并连续产汽");
@@ -171,6 +181,8 @@ public final class ExtensionBoilerGameTests {
     private static void nativePipe(GameTestHelper h, boolean critical) {
         build(h, 5, 5, 5, 2); BlockPos pipe = BASE.offset(-1, 3, 1), tank = BASE.offset(-2, 3, 1);
         h.setBlock(pipe, AllBlocks.FLUID_PIPE.get()); h.setBlock(tank, AllBlocks.FLUID_TANK.get());
+        if (critical) { h.setBlock(tank, Blocks.AIR); tank = IndustrialFluidNetworkGameTests.outlet(h, BASE.offset(0, 3, 1), Direction.WEST); }
+        BlockPos actualTank = tank;
         h.runAfterDelay(4, () -> {
             owner(h).selectMinimum(critical ? 60 : 10);
             BoilerSteamSelectionGameTests.submit(h, BASE.offset(0, 3, 1), critical ? 1 : 0);
@@ -178,7 +190,7 @@ public final class ExtensionBoilerGameTests {
             seedSteam(h, 14000, critical ? 14100 : 11200, critical);
         });
         h.runAfterDelay(35, () -> {
-            var t = handler(h, tank, Direction.EAST); var fluid = t == null ? FluidStack.EMPTY : t.getFluidInTank(0);
+            var t = handler(h, actualTank, Direction.EAST); var fluid = t == null ? FluidStack.EMPTY : t.getFluidInTank(0);
             h.assertTrue(!fluid.isEmpty() && fluid.is(critical ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get()), "实际Create管道未输出实际汽种");
             var old = steam(h); double before = owner(h).ledger().steamHu(); owner(h).selectMinimum(43);
             h.assertTrue(old.getTanks() == 1, "调压撤销了既有汽口句柄");
@@ -201,9 +213,9 @@ public final class ExtensionBoilerGameTests {
             var portable = owner(h).savePortableData(); owner(h).loadPortableData(portable);
             h.assertTrue(portable.equals(owner(h).savePortableData()), "当前保存加载改写库存/HU/出汽下限");
             h.setBlock(CONTROL.north(), Blocks.REDSTONE_BLOCK);
-            h.assertTrue(hot(h).fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256), IFluidHandler.FluidAction.EXECUTE) == 256, "红石状态不能储存待用热液");
-            int before = s.hot();
-            h.runAfterDelay(5, () -> { h.assertTrue(owner(h).ledger().hot() == before, "红石停止仍转换新热液"); h.succeed(); });
+            h.assertTrue(hot(h).fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256), IFluidHandler.FluidAction.EXECUTE) == 0, "红石状态标准热口仍应禁运");
+            IndustrialFluidNetworkGameTests.feed(h, HOT, Direction.NORTH, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 256);
+            h.runAfterDelay(8, () -> { h.assertTrue(owner(h).ledger().hot() == 256, "红石停止未保存专用送入待用热液或仍转换新热液"); h.succeed(); });
         });
     }
     @GameTest(template = "boiler_empty", timeoutTicks = 100, batch = "config")

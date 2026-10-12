@@ -1,0 +1,471 @@
+{
+  "dependency": "C:\\Users\\IKSXH\\.gradle\\caches\\modules-2\\files-2.1\\com.simibubi.create\\create-1.21.1\\6.0.10-280\\92471e8fc5ed4e3c2279001d77ebcec6fd38bcab\\create-1.21.1-6.0.10-280-slim.jar",
+  "dependency_sha256": "f0652bee27460f2d26a748f537cb5d687981441378d3a526d17ffaab5a1072bb",
+  "version": "Create 6.0.10-280 / Minecraft 1.21.1",
+  "assets_license": "All Rights Reserved",
+  "copyright": "The Create Team / The Creators of Create",
+  "license_url": "https://github.com/Creators-of-Create/Create/blob/mc1.21.1-6.0.10/LICENSE.md",
+  "models": {
+    "industrial_fluid_visual_01/steel/fluid_pipe/lu_x": {
+      "parent": "create:block/fluid_pipe/lu_x",
+      "source_sha256": "97a70d958e667f3daaed6bf419a26f28ee18fe76b66a40f749fc096178a64a4a"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ru_x": {
+      "parent": "create:block/fluid_pipe/ru_x",
+      "source_sha256": "be3133a08982bab4370d0c633692eeec24d05c50cc5c94070b60f4a6149277bb"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ld_x": {
+      "parent": "create:block/fluid_pipe/ld_x",
+      "source_sha256": "c7c3f47400d02c408d1887b05dbddc706e2ff0cef9a71781517ecbf88af09f36"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rd_x": {
+      "parent": "create:block/fluid_pipe/rd_x",
+      "source_sha256": "2e08c96a14ca4286a4163d61c92368bc5480f128535730fbbaed19563a2e61d3"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ud_x": {
+      "parent": "create:block/fluid_pipe/ud_x",
+      "source_sha256": "3f43ade73e04a6cc1ac313c7e446562f96caa846b4a7a4a95b250c8d8774ea3e"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/u_x": {
+      "parent": "create:block/fluid_pipe/u_x",
+      "source_sha256": "f57c7999283a9af11b13a2a66c7c9f2ba30ff37324ae8956b738a7da6d8aa2b2"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/d_x": {
+      "parent": "create:block/fluid_pipe/d_x",
+      "source_sha256": "c9ed3c2a9791c1b93e5c3924323e421a7842a2303e31dc9be8faebe95d184df8"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/lr_x": {
+      "parent": "create:block/fluid_pipe/lr_x",
+      "source_sha256": "21ca72d2befc23a679438e96fbfcc9f09e18dba50b7a9ec09eac355d5b894d1e"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/l_x": {
+      "parent": "create:block/fluid_pipe/l_x",
+      "source_sha256": "e5f713b0247f8932c82a6b1bbf954c3ad80670bccd942fb8a30ecdeb7fcb4970"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/r_x": {
+      "parent": "create:block/fluid_pipe/r_x",
+      "source_sha256": "fda04413948bf9439a67be7458d4414ed71db9e0eeec25d8b1fd594e22de3cf5"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/lu_y": {
+      "parent": "create:block/fluid_pipe/lu_y",
+      "source_sha256": "ffed4e9160eb654aac2ecdd8d02fc90ee3c33611d4e776b969c3eaffd9e27225"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ru_y": {
+      "parent": "create:block/fluid_pipe/ru_y",
+      "source_sha256": "3439e24e4d1acb7b38752e69e936c2d40451a4199062db655092b856377e54bb"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ld_y": {
+      "parent": "create:block/fluid_pipe/ld_y",
+      "source_sha256": "c4885cd8d4f49733664c3a36def3519b5e7adfd7fd033e339813c8863d18e6ff"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rd_y": {
+      "parent": "create:block/fluid_pipe/rd_y",
+      "source_sha256": "7fccddc89f436db52291f3d85a163de3f824783cec7ea5665f3778efade8f05c"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ud_y": {
+      "parent": "create:block/fluid_pipe/ud_y",
+      "source_sha256": "e6e8cefc97c577fdd4e32ddfa90fffe74d394b8f6f2cdd8a984930195429c002"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/u_y": {
+      "parent": "create:block/fluid_pipe/u_y",
+      "source_sha256": "20cd8fa967e14f54be651cb9a83861048db56ba03f2710714c783220e240b508"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/d_y": {
+      "parent": "create:block/fluid_pipe/d_y",
+      "source_sha256": "b43ef40b5e2e9467695740124fc90a3fc1e5ef3332176c31b746407198206fae"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/lr_y": {
+      "parent": "create:block/fluid_pipe/lr_y",
+      "source_sha256": "c7da3732847c3841dbf9fa189d3f1f4bd11dd8a61effa05850e49a6d485ab994"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/l_y": {
+      "parent": "create:block/fluid_pipe/l_y",
+      "source_sha256": "ed9a0caa5b357f550522b260058785c6629b681ac12078925f22b3a7b8374b0b"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/r_y": {
+      "parent": "create:block/fluid_pipe/r_y",
+      "source_sha256": "105e498b29ce39c7ae082514d4c7715e59c6bf87196404dfb2797c107fb988ad"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/lu_z": {
+      "parent": "create:block/fluid_pipe/lu_z",
+      "source_sha256": "13310dc650bc1ea0a1accc25615987d536b2d10589a1ac1032d367949a518347"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ru_z": {
+      "parent": "create:block/fluid_pipe/ru_z",
+      "source_sha256": "92ea1d73666706b70744995c83f49d416a3d13d3132065db81929b90ce36b4c6"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ld_z": {
+      "parent": "create:block/fluid_pipe/ld_z",
+      "source_sha256": "249b73626752d543dc4924668cc68b6e8810a3f4a1f0a05f78c69fd2a32db1c5"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rd_z": {
+      "parent": "create:block/fluid_pipe/rd_z",
+      "source_sha256": "9476b67992c5b8b4a2b66064ec8007b4e6b63d899fee3867c79fb85e2ba18ef6"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/ud_z": {
+      "parent": "create:block/fluid_pipe/ud_z",
+      "source_sha256": "07a5ebe124f4b47f3faed56b47c7700e46b51e7c1829eee5c9ce228339b7c7fa"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/u_z": {
+      "parent": "create:block/fluid_pipe/u_z",
+      "source_sha256": "24576dd36b5148807300061a74b0eb5805b6eca439743f4d4e92a4f115d09f8e"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/d_z": {
+      "parent": "create:block/fluid_pipe/d_z",
+      "source_sha256": "e95a61f5dd678eda68848ba8c28d12710268a59fee95176abbf5bcf831cbbd7c"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/lr_z": {
+      "parent": "create:block/fluid_pipe/lr_z",
+      "source_sha256": "00e9ddd1f34f3711f8dc7ffe301db8a794f0ea728b564c2731f380072443b216"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/l_z": {
+      "parent": "create:block/fluid_pipe/l_z",
+      "source_sha256": "4be169a0386ab3e9bc90521d81415f197120e815a96b952fde543719ecf5c163"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/r_z": {
+      "parent": "create:block/fluid_pipe/r_z",
+      "source_sha256": "8ac83cf750de31e54f0bb37c8e2577b700b12a5ea94ff4e91299823d1915007e"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/down": {
+      "parent": "create:block/fluid_pipe/rim_connector/down",
+      "source_sha256": "d9f01a76faf31a605ced3c7035de33adea056e38b96a29ffad3d74d17f35d646"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim/down": {
+      "parent": "create:block/fluid_pipe/rim/down",
+      "source_sha256": "3caa9aff18e2428a251072855cc0fc7707e1e79ab97e98bae2158b43cc2df5e0"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/up": {
+      "parent": "create:block/fluid_pipe/rim_connector/up",
+      "source_sha256": "8fe8b24a684ae0e9d32e6d7b3950edb309cb4d5956bca2ed953b8f2e5ac2cd4a"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim/up": {
+      "parent": "create:block/fluid_pipe/rim/up",
+      "source_sha256": "7d329712f0f513ae7d846c8f221d4b255bb27894eaea74c30b44514dc9c1b63f"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/north": {
+      "parent": "create:block/fluid_pipe/rim_connector/north",
+      "source_sha256": "9d0268eb66732b0017e33eff19cfe72cba58b0ff20c02527846c1dee94fbc205"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim/north": {
+      "parent": "create:block/fluid_pipe/rim/north",
+      "source_sha256": "533ed7989b3dfedcd722c1ca1b26ed2e5623b149b5aec461709f7a1e86a38d51"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/south": {
+      "parent": "create:block/fluid_pipe/rim_connector/south",
+      "source_sha256": "507c665033f6a836dac91fed19a2ae257ca802b726084aa7e4b16db29e6752b4"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim/south": {
+      "parent": "create:block/fluid_pipe/rim/south",
+      "source_sha256": "77ad3299f3f225e13ba52e6edeeb5333785c02a79cea83f44c5db905297d0fbf"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/west": {
+      "parent": "create:block/fluid_pipe/rim_connector/west",
+      "source_sha256": "c2adea970c8cfbdf96f00768f0527bd6d14327b4abf96289efbf15b1190f378d"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim/west": {
+      "parent": "create:block/fluid_pipe/rim/west",
+      "source_sha256": "f2622eb4f6d72d114541f77fdeb92bf421db8de62ea59173cf64dd22b9306d20"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/east": {
+      "parent": "create:block/fluid_pipe/rim_connector/east",
+      "source_sha256": "f0dc73e185bc580690784e5b80d4dbf0281b7d1a87817dd3b3d596d87adb625d"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/rim/east": {
+      "parent": "create:block/fluid_pipe/rim/east",
+      "source_sha256": "f75e39694625b60da8cf81861ad6e3e2b41cc87a5aea11eadc7a5c2b08b107a5"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/item": {
+      "parent": "create:block/fluid_pipe/item",
+      "source_sha256": "c188ece76dd14668d8394ce29cab82838bd6af9b6f17a2a4ee8ded60bc21901a"
+    },
+    "industrial_fluid_visual_01/steel/fluid_pipe/casing": {
+      "parent": "create:block/fluid_pipe/casing",
+      "source_sha256": "40b2b33d04feed096db06460bd865563bb0cf97a2537ac9e5f923180d703e33a"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/lu_x": {
+      "parent": "create:block/fluid_pipe/lu_x",
+      "source_sha256": "97a70d958e667f3daaed6bf419a26f28ee18fe76b66a40f749fc096178a64a4a"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ru_x": {
+      "parent": "create:block/fluid_pipe/ru_x",
+      "source_sha256": "be3133a08982bab4370d0c633692eeec24d05c50cc5c94070b60f4a6149277bb"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ld_x": {
+      "parent": "create:block/fluid_pipe/ld_x",
+      "source_sha256": "c7c3f47400d02c408d1887b05dbddc706e2ff0cef9a71781517ecbf88af09f36"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rd_x": {
+      "parent": "create:block/fluid_pipe/rd_x",
+      "source_sha256": "2e08c96a14ca4286a4163d61c92368bc5480f128535730fbbaed19563a2e61d3"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ud_x": {
+      "parent": "create:block/fluid_pipe/ud_x",
+      "source_sha256": "3f43ade73e04a6cc1ac313c7e446562f96caa846b4a7a4a95b250c8d8774ea3e"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/u_x": {
+      "parent": "create:block/fluid_pipe/u_x",
+      "source_sha256": "f57c7999283a9af11b13a2a66c7c9f2ba30ff37324ae8956b738a7da6d8aa2b2"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/d_x": {
+      "parent": "create:block/fluid_pipe/d_x",
+      "source_sha256": "c9ed3c2a9791c1b93e5c3924323e421a7842a2303e31dc9be8faebe95d184df8"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/lr_x": {
+      "parent": "create:block/fluid_pipe/lr_x",
+      "source_sha256": "21ca72d2befc23a679438e96fbfcc9f09e18dba50b7a9ec09eac355d5b894d1e"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/l_x": {
+      "parent": "create:block/fluid_pipe/l_x",
+      "source_sha256": "e5f713b0247f8932c82a6b1bbf954c3ad80670bccd942fb8a30ecdeb7fcb4970"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/r_x": {
+      "parent": "create:block/fluid_pipe/r_x",
+      "source_sha256": "fda04413948bf9439a67be7458d4414ed71db9e0eeec25d8b1fd594e22de3cf5"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/lu_y": {
+      "parent": "create:block/fluid_pipe/lu_y",
+      "source_sha256": "ffed4e9160eb654aac2ecdd8d02fc90ee3c33611d4e776b969c3eaffd9e27225"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ru_y": {
+      "parent": "create:block/fluid_pipe/ru_y",
+      "source_sha256": "3439e24e4d1acb7b38752e69e936c2d40451a4199062db655092b856377e54bb"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ld_y": {
+      "parent": "create:block/fluid_pipe/ld_y",
+      "source_sha256": "c4885cd8d4f49733664c3a36def3519b5e7adfd7fd033e339813c8863d18e6ff"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rd_y": {
+      "parent": "create:block/fluid_pipe/rd_y",
+      "source_sha256": "7fccddc89f436db52291f3d85a163de3f824783cec7ea5665f3778efade8f05c"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ud_y": {
+      "parent": "create:block/fluid_pipe/ud_y",
+      "source_sha256": "e6e8cefc97c577fdd4e32ddfa90fffe74d394b8f6f2cdd8a984930195429c002"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/u_y": {
+      "parent": "create:block/fluid_pipe/u_y",
+      "source_sha256": "20cd8fa967e14f54be651cb9a83861048db56ba03f2710714c783220e240b508"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/d_y": {
+      "parent": "create:block/fluid_pipe/d_y",
+      "source_sha256": "b43ef40b5e2e9467695740124fc90a3fc1e5ef3332176c31b746407198206fae"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/lr_y": {
+      "parent": "create:block/fluid_pipe/lr_y",
+      "source_sha256": "c7da3732847c3841dbf9fa189d3f1f4bd11dd8a61effa05850e49a6d485ab994"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/l_y": {
+      "parent": "create:block/fluid_pipe/l_y",
+      "source_sha256": "ed9a0caa5b357f550522b260058785c6629b681ac12078925f22b3a7b8374b0b"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/r_y": {
+      "parent": "create:block/fluid_pipe/r_y",
+      "source_sha256": "105e498b29ce39c7ae082514d4c7715e59c6bf87196404dfb2797c107fb988ad"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/lu_z": {
+      "parent": "create:block/fluid_pipe/lu_z",
+      "source_sha256": "13310dc650bc1ea0a1accc25615987d536b2d10589a1ac1032d367949a518347"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ru_z": {
+      "parent": "create:block/fluid_pipe/ru_z",
+      "source_sha256": "92ea1d73666706b70744995c83f49d416a3d13d3132065db81929b90ce36b4c6"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ld_z": {
+      "parent": "create:block/fluid_pipe/ld_z",
+      "source_sha256": "249b73626752d543dc4924668cc68b6e8810a3f4a1f0a05f78c69fd2a32db1c5"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rd_z": {
+      "parent": "create:block/fluid_pipe/rd_z",
+      "source_sha256": "9476b67992c5b8b4a2b66064ec8007b4e6b63d899fee3867c79fb85e2ba18ef6"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/ud_z": {
+      "parent": "create:block/fluid_pipe/ud_z",
+      "source_sha256": "07a5ebe124f4b47f3faed56b47c7700e46b51e7c1829eee5c9ce228339b7c7fa"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/u_z": {
+      "parent": "create:block/fluid_pipe/u_z",
+      "source_sha256": "24576dd36b5148807300061a74b0eb5805b6eca439743f4d4e92a4f115d09f8e"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/d_z": {
+      "parent": "create:block/fluid_pipe/d_z",
+      "source_sha256": "e95a61f5dd678eda68848ba8c28d12710268a59fee95176abbf5bcf831cbbd7c"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/lr_z": {
+      "parent": "create:block/fluid_pipe/lr_z",
+      "source_sha256": "00e9ddd1f34f3711f8dc7ffe301db8a794f0ea728b564c2731f380072443b216"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/l_z": {
+      "parent": "create:block/fluid_pipe/l_z",
+      "source_sha256": "4be169a0386ab3e9bc90521d81415f197120e815a96b952fde543719ecf5c163"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/r_z": {
+      "parent": "create:block/fluid_pipe/r_z",
+      "source_sha256": "8ac83cf750de31e54f0bb37c8e2577b700b12a5ea94ff4e91299823d1915007e"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim_connector/down": {
+      "parent": "create:block/fluid_pipe/rim_connector/down",
+      "source_sha256": "d9f01a76faf31a605ced3c7035de33adea056e38b96a29ffad3d74d17f35d646"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim/down": {
+      "parent": "create:block/fluid_pipe/rim/down",
+      "source_sha256": "3caa9aff18e2428a251072855cc0fc7707e1e79ab97e98bae2158b43cc2df5e0"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim_connector/up": {
+      "parent": "create:block/fluid_pipe/rim_connector/up",
+      "source_sha256": "8fe8b24a684ae0e9d32e6d7b3950edb309cb4d5956bca2ed953b8f2e5ac2cd4a"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim/up": {
+      "parent": "create:block/fluid_pipe/rim/up",
+      "source_sha256": "7d329712f0f513ae7d846c8f221d4b255bb27894eaea74c30b44514dc9c1b63f"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim_connector/north": {
+      "parent": "create:block/fluid_pipe/rim_connector/north",
+      "source_sha256": "9d0268eb66732b0017e33eff19cfe72cba58b0ff20c02527846c1dee94fbc205"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim/north": {
+      "parent": "create:block/fluid_pipe/rim/north",
+      "source_sha256": "533ed7989b3dfedcd722c1ca1b26ed2e5623b149b5aec461709f7a1e86a38d51"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim_connector/south": {
+      "parent": "create:block/fluid_pipe/rim_connector/south",
+      "source_sha256": "507c665033f6a836dac91fed19a2ae257ca802b726084aa7e4b16db29e6752b4"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim/south": {
+      "parent": "create:block/fluid_pipe/rim/south",
+      "source_sha256": "77ad3299f3f225e13ba52e6edeeb5333785c02a79cea83f44c5db905297d0fbf"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim_connector/west": {
+      "parent": "create:block/fluid_pipe/rim_connector/west",
+      "source_sha256": "c2adea970c8cfbdf96f00768f0527bd6d14327b4abf96289efbf15b1190f378d"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim/west": {
+      "parent": "create:block/fluid_pipe/rim/west",
+      "source_sha256": "f2622eb4f6d72d114541f77fdeb92bf421db8de62ea59173cf64dd22b9306d20"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim_connector/east": {
+      "parent": "create:block/fluid_pipe/rim_connector/east",
+      "source_sha256": "f0dc73e185bc580690784e5b80d4dbf0281b7d1a87817dd3b3d596d87adb625d"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/rim/east": {
+      "parent": "create:block/fluid_pipe/rim/east",
+      "source_sha256": "f75e39694625b60da8cf81861ad6e3e2b41cc87a5aea11eadc7a5c2b08b107a5"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/item": {
+      "parent": "create:block/fluid_pipe/item",
+      "source_sha256": "c188ece76dd14668d8394ce29cab82838bd6af9b6f17a2a4ee8ded60bc21901a"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_pipe/casing": {
+      "parent": "create:block/fluid_pipe/casing",
+      "source_sha256": "40b2b33d04feed096db06460bd865563bb0cf97a2537ac9e5f923180d703e33a"
+    },
+    "industrial_fluid_visual_01/steel/mechanical_pump/block": {
+      "parent": "create:block/mechanical_pump/block",
+      "source_sha256": "b5b5c264116cee488ed8f216b290fc6f324be7b51d2dc2bbfc8a77640682f9fa"
+    },
+    "industrial_fluid_visual_01/steel/mechanical_pump/item": {
+      "parent": "create:block/mechanical_pump/item",
+      "source_sha256": "9a2f0c0a44317bf3842926b5daefa2feb9cb68a19e532d2c01ae5ebb19960d22"
+    },
+    "industrial_fluid_visual_01/steel/mechanical_pump/cog": {
+      "parent": "create:block/mechanical_pump/cog",
+      "source_sha256": "5407ee662b516524fd3b2118f5e58ce0d6567adfc5adee77f66f48ba7c7d9bf2"
+    },
+    "industrial_fluid_visual_01/steel/fluid_valve/block_vertical_open": {
+      "parent": "create:block/fluid_valve/block_vertical_open",
+      "source_sha256": "432d5ed275cba6a0aa9681d2b201d6b1e7dc250e5d55e55ff9f99e7c42a209d2"
+    },
+    "industrial_fluid_visual_01/steel/fluid_valve/block_horizontal_open": {
+      "parent": "create:block/fluid_valve/block_horizontal_open",
+      "source_sha256": "3b60f1e4288ae7356c67eaecad176f769bdb5e58758d9cb359d57f0bee5aedef"
+    },
+    "industrial_fluid_visual_01/steel/fluid_valve/item": {
+      "parent": "create:block/fluid_valve/item",
+      "source_sha256": "24f2d93739751945aa608362ef63fa1222677b2efe10044381f9de5d18cc2bd4"
+    },
+    "industrial_fluid_visual_01/steel/fluid_valve/pointer": {
+      "parent": "create:block/fluid_valve/pointer",
+      "source_sha256": "f797413f8ec0fd30ec50b016a7f1d67fc8f8362b76703c0a7cdd1340d19e779f"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_valve/block_vertical_open": {
+      "parent": "create:block/fluid_valve/block_vertical_open",
+      "source_sha256": "432d5ed275cba6a0aa9681d2b201d6b1e7dc250e5d55e55ff9f99e7c42a209d2"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_valve/block_horizontal_open": {
+      "parent": "create:block/fluid_valve/block_horizontal_open",
+      "source_sha256": "3b60f1e4288ae7356c67eaecad176f769bdb5e58758d9cb359d57f0bee5aedef"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_valve/item": {
+      "parent": "create:block/fluid_valve/item",
+      "source_sha256": "24f2d93739751945aa608362ef63fa1222677b2efe10044381f9de5d18cc2bd4"
+    },
+    "industrial_fluid_visual_01/ceramic/fluid_valve/pointer": {
+      "parent": "create:block/fluid_valve/pointer",
+      "source_sha256": "f797413f8ec0fd30ec50b016a7f1d67fc8f8362b76703c0a7cdd1340d19e779f"
+    }
+  },
+  "textures": {
+    "steel_pipes": {
+      "source": "assets/create/textures/block/pipes.png",
+      "source_sha256": "156af1248f7d364a1389015ad33be458c7e4b98afe9c32b0a311acf6385c650a",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_preserved": true
+    },
+    "ceramic_pipes": {
+      "source": "assets/create/textures/block/pipes.png",
+      "source_sha256": "156af1248f7d364a1389015ad33be458c7e4b98afe9c32b0a311acf6385c650a",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_preserved": true
+    },
+    "steel_pipes_connected": {
+      "source": "assets/create/textures/block/pipes_connected.png",
+      "source_sha256": "eae54f1610d0a80cbc094cc846142d980977208a382e749cbb08373be9895feb",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_preserved": true
+    },
+    "ceramic_pipes_connected": {
+      "source": "assets/create/textures/block/pipes_connected.png",
+      "source_sha256": "eae54f1610d0a80cbc094cc846142d980977208a382e749cbb08373be9895feb",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_preserved": true
+    },
+    "steel_pump": {
+      "source": "assets/create/textures/block/pump.png",
+      "source_sha256": "55588768db4f0f6d53cd0b3b1ec786af8ba2645dc9fc1fe8adb3e685a805a613",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_preserved": true
+    },
+    "steel_fluid_valve": {
+      "source": "assets/create/textures/block/fluid_valve.png",
+      "source_sha256": "30c3fd0cf949b561a039de90718d7eb87e494f03db61a2c1400a9fc4500a96db",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_preserved": true
+    },
+    "ceramic_fluid_valve": {
+      "source": "assets/create/textures/block/fluid_valve.png",
+      "source_sha256": "30c3fd0cf949b561a039de90718d7eb87e494f03db61a2c1400a9fc4500a96db",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_preserved": true
+    }
+  }
+}

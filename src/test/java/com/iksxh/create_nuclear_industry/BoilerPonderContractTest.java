@@ -151,12 +151,12 @@ class BoilerPonderContractTest {
                 actualBlocks.put(pos, id);
                 CompoundTag properties = palette.getCompound(state).getCompound("Properties");
                 assertPortLayout(scene, id, properties, pos);
-                if (id.equals("create:fluid_pipe")) {
+                if (id.equals("create:fluid_pipe") || id.equals("create_nuclear_industry:reinforced_fluid_pipe")) {
                     assertTrue(!(pos.get(0) >= 3 && pos.get(0) <= 9 && pos.get(1) >= 1 && pos.get(1) <= 5
                             && pos.get(2) >= 3 && pos.get(2) <= 9),
                             "外接管线不得穿入炉腔: " + scene + " " + pos);
                 }
-                if (id.equals("create:mechanical_pump")) {
+                if (id.equals("create:mechanical_pump") || id.equals("create_nuclear_industry:industrial_fluid_pump")) {
                     pumpPositions.add(pos);
                     if (pos.equals(List.of(4, 1, 1)) || pos.equals(List.of(8, 0, 1)))
                         assertEquals("south", properties.getString("facing"), "给水/热液泵须向锅炉送液: " + scene);

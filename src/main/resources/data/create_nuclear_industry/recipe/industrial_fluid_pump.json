@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "FMF",
+    "RSP"
+  ],
+  "key": {
+    "P": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    },
+    "R": {
+      "item": "create_nuclear_industry:seal_ring"
+    },
+    "F": {
+      "item": "create_nuclear_industry:pressure_fitting"
+    },
+    "S": {
+      "item": "create_nuclear_industry:industrial_sensor"
+    },
+    "M": {
+      "item": "create:mechanical_pump"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:industrial_fluid_pump",
+    "count": 1
+  }
+}

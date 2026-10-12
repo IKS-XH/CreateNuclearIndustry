@@ -66,7 +66,7 @@ class BoilerDualSteamInventoryTest {
         var s = state(4000, 3200, 8000, 8000); s.setMinimumPressure(.2);
         var d = s.settings();
         s.setSettings(new BoilerState.Settings(d.minDimension(), d.maxDimension(), d.waterCapacityPerCellMb(), d.steamCapacityPerCellMb(),
-                20000, d.pairHeatHuPerTick(), d.boilingTemperature(), d.supercriticalTemperature(), d.wallHeatCapacityHuPerWaterCell(),
+                20000, 20000, d.pairHeatHuPerTick(), d.boilingTemperature(), d.supercriticalTemperature(), d.wallHeatCapacityHuPerWaterCell(),
                 d.waterSpecificHeatHuPerMb(), d.steamSpecificHeatHuPerMb(), d.vaporizationLatentHeatHuPerMb(), d.supercriticalPressure(),
                 d.outputMinPressure(), d.valveOpenPressure(), d.valveClosePressure(), d.valveFlowPerSteamCellMbPerTick(),
                 d.idleWaterCoolingHuPerCellPerTick(), d.idleSteamCoolingHuPerCellPerTick()));
@@ -82,10 +82,11 @@ class BoilerDualSteamInventoryTest {
         assertEquals(256, s.drainSteam(SUPERCRITICAL, BlockPos.ZERO, 256, true, 9)); assertEquals(before, s.save());
         assertEquals(100, s.drainSteam(NORMAL, BlockPos.ZERO, 100, false, 9));
         var restored = new BoilerState(); restored.load(s.save());
-        assertEquals(156, restored.drainSteam(SUPERCRITICAL, BlockPos.ZERO, 256, false, 9));
+        assertEquals(3996, restored.drainSteam(SUPERCRITICAL, BlockPos.ZERO, 5000, false, 9));
+        assertEquals(0, restored.drainSteam(SUPERCRITICAL, BlockPos.ZERO, 1, false, 9));
         assertEquals(256, restored.drainSteam(SUPERCRITICAL, new BlockPos(1, 0, 0), 256, false, 9));
         assertEquals(3120, restored.steamHu(NORMAL), EPS);
-        assertEquals(8000 - 412, restored.steamHu(SUPERCRITICAL), EPS);
+        assertEquals(8000 - 4252, restored.steamHu(SUPERCRITICAL), EPS);
     }
     @Test void reheatAndCoolingShareTheirSingleRealHuBudget() {
         var s = state(1000, 800, 1000, 900); double before = s.totalHu();

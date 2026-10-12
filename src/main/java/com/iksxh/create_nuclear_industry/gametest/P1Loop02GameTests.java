@@ -94,14 +94,14 @@ public final class P1Loop02GameTests {
             require(helper, instrument.boundPortCount() == 12,
                     "端口重扫后出现重复绑定或遗漏绑定");
 
-            ReactorCoolantFluidHandler firstCold = ReactorCoolantFluidHandler.forPort(cold);
-            ReactorCoolantFluidHandler secondCold = ReactorCoolantFluidHandler.forPort(extraCold);
-            ReactorCoolantFluidHandler firstHot = ReactorCoolantFluidHandler.forPort(hot);
+            net.neoforged.neoforge.fluids.capability.IFluidHandler firstCold = ReactorCoolantFluidHandler.forPort(cold);
+            net.neoforged.neoforge.fluids.capability.IFluidHandler secondCold = ReactorCoolantFluidHandler.forPort(extraCold);
+            net.neoforged.neoforge.fluids.capability.IFluidHandler firstHot = ReactorCoolantFluidHandler.forPort(hot);
             require(helper, firstCold != null && secondCold != null && firstHot != null,
                     "已绑定冷/热端口未提供流体 capability");
-            require(helper, firstCold.owner() == instrument
-                            && secondCold.owner() == instrument
-                            && firstHot.owner() == instrument,
+            require(helper, cold.boundOwner() == instrument
+                            && extraCold.boundOwner() == instrument
+                            && hot.boundOwner() == instrument,
                     "多个端口没有共享同一个仪表端口状态所有者");
 
             int configuredLimit = Math.max(0, P1ServerConfig.VALUES.perPortFlowMbPerTick.get());

@@ -117,11 +117,13 @@ public final class ExtensionHeatExchangerLoopGameTests {
                         return;
                     }
                     IFluidHandler west = machine.fluidPort(Direction.WEST);
-                    int prefilled = west.fill(new FluidStack(
-                            ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1_000),
-                            IFluidHandler.FluidAction.EXECUTE);
-                    require(helper, prefilled == 1_000,
-                            "近满换热器热罐预置失败：" + prefilled + "/1000");
+                    require(helper, west.fill(new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1000), IFluidHandler.FluidAction.SIMULATE) == 0, "换热器公开热侧应禁运");
+                    if (machine.ledger().hot() < 1000) {
+                        IndustrialFluidNetworkGameTests.feed(helper, EXCHANGER, Direction.WEST, ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1000);
+                        return;
+                    }
+                    int prefilled = machine.ledger().hot();
+                    require(helper, prefilled == 1000, "有限专用源预填不是1000mB");
                     buildDirectedExchangerNetwork(helper);
                     initialTotal = SOURCE_MB + prefilled;
                     started = true;
@@ -138,7 +140,7 @@ public final class ExtensionHeatExchangerLoopGameTests {
                 long hot = machine.ledger().hot();
                 long cold = machine.ledger().cold();
                 long total = sourceAmount + hot + cold;
-                westPortFlowObserved |= pipeFlowActive(helper, new BlockPos(1, 2, 2), Direction.EAST);
+                westPortFlowObserved |= ((com.iksxh.create_nuclear_industry.industrial.IndustrialPumpBlockEntity)pump(helper)).actualFlow() > 0;
                 require(helper, pump(helper).getSpeed() == PUMP_RPM,
                         "定向换热器输入网络的 Create 泵未保持 256 rpm");
                 require(helper, total == initialTotal,
@@ -365,7 +367,7 @@ public final class ExtensionHeatExchangerLoopGameTests {
     /** 构造从换热器背面受液的真实 Create 管网。 */
     private static void buildDirectedExchangerNetwork(GameTestHelper helper) {
         helper.setBlock(SOURCE_TANK, AllBlocks.FLUID_TANK.get().defaultBlockState());
-        int loaded = fluidHandler(helper, SOURCE_TANK, Direction.NORTH).fill(
+        int loaded = ((com.simibubi.create.content.fluids.tank.FluidTankBlockEntity)helper.getBlockEntity(SOURCE_TANK)).getTankInventory().fill(
                 new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), SOURCE_MB),
                 IFluidHandler.FluidAction.EXECUTE);
         require(helper, loaded == SOURCE_MB,
@@ -376,16 +378,15 @@ public final class ExtensionHeatExchangerLoopGameTests {
                 new BlockPos(1, 2, 4), new BlockPos(1, 2, 3), new BlockPos(1, 2, 2),
                 new BlockPos(2, 2, 7)};
         for (BlockPos pipe : pipes) {
-            helper.setBlock(pipe, AllBlocks.FLUID_PIPE.getDefaultState());
+            helper.setBlock(pipe, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get().defaultBlockState());
         }
-        buildDriveTrain(helper);
-        sealAndAssertNoOpenPipeEnds(helper, pipes);
-        propagatePipes(helper, pipes);
+        buildDriveTrain(helper, true);
     }
 
     /** 安装北向机械泵和 Create 创造马达传动轴；转速 256 rpm，Create 单刻输送上限为 128 mB。 */
-    private static void buildDriveTrain(GameTestHelper helper) {
-        helper.setBlock(PUMP, AllBlocks.MECHANICAL_PUMP.get().defaultBlockState()
+    private static void buildDriveTrain(GameTestHelper helper) { buildDriveTrain(helper, false); }
+    private static void buildDriveTrain(GameTestHelper helper, boolean industrial) {
+        helper.setBlock(PUMP, (industrial ? com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.PUMP.get() : AllBlocks.MECHANICAL_PUMP.get()).defaultBlockState()
                 .setValue(PumpBlock.FACING, Direction.NORTH));
         helper.setBlock(COG, AllBlocks.COGWHEEL.get().defaultBlockState()
                 .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
@@ -587,10 +588,10 @@ public final class ExtensionHeatExchangerLoopGameTests {
         return (ReactorInstrumentPortBlockEntity) entity;
     }
 
-    private static PumpBlockEntity pump(GameTestHelper helper) {
+    private static com.simibubi.create.content.kinetics.base.KineticBlockEntity pump(GameTestHelper helper) {
         var entity = helper.getBlockEntity(PUMP);
-        require(helper, entity instanceof PumpBlockEntity, "找不到 Create 机械泵方块实体");
-        return (PumpBlockEntity) entity;
+        require(helper, entity instanceof PumpBlockEntity || entity instanceof com.iksxh.create_nuclear_industry.industrial.IndustrialPumpBlockEntity, "找不到真实管网泵方块实体");
+        return (com.simibubi.create.content.kinetics.base.KineticBlockEntity) entity;
     }
 
     private static ReactorStructureDefinition.LocalPosition local(BlockPos position) {

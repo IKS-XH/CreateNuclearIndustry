@@ -1,0 +1,3153 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/lu_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "north": "false",
+            "south": "true",
+            "up": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ru_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "north": "true",
+            "south": "false",
+            "up": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ld_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "north": "false",
+            "south": "true",
+            "up": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rd_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "north": "true",
+            "south": "false",
+            "up": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ud_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "north": "false",
+            "south": "false",
+            "up": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/u_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "north": "false",
+            "south": "false",
+            "up": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/d_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "north": "false",
+            "south": "false",
+            "up": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/lr_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "north": "true",
+            "south": "true",
+            "up": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/l_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "north": "false",
+            "south": "true",
+            "up": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/r_x"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "north": "true",
+            "south": "false",
+            "up": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/lu_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "true",
+            "north": "false",
+            "south": "true",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ru_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "false",
+            "north": "false",
+            "south": "true",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ld_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "true",
+            "north": "true",
+            "south": "false",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rd_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "false",
+            "north": "true",
+            "south": "false",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ud_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "false",
+            "north": "true",
+            "south": "true",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/u_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "false",
+            "north": "false",
+            "south": "true",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/d_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "false",
+            "north": "true",
+            "south": "false",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/lr_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "true",
+            "north": "false",
+            "south": "false",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/l_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "true",
+            "north": "false",
+            "south": "false",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/r_y"
+      },
+      "when": {
+        "AND": [
+          {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/lu_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "east": "true",
+            "up": "true",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ru_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "east": "false",
+            "up": "true",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ld_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "east": "true",
+            "up": "false",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rd_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "east": "false",
+            "up": "false",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/ud_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "east": "false",
+            "up": "true",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/u_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "east": "false",
+            "up": "true",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/d_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "true",
+            "east": "false",
+            "up": "false",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/lr_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "east": "true",
+            "up": "false",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/l_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "east": "true",
+            "up": "false",
+            "west": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/r_z"
+      },
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "east": "false",
+            "up": "false",
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "down": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/down"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "down": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim/down"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "up": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/up"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "up": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim/up"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/north"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim/north"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "south": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/south"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "south": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim/south"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/west"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "west": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim/west"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "east": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim_connector/east"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "east": "true"
+          },
+          {
+            "OR": [
+              {
+                "down": "true",
+                "north": "true"
+              },
+              {
+                "down": "true",
+                "south": "true"
+              },
+              {
+                "down": "true",
+                "west": "true"
+              },
+              {
+                "down": "true",
+                "east": "true"
+              },
+              {
+                "up": "true",
+                "north": "true"
+              },
+              {
+                "up": "true",
+                "south": "true"
+              },
+              {
+                "up": "true",
+                "west": "true"
+              },
+              {
+                "up": "true",
+                "east": "true"
+              },
+              {
+                "north": "true",
+                "west": "true"
+              },
+              {
+                "north": "true",
+                "east": "true"
+              },
+              {
+                "south": "true",
+                "west": "true"
+              },
+              {
+                "south": "true",
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/rim/east"
+      }
+    },
+    {
+      "when": {
+        "down": "false",
+        "up": "false",
+        "north": "false",
+        "south": "false",
+        "west": "false",
+        "east": "false"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/item"
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "up": "false",
+            "north": "false",
+            "south": "false"
+          },
+          {
+            "OR": [
+              {
+                "west": "true"
+              },
+              {
+                "east": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/item",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "north": "false",
+            "south": "false",
+            "west": "false",
+            "east": "false"
+          },
+          {
+            "OR": [
+              {
+                "down": "true"
+              },
+              {
+                "up": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/item",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "AND": [
+          {
+            "down": "false",
+            "up": "false",
+            "west": "false",
+            "east": "false"
+          },
+          {
+            "OR": [
+              {
+                "north": "true"
+              },
+              {
+                "south": "true"
+              }
+            ]
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/item"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "false",
+            "west": "false",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "false",
+            "south": "true",
+            "west": "false",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "false",
+            "north": "true",
+            "south": "true",
+            "west": "false",
+            "east": "false"
+          },
+          {
+            "down": "false",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "false",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "false",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "false",
+            "south": "false",
+            "west": "true",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "false",
+            "west": "true",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "false",
+            "south": "true",
+            "west": "true",
+            "east": "false"
+          },
+          {
+            "down": "false",
+            "up": "false",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "false",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "false"
+          },
+          {
+            "down": "false",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "false"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "false",
+            "south": "false",
+            "west": "false",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "false",
+            "west": "false",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "false",
+            "south": "true",
+            "west": "false",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "false",
+            "north": "true",
+            "south": "true",
+            "west": "false",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "false",
+            "north": "true",
+            "south": "true",
+            "west": "false",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "false",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "false",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "false",
+            "north": "false",
+            "south": "false",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "true",
+            "north": "false",
+            "south": "false",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "false",
+            "south": "false",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "false",
+            "north": "true",
+            "south": "false",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "false",
+            "north": "true",
+            "south": "false",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "true",
+            "north": "true",
+            "south": "false",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "false",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "false",
+            "north": "false",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "false",
+            "north": "false",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "true",
+            "north": "false",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "false",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "false",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "false",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "false",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          },
+          {
+            "down": "true",
+            "up": "true",
+            "north": "true",
+            "south": "true",
+            "west": "true",
+            "east": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/steel/fluid_pipe/casing"
+      }
+    }
+  ]
+}

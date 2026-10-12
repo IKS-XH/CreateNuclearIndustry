@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "PMP",
+    " T "
+  ],
+  "key": {
+    "S": {
+      "item": "create_nuclear_industry:industrial_sensor"
+    },
+    "P": {
+      "item": "create_nuclear_industry:reinforced_steel_plate"
+    },
+    "M": {
+      "item": "create:fluid_valve"
+    },
+    "T": {
+      "item": "create_nuclear_industry:reinforced_fluid_pipe"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:reinforced_fluid_valve",
+    "count": 1
+  }
+}

@@ -1,0 +1,1932 @@
+{
+  "task": "ART-TURBINE-07B",
+  "stage": "已安装试用版（阶段一候选映射基线）",
+  "formal_targets": {
+    "mtl": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_07.mtl",
+    "panel_png": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine/turbine_casing_07_panel.png",
+    "endcap_png": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine/turbine_casing_07_endcap.png"
+  },
+  "materials": {
+    "casing": "turbine_casing_07_panel.png",
+    "endcap": "turbine_casing_07_endcap.png",
+    "inside": "原turbine_casing_panel.png",
+    "edge": "原turbine_casing_panel.png"
+  },
+  "uv": {
+    "formed_side_u": "标准局部Z原值，逐顶点保留0..1真实位置与front/rear裁切",
+    "formed_side_v": "按d与外法线分组的完整截面切向边界，邻接裁切格UV连续",
+    "formed_endcap": "局部XY加格偏移，归一化到完整d3/d5/d7截面",
+    "unformed": "六向按旧生成器预烘焙旋转逆映射回up基准后应用",
+    "invariants": "仅替换mtllib及casing/endcap所用vt；保留v/vn/f/usemtl/o"
+  },
+  "obj_targets": [
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x-1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x-1_y-1.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 50,
+      "sha256_source": "09853bc86d0df7120b9025bf8130284521392411388bb7b68a88c5cb6eff7cc9",
+      "sha256_candidate": "f042719b8b43dec819a740b84f9818628d37c2a07650c7942bd3d77f65bc6ee7"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x-1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x-1_y0.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "15f58d5bcd2991dec5609889f25f352aae249fce1094572bb4d79cd8bf716790",
+      "sha256_candidate": "08824df8b2c495949bd4dcf4c0671ccaf6a90d198ab553575a33d1ea4cedd29e"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x-1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x-1_y1.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 50,
+      "sha256_source": "6f061b7e289161cc7dcf71580c4ec6cf55491590094815e55855f7ba0c5e38bf",
+      "sha256_candidate": "107200dcc8be501719e1e16f68cd9744bf5796f547457c52260e87643968c123"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x0_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x0_y-1.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "813ce1d49a622ce716fc2dc2c2830030c7de293ee172b698c92d8a17dc05a633",
+      "sha256_candidate": "c3d3085212b041342d913ede006198787e79271fd612685ef737549685c90817"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x0_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x0_y0.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "20949b847efecae01c83c1010129f9ab88a007637f6ad8111b132ba50c18c4af",
+      "sha256_candidate": "e64c88cc56b7ff3a12a84f554de19f21008057f7129ec5391b2166ead7fdecd2"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x0_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x0_y1.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "48ba6dd34a1ebe5002b2c826f48c28b78e0a8a4c8f6491e0fca0b6bc5e6df9f4",
+      "sha256_candidate": "29f3af8a16dece77958b001cad01092943009bf116c7397d453f64921ce7894f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x1_y-1.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 50,
+      "sha256_source": "4a4700fb58556099df1eb0f1c4071e330c016693531b65b5b3910b94c8c69b93",
+      "sha256_candidate": "b9915727ffa0d418112c51f0b4a9707617859fff782a91ed10f64b5d7486ea4e"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x1_y0.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "05e258f8ce418bfcfa0f306e9663fc148c4e23a18013c24c35f75058c3f03867",
+      "sha256_candidate": "6b19a601b2d26eb6fc9bbdea2d972fd757e96c1df9990a487252977a2a6d74ee"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_front_x1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_front_x1_y1.obj",
+      "diameter": 3,
+      "segment": "front",
+      "changed_vt": 50,
+      "sha256_source": "24a8927920b3c1535e0e2e1e8dd068c65f43ec2ff2d8a1d5bbdc2ebc6406ce70",
+      "sha256_candidate": "560e6f87cf00ebb4e7e919325fce8debbb08777c6d1a12da03273aa3010f207c"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x-1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x-1_y-1.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 12,
+      "sha256_source": "5bac114e7bef357b7353cddf2984aba9d017f221b96638f2a24a782f1628f309",
+      "sha256_candidate": "8eb8d1e5a1d0f54e15242491ce0162c1905d7488f3657ec5d6d93b43fc4937ac"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x-1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x-1_y0.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "5314a34d927dfafc1726396c799b9736a689525b29204304157e6f51107ed225",
+      "sha256_candidate": "d9c7645b5e95da92c1172c69f3f473c7690e65e972bd387ce9f2b1bc68b93e55"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x-1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x-1_y1.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 12,
+      "sha256_source": "1f42824d2329681e83096835ce6c9c62cca37940e49e36f86c9ccd8c7e9dd370",
+      "sha256_candidate": "a3395bf61b66996f6f91af2f4ffea56591cdb37bfdf78d24008b62fa3b8e0b0d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x0_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x0_y-1.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "3ca3a11e70caeb8d34027025e55cca23ce51dd804635b1ae4dac449697c6f226",
+      "sha256_candidate": "2db134d3e8d95493aedbe842dd9349754fea2d5ed418b7d70a23639a10c8aed5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x0_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x0_y1.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "c37801253312fa532a0e40b30c79a4627a9207e64a661b22e27b4d4a718f8900",
+      "sha256_candidate": "98f9825fc65cc76b74390f84814e0c0c58fce5cb1e7822b42392e04240b16c4e"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x1_y-1.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 12,
+      "sha256_source": "4c0c55a70b5d37e31da0e198d0b7d99dbd3974bb9ec42dad639e03c5c3351b28",
+      "sha256_candidate": "6c475fcf5765b008ea9efa6c47bb0b518eaf4820cdfe3f9c802d9ea4decd465e"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x1_y0.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "e32c2e92ecfb62b06a9446b24f25d837074d46953e8d4dfe1c53114b12ec2b25",
+      "sha256_candidate": "acb6e064d12cf2ac6ac6ee2530d1dff17c3217a2332ba5a5e252c691fff0925b"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_middle_x1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_middle_x1_y1.obj",
+      "diameter": 3,
+      "segment": "middle",
+      "changed_vt": 12,
+      "sha256_source": "46a8421bbb37beba847f9582754fa7b69bebe5409448fc981ba2c1d2d6f6d26d",
+      "sha256_candidate": "afe467ef067002e7b274a80957abc0a8cbc7b2d6d0dc1299874494f4379b2abf"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x-1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x-1_y-1.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 50,
+      "sha256_source": "44e99aeb390533b2045209757660cbffa23b07a157e75281e5bc330d6cf1c7ad",
+      "sha256_candidate": "3ea04bef17e7a8467924a728118a56a4049fc352f132caeb58d3e7944e612e20"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x-1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x-1_y0.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "864bc25d520771dbd1f05860d112cdaba237564eb189e20559a6509dfdfb4e2a",
+      "sha256_candidate": "0880195c4e30026d3167a824232125cc6da0c11ad3af2c6af8fcc959a6e36c44"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x-1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x-1_y1.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 50,
+      "sha256_source": "8169d45f16a9793b649730c89b719868e19d9f11a0aac3e5acab88dd78d2deed",
+      "sha256_candidate": "f5af247d37f449d91c2a0242b826d4805e797a993c16adc19738bd79aca3a058"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x0_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x0_y-1.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "beaccad78722d73a7103616f3797c312a3ab730a1ddd90989413818e026ab51a",
+      "sha256_candidate": "8b68436388c5dcbae77199d69eea34ae33ecf54d45d63cd1121c150aeb5d86d5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x0_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x0_y0.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "12d379b76a4c491fe7e315fb904c3183e1dc1e925e9e1391b935c3fd28f5a1d2",
+      "sha256_candidate": "0a75568b0bab0e0827a4315f86cc16677b3a271dbefe65516779190cb5a141da"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x0_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x0_y1.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "dc25d9c876a974a46b9a5ebaa419a2b38d17dda15ee073c2f5026497a73ba40a",
+      "sha256_candidate": "6c367abef77c816f054f50e9503e05a385584fb57309e6db7f072e6f57a3c9b6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x1_y-1.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 50,
+      "sha256_source": "61592c4cedae1d7a12e179d9b62ee79295e87a058ec06140bbb51ecf2461a362",
+      "sha256_candidate": "da6c33728cbe73cf8baa7b23c66ea963f8117a9a0401e842adc4c3c9ca8f2fa9"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x1_y0.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "02c1086fd892c5a548922c1d29b7d49d98c29840dca74f16761ed43495363d6c",
+      "sha256_candidate": "0fd9e00465004adf2de0d9d33d15b63c12149ce25d0f7a527890f8cfb94bcab9"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d3_rear_x1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d3_rear_x1_y1.obj",
+      "diameter": 3,
+      "segment": "rear",
+      "changed_vt": 50,
+      "sha256_source": "dd23577d3befd003428b355503626563e78a86af7dea88ee874a81e14984f5da",
+      "sha256_candidate": "539320b02a9b66d0431030d69687a8ea419ae97f3e3bde53a768ab9d908ca708"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-1_y-1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "ae6eea8d6e08a0e3ff1c6bb5761a958eb95756578d177911eccd464b4ffe1bc3",
+      "sha256_candidate": "272d0c18d05dd66c62b2ce2f2c830e4fb00b7f7d0eb7760a6a884c8fef0bcff3"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-1_y-2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "f6eba4f3c08475a94822ad532760ce9dd6455d40be8676eb17782a79744a8c4a",
+      "sha256_candidate": "e3da35a764c6bda4b25654ab7ee673e629a704ab3dc42bbedd8dece5e8f75860"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-1_y0.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "2691c6f8ac8b550294e53d9bdc685ff999db6e7aa158b94b3c75b48803b32c7c",
+      "sha256_candidate": "cca7029026f514fedc5b422ebda97461c5792c7a6ce69bc6d328f3ba94aadb09"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-1_y1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "49848c9ae96169f4c1b30fc1fc1741c48342c3de7145e6fd8cf5936c6a9ad19d",
+      "sha256_candidate": "8b580cf3954efc38eff491ce93414d32ccb562e51044e814c8ca40aa7c978981"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-1_y2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "b67e8cd6657ae551ea1584cb399256dba96cd91399c0e600b2662d66e7ac433c",
+      "sha256_candidate": "2a6673143382a1023e6ab89784ecf6a9f885b7399bd876373cf3ffbf79f9943f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-2_y-1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "e64d680df53a1462d859487e377f2535043e51854787ca3f5ba01e50f19ed4ab",
+      "sha256_candidate": "96ad9f01475d549cf7a1be5a67d8c06f657cd5d864d8f2c548deb0d7b735b8eb"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-2_y-2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "688d96faf45894e21c648d66e0ab134e784d9b2acd4322cbd83d59615b0df795",
+      "sha256_candidate": "e3f25f713ba48c442e720954ab858bfe1ee488ffed82470b18817eef45d1b947"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-2_y0.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "959b541449ac0fd3eaa6f45e73a50ee93e324e9a91c329638e1cab1ded39a2cd",
+      "sha256_candidate": "8673d3ffb70d8237f62a39fbf5b576d5bda1c1e611e066ed518cb22ac72655cb"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-2_y1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "a12daa0dd934d23ebc8ee34ec70f60c50890b44d74375be9772e0afaccc7a418",
+      "sha256_candidate": "7b45621919a57ea49be95a57852344c1ed2bd4bd3711a6811cbe15b837f9f218"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x-2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x-2_y2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "a17e7fbcf60a359abbb7482fcb6065fc81d7f73011dc9db1140f4e9f3514e313",
+      "sha256_candidate": "ffc73b21e01fb670adf3f22cdb66e3f8922c3edca9f02f24e81214dab3c419df"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x0_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x0_y-1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "05b205c662fe4c91ef8cff28a757ce4d41f3926e375e37a8273768c5152d9e3c",
+      "sha256_candidate": "104cbfefec7f15543bfdfa793b31b53be690299d4fb15298620f6d48ca24e104"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x0_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x0_y-2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "6c0c474ac1a31cb5b9a23fe71b15be6ed5ea1caff640644100fc32b406d4e8f2",
+      "sha256_candidate": "da8ffcecdedeb6cca961983a07f431e46fe593d1660229c7de8293776d9a80a2"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x0_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x0_y0.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "9db37d86b6883729e851f210ca407a1aab8938eb6316505b3daf47a7def5ef81",
+      "sha256_candidate": "48b64f0f8e8d147e246f35d5be3a0a10bae1df25abc5669986144e8936a56c0b"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x0_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x0_y1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "dfab781d13ada6a644c0bde8d6bda77def22faeae28030f9e216cc341904c166",
+      "sha256_candidate": "d1e9516aefd87418444c12ef66aa00a92c7e9cdb23c4f4b318596fd451f260f7"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x0_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x0_y2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "13c05b3a9c7a8ea0df5f0593317059e71b60cf8a4460a82d676b04be74caa481",
+      "sha256_candidate": "e1fc9e6221b2e749a8dcad52563ae19fa01812ec332f1e47e3ef6ae4742b8af6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x1_y-1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "eb94d79ebe10a83ae5afd7deb7474e737b9f42abbbbb9cc723d5e7935332cc77",
+      "sha256_candidate": "312cc06e55234c724bb0d9876037607ee1caa52eb03a1b7f4b4e5204f47322da"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x1_y-2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "1bfca48900c1da022e5d7d79919d988fbbbf4bc7120e12281bdbcaeee72f9508",
+      "sha256_candidate": "6217f1b9827de877997d6e18e00c4cef364f17cea5da9d832ed5bebb354460c0"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x1_y0.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "571e5f0ebd359f315ebdc0e32583d3f3d6781d6cd32e294d9fa67778e0ce9fdf",
+      "sha256_candidate": "9570bf9f0dc867d6fbc7d0a65e75e7427f5c65b361a87314f9160c0d2053d6ef"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x1_y1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "e36b12ac51729f1cdfd961361aedaed20311d39444fca91b5fd8e457f387a664",
+      "sha256_candidate": "2d56f5e29eb7a244f61ce593f3a0148e565d6d7908cd3e0586ededcea9e15e51"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x1_y2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "fa86a0b35455b3eed68cf659d3ccdeeca0e77f6a39d0ca9b7431d7376b29321f",
+      "sha256_candidate": "f773ffdd1eccb1bd6c83dddb1806efb404e658670619394093e11a7467975f53"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x2_y-1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "c852704aa14c3c45c820c4a2b34caad4aad7ad7012bc111e8ed460b1d9451570",
+      "sha256_candidate": "9a5fe3ef7efaaceefc65ba7a789fbdc0747dcd725161e5faa2e4fcae6b5e7fad"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x2_y-2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "92e2a30c03bac1fe02f0dd7e4016c5e112ef01798fc071ef6cb9e8dba6ab7041",
+      "sha256_candidate": "fdc1210c457fbf4a080b82a8faa5451d7e26beec1bb412ed03f52aa704b58522"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x2_y0.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "bdb74d7dcaeaec7f8a514a5c97ea700be8da819ea6ee95120da9d87b3d28f338",
+      "sha256_candidate": "aa4f5198df0f0bb726befff7f0c382de97b0dc6258b45e17ac2bd360bdebc8df"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x2_y1.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "a95b2f03c025e85a9a3534c3a8902fa6bfd678d4454c437b652ff8f52e4a3ee4",
+      "sha256_candidate": "1f822756c1cee66f09293be8874043c3240a5b631d2f4026418f2393e25801f3"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_front_x2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_front_x2_y2.obj",
+      "diameter": 5,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "89badbdfe7cd1b1fe8e6c0e16a5d75c4a87087cc3e0427df14949223558614f9",
+      "sha256_candidate": "52be7e7548ce6c0a0b47426d65ad23d78449bba699295ce2690f1e21cda00298"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x-1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x-1_y-2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "3af11f8e24d276bd02c96ceb8e90ff796143c09932618782caca7357860e65c3",
+      "sha256_candidate": "5787da1c58de6aebc21948d24d4f976c620be4ef8e063681c59251d175eeaedc"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x-1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x-1_y2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "d17443ad0b28b4137d1d27c74d1860f2dcdea540b01c10f5d12648d032218f1f",
+      "sha256_candidate": "6cb00a6d827cf3ee96ad7868783c173bffeabaf97e9709f4f7a4111c5e2d8e20"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x-2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x-2_y-1.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "06e5b3557f88aca643f6c0c91b58453837832de2fcd596eb20f371d44e94d2bd",
+      "sha256_candidate": "779413b3bd9dbbe71edfab3c27d4aafff22d0eccda4aa24f3d7cedeb72c98bea"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x-2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x-2_y-2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "8f7e685084e45867bc4b70a11c172f34c374decb0cae753df43049308f890049",
+      "sha256_candidate": "3658f9554db2b7088892edf6f849bd9c2a3a134054d1c0bd06cad461b9494c6d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x-2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x-2_y0.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "615be0f55aee8c97393b3303748b334663fd4bc0b517f92bc82b467ba670e959",
+      "sha256_candidate": "6f3afe7fef7720a3207e5ee415df1554e9ecf1c2093096db083cef24d47415a1"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x-2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x-2_y1.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "832a00c455f3351a092debddaed78898a107635acb254de9d1fbed71c47780ac",
+      "sha256_candidate": "5bdce151e41f49e58464bfbf68bc746971a3d661c1cc0a39490c23654bc4a77d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x-2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x-2_y2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "88d0df1c598d42eb78d045f896ae51c0d0c4b075d99562c36b3c9580cb185c51",
+      "sha256_candidate": "54fc85c02c95121b095ad0a23d78189eb535ec1a085dfc15bee194a29020d66d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x0_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x0_y-2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "761272be0b9ce26a274bf14a55b093a19500fa9b9d721ad37cebee5d55489305",
+      "sha256_candidate": "f3638706d2e40dc34cf9244429b0caf27cffbe1e0159d13d49a247e6a64a8404"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x0_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x0_y2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "07269b8410c2690a2d8b98d6cee50537237ed87a6b749ed9eea4eb93ea963b80",
+      "sha256_candidate": "16a2358bf89700e8579a523d26b6e47aa2691341808bcac44c72be553f570e6f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x1_y-2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "f2bc6e6402c6295bd367ad1e315395d680f11c091495c04861bbe5e609091c7d",
+      "sha256_candidate": "61f94a14d1f45397be259f2948eb9106de4c337de25ed07044d095021c79bfa5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x1_y2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "954d44f0ec5d8c379940f31c07c623f9ab5078e845f2a365a35e73e888e66049",
+      "sha256_candidate": "9be26d6f429f8609cefbe8298c597d96c7fdad8ef206bd4badfe8e734f16f562"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x2_y-1.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "315ca03625b811e9df0966f08ba10d718f29f826b2f84afdfae44b6a3326a8ea",
+      "sha256_candidate": "d740862fde87525abf46a66d2fb506abdce9cc270706c597538c8193d75761c6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x2_y-2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "411d6c9dd200adacf71de37e00c980ad5d7a3bf1cef75da25d9e263a2e8275cf",
+      "sha256_candidate": "ff07f6084ebd34b44dd6c5c9834f18baa9bcdcbe6df47effa4e44fb5d24ed7a5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x2_y0.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "860b349c6270c06c6551a6c6513990d8e99347618778445be88927224254bcea",
+      "sha256_candidate": "4fb0282ccb1aef394a4bcf3b937da516e61a215bdacf6560069be402ab729230"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x2_y1.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "d77b965cdbd6d04371659eef9717d345edc0cb8f92752b39c900d92b01ad4053",
+      "sha256_candidate": "4509a997164ecad078a7279233628fb3efe2623f4903b5762419afd231667120"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_middle_x2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_middle_x2_y2.obj",
+      "diameter": 5,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "8b988072457321993fcb815e6891ecd4ac1a1d7d8ed5da4d91a1eec71fd5d969",
+      "sha256_candidate": "9f823f3544c342b7bb15289a40ba2c8b8d23d5ab8a06b880f272f029beba22d8"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-1_y-1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "074fa0cd566a973fb2addb2ec5bfc7cf57757f73972acf6692f36b9bf377ef13",
+      "sha256_candidate": "cac2b63ed0d32f33e3066de298ca352dcae6653016cc2e510e29d20ea44d5ea2"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-1_y-2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "06e12926bc11120ea066a6f6ffbd1fe758da96416518f68d7e42b0fffb5454be",
+      "sha256_candidate": "78f33162f9ca3c45263e6d3a380d00e7ab95e032063ce98afecc7eb540b23dd5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-1_y0.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "5874823d84da0637c27b4ff9bba2ead4660eb07711274f85c3f048ae2ce941d6",
+      "sha256_candidate": "3acb14444eb8bd81df7f1ead959ad3f4b012d3fae0e50079b190d008817cfcde"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-1_y1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "c79845ab0615cad59296912e1a0a754eb9e8db9dc8bead08c4375fcb51086b6b",
+      "sha256_candidate": "b1c47c51ab1556e3418ba4e55886c2c7139d5433562b49c1a434e349af8e7a29"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-1_y2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "83f31f327dca3046a95c56ba7cdf224513a83d2867569cbd221b993ba98be219",
+      "sha256_candidate": "887f31c770b025bf878a09531325181b36f8d9c2ea5c402fb8abddf8f49e9db6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-2_y-1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "c863c1ce38fd24a4e4a69e36646959aac0cd8c207f9030bd34a6a0fd6fcfa902",
+      "sha256_candidate": "1bcc5943fb04292d269ee7572f36b8140831f6fd0f77f0fffac52e13441c423a"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-2_y-2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "39fead13252451b5ce0c40ce8771265dde38e1476af9e958a51d61927f8b7e9f",
+      "sha256_candidate": "2805285648fd1cbffa3a280207b4fd27c71a7ebbe6838ca2c5651afba307c987"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-2_y0.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "d91afcc52bd4fb2b8b52d88923bb4e7de9fa3d4c67a4ad0dfb18ce19b78f96fc",
+      "sha256_candidate": "3f535da7ba99e0be696224352f9e8ddf274359229ea3a2aa52cb9b90fcde8966"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-2_y1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "253e9dbd855334ea6a884b8786bec4fc6d6abaebbb01d32decd41e0887ace5be",
+      "sha256_candidate": "037c738746e7465f5817f5384b1a934b7106f6e4625755041ad5197676540574"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x-2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x-2_y2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "30f601ccc7bac55091a5c284d66aaecf7d215999d850700d5539d0bb27fe2755",
+      "sha256_candidate": "927b17f632dfdb3cbcc73557dbac9d0aa1d6a6b84d6cd960fad39838a9b2eb80"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x0_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x0_y-1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "c403898e96b969bd85a7db0de7ec952bdc7c139ad0241c8b41defa499e934016",
+      "sha256_candidate": "76167a415b96490f882b8c025a4bfd802585b80418dc2ddbf75abcc67c4ca7dc"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x0_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x0_y-2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "9edda771690f8846b5a7c2b1525d1eac095eaef5079a79241af4a162223d01a5",
+      "sha256_candidate": "d3c2876853a29860b0b704fbe117da1e449e0b52a9c66c90185eb32e35487c6e"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x0_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x0_y0.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "356a10aeac8825228669cfbb82d632e8e917b66948a94dbe905292a7b56cd0a1",
+      "sha256_candidate": "379553454cb7fc1b34ae2c2bc272dde7cf6c5076903bcb0497672f2ede50771f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x0_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x0_y1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "d1df30696274ccae260f9f8c4d78fa014b733a760855fb6061f79e147e9bb5ec",
+      "sha256_candidate": "f951a8f3d00531586ca5e490b2ce526a4d5a87ef5af5ef975368c8b6e9c7991a"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x0_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x0_y2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "9cc956ebfdf5fb2b0fb76e588cde9392088a930d5c912b0c46e954960c05a9e3",
+      "sha256_candidate": "03f4de240d8907373ef14e10ceeea79ea10d6c18d7658418eea92072f5a30eb5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x1_y-1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "7dc2554e1b3153922ac0db27ff96546d23891805d62109e64576497e372fcb45",
+      "sha256_candidate": "d9ca1afc671a01caf6ea7298b1e2aa836bfc2451e80f827381b5915842c9864d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x1_y-2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "362adf718567e5ac829c251bd26c300d0aa3cf4fe8900e3c35f3751acc35ac19",
+      "sha256_candidate": "a0931b2c1c04233587ade88495c5b3cc4dd485020a64d633a4295941ca4ee4c7"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x1_y0.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "cb82a2595145ae4a789f6a35342208c7bc81bc905709cc2edcf28726d0186232",
+      "sha256_candidate": "9ebf4b832bcf93010430df8256a4ca3a5673229299ee1d760415d02e34693941"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x1_y1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "1c9239f5153000287f685d90adb86ddf1f7fb078c051242d3723122716bd2885",
+      "sha256_candidate": "93425202998fdd563231592bb1b2e8df523d5f11456aa0e5778fab07b227819a"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x1_y2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "07d0e87f2d53f627707e41b6d9cef0187d6c7704eb202084ed3dca3d415adb3b",
+      "sha256_candidate": "0df4966e71ee1332b2c3fae82635833b91c0003f5e6c99e9ccb1a979dad61ddd"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x2_y-1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "447e4e7f6ffe46358556697b66c6d2d120d109ea896a613c6d42d1fe6e86c9a7",
+      "sha256_candidate": "b0caaf4119b8e92fb14a38a44da16eab2593fa2e62513cb4cf6121f16c3e6588"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x2_y-2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "954ebbb0adb34a6a5591e3ffbb412fa088ea6440d5c4609a2a436c8dc46b75cf",
+      "sha256_candidate": "f8497d72106a11fd1924f409ce1973078729e8345534fede493713387733475f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x2_y0.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "e9a9c3cde9948e3e40a0445197c358e1deb8b8ae2da2126c7b5d44dfc766854b",
+      "sha256_candidate": "786c829d294cd0713f7f4621bc5e48d86d15be302667d58c1d2e769391afeace"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x2_y1.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "0b47292087e9efa701809fc1e8a882d48297d529cf5626c04bf2fcb0960a7a81",
+      "sha256_candidate": "d1684107941b644bbb3eca021c07a593af7da7d109e20945548461fc58914dd9"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d5_rear_x2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d5_rear_x2_y2.obj",
+      "diameter": 5,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "0379d398c5ef3e10afe7450621ac5d5528b02abdb3be48f6f3b883ac2238a630",
+      "sha256_candidate": "521420d1b47f89bedd8adb66f5897a8273833deaf5f3b8ef12f8d1bbb47d89b1"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-1_y-1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "3aff6a318975e907992827d1611e91cb3d8746563034f8fdea85a515587ce3c2",
+      "sha256_candidate": "a6e414bb232059ab3639fd33254c4f4704182eb2f79588233f29c5a2579447d8"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-1_y-2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "abc64701a2e7a868640387b62f0e8ea5f2ce30096099b38d00e257c857b10963",
+      "sha256_candidate": "fda227ef74f0afdbfd06d0fcf9bb2be4a857dd3586ec39c624e237e16238bdbf"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-1_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-1_y-3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "3e87eb8826da66a36c143a6dc8a637b2acf550bf77745cadb4167d9e6c0c1472",
+      "sha256_candidate": "51ba788223348a6829a2fa66958c0e3be79bba1c6a9b2b4952a8f4de588ad13b"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-1_y0.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "9ce29a9e506177941167505a0ac7e7a229005fcd3cb4b0d73c592929481f63e1",
+      "sha256_candidate": "9c736598299c7f440198a799a3a8619c2218244f364073e1a55bc296c55a0d08"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-1_y1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "6b97ede571172625ce827f010f08eb7bfc1ae6bc9d46484762ec28553f23c5cd",
+      "sha256_candidate": "71c8791780c2de6a1a3e5f2bd68b6002ecf215d89b7b00727a7aa87039a12289"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-1_y2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "d6f3ccac7b3171080b75841567613b9ff9ef42a91f47c0a4ed1c6ec62a90bced",
+      "sha256_candidate": "fb5f4fb892cd6d10366020c93ff3a6403e170d7033aa375e71083e7026524aa9"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-1_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-1_y3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "53bb9af2d6215b64a9b9d091b5b9e84c5ac754283c079ac8a46a7b9b1dd32a78",
+      "sha256_candidate": "f28f64c92c54a55d6fa9ec47cbf353a7ce1953d62ee98d411e86c3ed40e6dd52"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-2_y-1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "485f464d981b0cb935275642433ea04256446ffc4dc8015d07ba0130aa523d79",
+      "sha256_candidate": "dd9ca3acf6cd843d6e40637edbe0fe740a6203f9f81d1f5af194879c4f21e5ac"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-2_y-2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 42,
+      "sha256_source": "c8695981d49e5ffec4aa56246ee8ad7e463cf734a1b0e7d66f393bb3bbea46f6",
+      "sha256_candidate": "68e0607f81e4b07914d1023d61b126757630d45bab6c25a333ba51ebc927942d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-2_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-2_y-3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "a65c537913b3f780d1d7a17f9c9b77d322577a79cd2810d0210565541218b660",
+      "sha256_candidate": "a5f6b9790b4cb2fc10a38bdf86192c5bcb10fd3117de29d6039c890574fd6dc8"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-2_y0.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "67cf433ac4edbfe2300836e5f2dc27a95b4eea270112980399d005bd6e8705bc",
+      "sha256_candidate": "2b0969175d0e69e4349c0b63f371b127d16e5eb0b40dc95796936d1f89b8b149"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-2_y1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "f54e9a0f3022ccbbb1787ac0a906223380ae8d9ef866da8d33f661501c433265",
+      "sha256_candidate": "5dc8e808c4c70342bc004ec8ddd9eb120e3ac690eb8021c2027eb117317cb6b5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-2_y2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 42,
+      "sha256_source": "80b989e9d6956136c91aa626960f00bd6513e09ad6c2082a71a5edaf893cfc66",
+      "sha256_candidate": "0b1437c2aeec77e107a9e9771421504e0915e0e2b5c36023817813ff13b56795"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-2_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-2_y3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "a5adee67fd45594742c71b92545c47195a7a028a90fd9cde4bcfa6f677de34ca",
+      "sha256_candidate": "4d6a54b6788abfa64b1690fbbe328c024ab29e7f9663962279b58b8b8d3c8f0f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-3_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-3_y-1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "1bcf84cc8e2e695c8f24cce90a9cfd64b41ad9b4ed8603e49c98ebf00363e668",
+      "sha256_candidate": "c4fac8cabd7fc89500e0cf118070c65a1ca6399607dc4fa84cacc83b75508a49"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-3_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-3_y-2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "b751cbd9e416a6e6adf9732a3a0abd62e4d7ac31efecead4acf53046c4fea803",
+      "sha256_candidate": "64f87d9419e2d5d98d7c6bf63f93ea91fbaee98c16326c0e6bcd7169a3e80932"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-3_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-3_y0.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "70aab8e0e689860582ec74df7a0e0261fb552886191ecc1d34b2d675210f4eb9",
+      "sha256_candidate": "883462fecacafdb2dfaa1fb25cd9561a8291721623690afdaa2085785baee8b5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-3_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-3_y1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "8d97890d1ed440e881e4bb8ab32b009e55d467e0c664e7d2cb997c811a534050",
+      "sha256_candidate": "ccd4f84b998e8955a2a016f92f596b7fa05b21d268b5e1372da186baf3f573ef"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x-3_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x-3_y2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "a75554a55a9568370642f50e37a444dced17d30ca5d76ad5eb0a05d48b446774",
+      "sha256_candidate": "3220000307766ffe1998b51eb361e24f32205bb27904a0f27a8b42aff87f20f7"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x0_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x0_y-1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "8d3bc6804a2d789fba9c1c90e363854cbee5f998e2502d79cf9df27c467ee423",
+      "sha256_candidate": "a4c2c7fa8fc69ca6caef76499e97e62860bd93997eedb6b791668df432597375"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x0_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x0_y-2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "7414bb4aa9963394c0823c75158f716ee12eb3045cb72942d41111b2cee5dec0",
+      "sha256_candidate": "ba12ca8f6032679c6cc8ceb7a5d2711d7a8f64e4ef00c9a00ce6f8a06127a746"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x0_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x0_y-3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "f75298727cb0ef77be6811874b54c868208ee0f5b4101eba7bef1f7922d2c986",
+      "sha256_candidate": "1956234b40872a48a2776a9f5ab6eeb162ac965426fa5176778d639bf3cd3f82"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x0_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x0_y0.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "6553ecb0e1c99465c6838762ddaa3a7534e885d3cd615dccc600d9a4580d8333",
+      "sha256_candidate": "a4b6c911b7355c42c5c6504a81280a60d622b4ee839ecfe271035deb3329d355"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x0_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x0_y1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "812557b2c428b061e7d000f23411b34c6563103b46b2b43dbf9266240d1741fb",
+      "sha256_candidate": "097dc7f8896d44018b4853cfe7e7a051dd4c44b3be08f0bff6c8c0de320d1bfd"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x0_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x0_y2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "37323dea982f58c542aec96e983af6149120c864f1d07bfb1a8ca1104cf8f31b",
+      "sha256_candidate": "f035d9e93d279ce0a8cd48fbe6015d50c4178fb191ff2cd67deaae7325dab620"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x0_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x0_y3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "e57fbb2f55a481abb66ee9bad4963794a15d92fac446f5c76d58c84db27de5dd",
+      "sha256_candidate": "6bfcfc0c70bb2aa7e7a231b9fa881737a28da7503775e85f1dfcf7a8cf8d5c1b"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x1_y-1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "668cb1160770e4f7f5feae4173bc3d6e5bb0a3b0bbcea58d3d77d1f320177575",
+      "sha256_candidate": "d7dc09856c346a365eed0e229bd6cba909b7b9de20d323d3f14b52b934efc35f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x1_y-2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "01f68eaa91e058e5b7594ca87948dd1da4cf13a48f7aa35a6fe6f0e6a8186c9e",
+      "sha256_candidate": "4cffa51fdb889913cae18f67cac241b3179c194822d9e2617aea255752730cb5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x1_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x1_y-3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "232ca92055704c30d7d6f95d9dbe82842cf103ebeb54d082ab13e2d776e274a4",
+      "sha256_candidate": "a1bdc88d8c35a66b057e8d36e4f7bc9dccef36f7dfa3429371aa5c977889968d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x1_y0.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "c68cba57340a9637c04f1cf32401484702a7ae0aafe31e323385033e0886c760",
+      "sha256_candidate": "33eee7447bddb5f9467bf0d7e2930381ff7e45984c47c25be156e409bfd0ccfa"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x1_y1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "cb6c73ef53a4f32600d27e5230ad54c056c073adbde4bd056fb3e6d84216066b",
+      "sha256_candidate": "2ab7e4bcdac77180e11a568ba6a48fe196ff88ef8c1645d66ba0b89c54b5956c"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x1_y2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "2ef1492803b00c6802c2ae90361bd4af38ff677d8a4f13797ab4bc334b00ed07",
+      "sha256_candidate": "3dd5a314e918fc44fed6c0f0daf375c7ea1050773865207d6f79ee898662edde"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x1_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x1_y3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "c8f4c3caad62c0e5fdadd317b05961bc94e606f11228e2ff46e5fb1a328b6de7",
+      "sha256_candidate": "cd68ba35b979ed014f2a0ff038f7fc1a256a990699a2aad2f474bef8312f3f18"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x2_y-1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "d960ca3c5bbbab8687973f3605ae33819b197a71d5925de9146c9cc7fa1ce89c",
+      "sha256_candidate": "44d454c58df673d4d01aa5b59fa532b5f80b2a7e37a286d1e9534847c5354c32"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x2_y-2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 42,
+      "sha256_source": "7240abc59ef64e13ce0c435af6a6a03ec4019109afe8542daeb30e0cd8916bc7",
+      "sha256_candidate": "10132f2c6fbe6ebeea864c3993b268a026475a6c1edd289d3a82c2608c1059c0"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x2_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x2_y-3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "c7b9b8f11ca3869e55cc463ce71500f97bc604c1cce0ed666bc3671ad03986a9",
+      "sha256_candidate": "3ef8e6fd05633ceb1a08b07cbee00b0a39308bf0a146b242d2f55ac939d747af"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x2_y0.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "ca067ed23d368b2bc34650e40e170db147642ae6046181432151d25c164b1dc5",
+      "sha256_candidate": "d4f7ef2e715f65239d83a82bea9f01d8bf8c7bf26f7fe12f5f6d1eb037fa63b4"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x2_y1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 24,
+      "sha256_source": "8897de4c2390dcf7cb2ea69bba87d7bc6124abc19c0ee862b587765e3ad0276d",
+      "sha256_candidate": "76619cd06d7ea57a13178f8b6370116266c8db5d8392af3c50ed162f7c40c177"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x2_y2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 42,
+      "sha256_source": "76dc0749210bee308a90798d49ef3830f08429bedbce1c6e1b8d4ed9be9f25fe",
+      "sha256_candidate": "0a76af1c1288308bcf54cf47e65a763b49ac2741e1bafceaf41929773f20def8"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x2_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x2_y3.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "37e0b5ae3200b21819fb8a3b2e47eeede53f805839b0f2a2bb4c53f32a61b765",
+      "sha256_candidate": "a0fe58e04b5406145dcf5ac09d6ec52324efb8b760121a6588cc5e5710dd9249"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x3_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x3_y-1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "af968a36369077d887443f4ff1c7c071bb4e897f5a43c655fc665eca7f10e288",
+      "sha256_candidate": "49bd0d6dc0ed9b7365bde7ceb5da3d19b3899c2b1261db9e0773ea41c2effb0b"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x3_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x3_y-2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "954cf8a19f416135c6b2f31cccfcc8c0b81c4fa829647569ec99ced48c1cbaa9",
+      "sha256_candidate": "4fadbb9d06cda638b72100fbb1c5527f369e4c951d6bbed235025cb4874284d1"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x3_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x3_y0.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 28,
+      "sha256_source": "0bb90fb56a0f32077e9bc9804adb720d05e609eceb92d301022ea0d1dd2df22f",
+      "sha256_candidate": "27ef2ff8ab22583363de521085ff9ee57e7b779930fa9c4d56c9d15d1a6a8fd7"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x3_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x3_y1.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 46,
+      "sha256_source": "ffc036ae8f8c0f8a802530471cb47c1e9bac8b618d500fbe2cc8bd0228bbacb3",
+      "sha256_candidate": "8cc625bacf7ec733da91a4b0004d50b930bf01fd1e62a7ad5fe66990555ed868"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_front_x3_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_front_x3_y2.obj",
+      "diameter": 7,
+      "segment": "front",
+      "changed_vt": 22,
+      "sha256_source": "31fa05eec60b609fc33186978746b708888dba4d8aa814aa02efeb5a57db9b54",
+      "sha256_candidate": "e5759fa76a62ca8de8448ed648dec47383f33cdde6185156a1571c1121da9827"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-1_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-1_y-3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "ee4e1cea18ac2cf8b8c00b656bad442c831ba4f9f86bf7bf6433975543f84afd",
+      "sha256_candidate": "a1403a17a312e2974909a3564b427b6a93c6508e0b5fa4b96ca7f9518ed2fb72"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-1_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-1_y3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "0a113d86c85fc7609452e9618fd3c5ebb2cff742cfb5f67b8ad56394c17ecfa2",
+      "sha256_candidate": "780a3f8aca69ca0ff9969d034ba88721f6d8237e02c6c74622aff6f49b1ceb17"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-2_y-2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "285cb9094f31635845fcdf61b53755925d685e98a89f7bd0908a593a95b4e43b",
+      "sha256_candidate": "892bcdc51f50a7ddb8c3c8b79c32090a714f40baeadc76a93f1caf0f4a99a5c5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-2_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-2_y-3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "86cd55775a67a4cb4c920dc4dc606eccd7dc8caa6504990d194b9202caa2b979",
+      "sha256_candidate": "675a8390d78f09a529b4b7095a09a0f2ec49798dc7698344383b31ebe4379476"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-2_y2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "3349417fa790eb6189ba139a0941cdd8ad42cd7f88b1a2a3428597d70bbde3b5",
+      "sha256_candidate": "21a1c211603c17b8a827bea97de5cbfb60f7762da9ad29fa29fbe447e95063f7"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-2_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-2_y3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "1ee7f071556a3696f5bf0059d6c82b31545aba61f2101176eb9335b81364bcf0",
+      "sha256_candidate": "90068aa15fbb861347bbb6dcd83dd4e1f3687818b881232aef570ed32c36f50a"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-3_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-3_y-1.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "432c72559dbdfcb4231f982bead0a894a2de197c71213f79032cac13bf4d4c02",
+      "sha256_candidate": "445e258917b92794a75b7813c7ec464e8c72aaf94d20213d1d1ca068dc33b234"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-3_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-3_y-2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "b3d116949a53d8719d6238a50680f06c51d5dfbb3f0a64b3805085385d64cfab",
+      "sha256_candidate": "c9a5617dccf293124a62ae809977158193e03b5af6bb43f82997b1335d745e6c"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-3_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-3_y0.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "e7a8679ff6e9ed8976c4e24a3d4d222a5d4a3884340d649ce0153a3416fccc3e",
+      "sha256_candidate": "9332dd26ff85e024c0addb97abfdfdbe646c296fb20c7f94d569c4ca58f4cef4"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-3_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-3_y1.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "18273452a2d600aef0fbab27748c9791f1ec99bf10bec93f22ae7e9cd8910059",
+      "sha256_candidate": "2972d42d171f2e78418e2c4024bc83412ead168fbc4126bc2f85955dd1c0b361"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x-3_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x-3_y2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "8649aec47d5f756aff21f8d383ef8bf7c291d6df0f3bab667cbf321b44384471",
+      "sha256_candidate": "d6c8a5a7e62a9eee9014b12795746cabb2090d2cafedb6b30b14eedc580e8f2e"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x0_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x0_y-3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "d697c8fa7b42c7d6175b3355398db5d968f594bf6ff7a1d442b8ceb1bf1762bb",
+      "sha256_candidate": "ced7d92024f144443835b4045c210f2b7e60b2a655f27e7b000eecd38e806ce1"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x0_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x0_y3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "38f1a46f6f5f787b993b9f24a32ac3a2ec4f6f997a39dfc7d6bb431ceec3924a",
+      "sha256_candidate": "299b6ac0dfe70589e452c5be3e6e9bb33d6ffbd53e1bc494e8009d762dfc92ee"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x1_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x1_y-3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "1636d44b26af580a0adf20c69b3fd5c2f714aee083d333e4b544a2ce3a1e1e7f",
+      "sha256_candidate": "42b50000f688bb285c2d1286c073d1bfdcaf9b6eb9b6795b4ed5d89c6e1f0116"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x1_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x1_y3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "bad30419255601921d199edf370b02f4e3b0e29b75e2d261e87b059dec27c51d",
+      "sha256_candidate": "a456a1bf55c8af100451a43e36b6d1c21df8d80c055c0b0c3cccb9e3426b67ed"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x2_y-2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "9090d39f28af939de82c76e0e3155b6ecba88e3134b7a9ccd0e8bdddabbe74ef",
+      "sha256_candidate": "b33ca21c05b027eb61fe80a2c924f9671906afcf16c2e5ae3335c57d9ee1b58e"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x2_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x2_y-3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "5115619f54029e2dfc7784130baadf753f98895f402c222f14c03fe6b72cce33",
+      "sha256_candidate": "96f0397617a462b0ca3e66b7660b1d65c47d5814c7eb60d128746263dae55778"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x2_y2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "d570d136c759217ea8cb38a2e34eab3d0931248a12ce55092e80d8ad6f6c19c8",
+      "sha256_candidate": "7d2c4ca2938c589df0de4160c70600502d5dda1e9f1653eabb8d6a55da02bcd2"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x2_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x2_y3.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "f54eb42f898ffe099e79eb6bcde4dbdae3b40d29a5bd4236ec250415e69169ea",
+      "sha256_candidate": "a9102fc5656f88747d77c409190c0781b98528dd1e80ef4323d18a18d6c27ac8"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x3_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x3_y-1.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "4bc204d664e2db6fd3d82682e89f8bb2e16127dd71ef99783a0576b2c1a16410",
+      "sha256_candidate": "8bdefc0cec5f1ba44eeb819dec7784c9bf23a9ea338dcdf2cefaede80bea62d9"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x3_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x3_y-2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "3089842b7872ca80f288f150d6bc66aa0e04acfa51ef92af0de0ff5d1eaae46c",
+      "sha256_candidate": "5ca9859ab23e9f081d6319182757689760315b35d6fafd8df5c65cff5881594d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x3_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x3_y0.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "b01626aae6beb25e8def6b4eced45366251c0c7282b7e2634a0c13c83cdf1bf2",
+      "sha256_candidate": "9312986c3bde6f12009c0205c35497429a3ab46e3e3f1357299d149d0c31641a"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x3_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x3_y1.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 8,
+      "sha256_source": "a5674d8644f90b643f6068af95a7df7737da86ea65e70e13cec8e3f771c1ff09",
+      "sha256_candidate": "c7b53642bad113d59c7737dc2224ce677f5078637f8d54fa83ec092ea0698015"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_middle_x3_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_middle_x3_y2.obj",
+      "diameter": 7,
+      "segment": "middle",
+      "changed_vt": 4,
+      "sha256_source": "185d183687d8fe08354efa818963a158526d6f7a2c92293200464bcd4427dfea",
+      "sha256_candidate": "f2ff47845c0ad37b7cc4430876f7202b69ef8a6dc190c1bcd795757cd89ada26"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-1_y-1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "ba4a45507a892d5ba85c841cea8e1dd5bc3cf09a5d865029fa832eaccaefcb88",
+      "sha256_candidate": "230b3c19ec71a5cd1973f16c0563a2f4e2c7b8fdeab55daad2389eca363833b2"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-1_y-2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "02134bb3f1dfc9b2bd5cfde33091fa24eb528db887a307e4199829108386d521",
+      "sha256_candidate": "8c98fc59790819bf406909a99960a9286bb1428799718b6f85268cc57b7d286b"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-1_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-1_y-3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "050e0e253a017d5595f38d80220281bf893b84c69d734604f782311223209c0f",
+      "sha256_candidate": "6213de553b4a85104d4ae010d15042e29494d9fbb64296d72673b130753ed5e8"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-1_y0.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "28787ed35cb216fca9dd5b5648bb960102186cc5e83a4a3405b84cb48d4dff0f",
+      "sha256_candidate": "4ad0ecac8a6e754cf621d46e7215881a8a0372b94ed38efa67210285c7807a4c"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-1_y1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "389cc011908f0cf9ad5a6128dda820b0687af96de58bd03f36a542b235952a48",
+      "sha256_candidate": "7a33077c7f6393f98fc18abc46e1c7ddf5930a98be97f1a51d2cb28f16b1ba2f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-1_y2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "3e8753d538879f1bdfc95971860ec521fc03772c1b32027c86044f19050036d2",
+      "sha256_candidate": "3ae03dfd802c2cbdd5710004d1d1c07da59883fd1aae0759bcfe0bcddba09c75"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-1_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-1_y3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "ef9bd1bfc4eda4d9808968a03068af323e3ac50827bffeb1afb429c4c674eae4",
+      "sha256_candidate": "43183f86a5d22300915236528f8c45072e734715a1670e1bb3d38f561fac0a55"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-2_y-1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "aa5055a87ffc74db0caf4ff3d1a3c400cc8ac369fb8bcf7d70b9f2e6ecae15aa",
+      "sha256_candidate": "e2d92bb7c789bf421034fe9bf33ae353bea8f47defbe627a984ca66f915cb447"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-2_y-2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 42,
+      "sha256_source": "fbd22f39d50f79591c985aa180823c73c2a00457ca67b161c6e237e3a4ad0e11",
+      "sha256_candidate": "721c2d06ed84776bfae53a76260d1ec6a1dd7af044211293b73605d0aa32e984"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-2_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-2_y-3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "eaaaef629d7c4519e4c0e1ccc41a01b02914d3b40fb234c1e54ca1aea4cbd212",
+      "sha256_candidate": "d589283008f501a79ce83f42cc806adcd434328db5867b439b320d7f48bb4be6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-2_y0.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "547f7ec7a0e68c41ece313aca0ce6b8f21d4502b4dbdf42f388ab70d30ea0cfe",
+      "sha256_candidate": "56513a43e307d0035e2d69fa6d9f5a7a1b339382678422dcbdc45f42945a7635"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-2_y1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "ae44e80cfba99d2b37136accb11d033257066b472a0ebbf3512039d153060628",
+      "sha256_candidate": "28e51e67bb88151192589a74f20f3cf747d151635b1395e7854c52712372f8fb"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-2_y2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 42,
+      "sha256_source": "2b98a816dbd50272e14abfc612c2f6f8e13a3d50d17c19ae8c950839ddec27dd",
+      "sha256_candidate": "4bc239f8aeea084ba4611306658933d356b0c91a50d3598efca7e8781264a53b"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-2_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-2_y3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "07c82ec57dbb9bb0f1f39cbc93cc722aa067d2d76e69d8503230384b1836b8dd",
+      "sha256_candidate": "dc35bc43469456711e3968c2f9ae6131c99d00ff309ab0ae2f39b22973806c2d"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-3_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-3_y-1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "c98733c3fc50da694100663499fd03355167c52e32acbc2a1557ba1d0dbafbd2",
+      "sha256_candidate": "68de40977d84b95e2197f4a9cb0b04dd270cfa3f10ce481a2c9b9ade7b3e0af6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-3_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-3_y-2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "4368fd45288390aa730d23b0552d0fc4ff363cf677c9b984e23ab5f51b87020d",
+      "sha256_candidate": "2c8b6bf8c395f12bd9fa88beb6f6e394b4b55e1226d62b0a0be6e2fa52de1daf"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-3_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-3_y0.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "c36c8a1a98a7a3dce5ebac5f6431f4bec092bbd4b9527bed7ba50fe060780e8d",
+      "sha256_candidate": "3d791aa0979df10c98ff2ec3ac9e90f2f3b434a8b4686c2777f2b81a55ab8978"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-3_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-3_y1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "124f4de977ad5fd727e60d3d2212bd2511548201871e24a08ca7314eaf09daaa",
+      "sha256_candidate": "23028018087ceff0148867c9e3bb2ae1e544b1bb008e48bbf1998755aa86db17"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x-3_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x-3_y2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "d81971ba10797255f88c7187f58c81d600128ebf2c1161beb2ef64ee4f22cf89",
+      "sha256_candidate": "2054869b0b7998608a4a95df96bf875f6787c4e3d7a3681817eadd44f78dfc68"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x0_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x0_y-1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "fe22078abd6fe1de75787d281f1f0dd8bbbb2431b8fb12634548ebeb3a7ebeae",
+      "sha256_candidate": "8a5c220f4577d8cffee6563e3b761dea4f8614a4a7a7bd86dbec207b20b61599"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x0_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x0_y-2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "84a8eaa9598177dd59f3c8bc346f436ac10ad70ca2df10e4076eadbc85401409",
+      "sha256_candidate": "1f472c38b1f12a0a9be6b9a8f274c0909966427bb313ab455fa94793a6d1b261"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x0_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x0_y-3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "311c6ad62b8a3ff584a86ed9f41b1658c9de94286531c717145b8521ee342f79",
+      "sha256_candidate": "9b477066dbc4b5febce1eece6ee926305397b29eac9bb273dbe6792c165b62e6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x0_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x0_y0.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "67e9dfdc77adfafda564fed08f9aeb02083f4c7a4acdbfcfbd96ef7f11658a2e",
+      "sha256_candidate": "7f29befb1fdd83d02a0c9e847b0c61ae925dae73b1659db03a7063190dfa2781"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x0_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x0_y1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "eec67779001339f8f0a966d8ad318aa64cf7a3482ee3bebb8c3f310a5e53a02f",
+      "sha256_candidate": "03efc3e8270148f7d9a05d79dc138598f29d9d642c45aec0e1b5831e60e5ab44"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x0_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x0_y2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "f63fee4d552522cb224cf1573eebddf07911f07daaa23b43bf556a2b7781f116",
+      "sha256_candidate": "72e217cd4cd7328ca4b0fa52df8a1466bf32cda0185344b3bbee7c1b330d1087"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x0_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x0_y3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "fd195ab5b9932dea9cab01aebee997b388f2057b357e336cc8d89340f07d411e",
+      "sha256_candidate": "cf2eb1fe545b5d052d465ea7732b7a7fc5524536d0c074cc658b34e718306f5a"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x1_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x1_y-1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "b96aadb5fae2047a35fde8ca3ec01107906ade8cbbd981dbc46374521f3bf35e",
+      "sha256_candidate": "fbcf64723298a663f9f872bf0cda6f8c3b96ecbad062148d0bcd49572bf70dea"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x1_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x1_y-2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "a36f35a8de320b11f396b94e10f0a16ebaae4cff17fdc83b168b2dccf74e73d7",
+      "sha256_candidate": "5b5094df045aa5bbf6aa8bb1b9dbd49a1d081a2837f3855bf8db3f18c75c7e56"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x1_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x1_y-3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "1023fb6dfabe18acbfea44acf90e71c02d2a3556e0607c0bf6dbd047163113b7",
+      "sha256_candidate": "4e348d88a494be263465145cb9682fdbc1916a28157eba7fb70e497acaf3d572"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x1_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x1_y0.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "71174e2e81e52dfc5021389fafdd65e7b087637798417e9a416c3138befe6c9a",
+      "sha256_candidate": "4b99c7f49c0a6dd22bde14778d9e992b47202dbd57198d6ff522244caaaa7306"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x1_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x1_y1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "ef8423ea4fc06a8871b2a7e49de2d6999cba7d62d22de2f7d2adcb93c72289e1",
+      "sha256_candidate": "3b20027edfadabfda2894b5d777ee8961b648682dec662436b21fb0914ef98f6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x1_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x1_y2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "6e9155a7bc463f9573b63957cd29748f74a16be818623497f3d1b4a27322961e",
+      "sha256_candidate": "665894fa8da60a46e6dbb742c8b99d3271a4c1682896ff1e2ee23c63bc8a6689"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x1_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x1_y3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "c73a1c64f1db5e62f3e86cef3446a907b2167fec0c80ddd4e075a4cb4cff84fc",
+      "sha256_candidate": "aa1dff06f856dd4291af850364762b2494c3fc2a163f5e867851e5fcbe7c0c55"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x2_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x2_y-1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "2dbdc0073f0adbb5168e497f8d6976fcf5d53ef0f5add17251a30dc1591a7299",
+      "sha256_candidate": "01211033fdf64bbb0e7f5dcc36811e5f89cf0bed2c0c722092e43473052d99c3"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x2_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x2_y-2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 42,
+      "sha256_source": "6007c13ce2083d5d54b03d45a8c69eb2b175493061b4c61be4acab7a2f91e97d",
+      "sha256_candidate": "b6be6a1afca33460f345d624f1a5f252daadcde3d0254eabfacfb3e98295e9d2"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x2_y-3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x2_y-3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "71d635d294739c6bfcbeb1dfa4de03ea4eb0cfb739c18aa05c1ca42f7c666319",
+      "sha256_candidate": "eebf5693ecb58f1b01f85971ccfed61871fd16d40c22a3de5c31cab6a3026c83"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x2_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x2_y0.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "7283b4de985ed85503674bea91ca9ceab94ae83ceae7d1277d19eff89aa767d0",
+      "sha256_candidate": "ce3dbb96919e28fbd2232da0391c0aa16d601aac24cbce691c3af9e94ce285ce"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x2_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x2_y1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 24,
+      "sha256_source": "bb0ddd08b6eaa15f25d93e065ec929f9b17958f26d4e9a38f8b0bf1e310295dd",
+      "sha256_candidate": "5c9f5b7774bb80d44794f7f6d65b7b16c133d8a58d5a0eb964f13184edb3c900"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x2_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x2_y2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 42,
+      "sha256_source": "b81712e60c75905793b908bf67c13b073a0efbfbec14bdc05a26670ae2ee44d4",
+      "sha256_candidate": "6b50854ef618be009bd7603b4033b21c986cd5cf8dd2726c6417be18a3904373"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x2_y3.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x2_y3.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "82a18fe7dd869c1ea17efcf6be424e4970516efd3147eb10c9fe34a71efbbac1",
+      "sha256_candidate": "3228471b7000a43101ad40430a7575c2c438c0247f792d32f8ac173e9aedb9d6"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x3_y-1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x3_y-1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "f6814fd29ab3fa03e4277a5853ef78426c6917e73732828df9ff2c8c757d8ba7",
+      "sha256_candidate": "549fed480cea843de1930e7ace68c26c038c9b811676cc874eaa772c24704e83"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x3_y-2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x3_y-2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "1ad415d25268913a70714a77b2ca140dba8dbf47d57cd821d3a17efacbe05384",
+      "sha256_candidate": "5a3658c9ff89c0dbdcc1a1619802d867541b0e294c3f931c6e8aeefdf9576cc1"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x3_y0.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x3_y0.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 28,
+      "sha256_source": "4ef9cc833f064698fe931ef26c451eacb641cad9f389944bc667ab2017c0b000",
+      "sha256_candidate": "dee3c6ce975ab763775e31228e57ab261820845f8edd1b8a59047aeeba36bac5"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x3_y1.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x3_y1.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 46,
+      "sha256_source": "4066bdc1a57d850c955a84ff95d0f8dc649f6317ec763b28bb01407099eb48f7",
+      "sha256_candidate": "4c97e435b6c36ef5d222cee5cf61915dd04007ff95a9a7fae2bad810f2918248"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/casing_d7_rear_x3_y2.obj",
+      "candidate": "generated/models/block/turbine/mesh/casing_d7_rear_x3_y2.obj",
+      "diameter": 7,
+      "segment": "rear",
+      "changed_vt": 22,
+      "sha256_source": "39720035b74329d3361a55424bb4d9e84d283fc643cb21d29cd1f0d0ef3b83a9",
+      "sha256_candidate": "c50fd5e2d33d58bf943c09b20e01f68a2d792c765f8ca1056a41ead0737b9103"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed.obj",
+      "candidate": "generated/models/block/turbine/mesh/turbine_casing_unformed.obj",
+      "diameter": null,
+      "segment": "unformed",
+      "changed_vt": 12,
+      "sha256_source": "cce157eee3d53651148ff547756e488a6e5aba4246a20c98baaa7323bc887e27",
+      "sha256_candidate": "e285685d807d697017a99421a43be0d6ab6f6b1a2ac9ee7c9f40bbc06e1b5262"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_down.obj",
+      "candidate": "generated/models/block/turbine/mesh/turbine_casing_unformed_down.obj",
+      "diameter": null,
+      "segment": "unformed",
+      "changed_vt": 12,
+      "sha256_source": "d8b2d447489a9185893970ec5385819b8a09883f1aecca4ab8007b4bae0d15a6",
+      "sha256_candidate": "f6f87beff19fd1dcf648a624ee979474802f21767ae4547a6398a9809f94de70"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_east.obj",
+      "candidate": "generated/models/block/turbine/mesh/turbine_casing_unformed_east.obj",
+      "diameter": null,
+      "segment": "unformed",
+      "changed_vt": 12,
+      "sha256_source": "184031bacc856c1c2f4c04dd2320522e036bf32063cd3249584ae77623c97fde",
+      "sha256_candidate": "84c5a2265a3ca6553d221ecf1779b901dda0ca39b0dacd605d758a4901e949bd"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_north.obj",
+      "candidate": "generated/models/block/turbine/mesh/turbine_casing_unformed_north.obj",
+      "diameter": null,
+      "segment": "unformed",
+      "changed_vt": 12,
+      "sha256_source": "fe0ae3e219274c13a33e242ffeec3217db6b2d25c38f276b8c7171647813bf7f",
+      "sha256_candidate": "e142fa32d68a5a066c352fc69bcae2c1971d69d66f86a6e456a7156c62bc7e1a"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_south.obj",
+      "candidate": "generated/models/block/turbine/mesh/turbine_casing_unformed_south.obj",
+      "diameter": null,
+      "segment": "unformed",
+      "changed_vt": 12,
+      "sha256_source": "84822e4c7b4e20ba36e296fe8d57bd8bb20ab0b2ec6ec64b00273e0a00159d34",
+      "sha256_candidate": "90eec835002639a6d4668c2b717dd8c9ae487ef1c4ae70fb81a7041690b8039f"
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_casing_unformed_west.obj",
+      "candidate": "generated/models/block/turbine/mesh/turbine_casing_unformed_west.obj",
+      "diameter": null,
+      "segment": "unformed",
+      "changed_vt": 12,
+      "sha256_source": "9c89b13c7fcffac7c0d373a4aebf6c72abe86c19d3db274a5114b529fc545f81",
+      "sha256_candidate": "f16d7faa917c239af11524d5539ef39f79fe363013bcc93af2dbee559c940a7e"
+    }
+  ]
+}

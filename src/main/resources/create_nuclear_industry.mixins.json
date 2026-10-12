@@ -5,6 +5,9 @@
   "package": "com.iksxh.create_nuclear_industry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "FluidNetworkRestrictionMixin",
+    "CreateTankCapabilityRestrictionMixin",
+    "PortableFluidInterfaceRestrictionMixin",
     "FluidNetworkSharedFillMixin",
     "BoilerPipePressureMixin",
     "BasinHeatLevelMixin"

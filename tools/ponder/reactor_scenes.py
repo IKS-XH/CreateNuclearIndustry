@@ -5,6 +5,7 @@ from __future__ import annotations
 import gzip
 import struct
 from pathlib import Path
+from heat_exchanger_scenes import industrial_route
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -136,6 +137,10 @@ def _operation_scene() -> tuple[tuple[int, int, int], dict[tuple[int, int, int],
     _add(blocks, (8, 2, 0), "create:creative_motor", {"facing": "south"})
     _add(blocks, (6, 2, 3), "minecraft:lever",
          {"face": "wall", "facing": "north", "powered": "false"})
+    # 冷端保留Create；热端原泵格替换专用泵，复用原有齿轮与马达，不扩取景。
+    for pos in ((7, 2, 2), (7, 2, 3)):
+        blocks[pos] = ("create_nuclear_industry:reinforced_fluid_pipe", {"north": "true", "south": "true"})
+    blocks[(7, 2, 1)] = ("create_nuclear_industry:industrial_fluid_pump", {"facing": "north"})
     return (13, 5, 13), blocks
 
 

@@ -1,0 +1,8 @@
+{
+  "parent": "create:block/fluid_valve/block_vertical_open",
+  "textures": {
+    "2": "create_nuclear_industry:block/industrial_fluid_visual_01/steel_fluid_valve",
+    "particle": "create_nuclear_industry:block/industrial_fluid_visual_01/steel_fluid_valve"
+  },
+  "render_type": "minecraft:cutout_mipped"
+}

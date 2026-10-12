@@ -165,7 +165,7 @@ public final class BoilerPonderScenes {
         scene.world().showSection(hot, Direction.SOUTH);
         scene.idle(12);
         setTankFluid(scene, HOT_TANK, new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1000));
-        scene.world().setKineticSpeed(util.select().position(8, 0, 1), -64);
+        scene.world().setKineticSpeed(util.select().position(8, 0, 1), 64);
         scene.world().setKineticSpeed(hotDrive, 64);
         scene.effects().rotationSpeedIndicator(new BlockPos(8, 0, 1));
         scene.effects().rotationDirectionIndicator(util.grid().at(8, 0, 1));
@@ -204,6 +204,9 @@ public final class BoilerPonderScenes {
         scene.idle(10);
         scene.world().showSection(ordinary, Direction.SOUTH);
         scene.world().showSection(supercritical, Direction.SOUTH);
+        scene.world().showSection(util.select().fromTo(5, 4, 0, 5, 4, 1).add(util.select().fromTo(9, 4, 0, 9, 4, 1)), Direction.SOUTH);
+        scene.world().setKineticSpeed(util.select().position(4, 4, 1).add(util.select().position(8, 4, 1)), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(5, 4, 0, 5, 4, 1).add(util.select().fromTo(9, 4, 0, 9, 4, 1)), -256);
         scene.idle(10);
         setTankFluid(scene, NORMAL_TANK, new FluidStack(TurbineContent.STEAM.get(), 1000));
         setTankFluid(scene, SUPERCRITICAL_TANK, FluidStack.EMPTY);

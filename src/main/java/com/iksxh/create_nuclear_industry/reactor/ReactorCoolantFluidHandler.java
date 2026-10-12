@@ -50,7 +50,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
     }
 
     /** 仅为绑定到有效反应堆所有者的冷/热端口创建 capability。 */
-    public static ReactorCoolantFluidHandler forPort(ReactorPortBlockEntity port) {
+    public static IFluidHandler forPort(ReactorPortBlockEntity port) {
         if (port == null) {
             return null;
         }
@@ -66,10 +66,11 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
         if (owner == null || !port.isBoundTo(owner, expectedType, null)) {
             return null;
         }
-        return new ReactorCoolantFluidHandler(port, owner, cold, budgetFor(port), null);
+        return com.iksxh.create_nuclear_industry.industrial.RestrictedFluidHandler.wrap(
+                new ReactorCoolantFluidHandler(port, owner, cold, budgetFor(port), null));
     }
 
-    /** 使用实时服务端配置中的流量上限和库存容量。 */
+    /** 脱离世界的账本验证入口；真实世界必须经物理端口取得受限能力，不能借此创建额外口额度。 */
     public static ReactorCoolantFluidHandler forOwner(
             ReactorInstrumentPortBlockEntity owner,
             boolean coldInput
@@ -190,7 +191,7 @@ public final class ReactorCoolantFluidHandler implements IFluidHandler, SharedFl
     /** 判断从世界 capability 取得的处理器是否仍对应当前有效绑定。 */
     private boolean isCapabilityAvailable() {
         if (sourcePort == null) {
-            return true;
+            return owner.getLevel() == null;
         }
         ReactorPortBlockEntity.BindingType expectedType = coldInput
                 ? ReactorPortBlockEntity.BindingType.COLD_COOLANT

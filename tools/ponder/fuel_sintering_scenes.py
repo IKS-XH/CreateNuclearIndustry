@@ -8,7 +8,7 @@ import io
 import struct
 from pathlib import Path
 
-from heat_exchanger_scenes import add, add_tank, encode
+from heat_exchanger_scenes import add, add_tank, encode, industrial_route
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "src/main/resources/assets/create_nuclear_industry/ponder"
@@ -35,6 +35,7 @@ def scene(automation: bool) -> dict:
         for x in (1, 2, 4, 5):
             add(blocks, (x, 1, 3), "create:fluid_pipe", {"east": "true", "west": "true", "north": "false",
                 "south": "false", "up": "false", "down": "false", "waterlogged": "false"})
+        industrial_route(blocks, [(1, 1, 3), (2, 1, 3)], (1, 1, 3), "east", (1, 1, 4), (0, 1, 4), "east")
     return blocks
 
 
@@ -92,7 +93,10 @@ def validate(root: dict, expected: dict, automation: bool) -> None:
         assert blocks[(3, 1, 2)][1]["facing"] == "west"
         assert blocks[(2, 1, 2)][0] == "minecraft:barrel"
         for x in (1, 2, 4, 5):
-            assert blocks[(x, 1, 3)][1]["east"] == blocks[(x, 1, 3)][1]["west"] == "true"
+            if x == 1:
+                assert blocks[(x, 1, 3)] == (NS + "industrial_fluid_pump", {"facing": "east"})
+            else:
+                assert blocks[(x, 1, 3)][1]["east"] == blocks[(x, 1, 3)][1]["west"] == "true"
 
 
 def main() -> None:

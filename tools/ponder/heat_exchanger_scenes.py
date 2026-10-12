@@ -72,6 +72,21 @@ def add_tank(blocks: dict, pos: tuple[int, int, int]) -> None:
     add(blocks, pos, "create:fluid_tank", {"bottom": "true", "shape": "window", "top": "true"})
 
 
+def industrial_route(blocks: dict, positions: list[tuple[int, int, int]], pump: tuple[int, int, int],
+                     facing: str, cog: tuple[int, int, int], motor: tuple[int, int, int], motor_facing: str) -> None:
+    """只替换已存在的受限流体路线；复用一个管格作泵，齿轮/马达保持在原取景包络内。"""
+    for pos in positions:
+        block_id, props = blocks[pos]
+        if block_id != "create:fluid_pipe":
+            raise ValueError(f"受限路线只可替换原管格: {pos} {block_id}")
+        props = {key: value for key, value in props.items() if key != "waterlogged"}
+        blocks[pos] = (NS + "reinforced_fluid_pipe", props)
+    blocks[pump] = (NS + "industrial_fluid_pump", {"facing": facing})
+    axis = "x" if facing in ("east", "west") else "z"
+    add(blocks, cog, "create:cogwheel", {"axis": axis})
+    add(blocks, motor, "create:creative_motor", {"facing": motor_facing})
+
+
 def heating_scene() -> dict:
     blocks: dict = {}
     size = HEATING_SIZE
@@ -239,7 +254,8 @@ def validate(name: str, blocks: dict, size: tuple[int, int, int]) -> None:
         if sum(state[0] == MACHINE for state in blocks.values()) != 2:
             raise ValueError("供热幕必须显示两台同向直列换热器")
         for pos in ((7, 1, 2), (7, 1, 3), (7, 1, 4), (7, 1, 7), (7, 1, 8), (7, 1, 9)):
-            if blocks[pos][0] != "create:fluid_pipe":
+            expected = NS + "industrial_fluid_pump" if pos == (7, 1, 8) else NS + "reinforced_fluid_pipe" if pos[2] >= 7 else "create:fluid_pipe"
+            if blocks[pos][0] != expected:
                 raise ValueError(f"供热幕外端管路缺格: {pos}")
         if not all(blocks[(7, 2, z)][0] == "create:fluid_tank" for z in (5, 6)):
             raise ValueError("供热幕需在换热器顶部显示Create储罐锅炉")
@@ -302,6 +318,14 @@ def main() -> None:
     )
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     for name, blocks, size in scenes:
+        routes = {
+            "nuclear_heat_exchanger_introduction": ([(5, 1, z) for z in range(7, 11)], (5, 1, 9), "north", (6, 1, 9), (6, 1, 10), "north"),
+            "nuclear_heat_exchanger_heating": ([(7, 1, z) for z in (7, 8, 9)], (7, 1, 8), "north", (8, 1, 8), (8, 1, 9), "north"),
+            "nuclear_heat_exchanger_boiler": ([(7, 1, z) for z in (2, 3, 4)], (7, 1, 3), "south", (8, 1, 3), (8, 1, 2), "south"),
+            "nuclear_heat_exchanger_processing": ([(7, 1, z) for z in (6, 7, 8, 9)], (7, 1, 8), "north", (8, 1, 8), (8, 1, 9), "north"),
+        }
+        if name in routes:
+            industrial_route(blocks, *routes[name])
         validate(name, blocks, size)
         raw = encode(blocks, size)
         path = OUTPUT_DIR / f"{name}.nbt"

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "TM ",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "item": "create_nuclear_industry:industrial_ceramic"
+    },
+    "T": {
+      "item": "create_nuclear_industry:ceramic_fluid_pipe"
+    },
+    "M": {
+      "item": "create_nuclear_industry:reinforced_fluid_valve"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:ceramic_fluid_valve",
+    "count": 1
+  }
+}

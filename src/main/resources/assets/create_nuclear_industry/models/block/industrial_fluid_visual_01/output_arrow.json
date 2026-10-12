@@ -1,0 +1,100 @@
+{
+  "textures": {
+    "arrow": "create_nuclear_industry:block/industrial_fluid_visual_01/output_arrow",
+    "particle": "create_nuclear_industry:block/industrial_fluid_visual_01/output_arrow"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        13.1,
+        1.99
+      ],
+      "to": [
+        10,
+        15.9,
+        1.99
+      ],
+      "faces": {
+        "north": {
+          "texture": "#arrow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        13.1,
+        14.01
+      ],
+      "to": [
+        10,
+        15.9,
+        14.01
+      ],
+      "faces": {
+        "south": {
+          "texture": "#arrow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        14.01,
+        13.1,
+        6
+      ],
+      "to": [
+        14.01,
+        15.9,
+        10
+      ],
+      "faces": {
+        "east": {
+          "texture": "#arrow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1.99,
+        13.1,
+        6
+      ],
+      "to": [
+        1.99,
+        15.9,
+        10
+      ],
+      "faces": {
+        "west": {
+          "texture": "#arrow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -83,8 +83,8 @@ public final class P1ServerConfig {
                     .comment("一毫桶复合冷却剂吸收的热量。")
                     .defineInRange("coolantAbsorptionHuPerMb", 0.5D, 0.0D, 1_000_000.0D);
             perPortFlowMbPerTick = builder
-                    .comment("单个端口每 tick 的最大冷却剂流量。")
-                    .defineInRange("perPortFlowMbPerTick", 128, 0, 1_000_000);
+                    .comment("单个物理端口共用主被动及专用网络额度，单位mB/t。")
+                    .defineInRange("perPortFlowMbPerTick", 2048, 0, 1_000_000);
             coolantCapacityPerEmptyBlockMb = builder
                     .comment("每个空列或控制棒列内部主体格提供的共享冷却剂容量，单位为毫桶。")
                     .defineInRange("coolantCapacityPerEmptyBlockMb",

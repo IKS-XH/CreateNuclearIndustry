@@ -9,11 +9,11 @@ import net.minecraft.nbt.Tag;
 
 /** 服务端唯一水汽、冷却剂与 HU 账本。库存单位 mB；模拟纯读，汽输出按实际完整比焓扣账。 */
 public final class BoilerState {
-    public static final int CAPACITY = 18000, FLOW_LIMIT = 256;
+    public static final int CAPACITY = 18000, FLOW_LIMIT = 4096;
     private static final double EPS = 1e-8;
     /** 几何独立的配置快照；容量乘积在运行前以 long 预检，非法组合不交易。 */
     public record Settings(int minDimension, int maxDimension, int waterCapacityPerCellMb,
-            int steamCapacityPerCellMb, int portFlowMbPerTick, double pairHeatHuPerTick,
+            int steamCapacityPerCellMb, int coolantPortFlowMbPerTick, int waterSteamPortFlowMbPerTick, double pairHeatHuPerTick,
             double boilingTemperature, double supercriticalTemperature, double wallHeatCapacityHuPerWaterCell,
             double waterSpecificHeatHuPerMb, double steamSpecificHeatHuPerMb, double vaporizationLatentHeatHuPerMb,
             double supercriticalPressure, double outputMinPressure,
@@ -21,7 +21,7 @@ public final class BoilerState {
             double idleWaterCoolingHuPerCellPerTick, double idleSteamCoolingHuPerCellPerTick) {
         public boolean valid() {
             if (minDimension < 5 || minDimension > maxDimension || maxDimension > 32
-                    || waterCapacityPerCellMb < 1 || steamCapacityPerCellMb < 1 || portFlowMbPerTick < 1
+                    || waterCapacityPerCellMb < 1 || steamCapacityPerCellMb < 1 || coolantPortFlowMbPerTick < 1 || waterSteamPortFlowMbPerTick < 1
                     || valveFlowPerSteamCellMbPerTick < 1) return false;
             for (double v : new double[]{pairHeatHuPerTick, boilingTemperature, supercriticalTemperature,
                     wallHeatCapacityHuPerWaterCell, waterSpecificHeatHuPerMb, steamSpecificHeatHuPerMb,
@@ -41,7 +41,7 @@ public final class BoilerState {
         public int waterCapacityMb() { return 9 * waterCapacityPerCellMb; }
         public int steamCapacityMb() { return 9 * steamCapacityPerCellMb; }
     }
-    public static final Settings DEFAULT = new Settings(5, 11, 2000, 2000, 256, 18, 1, 2,
+    public static final Settings DEFAULT = new Settings(5, 11, 2000, 2000, 2048, 4096, 18, 1, 2,
             1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
     private Settings settings = DEFAULT;
     private int waterCells = 9, steamCells = 9, exchangers = 1, pairs = 1, hotCapacity = 4000, coldCapacity = 4000;
@@ -121,15 +121,15 @@ public final class BoilerState {
         if (!Double.isFinite(value)) return;
         minimum = Math.clamp(value, 0, 1); minimumSet = true;
     }
-    private int budget(BlockPos port, long now) { return settings.valid() ? Math.max(0, settings.portFlowMbPerTick()
+    private int budget(BlockPos port, long now, boolean coolant) { return settings.valid() ? Math.max(0, (coolant ? settings.coolantPortFlowMbPerTick() : settings.waterSteamPortFlowMbPerTick())
             - (now == flowTick ? usedByPort.getOrDefault(port.asLong(), 0) : 0)) : 0; }
     private void spend(BlockPos port, int amount, long now) {
         if (flowTick != now) { usedByPort.clear(); flowTick = now; }
         usedByPort.merge(port.asLong(), amount, Integer::sum);
     }
-    public int remainingFill(BlockPos port, long now) { return Math.min(Math.max(0, waterCapacity() - water), budget(port, now)); }
-    public int remainingHotFill(BlockPos port, long now) { return Math.min(Math.max(0, hotCapacity - hot), budget(port, now)); }
-    public int remainingDrain(BoilerSteamInventoryKind kind, BlockPos port, long now) { return Math.min(removableSteam(kind), budget(port, now)); }
+    public int remainingFill(BlockPos port, long now) { return Math.min(Math.max(0, waterCapacity() - water), budget(port, now, false)); }
+    public int remainingHotFill(BlockPos port, long now) { return Math.min(Math.max(0, hotCapacity - hot), budget(port, now, true)); }
+    public int remainingDrain(BoilerSteamInventoryKind kind, BlockPos port, long now) { return Math.min(removableSteam(kind), budget(port, now, false)); }
     /** 补冷水不增加 HU，热容增加自然造成混合降温。 */
     public int fillWater(BlockPos port, int amount, boolean simulate, long now) {
         int n = Math.min(Math.max(0, amount), remainingFill(port, now));
@@ -140,7 +140,7 @@ public final class BoilerState {
         if (!simulate && n > 0) { hot += n; spend(port, n, now); } return n;
     }
     public int drainCold(BlockPos port, int amount, boolean simulate, long now) {
-        int n = Math.min(Math.max(0, amount), Math.min(cold, budget(port, now)));
+        int n = Math.min(Math.max(0, amount), Math.min(cold, budget(port, now, true)));
         if (!simulate && n > 0) { cold -= n; spend(port, n, now); } return n;
     }
     /** 服务端逐种交易，单位mB；模拟纯读，同口主动/被动共用额度，每次按实际汽温重算共同保压余量。 */

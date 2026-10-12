@@ -351,7 +351,8 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         if (side == null || !side.getAxis().isHorizontal()) return null;
         if (level != null && !level.isClientSide) ledger.setSettings(HeatExchangerConfig.settings());
         HeatExchangerLine line = HeatExchangerLine.find(this);
-        return line != null && (line.inlet(this, side) || line.outlet(this, side)) ? new Port(side, line) : null;
+        return line != null && (line.inlet(this, side) || line.outlet(this, side))
+                ? com.iksxh.create_nuclear_industry.industrial.RestrictedFluidHandler.wrap(new Port(side, line)) : null;
     }
     private void updateLineView(HeatExchangerLine line) {
         updateLineView(line.count(), line.totalHot(), line.totalCold());

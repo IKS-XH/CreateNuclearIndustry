@@ -61,9 +61,13 @@ class FuelSinteringPonderContractTest {
                 for (int x : List.of(1, 2, 4, 5)) {
                     // 冷热管路沿东西轴，避开北侧漏斗；底部热源上下直接相邻。
                     var pipe = blocks.get(List.of(x, 1, 3));
-                    assertEquals("create:fluid_pipe", pipe.getString("Name"));
-                    assertEquals("true", pipe.getCompound("Properties").getString("east"));
-                    assertEquals("true", pipe.getCompound("Properties").getString("west"));
+                    assertEquals(x == 1 ? "create_nuclear_industry:industrial_fluid_pump" : x == 2
+                            ? "create_nuclear_industry:reinforced_fluid_pipe" : "create:fluid_pipe", pipe.getString("Name"));
+                    if (x == 1) assertEquals("east", pipe.getCompound("Properties").getString("facing"));
+                    else {
+                        assertEquals("true", pipe.getCompound("Properties").getString("east"));
+                        assertEquals("true", pipe.getCompound("Properties").getString("west"));
+                    }
                 }
             }
         }

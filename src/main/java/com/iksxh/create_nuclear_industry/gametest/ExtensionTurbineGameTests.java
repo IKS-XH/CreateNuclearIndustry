@@ -63,8 +63,7 @@ public final class ExtensionTurbineGameTests {
                 .setValue(EncasedFanBlock.FACING, Direction.NORTH));
         helper.onEachTick(() -> {
             IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
-            if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
-                    tier.ratedFlowMbPerTick()), IFluidHandler.FluidAction.EXECUTE);
+            if (input != null) IndustrialFluidNetworkGameTests.feed(helper, inlet(FRONT, tier), Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), tier.ratedFlowMbPerTick());
             IFluidHandler output = handler(helper, exhaust(FRONT, tier), Direction.EAST);
             if (output != null) output.drain(tier.ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
         });
@@ -116,8 +115,7 @@ public final class ExtensionTurbineGameTests {
         helper.onEachTick(() -> {
             if (!feeding[0]) return;
             IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
-            if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
-                    tier.ratedFlowMbPerTick()), IFluidHandler.FluidAction.EXECUTE);
+            if (input != null) IndustrialFluidNetworkGameTests.feed(helper, inlet(FRONT, tier), Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), tier.ratedFlowMbPerTick());
             IFluidHandler output = handler(helper, exhaust(FRONT, tier), Direction.EAST);
             if (output != null) output.drain(tier.ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
         });
@@ -202,8 +200,7 @@ public final class ExtensionTurbineGameTests {
         helper.onEachTick(() -> {
             if (!feeding[0]) return;
             IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
-            if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 40),
-                    IFluidHandler.FluidAction.EXECUTE);
+            if (input != null) IndustrialFluidNetworkGameTests.feed(helper, inlet(FRONT, tier), Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), 40);
             IFluidHandler output = handler(helper, exhaust(FRONT, tier), Direction.EAST);
             if (output != null) output.drain(40, IFluidHandler.FluidAction.EXECUTE);
         });
@@ -286,11 +283,10 @@ public final class ExtensionTurbineGameTests {
         helper.onEachTick(() -> {
             for (int i = 0; i < feeds.size(); i++) {
                 IFluidHandler input = handler(helper, feeds.get(i), Direction.WEST);
-                if (input != null) input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
-                                tiers[i].ratedFlowMbPerTick()),
-                        IFluidHandler.FluidAction.EXECUTE);
+                if (input != null) IndustrialFluidNetworkGameTests.feedBelow(helper, feeds.get(i), BoilerContent.SUPERCRITICAL_STEAM.get(), tiers[i].ratedFlowMbPerTick());
                 IFluidHandler output = handler(helper, outlets.get(i), Direction.EAST);
                 if (output != null) output.drain(tiers[i].ratedFlowMbPerTick(), IFluidHandler.FluidAction.EXECUTE);
+                if (i == 2) IndustrialFluidNetworkGameTests.feed(helper, part(fronts[2], 0, 3, 5), Direction.UP, BoilerContent.SUPERCRITICAL_STEAM.get(), 256);
             }
         });
         helper.runAfterDelay(14, () -> {
@@ -306,13 +302,45 @@ public final class ExtensionTurbineGameTests {
                     IFluidHandler.FluidAction.EXECUTE) == 0, "普通蒸汽被进汽口接收");
             int secondAccepted = second.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 256),
                     IFluidHandler.FluidAction.EXECUTE);
-            require(helper, secondAccepted <= tiers[2].ratedFlowMbPerTick()
-                    && owner(helper, fronts[2]).ledger().remainingInput(
-                            helper.absolutePos(part(fronts[2], 0, 3, 5)).asLong(),
-                            helper.getLevel().getGameTime()) == 0,
-                    "第二物理进口绕过整机每 tick 额定值");
+            require(helper, secondAccepted == 0, "SC标准第二口应禁运");
+        });
+        int[] before = {0, 0}, samples = {0}, actualInputs = {0, 0}; boolean[] ready = {false};
+        int originalTurnover = TurbineConfig.TURNOVER_TICKS.get();
+        helper.runAfterDelay(29, () -> TurbineConfig.TURNOVER_TICKS.set(2));
+        BlockPos primaryPort = feeds.get(2), secondaryPort = part(fronts[2], 0, 3, 5);
+        BlockPos primarySource = primaryPort.west().below(4), secondarySource = secondaryPort.above(4);
+        java.util.function.Consumer<net.neoforged.neoforge.event.tick.LevelTickEvent.Post> capture = event -> {
+            if (event.getLevel() != helper.getLevel() || helper.getTick() < 30 || helper.getTick() > 60) return;
+            var owner = owner(helper, fronts[2]);
+            require(helper, owner.ledger().exhaust() == 0, "共口输入验证没有先释放机组接收容量");
+            before[0] = handler(helper, primarySource, null).getFluidInTank(0).getAmount();
+            before[1] = handler(helper, secondarySource, null).getFluidInTank(0).getAmount(); ready[0] = true;
+        };
+        java.util.function.Consumer<net.neoforged.neoforge.event.tick.LevelTickEvent.Post> verify = event -> {
+            if (event.getLevel() != helper.getLevel() || !ready[0]) return; ready[0] = false;
+            var ledger = owner(helper, fronts[2]).ledger(); var data = ledger.save(); long now = helper.getLevel().getGameTime();
+            int a = before[0] - handler(helper, primarySource, null).getFluidInTank(0).getAmount();
+            int b = before[1] - handler(helper, secondarySource, null).getFluidInTank(0).getAmount();
+            require(helper, data.getLong("FlowTick") == now && data.getInt("InputUsed") == tiers[2].ratedFlowMbPerTick()
+                    && a + b == tiers[2].ratedFlowMbPerTick()
+                    && ledger.exhaust() == tiers[2].ratedFlowMbPerTick() && ledger.exhaust() < ledger.exhaustCapacity()
+                    && ledger.exhaustCapacity() == 2 * tiers[2].ratedFlowMbPerTick()
+                    && ledger.remainingInput(helper.absolutePos(primaryPort).asLong(), now) == 0
+                    && ledger.remainingInput(helper.absolutePos(secondaryPort).asLong(), now) == 0, "两合法路线实收绕过同机额定输入预算：a=" + a + " b=" + b + " used=" + data.getInt("InputUsed"));
+            var firstPump = (com.iksxh.create_nuclear_industry.industrial.IndustrialPumpBlockEntity)helper.getBlockEntity(primaryPort.west().below(2));
+            var secondPump = (com.iksxh.create_nuclear_industry.industrial.IndustrialPumpBlockEntity)helper.getBlockEntity(secondaryPort.above(2));
+            require(helper, firstPump.cachedFluid().isEmpty() && secondPump.cachedFluid().isEmpty(), "被整机预算拒绝后仍额外抽源入缓存");
+            actualInputs[0] += a; actualInputs[1] += b; samples[0]++;
+        };
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGH, capture);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, verify);
+        helper.runAfterDelay(61, () -> {
+            try { net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(capture); net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(verify); }
+            finally { TurbineConfig.TURNOVER_TICKS.set(originalTurnover); }
         });
         helper.runAfterDelay(75, () -> {
+            require(helper, samples[0] >= 5 && actualInputs[0] > 0 && actualInputs[1] > 0, "共机两合法输入没有真实轮转成交证据");
+            System.out.println("[industrial-review] two physical turbine inlets " + samples[0] + " same-tick samples: InputUsed=" + tiers[2].ratedFlowMbPerTick() + ", exhaust216<capacity432, remaining both0, source totals=" + actualInputs[0] + "+" + actualInputs[1] + ", caches0, turnover restored=" + TurbineConfig.TURNOVER_TICKS.get());
             for (int i = 0; i < 3; i++) {
                 TurbineControllerBlockEntity owner = owner(helper, fronts[i]);
                 TurbineState.Tier tier = tiers[i];
@@ -362,7 +390,8 @@ public final class ExtensionTurbineGameTests {
             require(helper, owner != null && owner.currentForm() != null, "拆装场景未成型");
             var port = handler(helper, input, Direction.WEST);
             require(helper, port != null && port.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 54),
-                    IFluidHandler.FluidAction.EXECUTE) == 54, "真实进汽口未收汽");
+                    IFluidHandler.FluidAction.EXECUTE) == 0, "标准SC进汽口未禁运");
+            IndustrialFluidNetworkGameTests.feed(helper, input, Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), 54);
         });
         final IFluidHandler[] oldHandle = {null};
         helper.runAfterDelay(18, () -> {
@@ -422,14 +451,14 @@ public final class ExtensionTurbineGameTests {
         BlockPos motor = shaft.south();
         helper.setBlock(sourceTank, AllBlocks.FLUID_TANK.get());
         IFluidHandler source = handler(helper, sourceTank, Direction.EAST);
-        require(helper, source != null && source.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 8000),
-                IFluidHandler.FluidAction.EXECUTE) == 8000, "Create 源罐装汽失败");
-        helper.setBlock(sourcePipe, AllBlocks.FLUID_PIPE.get());
-        helper.setBlock(targetPipeA, AllBlocks.FLUID_PIPE.get());
-        helper.setBlock(targetPipeB, AllBlocks.FLUID_PIPE.get());
-        helper.setBlock(inletPipe, AllBlocks.FLUID_PIPE.get());
-        helper.setBlock(pump, AllBlocks.MECHANICAL_PUMP.getDefaultState()
-                .setValue(PumpBlock.FACING, Direction.NORTH));
+        require(helper, source != null && ((com.simibubi.create.content.fluids.tank.FluidTankBlockEntity)helper.getBlockEntity(sourceTank)).getTankInventory().fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 8000),
+                IFluidHandler.FluidAction.EXECUTE) == 8000, "Create 有限源罐夹具装汽失败");
+        helper.setBlock(sourcePipe, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get());
+        helper.setBlock(targetPipeA, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get());
+        helper.setBlock(targetPipeB, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get());
+        helper.setBlock(inletPipe, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.CERAMIC_PIPE.get());
+        helper.setBlock(pump, com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.PUMP.get().defaultBlockState()
+                .setValue(com.iksxh.create_nuclear_industry.industrial.IndustrialPumpBlock.FACING, Direction.NORTH));
         helper.setBlock(cog, AllBlocks.COGWHEEL.getDefaultState()
                 .setValue(RotatedPillarKineticBlock.AXIS, Direction.Axis.Z));
         helper.setBlock(shaft, AllBlocks.SHAFT.getDefaultState()
@@ -437,7 +466,7 @@ public final class ExtensionTurbineGameTests {
         helper.setBlock(motor, AllBlocks.CREATIVE_MOTOR.getDefaultState()
                 .setValue(CreativeMotorBlock.FACING, Direction.NORTH));
         ((CreativeMotorBlockEntity) helper.getBlockEntity(motor)).generatedSpeed.setValue(256);
-        sealOpenEnds(helper, new BlockPos[]{sourcePipe, targetPipeA, targetPipeB, inletPipe});
+
         BlockPos exhaust = exhaust(front, tier);
         BlockPos[] pipes = {exhaust.east(), exhaust.east(2), exhaust.east(3)};
         BlockPos tankPos = exhaust.east(4);
@@ -446,10 +475,10 @@ public final class ExtensionTurbineGameTests {
         sealOpenEnds(helper, pipes);
         helper.runAfterDelay(15, () -> {
             require(helper, owner(helper, front).currentForm() != null
-                    && ((PumpBlockEntity) helper.getBlockEntity(pump)).getSpeed() != 0,
+                    && ((KineticBlockEntity) helper.getBlockEntity(pump)).getSpeed() != 0,
                     "双管网场景未成型或入口机械泵未转动：成型="
                             + (owner(helper, front).currentForm() != null)
-                            + " 泵速=" + ((PumpBlockEntity) helper.getBlockEntity(pump)).getSpeed()
+                            + " 泵速=" + ((KineticBlockEntity) helper.getBlockEntity(pump)).getSpeed()
                             + " 马达速=" + ((CreativeMotorBlockEntity) helper.getBlockEntity(motor)).getSpeed());
         });
         final int[] baseline = {0};
@@ -488,8 +517,7 @@ public final class ExtensionTurbineGameTests {
         final int[] supply = {tier.ratedFlowMbPerTick()}, accepted = {0};
         helper.onEachTick(() -> {
             IFluidHandler input = handler(helper, inlet(FRONT, tier), Direction.WEST);
-            if (input != null) accepted[0] += input.fill(new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(),
-                    supply[0]), IFluidHandler.FluidAction.EXECUTE);
+            if (input != null) accepted[0] += IndustrialFluidNetworkGameTests.feed(helper, inlet(FRONT, tier), Direction.WEST, BoilerContent.SUPERCRITICAL_STEAM.get(), supply[0]);
         });
         helper.runAfterDelay(25, () -> {
             TurbineControllerBlockEntity owner = owner(helper, FRONT);
@@ -505,7 +533,7 @@ public final class ExtensionTurbineGameTests {
             TurbineControllerBlockEntity owner = owner(helper, FRONT);
             IFluidHandler tank = handler(helper, tankPos, Direction.WEST);
             int moved = tank == null ? 0 : tank.getFluidInTank(0).getAmount();
-            require(helper, moved > 0 && moved + owner.ledger().exhaust() == accepted[0]
+            require(helper, moved > 0 && moved + owner.ledger().exhaust() == accepted[0] + IndustrialFluidNetworkGameTests.unreportedFeed(helper, inlet(FRONT, tier), Direction.WEST)
                     && owner.ledger().averageFlowMbPerTick() < owner.ledger().minimumFlowMbPerTick()
                     && owner.ledger().totalSu() == 0,
                     "低供汽实际排出/守恒/零动力不符：入=" + accepted[0] + " 出=" + moved
@@ -520,7 +548,7 @@ public final class ExtensionTurbineGameTests {
             owner.addToGoggleTooltip(tooltip, false);
             boolean running = tooltip.size() > 1 && tooltip.get(1).getContents() instanceof TranslatableContents text
                     && text.getKey().endsWith(".running");
-            require(helper, moved + owner.ledger().exhaust() == accepted[0]
+            require(helper, moved + owner.ledger().exhaust() == accepted[0] + IndustrialFluidNetworkGameTests.unreportedFeed(helper, inlet(FRONT, tier), Direction.WEST)
                     && owner.ledger().averageFlowMbPerTick() == tier.ratedFlowMbPerTick()
                     && running && owner.ledger().totalSu() > 0,
                     "恢复后管路未持续额定排汽或护目镜误报堵塞：入=" + accepted[0]

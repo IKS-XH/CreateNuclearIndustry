@@ -61,6 +61,9 @@ public final class CreateNuclearIndustry {
         P1ServerConfig.register(modContainer);
         HeatExchangerConfig.register(modContainer);
         BoilerConfig.register(modContainer);
+        com.iksxh.create_nuclear_industry.config.IndustrialFluidConfig.register(modContainer);
+        com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.register(modEventBus);
+        NeoForge.EVENT_BUS.register(com.iksxh.create_nuclear_industry.industrial.IndustrialNetworkScheduler.class);
         TurbineConfig.register(modContainer);
         SpentFuelStorageConfig.register(modContainer);
         ModFluids.register(modEventBus);
@@ -90,7 +93,8 @@ public final class CreateNuclearIndustry {
         });
         // 持有库存的整机及其分块均禁止 Create 构造搬移；搬迁统一走整机携物入口。
         BlockMovementChecks.registerMovementAllowedCheck((state, level, pos) ->
-                state.is(SpentFuelStorageContent.DRY_STORAGE_RACK.get())
+                state.is(com.iksxh.create_nuclear_industry.content.IndustrialFluidContent.PUMP.get())
+                        || state.is(SpentFuelStorageContent.DRY_STORAGE_RACK.get())
                         || state.is(FuelProcessingContent.ENRICHMENT_CENTRIFUGE.get())
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())
                         || state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get())

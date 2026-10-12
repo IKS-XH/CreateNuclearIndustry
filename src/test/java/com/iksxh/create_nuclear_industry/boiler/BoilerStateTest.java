@@ -47,10 +47,10 @@ class BoilerStateTest {
     }
     @Test void coldFeedDilutesOnlyTemperatureAndSimulationIsPure() {
         var s = state(1000, 0, 29000, 0); CompoundTag before = s.save();
-        assertEquals(256, s.fillWater(A, 1000, true, 1)); assertEquals(before, s.save());
-        double tw = s.waterTemperature(); s.fillWater(A, 1000, false, 1);
+        assertEquals(4096, s.fillWater(A, 10000, true, 1)); assertEquals(before, s.save());
+        double tw = s.waterTemperature(); s.fillWater(A, 10000, false, 1);
         assertEquals(29000, s.totalHu(), EPS); assertTrue(s.waterTemperature() < tw);
-        assertEquals(0, s.fillWater(A, 1, false, 1)); assertEquals(256, s.fillWater(B, 1000, false, 1));
+        assertEquals(0, s.fillWater(A, 1, false, 1)); assertEquals(1000, s.fillWater(B, 1000, false, 1));
     }
     @Test void multiplePortsCannotDuplicatePressureHeadroomAndCarryActualEnthalpy() {
         var s = state(0, 11100, 0, 11100); var before = s.save();
@@ -83,8 +83,8 @@ class BoilerStateTest {
         assertEquals(0, unpaid.drainSteam(SUPERCRITICAL, A, 256, false, 1));
         assertFalse(state(0, 0, 0, 20000).outputQualified());
         var s = state(0, 12000, 0, 12000); s.setMinimumPressure(0); double before = s.totalHu();
-        assertEquals(256, s.drainSteam(SUPERCRITICAL, A, 256, false, 1));
-        assertEquals(before - 256, s.totalHu(), EPS); assertEquals(0, s.drainSteam(SUPERCRITICAL, A, 256, false, 1));
+        assertEquals(4096, s.drainSteam(SUPERCRITICAL, A, 10000, false, 1));
+        assertEquals(before - 4096, s.totalHu(), EPS); assertEquals(0, s.drainSteam(SUPERCRITICAL, A, 1, false, 1));
     }
     @Test void coolingKeepsLatentHeatAndCriticalRestorationMustPayAgain() {
         var s = state(0, 9000, 0, 9000); s.tick(1, 1, 0, true, true); s.prepare(100000, 1);
@@ -118,21 +118,21 @@ class BoilerStateTest {
         var s = state(200, 12000, 1200, 12000); s.setGeometry(12, 15, 3, 2, 4000, 4000);
         s.fillWater(A, 128, false, 5); s.setMinimumPressure(.2);
         var restored = new BoilerState(); restored.load(s.save()); assertEquals(s.save(), restored.save());
-        assertEquals(128, restored.fillWater(A, 256, false, 5)); assertEquals(24000, restored.waterCapacity()); assertEquals(30000, restored.steamCapacity());
+        assertEquals(3968, restored.fillWater(A, 10000, false, 5)); assertEquals(24000, restored.waterCapacity()); assertEquals(30000, restored.steamCapacity());
         restored.setGeometry(1, 1, 1, 1, 4000, 4000); assertEquals(12000, restored.steam()); assertEquals(12000, restored.steamHu(), EPS);
     }
     @Test void configurationValidatesRangeProductsAndThresholds() {
         assertTrue(BoilerState.DEFAULT.valid());
-        assertTrue(new BoilerState.Settings(5, 11, 2000, 2000, 256, 18, 1, 2, 1600, .1, .2, .7, .5, 1, .9, .8, 32, .9, .1).valid());
-        assertFalse(new BoilerState.Settings(5, 11, 2000, 2000, 256, 18, 1, 2, 1600, .1, .2, .7, .5, 1.01, .9, .8, 32, .9, .1).valid());
+        assertTrue(new BoilerState.Settings(5, 11, 2000, 2000, 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, 1, .9, .8, 32, .9, .1).valid());
+        assertFalse(new BoilerState.Settings(5, 11, 2000, 2000, 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, 1.01, .9, .8, 32, .9, .1).valid());
         var d = BoilerState.DEFAULT;
-        var valid = new BoilerState.Settings(6, 12, 500, 600, 128, 10, 1, 3, 100, .2, .3, .8, .4, .5, .9, .7, 16, 0, 0);
+        var valid = new BoilerState.Settings(6, 12, 500, 600, 128, 128, 10, 1, 3, 100, .2, .3, .8, .4, .5, .9, .7, 16, 0, 0);
         assertTrue(valid.valid()); var s = new BoilerState(); s.setSettings(valid); s.setGeometry(12, 24, 3, 2, 2000, 3000);
         assertEquals(6000, s.waterCapacity()); assertEquals(14400, s.steamCapacity());
         for (int[] range : new int[][]{{4, 11}, {12, 5}, {5, 33}}) {
-            var bad = new BoilerState.Settings(range[0], range[1], 2000, 2000, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
+            var bad = new BoilerState.Settings(range[0], range[1], 2000, 2000, 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
             assertFalse(bad.valid()); s.setSettings(bad); assertEquals(0, s.fillWater(A, 10, false, 1));
         }
-        assertFalse(new BoilerState.Settings(5, 32, 1000000, 1000000, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1).valid());
+        assertFalse(new BoilerState.Settings(5, 32, 1000000, 1000000, 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1).valid());
     }
 }

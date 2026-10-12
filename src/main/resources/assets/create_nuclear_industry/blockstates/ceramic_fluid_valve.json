@@ -1,0 +1,29 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/ceramic/fluid_valve/block_vertical_open"
+      }
+    },
+    {
+      "when": {
+        "axis": "y"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/ceramic/fluid_valve/block_horizontal_open"
+      }
+    },
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "create_nuclear_industry:block/industrial_fluid_visual_01/ceramic/fluid_valve/block_vertical_open",
+        "y": 90
+      }
+    }
+  ]
+}

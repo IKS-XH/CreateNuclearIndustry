@@ -184,7 +184,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         pushSteam(membersReady ? form : null, now);
         ledger.vent(now, membersReady && clear);
         refreshSteamKind(form); refreshPipes();
-        steamPressure.refresh(level, membersReady ? form : null, this::steamSourceReady, ledger.settings().portFlowMbPerTick());
+        steamPressure.refresh(level, membersReady ? form : null, this::steamSourceReady, ledger.settings().waterSteamPortFlowMbPerTick());
         producedView = ledger.produced(); ventedView = ledger.vented();
         status = !ledger.settings().valid() || !heat.valid() ? "invalid" : form == null ? "unformed" : !membersReady ? "member_conflict"
                 : stopped ? "redstone" : ledger.valveBlocked() ? "vent_blocked"
@@ -243,7 +243,8 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     }
     /** 原生源只随真实库存、付款和共同保压余量启停；本tick口额度耗尽不能撤销尚有存量的拓扑。 */
     private boolean steamSourceReady(BlockPos port) {
-        var kind = inventoryKind(port); return kind != null && ledger.removableSteam(kind) > 0;
+        // SC只允许专用交易，不能给Create普通管额外注入压力；原炉压和普通汽资格保持。
+        var kind = inventoryKind(port); return kind == BoilerSteamInventoryKind.NORMAL && ledger.removableSteam(kind) > 0;
     }
     /** 单口选择变更立即撤销该口句柄；原生来源网络只在控制器tick刷新，不改变同tick额度。 */
     void steamSelectionChanged(BlockPos p) {
@@ -279,7 +280,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     private void pushSteam(BoilerStructure.Form form, long now) {
         if (form == null) return;
         for (BlockPos p : form.steamPorts()) {
-            var kind = inventoryKind(p); if (kind == null) continue;
+            var kind = inventoryKind(p); if (kind != BoilerSteamInventoryKind.NORMAL) continue;
             int amount = ledger.remainingDrain(kind, p, now); if (amount == 0) continue;
             Direction side = form.outward(p); BlockPos targetPos = p.relative(side);
             if (!level.hasChunkAt(targetPos) || FluidPropagator.getPipe(level, targetPos) != null) continue;
@@ -303,7 +304,8 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         var heat = HeatExchangerConfig.settings();
         ledger.setGeometry(form.waterCells(), form.steamCells(), form.exchangers().size(), form.sections().size(), heat.hotCapacityMb(), heat.coldCapacityMb());
         refreshSteamKind(form);
-        return new Port(p.immutable(), side, form.waterPorts().contains(p) ? 0 : form.steamPorts().contains(p) ? 1 : form.hotPorts().contains(p) ? 2 : 3);
+        return com.iksxh.create_nuclear_industry.industrial.RestrictedFluidHandler.wrap(new Port(p.immutable(), side,
+                form.waterPorts().contains(p) ? 0 : form.steamPorts().contains(p) ? 1 : form.hotPorts().contains(p) ? 2 : 3));
     }
     private final class Port implements IFluidHandler, SharedFluidReceiver {
         private final BlockPos pos; private final Direction side; private final int kind, issued = epoch, issuedSteam;

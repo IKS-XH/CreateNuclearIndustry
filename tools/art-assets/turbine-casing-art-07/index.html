@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>汽轮机机壳B方案实际OBJ预览</title>
+<style>body{margin:0;background:#0d1519;color:#e8e6e0;font:16px/1.5 system-ui,sans-serif}main{max-width:1500px;margin:auto;padding:22px}h1{margin:0}.lead{color:#b6c2c1}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}.card{background:#192328;border:1px solid #38474d;border-radius:8px;padding:14px;overflow:auto}.tile{width:160px;height:160px;image-rendering:pixelated;background:#10171b;border:1px solid #647177}.models{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px}.model{display:block;width:100%;height:420px}.row{display:flex;gap:20px;align-items:center}.meta{color:#c3cbc6;font-size:14px}code{color:#c9dcd5}</style>
+<main><h1>汽轮机机壳｜B 分段轮舱试用候选</h1><p class="lead">以下几何直接来自现有汽轮机壳 OBJ。浏览器预览按实际 MTL、顶点/法线/面组和 UV 将两张原创纹理投到真实面上；素材已安装，真实游戏视觉仍待复看。</p>
+<section class="grid"><article class="card"><div class="row"><img class="tile" src="panel.svg"><div><h2>钢束带与窄铜缝</h2><p>U沿标准局部Z；V跨完整八棱同一平面，裁切邻格连续。</p></div></div></article><article class="card"><div class="row"><img class="tile" src="endcap.svg"><div><h2>钢法兰与铜内嵌端盖</h2><p>UV覆盖完整d3/d5/d7端截面，不在每个格子重复中心图案。</p></div></div></article></section>
+<section class="models"><article class="card"><h2>未成型实际模型</h2><object class="model" type="image/svg+xml" data="generated/preview/unformed.svg"></object><p class="meta">六向OBJ按既有预烘焙旋转逆映射；此处展示up基准。</p></article>
+<article class="card"><h2>d3成型模型</h2><object class="model" type="image/svg+xml" data="generated/preview/formed-d3.svg"></object></article>
+<article class="card"><h2>d5成型模型</h2><object class="model" type="image/svg+xml" data="generated/preview/formed-d5.svg"></object></article>
+<article class="card"><h2>d7成型模型</h2><object class="model" type="image/svg+xml" data="generated/preview/formed-d7.svg"></object></article></section>
+<article class="card"><h2>生产映射摘要</h2><p><code>casing → turbine_casing_07_panel</code>；<code>endcap → turbine_casing_07_endcap</code>；<code>inside/edge</code>继续引用原贴图。机壳候选清单共212个OBJ，详见 <code>mapping.json</code>。</p></article></main></html>

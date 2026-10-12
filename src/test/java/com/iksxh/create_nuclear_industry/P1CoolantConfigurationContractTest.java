@@ -17,7 +17,7 @@ class P1CoolantConfigurationContractTest {
     void serverConfigExposesPerSpaceBlockSharedCapacity() throws IOException {
         String source = readSource("com/iksxh/create_nuclear_industry/config/P1ServerConfig.java");
 
-        assertTrue(source.contains("defineInRange(\"perPortFlowMbPerTick\", 128"));
+        assertTrue(source.contains("defineInRange(\"perPortFlowMbPerTick\", 2048"));
         assertTrue(source.contains("defineInRange(\"coolantCapacityPerEmptyBlockMb\""));
         assertTrue(source.contains("ReactorCoolantCapacity.DEFAULT_CAPACITY_PER_EMPTY_BLOCK_MB"));
         assertTrue(source.contains("ReactorCoolantCapacity.MAX_CAPACITY_PER_EMPTY_BLOCK_MB"));

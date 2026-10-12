@@ -115,7 +115,9 @@ public final class FuelSinteringPonderScenes {
         lit(scene, false);
         Selection loop = util.select().fromTo(0, 1, 3, 2, 1, 3)
                 .add(util.select().fromTo(4, 1, 3, 6, 1, 3));
-        scene.world().showSection(loop, Direction.DOWN);
+        scene.world().showSection(loop.add(util.select().fromTo(0, 1, 4, 1, 1, 4)), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(1, 1, 3), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(0, 1, 4, 1, 1, 4), -256);
         scene.idle(15);
         tank(scene, HOT_TANK, new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1000));
         tank(scene, COLD_TANK, FluidStack.EMPTY);

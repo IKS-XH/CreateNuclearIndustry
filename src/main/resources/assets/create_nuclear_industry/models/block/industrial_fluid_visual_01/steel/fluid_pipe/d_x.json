@@ -1,0 +1,8 @@
+{
+  "parent": "create:block/fluid_pipe/d_x",
+  "textures": {
+    "0": "create_nuclear_industry:block/industrial_fluid_visual_01/steel_pipes_connected",
+    "1": "create_nuclear_industry:block/industrial_fluid_visual_01/steel_pipes",
+    "particle": "create_nuclear_industry:block/industrial_fluid_visual_01/steel_pipes"
+  }
+}

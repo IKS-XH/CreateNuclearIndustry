@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TTT",
+    "TCT",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "create_nuclear_industry:reinforced_fluid_pipe"
+    },
+    "C": {
+      "item": "create_nuclear_industry:industrial_ceramic"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:ceramic_fluid_pipe",
+    "count": 8
+  }
+}

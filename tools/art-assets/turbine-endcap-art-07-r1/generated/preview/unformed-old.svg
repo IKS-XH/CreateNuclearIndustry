@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="412" height="292" viewBox="0 0 412 292" shape-rendering="crispEdges">
+<title>未成型｜old端盖</title>
+<rect width="100%" height="100%" fill="#10171b"/>
+<text x="18" y="27" fill="#e5e7e3" font-family="sans-serif" font-size="16">未成型｜old端盖</text>
+<defs>
+<clipPath id="cap0" clipPathUnits="userSpaceOnUse"><polygon points="376.000,133.000 206.000,48.000 36.000,133.000 206.000,218.000"/></clipPath>
+<clipPath id="cap1" clipPathUnits="userSpaceOnUse"><polygon points="206.000,48.000 206.000,79.875 36.000,164.875 36.000,133.000"/></clipPath>
+<clipPath id="cap2" clipPathUnits="userSpaceOnUse"><polygon points="206.000,79.875 376.000,164.875 206.000,249.875 36.000,164.875"/></clipPath>
+<clipPath id="cap3" clipPathUnits="userSpaceOnUse"><polygon points="376.000,164.875 376.000,133.000 206.000,218.000 206.000,249.875"/></clipPath>
+<clipPath id="cap4" clipPathUnits="userSpaceOnUse"><polygon points="376.000,164.875 206.000,79.875 206.000,48.000 376.000,133.000"/></clipPath>
+<clipPath id="cap5" clipPathUnits="userSpaceOnUse"><polygon points="206.000,218.000 36.000,133.000 36.000,164.875 206.000,249.875"/></clipPath>
+</defs>
+<polygon points="206.000,48.000 206.000,79.875 36.000,164.875 36.000,133.000" fill="#3E5058" stroke="#101519" stroke-width="0.35"/>
+<g clip-path="url(#cap4)"><image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR42mPQMLX6TwlmwCa4ePsOrJgoA0AKowsqsGJshjBg0wxiFwaYgvGKSicwBolhM4QBl2aYRmSMzRAGbJphCpHxxfu3sBqCYgDMZlxhAHMJ9Q2wC4iAGwDCID42jGwBiE99A2CBCAowdM0gOeRARDEAmyHoGJtmjISEzRD0NICsGWtShhmCDaNrxpmZcAUi0bmRFAwASrX2tsU3waIAAAAASUVORK5CYII=" x="0" y="0" width="16" height="16" preserveAspectRatio="none" image-rendering="pixelated" transform="matrix(10.62500000 5.31250000 -0.00000000 -10.62500000 206.0000 218.0000)"/></g>
+<polygon points="206.000,79.875 376.000,164.875 206.000,249.875 36.000,164.875" fill="#28353A" stroke="#101519" stroke-width="0.35"/>
+<g clip-path="url(#cap0)"><image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAV0lEQVR42mPQMLX6TwlmWLx9x39KMMOKSicwo6Jvyn+7gAgwTQrGMCC6oIIkjNeAi/dvYWhAF8NrACiQ0A1AF6OtF4aBARQHIsXRSJYXSMUMFOdGSg0AALmsO9/CnZBlAAAAAElFTkSuQmCC" x="0" y="0" width="16" height="16" preserveAspectRatio="none" image-rendering="pixelated" transform="matrix(-10.62500000 5.31250000 -10.62500000 -5.31250000 376.0000 133.0000)"/></g>
+<polygon points="376.000,164.875 376.000,133.000 206.000,218.000 206.000,249.875" fill="#3E5058" stroke="#101519" stroke-width="0.35"/>
+<g clip-path="url(#cap5)"><image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR42mPQMLX6TwlmwCa4ePsOrJgoA0AKowsqsGJshjBg0wxiFwaYgvGKSicwBolhM4QBl2aYRmSMzRAGbJphCpHxxfu3sBqCYgDMZlxhAHMJ9Q2wC4iAGwDCID42jGwBiE99A2CBCAowdM0gOeRARDEAmyHoGJtmjISEzRD0NICsGWtShhmCDaNrxpmZcAUi0bmRFAwASrX2tsU3waIAAAAASUVORK5CYII=" x="0" y="0" width="16" height="16" preserveAspectRatio="none" image-rendering="pixelated" transform="matrix(10.62500000 5.31250000 0.00000000 -10.62500000 36.0000 303.0000)"/></g>
+</svg>

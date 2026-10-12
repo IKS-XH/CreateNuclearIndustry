@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** 验证 P1 默认热量、燃耗、损伤和流量参数仍与冻结平衡锚点一致。 */
+/** 验证正式P1已确认的2048流量与冻结热工锚点；原P0数值原型单独保持历史128参数。 */
 class P1BalanceContractTest {
     private static final Path SERVER_CONFIG_SOURCE = Path.of(
             "src", "main", "java", "com", "iksxh", "create_nuclear_industry", "config", "P1ServerConfig.java");
@@ -29,7 +29,7 @@ class P1BalanceContractTest {
         assertTrue(source.contains("defineInRange(\"baseHeatPerFuelBlockHuPerTick\", 1.0D"));
         assertTrue(source.contains("defineInRange(\"fuelBurnTimeHours\", 3.0D"));
         assertTrue(source.contains("defineInRange(\"coolantAbsorptionHuPerMb\", 0.5D"));
-        assertTrue(source.contains("defineInRange(\"perPortFlowMbPerTick\", 128"));
+        assertTrue(source.contains("defineInRange(\"perPortFlowMbPerTick\", 2048"));
         assertTrue(source.contains("defineInRange(\"damageHeatThresholdHuPerTick\", 0.25D"));
         assertTrue(source.contains("defineInRange(\"damageRatePerTickHuLoad\", 0.0000005D"));
         assertTrue(source.contains("defineInRange(\"fuelColumnDamageHeatMultiplier\""));

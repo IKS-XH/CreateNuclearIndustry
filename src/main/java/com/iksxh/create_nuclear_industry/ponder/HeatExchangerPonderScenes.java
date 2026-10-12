@@ -82,7 +82,9 @@ public final class HeatExchangerPonderScenes {
         note(scene, machine, util.vector().topOf(INTRO_EXCHANGER), 65,
                 "顶部受热面可连接供热负载。朝向决定冷热端口位置。");
 
-        scene.world().showSection(pipes.add(tanks), Direction.SOUTH);
+        scene.world().showSection(pipes.add(tanks).add(util.select().fromTo(6, 1, 9, 6, 1, 10)), Direction.SOUTH);
+        scene.world().setKineticSpeed(util.select().position(5, 1, 9), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(6, 1, 9, 6, 1, 10), -256);
         scene.idle(15);
         setTankFluid(scene, INTRO_HOT_TANK,
                 new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1000));
@@ -117,7 +119,9 @@ public final class HeatExchangerPonderScenes {
         BlockPos shaftPosition = createShaftPosition();
         Selection shaft = util.select().position(shaftPosition);
 
-        scene.world().showSection(exchangers.add(pipes).add(tanks), Direction.DOWN);
+        scene.world().showSection(exchangers.add(pipes).add(tanks).add(util.select().fromTo(8, 1, 8, 8, 1, 9)), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(7, 1, 8), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(8, 1, 8, 8, 1, 9), -256);
         scene.idle(15);
         setTankFluid(scene, LINE_HOT_TANK,
                 new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1000));
@@ -180,7 +184,9 @@ public final class HeatExchangerPonderScenes {
         Selection coolantLines = util.select().fromTo(6, 3, 1, 6, 3, 4)
                 .add(util.select().fromTo(7, 1, 1, 7, 1, 4));
         Selection coolantTanks = util.select().position(BOILER_COLD_TANK).add(util.select().position(BOILER_HOT_TANK));
-        scene.world().showSection(boiler.add(coolantLines).add(coolantTanks), Direction.DOWN);
+        scene.world().showSection(boiler.add(coolantLines).add(coolantTanks).add(util.select().fromTo(8, 1, 2, 8, 1, 3)), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(7, 1, 3), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(8, 1, 2, 8, 1, 3), -256);
         scene.idle(35);
         // 默认镜头从东北上方看入：同时移开北壁、东壁、顶盖和内部遮挡，端口不留在剖口中。
         // Ponder 1.0.82会重绘可见区，并将mask外邻块视为空气；无需改变模板或临时方块状态。
@@ -225,7 +231,9 @@ public final class HeatExchangerPonderScenes {
                 .add(util.select().position(CONDENSE_STEAM_TANK)).add(util.select().position(CONDENSE_WATER_TANK));
         Selection basin = util.select().position(PROCESS_BASIN).add(util.select().position(PROCESS_MIXER))
                 .add(util.select().position(PROCESS_SHAFT));
-        scene.world().showSection(loop.add(basin), Direction.DOWN);
+        scene.world().showSection(loop.add(basin).add(util.select().fromTo(8, 1, 8, 8, 1, 9)), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(7, 1, 8), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(8, 1, 8, 8, 1, 9), -256);
         scene.idle(15);
         setTankFluid(scene, CONDENSE_STEAM_TANK,
                 new FluidStack(ModFluids.HOT_COMPOUND_COOLANT_SOURCE.get(), 1000));

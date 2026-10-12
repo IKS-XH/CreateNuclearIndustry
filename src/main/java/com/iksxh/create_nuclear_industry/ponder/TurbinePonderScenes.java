@@ -127,7 +127,9 @@ public final class TurbinePonderScenes {
         Selection input = lineSelection(util, 9, FY, 5, 12, FY, 5);
         Selection output = lineSelection(util, 2, FY, 4, 5, FY, 4);
         Selection pad = util.select().fromTo(1, 0, 2, 13, 0, 9);
-        scene.world().showSection(machine.add(axles).add(input).add(output).add(pad), Direction.DOWN);
+        scene.world().showSection(machine.add(axles).add(input).add(output).add(pad).add(util.select().fromTo(10, FY, 6, 11, FY, 6)), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(10, FY, 5), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(10, FY, 6, 11, FY, 6), -256);
         scene.idle(15);
         setTankFluid(scene, OP_INPUT_TANK, new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 1000));
         setTankFluid(scene, OP_OUTPUT_TANK, FluidStack.EMPTY);
@@ -175,7 +177,9 @@ public final class TurbinePonderScenes {
                 .add(lineSelection(util, 2, FY, 4, 5, FY, 4));
         Selection axles = axles(util);
         Selection pad = util.select().fromTo(1, 0, 2, 13, 0, 9);
-        scene.world().showSection(machine.add(axles).add(lines).add(pad), Direction.DOWN);
+        scene.world().showSection(machine.add(axles).add(lines).add(pad).add(util.select().fromTo(10, FY, 6, 11, FY, 6)), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().position(10, FY, 5), 256);
+        scene.world().setKineticSpeed(util.select().fromTo(10, FY, 6, 11, FY, 6), -256);
         scene.idle(15);
         setTankFluid(scene, OP_INPUT_TANK, new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 1000));
         setTankFluid(scene, OP_OUTPUT_TANK, FluidStack.EMPTY);

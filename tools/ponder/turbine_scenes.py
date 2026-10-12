@@ -5,6 +5,7 @@ from __future__ import annotations
 import gzip
 import struct
 from pathlib import Path
+from heat_exchanger_scenes import industrial_route
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -181,6 +182,7 @@ def operation_scene() -> dict:
     add_tank(blocks, (fx - 5, fy, fz + 1))
     add(blocks, (fx, fy, fz - 1), "create:shaft", {"axis": "z"})
     add(blocks, (fx, fy, fz + 5), "create:shaft", {"axis": "z"})
+    industrial_route(blocks, [(x, fy, fz + 2) for x in range(fx + 2, fx + 5)], (10, fy, 5), "west", (10, fy, 6), (11, fy, 6), "west")
     return blocks
 
 
@@ -198,6 +200,7 @@ def efficiency_scene() -> dict:
     add_tank(blocks, (fx - 5, fy, fz + 1))
     add(blocks, (fx, fy, fz - 1), "create:shaft", {"axis": "z"})
     add(blocks, (fx, fy, fz + 5), "create:shaft", {"axis": "z"})
+    industrial_route(blocks, [(x, fy, fz + 2) for x in range(fx + 2, fx + 5)], (10, fy, 5), "west", (10, fy, 6), (11, fy, 6), "west")
     return blocks
 
 
