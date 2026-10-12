@@ -1,5 +1,7 @@
 # TIERED-FLUID-FLOW-01 管网候选与启动
 
+**2026-10-12验收更新：** 功能通过及01R2外观复看已由用户确认，按[联合验收](../turbine-fluid-accepted-integration/ACCEPTANCE.md)净合main `151ceba`；本页候选启动、旧制品与待测叙述保留原时点，现行主目录结果以联合验收为准。
+
 2026-10-12，主PM登记。功能源码候选`a5d1fe6`的自动及独立审查证据保留，用户本次明确除四项外观问题外功能手测全部通过。原Create模型/调色609914f的孤立管/自由端/T中心及箭头缺陷已按[01R2](../../../superpowers/plans/2026-10-12-tiered-fluid-visual-01r2.md)在原树窄整改并交[新候选](../tiered-fluid-visual-01r2/CANDIDATE.md)；只保留这四项视觉复看，不重复功能测试，未合main。独立16³锅炉候选及其他已验收范围保持。
 
 ## 启动与制品

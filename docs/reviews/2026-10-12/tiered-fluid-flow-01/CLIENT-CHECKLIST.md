@@ -1,5 +1,7 @@
 # TIERED-FLUID-FLOW-01 集中客户端检查
 
+**验收更新（2026-10-12）：** 用户已确认功能及01R2四项外观通过，按[联合验收](../turbine-fluid-accepted-integration/ACCEPTANCE.md)净合main `151ceba`，主目录build605/605通过；下方是原候选检查参考，不重开本批已通过门或补记用户未报告的教学细项。
+
 本清单保留原新增部件/受限运输操作供查阅。用户已明确除四项外观问题外功能手测全部通过，见[实际反馈登记](../tiered-fluid-visual-01r2/FEEDBACK.md)。原功能及自动/审查证据保留；当前只需01R2的四项局部复看，不重新进行下方已过功能操作。候选未合main；锅炉16³的独立人工门不由本清单关闭，不要求重新搭建极限规模机组。
 
 候选目录：`E:/MyMC/NewMod/Create_NuclearIndustry-fluid-network`，分支`codex/tiered-fluid-network-flow`。已携带用户当前候选“新的世界”27文件，主目录与来源原件保持，不回写候选测试进度。从该目录执行`./gradlew.bat runClient`。

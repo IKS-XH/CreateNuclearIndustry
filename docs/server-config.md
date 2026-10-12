@@ -1,6 +1,6 @@
 # 设备服务端配置
 
-> **流量首批01已交候选（2026-10-12）：** [a5d1fe6候选](./reviews/2026-10-12/tiered-fluid-flow-01/CANDIDATE.md)在同级Create_NuclearIndustry-fluid-network，543/543完整build和一次独立组合审查通过，停客户端门，尚未合main。下面记录实际配置键。反应堆现有冷热口与锅炉冷热口默认2048mB/t，锅炉给水/汽口4096；两档专用管阀8192/32768，一种专用泵16384mB/t@256RPM、16SU/RPM（4096SU@256RPM）。热液/SC只走专用管泵，Create罐保留；新管网压力后置。旧main的128/256限流不是本批候选默认，16³锅炉仍是独立候选。
+> **流量首批01已验收合入（2026-10-12）：** 功能及01R2外观由用户确认通过，按[联合验收](./reviews/2026-10-12/turbine-fluid-accepted-integration/ACCEPTANCE.md)净合main `151ceba`，下面记录实际配置键。反应堆现有冷热口与锅炉冷热口默认2048mB/t，锅炉给水/汽口4096；两档专用管阀8192/32768，一种专用泵16384mB/t@256RPM、16SU/RPM（4096SU@256RPM）。热液/SC只走专用管泵，Create罐保留；新管网压力后置。已有实例显式设置不自动覆盖，16³锅炉仍是独立候选。
 
 > **版本边界：** 三档结构、256RPM、01E共享双轴、01F流量效率/微周转、01G停机及冷凝配置已完成现行联合验收并合入main，见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。已有实例的显式设置不会因代码默认值改变而自动覆盖；主目录与候选各使用自己的运行配置。
 
@@ -56,8 +56,8 @@
 | :--- | ---: | :--- |
 | `dimensionRange` | main和流量候选 `[5, 11]`；独立尺寸候选 `[5, 16]` | 三边分别允许的整数闭区间；恰好两值；独立尺寸候选5≤min≤max≤16，main/流量候选原校验上限32 |
 | `waterCapacityPerCellMb` / `steamCapacityPerCellMb` | 各2000 | 每个有效水区/汽区格的mB容量；01F两种汽共用汽区总容量 |
-| `coolantPortFlowMbPerTick` | 本批候选2048 | 每个热液/冷液物理口的mB/t额度，主动/被动/专用交易共用 |
-| `waterSteamPortFlowMbPerTick` | 本批候选4096 | 每个给水/蒸汽物理口的mB/t额度，主动/被动/专用交易共用 |
+| `coolantPortFlowMbPerTick` | 2048 | 每个热液/冷液物理口的mB/t额度，主动/被动/专用交易共用 |
+| `waterSteamPortFlowMbPerTick` | 4096 | 每个给水/蒸汽物理口的mB/t额度，主动/被动/专用交易共用 |
 | `pairHeatHuPerTick` | 18 | 每有效换热器/再加热段配对的HU/t上限 |
 | `boilingTemperature` / `supercriticalTemperature` | 1 / 2 | 归一游戏温度，后者须大于前者 |
 | `wallHeatCapacityHuPerWaterCell` | 1600 | 每个水区格提供的炉壁热容，HU/温升 |
