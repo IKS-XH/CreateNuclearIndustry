@@ -4,6 +4,8 @@
 
 ## 当前执行与接续
 
+用户2026-10-12暂缓16³锅炉手测，要求先规划大规模反应堆的运输与自动控制。已确认新增工业冷端/热端，且工业管网优先、管理员随后；[分阶段准备稿](./superpowers/plans/2026-10-12-large-reactor-infrastructure-preparation.md)记录普通口128mB/t、锅炉口256mB/t及后端热力瓶颈，下一份设计聚焦工业冷却闭环。当前只规划，不派发未决数值/范围的实现；锅炉候选与原人工门保持。
+
 用户2026-10-12明确通过可变反应堆、快捷换料、窗口/顶盖控件及重进存档复看，已按[联合验收](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)净合main `6bdef37`，同源冻结包复用，未重复测试构建或回写世界。下方旧候选等待描述为历史。用户指定的[锅炉16³上限](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)已交[候选 `30020e4`](./reviews/2026-10-12/boiler-size-limit-01/CANDIDATE.md)，29/29定向、真实3/3及独立窄审通过，新范围独立留候选手测；按用户答复继续当前测试存档。
 
 候选进入原存档的换热器弱集合并发故障已交[窄修候选5d01314](./reviews/2026-10-12/exchanger-load-crash-01/CANDIDATE.md)，30/30定向、真实Basin7/7、唯一增量打包及独立窄审通过。现候选JAR仅桥class改变，快捷换料/ART09输入保持；从同一候选目录重启并进入原世界复看，本故障及其他人工门分别保持，未合main。
