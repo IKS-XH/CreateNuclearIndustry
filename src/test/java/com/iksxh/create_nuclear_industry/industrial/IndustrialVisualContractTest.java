@@ -3,14 +3,18 @@ package com.iksxh.create_nuclear_industry.industrial;
 import static org.junit.jupiter.api.Assertions.*;
 import com.google.gson.*;
 import com.iksxh.create_nuclear_industry.content.IndustrialFluidContent;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import java.io.ByteArrayInputStream;
 import java.nio.file.*;
 import java.util.*;
 import java.util.zip.ZipFile;
 import javax.imageio.ImageIO;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.TickRateManager;
 import org.junit.jupiter.api.Test;
+import sun.misc.Unsafe;
 
 /** 解析实际依赖及生产资源；连接、方向与首行只证明自动合同，不替代GPU和鼠标复看。 */
 class IndustrialVisualContractTest {
@@ -156,18 +160,53 @@ class IndustrialVisualContractTest {
             assertTrue(source.substring(source.indexOf("boolean addToGoggleTooltip")).contains("tooltip.add(GoggleTooltip.indentFirstLine("), name + "首行缺Create图标避让");
         }
     }
-    @Test void displayedOutputUsesActualPumpDirectionAndSuppressesStoppedAndOverstressed() throws Exception {
+    /** 理论轴速单位RPM；预期转向独立列出，超载/冻结只影响实际运行速度。 */
+    record PumpState(float speed, boolean overStressed, boolean frozen, boolean reversed) {}
+    static final List<PumpState> PUMP_STATES = List.of(
+            new PumpState(0, false, false, false),
+            new PumpState(256, false, false, false),
+            new PumpState(-256, false, false, true),
+            new PumpState(256, true, false, false),
+            new PumpState(-256, true, false, true),
+            new PumpState(256, false, true, false),
+            new PumpState(-256, false, true, true));
+    /** 仅替代客户端世界构造边界；原生TickRateManager及Create的getSpeed均照常执行。 */
+    static final class PumpWorld extends ClientLevel {
+        TickRateManager rates;
+        private PumpWorld() { super(null, null, null, null, 0, 0, null, null, false, 0); throw new AssertionError(); }
+        @Override public TickRateManager tickRateManager() { return rates; }
+    }
+    /** 方向合同与真实glyph共用最小世界夹具，不创建磁盘存档或改变生产动力逻辑。 */
+    static IndustrialPumpBlockEntity pumpFixture() throws ReflectiveOperationException {
+        var unsafe = Unsafe.class.getDeclaredField("theUnsafe"); unsafe.setAccessible(true);
+        var world = (PumpWorld) ((Unsafe) unsafe.get(null)).allocateInstance(PumpWorld.class);
+        world.rates = new TickRateManager();
+        var pump = new IndustrialPumpBlockEntity(BlockPos.ZERO, IndustrialFluidContent.PUMP.get().defaultBlockState());
+        pump.setLevel(world);
+        return pump;
+    }
+    /** 输入为同步轴速/超载/冻结状态；只设置夹具外部条件，保留真实速度读取和显示入口。 */
+    static void applyPumpState(IndustrialPumpBlockEntity pump, PumpState state) throws ReflectiveOperationException {
+        pump.setSpeed(state.speed());
+        var stress = KineticBlockEntity.class.getDeclaredField("overStressed"); stress.setAccessible(true); stress.setBoolean(pump, state.overStressed());
+        pump.getLevel().tickRateManager().setFrozen(state.frozen());
+    }
+    @Test void displayedOutputKeepsPlannedDirectionWhenStoppedOverstressedOrFrozen() throws Exception {
         Class<?> adapter;
         try { adapter = Class.forName("com.iksxh.create_nuclear_industry.industrial.client.IndustrialVisualOrientation"); }
         catch (ClassNotFoundException exception) { fail("缺少读取真实泵方向的只读视觉入口"); return; }
         var method = adapter.getMethod("displayedOutput", IndustrialPumpBlockEntity.class);
-        var pump = new IndustrialPumpBlockEntity(BlockPos.ZERO, IndustrialFluidContent.PUMP.get().defaultBlockState());
-        for (Direction facing : Direction.values()) {
+        var pump = pumpFixture();
+        for (Direction facing : Direction.values()) for (PumpState state : PUMP_STATES) {
             pump.setBlockState(pump.getBlockState().setValue(IndustrialPumpBlock.FACING, facing));
-            pump.setSpeed(256); assertEquals(pump.outputDirection(), method.invoke(null, pump)); assertEquals(facing, method.invoke(null, pump));
-            pump.setSpeed(-256); assertEquals(pump.outputDirection(), method.invoke(null, pump)); assertEquals(facing.getOpposite(), method.invoke(null, pump));
-            pump.setSpeed(0); assertNull(method.invoke(null, pump));
-            pump.setSpeed(256); var stress = com.simibubi.create.content.kinetics.base.KineticBlockEntity.class.getDeclaredField("overStressed"); stress.setAccessible(true); stress.setBoolean(pump, true); assertNull(method.invoke(null, pump)); stress.setBoolean(pump, false);
+            applyPumpState(pump, state);
+            Direction expected = state.reversed() ? facing.getOpposite() : facing;
+            assertEquals(expected, method.invoke(null, pump), "停转、超载或冻结仍须显示预定运输方向 " + state);
+            assertEquals(state.speed(), pump.getTheoreticalSpeed(), "显示只读取现有同步轴速");
+            if (state.overStressed() || state.frozen() || state.speed() == 0) {
+                assertEquals(0, pump.getSpeed(), "可见箭头不能恢复被停用的真实动力");
+                assertEquals(0, IndustrialFlowBudget.pumpLimit(16384, 256, pump.getSpeed()), "真实停用速度仍产生零运输额度");
+            } else assertEquals(pump.outputDirection(), method.invoke(null, pump), "运行时保持正式出液方向");
         }
     }
 }

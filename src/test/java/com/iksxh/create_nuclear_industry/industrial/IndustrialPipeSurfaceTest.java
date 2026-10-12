@@ -142,9 +142,13 @@ class IndustrialPipeSurfaceTest {
     }
     @Test void everyActualArrowFaceShowsOpaqueTipTowardRealPumpOutput() throws Exception {
         var application=new JsonObject();application.addProperty("model",NS+":block/industrial_fluid_visual_01/output_arrow");var faces=bake(application);
-        var pump=new IndustrialPumpBlockEntity(BlockPos.ZERO,IndustrialFluidContent.PUMP.get().defaultBlockState());
-        for(Direction facing:Direction.values())for(float speed:List.of(-256f,256f)){
-            pump.setBlockState(pump.getBlockState().setValue(IndustrialPumpBlock.FACING,facing));pump.setSpeed(speed);var output=pump.outputDirection();
+        var pump=IndustrialVisualContractTest.pumpFixture();
+        for(Direction facing:Direction.values())for(var state:IndustrialVisualContractTest.PUMP_STATES){
+            pump.setBlockState(pump.getBlockState().setValue(IndustrialPumpBlock.FACING,facing));IndustrialVisualContractTest.applyPumpState(pump,state);
+            var output=IndustrialVisualOrientation.displayedOutput(pump);var expected=state.reversed()?facing.getOpposite():facing;
+            assertNotNull(output,"真实glyph在停转、超载和冻结时也必须可见 "+state);
+            assertEquals(expected,output,"真实glyph使用预定运输方向");
+            if(!state.overStressed()&&!state.frozen()&&state.speed()!=0)assertEquals(pump.outputDirection(),output,"运行时仍朝真实出液口");
             for(Surface surface:faces){
                 int first=-1,last=-1,widest=-1,maxWidth=0;float tipX=0,stemX=0;
                 for(int y=0;y<surface.pixels.getHeight();y++){
@@ -157,11 +161,9 @@ class IndustrialPipeSurfaceTest {
                 try { IndustrialVisualOrientation.class.getMethod("orientArrow",Class.forName("net.createmod.catnip.render.SuperByteBuffer"),Direction.class).invoke(null,buffer,output); }
                 catch(NoSuchMethodException absent){buffer.getClass().getMethod("center").invoke(buffer); buffer.getClass().getMethod("rotateYDegrees",float.class).invoke(buffer,(float)IndustrialVisualOrientation.yRotation(output)); buffer.getClass().getMethod("rotateXDegrees",float.class).invoke(buffer,(float)IndustrialVisualOrientation.xRotation(output)); buffer.getClass().getMethod("uncenter").invoke(buffer);}
                 var matrix=((com.mojang.blaze3d.vertex.PoseStack)buffer.getClass().getMethod("getTransforms").invoke(buffer)).last().pose();var delta=matrix.transformPosition(new Vector3f(tip)).sub(matrix.transformPosition(new Vector3f(stem))).normalize();
-                assertTrue(delta.dot(new Vector3f(output.getStepX(),output.getStepY(),output.getStepZ()))>.9999,"真实FaceBakery glyph及SuperByteBuffer变换必须朝真实出液口");
+                assertTrue(delta.dot(new Vector3f(expected.getStepX(),expected.getStepY(),expected.getStepZ()))>.9999,"真实FaceBakery glyph及SuperByteBuffer变换必须朝预定运输方向");
             }
         }
-        pump.setSpeed(0);assertNull(IndustrialVisualOrientation.displayedOutput(pump));
-        pump.setSpeed(256);var stress=com.simibubi.create.content.kinetics.base.KineticBlockEntity.class.getDeclaredField("overStressed");stress.setAccessible(true);stress.setBoolean(pump,true);assertNull(IndustrialVisualOrientation.displayedOutput(pump));
     }
     /** 两个静态法兰侧面共用旋转UV；逐点经FaceBakery逆映射检查消色区，不能用齿轮不可见点代替。 */
     private static void assertPumpFlangeSideIsNeutral(float lowerY) throws Exception {
