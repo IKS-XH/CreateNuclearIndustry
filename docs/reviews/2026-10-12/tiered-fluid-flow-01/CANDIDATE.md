@@ -1,6 +1,6 @@
 # TIERED-FLUID-FLOW-01 管网候选与启动
 
-2026-10-12，主PM登记。功能源码已提交候选`a5d1fe6`，自动验证及一次独立规格/质量组合审查完成；停在本批集中客户端门，未合main。main正式源码/JAR、独立16³锅炉候选及其他已验收范围保持。
+2026-10-12，主PM登记。功能源码候选`a5d1fe6`的自动及独立审查证据保留。用户发现新增管道缺图、泵流向不清与图标遮字，按[TIERED-FLOW-VISUAL-01](../../../superpowers/plans/2026-10-12-tiered-fluid-visual-01.md)在原树整改；当前制品包含Create原模型/调色、实流箭头与首行避让。停在本批集中客户端门，未合main。独立16³锅炉候选及其他已验收范围保持。
 
 ## 启动与制品
 
@@ -11,9 +11,11 @@ cd E:\MyMC\NewMod\Create_NuclearIndustry-fluid-network
 .\gradlew.bat runClient
 ```
 
-JAR在本树`build/libs/create_nuclear_industry-0.1.0.jar`，2,790,597 bytes，SHA256：
+当前视觉整改JAR在本树`build/libs/create_nuclear_industry-0.1.0.jar`，2,853,790 bytes，SHA256：
 
-`364ec4277fc8c8b8ca2a99ef114a86ab17e5fff73a311b905c18d4d21edbf053`
+`be28ad02d98152532932595912dda375448bb46dce84abd183be0fb56db0d03b`
+
+原功能包`364ec427…`保留于`build/reports/tiered-fluid-visual-01/pre-visual.jar`；首次视觉包和审查前后日志亦保留。当前世界直接留在原位，没有再次搬动、覆盖或回写。
 
 本批没有自动启动客户端或改写用户世界。只携带存档，未复制来源实例配置；本树首次启动生成自己的配置，世界内若有同名serverconfig仍优先。现有热液与SC管线需改用专用管及工业泵；水、冷冷却液及蒸汽仍允许原版输送。
 
@@ -42,6 +44,8 @@ JAR在本树`build/libs/create_nuclear_industry-0.1.0.jar`，2,790,597 bytes，S
 主目录用户/其他任务dirty的project.md、模拟器、日志与艺术稿保留；候选自动生成日志/pycache也未夹带。PM只管理计划、文档/Git与审核，生产/测试由唯一执行者完成，review未重跑测试。没有新旧存档兼容研究，也没有主目录制品替换。
 
 ## 当前需要的人工门
+
+视觉整改最终11/11定向检查通过；首次必要增量assemble退出0，同一次审查发现阀指针被实心面/透明窗口深度遮挡，窄修三轴矩阵与准确`minecraft:cutout_mipped`后第二次必要增量退出0。154来源与143独立JAR条目一致；原543/543及热工真实组复用，不是本轮重跑。具体来源、许可证、失败历史和实际范围见[视觉执行报告](../tiered-fluid-visual-01/IMPLEMENTATION.md)与[同一次窄审](../tiered-fluid-visual-01/REVIEW.md)。
 
 按[集中检查单](./CLIENT-CHECKLIST.md)复看新增部件放置/扳手/开度、实际输送与禁运、Create罐联动、泵缓存搬移、正常重进和受影响Ponder的局部画面。只用现有小机组即可，不要求先搭16³锅炉或重新验八类教学。客户端模型、Ctrl选取按键与鼠标可读性不能由服务端/静态检查代替。
 
