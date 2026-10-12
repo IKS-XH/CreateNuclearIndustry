@@ -1,5 +1,7 @@
 # 《机械动力：核工业》内容注册与素材清单
 
+> **流量首批01已交候选（2026-10-12）：** [a5d1fe6](./reviews/2026-10-12/tiered-fluid-flow-01/CANDIDATE.md)实际注册reinforced_fluid_pipe、ceramic_fluid_pipe、industrial_fluid_pump、reinforced_fluid_valve、ceramic_fluid_valve五种，两个管阀等级与一个泵；543/543完整build与一次独立审查通过，模型/操作人工门保持，未合main。取消新增工业端口，沿用现有反应堆/锅炉接口身份，直接提高限流；无新储罐/原料/压力元数据。现有Create罐可存热冷却液/SC，运输必须专用管泵。依据[规范](./superpowers/specs/2026-10-12-tiered-fluid-network-design.md)与[实施卡](./superpowers/plans/2026-10-12-tiered-fluid-network-flow-01.md)，旧目标表不构成本批新增泵/端口授权。
+
 **更新：2026-10-11。** 注册身份、目标内容及资源职责由本清单维护；进度和完成证据统一见[路线图](./implementation-roadmap.md)。表中P1/P2/P3是目标阶段，不代表已实现；现有基础链、热端、封存及八类设备教学均已按各自范围验收。反应堆和普通冷热冷却剂的本批美术已按用户授权[合入main](./reviews/2026-10-11/art-integration/INTEGRATION.md)，原视觉记录保留。
 
 命名空间`create_nuclear_industry`，版本为Java21 / Minecraft1.21.1 / NeoForge21.1.219 / Create6.0.10。玩法见[项目策划](./project.md)，材料数量与工序见[配方表](./recipes.md)。ID保持稳定，但首发前不研究旧存档兼容，不把旧半成品身份列为新加工路线。

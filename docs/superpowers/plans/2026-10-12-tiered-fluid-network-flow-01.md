@@ -10,6 +10,8 @@
 
 **Spec：** [已确认规范](../specs/2026-10-12-tiered-fluid-network-design.md)，[锁定Create事务核查](../../reviews/2026-10-12/tiered-pipe-preparation/RESTRICTION-STUDY.md)。用户最后两次修订取消工业口，锅炉水汽4096、其余冷热2048；均已确认，不再等待开工许可。
 
+**当前状态（2026-10-12）：** Task1实现、必要自动验证及一次独立组合审查已完成，候选源码`a5d1fe6`留同级`Create_NuclearIndustry-fluid-network`。最终543/543标准build成功；43旧128断言失败后精确修断言，再一次必要build如实保留。102源/117独立JAR项一致、四项P2闭环，原工业20、汽轮机12、汽种6、换热4及新增定向行为证据复用。见[候选与实际限制](../../reviews/2026-10-12/tiered-fluid-flow-01/CANDIDATE.md)及[人工清单](../../reviews/2026-10-12/tiered-fluid-flow-01/CLIENT-CHECKLIST.md)。停集中人工门，未合main、不重复派发或构建，不推进管理员/压力；下列任务列表保留原实施合同，不表示需要重新执行。
+
 ## 全局约束、基线与唯一写者
 
 - 单泵16384mB/t@256RPM、16SU/RPM（4096SU@256RPM），公式floor(额定Q×clamp(abs(RPM)/256,0,1))，无额外最低转速；每侧搜寻256管段、网络最多4096节点。二级管/阀8192、三级32768；阀开度0～100%，红石高电平强制关闭。所有数字SERVER配置；非法或溢出不交易并可读提示。
@@ -88,3 +90,7 @@ main已验收生产源及原功能证据作为基线复用，不再跑开工全�
 - J/gametest/BoilerControlsGameTests.java：仅被已允BoilerTurbineFlowGameTests委托的nativeSteamPipeChangesTypeWithoutLossOrExternalRewrite及其受限路线helper，将SC原生输出正例改为专用管泵及同份库存观测；原过滤、背压、mB/HU、调压和恢复断言保持，其他方法不改。这是已批准禁运规则直接影响的原测试调用，不扩功能或旧存档范围。
 - 隔离区块诊断允许仅该方法临时templateNamespace=create_nuclear_industry_industrial_chunk并在build/resources/main/data复制原模板；成功后恢复原注解，验证临时目录绝对路径在本树build内后删除本批输出，最终JAR不得含临时域。真实卸载保持，不用hasChunkAt=false代替Unload事件。锁定MC票据MAX_LEVEL44与owner31的生成范围造成82格夹具不卸载，目标改224格/14区块、223管段仍≤256；只跑对应增量，最终稳定源再统一原域，完整build保留一次。
 - 一次组合审查的三个P2用例允许相同隔离机制使用临时create_nuclear_industry_industrial_review域，仅新增方向绕行/多面、边界阀真实卸载、原生BlockItem创造连续放置与Ctrl追加NBT三条用例；原模板只复制到本树build/resources/main/data。定向结束恢复原正式域注解，核绝对目标在本树build内后清理本批临时输出；最终JAR不得含该域，不重跑未受影响的20例/12汽轮机域，不写构建脚本。
+- 同次旧域适配审查要求恢复ExtensionTurbineGameTests原第二进口的实质整机同tick预算断言；标准SC禁运0及remainingInput≤rated不能代替额度耗尽/两合法路共享额度。仅该方法可临时纳入上述review域并复制其原合法模板至build；真实账本/两路实收及缓存守恒证据定向验证，结束还原注解/临时输出，不重跑未变12例或修改汽轮机生产性能。
+- 上项定向样本允许在该单方法保存/临时设置原合法turnoverTicks=2并完整恢复；须证明exhaust=216小于容量432时，两口剩余输入额度仍0且两源同tick总扣量216，排除默认1tick满库存掩盖预算。正式默认及候选玩法仍1tick，不扩为性能调整；如实际合法校验不同则先报告，不凭假字段造测试。
+- BoilerSteamSelectionGameTests原六个方法实际模板域均为boiler_inventory，单看holder名steam_selection会零注册。允许仅该类六方法临时筛到industrial_review并复制其原inventory_empty模板到本树build临时域；结束恢复原注解/清临时输出，真实注册6才计6例，原No test functions的Gradle0不记通过。不得借此重跑整个原库存域或改正式测试域/构建脚本。
+- T/P1BalanceContractTest.java：仅serverConfigUsesFrozenDefaultsAndHasNoAggregateFlowKey的原默认128字符串断言改已批准2048，并准确区分原P0数值原型仍128；其余三个方法及热工/燃耗/损伤不改。43完整build实际543项、542通过、此1项失败，exit1/JAR不计成功。此明确失败触发修后再执行一次标准增量build关闭原构建入口，不先额外跑同类再机械重复；保留43原日志、实际最终全量/退出及JAR身份，禁止clean/--rerun-tasks。

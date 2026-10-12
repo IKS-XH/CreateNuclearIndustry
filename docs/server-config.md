@@ -1,5 +1,7 @@
 # 设备服务端配置
 
+> **流量首批01已交候选（2026-10-12）：** [a5d1fe6候选](./reviews/2026-10-12/tiered-fluid-flow-01/CANDIDATE.md)在同级Create_NuclearIndustry-fluid-network，543/543完整build和一次独立组合审查通过，停客户端门，尚未合main。下面记录实际配置键。反应堆现有冷热口与锅炉冷热口默认2048mB/t，锅炉给水/汽口4096；两档专用管阀8192/32768，一种专用泵16384mB/t@256RPM、16SU/RPM（4096SU@256RPM）。热液/SC只走专用管泵，Create罐保留；新管网压力后置。旧main的128/256限流不是本批候选默认，16³锅炉仍是独立候选。
+
 > **版本边界：** 三档结构、256RPM、01E共享双轴、01F流量效率/微周转、01G停机及冷凝配置已完成现行联合验收并合入main，见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。已有实例的显式设置不会因代码默认值改变而自动覆盖；主目录与候选各使用自己的运行配置。
 
 三设备配置化随[01A](archive/2026-10-08-completed-plans/2026-10-04-ext-b-turbine-01a.md)实施并经后续各批接续，当前数值与行为按下表及SERVER配置执行。数值调整由服务器决定，客户端护目镜读取服务端同步结果。
@@ -16,10 +18,29 @@
 - `create_nuclear_industry-heat-exchanger.toml`：核换热器，保留原文件和已有键。
 - `create_nuclear_industry-turbine.toml`：三档汽轮机。
 - `create_nuclear_industry-storage.toml`：已验收的轻量封存与干式贮存架。
+- `create_nuclear_industry-industrial-fluid.toml`：本批专用管网候选，所有键在顶层。
 
-当前开发候选配置目录为 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration/run/config/`；主目录启动的客户端使用主目录自己的 `run/config/`。如需仅对某个单人世界生效，可将相应文件复制到 `run/saves/<世界名>/serverconfig/` 再修改；已有覆盖文件会优先于实例配置。不要混淆两套运行目录。
+本批流量候选配置目录为 `E:/MyMC/NewMod/Create_NuclearIndustry-fluid-network/run/config/`；独立16³锅炉候选仍在 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration/run/config/`，主目录启动读取主目录自己的 `run/config/`。本批只携带世界、未复制来源实例配置，新的默认由候选源码生成；世界若有同名serverconfig仍优先使用。如需仅对某个单人世界生效，可将相应文件复制到 `run/saves/<世界名>/serverconfig/` 再修改。不要混淆运行目录。
 
 退出世界或关闭服务器，修改当前实际生效的 TOML，重新进入或启动后核对护目镜。本文不承诺在线热重载，也不把旧版Forge默认的存档路径说明当作当前版本行为。路径依据为锁定版 `ServerLifecycleHooks.handleServerAboutToStart` 与 `ConfigTracker.resolveBasePath`，并由本批隔离服务端实际生成文件核实。
+
+## 专用流体管网（流量首批候选）
+
+文件：`create_nuclear_industry-industrial-fluid.toml`，SERVER配置，全部顶层键。
+
+| 键 | 默认 | 含义 |
+| :--- | ---: | :--- |
+| `reinforcedFlowMbPerTick` | 8192 | 二级强化钢管及阀的单节点共享mB/t额度 |
+| `ceramicFlowMbPerTick` | 32768 | 三级陶瓷内衬管及阀的单节点共享mB/t额度 |
+| `pumpFlowMbPerTick` | 16384 | 唯一工业泵的额定mB/t及最大周转mB；缩小配置保留现有余量并拒收超额 |
+| `ratedRpm` | 256 | 达到泵额定流量的RPM，实际转速绝对值线性换算并封顶 |
+| `stressSuPerRpm` | 16 | 每RPM的泵应力SU；256RPM默认4096SU |
+| `searchDistance` | 256 | 每侧最多搜寻的专用管段数；不强载缺失区块 |
+| `maxNetworkNodes` | 4096 | 连接拓扑最大节点数，超出停止交易并提示 |
+
+流量公式为floor(`pumpFlowMbPerTick`×clamp(abs(RPM)/`ratedRpm`,0,1))，再受路径、阀、源量、设备口及接收量限制；串泵不相加，共用物理管段额度，多泵独立路线可并联。阀的0～100%开度在世界内设置，红石关闭优先。缓存是原已扣源的同份工质，管段不存液；模拟不收费，目标短收保留同泵缓存，恢复后继续交付，不换种或降级。冷热液和两种汽各走独立介质路线。
+
+原P1 SERVER文件的`reactor.perPortFlowMbPerTick`在本候选默认2048，反应堆每个冷/热物理口共用其自身额度。锅炉分项见下表；不新增工业口ID或配方，不提升原热工功率或汽轮机耗汽上限。
 
 ## 锅炉
 
@@ -33,9 +54,10 @@
 
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |
-| `dimensionRange` | main `[5, 11]`；本批候选 `[5, 16]` | 三边分别允许的整数闭区间；恰好两值；本批候选5≤min≤max≤16，main旧校验上限32 |
+| `dimensionRange` | main和流量候选 `[5, 11]`；独立尺寸候选 `[5, 16]` | 三边分别允许的整数闭区间；恰好两值；独立尺寸候选5≤min≤max≤16，main/流量候选原校验上限32 |
 | `waterCapacityPerCellMb` / `steamCapacityPerCellMb` | 各2000 | 每个有效水区/汽区格的mB容量；01F两种汽共用汽区总容量 |
-| `portFlowMbPerTick` | 256 | 每个水、汽、热液、冷液口的独立mB/t额度，主动/被动共用 |
+| `coolantPortFlowMbPerTick` | 本批候选2048 | 每个热液/冷液物理口的mB/t额度，主动/被动/专用交易共用 |
+| `waterSteamPortFlowMbPerTick` | 本批候选4096 | 每个给水/蒸汽物理口的mB/t额度，主动/被动/专用交易共用 |
 | `pairHeatHuPerTick` | 18 | 每有效换热器/再加热段配对的HU/t上限 |
 | `boilingTemperature` / `supercriticalTemperature` | 1 / 2 | 归一游戏温度，后者须大于前者 |
 | `wallHeatCapacityHuPerWaterCell` | 1600 | 每个水区格提供的炉壁热容，HU/温升 |
@@ -48,11 +70,13 @@
 | `idleWaterCoolingHuPerCellPerTick` | 0.9 | 无实际收热时每水区格显热损失，HU/t |
 | `idleSteamCoolingHuPerCellPerTick` | 0.1 | 无实际收热时每汽区格高于沸点的显热损失，HU/t |
 
-冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；扫描/传输保守工程封顶32保持，本批候选合法搭建上限为16。16³隔层localY=8示例水区1372格、汽区1176格，默认水2744000mB、汽2352000mB；隔层高度仍由现行结构规则决定，自动检查不代替客户端性能验收。
+冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；main和本批流量候选保持原扫描/传输保守工程封顶32，独立尺寸候选合法搭建上限为16。16³隔层localY=8示例水区1372格、汽区1176格，默认水2744000mB、汽2352000mB；隔层高度仍由现行结构规则决定，自动检查不代替客户端性能验收。
 
 控制器沿用01B单一出汽压力下限，显式机器设置独立保存，不由默认配置覆盖。01F新批次按实际批次汽温及加量后的共同炉压归类，已有两种库存不变身份；炉压由两种汽量和各自实际汽温共同决定，与Create运输压力分开。压力下限可设100%，可能因安全阀先泄放而停止正常出汽；它不是目标炉压，也不强制产生普通汽。默认5³居中隔层上下各9格、水汽各18000mB，汽容量由两种共用；全部汽温为2时，下限0.6对应保留10800mB。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出HU均实际扣账，普通汽不因再热变SC，欠热SC等待再热。散热不扣潜热、不模拟炉内凝水，安全阀排放仍消耗工质和热量。
 
 历史配置键说明见已归档的重构合同，当前仅使用上表键；本次不删除用户配置或世界。
+
+本批流量候选以冷热、水汽两个键替代main旧`portFlowMbPerTick=256`，不新增旧字段迁移或兼容别名；各实例显式设置按其实际运行配置生效。本批锅炉尺寸仍使用已验收main默认[5,11]与原校验，不夹带待验16³源。SC仅经专用管泵抽取，停止原生管加压和邻罐直推；普通蒸汽主动输出保持。
 
 **汽口选择（01F现行）：** 沿用01D原生选项“蒸汽 / 超临界蒸汽”，默认超临界，各口独立保存。每个口只抽所选的真实库存，无对应库存、欠热或无保压余量时等待；已有SC在低于生产炉压门槛后仍可按公共下限输出。两种可同时经各自独立管路交付，不降级、混装、转换或清除外部异种流体。控制器不增加汽种开关，所有配置数值保持原值。01D历史4项证据保留，本批25项账本/11个不同真实用例及独立审查见候选说明，客户端门已由2026-10-08集中验收关闭。
 

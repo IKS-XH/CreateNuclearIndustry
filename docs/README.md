@@ -1,10 +1,10 @@
 # 项目文档入口
 
-**更新：2026-10-12。** 已接受的反应堆可变尺寸、快捷换料、窗口与顶面控件及重进存档窄修现已[净合main `6bdef37`](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原定向证据和冻结组合JAR复用。此前美术集成main `fba424fc`及设备教学验收保持。当前仅接用户指定的锅炉最大外尺寸16³，新增范围单独验收。
+**更新：2026-10-12。** 已接受的反应堆可变尺寸、快捷换料、窗口与顶面控件及重进存档窄修现已[净合main `6bdef37`](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原定向证据和冻结组合JAR复用。此前美术集成main `fba424fc`及设备教学验收保持。当前分级流量候选待集中手测；锅炉16³上限仍是独立待验候选。
 
 ## 当前执行与接续
 
-当前已按用户最终修订冻结[分级流量规范](./superpowers/specs/2026-10-12-tiered-fluid-network-design.md)与[实施卡01](./superpowers/plans/2026-10-12-tiered-fluid-network-flow-01.md)：两档管/阀8192和32768，一种泵16384mB/t@256RPM、4096SU；取消工业端口，直接提高现有反应堆冷热口及锅炉冷热口为2048、锅炉水汽口为4096mB/t，全部可配置。热冷却液/SC运输走专用管泵，Create罐保留，管网压力后置。下一步自动派发唯一执行者开发，原锅炉16³人工门及用户无关dirty源保持。下段未决描述为修订前准备时点。
+当前[分级流量候选a5d1fe6](./reviews/2026-10-12/tiered-fluid-flow-01/CANDIDATE.md)已完成543/543标准build及一次独立组合审查，留同级`Create_NuclearIndustry-fluid-network`，按[集中检查单](./reviews/2026-10-12/tiered-fluid-flow-01/CLIENT-CHECKLIST.md)启动手测。二/三级管阀8192/32768、单泵16384mB/t@256RPM与4096SU；现有反应堆/锅炉冷热口2048、水汽口4096，全部配置。热液/SC仅专用运输且保留Create罐，当前世界已携带。源码/JAR未合main；锅炉16³、独立美术门及用户dirty源保持。停本批人工门，管理员和管网压力不自动推进；下段未决/未实现描述保留原准备时点。
 
 用户2026-10-12明确开始多级专用管网，热冷却液与超临界蒸汽只走专用管泵，保留Create普通/创造储罐；随后明确本批只做流量，管网压力与超压损坏后置。已确认新增工业反应堆冷热口、管网优先、管理员随后；[首批流量设计](./superpowers/specs/2026-10-12-tiered-fluid-network-design.md)列出二/三级流量、配方及锅炉工业接入建议，[锁定Create禁运核查](./reviews/2026-10-12/tiered-pipe-preparation/RESTRICTION-STUDY.md)提供真实事务边界。新增数值和接口范围待集中确认后自动派发；原锅炉温压与16³独立人工门保持，旧[分阶段准备稿](./superpowers/plans/2026-10-12-large-reactor-infrastructure-preparation.md)的首批一档建议已被替代。
 

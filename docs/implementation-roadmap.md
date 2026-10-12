@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**更新：2026-10-12。** 用户确认反应堆可变尺寸、快捷换料、观察窗与顶面控件复看通过，最近加载故障也已手测通过；接受组合已[净合main `6bdef37`](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原自动/审查和最终制品复用。此前2026-10-11美术集成main `fba424fc`及各设备教学验收记录保持。下一项仅推进用户指定的[锅炉最大外尺寸16³](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)，其新增范围单独验收。
+**更新：2026-10-12。** 用户确认反应堆可变尺寸、快捷换料、观察窗与顶面控件复看通过，最近加载故障也已手测通过；接受组合已[净合main `6bdef37`](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原自动/审查和最终制品复用。此前2026-10-11美术集成main `fba424fc`及各设备教学验收记录保持。当前分级流量候选待手测；[锅炉最大外尺寸16³](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)新增范围仍独立待验。
 
 技术基线：Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。版本仍为0.1.0 Alpha，当前完成批次不等于首个可发布版本出口已完成。
 
@@ -36,7 +36,7 @@
 
 ## 2. 近期顺序与人工门
 
-最新接续：用户2026-10-12已冻结[流量规范](./superpowers/specs/2026-10-12-tiered-fluid-network-design.md)与[实施卡01](./superpowers/plans/2026-10-12-tiered-fluid-network-flow-01.md)。只新增一种泵16384mB/t@256RPM、4096SU；二/三级管阀8192/32768；不新增工业口，现有反应堆/锅炉冷热口2048，锅炉水汽口4096mB/t。热冷却液/SC运输走专用管泵，保留Create罐，管网压力后置。已可自动派发，原锅炉16³待验范围独立保留；下方规划待确认文字为先前时点，不阻断这组已确认需求。
+最新接续：[流量候选a5d1fe6](./reviews/2026-10-12/tiered-fluid-flow-01/CANDIDATE.md)已交同级独立树，543/543标准build、正式工业20/20和受影响代表域通过，一次独立审查关闭四项P2；102源与117独立制品项一致。只新增一种泵16384mB/t@256RPM、4096SU；二/三级管阀8192/32768；现有反应堆/锅炉冷热口2048、水汽口4096mB/t均配置。热液/SC专用输送、Create罐保留；停[集中人工门](./reviews/2026-10-12/tiered-fluid-flow-01/CLIENT-CHECKLIST.md)，源码/JAR未合main，不推进管理员或管网压力。原锅炉16³与独立美术门保持；下方历史规划不重新开启已确认参数。
 
 1. 汽轮机思索04：三幕及取景整改[用户播放通过](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)，净教学整合main，文档整理保持独立完成记录。
 2. 换热器烧结炉供热：`094a925`实现与复核、增量打包及隔离真实GameTest3/3通过，复用21/21账本；用户[本批手测](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main，不重复工作盆7项或已通过人工门。
