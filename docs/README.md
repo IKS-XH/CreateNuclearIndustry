@@ -4,7 +4,9 @@
 
 ## 当前执行与接续
 
-用户2026-10-12暂缓16³锅炉手测，要求先规划大规模反应堆的运输与自动控制。已确认新增工业冷端/热端，且工业管网优先、管理员随后；[分阶段准备稿](./superpowers/plans/2026-10-12-large-reactor-infrastructure-preparation.md)记录普通口128mB/t、锅炉口256mB/t及后端热力瓶颈，下一份设计聚焦工业冷却闭环。当前只规划，不派发未决数值/范围的实现；锅炉候选与原人工门保持。
+当前已按用户最终修订冻结[分级流量规范](./superpowers/specs/2026-10-12-tiered-fluid-network-design.md)与[实施卡01](./superpowers/plans/2026-10-12-tiered-fluid-network-flow-01.md)：两档管/阀8192和32768，一种泵16384mB/t@256RPM、4096SU；取消工业端口，直接提高现有反应堆冷热口及锅炉冷热口为2048、锅炉水汽口为4096mB/t，全部可配置。热冷却液/SC运输走专用管泵，Create罐保留，管网压力后置。下一步自动派发唯一执行者开发，原锅炉16³人工门及用户无关dirty源保持。下段未决描述为修订前准备时点。
+
+用户2026-10-12明确开始多级专用管网，热冷却液与超临界蒸汽只走专用管泵，保留Create普通/创造储罐；随后明确本批只做流量，管网压力与超压损坏后置。已确认新增工业反应堆冷热口、管网优先、管理员随后；[首批流量设计](./superpowers/specs/2026-10-12-tiered-fluid-network-design.md)列出二/三级流量、配方及锅炉工业接入建议，[锁定Create禁运核查](./reviews/2026-10-12/tiered-pipe-preparation/RESTRICTION-STUDY.md)提供真实事务边界。新增数值和接口范围待集中确认后自动派发；原锅炉温压与16³独立人工门保持，旧[分阶段准备稿](./superpowers/plans/2026-10-12-large-reactor-infrastructure-preparation.md)的首批一档建议已被替代。
 
 用户2026-10-12明确通过可变反应堆、快捷换料、窗口/顶盖控件及重进存档复看，已按[联合验收](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)净合main `6bdef37`，同源冻结包复用，未重复测试构建或回写世界。下方旧候选等待描述为历史。用户指定的[锅炉16³上限](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)已交[候选 `30020e4`](./reviews/2026-10-12/boiler-size-limit-01/CANDIDATE.md)，29/29定向、真实3/3及独立窄审通过，新范围独立留候选手测；按用户答复继续当前测试存档。
 
