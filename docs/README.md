@@ -4,6 +4,8 @@
 
 ## 当前执行与接续
 
+用户2026-10-12明确通过可变反应堆、快捷换料、窗口/顶盖控件及重进存档复看，已按[联合验收](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)净合main `6bdef37`，同源冻结包复用，未重复测试构建或回写世界。下方旧候选等待描述为历史。当前接用户指定[锅炉16³上限](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)，新范围独立留候选验收。
+
 候选进入原存档的换热器弱集合并发故障已交[窄修候选5d01314](./reviews/2026-10-12/exchanger-load-crash-01/CANDIDATE.md)，30/30定向、真实Basin7/7、唯一增量打包及独立窄审通过。现候选JAR仅桥class改变，快捷换料/ART09输入保持；从同一候选目录重启并进入原世界复看，本故障及其他人工门分别保持，未合main。
 
 用户2026-10-12指定[换料端口枯竭组件快捷替换](./superpowers/plans/2026-10-12-refueling-quick-swap-01.md)，在现有可变尺寸候选树实施；仍有耐久者禁止替换，空槽装料和机械臂规则保持。已到[候选客户端门](./reviews/2026-10-12/refueling-quick-swap-01/CANDIDATE.md)，源码`d811f84`、12/12事务与最终1/1真实服务端、必要增量打包及一次独立窄审通过。ART09顶盖辨识/深度控件也净接入同包，原证据复用；在现有候选集中复看，各项人工门分别保持，未合main。

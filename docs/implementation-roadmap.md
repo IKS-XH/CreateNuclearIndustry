@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**更新：2026-10-11。** 用户授权的美术集成已完成main `fba424fc`：反应堆材质、内部模型/运行动画与03R3控件，以及普通冷热冷却剂八帧循环均包含；[合入记录](./reviews/2026-10-11/art-integration/INTEGRATION.md)确认一次集成打包及精确资源绑定。此前视觉记录保持原时点，不补记为逐项通过。屏蔽装配台[07-R1单页教学](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)、换热器[五幕及R4剖面](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)和烧结炉两幕均已验收，其他主线暂缓。
+**更新：2026-10-12。** 用户确认反应堆可变尺寸、快捷换料、观察窗与顶面控件复看通过，最近加载故障也已手测通过；接受组合已[净合main `6bdef37`](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原自动/审查和最终制品复用。此前2026-10-11美术集成main `fba424fc`及各设备教学验收记录保持。下一项仅推进用户指定的[锅炉最大外尺寸16³](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)，其新增范围单独验收。
 
 技术基线：Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。版本仍为0.1.0 Alpha，当前完成批次不等于首个可发布版本出口已完成。
 
@@ -13,7 +13,7 @@
 | 批次 | 现行结果 | 证据 |
 | :--- | :--- | :--- |
 | 锅炉美术05B＋06R1 | A横箍压力舱连接外观、去内框观察窗、真实汽区雾效/库存浓度混色与两种蒸汽同源循环；用户整体视觉验收通过 | [验收与主分支集成](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)，main `81a161e` |
-| P0 / P1核心反应堆 | 固定5×5×5、逐列热工/燃耗/损伤、控制棒与SCRAM、多口冷却、换料维修及危险拆除事件；具体事故世界效果未实现 | [P1最终交接](./archive/P1-VERIFY-03.md)、[证据包](./handoffs/2026-09-29/README.md) |
+| P0 / P1核心反应堆及可变尺寸 | 三边各5～16、可跨区块；逐列热工/燃耗/损伤、控制棒与SCRAM、多口冷却、换料维修及危险拆除事件，新增枯竭快捷换料；具体事故世界效果未实现 | [P1最终交接](./archive/P1-VERIFY-03.md)、[2026-10-12组合验收与main集成](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md) |
 | 矿物及基础材料 | 三矿自然生成/采集、铅锡原生加工、制钢、两类传感器、耐火砖/重型轴承与SVG素材 | [三矿](./reviews/2026-10-01/ore-art-acceptance.md)、[铅锡](./reviews/2026-10-01/material-02-acceptance.md)、[钢材](./reviews/2026-10-01/material-03b/README.md)、[传感器](./reviews/2026-10-01/material-04/ACCEPTANCE.md)、[材料05](./reviews/2026-10-02/material-05/ACCEPTANCE.md) |
 | 铀加工与离心机 | 铀选矿/制浆，两格高、顶进浆、底动力、水平物流与维修 | [燃料01](./reviews/2026-10-02/fuel-01/ACCEPTANCE.md) |
 | 烧结与燃料组件装配 | 整格烧结炉、工作台中央高炉；焊料/包壳/钢格架；2×2×2装配台直接制组件 | [烧结](./reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)、[材料](./reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)、[装配台](./reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)；R2模型修复按用户指令继续，未补记修后人工复看 |
@@ -52,7 +52,7 @@
 
 | 范围 | 状态/前置 |
 | :--- | :--- |
-| 反应堆可变尺寸 | [01计划](./superpowers/plans/2026-10-12-reactor-variable-size-01.md)候选`0840906`自动与独立审查通过；三边各5～16、允许跨区块，现行棒列/容量/热工推广，停在[集中人工门](./reviews/2026-10-12/reactor-variable-size/CANDIDATE.md)；源码未合main，主目录仍5³ |
+| 锅炉最大外尺寸16³ | 用户已指定三边上限16；[本批计划](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)调整默认/配置合法范围并验证16³实际分区容量、17拒绝；保持原温压和双汽账本，候选通过本批手测后再合main |
 | 专用锅炉普通辅助热、二级耐压 | 仍后置，工作盆和烧结炉核热已验收；Create原生管泵罐继续可用 |
 | 自动控制、显示链接、比较器扩展 | 现有控制语义保持，新增桥接与信息功能单独设计 |
 | 具体事故、防护、污染、再处理/再生燃料 | 后置；事故产物/保护规则未冻结，不由事件占位符推定实现；轻量封存已经提供首发废料去向 |
