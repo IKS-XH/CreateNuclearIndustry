@@ -8,7 +8,7 @@
 
 ## 文件位置与修改方式
 
-**反应堆可变尺寸（2026-10-12候选，待人工验收）：** [候选`0840906`](./reviews/2026-10-12/reactor-variable-size/CANDIDATE.md)已在已有P1 SERVER配置的`reactor`节实现`minDimension=5`、`maxDimension=16`，三边分别受同一范围约束，允许跨区块；组合需满足5≤min≤max≤16，非法组合拒绝成型。既有产热、燃耗、吸热、每口流量和每格容量数值保持，只按实际内部高度/列图计算；空列及控制棒列的主体格×每格容量为冷热共用容量。每列仍一个燃料组件。配置缩小保留已有库存并拒收超额输入，不生成或删除流体。实现仅在同级候选树，main尚未包含本批配置键和可变尺寸。
+**反应堆可变尺寸（2026-10-12已验收合main）：** [组合验收](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)确认main `6bdef37`包含P1 SERVER配置`reactor`节的`minDimension=5`、`maxDimension=16`，三边分别受同一范围约束，允许跨区块；组合需满足5≤min≤max≤16，非法组合拒绝成型。既有产热、燃耗、吸热、每口流量和每格容量数值保持，只按实际内部高度/列图计算；空列及控制棒列的主体格×每格容量为冷热共用容量。每列仍一个燃料组件。配置缩小保留已有库存并拒收超额输入，不生成或删除流体。
 
 配置类型为 NeoForge SERVER。当前锁定的 NeoForge 21.1.219 默认在实例的 `config/` 目录生成；世界的 `serverconfig/` 中已有同名文件时，该世界优先使用覆盖文件：
 
@@ -17,7 +17,7 @@
 - `create_nuclear_industry-turbine.toml`：三档汽轮机。
 - `create_nuclear_industry-storage.toml`：已验收的轻量封存与干式贮存架。
 
-开发候选默认目录为 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition/run/config/`；主目录启动的客户端使用主目录自己的 `run/config/`。如需仅对某个单人世界生效，可将相应文件复制到 `run/saves/<世界名>/serverconfig/` 再修改；已有覆盖文件会优先于实例配置。不要混淆两套运行目录。
+当前开发候选配置目录为 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration/run/config/`；主目录启动的客户端使用主目录自己的 `run/config/`。如需仅对某个单人世界生效，可将相应文件复制到 `run/saves/<世界名>/serverconfig/` 再修改；已有覆盖文件会优先于实例配置。不要混淆两套运行目录。
 
 退出世界或关闭服务器，修改当前实际生效的 TOML，重新进入或启动后核对护目镜。本文不承诺在线热重载，也不把旧版Forge默认的存档路径说明当作当前版本行为。路径依据为锁定版 `ServerLifecycleHooks.handleServerAboutToStart` 与 `ConfigTracker.resolveBasePath`，并由本批隔离服务端实际生成文件核实。
 
@@ -29,9 +29,11 @@
 
 文件：`create_nuclear_industry-boiler.toml`。所有键在文件顶层。
 
+**尺寸调整候选（2026-10-12）：** [BOILER-SIZE-LIMIT-01](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)将默认和可配置上限统一为16，合法组合5≤min≤max≤16；最小5、跨区块与分区容量/温压保持。代码与服务端定向检查已完成，客户端新增尺寸门独立待验，尚未合main。候选实例配置已备份后仅将`dimensionRange`由[5,11]改[5,16]，代码默认改变不会覆盖其他实例的显式11。
+
 | 键 | 默认 | 含义 |
 | :--- | ---: | :--- |
-| `dimensionRange` | `[5, 11]` | 三边分别允许的整数闭区间；恰好两值，5≤min≤max≤32 |
+| `dimensionRange` | main `[5, 11]`；本批候选 `[5, 16]` | 三边分别允许的整数闭区间；恰好两值；本批候选5≤min≤max≤16，main旧校验上限32 |
 | `waterCapacityPerCellMb` / `steamCapacityPerCellMb` | 各2000 | 每个有效水区/汽区格的mB容量；01F两种汽共用汽区总容量 |
 | `portFlowMbPerTick` | 256 | 每个水、汽、热液、冷液口的独立mB/t额度，主动/被动共用 |
 | `pairHeatHuPerTick` | 18 | 每有效换热器/再加热段配对的HU/t上限 |
@@ -46,7 +48,7 @@
 | `idleWaterCoolingHuPerCellPerTick` | 0.9 | 无实际收热时每水区格显热损失，HU/t |
 | `idleSteamCoolingHuPerCellPerTick` | 0.1 | 无实际收热时每汽区格高于沸点的显热损失，HU/t |
 
-冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；32为工程扫描封顶，不代表最大规模已完成客户端性能验收。
+冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；扫描/传输保守工程封顶32保持，本批候选合法搭建上限为16。16³隔层localY=8示例水区1372格、汽区1176格，默认水2744000mB、汽2352000mB；隔层高度仍由现行结构规则决定，自动检查不代替客户端性能验收。
 
 控制器沿用01B单一出汽压力下限，显式机器设置独立保存，不由默认配置覆盖。01F新批次按实际批次汽温及加量后的共同炉压归类，已有两种库存不变身份；炉压由两种汽量和各自实际汽温共同决定，与Create运输压力分开。压力下限可设100%，可能因安全阀先泄放而停止正常出汽；它不是目标炉压，也不强制产生普通汽。默认5³居中隔层上下各9格、水汽各18000mB，汽容量由两种共用；全部汽温为2时，下限0.6对应保留10800mB。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出HU均实际扣账，普通汽不因再热变SC，欠热SC等待再热。散热不扣潜热、不模拟炉内凝水，安全阀排放仍消耗工质和热量。
 

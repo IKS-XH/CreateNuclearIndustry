@@ -15,7 +15,7 @@
 
 ## 项目治理
 
-- 用户2026-10-12明确确认可变反应堆、快捷换料、观察窗/顶面控件与最近重进存档手测通过，按[联合验收](docs/reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)关闭这些门。274已审src/tools净合main `6bdef37`，同源冻结JAR复用，原自动/审查证据不重跑，世界不回写。旧“未合main/待这些人工门”记录为历史；用户指定锅炉上限改为16³，按[BOILER-SIZE-LIMIT-01](docs/superpowers/plans/2026-10-12-boiler-size-limit-01.md)开始独立窄调整，此新范围待手测。
+- 用户2026-10-12明确确认可变反应堆、快捷换料、观察窗/顶面控件与最近重进存档手测通过，按[联合验收](docs/reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)关闭这些门。274已审src/tools净合main `6bdef37`，同源冻结JAR复用，原自动/审查证据不重跑，世界不回写。旧“未合main/待这些人工门”记录为历史；用户指定锅炉上限改为16³，按[BOILER-SIZE-LIMIT-01](docs/superpowers/plans/2026-10-12-boiler-size-limit-01.md)完成独立候选 `30020e4`：默认/合法上限16，原温压/双汽/分区规则保持，29/29定向JUnit、最终真实3/3自然退出0及一次独立窄审通过；旧12拒绝断言按精确扩卡改17，因此如实记录两次必要增量assemble。实例配置备份后仅11→16，用户明确继续当前候选存档，本批无世界复制/覆盖。见[启动与本批人工门](docs/reviews/2026-10-12/boiler-size-limit-01/CANDIDATE.md)，锅炉新范围未合main，待16³/17拒绝及容量显示手测；其他主线暂停。
 
 - 用户2026-10-12报告同级候选进入存档崩溃，实际服务器报告定位HeatExchangerBoilerBridge弱集合并发迭代。按[EXCHANGER-LOAD-CRASH-01](docs/superpowers/plans/2026-10-12-exchanger-load-crash-01.md)仅修复服务端登记边界及一致快照锁，原世界/热工/候选功能保持；已交窄修候选`5d01314`：30/30定向JUnit、真实Basin7/7与唯一增量assemble退出0，独立窄审无必改项；旧新JAR仅桥class变化，原34输入保持，见[重进存档入口](docs/reviews/2026-10-12/exchanger-load-crash-01/CANDIDATE.md)。未合main，客户端故障门及此前各人工门保持，其他主线暂停。
 

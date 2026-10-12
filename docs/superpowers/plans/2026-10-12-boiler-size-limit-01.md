@@ -24,12 +24,12 @@
 
 ## Task 1：上界、实际结构与候选配置
 
-- [ ] RED：新增默认最大16与Settings17拒绝的行为断言，原生产上先运行；检查当前配置默认，不能用运行文件改值掩盖旧默认11。
-- [ ] 最小实现两个生产路径的默认和合法性，相关注释中文。原overflow用例应在合法最大16下仍证明乘积溢出拒绝，不能仅因尺寸32非法而失去原断言含义。
-- [ ] 独立真实服务端有限用例搭16³且跨区块、不强载，并验证Form与1372/1176格及实际容量/配置来源；补一个17尺寸拒绝。复用现有锅炉搭建法，无需多份完整夹具或改变原测试。空腔非边框/端口绑定与隔层按原规则。
-- [ ] 最终定向 `./gradlew.bat test --tests '*BoilerStateTest' --tests '*BoilerDualSteamInventoryTest'`；新增独立域 `./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_boiler_size -PgameTestDirectory=build/gametest-boiler-size-limit-01`。实际注册非零，保存退出自然exit0才称完整通过。
-- [ ] PM放行后候选运行配置备份/仅dimensionRange更新，给前后SHA/差异；不改服务器测试配置以伪造默认。最终唯一增量assemble，旧接受组合包备份；冻结来源/class/模板/JAR及旧功能保护身份，不完整build、不clean、不重复已审矩阵。
-- [ ] 完整报告区分代码默认、运行配置及客户端结果；一次独立窄审复用原证据不重跑。PM提交候选停在16³/17拒绝与尺寸显示/容量的本批手测门，不重复原锅炉生产线或视觉全套。
+- [x] RED：新增默认最大16与Settings17拒绝的行为断言，原生产上先运行；检查当前配置默认，不能用运行文件改值掩盖旧默认11。
+- [x] 最小实现两个生产路径的默认和合法性，相关注释中文。原overflow用例应在合法最大16下仍证明乘积溢出拒绝，不能仅因尺寸32非法而失去原断言含义。
+- [x] 独立真实服务端有限用例搭16³且跨区块、不强载，并验证Form与1372/1176格及实际容量/配置来源；补一个17尺寸拒绝。复用现有锅炉搭建法，无需多份完整夹具或改变原测试。空腔非边框/端口绑定与隔层按原规则。
+- [x] 最终定向 `./gradlew.bat test --tests '*BoilerStateTest' --tests '*BoilerDualSteamInventoryTest'`；新增独立域 `./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_boiler_size -PgameTestDirectory=build/gametest-boiler-size-limit-01`。实际注册非零，保存退出自然exit0才称完整通过。
+- [x] PM放行后候选运行配置备份/仅dimensionRange更新，给前后SHA/差异；不改服务器测试配置以伪造默认。最终唯一增量assemble，旧接受组合包备份；冻结来源/class/模板/JAR及旧功能保护身份，不完整build、不clean、不重复已审矩阵。
+- [x] 完整报告区分代码默认、运行配置及客户端结果；一次独立窄审复用原证据不重跑。PM提交候选停在16³/17拒绝与尺寸显示/容量的本批手测门，不重复原锅炉生产线或视觉全套。
 
 ## Review Focus
 
@@ -38,3 +38,7 @@
 ## 同批发现的旧边界断言补充（2026-10-12）
 
 首次真实2/2检查后发现ExtensionBoilerGameTests.elevenBoundaryAndOffCenterPartition仍把12格作为默认非法边界。为避免已知断言与本批默认16矛盾，额外批准原gametest/ExtensionBoilerGameTests.java仅该方法：保留11格偏心分区参考，非法宽度12改17及相关中文提示；其他方法逐字保持。在原新增BoilerSizeLimitGameTests内增一个委托该方法的隔离用例，最终独立域3/3验证。原29/29JUnit未变不重复；原2/2与首次assemble证据保留为中间候选。由于改动测试class，允许在同域最终通过后新增一次必要增量assemble，报告分别记录，禁止称整个过程只构建一次。没有增加生产写集或全量旧域验证。
+
+## 本批存档来源确认（2026-10-12）
+
+用户答复采用“继续用当前候选的测试存档”。沿用Create_NuclearIndustry-art-integration/run/saves/内已保存世界，本批未创建或切换新分支，不复制/覆盖/回写世界；既有备份与主目录原件保留。原“来源待答复”文字为问答前时点，实际本批来源以此确认为准。
