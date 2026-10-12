@@ -76,3 +76,9 @@ PM持有spec/本计划、AGENTS、docs入口、server-config/recipes/项目合�
 main已验收生产源及原功能证据作为基线复用，不再跑开工全量。锅炉16³的29/29、3/3和候选包仅证明独立尺寸批，不能拿来替代本卡端口分组或管网证据。正常当前保存加载属于本批必要生命周期；不做旧版本存档迁移和跨版本矩阵。
 
 计划自审已对照spec：限制运输/储存、五种内容/成本、泵唯一预算/缓存、每口分组限流、配置、生命周期、受影响教程、最终公共机制回归与人工门均由Task1覆盖。允许写集之外的实际共享调用先申请精确扩卡，不派发笼统全src改造。
+
+## 精确共享消费扩卡（2026-10-12，PM已批准）
+
+- J/gametest/ExtensionConfigGameTests.java：原PORT_FLOW_MB_PER_TICK的保存/设置/恢复改为冷热、水汽两个真实键，并调整对应额度断言；原其他配置、生命周期及测试保持。不得保留一个旧别名掩盖两组真实配置。
+- J/gametest/P1Loop02GameTests.java：forPort对外类型改为IFluidHandler的三个局部声明及必要import，原热口正例用本批合法专用网络/受控夹具，不绕受限包装；保持液量/热量守恒与输入空槽等原不变量。仅该API与禁运直接影响范围，不修改事故/热工设定。
+- BoilerSteamSelectionGameTests原全限定Settings构造已在初始写集，随两组额度必要适配；Create创造罐继承同一handlerForCapability，经实际字节码核实无需新的分离Mixin。本扩卡不增加生产范围或运行压力。
