@@ -7,6 +7,7 @@
   "mixins": [
     "FluidNetworkRestrictionMixin",
     "CreateTankCapabilityRestrictionMixin",
+    "CreateTankPlayerInteractionMixin",
     "PortableFluidInterfaceRestrictionMixin",
     "FluidNetworkSharedFillMixin",
     "BoilerPipePressureMixin",

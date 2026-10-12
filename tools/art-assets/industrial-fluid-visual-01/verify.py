@@ -1,13 +1,14 @@
 """逐像素校验最终PNG来自已保存SVG，并核原图alpha/尺寸；不写生产资源。"""
-import io, json, zipfile
+import argparse, io, json, zipfile
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from PIL import Image
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[2]
 manifest=json.loads((HERE/'sources.json').read_text(encoding='utf-8'))
+parser=argparse.ArgumentParser(); parser.add_argument('--pump-only',action='store_true',help='只核泵SVG/PNG，不重复其他资源'); args=parser.parse_args()
 with zipfile.ZipFile(manifest['dependency']) as z:
-    for svg_path in sorted((HERE/'svg').glob('*.svg')):
+    for svg_path in sorted((HERE/'svg').glob('steel_pump.svg' if args.pump_only else '*.svg')):
         svg=ET.parse(svg_path).getroot(); size=(int(svg.attrib['width']),int(svg.attrib['height']))
         expected=Image.new('RGBA',size)
         for rect in svg:

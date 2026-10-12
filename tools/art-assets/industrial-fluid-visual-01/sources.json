@@ -447,7 +447,29 @@
         32,
         32
       ],
-      "alpha_preserved": true
+      "alpha_preserved": true,
+      "derived_patch": {
+        "region_px": [
+          3,
+          19,
+          15,
+          27
+        ],
+        "pixel_count": 96,
+        "before_rgba": [
+          0,
+          0,
+          8,
+          255
+        ],
+        "after_rgba": [
+          116,
+          126,
+          134,
+          255
+        ],
+        "reason": "仅消除COG大面近黑实体孔形成的方向伪图案，alpha与其他像素保持"
+      }
     },
     "steel_fluid_valve": {
       "source": "assets/create/textures/block/fluid_valve.png",
