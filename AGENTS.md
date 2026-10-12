@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 用户2026-10-12在R2蓝框局部复看后明确“OK，没问题了”，按[本次验收](docs/reviews/2026-10-12/industrial-pump-triangle-r2/ACCEPTANCE.md)关闭工业泵两端深色三角视觉门，R2完成。main源码`b67be67`与b0aef730…冻结JAR、11来源零漂移；原3/3、唯一增量assemble和独立窄审复用，不重复测试/构建或改包/世界。下方R2待复看为交付历史；此次反馈不扩展为未明确报告的创造罐桶操作或16³锅炉验收，不推进其他主线。
+
 - 用户2026-10-12新的蓝框截图明确工业泵两端三角仍在，上轮COG96点补片改错区域，不登记其视觉通过。按[R2精准定位卡](docs/superpowers/plans/2026-10-12-industrial-pump-triangle-r2.md)已交[main原位候选](docs/reviews/2026-10-12/industrial-pump-triangle-r2/CANDIDATE.md)：实际两静态法兰侧面UV/染色/可见texel定位后只将侧36点变均匀钢灰、恢复错改COG96，upper32及共面假设的负证据保留；原模型/Renderer/青箭头/运输/桶保持。真实两端RED、3/3 GREEN、唯一1秒增量assemble及一次独立窄审通过，11来源与b0aef730…正式/冻结JAR一致；相对1829仅一个PNG载荷改变、其余2149文件保持。原桶证据复用，用户261012/前包/992世界及其他dirty保持，只待新蓝框两处局部视觉复看；下方1829交付为历史，不能覆盖此实际失败，不重跑原整机门或推进其他主线。
 
 - 工业泵/创造罐窄修已交[当前主目录候选](docs/reviews/2026-10-12/industrial-pump-tank-interaction-fix/CANDIDATE.md)：原深色三角按实际COG UV只调整96个不透明近黑SVG/PNG点，其余928点/alpha/原模型/Renderer/青箭头/实际运输保持；错误cutout假设被反证且未实施，诊断历史保留。冷液桶仅新Mixin接续原helper成功后的创造罐身份提交/清除，原能力包装、数量与禁运保持；4/4定向、真实手持3/3自然退出0、唯一1秒增量assemble及一次独立窄审通过，11来源/3资源/2class与最终1829ef1c…JAR一致。用户261012/ecbe包与世界原位保留，当前只待泵图案/桶操作局部复看，不重复原整机门或推进其他主线。
