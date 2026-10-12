@@ -163,18 +163,27 @@ class IndustrialPipeSurfaceTest {
         pump.setSpeed(0);assertNull(IndustrialVisualOrientation.displayedOutput(pump));
         pump.setSpeed(256);var stress=com.simibubi.create.content.kinetics.base.KineticBlockEntity.class.getDeclaredField("overStressed");stress.setAccessible(true);stress.setBoolean(pump,true);assertNull(IndustrialVisualOrientation.displayedOutput(pump));
     }
-    /** 实际齿轮大面不透明近黑孔会成为方向伪图案；只消除该孔黑色，不能透明化或替换几何。 */
-    @Test void actualPumpCogFaceKeepsOpaqueAlphaAndRemovesDarkPseudoIndicator() throws Exception {
+    /** 两个静态法兰侧面共用旋转UV；逐点经FaceBakery逆映射检查消色区，不能用齿轮不可见点代替。 */
+    private static void assertPumpFlangeSideIsNeutral(float lowerY) throws Exception {
         var application = new JsonObject();
-        application.addProperty("model", NS + ":block/industrial_fluid_visual_01/steel/mechanical_pump/cog");
+        application.addProperty("model", NS + ":block/industrial_fluid_visual_01/steel/mechanical_pump/block");
         var faces = bake(application);
-        // 第一根十字轴大面UV[0,9,9,14]中心取实际PNG第9列/23行，不凭资源名生成方向预期。
-        var surface = faces.get(1);
-        var center = new Vector3f(vertex(surface.quad, 0)).add(vertex(surface.quad, 2)).mul(.5f);
-        int pixel = sample(surface, center);
-        assertEquals(255, pixel >>> 24, "近黑孔原alpha255必须保持，不能用cutout假修");
-        assertTrue((pixel >> 16 & 255) >= 80 && (pixel >> 8 & 255) >= 80 && (pixel & 255) >= 80,
-                "真实COG大面仍采到近黑方向伪图案，需局部恢复同面钢灰");
+        int checked = 0;
+        for (Surface surface : faces) {
+            if (surface.quad.getDirection().getAxis() == Direction.Axis.Y) continue;
+            float minY = Float.MAX_VALUE;
+            for (int i = 0; i < 4; i++) minY = Math.min(minY, vertex(surface.quad, i).y);
+            if (Math.abs(minY - lowerY) > .00001f) continue;
+            // 原侧面UV[8,0,6.5,6]旋转270，32×32图实际半开区域[13,0,16,12]。
+            for (int y = 0; y < 12; y++) for (int x = 13; x < 16; x++) {
+                var point = pixelPosition(surface, x + .5f, y + .5f);
+                assertEquals(0xff747e86, sample(surface, point), "实际法兰侧面仍含方向状深浅条纹");
+            }
+            checked++;
+        }
+        assertEquals(4, checked, "每个静态法兰必须核四个实际侧面");
     }
+    @Test void actualPumpUpperFlangeSideRemovesDarkDirectionalContour() throws Exception { assertPumpFlangeSideIsNeutral(13f / 16f); }
+    @Test void actualPumpLowerFlangeSideRemovesDarkDirectionalContour() throws Exception { assertPumpFlangeSideIsNeutral(0); }
 
 }

@@ -38,20 +38,23 @@ def export_svg(path):
     out = ASSETS / 'textures/block' / FAMILY / (path.stem+'.png'); out.parent.mkdir(parents=True,exist_ok=True); metadata=PngImagePlugin.PngInfo(); metadata.add_text("Copyright", "The Create Team / The Creators of Create; output_arrow authored for Create Nuclear Industry"); metadata.add_text("License", "Create-derived textures: All Rights Reserved"); metadata.add_text("Source", "https://github.com/Creators-of-Create/Create/tree/mc1.21.1-6.0.10/src/main/resources/assets/create"); image.save(out, compress_level=9, pnginfo=metadata)
     return image
 
-PUMP_PATCH = {'region_px':[3,19,15,27], 'pixel_count':96, 'before_rgba':[0,0,8,255], 'after_rgba':[116,126,134,255], 'reason':'仅消除COG大面近黑实体孔形成的方向伪图案，alpha与其他像素保持'}
-def neutralize_pump_cog_face(image):
-    """像素坐标使用32×32原图单位；只改已核COG面上的96个不透明近黑点，不改其余纹理。"""
-    for y in range(19,27):
-        for x in range(3,15):
-            assert image.getpixel((x,y)) == (0,0,8,255), '锁定Create泵补片前像素身份变化'
+PUMP_PATCH = {'region_px':[13,0,16,12], 'pixel_count':36, 'after_rgba':[116,126,134,255], 'reason':'两静态法兰实际侧面UV[8,0,6.5,6]旋转270，仅消除侧条纹方向状轮廓；其余988点及alpha保持'}
+
+def neutralize_pump_flange_sides(image):
+    """坐标使用32×32原图单位；两法兰共用此36点侧面，原COG与其余像素不变。"""
+    assert image.size == (32,32), '锁定Create泵尺寸变化'
+    for y in range(12):
+        for x in range(13,16):
+            assert image.getpixel((x,y))[3] == 255, '锁定法兰侧面alpha变化'
             image.putpixel((x,y),(116,126,134,255))
+
 def pump_only():
     """只从本张已保存SVG导出PNG，并更新本张派生记录；其他资源和模型不生成。"""
     export_svg(HERE/'svg/steel_pump.svg')
     sources=json.loads((HERE/'sources.json').read_text(encoding='utf-8'))
     sources['textures']['steel_pump']['derived_patch']=PUMP_PATCH
     save(HERE/'sources.json',sources)
-    print('steel_pump单张SVG导出完成，96点补片，其他资源未生成。')
+    print('steel_pump单张SVG导出完成，36点法兰侧面补片，其他资源未生成。')
 
 def produce():
     sources = {'dependency':str(JAR), 'dependency_sha256':hashlib.sha256(JAR.read_bytes()).hexdigest(), 'version':'Create 6.0.10-280 / Minecraft 1.21.1', 'assets_license':'All Rights Reserved', 'copyright':'The Create Team / The Creators of Create', 'license_url':'https://github.com/Creators-of-Create/Create/blob/mc1.21.1-6.0.10/LICENSE.md', 'models':{}, 'textures':{}}
@@ -61,7 +64,7 @@ def produce():
             raw = z.read('assets/create/textures/block/'+texture+'.png'); original = Image.open(io.BytesIO(raw)).convert('RGBA')
             for tone in ['steel','ceramic'] if texture != 'pump' else ['steel']:
                 image = original.copy(); image.putdata([recolor(p,tone) for p in original.get_flattened_data()])
-                if texture == 'pump': neutralize_pump_cog_face(image)
+                if texture == 'pump': neutralize_pump_flange_sides(image)
                 name = tone+'_'+texture; actual = export_svg(svg_pixels(image,name)); assert actual.tobytes()==image.tobytes()
                 assert [p[3] for p in actual.get_flattened_data()]==[p[3] for p in original.get_flattened_data()]
                 sources['textures'][name]={'source':'assets/create/textures/block/'+texture+'.png','source_sha256':hashlib.sha256(raw).hexdigest(),'size':list(original.size),'alpha_preserved':True}

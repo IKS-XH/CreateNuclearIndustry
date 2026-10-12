@@ -22,4 +22,18 @@ with zipfile.ZipFile(manifest['dependency']) as z:
             assert original.size==size
             assert [p[3] for p in actual.get_flattened_data()]==[p[3] for p in original.get_flattened_data()]
             assert len(set(actual.get_flattened_data()))>8,'禁止整图抹平'
+            if svg_path.stem == 'steel_pump':
+                from produce import recolor
+                # 相对锁定原Create钢灰只允许两法兰侧36点；同时抓住上轮错误COG96未恢复。
+                changes=[]
+                for y in range(32):
+                    for x in range(32):
+                        baseline=recolor(original.getpixel((x,y)),'steel')
+                        expected_pixel=(116,126,134,255) if 13<=x<16 and y<12 else baseline
+                        assert actual.getpixel((x,y))==expected_pixel, ('泵精确补片边界',x,y)
+                        if actual.getpixel((x,y))!=baseline: changes.append((x,y))
+                assert len(changes)==36, '侧面36点必须全部变化，其余988点保持'
+                patch=manifest['textures']['steel_pump']['derived_patch']
+                assert patch['region_px']==[13,0,16,12] and patch['pixel_count']==36
+
         print(svg_path.stem, size, 'SVG/PNG一致，原alpha保持')
