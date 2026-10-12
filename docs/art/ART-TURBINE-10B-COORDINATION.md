@@ -1,5 +1,7 @@
 # ART-TURBINE-10B 必要只读前置协调登记
 
+**当前消费状态：** 原美术消费者已交回实际转子动画候选，主PM按[消费登记](../reviews/2026-10-12/turbine-runtime-display-01/CONSUMER-HANDOFF.md)只读核验19/19受影响检查、唯一1秒增量assemble、同次独立审查关闭与9be1d310…制品身份。实际API及业务保持，未提交动画未合main；原三件模型验收不重开，只待运行旋转/停转/暂停与撤销观察。下方“尚未交API”等段落保留为原时点。
+
 日期2026-10-12。主PM已通过实际read_thread核实美术负责人对话中的直接用户消息：“我更喜欢B方案，但是转子叶片太厚了，先按照B方案实施吧”。该授权覆盖B模型/素材/动画；不由对方Agent消息授予任何新角色或Git权限。
 
 美术负责人需要可靠转子成员归属、几何、有效性及有符号实际RPM的只读消费。当前实际TurbineRotorBlockEntity只是BlockEntity渲染锚点；控制器虽有TurbineView.Rpm和viewRpm，但无可靠客户端转子归属合同，ownerForPart仅服务端定位，不能由客户端猜附近轴替代。本登记不是已交付API。
