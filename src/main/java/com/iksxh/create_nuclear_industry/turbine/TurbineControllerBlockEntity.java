@@ -34,6 +34,10 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
  * 前轴读取唯一总 SU 并发布到两端贯通的 Create 网络，客户端只接收显示快照。
  */
 public final class TurbineControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+    // 运行显示身份只存在本次 BE 生命周期；磁盘和可携数据不恢复可信动画。
+    private final java.util.UUID runtimeGeneration = java.util.UUID.randomUUID();
+    private java.util.UUID clientRuntimeGeneration;
+    private int clientRuntimeEpoch = -1;
     private final TurbineState ledger = new TurbineState();
     private final TurbineSteamPressure steamPressure;
     private TurbineStructure.Form activeForm;
@@ -56,12 +60,18 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         // 侧控制器不提供 Create 动力，运行许可及周转量只由服务端账本决定。
     }
 
+    /** 只读显示实例身份；客户端只返回本次更新包确认的身份。 */
+    public java.util.UUID runtimeGeneration() { return level != null && level.isClientSide ? clientRuntimeGeneration : runtimeGeneration; }
+    /** 只读成型世代；失效时原有 epoch 递增，显示绑定同时作废。 */
+    public int runtimeEpoch() { return level != null && level.isClientSide ? clientRuntimeEpoch : epoch; }
+
     public TurbineState ledger() { return ledger; }
     public TurbineStructure.Form currentForm() { return activeForm; }
     public TurbineStructure.Form claimedForm() { return live() ? activeForm : null; }
 
     /** 构件变化或区块卸载先撤销历史 SU 与旧句柄，再让下次 tick 重扫。 */
     public void invalidateForm() {
+        com.iksxh.create_nuclear_industry.turbine.display.TurbineRuntimePublisher.revoke(this);
         TurbineStructure.Form old = activeForm;
         activeForm = null;
         ledger.stop();
@@ -444,15 +454,27 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     }
     @Override public void onLoad() {
         super.onLoad();
-        if (level != null && !level.isClientSide) invalidateForm();
+        if (level != null && !level.isClientSide) {
+            invalidateForm();
+            com.iksxh.create_nuclear_industry.turbine.display.TurbineRuntimePublisher.register(this);
+        }
+    }
+    @Override public void remove() {
+        com.iksxh.create_nuclear_industry.turbine.display.TurbineRuntimePublisher.unregister(this);
+        super.remove();
     }
     @Override public void onChunkUnloaded() {
+        com.iksxh.create_nuclear_industry.turbine.display.TurbineRuntimePublisher.unregister(this);
         ledger.stop(); steamPressure.release(); activeForm = null; epoch++;
         if (level != null && !level.isClientSide) TurbineStructure.forget(level, this);
         super.onChunkUnloaded();
     }
     @Override protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
+        if (clientPacket) {
+            tag.putUUID("TurbineRuntimeGeneration", runtimeGeneration);
+            tag.putInt("TurbineRuntimeEpoch", epoch);
+        }
         if (!clientPacket) {
             tag.put("Turbine", ledger.save());
             if (legacyKineticMigrationPending) tag.putBoolean("LegacyKineticMigrationPending", true);
@@ -473,6 +495,10 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     }
     @Override protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
+        if (clientPacket) {
+            clientRuntimeGeneration = tag.hasUUID("TurbineRuntimeGeneration") ? tag.getUUID("TurbineRuntimeGeneration") : null;
+            clientRuntimeEpoch = tag.contains("TurbineRuntimeEpoch", net.minecraft.nbt.Tag.TAG_INT) ? tag.getInt("TurbineRuntimeEpoch") : -1;
+        }
         if (!clientPacket) {
             ledger.load(tag.getCompound("Turbine"));
             legacyKineticMigrationPending = tag.getBoolean("LegacyKineticMigrationPending")
