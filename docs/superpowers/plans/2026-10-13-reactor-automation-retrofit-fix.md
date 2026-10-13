@@ -1,6 +1,6 @@
 # REACTOR-AUTOMATION-01R 改装接口后运行数据不可用窄修
 
-2026-10-13。用户在01手测中报告已成型反应堆拆壳换自动化接口后“无法成型”，进一步明确：扳手右键提示已成型，但护目镜显示未成型或数据不可用；接口位于侧壁中间、与仪表隔一格。当前只确认结构扫描成功与动态显示缺失的差异，尚未认定根因或视觉通过。
+2026-10-13。用户在01手测中报告已成型反应堆拆壳换自动化接口后“无法成型”，进一步明确：扳手右键提示已成型，但护目镜显示未成型或数据不可用；接口位于侧壁中间、与仪表隔一格。原只读诊断现已定位尺寸清空与延后补液窗口，根因、精确实现权限见下节；尚未登记修复或视觉通过。
 
 ## 范围与执行方式
 
@@ -23,8 +23,9 @@
 
 1. `src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java`：安全完全清空的计划nextSnapshot保留原实际dims；初始化尺寸门只接纳字段精确无核状态（无燃料/控制列、热液、SCRAM/保存目标、事故及待迁移燃料）的快照，纯冷液原量保留且不得超过新派生容量。干净无库存状态仍可按原完全停机规则重建尺寸，含任何真实核状态仍拒尺寸重组。不抹冷液、不改全局Snapshot/handler/核热工或拆壳安全事务。
 2. `src/main/java/com/iksxh/create_nuclear_industry/structure/ReactorStructureLifecycle.java`：显式重扫返回仪表最终接受的contract/origin，保留本次read-count和原扫描/流体刷新顺序，使拒绝时扳手不再报告假成功。其他排队、拆除、区块边界不变。
-3. 新`src/main/java/com/iksxh/create_nuclear_industry/gametest/ReactorAutomationRetrofitGameTests.java`：独立域`cni_reactor_automation_retrofit`，复用原`cni_reactor_automation:automation_empty`16×8×16空模板和当前原生块/玩家/接口入口。6³足以暴露5格占位错误，不复制用户世界或要求重搭16³。
-4. `build.gradle`仅新增本测试类的生产JAR排除，原测试模板排除及开发classpath保持，不改依赖或旧域规则。
+3. 新`src/main/java/com/iksxh/create_nuclear_industry/gametest/ReactorAutomationRetrofitGameTests.java`：独立域`cni_reactor_automation_retrofit`，复用原16×8×16空模板字节与当前原生块/玩家/接口入口。6³足以暴露5格占位错误，不复制用户世界或要求重搭16³。
+4. `build.gradle`仅新增本测试类及下述同域模板别名的生产JAR排除，原测试模板排除及开发classpath保持，不改依赖或旧域规则。
+5. 首次`01-red.log`为零用例：锁定NF按templateNamespace筛选域，引用原namespace会错过新类，Gradle exit0不能计行为通过或RED。允许把原`src/main/resources/data/cni_reactor_automation/structure/automation_empty.nbt`字节原样复制为唯一新`src/main/resources/data/cni_reactor_automation_retrofit/structure/retrofit_empty.nbt`，使用新域templateNamespace/retrofit_empty并核字节一致。这是隔离测试入口的必要别名，不改变原模板，不添加Generator/自定义Registry绕过或其他测试框架；该别名不得进入生产JAR。
 
 必须先在旧生产上取得真实行为RED，再改生产：真实6³成型→安全BreakEvent拆侧壳→延后重扫前原冷端EXECUTE注入→换接口→扫描、owner有效性、实际更新包静态摘要与正式tick；另覆盖保存现场型5³+32768纯冷液恢复、任意热液/燃料/控制/SCRAM/事故/待迁移状态拒绝重组、超过新容量拒绝且冷量不丢、干净改尺寸及原5³。场景可合并成少量代表，但不得用源码字符串断言、强制清空或人工rescan穿插掩盖原事件窗口；显式扳手用例另证明失败显示实际拒绝。
 
