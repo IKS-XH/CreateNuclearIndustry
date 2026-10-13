@@ -1,5 +1,7 @@
 # 项目文档入口
 
+最新美术分支已[合并并纳入正式JAR版本管理](reviews/2026-10-14/latest-art-jar-integration/INTEGRATION.md)：高清Logo、MC百科R1封面与缺少的可编辑／历史交付来源已补齐；双亲合并48dc8d1，正式26cb18d0…包提交4290bcb。干净Git树标准build52秒exit0，609通过／3项显式Sodium夹具跳过／0失败，主目录107个无关dirty保持。管理员03仍留原候选，以下主34bedc身份为上一制品时点。
+
 管理员03已交[三页GUI／连续换料／核热值班候选](reviews/2026-10-14/reactor-administrator-03/CANDIDATE.md)`78acd5d`／879c3d72…，原唯一执行者及一次组合审查的整改项已关闭。最终21/21受影响定向、两个新增启动窗口2/2自然保存exit0和必要增量包通过，旧六业务／热工及保存挂起按阶段保留；33来源与当前制品零漂移。继续原候选目录和存档做[03集中手测](reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，01／01R未验门承接同一清单，main管理员源码／包不改、02仍未派发。下方旧控件及包身份是历史交付时点。
 
 Logo已获用户验收并[合入main`d8efdc9`](reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)，创造标签改用齿轮＋蓝核芯图标，可编辑SVG和工具保留。唯一主目录增量assemble通过，正式包为34bedc81…；原物品列表、世界与其他人工门保持。

@@ -1,5 +1,7 @@
 # 美术并行协作入口
 
+**最新分支集成（2026-10-14）：** 用户指定合并最新美术及跟踪最终JAR，已[补齐高清Logo／MC百科R1封面与历史交付来源并完成双亲合并48dc8d1](../reviews/2026-10-14/latest-art-jar-integration/INTEGRATION.md)。游戏内已有接受实现及现行管网物品保持，宣传资产不替换32px游戏图标；原内部视觉记录复用，不扩大人工验收。干净已提交树标准build609通过、3项显式Sodium夹具跳过、0失败，正式26cb18d0…包已纳Git4290bcb。
+
 **Logo当前状态（2026-10-14）：** 用户整体验收通过，ART-LOGO-11原创SVG/PNG及创造标签图标已[净合main`d8efdc9`](../reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)。只增加UI注册/唯一supplier与两资源，物品列表保持；唯一11秒增量包退出0，主目录34bedc81…包已更新，旧包和美术来源保留。下方美术旧阶段及原候选待验记录为历史，不重复已验Logo或其他设备测试。
 
 **汽轮机当前状态（2026-10-12）：** 用户确认美术重置及运行动画通过，07B-R2机壳/观察窗和10B/R1转子/输出轴/动画已按[联合验收](../reviews/2026-10-12/turbine-fluid-accepted-integration/ACCEPTANCE.md)净合main `151ceba`，主目录标准build605/605通过。原美术候选/生成源与证据保持，其他美术人工门不由本次关闭。
