@@ -8,7 +8,7 @@
 
 **Tech Stack:** Minecraft1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6，沿用Gradle9.0.0与既有JUnit/GameTest入口。
 
-**Spec:** [已批准完整设计](../specs/2026-10-13-reactor-automation-design.md)。用户2026-10-13明确采用整稿及推荐参数，并确认“计划无误，按既定方式开工”。本计划已批准，当前开始准备同级候选和存档，实际派发、验证与交付记录在本批报告中。
+**Spec:** [已批准完整设计](../specs/2026-10-13-reactor-automation-design.md)。用户2026-10-13明确采用整稿及推荐参数，并确认“计划无误，按既定方式开工”。已交[稳定候选](../../reviews/2026-10-13/reactor-automation-01/CANDIDATE.md)`4757f27`，停集中客户端门；本卡开工过程、RED/扩卡与同次审查整改按实际阶段保留。
 
 ## 全局约束与执行方式
 
@@ -49,6 +49,27 @@
 允许修改资源：`src/main/resources/create_nuclear_industry.mixins.json`、`assets/create_nuclear_industry/lang/zh_cn.json`、`en_us.json`；新建同namespace下 `blockstates/reactor_automation_port.json`、`models/block/reactor_automation_port.json`、`models/item/reactor_automation_port.json`，以及 `data/create_nuclear_industry/recipe/crafting/reactor/reactor_automation_port.json`、`loot_table/blocks/reactor_automation_port.json`。接口模型只引用既有外壳/仪表/工业传感器资源，完整方块碰撞；不替换旧PNG或重置美术。新建 `data/minecraft/tags/block/mineable/pickaxe.json` 时仅用replace=false补本ID；已有同路径则只追加本ID。真实测试模板唯一新增 `data/cni_reactor_automation/structure/automation_empty.nbt`，16×8×16，编码沿用现行 `data/reactor_surface_display_probe/structure/surface_probe_empty.nbt`，不修改原件。
 
 执行者报告仅 `docs/reviews/2026-10-13/reactor-automation-01/IMPLEMENTATION.md`；原始日志/临时夹具/冻结来源仅 `build/reports/reactor-automation-01/**`。PM负责CANDIDATE/REVIEW/CLIENT-CHECKLIST和治理文档；其他源码测试如因新增枚举需要窄适配，报告精确失败后由PM扩卡，禁止自动删断言。
+
+### 开工后的必要写集补充
+
+2026-10-13任务1真实RED为10项中2项失败：合法单接口被旧结构扫描拒绝及配方资源不存在，见`01-red.log`。执行者随后指出`structure/ReactorSurfaceDescriptor.java`的`BLOCK_IDS`只接受旧壳成员，PM核实际29～32行白名单及174行校验确认：新接口会使完整表面投影失效。允许该文件仅向白名单追加`create_nuclear_industry:reactor_automation_port`，不改L1字段、NBT、成员坐标/朝外面、代际或旧接收规则；必要断言写在本批StructureTest。此为新结构成员的同合同接入，不重构渲染或再次测试已验Sodium。
+
+任务1`01-green-2.log`实际编译失败指出既有`src/test/java/com/iksxh/create_nuclear_industry/structure/ReactorInstrumentStructureSummaryTest.java:147`的`switch(type)`未覆盖新增AUTOMATION。允许该文件仅追加AUTOMATION到新接口ID的转换分支，原摘要断言不改、不删除；属于枚举穷尽性必要适配。
+
+继上述适配后，`01-green-3.log`实际编译指出`src/test/java/com/iksxh/create_nuclear_industry/structure/ReactorStructureContractTest.java:249`相同ID转换分支未覆盖AUTOMATION。该测试也允许仅补新类型到新接口ID的映射，原合同断言保持。两处同型分支已核，避免通过删除枚举穷尽校验绕过问题。
+
+任务4指出现有Gradle默认把`src/main/gametest`类及测试模板一并打入JAR，原基线也已包含旧域。PM核实际构建与本卡“新增fixture/测试类不得入生产包”的要求，允许`build.gradle`仅新增本批JAR排除规则：`com/iksxh/create_nuclear_industry/gametest/ReactorAutomationGameTests*.class`和`data/cni_reactor_automation/structure/automation_empty.nbt`。保留开发编译/资源/运行classpath，使四代表仍走现有GameTest；不新增source set、改变依赖、排除其他旧域或清理历史制品。规则使用中文注释，最终载荷检查证明两项本批测试输入未入JAR；既有旧GameTest类不能据此宣称全包均不含测试。
+
+任务3/4发现手动精修后各棒深度可能不同，统一预警深度会提起较深棒或超出正常插入步长。保护语义按原批准“预警禁止提棒、正常每次插入最多5个百分点”执行：允许Decision在现有可选整组命令之外增加逐棒安全插入指示，Service以一个权威映射提交。每tick先阻断目标低于实际/既有较深目标的待执行提棒，到调节周期才各可动棒在安全基准上追加最多配置插入步长；卡死棒保持。预警下全堆/逐棒请求只能进一步插入，若全堆请求会提起任一可动棒则整次拒绝。只在已列Controller/Service/仪表/旧SliderService与本批测试实现，无新路径、新玩法值或正常手动后台重写；补不同深度与周期前待执行提棒的定向断言。真实组合旧证据在未改对应路径时复用，权威逻辑改变才补相关代表。
+
+## 同一次组合审查整改
+
+2026-10-13初轮独立组合审查发现两项Important，PM按已批准控制安全合同接受，交原执行者同批整改：
+
+1. 接口同一服务器回合拆下原位重放，队列合并后的结构内容相同，旧请求可能沿用原代际/epoch。使用原Service/PortBlock/PortBE/仪表写集，已加载接口拆/换即时撤权并推进控制epoch，核对实际PortBE身份，防命令先于正式tick漏过；普通库存/自动步进不换epoch。真实代表不在remove和replace之间人为rescan，证明新实例绑回后旧请求仍被拒绝。
+2. 首次急停时已卡死棒未进入旧savedTargets；原钢板维修解除卡死后，管理员持锁降沿必须对当前全部可动棒建立100%恢复基准，不能只遍历旧savedTargets。无管理员的保存/恢复语义保持；原SCRAM/Service/Controller允许范围内实现，真实代表走原维修入口后降沿/正式tick，证明不会按旧浅目标提棒。
+
+保留初包`f29c4ea7...`与所有首轮证据，实际生产修复后只补必要定向检查、本域代表及第二次增量包；同一审查者仅复核实际差异，不另开审查或重跑旧域。审查同时指出Javadoc错挂与复位拒绝提示写死100tick；前者按AGENTS注释准确性要求修正，后者改为适用于配置的原因提示，仍限原仪表/两语言写集，文案不另建镜像测试。生产热工、原维修玩法和人工门保持。
 
 ## Review Focus
 
@@ -122,4 +143,10 @@
 
 规范1～2对应任务1/2，功率/保护及15参数对应任务3，红石/代际/输入冲突对应任务2/3，配方资源对应任务1，真实与客户端验证对应任务4；5类Review Focus均有归属。各任务消费的类型/入口已在前述Interfaces声明，文件职责、允许写集、版本、数量/单位与规范一致。
 
-本计划只细化已批准玩法，不增加后端仪表绑定、棒物理速度或新材料。执行方式沿用原唯一执行者/一次审查授权，不向执行者转授PM/Git权。完整计划已提交且用户审阅通过，PM开始准备；未获得实际证据前不登记功能完成、测试通过或客户端验收。
+本计划只细化已批准玩法，不增加后端仪表绑定、棒物理速度或新材料。执行方式沿用原唯一执行者/一次审查授权，不向执行者转授PM/Git权。完整计划已提交且用户审阅通过；内部实现的实际结果见下节，客户端验收仍待用户操作。
+
+## 当前交付状态
+
+同级候选`codex/reactor-automation-basic`已完成任务1～4内部实现与审查，源码净提交`4757f27`；详[CANDIDATE](../../reviews/2026-10-13/reactor-automation-01/CANDIDATE.md)、[REVIEW](../../reviews/2026-10-13/reactor-automation-01/REVIEW.md)及[IMPLEMENTATION](../../reviews/2026-10-13/reactor-automation-01/IMPLEMENTATION.md)。27文件世界与6配置已携带，原件保留；47来源与最终4204ab17…包一致。
+
+初轮31/31和整改28/28、同一生产真实4/4自然保存exit0、两次必要增量assemble与一次独立组合审查/同次窄复核均有原始证据。无下降沿补充的业务4/4与保存挂起非成功分列，提交前四份EOF纯格式经正文实核且未重测试/打包。未合main、未替换主正式包/世界，当前停[管理员集中人工门](../../reviews/2026-10-13/reactor-automation-01/CLIENT-CHECKLIST.md)。原清单中用户操作、视觉、真正卸载/保存重进仍未勾通过，不因此继续其他主线。
