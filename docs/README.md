@@ -1,5 +1,7 @@
 # 项目文档入口
 
+Logo已获用户验收并[合入main`d8efdc9`](reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)，创造标签改用齿轮＋蓝核芯图标，可编辑SVG和工具保留。唯一主目录增量assemble通过，正式包为34bedc81…；原物品列表、世界与其他人工门保持。
+
 管理员01手测的“换接口后扳手成功、护目镜不可用”已交[01R局部复看候选](reviews/2026-10-13/reactor-automation-retrofit-fix/CANDIDATE.md)`2dff787`/`5e04c667…`：安全拆壳保实际尺寸，纯冷液无核状态且容量足够时原量恢复，扳手返回实际接受结果。18/18定向、真实3/3自然退出、唯一增量包及一次窄审通过；原目录/世界继续手测，未合main，01集中人工门与02待派发状态保持。
 
 应力余量闭环[设计02](superpowers/specs/2026-10-13-reactor-load-follow-design.md)及[实施计划02](superpowers/plans/2026-10-13-reactor-load-follow-02.md)已按用户要求形成：绑定Create应力表、PI维持可设余量（默认20%）、正最低运行HU及原库存/积热保护。只准备文档，明确等01手测通过后沿唯一执行者/一次组合窄审派发；尚未实现，不新增流量测量或库存保持模式。

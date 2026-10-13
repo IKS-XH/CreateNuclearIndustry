@@ -1,5 +1,7 @@
 # 美术并行协作入口
 
+**Logo当前状态（2026-10-14）：** 用户整体验收通过，ART-LOGO-11原创SVG/PNG及创造标签图标已[净合main`d8efdc9`](../reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)。只增加UI注册/唯一supplier与两资源，物品列表保持；唯一11秒增量包退出0，主目录34bedc81…包已更新，旧包和美术来源保留。下方美术旧阶段及原候选待验记录为历史，不重复已验Logo或其他设备测试。
+
 **汽轮机当前状态（2026-10-12）：** 用户确认美术重置及运行动画通过，07B-R2机壳/观察窗和10B/R1转子/输出轴/动画已按[联合验收](../reviews/2026-10-12/turbine-fluid-accepted-integration/ACCEPTANCE.md)净合main `151ceba`，主目录标准build605/605通过。原美术候选/生成源与证据保持，其他美术人工门不由本次关闭。
 
 ## 当前集成状态：2026-10-12
