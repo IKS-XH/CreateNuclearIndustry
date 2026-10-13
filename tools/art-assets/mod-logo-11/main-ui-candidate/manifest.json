@@ -1,0 +1,27 @@
+{
+  "task": "ART-LOGO-11",
+  "phase": "receiver-main-ui-delivery",
+  "historical_art_manifest": "final-source-manifest.json",
+  "files": [
+    {
+      "path": "tools/art-assets/mod-logo-11/main-ui-candidate/src/main/java/com/iksxh/create_nuclear_industry/content/ModItems.java",
+      "bytes": 2934,
+      "sha256": "974f80bd82e6609ccae5dbb04cf5484e6124ec54c7e4c68bc0e265cf0834e6f0"
+    },
+    {
+      "path": "tools/art-assets/mod-logo-11/main-ui-candidate/src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java",
+      "bytes": 9107,
+      "sha256": "240c45f5a5b7cd3c2519a40bbf6b29477b7991138e58bbbe92f06931a6c45598"
+    },
+    {
+      "path": "tools/art-assets/mod-logo-11/main-ui.patch",
+      "bytes": 1856,
+      "sha256": "4a205f766ddc818eb361701b766d05f52035bfa2854665aa943d184f724234fd"
+    },
+    {
+      "path": "tools/art-assets/mod-logo-11/main-ui-candidate/scope-proof.json",
+      "bytes": 2606,
+      "sha256": "f267c8f34f83cbea9cb60f53ed490581992c9f6ae0368d8cb4001f9590c4f1fd"
+    }
+  ]
+}

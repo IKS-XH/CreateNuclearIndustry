@@ -1,0 +1,55 @@
+{
+  "task": "ART-LOGO-11",
+  "receiver_root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry",
+  "receiver_unchanged_after_generation": true,
+  "scope": "ModItems增加已审原样MOD_LOGO注册；MAIN.icon supplier唯一替换",
+  "files": [
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/content/ModItems.java",
+      "candidate": "tools/art-assets/mod-logo-11/main-ui-candidate/src/main/java/com/iksxh/create_nuclear_industry/content/ModItems.java",
+      "before_sha256": "6e83859b330c20e003142d15f2211ffabe38c7e864a119d6f2dcb45cf0ecea74",
+      "after_sha256": "974f80bd82e6609ccae5dbb04cf5484e6124ec54c7e4c68bc0e265cf0834e6f0",
+      "bytes": 2934,
+      "patch_context_verified": true
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java",
+      "candidate": "tools/art-assets/mod-logo-11/main-ui-candidate/src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java",
+      "before_sha256": "3ef6d255c83d131b2b9260974c2494cce66a96c7383d50309c1510479a29fb88",
+      "after_sha256": "240c45f5a5b7cd3c2519a40bbf6b29477b7991138e58bbbe92f06931a6c45598",
+      "bytes": 9107,
+      "patch_context_verified": true
+    }
+  ],
+  "display_items_byte_identical": true,
+  "display_items_sha256": "3dfb7c0fa6efaefe186b057fb9f47609130a47728244d2a20369f1053550ea6e",
+  "industrial_five_entries_preserved": [
+    "output.accept(IndustrialFluidContent.REINFORCED_PIPE_ITEM.get());",
+    "output.accept(IndustrialFluidContent.CERAMIC_PIPE_ITEM.get());",
+    "output.accept(IndustrialFluidContent.PUMP_ITEM.get());",
+    "output.accept(IndustrialFluidContent.REINFORCED_VALVE_ITEM.get());",
+    "output.accept(IndustrialFluidContent.CERAMIC_VALVE_ITEM.get());"
+  ],
+  "other_registration_bytes_restored_exactly": true,
+  "main_patch_context_from_actual_receiver": true,
+  "patch": {
+    "path": "tools/art-assets/mod-logo-11/main-ui.patch",
+    "sha256": "4a205f766ddc818eb361701b766d05f52035bfa2854665aa943d184f724234fd",
+    "bytes": 1856
+  },
+  "art_final17_unchanged": true,
+  "jar_unchanged": true,
+  "no_git_build_test_or_recipient_write": true,
+  "jar_unchanged_readback": [
+    {
+      "path": "build/libs/create_nuclear_industry-0.1.0.jar",
+      "bytes": 2778351,
+      "sha256": "d12cca860f69f0b411a99b3c7f34bacc17895c7ac4fb7bbd149616769dc839c5"
+    },
+    {
+      "path": "build/reports/art/ART-LOGO-11/final/create_nuclear_industry-0.1.0.jar",
+      "bytes": 2778351,
+      "sha256": "d12cca860f69f0b411a99b3c7f34bacc17895c7ac4fb7bbd149616769dc839c5"
+    }
+  ]
+}

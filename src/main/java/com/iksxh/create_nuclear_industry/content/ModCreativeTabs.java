@@ -25,7 +25,7 @@ public final class ModCreativeTabs {
             "main",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.create_nuclear_industry.main"))
-                    .icon(() -> new ItemStack(ModBlocks.EXPERIMENTAL_REACTOR_CASING_ITEM.get()))
+                    .icon(() -> new ItemStack(ModItems.MOD_LOGO.get()))
                     .displayItems((parameters, output) -> {
                         output.accept(IndustrialFluidContent.REINFORCED_PIPE_ITEM.get());
                         output.accept(IndustrialFluidContent.CERAMIC_PIPE_ITEM.get());

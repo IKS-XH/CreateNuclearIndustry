@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ART-LOGO-11 · 齿轮与蓝色核芯</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;padding:32px;background:#e8ecee;color:#26313a;font:15px/1.6 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1056px;margin:auto}h1{font-size:26px;margin:0 0 6px}p{margin:0 0 20px}a{color:#12507c}section{background:#fff;border:1px solid #cbd3d7;border-radius:12px;padding:22px;margin:18px 0}h2{font-size:19px;margin:0 0 14px}.surfaces{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.surface{padding:18px;border-radius:8px;text-align:center}.light{background:#f8f6ef}.dark{background:#202930;color:#dde8e8}.grid{background-color:#d0d5d8;background-image:conic-gradient(#e8ecee 25%,#ced5d8 0 50%,#e8ecee 0 75%,#ced5d8 0);background-size:24px 24px}.hero{width:256px;height:256px;max-width:100%;object-fit:contain}img{image-rendering:pixelated;image-rendering:crisp-edges}.native{display:flex;align-items:center;gap:32px;min-height:82px;padding:14px}.sample{display:flex;align-items:center;gap:14px}.sample span{font-size:13px}.tabs{display:flex;align-items:center;gap:30px}.tab{position:relative;display:inline-flex;justify-content:center;align-items:center;width:29px;height:32px;background:#c6c6c6;border:1px solid #232a30;box-shadow:inset 1px 1px #fff,inset -1px -1px #555}.tab.dark-tab{background:#373c43}.tab img{width:16px;height:16px}.note{color:#56656d;font-size:13px}.exports{display:flex;gap:18px;flex-wrap:wrap}.palette{display:flex;gap:8px;flex-wrap:wrap}.swatch{width:36px;height:28px;border:1px solid #26313a;border-radius:3px}code{background:#eef1f2;padding:2px 5px}@media(max-width:760px){body{padding:16px}.surfaces{grid-template-columns:1fr}.hero{width:192px;height:192px}.native{gap:12px;flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>齿轮与蓝色核芯</h1>
+  <p>ART-LOGO-11 · 原创 32px 像素徽标 · 钢灰齿轮 / 铜色轮圈 / 钢制约束 / 蓝白核芯</p>
+  <section>
+    <h2>透明底同源图形</h2>
+    <div class="surfaces">
+      <div class="surface light"><div>明色背景</div><img class="hero" src="generated/mod_logo_256.png" alt="明背景Logo"></div>
+      <div class="surface dark"><div>暗色背景</div><img class="hero" src="generated/mod_logo_256.png" alt="暗背景Logo"></div>
+      <div class="surface grid"><div>透明网格</div><img class="hero" src="generated/mod_logo_256.png" alt="透明底Logo"></div>
+    </div>
+  </section>
+  <section>
+    <h2>原生小尺寸</h2>
+    <div class="native light">
+      <div class="sample"><img src="generated/mod_logo_32.png" width="16" height="16" alt="16px原生Logo"><span>16 × 16px</span></div>
+      <div class="sample"><img src="generated/mod_logo_32.png" width="24" height="24" alt="24px原生Logo"><span>24 × 24px</span></div>
+      <div class="sample"><img src="generated/mod_logo_32.png" width="32" height="32" alt="32px原生Logo"><span>32 × 32px</span></div>
+    </div>
+    <div class="native dark">
+      <div class="sample"><img src="generated/mod_logo_32.png" width="16" height="16" alt="暗背景16pxLogo"><span>16 × 16px</span></div>
+      <div class="sample"><img src="generated/mod_logo_32.png" width="24" height="24" alt="暗背景24pxLogo"><span>24 × 24px</span></div>
+      <div class="sample"><img src="generated/mod_logo_32.png" width="32" height="32" alt="暗背景32pxLogo"><span>32 × 32px</span></div>
+    </div>
+    <p class="note">原生尺寸按 CSS 像素显示；浏览器缩放与系统显示比例可能影响屏幕上的物理像素。关键轮廓均为 2px 网格，16px 最近邻缩图可无损还原 32px 源图。</p>
+  </section>
+  <section>
+    <h2>创造模式标签模拟</h2>
+    <div class="tabs"><span class="tab"><img src="generated/mod_logo_32.png" alt="明色标签模拟"></span><span class="tab dark-tab"><img src="generated/mod_logo_32.png" alt="暗色标签模拟"></span><span>16px 图标 · 单层平面徽标 · 无图标文字</span></div>
+    <p class="note">这是离线标签构图模拟，不是 Minecraft 加载截图，也不代表客户端视觉验收。</p>
+  </section>
+  <section>
+    <h2>源文件与候选映射</h2>
+    <div class="exports"><a href="source/mod_logo.svg">可编辑 SVG</a><a href="generated/mod_logo_32.png">透明 PNG 32px</a><a href="generated/mod_logo_128.png">透明 PNG 128px</a><a href="generated/mod_logo_256.png">透明 PNG 256px</a><a href="generated/preview-sheet.png">离线检查图</a><a href="resource-map.json">资源映射</a></div>
+    <p><code>minecraft:item/generated</code> → <code>create_nuclear_industry:item/mod_logo</code></p>
+    <p class="note">正式模型/贴图与共享 Java 图标供给入口已按本批许可接入美术树，素材/源码/安装的组合审查无必改；唯一增量 assemble 已成功，候选等待同轮制品审查和用户客户端观察。旧实验反应堆外壳资源保留。</p>
+  </section>
+</main>
+</body>
+</html>

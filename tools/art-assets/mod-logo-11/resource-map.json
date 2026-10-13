@@ -1,0 +1,12 @@
+{
+  "task": "ART-LOGO-11",
+  "source": "source/mod_logo.svg",
+  "namespace": "create_nuclear_industry",
+  "candidate_root": "candidate",
+  "model": "assets/create_nuclear_industry/models/item/mod_logo.json",
+  "texture": "assets/create_nuclear_industry/textures/item/mod_logo.png",
+  "installed_root": "src/main/resources",
+  "exports": [32, 128, 256],
+  "phase": "candidate-only",
+  "originality": "本任务原创手工像素SVG；未导入第三方图片或标志。"
+}
