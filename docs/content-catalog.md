@@ -155,11 +155,10 @@ P1核心反应堆已经交接，基础生产、锅炉、汽轮机与轻量封存
 | `P1` | `reactor_casing`、`reactor_window` | 反应堆外壳、观察窗；外壳同时是棱边、转角、顶面和底面的唯一基础结构方块 |
 | `P1` | `reactor_cold_port`、`reactor_hot_port` | 一回路冷端、热端接口 |
 | `P1` | `reactor_instrument_port` | 反应堆模拟状态锚点、工程师护目镜全堆信息接口和红石 SCRAM 输入端；保存热工、控制、冷/热冷却剂量与事故状态，不保存燃料组件实体物品；护目镜显示结构尺寸、列/端口计数、空列与控制棒列内部空气格派生的共享容量、冷/热当前库存、全堆发热量及冷却剂转化速率，不枚举逐列详情；所有玩家可用 Create 扳手普通右键请求服务端重扫，并在快捷栏获得本地化的成型结果或失败原因 |
-| `P2` | `reactor_control_port` | 反应堆控制端口；随烈焰人管理员提供可选自动控制桥接，不拥有反应堆状态 |
+| `P2` | `reactor_automation_port` | 反应堆自动化接口；2026-10-13设计已批准、待实现。可选侧壁结构口，最多一个；外侧相邻Create烈焰人燃烧室任职，所有控件在燃烧室，权威状态仍归仪表端口 |
 | `P1` | `reactor_fuel_rod` | 燃料列内部的连续燃料柱方块；完整燃料列顶面必须配对 `reactor_refueling_port` |
 | `P1` | `reactor_refueling_port` | 单列换料端口；只能安装在燃料列正上方的顶面，方块实体唯一保存该列一个完整燃料组件 `ItemStack`，无 GUI，供人工或 Create 动力机械臂逐列取放；未成型时仅允许玩家安全取出本地组件，不允许装入或自动化；工程师护目镜指向它时显示端口内部组件的剩余/最大耐久与比例，以及下方燃料列的完整度/损坏度和当前发热量 |
 | `P1` | `control_rod_drive` | 控制棒驱动器；唯一可放置的控制棒相关方块，方块实体渲染无碰撞箱模型并保存逐棒控制状态；不接受红石输入，所有玩家都可用拖动滑块调节，拖动采用客户端本地预览且只在最终提交/拒绝时接受服务端校正；工程师护目镜显示其绑定控制棒列的行列编号与完整度；管理员桥接后置 |
-| `P2` | `blaze_reactor_manager` | 烈焰人反应堆管理台 |
 | `P1` | `pressure_pipe_tier_1`、`pressure_valve_tier_1` | 一级耐压管和控制阀 |
 | `P1` | `supercritical_steam_valve`、`turbine_exhaust_port` | 超临界蒸汽阀、排汽接口 |
 | `P2` | `pressure_pipe_tier_2` | 二级强化管 |
@@ -292,7 +291,7 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 | `已验收`五幕 | `nuclear_heat_exchanger` | [05播放验收](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)：本体/直列、Create锅炉供热、锅炉内置、盆/炉持续核热、蒸汽冷凝；拒收超临界蒸汽，不演示取消的降级供热路线 |
 | `暂缓` | `spent_fuel_pool_port` | 乏燃料池控制/流体接口和后置状态，不展示首发不存在的冷却转换 |
 | `已验收`一页 | `dry_storage_rack` | [08播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)：封装桶手持右击存入、空手右击取出、顶部/四侧输入与底部只输出、护目镜占用及满架等待。只教现有用法，不讲具体配方或未实现辐射效果；main净教学提交`d2b9345`，复用候选`f87185a`的10/10定向检查、增量打包与独立窄审。 |
-| `P2` | `blaze_reactor_manager` | 烈焰人燃烧室安装、仪表绑定、逐棒调节、红色阈值向 `reactor_instrument_port` 输出 SCRAM 信号 |
+| `P2` | `reactor_automation_port`＋`create:blaze_burner` | 已批准待实现：接口外侧燃烧室提供全堆手动/恒定HU/t/停堆/人工复位控件及运行许可红石，反相接入仪表SCRAM；负载跟随后续 |
 | `P3` | `shielded_disassembler` | 屏蔽环境、冷却乏燃料组件输入、乏燃料棒/受污染格架输出及普通机械手拒绝 |
 | `P3` | `sealed_reprocessor` | 处理介质、乏燃料输入、再生燃料与高放废物/受污染包壳同步产出 |
 | `P3` | `shielded_manipulator` | 热室内危险物品搬运、允许端口、屏蔽边界和不执行加工配方 |
@@ -315,7 +314,7 @@ Create 流体储罐锅炉和其他原生受热设备不是本模组多方块。`
 | `P1` | `reactor_cold_port` | 复合冷却剂冷端输入、流向和反应堆结构必需性；允许多个端口汇总，每端口默认上限 `128 mB/t`，不设全堆流量上限 |
 | `P1` | `reactor_hot_port` | 热复合冷却剂输出、冷却剂转化和热端不能徒手桶取；允许多个端口汇总，每端口默认上限 `128 mB/t`，不设全堆流量上限 |
 | `P1` | `reactor_instrument_port` | 唯一模拟状态所有者、Create 扳手普通右键成型诊断、工程师护目镜显示尺寸/列数/冷热端口数/可计空气格数/布局派生共享容量、红石高电平保持 SCRAM/低电平恢复停堆前位置、无控制棒列时拒绝 SCRAM、不得重复安装；燃料组件实体物品由各换料端口保存 |
-| `P2` | `reactor_control_port` | 随烈焰人管理员提供可选自动控制桥接、无状态所有权、不能替代仪表端口 SCRAM |
+| `P2` | `reactor_automation_port` | 已批准的可选自动化桥接，无核反应状态所有权，不替代仪表端口SCRAM；不另注册独立管理台，详见[冻结设计](superpowers/specs/2026-10-13-reactor-automation-design.md) |
 | `P1` | `reactor_refueling_port` | 只能位于燃料列顶面、唯一保存单列燃料组件、提供停堆/耗尽许可、人工或动力机械臂换料、受危险锁保护的未成型人工取料，以及本地组件耐久与结构列级护目镜信息 |
 | `P2` | `high_pressure_boiler_water_port`、`high_pressure_boiler_steam_port` | 锅炉给水/超临界蒸汽方向；两者分别有入口，不能混接 |
 | `P2` | `boiler_safety_valve`、`boiler_blaze_heater_port`、`boiler_heat_exchange_section` | 泄压、烈焰人辅助热源和核热输入的差异；组件入口由锅炉场景与独立入口共同覆盖 |
