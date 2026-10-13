@@ -1,5 +1,7 @@
 # 项目文档入口
 
+管理员01手测的“换接口后扳手成功、护目镜不可用”正按[01R窄修卡](superpowers/plans/2026-10-13-reactor-automation-retrofit-fix.md)整改：现场16³结构配默认5³＋纯冷液快照，尺寸接纳门拒绝；两生产入口及隔离代表限定在原候选。当前未登记修复通过，01集中手测与02待派发状态保持。
+
 应力余量闭环[设计02](superpowers/specs/2026-10-13-reactor-load-follow-design.md)及[实施计划02](superpowers/plans/2026-10-13-reactor-load-follow-02.md)已按用户要求形成：绑定Create应力表、PI维持可设余量（默认20%）、正最低运行HU及原库存/积热保护。只准备文档，明确等01手测通过后沿唯一执行者/一次组合窄审派发；尚未实现，不新增流量测量或库存保持模式。
 
 反应堆自动控制[首批候选](reviews/2026-10-13/reactor-automation-01/CANDIDATE.md)已交：同级`Create_NuclearIndustry-reactor-automation`的`codex/reactor-automation-basic`、源码`4757f27`。自动化接口、燃烧室四控件、统一调棒/恒定HU/t/故障保持与15参数/有序配方已实现；定向及真实代表、增量包和一次组合审查通过，最新补充夹具保存挂起与自然退出证据分列。世界27文件/6配置已携带、原件保留。当前停[集中手测](reviews/2026-10-13/reactor-automation-01/CLIENT-CHECKLIST.md)，未合main；负载跟随与其他原人工门独立保持。下方此前管理员后置、管网未合main的准备文字是历史时点。
