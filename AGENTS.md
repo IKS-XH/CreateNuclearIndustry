@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 用户2026-10-13将Sodium/Iris渲染问题交独立对话处理后，向主PM明确“这个渲染问题已经解决了，我手动测试也没问题了”，按[本次验收](docs/reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md)关闭原反应堆成型连接纹理故障。独立交付仅原快照入口适配真实final LevelSlice世界身份及新增真实类测试；原26/26、无Sodium专用服1/1、唯一实际2秒增量assemble复用，PM一次独立窄审无剩余必改，两源码/六class与8c03dbd…候选一致。精确源码及本批文档净提交main，不再测试/构建、改名或覆盖用户包/实例/世界，其他dirty保持；不扩展成Iris或全部设备兼容保证，不关闭泵/端口流量/16³锅炉等独立门。下方及原暂停记录均为交付前历史，其他主线不自动接续。
+
 - 用户2026-10-13明确暂停Sodium/Iris连接纹理兼容，按[暂存诊断卡](docs/superpowers/plans/2026-10-13-reactor-sodium-surface-01.md)仅保留已得只读证据。随后指定[工业泵静止方向与主目录流量配置窄修](docs/superpowers/plans/2026-10-13-industrial-pump-idle-arrow-flow-config.md)，已交[main候选](docs/reviews/2026-10-13/industrial-pump-idle-arrow-flow-config/CANDIDATE.md)：理论轴速符号让静止/超载/冻结箭头可见，实际停用运输仍为零；代码默认与正式handler/账本已为2048，主目录实例覆盖100仅备份后恢复为2048，其余配置保持且不进Git。最终3/3定向、唯一1秒增量assemble及一次独立窄审通过，16来源/正式冻结745e936c…包一致；原R2素材/用户包和其他dirty保持，任务无世界写入。主目录原位，不新分支/搬世界或重跑R2/桶/整机，只待静止箭头和加载配置后的实际流量局部复看；原已验门保持，不继续Sodium或其他主线。
 
 - 用户2026-10-12在R2蓝框局部复看后明确“OK，没问题了”，按[本次验收](docs/reviews/2026-10-12/industrial-pump-triangle-r2/ACCEPTANCE.md)关闭工业泵两端深色三角视觉门，R2完成。main源码`b67be67`与b0aef730…冻结JAR、11来源零漂移；原3/3、唯一增量assemble和独立窄审复用，不重复测试/构建或改包/世界。下方R2待复看为交付历史；此次反馈不扩展为未明确报告的创造罐桶操作或16³锅炉验收，不推进其他主线。

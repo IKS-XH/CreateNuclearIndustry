@@ -1,6 +1,6 @@
 # 反应堆Sodium联机连接纹理窄修
 
-状态：用户2026-10-13明确“先不管这个兼容性问题了，以后再说”，暂停本项。停止继续诊断/实现/测试/构建，只保存已得只读来源与报告；未修改生产代码、用户客户端实例或世界。后续只有用户恢复时才接续，不以新工业泵/流量问题替代此兼容任务的验收。
+状态：用户2026-10-13将本问题交独立对话处理后，向主PM明确反馈“这个渲染问题已经解决了，我手动测试也没问题了”。本故障的用户人工验收通过；旧暂停段为历史时点。主PM接收原位未提交交付，复用同源自动和候选证据，补齐原要求的一次独立窄审后精确提交，不再次实现、测试或构建，不由此关闭其他故障或推进其他主线。
 
 2026-10-13用户报告：独立专用服务器上的反应堆护目镜显示已成型、功能正常，但客户端一直显示搭建时的分离纹理。用户确认客户端安装Sodium/Iris。基线main `6d1baba`，工业泵R2已验收，其素材与原验收保持。
 
@@ -22,3 +22,13 @@
 - 先以实际上下文路径做RED，修复后核同世界可连接、旧世界/未知/Ponder不可借用、原生入口保持；必要时一个无可选模组真实专用服启动探针。不以纯模拟状态机通过冒称真实Sodium路径覆盖。
 - 定向测试和一次必要增量assemble；一次独立窄审，复用原L1/L2/CT及泵/管网证据。不上全量build、兼容存档研究或各设备复测；有具体失败/新风险才追加必要检查。
 - 最终交main可安装候选和具体联机复看入口；用户客户端Sodium/Iris下真实外观是独立人工门，不以自动证据关闭。原JAR/用户实例/世界与其他dirty保持，未报告其他问题不扩范围。
+
+## 独立对话交回与验收接续
+
+独立执行者从main `4da5e94`完成[诊断](../../reviews/2026-10-13/reactor-sodium-surface-01/DIAGNOSIS.md)和[实施交付](../../reviews/2026-10-13/reactor-sodium-surface-01/IMPLEMENTATION.md)。最终精确源码为原 `ReactorSurfaceSnapshots.java` 与新增 `ReactorSodiumSurfaceTest.java`；生产仅适配已核实的 final Sodium LevelSlice 世界身份，不改服务端、材质、协议或生命周期。执行者没有Git写或派审。
+
+主PM只读核对原26/26、无Sodium真实专用服1/1、唯一实际增量assemble及来源/JAR身份；一次独立审查者仅写 `docs/reviews/2026-10-13/reactor-sodium-surface-01/REVIEW.md`，禁止实现、再次测试/构建、Git写或转派。审核后仅净提交两源码及本批报告/治理文档，保持用户包、世界与其他dirty。候选 `create_nuclear_industry-0.1.0_261013_sodium-surface.jar` 的SHA256为 `8c03dbd11e4812705b18942407ae4dd64aba8e7c0cbbc18d03ab2690a0ac1f23`；不为改文件名重复打包或覆盖用户正式包。
+
+用户本次反馈仅登记原反应堆成型连接纹理故障通过，不补写光影切换、世界隔离或全部设备优化模组兼容的逐项人工结果。实际使用minecraft-modding/testing、requesting-code-review及verification-before-completion；沿用已核锁定工程版本和治理5.1证据复用规则。
+
+接续结果：[独立窄审](../../reviews/2026-10-13/reactor-sodium-surface-01/REVIEW.md)无剩余必改项，当前两源码/六class与8c03dbd…候选绑定一致，原自动证据复用；[用户验收](../../reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md)关闭原故障，源码及本批文档净提交main，不再重复构建或覆盖正式/用户包。本项完成，其他独立门保持。

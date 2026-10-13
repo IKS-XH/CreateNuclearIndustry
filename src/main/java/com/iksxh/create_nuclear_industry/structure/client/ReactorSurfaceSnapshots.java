@@ -7,9 +7,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ChunkPos;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,20 +23,51 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class ReactorSurfaceSnapshots {
     private static final AtomicReference<Publication> PUBLISHED = new AtomicReference<>(new Publication(null, ReactorSurfaceSnapshot.empty()));
+    /**
+     * Sodium 0.8.12 的真实 LevelSlice 用 final 字段绑定构建所属世界；仅缓存该确切类型的只读访问。
+     * ClassValue 按类身份隔离且不保留世界对象，不加载可选模组类；字段不兼容或不可访问时安全降级。
+     */
+    private static final ClassValue<Optional<Field>> SODIUM_WORLD_FIELDS = new ClassValue<>() {
+        @Override
+        protected Optional<Field> computeValue(Class<?> type) {
+            if (!type.getName().equals("net.caffeinemc.mods.sodium.client.world.LevelSlice")
+                    || !Modifier.isFinal(type.getModifiers())) return Optional.empty();
+            try {
+                Field field = type.getDeclaredField("level");
+                if (field.getType() != ClientLevel.class || !Modifier.isFinal(field.getModifiers())
+                        || Modifier.isStatic(field.getModifiers()) || !field.trySetAccessible()) return Optional.empty();
+                return Optional.of(field);
+            } catch (ReflectiveOperationException | SecurityException exception) {
+                return Optional.empty();
+            }
+        }
+    };
     private ReactorSurfaceSnapshots() { }
 
     public static ReactorSurfaceSnapshot capture() { return PUBLISHED.get().snapshot(); }
 
     /**
-     * 只接受真实 ClientLevel 或原生 RenderChunkRegion 的同一 Level 对象；AT 只开放读取其 final level。
+     * 只接受真实 ClientLevel、原生 RenderChunkRegion 或已核实 Sodium 切片绑定的同一 Level 对象。
      * 未知包装、Ponder 以及旧世界延迟构建一律返回空；不查询 BE、区块、光照或世界方块。
      */
     public static ReactorSurfaceSnapshot capture(BlockAndTintGetter context) {
         Publication publication = PUBLISHED.get();
         Object world = context != null && context.getClass() == RenderChunkRegion.class
                 ? ((RenderChunkRegion) context).level : context;
+        if (!(world instanceof ClientLevel) && context != null) world = sodiumWorld(context);
         return world instanceof ClientLevel && world == publication.world()
                 ? publication.snapshot() : ReactorSurfaceSnapshot.empty();
+    }
+
+    /** 模型线程仅读取切片的 final 世界身份，不调用其方块、BE、区块或光照方法，也不借用当前全局世界。 */
+    private static ClientLevel sodiumWorld(BlockAndTintGetter context) {
+        Optional<Field> field = SODIUM_WORLD_FIELDS.get(context.getClass());
+        if (field.isEmpty()) return null;
+        try {
+            return (ClientLevel) field.get().get(context);
+        } catch (IllegalAccessException exception) {
+            return null;
+        }
     }
 
     static void publish(ClientLevel world, ReactorSurfaceSnapshot snapshot) {
