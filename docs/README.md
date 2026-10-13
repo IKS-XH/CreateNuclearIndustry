@@ -1,5 +1,7 @@
 # 项目文档入口
 
+管理员新增[GUI／连续换料／核热值班整合草案](superpowers/specs/2026-10-14-reactor-administrator-gui-design.md)：三页GUI、部分燃料耗尽不停堆、反应堆热量维持普通燃烧及一个燃料冷启动。当前只设计，新建议值待审阅；未改代码或打包，01/01R与02人工/派发门保持。
+
 Logo已获用户验收并[合入main`d8efdc9`](reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)，创造标签改用齿轮＋蓝核芯图标，可编辑SVG和工具保留。唯一主目录增量assemble通过，正式包为34bedc81…；原物品列表、世界与其他人工门保持。
 
 管理员01手测的“换接口后扳手成功、护目镜不可用”已交[01R局部复看候选](reviews/2026-10-13/reactor-automation-retrofit-fix/CANDIDATE.md)`2dff787`/`5e04c667…`：安全拆壳保实际尺寸，纯冷液无核状态且容量足够时原量恢复，扳手返回实际接受结果。18/18定向、真实3/3自然退出、唯一增量包及一次窄审通过；原目录/世界继续手测，未合main，01集中人工门与02待派发状态保持。
