@@ -1,0 +1,38 @@
+{
+  "stage": "final-candidate",
+  "names": [
+    "机械动力：核工业",
+    "Create: Nuclear Industry"
+  ],
+  "logoSource": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\mod-logo-12-hd\\source\\mod_logo_hd.svg",
+  "logoSha256": "cd763c08bf7f29ce21aef613230fd9dc37c06b826a5dbd2f7ec776e862b16c2c",
+  "font": {
+    "path": "C:/Windows/Fonts/msyhbd.ttc",
+    "sha256": "519309b7ab0479c4dc3ace5e291de5a8702175be5586e165bc810267bd4619a5",
+    "redistribution": false
+  },
+  "background": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\mcmod-cover-13\\background\\reactor-5x5x5.png",
+    "sha256": "c4493e3b6953478e0361aa3afb39c92a1be9ff8da598778eff8d9c39bebca249"
+  },
+  "exported": [
+    {
+      "name": "mcmod-cover-1920x1200.png",
+      "width": 1920,
+      "height": 1200,
+      "sha256": "77a11300fae138b917be130d3675ecde141757784b0cbd1a9daa5020245d86bc"
+    },
+    {
+      "name": "mcmod-cover-960x600.png",
+      "width": 960,
+      "height": 600,
+      "sha256": "7d6ef584bca6334385cb9fc41cf5892c326b10990ba686a45049a20f300a965c"
+    },
+    {
+      "name": "mcmod-cover-240x150.png",
+      "width": 240,
+      "height": 150,
+      "sha256": "4ebe5fa212ba9f4a10a815180e08850b9ad7654d2662a309ea923cb8874cdc14"
+    }
+  ]
+}

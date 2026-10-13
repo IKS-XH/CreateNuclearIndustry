@@ -1,0 +1,311 @@
+{
+  "task": "ART-REACTOR-08",
+  "stage": "已安装试用，游戏内视觉待用户复看",
+  "source_of_truth": "纯SVG rect，窗格的fill-opacity在SVG中明确为64/255",
+  "tile_size": 16,
+  "atlas_size": [
+    128,
+    128
+  ],
+  "ct_type": "OMNIDIRECTIONAL",
+  "source_sprite": "create_nuclear_industry:block/reactor_window",
+  "target_sprite": "create_nuclear_industry:block/reactor_ct/reactor_window",
+  "source_tiles": 64,
+  "window_contexts": [
+    {
+      "mask": 0,
+      "index": 0
+    },
+    {
+      "mask": 1,
+      "index": 1
+    },
+    {
+      "mask": 2,
+      "index": 2
+    },
+    {
+      "mask": 3,
+      "index": 3
+    },
+    {
+      "mask": 4,
+      "index": 8
+    },
+    {
+      "mask": 5,
+      "index": 9
+    },
+    {
+      "mask": 6,
+      "index": 10
+    },
+    {
+      "mask": 7,
+      "index": 11
+    },
+    {
+      "mask": 8,
+      "index": 16
+    },
+    {
+      "mask": 9,
+      "index": 17
+    },
+    {
+      "mask": 10,
+      "index": 18
+    },
+    {
+      "mask": 11,
+      "index": 19
+    },
+    {
+      "mask": 12,
+      "index": 24
+    },
+    {
+      "mask": 13,
+      "index": 25
+    },
+    {
+      "mask": 14,
+      "index": 26
+    },
+    {
+      "mask": 15,
+      "index": 27
+    },
+    {
+      "mask": 21,
+      "index": 12
+    },
+    {
+      "mask": 23,
+      "index": 33
+    },
+    {
+      "mask": 29,
+      "index": 48
+    },
+    {
+      "mask": 31,
+      "index": 29
+    },
+    {
+      "mask": 41,
+      "index": 20
+    },
+    {
+      "mask": 43,
+      "index": 41
+    },
+    {
+      "mask": 45,
+      "index": 49
+    },
+    {
+      "mask": 47,
+      "index": 28
+    },
+    {
+      "mask": 61,
+      "index": 50
+    },
+    {
+      "mask": 63,
+      "index": 30
+    },
+    {
+      "mask": 70,
+      "index": 13
+    },
+    {
+      "mask": 71,
+      "index": 32
+    },
+    {
+      "mask": 78,
+      "index": 56
+    },
+    {
+      "mask": 79,
+      "index": 35
+    },
+    {
+      "mask": 87,
+      "index": 34
+    },
+    {
+      "mask": 95,
+      "index": 37
+    },
+    {
+      "mask": 111,
+      "index": 36
+    },
+    {
+      "mask": 127,
+      "index": 38
+    },
+    {
+      "mask": 138,
+      "index": 21
+    },
+    {
+      "mask": 139,
+      "index": 40
+    },
+    {
+      "mask": 142,
+      "index": 57
+    },
+    {
+      "mask": 143,
+      "index": 43
+    },
+    {
+      "mask": 159,
+      "index": 45
+    },
+    {
+      "mask": 171,
+      "index": 42
+    },
+    {
+      "mask": 175,
+      "index": 44
+    },
+    {
+      "mask": 191,
+      "index": 46
+    },
+    {
+      "mask": 206,
+      "index": 58
+    },
+    {
+      "mask": 207,
+      "index": 51
+    },
+    {
+      "mask": 223,
+      "index": 53
+    },
+    {
+      "mask": 239,
+      "index": 52
+    },
+    {
+      "mask": 255,
+      "index": 54
+    }
+  ],
+  "fallback_indices": [
+    4,
+    5,
+    6,
+    7,
+    14,
+    15,
+    22,
+    23,
+    31,
+    39,
+    47,
+    55,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "pane": {
+    "color": "#66696A",
+    "alpha": 64,
+    "fill_opacity": "0.25098039215686275",
+    "scope": "只覆盖64个索引的原透明窗格（47个原生上下文及17个隔离fallback）"
+  },
+  "preservation": "原R1窗口SVG中全部框/角/实体像素逐像素不变；17个fallback索引保持原不透明形状",
+  "old_source_sha256": {
+    "tile_00.svg": "18a96cd0b30c6e9a5f137614bcb21203c9e77c71a7ee3fd00be53af172c32db8",
+    "tile_01.svg": "82aaeb0594ad608d50f0ad7b617b9610ad01a069d33d2ada667dddb077063afc",
+    "tile_02.svg": "b0eca41f193d1cf8f591b4dc08b13ba86f3911bca2ca716309902298bfabc690",
+    "tile_03.svg": "026db12849feb938079846211506e9a114478f535cd91933f005e839ecab3b28",
+    "tile_04.svg": "29437a8469c3f44037e0298ef40a92ea0ab8aac1f5331695b30fa5d13b083572",
+    "tile_05.svg": "01d5617f873fc37a55c5cb7a28b2a07a005b557e26e6bfbb68a6da09d09655c5",
+    "tile_06.svg": "4cb6a4f92c6b96946c44091720b056ba9da5d29010d8c55d8aef6b3b46140123",
+    "tile_07.svg": "86f7ef9fb9634a9e35c4c4c512c4c316d7fec9bccec8e2b4a15cd180823863ef",
+    "tile_08.svg": "6478bcd34813eefae7222854c2c6445c02ab986ec25761dbb73f616ad55cd2ea",
+    "tile_09.svg": "651f568b077530e0ee7693518431053c362908ea283a86e49de45693dbdb7677",
+    "tile_10.svg": "4844032bb49c5a7bf6d64fae833bc9eb857a00363d26dcc6f78a3fc9dfe9ac9d",
+    "tile_11.svg": "b5dcb24aabf75103ae7f3ce8caf1f5d7122439daa46909c70bdc9917a7b05d9a",
+    "tile_12.svg": "8e0f8dabed8344329a162341db7786774ccd01bb61e4b347badeb80725f0cf7e",
+    "tile_13.svg": "f4524a11d6565b95c8c5b8bf3522513e93f42251e9c05ba28c184b4ea650d1ad",
+    "tile_14.svg": "c900952c8592e4f2312f91f368b5a60fe9128ce67d3f4417a1239297a247f88f",
+    "tile_15.svg": "1f6c4e7f55ff9f80df7f5f0fbff3d1f6df5805473bad4245ded7bb4cbb30a411",
+    "tile_16.svg": "78bb5fca9bb6011b0e75fcaa1d5dd6455f39f27b1ffafbad2d757defc2d33524",
+    "tile_17.svg": "8eade3dc5c41a9a31fae25bc52661adaf9e241efb8612d010884810e5457d87b",
+    "tile_18.svg": "156a02e8537dfd8c6ed4dde406af3710dcd615728b951b222db086ac6dc6149c",
+    "tile_19.svg": "4b6204dbd63c2903cdaaceea484b7c9d54ef9304b0360bdd0e3fbb0d3d239f66",
+    "tile_20.svg": "949271fbb1d4722458ca380696a55cca43ac3556556efe74c0bdc7b9d831802b",
+    "tile_21.svg": "0db517d7cf1e2f00561990e67a6605c27bb065376d9409c3d31a9f6caeb6a968",
+    "tile_22.svg": "8fec6a3d129fadeb0b26e6b80da8165748dc831189ccd6107f3fae6cea81e647",
+    "tile_23.svg": "5ba04da44e555eecc419d7d136740461bddf2fd0718954ce6a4d543e4cb5bbf9",
+    "tile_24.svg": "770e845e4fad548e37aad34800d98d3b965d4838670e333cfae7667bbcdd71f2",
+    "tile_25.svg": "3e8c3758cd1802890d9101069f4d182c63a688027d03f73a352d0748136f9f26",
+    "tile_26.svg": "06cb8885845ad4b489f8b6e0c6c768c6a582a3020959d2e6e58b97bf293f3351",
+    "tile_27.svg": "3d214396fc40c2fe13660bafb1b3bbefcb035ade933e77797dac87dc66a7416c",
+    "tile_28.svg": "d068b8f001e9cc88c9a0a8addabf36e69814568c6e2884a191636531d82e795a",
+    "tile_29.svg": "de55a70193d52036996971775d9dbc0076995578e88bc53148767c600722603b",
+    "tile_30.svg": "6d0d72031c86c8c02695d39a69e978ea1ba734c9a3426a408c4138b83273a900",
+    "tile_31.svg": "897b5d6afeea8c2723ec1f9365c6ebed195ab188e48ac1cd579d7210bbb8726a",
+    "tile_32.svg": "7efcfd055eebfac463cb3c7d4f2b0f36b7240be6b941cbc1861b78408276d743",
+    "tile_33.svg": "a3cfeebf03ff19cd82adc810dd34980c78b207f0170db582209d577bb76e3244",
+    "tile_34.svg": "bc3b0c7bfce6661e294090151dc83be1f625ac5aaff09fce875f4b848c15ca5e",
+    "tile_35.svg": "72075cb6b8ca043fde6c4fb3e6a827cdd688c85401c624368eaba2140d0565fb",
+    "tile_36.svg": "056eda6b4b37021a154cc58042a6dc8a745f9588a863485b06edd2974e9c3c78",
+    "tile_37.svg": "71f99050eaf39bc5985c2ea4d6e43a4c13cd08abb6011242dbdc03625c877d93",
+    "tile_38.svg": "8d6cd71960ba33f84eca58ae9c1cf20961446c361fc002843ca72ce493a6271d",
+    "tile_39.svg": "f5856458e2df48d32a6f9effaaf19e2d3ee3bee3c681a513fd548182f50734fd",
+    "tile_40.svg": "e1235ccbab136f9113457142b06a9f30c0db1d654f958dfa8e3ae1342dab4330",
+    "tile_41.svg": "5b3639953da2e33b657a0b198fd33776199fea5c6b04dd1f00232e2f18159d2e",
+    "tile_42.svg": "acbe3d3880fed5cc6f4fce5fdc2a8ca76e811218b58fa83de46ac9ea3212a289",
+    "tile_43.svg": "69f728f6b2f0e75b25ccfdd56f4be012170b8462a01b1441d9a74a034fed5598",
+    "tile_44.svg": "b320ff25d2890aff9fdb8bced1c51a37f0bd6f082068ae25fa294c53ec30010d",
+    "tile_45.svg": "57ef35de5c00451060be6295686f8a48283e3b40b00b5ba5f9d02732132b2190",
+    "tile_46.svg": "421b32c1f92d91505190c3a1648e63dbc80c47be83b542704ad3d118530aa402",
+    "tile_47.svg": "7413cc385e8b470b102dfe1ec82f7c76d94f930e1c8d273328d4d2bef76f037a",
+    "tile_48.svg": "d6eb7604c42fe51a5d7783b7a59a54022e804e77a618a8f53d1120a214b9c4e4",
+    "tile_49.svg": "2d78138a3f81e74f4ac247763961b8194c9c9e2cfa5ce0274008d7d4ce9c9796",
+    "tile_50.svg": "eed156881fb5586f9d33ca1c019ebd50e32333a3bd00db7b20530950876c9ad2",
+    "tile_51.svg": "effc00ef474dfc2eed33c42c5729d2b4352707d5336b7fdf127aa7e389e22e6a",
+    "tile_52.svg": "06634667045b4e00c57a70f76f34594dac2e9c149b6e801c72b017faefc30a7b",
+    "tile_53.svg": "d767920b02adeb65460acd3cb86d61a5ae7d537ef0033203d8d0f9b5d08d3c0a",
+    "tile_54.svg": "65593b672ad8a417faf8e068bce8b577fe03c50b63fe3ef758e97ceb17d4392b",
+    "tile_55.svg": "164068db76f58a8a6a1bde3af5154b30ca796082c43009a306e3577c97a58ad7",
+    "tile_56.svg": "a516926db1db12f1cdbd12229182a1b02e97da4d2991c472a3b66a656446fcb1",
+    "tile_57.svg": "19f6efcfe67950b2a0307ff0301a6bb7e7b7b25c1f113593eef01bbc0d761855",
+    "tile_58.svg": "be64c2c787b0c52f3542661818639c9d92af0ec88f9eb0baea8dc11388343cf7",
+    "tile_59.svg": "a288ae50a216b1df0d3102f43db19704ca1077a9b59bf4dfe66b845535b4035a",
+    "tile_60.svg": "b2187bef266ffa706671c8d887815360927f32a68833e9f3eae8b6a56f0c6ab4",
+    "tile_61.svg": "33d2a9805439db39c4f13e6664204b795b7b75ea270180762ac23cd74dc9a3c8",
+    "tile_62.svg": "c7ce316cec103501ece9d2576e644878d1f8db6928e24c3265b69d310a0fdbb5",
+    "tile_63.svg": "73ecc8232c8ffd37a9ac9a3fab4f35ecd02c24a57d1f69ef65e230d0b2d654e8"
+  },
+  "old_atlas": "tools/art-assets/reactor-ct-r1/generated/reactor_window_ct.png",
+  "candidate_atlas": "generated/reactor_window_lead_ct.png",
+  "formal_target": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_ct/reactor_window.png",
+  "installation": {
+    "status": "installed_trial",
+    "generated": "tools/art-assets/reactor-window-art-08/generated/reactor_window_lead_ct.png",
+    "formal": "src/main/resources/assets/create_nuclear_industry/textures/block/reactor_ct/reactor_window.png",
+    "sha256": "f18296427db4c106579f778e3b0443284d5fd074ebf997889d13c495f1874723",
+    "bytes": 1458,
+    "previous_formal_backup": "build/reports/art/ART-REACTOR-08/assets/baseline/reactor_window.png",
+    "previous_formal_sha256": "cb0a9fe5dc3f106c75a8070d09ff305df99d594bd7b630b9a2796e88b8994026",
+    "client_visual": "待用户复看，未作为验收"
+  }
+}
+
+

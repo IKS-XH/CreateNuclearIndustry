@@ -21,6 +21,15 @@ public final class ModItems {
             CreateNuclearIndustry.MOD_ID
     );
 
+    /**
+     * 仅供创造模式标签读取的徽标物品；沿用延迟注册，客户端由平面模型显示。
+     * 不加入展示列表或配方，不承载服务端玩法状态。
+     */
+    public static final DeferredItem<Item> MOD_LOGO = ITEMS.register(
+            "mod_logo",
+            () -> new Item(new Item.Properties())
+    );
+
     public static final DeferredItem<Item> FRESH_FUEL_ASSEMBLY = ITEMS.register(
             P1ContentIds.FRESH_FUEL_ASSEMBLY_ID,
             () -> new Item(new Item.Properties()

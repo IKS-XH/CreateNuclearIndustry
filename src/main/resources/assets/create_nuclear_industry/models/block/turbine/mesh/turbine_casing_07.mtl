@@ -1,0 +1,19 @@
+newmtl casing
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_07_panel
+
+newmtl inside
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_panel
+
+newmtl edge
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_panel
+
+newmtl endcap
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_casing_07_endcap

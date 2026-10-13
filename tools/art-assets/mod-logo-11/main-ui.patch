@@ -1,0 +1,31 @@
+diff --git a/src/main/java/com/iksxh/create_nuclear_industry/content/ModItems.java b/src/main/java/com/iksxh/create_nuclear_industry/content/ModItems.java
+--- a/src/main/java/com/iksxh/create_nuclear_industry/content/ModItems.java
++++ b/src/main/java/com/iksxh/create_nuclear_industry/content/ModItems.java
+@@ -19,6 +19,15 @@
+ 
+     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(
+             CreateNuclearIndustry.MOD_ID
++    );
++
++    /**
++     * 仅供创造模式标签读取的徽标物品；沿用延迟注册，客户端由平面模型显示。
++     * 不加入展示列表或配方，不承载服务端玩法状态。
++     */
++    public static final DeferredItem<Item> MOD_LOGO = ITEMS.register(
++            "mod_logo",
++            () -> new Item(new Item.Properties())
+     );
+ 
+     public static final DeferredItem<Item> FRESH_FUEL_ASSEMBLY = ITEMS.register(
+diff --git a/src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java b/src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java
+--- a/src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java
++++ b/src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java
+@@ -25,7 +25,7 @@
+             "main",
+             () -> CreativeModeTab.builder()
+                     .title(Component.translatable("itemGroup.create_nuclear_industry.main"))
+-                    .icon(() -> new ItemStack(ModBlocks.EXPERIMENTAL_REACTOR_CASING_ITEM.get()))
++                    .icon(() -> new ItemStack(ModItems.MOD_LOGO.get()))
+                     .displayItems((parameters, output) -> {
+                         output.accept(IndustrialFluidContent.REINFORCED_PIPE_ITEM.get());
+                         output.accept(IndustrialFluidContent.CERAMIC_PIPE_ITEM.get());

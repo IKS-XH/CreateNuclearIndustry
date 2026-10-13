@@ -1,0 +1,95 @@
+{
+  "results": [
+    {
+      "name": "正式阶段并绑定Logo R2",
+      "passed": true
+    },
+    {
+      "name": "准确中英名称",
+      "passed": true
+    },
+    {
+      "name": "成品标题全部转路径",
+      "passed": true
+    },
+    {
+      "name": "成品SVG全部自包含",
+      "passed": true
+    },
+    {
+      "name": "内嵌背景与绑定来源一致",
+      "passed": true
+    },
+    {
+      "name": "背景2048方图和透明边缘",
+      "passed": true
+    },
+    {
+      "name": "mcmod-cover-1920x1200.png尺寸比例和身份",
+      "passed": true
+    },
+    {
+      "name": "mcmod-cover-960x600.png尺寸比例和身份",
+      "passed": true
+    },
+    {
+      "name": "mcmod-cover-240x150.png尺寸比例和身份",
+      "passed": true
+    },
+    {
+      "name": "ZIP不含草案或字体文件",
+      "passed": true
+    },
+    {
+      "name": "ZIP逐字身份 manifest.json",
+      "passed": true
+    },
+    {
+      "name": "ZIP逐字身份 mcmod-cover-1920x1200.png",
+      "passed": true
+    },
+    {
+      "name": "ZIP逐字身份 mcmod-cover-240x150.png",
+      "passed": true
+    },
+    {
+      "name": "ZIP逐字身份 mcmod-cover-960x600.png",
+      "passed": true
+    },
+    {
+      "name": "ZIP逐字身份 mcmod-cover-editable.svg",
+      "passed": true
+    },
+    {
+      "name": "ZIP逐字身份 mcmod-cover.svg",
+      "passed": true
+    },
+    {
+      "name": "ZIP原Logo完整身份",
+      "passed": true
+    },
+    {
+      "name": "ZIP背景完整身份",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "failed": 0,
+  "zip": {
+    "bytes": 1463744,
+    "sha256": "fb0336423ed09232328d91f778b5f990cbbd18289de7d9993aad347197a3f1f4",
+    "entries": [
+      "output/manifest.json",
+      "output/mcmod-cover-1920x1200.png",
+      "output/mcmod-cover-240x150.png",
+      "output/mcmod-cover-960x600.png",
+      "output/mcmod-cover-editable.svg",
+      "output/mcmod-cover.svg",
+      "sources/mod_logo_hd.svg",
+      "sources/reactor-render.png",
+      "export-cover.cjs",
+      "verify-cover.cjs",
+      "README.md"
+    ]
+  }
+}

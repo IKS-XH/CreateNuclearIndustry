@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Create: Nuclear Industry 宣传版齿轮与蓝色核芯</title>
+  <desc>ART-LOGO-12-HD原创连续矢量。承接ART11八齿钢灰轮体、铜圈、四向钢卡爪与蓝白核芯，无文字绘图、位图或外部依赖。</desc>
+  <defs>
+    <!-- 八齿轮廓以连续二次曲线倒角，边缘保留约七十坐标单位的透明留白。 -->
+    <path id="gear" d="M 418.27 161.83 L 432.51 90.44 Q 435.25 76.71 449.25 76.71 L 574.75 76.71 Q 588.75 76.71 591.49 90.44 L 605.73 161.83 Q 608.47 175.56 621.41 180.92 L 668.75 200.53 Q 681.68 205.88 693.33 198.11 L 753.88 157.71 Q 765.52 149.93 775.42 159.83 L 864.17 248.58 Q 874.07 258.48 866.29 270.12 L 825.89 330.67 Q 818.12 342.32 823.47 355.25 L 843.08 402.59 Q 848.44 415.53 862.17 418.27 L 933.56 432.51 Q 947.29 435.25 947.29 449.25 L 947.29 574.75 Q 947.29 588.75 933.56 591.49 L 862.17 605.73 Q 848.44 608.47 843.08 621.41 L 823.47 668.75 Q 818.12 681.68 825.89 693.33 L 866.29 753.88 Q 874.07 765.52 864.17 775.42 L 775.42 864.17 Q 765.52 874.07 753.88 866.29 L 693.33 825.89 Q 681.68 818.12 668.75 823.47 L 621.41 843.08 Q 608.47 848.44 605.73 862.17 L 591.49 933.56 Q 588.75 947.29 574.75 947.29 L 449.25 947.29 Q 435.25 947.29 432.51 933.56 L 418.27 862.17 Q 415.53 848.44 402.59 843.08 L 355.25 823.47 Q 342.32 818.12 330.67 825.89 L 270.12 866.29 Q 258.48 874.07 248.58 864.17 L 159.83 775.42 Q 149.93 765.52 157.71 753.88 L 198.11 693.33 Q 205.88 681.68 200.53 668.75 L 180.92 621.41 Q 175.56 608.47 161.83 605.73 L 90.44 591.49 Q 76.71 588.75 76.71 574.75 L 76.71 449.25 Q 76.71 435.25 90.44 432.51 L 161.83 418.27 Q 175.56 415.53 180.92 402.59 L 200.53 355.25 Q 205.88 342.32 198.11 330.67 L 157.71 270.12 Q 149.93 258.48 159.83 248.58 L 248.58 159.83 Q 258.48 149.93 270.12 157.71 L 330.67 198.11 Q 342.32 205.88 355.25 200.53 L 402.59 180.92 Q 415.53 175.56 418.27 161.83 Z"/>
+    <linearGradient id="steelEdge" x1="100" y1="70" x2="870" y2="954" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#DDE8E8"/><stop offset="0.28" stop-color="#B1BEC1"/>
+      <stop offset="0.54" stop-color="#72828A"/><stop offset="1" stop-color="#26313A"/>
+    </linearGradient>
+    <linearGradient id="steelFace" x1="182" y1="148" x2="856" y2="925" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B1BEC1"/><stop offset="0.37" stop-color="#72828A"/>
+      <stop offset="0.72" stop-color="#72828A"/><stop offset="1" stop-color="#465660"/>
+    </linearGradient>
+    <linearGradient id="copper" x1="320" y1="256" x2="704" y2="768" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E4A56B"/><stop offset="0.35" stop-color="#B87949"/>
+      <stop offset="0.67" stop-color="#B87949"/><stop offset="1" stop-color="#754832"/>
+    </linearGradient>
+    <linearGradient id="chamber" x1="326" y1="300" x2="672" y2="728" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#26313A"/><stop offset="0.5" stop-color="#465660"/>
+      <stop offset="1" stop-color="#26313A"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0.34" cy="0.27" r="0.84">
+      <stop offset="0" stop-color="#D8FAFF"/><stop offset="0.19" stop-color="#6AD5EF"/>
+      <stop offset="0.56" stop-color="#1489C1"/><stop offset="1" stop-color="#12507C"/>
+    </radialGradient>
+    <linearGradient id="clampFace" x1="0" y1="0" x2="0.76" y2="1">
+      <stop offset="0" stop-color="#DDE8E8"/><stop offset="0.14" stop-color="#B1BEC1"/>
+      <stop offset="0.55" stop-color="#72828A"/><stop offset="1" stop-color="#465660"/>
+    </linearGradient>
+    <path id="clamp" d="M 460 200 H 564 Q 580 200 580 216 V 350 Q 580 366 566 374 L 532 393 Q 512 403 492 393 L 458 374 Q 444 366 444 350 V 216 Q 444 200 460 200 Z"/>
+    <clipPath id="glassClip"><circle cx="512" cy="512" r="169"/></clipPath>
+  </defs>
+  <!-- 轮体保持正面构图；窄倒角比主面更亮，不附加透视或文字。 -->
+  <use href="#gear" fill="url(#steelEdge)" stroke="#26313A" stroke-width="14" stroke-linejoin="round"/>
+  <use href="#gear" transform="translate(512 512) scale(0.962) translate(-512 -512)" fill="url(#steelFace)" stroke="#B1BEC1" stroke-opacity="0.34" stroke-width="3"/>
+  <!-- 铜圈嵌入钢体，保留原稿铜色端点，只以连续渐变表现金属。 -->
+  <circle cx="512" cy="512" r="287" fill="#26313A"/>
+  <circle cx="512" cy="512" r="274" fill="url(#steelEdge)"/>
+  <circle cx="512" cy="512" r="263" fill="url(#copper)" stroke="#754832" stroke-width="6"/>
+  <circle cx="512" cy="512" r="257" fill="none" stroke="#E4A56B" stroke-width="3" stroke-opacity="0.52"/>
+  <circle cx="512" cy="512" r="226" fill="url(#chamber)" stroke="#754832" stroke-width="7"/>
+  <!-- 玻璃核芯通过同源矢量渐变和裁切反光呈现，不用位图或模糊滤镜。 -->
+  <circle cx="512" cy="512" r="185" fill="#12507C" stroke="#26313A" stroke-width="10"/>
+  <circle cx="512" cy="512" r="176" fill="#6AD5EF"/>
+  <circle cx="512" cy="512" r="169" fill="url(#glass)"/>
+  <g clip-path="url(#glassClip)">
+    <path d="M 348 484 C 354 408 422 349 512 346 C 574 344 624 368 650 405 C 594 384 552 388 500 414 C 445 441 400 465 348 484 Z" fill="#D8FAFF" opacity="0.40"/>
+    <ellipse cx="459" cy="418" rx="61" ry="21" transform="rotate(-28 459 418)" fill="#D8FAFF" opacity="0.74"/>
+    <path d="M 416 643 C 489 677 580 661 630 610" fill="none" stroke="#6AD5EF" stroke-width="10" stroke-linecap="round" opacity="0.23"/>
+  </g>
+  <!-- 四向钢卡爪跨越铜圈并扣住核芯边缘；四件复用同一连续几何。 -->
+  <g fill="url(#clampFace)" stroke="#26313A" stroke-width="10" stroke-linejoin="round">
+    <use href="#clamp"/>
+    <use href="#clamp" transform="rotate(90 512 512)"/>
+    <use href="#clamp" transform="rotate(180 512 512)"/>
+    <use href="#clamp" transform="rotate(270 512 512)"/>
+  </g>
+  <g fill="none" stroke="#DDE8E8" stroke-width="5" stroke-linecap="round" opacity="0.63">
+    <path d="M 461 214 H 562 Q 567 214 567 220"/>
+    <path d="M 461 214 H 562 Q 567 214 567 220" transform="rotate(90 512 512)"/>
+    <path d="M 461 214 H 562 Q 567 214 567 220" transform="rotate(180 512 512)"/>
+    <path d="M 461 214 H 562 Q 567 214 567 220" transform="rotate(270 512 512)"/>
+  </g>
+</svg>

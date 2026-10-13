@@ -1,0 +1,51 @@
+{
+  "task": "ART-LOGO-12-HD",
+  "phase": "R1-history-user-requested-heavy-R2",
+  "files": [
+    {
+      "path": "source/mod_logo_hd.svg",
+      "sha256": "97cb4923ad930475b814f94e38790ce4ec6747008e14286e10e6fdf205634bc5",
+      "bytes": 6281
+    },
+    {
+      "path": "generated/mod_logo_hd_1024.png",
+      "sha256": "8d9201453054c4b594d95dd0ccb1625ab1a8acb15680d58757251f483af81f73",
+      "bytes": 200882
+    },
+    {
+      "path": "generated/mod_logo_hd_2048.png",
+      "sha256": "898386a219045097dc92eba91976e07d2c281a43813fdf01bc9941400d90718b",
+      "bytes": 480627
+    },
+    {
+      "path": "generated/mod_logo_hd_4096.png",
+      "sha256": "e45c89c768acdd8690ebcd4e882e497496ebd60d57452c473160e698a54f09d4",
+      "bytes": 1183646
+    },
+    {
+      "path": "create_nuclear_industry_logo_hd.zip",
+      "sha256": "74e5c6f91fd3b64093925af50befb2a1533ae8f95858c2cf6eed3ff13dec9db3",
+      "bytes": 1621676
+    },
+    {
+      "path": "README.md",
+      "sha256": "2f4da18636c2a75c98670836578f232b79ce029b2cf85fa284570748a8b2e48d",
+      "bytes": 2069
+    },
+    {
+      "path": "index.html",
+      "sha256": "ddb1c76d7d4c37896f6a581d922da1bc7745ec1defdaac264c2681a3d0d51c88",
+      "bytes": 3386
+    },
+    {
+      "path": "export_hd.mjs",
+      "sha256": "9b70857e710c0de91d8ea1a017e46a2ffbd5e9095906ee7531c97e419d626469",
+      "bytes": 3227
+    },
+    {
+      "path": "check_package.py",
+      "sha256": "ac605465f35a41f70cc3d3b890789989a05a671fcd8d658d5efcbc391f6c71e5",
+      "bytes": 7559
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "task": "ART-TURBINE-10A",
+  "units": "Minecraft block units; rotor axis is local +Z",
+  "designs": {
+    "A": {"name": "宽弦斜叶·开放锻钢轮毂", "bladeCount": 8, "bladeWidth": 0.34, "sweepAngle": -0.19, "hubRadius": 0.33, "bearingStyle": "split"},
+    "B": {"name": "双层短叶盘·窄铜锁圈", "bladeCount": 12, "bladeWidth": 0.21, "sweepAngle": 0.09, "hubRadius": 0.33, "bearingStyle": "box"},
+    "C": {"name": "稀疏双列叶轮·外露滚子座", "bladeCount": 6, "bladeWidth": 0.39, "sweepAngle": 0.26, "hubRadius": 0.33, "bearingStyle": "rollers"}
+  },
+  "sizes": {
+    "3": {"sweepRadius": 1.1875, "innerShellRadius": 1.3125, "length": 3},
+    "5": {"sweepRadius": 2.1875, "innerShellRadius": 2.3125, "length": 5},
+    "7": {"sweepRadius": 3.1875, "innerShellRadius": 3.3125, "length": 7}
+  },
+  "shared": {
+    "bladeZ": [0.13, 0.87],
+    "hubMain": {"outerRadius": 0.33, "innerRadius": 0.19, "z": [0.22, 0.78]},
+    "hubEndRadius": 0.29,
+    "hubEndZ": [[0.13, 0.22], [0.78, 0.87]],
+    "shaftRadius": 0.14,
+    "frontPlateZ": [0.0, 0.1875],
+    "rearPlateZ": [0.8125, 1.0],
+    "bearingRadii": {"outer": 0.27, "inner": 0.155},
+    "clearance": 0.125,
+    "stationSpacing": 1,
+    "unformedRadius": 0.42
+  },
+  "notes": [
+    "设计形状只表达同一转子方块的外观选项，不增加发电级数或机器功能。",
+    "轴承座是现有输出轴端板与轴承环的视觉拆分；固定板/外环不旋转，轴/内圈随转。",
+    "铜色小锁圈仅为外观分区，不表示配方添加铜或新增润滑系统。",
+    "浏览器转速为演示动画，不代表游戏已有RPM动画接口。"
+  ]
+}

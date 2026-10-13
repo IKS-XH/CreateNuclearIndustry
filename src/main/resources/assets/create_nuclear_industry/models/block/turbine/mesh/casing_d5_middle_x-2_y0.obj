@@ -1,4 +1,4 @@
-mtllib turbine.mtl
+mtllib turbine_casing_07.mtl
 o d5_middle_x-2_y0
 v 0 1 0
 v 0 0 0
@@ -16,10 +16,10 @@ v 0.1875 1 0
 v 0 1 0
 v 0 1 1
 v 0.1875 1 1
-vt 0 1
-vt 0 0
-vt 1 0
-vt 1 1
+vt 0.0000000 0.4000000
+vt 0.0000000 0.6000000
+vt 1.0000000 0.6000000
+vt 1.0000000 0.4000000
 vt 0 0
 vt 1 0
 vt 1 1

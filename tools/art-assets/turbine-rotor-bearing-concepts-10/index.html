@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>汽轮机转子与轴承设计稿 10A</title>
+<style>
+:root{color-scheme:dark;--bg:#171a1c;--panel:#222729;--line:#455054;--text:#e5e9e7;--muted:#a9b2b2;--steel:#718083;--copper:#b27a4e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 "Segoe UI","Microsoft YaHei",sans-serif}
+header{padding:20px clamp(16px,3vw,42px) 14px;background:#202527;border-bottom:1px solid var(--line)}h1{margin:0 0 5px;font-size:25px}header p{margin:0;color:#c0c8c7}
+main{max-width:1500px;margin:auto;padding:18px clamp(12px,2vw,28px) 40px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.card,.workbench{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px}.card h2{font-size:17px;margin:0 0 8px}.card svg{width:100%;height:160px;display:block;background:#15191a;border-radius:6px}.card p{margin:8px 0 0;color:#c2c9c7;font-size:13px}.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 10px}.toolbar label{color:#c0c8c7}.toolbar button,.toolbar select{background:#303739;color:var(--text);border:1px solid #5a6668;border-radius:6px;padding:8px 11px;font:inherit}.toolbar button[aria-pressed=true]{border-color:#d4a176;background:#46372c}.toolbar .spacer{flex:1}.tag{font-size:12px;color:#d3b28c;border:1px solid #6b5541;border-radius:20px;padding:3px 9px}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:12px}.mainview{width:100%;height:min(62vw,620px);min-height:390px;background:#141819;border:1px solid #394346;border-radius:8px;display:block}.notes{font-size:13px;color:#c2c9c7}.notes h3{font-size:15px;color:#edf0ed}.notes ul{padding-left:18px}.notes li{margin:0 0 7px}.foot{margin-top:12px;color:#aeb8b6;font-size:13px}.small{font-size:12px;color:var(--muted)}
+@media(max-width:850px){.cards{grid-template-columns:1fr}.card svg{height:190px}.stage{grid-template-columns:1fr}.mainview{height:65vw;min-height:330px}}
+</style>
+</head>
+<body>
+<header><h1>汽轮机转子与轴承 · 三套外观设计稿</h1><p>离线设计稿，转速为演示；未替换游戏素材。</p></header>
+<main>
+  <section class="cards" aria-label="三套外观方向">
+    <article class="card"><h2>A · 宽弦斜叶</h2><svg id="cardA" viewBox="0 0 420 160" role="img" aria-label="A方案端面和透视静止图"></svg><p>8片宽厚斜叶、开放锻钢轮毂、分体重型端座；钢面为主，少量铜色紧固点。</p></article>
+    <article class="card"><h2>B · 分级短叶盘</h2><svg id="cardB" viewBox="0 0 420 160" role="img" aria-label="B方案端面和透视静止图"></svg><p>12片短叶分布在同一转子内的两道叶盘，窄铜色锁圈与箱式固定座。</p></article>
+    <article class="card"><h2>C · 稀疏双列叶轮</h2><svg id="cardC" viewBox="0 0 420 160" role="img" aria-label="C方案端面和透视静止图"></svg><p>6组宽弦叶轮前后错列、开敞轮毂及外露滚子端座；转动节奏容易辨认。</p></article>
+  </section>
+  <section class="workbench" aria-label="可交互样稿">
+    <div class="toolbar">
+      <label for="design">方案</label><select id="design"><option value="A" selected>A · 宽弦斜叶</option><option value="B">B · 分级短叶盘</option><option value="C">C · 稀疏双列叶轮</option></select>
+      <label for="size">截面</label><select id="size"><option value="3">小 · 3×3×3</option><option value="5" selected>中 · 5×5×5</option><option value="7">大 · 7×7×7</option></select>
+      <button data-view="side" aria-pressed="true">完整外观</button><button data-view="end" aria-pressed="false">端面</button><button data-view="window" aria-pressed="false">观察窗</button><button data-view="inside" aria-pressed="false">内侧轴承</button><button id="explode" aria-pressed="false">拆件</button>
+      <span class="spacer"></span><button id="play">暂停</button><button id="slow">慢放：关</button><label for="speed">示意转速</label><select id="speed"><option value="0.25">低速</option><option value="0.7" selected>中速</option><option value="1.4">高速</option></select><span class="tag">演示动画，不是游戏RPM</span>
+    </div>
+    <div class="stage">
+      <svg id="viewport" class="mainview" viewBox="0 0 1000 620" role="img" aria-label="汽轮机转子设计稿动态预览"></svg>
+      <aside class="notes"><h3 id="designTitle">A · 宽弦斜叶</h3><div id="designText"></div><ul><li>固定轴座留在原位，转子与轴承内圈示意随动。</li><li>拆件视图分开展示端座、贯穿轴、轮毂和叶片。</li><li>剖视保留机壳窗口，可观察内部转子轮廓。</li></ul><p class="small">未成型单件采用所选叶轮形状缩小展示。铜色小件仅为视觉锁圈。</p></aside>
+    </div>
+    <p class="foot">样稿采用现有汽轮机钢灰/铜色家族，几何按已核对的三档扫掠边界制作；此页用于选择外观，不代表正式模型、动画或游戏内视觉验收。</p>
+  </section>
+</main>
+<script src="preview.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>反应堆观察窗 · 铅灰透明层试用</title>
+<style>
+:root{color-scheme:dark;background:#202526;color:#e4e6df;font:16px/1.5 "Segoe UI","Microsoft YaHei",sans-serif}
+body{max-width:1160px;margin:24px auto;padding:0 20px}h1{font-size:28px;margin-bottom:4px}h2{margin:28px 0 10px}p{color:#c2c8c3}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.card{background:#303638;border:1px solid #5b6664;border-radius:8px;padding:14px}.card h3{margin:0 0 8px;font-size:18px}.scene{position:relative;width:320px;height:192px;max-width:100%;overflow:hidden;border:3px solid #77817c;background:#182327}.scene img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}.scene .layer{inset:0;left:0;top:0;width:100%;height:100%;object-fit:fill}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tile{width:160px;height:160px;max-width:100%;image-rendering:pixelated;background:repeating-conic-gradient(#46504e 0 25%,#78817d 0 50%) 50%/16px 16px;object-fit:fill;border:1px solid #87918c}.atlas{width:256px;height:256px;max-width:100%;image-rendering:pixelated;image-rendering:crisp-edges;border:1px solid #87918c}.label{font-size:14px;color:#bcc4be}.pill{display:inline-block;border:1px solid #85908b;padding:2px 8px;border-radius:12px;color:#cbd4ce}.small{font-size:13px;color:#9fa9a4}.note{border-left:3px solid #8a9690;padding-left:12px}.rows{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}@media(max-width:700px){.rows,.comparison{grid-template-columns:1fr}.scene{width:100%;height:auto;aspect-ratio:320/192}}
+</style>
+</head>
+<body>
+<h1>反应堆观察窗 · 铅灰透明层试用</h1>
+<p><span class="pill">已安装试用</span> 本页仅作SVG/PNG离线透明合成对照，游戏内排序与实际观感仍待用户复看。</p>
+<p><span class="pill">alpha 64/255</span> 仅原先透明的pane区域新增铅灰色，原窗框/角仍保持原像素与不透明度。</p>
+<p class="note">以下为SVG与PNG的浏览器离线合成：以手绘矢量堆芯示意为背景叠一层或两层玻璃，帮助比较铅灰可见度与内部辨识度。它不模拟Minecraft的透明面排序、光照或最终游戏观感。</p>
+<h2>全连接内窗：旧空格与候选单层/双层</h2>
+<div class="grid">
+  <section class="card"><h3>旧全连接格</h3><div class="scene"><img src="preview/core-backdrop.svg" alt="堆芯示意背景"><img class="layer" src="../reactor-ct-r1/generated/tiles/reactor_window/tile_54.png" alt="旧空透明窗格"></div><div class="label">原生mask 255 / index 54，旧源为全透明</div></section>
+  <section class="card"><h3>候选单层玻璃</h3><div class="scene"><img src="preview/core-backdrop.svg" alt="堆芯示意背景"><img class="layer" src="generated/tiles/reactor_window/tile_54.png" alt="候选单层铅灰玻璃"></div><div class="label">一层alpha64窗格：堆芯和冷却通道应仍易辨</div></section>
+  <section class="card"><h3>候选双层玻璃</h3><div class="scene"><img src="preview/core-backdrop.svg" alt="堆芯示意背景"><img class="layer" src="generated/tiles/reactor_window/tile_54.png" alt="第一层玻璃"><img class="layer" src="generated/tiles/reactor_window/tile_54.png" alt="第二层玻璃"></div><div class="label">相同像素叠两次的浏览器合成示意</div></section>
+</div>
+<h2>原边框与角窗上下文</h2>
+<div class="grid">
+  <section class="card"><h3>单边连接</h3><img class="tile" src="generated/tiles/reactor_window/tile_01.png" alt="原生index01"><div class="label">原生mask 1 / index 1；透明仅落在原pane与连接侧</div></section>
+  <section class="card"><h3>相邻边角连接</h3><img class="tile" src="generated/tiles/reactor_window/tile_12.png" alt="原生index12"><div class="label">原生mask 21 / index 12；原框/角保持不透明</div></section>
+  <section class="card"><h3>全连接pane颜色</h3><img class="tile" src="generated/tiles/reactor_window/tile_54.png" alt="铅灰透明全连接格"><div class="label">16×16；铅灰 #66696A，fill-opacity 0.25098039215686275</div></section>
+</div>
+<h2>候选图集</h2>
+<div class="rows"><img class="atlas" src="generated/reactor_window_lead_ct.png" alt="128乘128窗口CT候选图集"><p class="small">128×128，64张16×16窗格。保留R1锁定的47项原生OMNIDIRECTIONAL上下文和17项fallback；正式试用资源已安装；本页仍展示生成候选图集。其他13张图集未改。PNG逐rect读取SVG的fill-opacity。</p></div>
+<h2>堆芯背景来源</h2>
+<p class="small">对照底图为本批手绘的简明SVG示意（<code>preview/core-backdrop.svg</code>），表示燃料管与冷却通道，不是游戏截图或新游戏纹理。窗格本身来自候选SVG导出的真实alpha PNG。</p>
+</body>
+</html>
+
+
+
+

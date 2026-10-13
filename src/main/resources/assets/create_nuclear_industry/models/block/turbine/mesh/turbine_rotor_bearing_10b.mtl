@@ -1,0 +1,19 @@
+newmtl steel
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_10b_steel
+
+newmtl blade
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_10b_blade
+
+newmtl bearing
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_10b_bearing
+
+newmtl copper
+Ka 0.25 0.25 0.25
+Kd 1 1 1
+map_Kd create_nuclear_industry:block/turbine/turbine_10b_copper

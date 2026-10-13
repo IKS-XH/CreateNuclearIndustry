@@ -87,7 +87,7 @@ public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
 
     /**
      * 原生深度控件的本格几何；坐标/尺度同时供Create显示与testHit使用，不改变百分数或权威提交。
-     * 锚点位于真实块面，使原生框/文字后置矩阵绘制到面外；切向避开方杆/端箍，保留六面与严格球形命中。
+     * 锚点位于真实块面，使原生框/文字后置矩阵绘制到面外；顶底沿边居中并用等比字体扩大数值，椭球操作区避开方杆/端箍；四侧保留原生球形命中。
      */
     static final class CornerTransform extends CenteredSideValueBoxTransform {
         CornerTransform() {
@@ -98,8 +98,8 @@ public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
         @Override
         public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
             return switch (direction) {
-                case UP -> new Vec3(.10, 1, .10);
-                case DOWN -> new Vec3(.10, 0, .10);
+                case UP -> new Vec3(.5, 1, .0875);
+                case DOWN -> new Vec3(.5, 0, .0875);
                 case SOUTH -> new Vec3(.25, .75, 1);
                 case NORTH -> new Vec3(.75, .75, 0);
                 case EAST -> new Vec3(1, .75, .75);
@@ -109,7 +109,32 @@ public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
 
         @Override
         public float getScale() {
-            return direction == null || direction.getAxis() == Direction.Axis.Y ? .18f : .40f;
+            return direction == null || direction.getAxis() == Direction.Axis.Y ? .20f : .40f;
+        }
+
+        /** 顶底字号与基准尺度合计为原两倍；字体三个轴等比，四侧继续用Create默认值。 */
+        @Override
+        public float getFontScale() {
+            return direction == null || direction.getAxis() == Direction.Axis.Y ? 1.8f / 64 : super.getFontScale();
+        }
+
+        /**
+         * Create已将命中点减去blockPos；顶底只接受本格边缘严格椭球，法向仍用当前缓存尺度的一半。
+         * 保留Sided面启用条件；四侧完全交回原生命中，不改变长按、百分数或服务端批准路径。
+         */
+        @Override
+        public boolean testHit(LevelAccessor level, BlockPos pos, BlockState state, Vec3 hit) {
+            if (direction == null || direction.getAxis() != Direction.Axis.Y) {
+                return super.testHit(level, pos, state, hit);
+            }
+            if (!isSideActive(state, direction)) {
+                return false;
+            }
+            Vec3 center = getLocalOffset(level, pos, state);
+            double x = (hit.x - center.x) / .35;
+            double y = (hit.y - center.y) / (scale / 2.);
+            double z = (hit.z - center.z) / .075;
+            return x * x + y * y + z * z < 1;
         }
 
         @Override

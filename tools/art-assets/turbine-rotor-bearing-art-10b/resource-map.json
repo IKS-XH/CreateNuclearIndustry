@@ -1,0 +1,169 @@
+{
+  "task": "ART-TURBINE-10B-R1",
+  "installed": false,
+  "resources": [
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_front.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_front.obj",
+      "operation": "replace",
+      "sha256": "7e117e7ff1bfc12441aa101d7d3294c09d9c7d14ef1e2334e5323c65511b1dd4"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_front_rotating.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_front_rotating.obj",
+      "operation": "replace",
+      "sha256": "3dce2b08d94a1fd43c9da63bfa453e8370cbefb1f02582aade0c0d8a719dfbfb"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_rear.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_rear.obj",
+      "operation": "replace",
+      "sha256": "1a715b57528238dd6f39dfea364e55ffa741cfabb8778a27a18c18225098242b"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_rear_rotating.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/output_shaft_rear_rotating.obj",
+      "operation": "replace",
+      "sha256": "deb3a49656d811cebf7bf2adfac63f000c6f28b452ab7d4e59fd4780054a4db7"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/rotor_blades_d3.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/rotor_blades_d3.obj",
+      "operation": "replace",
+      "sha256": "02cfc3ab0538b038d8cb012a940d40679d1ae40cdfbefe04dd8cd30aad1f87a8"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/rotor_blades_d5.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/rotor_blades_d5.obj",
+      "operation": "replace",
+      "sha256": "6a617e6ac1db85786217a23478023b96d05947efb67b42d2fdab7223bd757b29"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/rotor_blades_d7.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/rotor_blades_d7.obj",
+      "operation": "replace",
+      "sha256": "4092c941079f65ee658da06010a74c8970c87c8344d851a6e93eabe67581132c"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/turbine_output_shaft_unformed.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_output_shaft_unformed.obj",
+      "operation": "replace",
+      "sha256": "e0f4b6a724d9d4ce5d8ef709d8445cf88469d6e9d51709d4b401f71957026fee"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/turbine_output_shaft_unformed_rear.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_output_shaft_unformed_rear.obj",
+      "operation": "replace",
+      "sha256": "9b54d5b9c8114e3cfb6e15c09f0d588d26b381f43bf6e665bc7706cc20d67ab0"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/turbine_rotor_bearing_10b.mtl",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_rotor_bearing_10b.mtl",
+      "operation": "replace",
+      "sha256": "073c3c42064867eff1ac915a33314edebd2a3ba81ddfda85c3215756bb2b87b3"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/mesh/turbine_rotor_unformed.obj",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/mesh/turbine_rotor_unformed.obj",
+      "operation": "replace",
+      "sha256": "bbe3dc551d09d3ca8c3d4a03ed16d7b9715d5ce522dc33b49ba0773136732255"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/output_shaft_front.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/output_shaft_front.json",
+      "operation": "replace",
+      "sha256": "62f3ad1cf20ffcff9046671b4a8a7c1f111d44452ed336f841926ac5c5ef69bb"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/output_shaft_front_rotating.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/output_shaft_front_rotating.json",
+      "operation": "replace",
+      "sha256": "df240dde8447ee2bfb9304f3921d44ba577fb0337efb1b61abaed31c3fb55b8c"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/output_shaft_rear.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/output_shaft_rear.json",
+      "operation": "replace",
+      "sha256": "4c6a2f5a3a803376a2a04be6addee683949d6577226e805aca5ed7aa32c33a07"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/output_shaft_rear_rotating.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/output_shaft_rear_rotating.json",
+      "operation": "replace",
+      "sha256": "7d0f2280cfa11f3b9008edf45c086fc3d7525addbea979fb324e85ff8658e377"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/rotor_axle.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/rotor_axle.json",
+      "operation": "replace",
+      "sha256": "3c1e10975ba20e75d8bcd79bc5361edda7caa6ad217c9d1dc4438565fe41ae8f"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/rotor_blades_d3.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/rotor_blades_d3.json",
+      "operation": "replace",
+      "sha256": "751baf551a8ccb819f81bf577b17750df8a131cd113a00a8372079ffee4e1853"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/rotor_blades_d5.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/rotor_blades_d5.json",
+      "operation": "replace",
+      "sha256": "114169838eea852fb6865997efb2ad7725da9759d1cac2df708a471e7dbb02f0"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/rotor_blades_d7.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/rotor_blades_d7.json",
+      "operation": "replace",
+      "sha256": "bd339e6b339d38375e883db2a8f858d93f035e3bd77147374a86d898efdad714"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/turbine_output_shaft_unformed.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/turbine_output_shaft_unformed.json",
+      "operation": "replace",
+      "sha256": "cf1fd96daf12d35d962598bf67c5620be02793688e9ddb6887332c3336b359ae"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/turbine_output_shaft_unformed_rear.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/turbine_output_shaft_unformed_rear.json",
+      "operation": "replace",
+      "sha256": "ca80c22ec969024f388d7b2b56b0ce28ff011db1cf838149958beca4129f999f"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/models/block/turbine/turbine_rotor_unformed.json",
+      "destination": "src/main/resources/assets/create_nuclear_industry/models/block/turbine/turbine_rotor_unformed.json",
+      "operation": "replace",
+      "sha256": "3ba4bf2ef090ad390e8e986993b18cceb55143f2638a4d8b0f14994af0e641d1"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/textures/block/turbine/turbine_10b_bearing.png",
+      "destination": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine/turbine_10b_bearing.png",
+      "operation": "replace",
+      "sha256": "bba7319d16c6efe7c2b00f958f2d9206c3dcf6377b3b4025cc442fc881a036f5"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/textures/block/turbine/turbine_10b_blade.png",
+      "destination": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine/turbine_10b_blade.png",
+      "operation": "replace",
+      "sha256": "ce4bdc18e4e1abcbce65f1e7d48b38f30124c8f40f2f51d91c2b6b0cd4f9e355"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/textures/block/turbine/turbine_10b_copper.png",
+      "destination": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine/turbine_10b_copper.png",
+      "operation": "replace",
+      "sha256": "625e7978eaae2a164ba6d6d1233be9da97854cccf38b831c16197f493da7c34b"
+    },
+    {
+      "candidate": "assets/create_nuclear_industry/textures/block/turbine/turbine_10b_steel.png",
+      "destination": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine/turbine_10b_steel.png",
+      "operation": "replace",
+      "sha256": "18aa6c66be9edecb314eb107481fb8ab0250bdab0cc44160ef8194824ac54ef7"
+    }
+  ],
+  "read_only_blockstates": [
+    "turbine_rotor",
+    "turbine_output_shaft"
+  ],
+  "obsolete_unconsumed": [
+    "rotor_middle"
+  ]
+}

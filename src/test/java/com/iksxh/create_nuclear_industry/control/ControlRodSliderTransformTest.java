@@ -74,10 +74,7 @@ class ControlRodSliderTransformTest {
     }
 
     private static final BlockPos POS = BlockPos.ZERO;
-    /**
-     * 锁定ValueBox.render在生产transform后的原生Pose指令；不是复制生产offset或命中算法。
-     * 无客户端Font/纹理管理器时只执行最终矩阵，具体完整入口障碍记入输出，不声称游戏render通过。
-     */
+    /** 锁定ValueBox后置矩阵；生产定位/旋转仍实际执行，未运行客户端Font/GPU。 */
     private static PoseStack outlinePose(CornerTransform transform) {
         var pose=nativePose();transform.transform(null,POS,null,pose);
         pose.scale(-2.01f,-2.01f,2.01f);pose.translate(-.5,-.5,-1./32);
@@ -86,15 +83,25 @@ class ControlRodSliderTransformTest {
     private static PoseStack textBaselinePose(CornerTransform transform) {
         var pose=nativePose();transform.transform(null,POS,null,pose);
         float font=-transform.getFontScale();pose.scale(font,font,font);
-        // TextValueBox.renderContents的Font.width之前：后续字体适配平移z=0，不改变基线所在深度面。
         pose.scale(3,3,1);pose.translate(-4,-3.75,5);
+        return pose;
+    }
+    /**
+     * 仅重放锁定TextValueBox的Font.width之后指令；12/18/24来自1.21.1默认ASCII的实际六像素advance。
+     * 宽度来源保存于09的text-inputs.json；保守用整段advance×九像素行高，不声称字体烘焙已运行。
+     */
+    private static PoseStack formattedTextPose(CornerTransform transform,int width) {
+        var pose=textBaselinePose(transform);
+        float fit=9f/width;boolean shortText=width<10;
+        if(shortText)fit/=2;
+        float vertical=(width-9)/2f;
+        pose.scale(fit,fit,fit);pose.translate(shortText?width/2:0,shortText?-vertical:vertical,0);
         return pose;
     }
     private static double outward(Direction side,Vector3f point) {
         return switch(side){case UP->point.y-1;case DOWN->-point.y;case SOUTH->point.z-1;case NORTH->-point.z;case EAST->point.x-1;case WEST->-point.x;};
     }
     @Test void nativeFinalOutlineFourCornersClearAllSixBlockFaces() {
-        // 完整原生构造器首先访问Minecraft.level；JUnit无客户端单例，保留实际入口异常边界。
         try {
             new com.simibubi.create.foundation.blockEntity.behaviour.ValueBox.TextValueBox(
                     net.minecraft.network.chat.Component.literal("深度"),new net.minecraft.world.phys.AABB(0,0,0,1,1,1),POS,
@@ -102,125 +109,147 @@ class ControlRodSliderTransformTest {
             System.out.println("NATIVE_DRAW_ENTRY|构造器可用；未启动Font/纹理绘制");
         }catch(RuntimeException unavailable){System.out.println("NATIVE_DRAW_ENTRY|"+unavailable.getClass().getName()+"|"+unavailable.getMessage());}
         var transform=new CornerTransform();
-        for(var side:new Direction[]{Direction.UP,Direction.DOWN,Direction.NORTH,Direction.SOUTH,Direction.WEST,Direction.EAST}){
+        for(var side:Direction.values()){
             transform.fromSide(side);var pose=outlinePose(transform);
-            // 宽框实际6PX位于16PX图标中心，四个可见边角为5/16..11/16，透明图标边距不当实体边框。
+            // 原生6PX宽框四个可见角；不把透明图标边距当实体框。
             for(float x:new float[]{5f/16,11f/16})for(float y:new float[]{5f/16,11f/16}){
                 var point=new Vector3f(x,y,0).mulPosition(pose.last().pose());
                 System.out.println("FINAL_FRAME|"+side+"|"+point.x+"|"+point.y+"|"+point.z+"|"+outward(side,point));
-                assertTrue(outward(side,point)>0,"最终宽框必须在实体面外："+side+" "+point);
-                assertEquals(side.getAxis()==Direction.Axis.Y?.01130625:.025125,outward(side,point),1e-6);
-                if(side.getAxis()==Direction.Axis.Y){assertTrue(point.x>0 && point.x<.175 && point.z>0 && point.z<.175,"可见框四角仍避开固定方箍");}
+                assertTrue(outward(side,point)>0,"最终框必须在真实面外");
+                assertEquals(side.getAxis()==Direction.Axis.Y?.0125625:.025125,outward(side,point),1e-6);
+                if(side.getAxis()==Direction.Axis.Y){
+                    assertTrue(point.x>.42 && point.x<.58 && point.z>0 && point.z<.175,"宽框需沿边居中并避固定方箍");
+                }
             }
         }
     }
     @Test void nativeFinalTextBaselineClearsAllSixBlockFaces() {
         var transform=new CornerTransform();
-        for(var side:new Direction[]{Direction.UP,Direction.DOWN,Direction.NORTH,Direction.SOUTH,Direction.WEST,Direction.EAST}){
+        for(var side:Direction.values()){
             transform.fromSide(side);var point=new Vector3f().mulPosition(textBaselinePose(transform).last().pose());
             System.out.println("FINAL_TEXT|"+side+"|"+point.x+"|"+point.y+"|"+point.z+"|"+outward(side,point));
-            assertTrue(outward(side,point)>0,"正常深度测试的文字基线必须在实体面外："+side);
-            assertEquals(side.getAxis()==Direction.Axis.Y?.0140625:.03125,outward(side,point),1e-6);
+            assertTrue(outward(side,point)>0,"文字基线必须在真实面外");
+            assertEquals(side.getAxis()==Direction.Axis.Y?.028125:.03125,outward(side,point),1e-6);
         }
     }
-    private static final Map<Direction, Vec3> EXPECTED = Map.of(
-            Direction.UP, new Vec3(.10, 1, .10), Direction.DOWN, new Vec3(.10, 0, .10),
-            Direction.SOUTH, new Vec3(.25, .75, 1), Direction.NORTH, new Vec3(.75, .75, 0),
-            Direction.EAST, new Vec3(1, .75, .75), Direction.WEST, new Vec3(0, .75, .25));
-
-    /** 点击点在原方块真实面上，显示中心与实际鼠标落点共用该块面。 */
-    private static Vec3 onSurface(Direction side, Vec3 point) {
-        double normal = side.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1 : 0;
-        return switch (side.getAxis()) {
-            case X -> new Vec3(normal, point.y, point.z);
-            case Y -> new Vec3(point.x, normal, point.z);
-            case Z -> new Vec3(point.x, point.y, normal);
+    @Test void zeroHalfFullTextBoundsStayIsotropicWithinTheEdgeOutsideHead() {
+        var transform=new CornerTransform();String[] labels={"0%","50%","100%"};int[] widths={12,18,24};
+        for(var side:Direction.values()){
+            transform.fromSide(side);
+            assertEquals(side.getAxis()==Direction.Axis.Y?1.8f/64:1f/64,transform.getFontScale());
+            for(int i=0;i<labels.length;i++){
+                var pose=formattedTextPose(transform,widths[i]);
+                float horizontal=new Vector3f(1,0,0).mulDirection(pose.last().pose()).length();
+                float vertical=new Vector3f(0,1,0).mulDirection(pose.last().pose()).length();
+                assertEquals(horizontal,vertical,1e-7,"字形不能被非等比拉扁");
+                assertEquals(side.getAxis()==Direction.Axis.Y?.151875:.16875,horizontal*widths[i],1e-6,"顶底字号应为旧版两倍，四侧原值保持");
+                for(float x:new float[]{0,widths[i]})for(float y:new float[]{0,9}){
+                    var point=new Vector3f(x,y,0).mulPosition(pose.last().pose());
+                    System.out.println("TEXT_BOUNDS|"+side+"|"+labels[i]+"|"+point.x+"|"+point.y+"|"+point.z+"|"+outward(side,point));
+                    assertTrue(outward(side,point)>0,"完整字面需出面");
+                    if(side.getAxis()==Direction.Axis.Y){
+                        assertTrue(point.x>0 && point.x<1 && point.z>0 && point.z<.175,"整段字面需在本格边缘且避方箍");
+                    }
+                }
+            }
+        }
+    }
+    private static final Map<Direction,Vec3> EXPECTED=Map.of(
+            Direction.UP,new Vec3(.5,1,.0875),Direction.DOWN,new Vec3(.5,0,.0875),
+            Direction.SOUTH,new Vec3(.25,.75,1),Direction.NORTH,new Vec3(.75,.75,0),
+            Direction.EAST,new Vec3(1,.75,.75),Direction.WEST,new Vec3(0,.75,.25));
+    /** 原生输入已减blockPos，鼠标在真实0/1块面。 */
+    private static Vec3 onSurface(Direction side,Vec3 point) {
+        double normal=side.getAxisDirection()==Direction.AxisDirection.POSITIVE?1:0;
+        return switch(side.getAxis()){
+            case X->new Vec3(normal,point.y,point.z);case Y->new Vec3(point.x,normal,point.z);case Z->new Vec3(point.x,point.y,normal);
         };
     }
-
-    private static Vec3 tangent(Direction side, Vec3 point, double distance) {
-        return side.getAxis() == Direction.Axis.X ? point.add(0, distance, 0) : point.add(distance, 0, 0);
+    private static Vec3 tangent(Direction side,Vec3 point,double distance) {
+        return side.getAxis()==Direction.Axis.X?point.add(0,distance,0):point.add(distance,0,0);
     }
-
-    @Test void constructionStartsWithValidUpScaleAndNativeHit() {
-        var transform = assertDoesNotThrow(CornerTransform::new);
-        assertEquals(Direction.UP, transform.getSide());
-        assertEquals(.18f, transform.getScale());
-        assertTrue(transform.testHit(null, POS, null, new Vec3(.10, 1, .10)));
-        assertFalse(transform.testHit(null, POS, null, new Vec3(.21, 1, .10)), "初始UP缓存不能保留旧.5尺度");
-        var pose = nativePose(); transform.transform(null, POS, null, pose);
-        assertEquals(.18, new Vector3f(1, 0, 0).mulDirection(pose.last().pose()).length(), 1e-6);
+    @Test void constructionStartsWithValidUpScaleFontAndEdgeHit() {
+        var transform=assertDoesNotThrow(CornerTransform::new);
+        assertEquals(Direction.UP,transform.getSide());assertEquals(.20f,transform.getScale());assertEquals(1.8f/64,transform.getFontScale());
+        assertTrue(transform.testHit(null,POS,null,new Vec3(.5,1,.0875)));
+        assertTrue(transform.testHit(null,POS,null,new Vec3(.8,1,.0875)),"长边必须有效，不能残留旧小圆缓存");
+        assertFalse(transform.testHit(null,POS,null,new Vec3(.86,1,.0875)));
+        var pose=nativePose();transform.transform(null,POS,null,pose);
+        assertEquals(.20,new Vector3f(1,0,0).mulDirection(pose.last().pose()).length(),1e-6);
     }
-
     @Test void sixFacesUseFrozenOffsetsAndActualNativePoseOrientation() {
-        var transform = new CornerTransform();
-        for (var side : Direction.values()) {
-            assertSame(transform, transform.fromSide(side));
-            var offset = transform.getLocalOffset(null, POS, null); assertEquals(EXPECTED.get(side), offset);
-            assertTrue(offset.x >= 0 && offset.x <= 1 && offset.y >= 0 && offset.y <= 1 && offset.z >= 0 && offset.z <= 1);
-            var pose = nativePose(); transform.transform(null, POS, null, pose);
-            var origin = new Vector3f().mulPosition(pose.last().pose());
-            assertEquals(offset.x, origin.x, 1e-6); assertEquals(offset.y, origin.y, 1e-6); assertEquals(offset.z, origin.z, 1e-6);
-            var nativePose = nativePose();
-            new CenteredSideValueBoxTransform().fromSide(side).rotate(null, POS, null, nativePose);
-            for (var axis : new Vector3f[]{new Vector3f(1,0,0), new Vector3f(0,1,0), new Vector3f(0,0,1)}) {
-                var actual = new Vector3f(axis).mulDirection(pose.last().pose());
-                var nativeAxis = new Vector3f(axis).mulDirection(nativePose.last().pose()).mul(transform.getScale());
-                assertEquals(nativeAxis.x, actual.x, 1e-6); assertEquals(nativeAxis.y, actual.y, 1e-6); assertEquals(nativeAxis.z, actual.z, 1e-6);
+        var transform=new CornerTransform();
+        for(var side:Direction.values()){
+            assertSame(transform,transform.fromSide(side));var offset=transform.getLocalOffset(null,POS,null);assertEquals(EXPECTED.get(side),offset);
+            assertTrue(offset.x>=0 && offset.x<=1 && offset.y>=0 && offset.y<=1 && offset.z>=0 && offset.z<=1);
+            var pose=nativePose();transform.transform(null,POS,null,pose);
+            var origin=new Vector3f().mulPosition(pose.last().pose());
+            assertEquals(offset.x,origin.x,1e-6);assertEquals(offset.y,origin.y,1e-6);assertEquals(offset.z,origin.z,1e-6);
+            var nativePose=nativePose();new CenteredSideValueBoxTransform().fromSide(side).rotate(null,POS,null,nativePose);
+            for(var axis:new Vector3f[]{new Vector3f(1,0,0),new Vector3f(0,1,0),new Vector3f(0,0,1)}){
+                var actual=new Vector3f(axis).mulDirection(pose.last().pose());var nativeAxis=new Vector3f(axis).mulDirection(nativePose.last().pose()).mul(transform.getScale());
+                assertEquals(nativeAxis.x,actual.x,1e-6);assertEquals(nativeAxis.y,actual.y,1e-6);assertEquals(nativeAxis.z,actual.z,1e-6);
             }
-            var normal = new Vector3f(0,0,1).mul(pose.last().normal()).normalize();
-            var face = side.getNormal(); assertEquals(1, Math.abs(normal.x*face.getX()+normal.y*face.getY()+normal.z*face.getZ()), 1e-6);
-            System.out.println("LAYOUT|"+side+"|"+origin.x+"|"+origin.y+"|"+origin.z+"|"+new Vector3f(1,0,0).mulDirection(pose.last().pose()).length());
+            var normal=new Vector3f(0,0,1).mul(pose.last().normal()).normalize();var face=side.getNormal();
+            assertEquals(1,Math.abs(normal.x*face.getX()+normal.y*face.getY()+normal.z*face.getZ()),1e-6);
+            System.out.println("LAYOUT|"+side+"|"+origin.x+"|"+origin.y+"|"+origin.z+"|"+transform.getScale()+"|"+transform.getFontScale());
         }
     }
-
-    @Test void sixRealBlockFacesAcceptInnerCircleAndRejectOutside() {
-        var transform = new CornerTransform();
-        for (var side : Direction.values()) {
-            transform.fromSide(side); var center = onSurface(side, transform.getLocalOffset(null, POS, null));
-            boolean vertical = side.getAxis() == Direction.Axis.Y;
-            var inside = tangent(side, center, vertical ? .089 : .199);
-            var outside = tangent(side, center, vertical ? .091 : .201);
-            assertTrue(transform.testHit(null, POS, null, center)); assertTrue(transform.testHit(null, POS, null, inside));
-            assertFalse(transform.testHit(null, POS, null, outside));
-            System.out.println("HIT|"+side+"|"+inside.x+"|"+inside.y+"|"+inside.z+"|true");
-            System.out.println("HIT|"+side+"|"+outside.x+"|"+outside.y+"|"+outside.z+"|false");
-        }
-    }
-
-    @Test void inheritedSphereUsesStrictRadiusBoundary() {
-        var transform = new CornerTransform();
-        for (var side : Direction.values()) {
-            transform.fromSide(side); var center = transform.getLocalOffset(null, POS, null); double radius = transform.getScale()/2.;
-            var normal = side.getNormal();
-            var boundary = center.add(normal.getX()*radius, normal.getY()*radius, normal.getZ()*radius);
-            assertFalse(transform.testHit(null, POS, null, boundary), "原生严格<边界必须拒绝："+side);
-            var justInside = center.add(normal.getX()*(radius-1e-6), normal.getY()*(radius-1e-6), normal.getZ()*(radius-1e-6));
-            assertTrue(transform.testHit(null, POS, null, justInside));
-        }
-    }
-
-    @Test void oldCentersAndVerticalRodOrHeadCornersAreNotTargets() {
-        var transform = new CornerTransform();
-        for (var side : Direction.values()) {
-            transform.fromSide(side); assertFalse(transform.testHit(null, POS, null, onSurface(side, new Vec3(.5,.5,.5))));
-            if (side.getAxis() == Direction.Axis.Y) {
-                double y = side == Direction.UP ? 1 : 0;
-                assertFalse(transform.testHit(null, POS, null, new Vec3(.2,y,.2)), "杆体最近角不属于热点");
-                assertFalse(transform.testHit(null, POS, null, new Vec3(.175,y,.175)), "固定方箍最近角也不属于热点");
+    @Test void sixRealBlockFacesAcceptInsideAndRejectOutside() {
+        var transform=new CornerTransform();
+        for(var side:Direction.values()){
+            transform.fromSide(side);var center=onSurface(side,EXPECTED.get(side));boolean top=side.getAxis()==Direction.Axis.Y;
+            assertTrue(transform.testHit(null,POS,null,center));
+            assertTrue(transform.testHit(null,POS,null,tangent(side,center,top?.349:.199)));
+            assertFalse(transform.testHit(null,POS,null,tangent(side,center,top?.351:.201)));
+            if(top){
+                assertTrue(transform.testHit(null,POS,null,center.add(0,0,.074)));
+                assertFalse(transform.testHit(null,POS,null,center.add(0,0,.076)));
+                assertTrue(transform.testHit(null,POS,null,center.add(.21,0,.045)),"椭圆内部斜点命中");
+                assertFalse(transform.testHit(null,POS,null,center.add(.28,0,.06)),"不能用长方形替代椭球，斜角必须拒绝");
+                assertFalse(transform.testHit(null,POS,null,center.add(.21,.06,.045)),"法向也参与同一椭球");
             }
         }
     }
-
-    @Test void successiveUpSideDownSideChangesRefreshDrawAndHitCache() {
-        var transform = new CornerTransform();
-        for (var side : new Direction[]{Direction.UP, Direction.SOUTH, Direction.DOWN, Direction.EAST}) {
-            assertSame(transform, transform.fromSide(side)); var center = onSurface(side, transform.getLocalOffset(null, POS, null));
-            boolean vertical = side.getAxis() == Direction.Axis.Y;
-            assertEquals(vertical ? .18f : .40f, transform.getScale());
-            assertEquals(!vertical, transform.testHit(null, POS, null, tangent(side, center, .12)), "命中缓存必须跟当前面尺度一起切换");
-            var pose = nativePose(); transform.transform(null, POS, null, pose);
-            assertEquals(transform.getScale(), new Vector3f(1,0,0).mulDirection(pose.last().pose()).length(), 1e-6);
+    @Test void strictBoundaryRejectsTangentialAndNormalEndpoints() {
+        var transform=new CornerTransform();
+        for(var side:Direction.values()){
+            transform.fromSide(side);var center=EXPECTED.get(side);double radius=transform.getScale()/2.;var normal=side.getNormal();
+            assertFalse(transform.testHit(null,POS,null,center.add(normal.getX()*radius,normal.getY()*radius,normal.getZ()*radius)));
+            assertTrue(transform.testHit(null,POS,null,center.add(normal.getX()*(radius-1e-6),normal.getY()*(radius-1e-6),normal.getZ()*(radius-1e-6))));
+            if(side.getAxis()==Direction.Axis.Y){
+                assertFalse(transform.testHit(null,POS,null,new Vec3(.85,center.y,.0875)),"X严格边界");
+                assertFalse(transform.testHit(null,POS,null,new Vec3(.5,center.y,.1625)),"Z严格边界");
+                assertTrue(transform.testHit(null,POS,null,new Vec3(.849999,center.y,.0875)));
+                assertTrue(transform.testHit(null,POS,null,new Vec3(.5,center.y,.162499)));
+            }
+        }
+    }
+    @Test void oldCentersRodHeadAndAdjacentCellsAreNotTargets() {
+        var transform=new CornerTransform();
+        for(var side:Direction.values()){
+            transform.fromSide(side);assertFalse(transform.testHit(null,POS,null,onSurface(side,new Vec3(.5,.5,.5))));
+            var center=EXPECTED.get(side);
+            for(var delta:new Vec3[]{new Vec3(1,0,0),new Vec3(-1,0,0),new Vec3(0,0,1),new Vec3(0,0,-1)}){
+                assertFalse(transform.testHit(null,POS,null,center.add(delta)),"相邻格坐标不是本格热点");
+            }
+            if(side.getAxis()==Direction.Axis.Y){
+                double y=side==Direction.UP?1:0;
+                assertFalse(transform.testHit(null,POS,null,new Vec3(.10,y,.10)),"旧角热点撤销");
+                for(var point:new Vec3[]{new Vec3(.2,y,.2),new Vec3(.175,y,.175),new Vec3(.5,y,.175),new Vec3(.825,y,.825)}){
+                    assertFalse(transform.testHit(null,POS,null,point),"0/50/100行程下相同XZ杆体/方箍投影不得命中");
+                }
+            }
+        }
+    }
+    @Test void successiveUpSideDownSideChangesRefreshDrawFontAndHitCache() {
+        var transform=new CornerTransform();
+        for(var side:new Direction[]{Direction.UP,Direction.SOUTH,Direction.DOWN,Direction.EAST}){
+            assertSame(transform,transform.fromSide(side));var center=EXPECTED.get(side);boolean top=side.getAxis()==Direction.Axis.Y;
+            assertEquals(top?.20f:.40f,transform.getScale());assertEquals(top?1.8f/64:1f/64,transform.getFontScale());
+            assertEquals(top,transform.testHit(null,POS,null,tangent(side,center,.30)),"顶底长边与侧面原圆按当前面切换");
+            var pose=nativePose();transform.transform(null,POS,null,pose);
+            assertEquals(transform.getScale(),new Vector3f(1,0,0).mulDirection(pose.last().pose()).length(),1e-6);
         }
     }
 }

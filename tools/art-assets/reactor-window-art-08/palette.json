@@ -1,0 +1,12 @@
+{
+  "reactor_window": {
+    "outline": "#28353A",
+    "frame_light": "#A3B7B8",
+    "frame_mid": "#788E94",
+    "frame_dark": "#3E5058",
+    "frame_shadow": "#5B7078",
+    "copper_light": "#D2A359",
+    "copper_shadow": "#715035",
+    "pane_lead": "#66696A"
+  }
+}

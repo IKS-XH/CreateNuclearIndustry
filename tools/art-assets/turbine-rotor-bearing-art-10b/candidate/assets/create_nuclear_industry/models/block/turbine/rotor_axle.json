@@ -1,0 +1,6 @@
+{
+  "textures": {
+    "particle": "create_nuclear_industry:block/turbine/turbine_10b_steel"
+  },
+  "elements": []
+}

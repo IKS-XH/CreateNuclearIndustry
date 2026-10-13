@@ -1,0 +1,1401 @@
+{
+  "bounds": {
+    "min": [
+      0,
+      0,
+      0
+    ],
+    "size": [
+      5,
+      5,
+      5
+    ]
+  },
+  "blocks": [
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        0,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        0,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        0,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        0,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        0,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        0,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        0,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        0,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        0,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        0,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        0,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        0,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        0,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        0,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        0,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        0,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        0,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        0,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        0,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        0,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        0,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        0,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        0,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        0,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        1,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        1,
+        1,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        2,
+        1,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        3,
+        1,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        1,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        1,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        1,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        1,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        1,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        1,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        1,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        1,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        1,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        1,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        1,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        1,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        1,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        1,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        1,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        1,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        1,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        1,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        1,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        1,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        1,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        2,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        1,
+        2,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        2,
+        2,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        3,
+        2,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        2,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        2,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        2,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        2,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        2,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        2,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_instrument_port",
+      "pos": [
+        0,
+        2,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        2,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        2,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        2,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        2,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        2,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        2,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        2,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        2,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        2,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        2,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_cold_port",
+      "pos": [
+        1,
+        2,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        2,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_hot_port",
+      "pos": [
+        3,
+        2,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        2,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        3,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        1,
+        3,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        2,
+        3,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_window",
+      "pos": [
+        3,
+        3,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        3,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        3,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        3,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        3,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        3,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        3,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        3,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        3,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        3,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        3,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        3,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        3,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        1,
+        3,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "minecraft:air",
+      "pos": [
+        2,
+        3,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_fuel_rod",
+      "pos": [
+        3,
+        3,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        3,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        3,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        3,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        3,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        3,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        3,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        4,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        4,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        4,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        4,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        4,
+        0
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        4,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_refueling_port",
+      "pos": [
+        1,
+        4,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:control_rod_drive",
+      "pos": [
+        2,
+        4,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_refueling_port",
+      "pos": [
+        3,
+        4,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        4,
+        1
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        4,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_refueling_port",
+      "pos": [
+        1,
+        4,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:control_rod_drive",
+      "pos": [
+        2,
+        4,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_refueling_port",
+      "pos": [
+        3,
+        4,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        4,
+        2
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        4,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_refueling_port",
+      "pos": [
+        1,
+        4,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:control_rod_drive",
+      "pos": [
+        2,
+        4,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_refueling_port",
+      "pos": [
+        3,
+        4,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        4,
+        3
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        0,
+        4,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        1,
+        4,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        2,
+        4,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        3,
+        4,
+        4
+      ],
+      "properties": {}
+    },
+    {
+      "id": "create_nuclear_industry:reactor_casing",
+      "pos": [
+        4,
+        4,
+        4
+      ],
+      "properties": {}
+    }
+  ],
+  "partials": [
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        1,
+        1
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        1,
+        1
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        1,
+        1
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        1,
+        2
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        1,
+        2
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        1,
+        3
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        1,
+        3
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        2,
+        1
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        2,
+        1
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        2,
+        1
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        2,
+        2
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        2,
+        2
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        2,
+        3
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        2,
+        3
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        2,
+        3
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        3,
+        1
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        3,
+        1
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        3,
+        1
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        3,
+        2
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        3,
+        2
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        3,
+        2
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        1,
+        3,
+        3
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_shaft",
+      "pos": [
+        2,
+        3,
+        3
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/fuel_rod_glow",
+      "pos": [
+        3,
+        3,
+        3
+      ],
+      "glow": true
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_head",
+      "pos": [
+        2,
+        3,
+        1
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_head",
+      "pos": [
+        2,
+        3,
+        2
+      ]
+    },
+    {
+      "modelId": "create_nuclear_industry:block/reactor_animation/control_rod_head",
+      "pos": [
+        2,
+        3,
+        3
+      ]
+    }
+  ]
+}

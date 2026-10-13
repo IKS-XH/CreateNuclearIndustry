@@ -1,0 +1,64 @@
+{
+  "task": "ART-TURBINE-07B-R2",
+  "stage": "唯一新增PNG已安装试用，客户端视觉待复看",
+  "source": "原创64×32整数rect SVG，同源确定性导出PNG；旧07B脚本和正式资源只读",
+  "targets": {
+    "candidate_png": "generated/textures/turbine_casing_07_sparse.png",
+    "formal_png_after_authorized_install": "src/main/resources/assets/create_nuclear_industry/textures/block/turbine/turbine_casing_07_sparse.png"
+  },
+  "atlas": {
+    "size": [
+      64,
+      32
+    ],
+    "tile": [
+      16,
+      16
+    ],
+    "d5": {
+      "row": 0,
+      "columns": [
+        0,
+        1
+      ],
+      "period": 2
+    },
+    "d7": {
+      "row": 1,
+      "columns": [
+        0,
+        1,
+        2
+      ],
+      "period": 3
+    },
+    "unused": "其余像素为连续钢色",
+    "uv": "((phase+u)/4,(row+v)/2)"
+  },
+  "phase": "纯装饰，floorMod(worldPos·machine_facing.getOpposite(),周期)。north:+Z/east:-X/south:-Z/west:+X。示例south朝向、front轴坐标0；移动位置会改变相位。",
+  "preserved": [
+    "d3现行quad/PNG",
+    "R1端盖PNG/OBJ UV",
+    "旧07B PNG/OBJ/MTL/脚本"
+  ],
+  "preview_files": [
+    "d3-before.svg",
+    "d3-after.svg",
+    "d5-before.svg",
+    "d5-after.svg",
+    "d7-before.svg",
+    "d7-after.svg"
+  ],
+  "window_mesh_evidence": "build/reports/art/ART-TURBINE-07B-R2/consumer/window-mesh-glass-uv.json",
+  "window_preview_files": [
+    "windows/window-single.svg",
+    "windows/window-three-before.svg",
+    "windows/window-three-connected.svg"
+  ],
+  "sha256_atlas_png": "aff06b77869abb21ba6939a2300d9ba07c7c06c7684866ddcaf5e3459be4c741",
+  "protected_input_fingerprint": {
+    "files": 210,
+    "sha256": "4b64fd5c658737862199a8124bfe411d96cfcf2f616ec67312ee804e246f9fc6",
+    "scope": "旧07B工具、3张旧机壳PNG及206张d3/d5/d7成型OBJ"
+  }
+}
