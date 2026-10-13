@@ -1,0 +1,64 @@
+{
+  "task": "ART-TURBINE-07A",
+  "png_created": 0,
+  "geometry": {
+    "width": 5,
+    "length": 8,
+    "height": 5,
+    "profile": "octagonal",
+    "projection": "iso-5x8x5-v1"
+  },
+  "schemes": {
+    "A": {
+      "title": "分体钢铜",
+      "short": "铜上盖 / 深钢下壳",
+      "desc": "铜质上盖覆盖上部八棱面；深钢下壳由连续中腰检修分缝收口，并配置成组螺栓。",
+      "claim": "上部铜盖与下部深钢沿中腰连续分体",
+      "sources": [
+        "A/side.svg",
+        "A/top.svg",
+        "A/endcap.svg",
+        "A/seam.svg"
+      ],
+      "board": "A/board.svg"
+    },
+    "B": {
+      "title": "分段轮舱",
+      "short": "钢制轮舱 / 窄铜环缝",
+      "desc": "钢面为主，轴向每段用厚钢束带收口，并以窄铜缝标记轮舱分界。",
+      "claim": "连续环带分段，铜只作窄识别线",
+      "sources": [
+        "B/side.svg",
+        "B/top.svg",
+        "B/endcap.svg",
+        "B/seam.svg"
+      ],
+      "board": "B/board.svg"
+    },
+    "C": {
+      "title": "纵筋检修",
+      "short": "纵向钢筋 / 凹入铜面",
+      "desc": "深钢纵筋贯通机壳长轴，凹入铜面被亮钢边压住，间隔短横缝提示检修板。",
+      "claim": "纵筋连续，凹入铜带构成长轴中心",
+      "sources": [
+        "C/side.svg",
+        "C/top.svg",
+        "C/endcap.svg",
+        "C/seam.svg"
+      ],
+      "board": "C/board.svg"
+    }
+  },
+  "overview": "overview.svg",
+  "entry": "index.html",
+  "reference_palette": {
+    "#28353A": "钢影",
+    "#3E5058": "钢暗面",
+    "#5B7078": "深钢",
+    "#788E94": "钢灰",
+    "#A3B7B8": "钢亮面",
+    "#D1DFDA": "钢高光",
+    "#715035": "铜影",
+    "#A87942": "铜面"
+  }
+}

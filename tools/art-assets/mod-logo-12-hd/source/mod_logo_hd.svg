@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Create: Nuclear Industry 厚铸钢宣传徽标 R2</title>
+  <desc>ART-LOGO-12-HD R2：八齿厚铸钢轮体、右下钢背层、暗铜螺栓法兰、四向切角压板与深嵌蓝核芯。纯矢量透明底，无文字绘图或外部图片。</desc>
+  <defs>
+    <!-- 八齿均用直线切角；前面保持正视，背层右移36、下移40表达台阶厚度。 -->
+    <path id="gear" d="M 395.77 162.61 L 403.93 87.55 L 415.01 77.61 L 552.99 77.61 L 564.07 87.55 L 572.23 162.61 L 582.55 176.38 L 631.84 196.80 L 648.87 194.36 L 707.71 147.04 L 722.58 147.85 L 820.15 245.42 L 820.96 260.29 L 773.64 319.13 L 771.20 336.16 L 791.62 385.45 L 805.39 395.77 L 880.45 403.93 L 890.39 415.01 L 890.39 552.99 L 880.45 564.07 L 805.39 572.23 L 791.62 582.55 L 771.20 631.84 L 773.64 648.87 L 820.96 707.71 L 820.15 722.58 L 722.58 820.15 L 707.71 820.96 L 648.87 773.64 L 631.84 771.20 L 582.55 791.62 L 572.23 805.39 L 564.07 880.45 L 552.99 890.39 L 415.01 890.39 L 403.93 880.45 L 395.77 805.39 L 385.45 791.62 L 336.16 771.20 L 319.13 773.64 L 260.29 820.96 L 245.42 820.15 L 147.85 722.58 L 147.04 707.71 L 194.36 648.87 L 196.80 631.84 L 176.38 582.55 L 162.61 572.23 L 87.55 564.07 L 77.61 552.99 L 77.61 415.01 L 87.55 403.93 L 162.61 395.77 L 176.38 385.45 L 196.80 336.16 L 194.36 319.13 L 147.04 260.29 L 147.85 245.42 L 245.42 147.85 L 260.29 147.04 L 319.13 194.36 L 336.16 196.80 L 385.45 176.38 L 395.77 162.61 Z"/>
+    <linearGradient id="backSteel" x1="180" y1="180" x2="930" y2="972" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#465660"/><stop offset="0.55" stop-color="#465660"/><stop offset="1" stop-color="#26313A"/></linearGradient>
+    <linearGradient id="bevel" x1="160" y1="100" x2="850" y2="860" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#B1BEC1"/><stop offset="0.4" stop-color="#72828A"/><stop offset="1" stop-color="#26313A"/></linearGradient>
+    <linearGradient id="castSteel" x1="170" y1="125" x2="858" y2="889" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#72828A"/><stop offset="0.48" stop-color="#72828A"/><stop offset="1" stop-color="#465660"/></linearGradient>
+    <linearGradient id="darkCopper" x1="325" y1="232" x2="730" y2="772" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#B87949"/><stop offset="0.36" stop-color="#754832"/><stop offset="1" stop-color="#754832"/></linearGradient>
+    <linearGradient id="plate" x1="0" y1="0" x2="0.62" y2="1"><stop offset="0" stop-color="#B1BEC1"/><stop offset="0.15" stop-color="#72828A"/><stop offset="1" stop-color="#465660"/></linearGradient>
+    <radialGradient id="core" cx="0.49" cy="0.46" r="0.57"><stop offset="0" stop-color="#D8FAFF"/><stop offset="0.12" stop-color="#6AD5EF"/><stop offset="0.40" stop-color="#1489C1"/><stop offset="0.77" stop-color="#12507C"/><stop offset="1" stop-color="#12507C"/></radialGradient>
+    <path id="plateBlock" d="M 426 202 H 542 L 558 218 V 338 L 538 358 H 430 L 410 338 V 218 Z"/>
+    <g id="bolt">
+      <path d="M -21 -12 L 0 -24 L 21 -12 V 12 L 0 24 L -21 12 Z" fill="#26313A"/>
+      <path d="M -16 -9 L 0 -18 L 16 -9 V 9 L 0 18 L -16 9 Z" fill="#72828A" stroke="#465660" stroke-width="2"/>
+      <path d="M -15 -8 L 0 -16 L 14 -8" fill="none" stroke="#B1BEC1" stroke-width="4"/>
+      <path d="M -5 -3 H 5 V 3 H -5 Z" fill="#26313A"/>
+    </g>
+  </defs>
+  <!-- 背层在右下可见，宽实心轮缘与深暗缝表现厚铸钢重量。 -->
+  <use href="#gear" transform="translate(36 40)" fill="url(#backSteel)" stroke="#26313A" stroke-width="16"/>
+  <use href="#gear" transform="translate(28 31)" fill="none" stroke="#72828A" stroke-width="5" stroke-opacity="0.38"/>
+  <use href="#gear" fill="url(#bevel)" stroke="#26313A" stroke-width="16"/>
+  <use href="#gear" transform="translate(484 484) scale(0.968) translate(-484 -484)" fill="url(#castSteel)"/>
+  <!-- 法兰嵌在钢体沉孔中，铜色压暗；八枚六角螺栓沿压板之间成对布置。 -->
+  <circle cx="484" cy="484" r="290" fill="#26313A"/>
+  <circle cx="484" cy="484" r="278" fill="#465660" stroke="#B1BEC1" stroke-width="6"/>
+  <circle cx="484" cy="484" r="260" fill="url(#darkCopper)" stroke="#26313A" stroke-width="10"/>
+  <circle cx="484" cy="484" r="250" fill="none" stroke="#B87949" stroke-width="5"/>
+  <circle cx="484" cy="484" r="193" fill="#26313A"/>
+  <circle cx="484" cy="484" r="184" fill="#465660" stroke="#72828A" stroke-width="5"/>
+  <circle cx="484" cy="484" r="166" fill="#26313A"/>
+  <g><use href="#bolt" transform="translate(595 291.74)"/><use href="#bolt" transform="translate(676.26 373)"/><use href="#bolt" transform="translate(676.26 595)"/><use href="#bolt" transform="translate(595 676.26)"/><use href="#bolt" transform="translate(373 676.26)"/><use href="#bolt" transform="translate(291.74 595)"/><use href="#bolt" transform="translate(291.74 373)"/><use href="#bolt" transform="translate(373 291.74)"/></g>
+  <!-- 核芯缩小为切角嵌件，厚内环将蓝辉限定在中心，不使用泡状反光。 -->
+  <path d="M 427 347 H 541 L 621 427 V 541 L 541 621 H 427 L 347 541 V 427 Z" fill="#12507C" stroke="#26313A" stroke-width="14"/>
+  <path d="M 437 370 H 531 L 598 437 V 531 L 531 598 H 437 L 370 531 V 437 Z" fill="url(#core)" stroke="#1489C1" stroke-width="6"/>
+  <path d="M 438 379 H 529 L 581 431" fill="none" stroke="#6AD5EF" stroke-width="5" stroke-opacity="0.72"/>
+  <!-- 四块宽切角钢压板带下缘承台与扣合缝，连续同源几何保持正视。 -->
+  <g fill="#26313A" stroke="#26313A" stroke-width="13"><use href="#plateBlock" transform="translate(6 9)"/><use href="#plateBlock" transform="translate(6 9) rotate(90 484 484)"/><use href="#plateBlock" transform="translate(6 9) rotate(180 484 484)"/><use href="#plateBlock" transform="translate(6 9) rotate(270 484 484)"/></g>
+  <g fill="url(#plate)" stroke="#26313A" stroke-width="10"><use href="#plateBlock"/><use href="#plateBlock" transform="rotate(90 484 484)"/><use href="#plateBlock" transform="rotate(180 484 484)"/><use href="#plateBlock" transform="rotate(270 484 484)"/></g>
+  <g fill="none" stroke="#B1BEC1" stroke-width="8"><path d="M 431 217 H 536 L 544 225"/><path d="M 431 217 H 536 L 544 225" transform="rotate(90 484 484)"/><path d="M 431 217 H 536 L 544 225" transform="rotate(180 484 484)"/><path d="M 431 217 H 536 L 544 225" transform="rotate(270 484 484)"/></g>
+  <g fill="none" stroke="#26313A" stroke-width="7"><path d="M 425 329 H 543"/><path d="M 425 329 H 543" transform="rotate(90 484 484)"/><path d="M 425 329 H 543" transform="rotate(180 484 484)"/><path d="M 425 329 H 543" transform="rotate(270 484 484)"/></g>
+</svg>

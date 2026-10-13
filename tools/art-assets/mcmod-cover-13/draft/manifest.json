@@ -1,0 +1,29 @@
+{
+  "stage": "brand-layout-draft",
+  "names": [
+    "机械动力：核工业",
+    "Create: Nuclear Industry"
+  ],
+  "logoSource": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\mod-logo-12-hd\\source\\mod_logo_hd.svg",
+  "logoSha256": "cd763c08bf7f29ce21aef613230fd9dc37c06b826a5dbd2f7ec776e862b16c2c",
+  "font": {
+    "path": "C:/Windows/Fonts/msyhbd.ttc",
+    "sha256": "519309b7ab0479c4dc3ace5e291de5a8702175be5586e165bc810267bd4619a5",
+    "redistribution": false
+  },
+  "background": null,
+  "exported": [
+    {
+      "name": "brand-layout-960x600.png",
+      "width": 960,
+      "height": 600,
+      "sha256": "dbd498114de7294b005ccdf1f25ef164363f0573c3da55ff3393e386c457387f"
+    },
+    {
+      "name": "brand-layout-240x150.png",
+      "width": 240,
+      "height": 150,
+      "sha256": "fdfd88890d68ca814daafdcd5d194ceefd280a09a0905d75574a83851d1616d7"
+    }
+  ]
+}
