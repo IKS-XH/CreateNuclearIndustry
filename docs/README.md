@@ -1,6 +1,6 @@
 # 项目文档入口
 
-管理员新增[GUI／连续换料／核热值班整合草案](superpowers/specs/2026-10-14-reactor-administrator-gui-design.md)：三页GUI、部分燃料耗尽不停堆、反应堆热量维持普通燃烧及一个燃料冷启动。当前只设计，新建议值待审阅；未改代码或打包，01/01R与02人工/派发门保持。
+管理员[GUI／连续换料／核热值班设计](superpowers/specs/2026-10-14-reactor-administrator-gui-design.md)已获用户开工批准，沿[实施卡03](superpowers/plans/2026-10-14-reactor-administrator-gui-03.md)在原候选接续三页GUI、部分燃料耗尽不停堆、默认1HU/t核热值班和一个燃料冷启动。唯一执行者与一次组合窄审；main管理员源码/包不改，01/01R并入集中复看，02仍未派发。
 
 Logo已获用户验收并[合入main`d8efdc9`](reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)，创造标签改用齿轮＋蓝核芯图标，可编辑SVG和工具保留。唯一主目录增量assemble通过，正式包为34bedc81…；原物品列表、世界与其他人工门保持。
 
