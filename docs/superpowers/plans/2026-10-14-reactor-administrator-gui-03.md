@@ -12,7 +12,7 @@
 
 ## 全局合同与基线
 
-- 状态：待唯一执行者接续；执行者为原`reactor_automation_retrofit_impl`，独立审查为原`reactor_automation_review`。PM不写功能、测试、构建代码。
+- 状态：执行中；原`reactor_automation_retrofit_impl`已收到任务并确认唯一接续，候选派发文档提交`6fcf9c0`。独立审查为原`reactor_automation_review`，待稳定组合候选；PM不写功能、测试、构建代码。
 - 复用`E:/MyMC/NewMod/Create_NuclearIndustry-reactor-automation`、`codex/reactor-automation-basic`，文档基线`d26018a`、生产基线`2dff787`，冻结JAR`5e04c667fc509a0eb9349bb95faf6c3a15b5d19a961ffdeb29458d00b5c2d434`。
 - 原候选仅`logs/debug.log`和`logs/latest.log`有用户更新；01:35:15已保存各维度。保持当前候选世界原位，不开分支、不重新搬档、不启动/写用户世界或配置、不杀用户客户端。
 - main管理员功能仍未集成；main已验Logo及34bedc81…JAR不动，不用main整类或整包覆盖候选。01/01R既有手测门合并进本次集中复看，不能登记通过。
@@ -117,3 +117,5 @@
 ## 派发记录
 
 PM自审：新需求已批准；GUI为用户指定的管理员特例，原通用无GUI规则不阻止本批；03是原01候选接续而非依赖01手测通过的02。已读真实原生燃烧室tick与当前Service三处燃料判定；SPEC和原安全交接无剩余玩法取舍。实际执行开始以Agent返回为准。
+
+执行者已明确收到并接续同一候选，使用卡中技能和RED→定向→真实域→增量包流程；禁止Git写与转派。本条记录实际启动，不表示实现/审查/人工验收完成。
