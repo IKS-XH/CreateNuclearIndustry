@@ -1,6 +1,6 @@
 # 反应堆自动化接口与烈焰人管理员：首批设计
 
-2026-10-13。状态：用户已明确“采用整份设计稿与推荐参数”，本稿的参数、配方及联锁接法已冻结。实施计划另行编写并审阅；尚未派发实现，未修改生产源码、配置、素材或世界，不把批准设计当成已实现功能。
+2026-10-13。状态：用户已明确“采用整份设计稿与推荐参数”，本稿的参数、配方及联锁接法已冻结；对应实施计划已审阅并授权开工，当前准备同级候选。设计和计划批准不等于功能或客户端验收通过，实际结果见本批报告。
 
 ## 1. 已确认的目标和范围
 
@@ -133,4 +133,4 @@
 
 基线main `0d2b238`。已核旧[大规模机组准备稿](../plans/2026-10-12-large-reactor-infrastructure-preparation.md)、`docs/project.md`5.2、`ControlRodSliderService`、`ControlRodScramService`、`ControlRodStateTransitions`、正式仪表tick/遥测、裂变/热负荷计算及锁定Create6.0.10-280燃烧室公开入口。MC1.21.1/Java21/NF21.1.219保持；不按技能示例升级依赖。
 
-实际使用brainstorming、minecraft-modding/testing及治理证据分层。本稿经PM自查范围、单位、原SCRAM恢复与量化余热边界，用户已整体审阅通过；对应[实施计划](../plans/2026-10-13-reactor-automation-01.md)确定精确写集和tick交接，待计划审阅后使用既有唯一执行者及一次组合窄审的方式推进。主目录其他dirty、旧人工门及世界保持；设计批准本身不改写运行配置。
+实际使用brainstorming、minecraft-modding/testing及治理证据分层。本稿经PM自查范围、单位、原SCRAM恢复与量化余热边界，用户已整体审阅通过；对应[实施计划](../plans/2026-10-13-reactor-automation-01.md)的精确写集和tick交接也已获批准，按既有唯一执行者及一次组合窄审方式推进。主目录其他dirty、旧人工门及世界保持；设计批准本身不改写运行配置。
