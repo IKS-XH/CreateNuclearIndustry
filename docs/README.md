@@ -1,6 +1,6 @@
 # 项目文档入口
 
-管理员[GUI／连续换料／核热值班设计](superpowers/specs/2026-10-14-reactor-administrator-gui-design.md)已获用户开工批准，沿[实施卡03](superpowers/plans/2026-10-14-reactor-administrator-gui-03.md)在原候选接续三页GUI、部分燃料耗尽不停堆、默认1HU/t核热值班和一个燃料冷启动。唯一执行者与一次组合窄审；main管理员源码/包不改，01/01R并入集中复看，02仍未派发。
+管理员03已交[三页GUI／连续换料／核热值班候选](reviews/2026-10-14/reactor-administrator-03/CANDIDATE.md)`78acd5d`／879c3d72…，原唯一执行者及一次组合审查的整改项已关闭。最终21/21受影响定向、两个新增启动窗口2/2自然保存exit0和必要增量包通过，旧六业务／热工及保存挂起按阶段保留；33来源与当前制品零漂移。继续原候选目录和存档做[03集中手测](reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，01／01R未验门承接同一清单，main管理员源码／包不改、02仍未派发。下方旧控件及包身份是历史交付时点。
 
 Logo已获用户验收并[合入main`d8efdc9`](reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)，创造标签改用齿轮＋蓝核芯图标，可编辑SVG和工具保留。唯一主目录增量assemble通过，正式包为34bedc81…；原物品列表、世界与其他人工门保持。
 

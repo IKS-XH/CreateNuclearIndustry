@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 管理员03按用户2026-10-14开工授权已交[集中客户端候选](docs/reviews/2026-10-14/reactor-administrator-03/CANDIDATE.md)`78acd5d`／879c3d72…：总览／堆芯／保护GUI、仅全部可用燃料耗尽才缺料保持、默认1HU/t真实核热值班与普通燃料冷启动。原唯一执行者及一次组合审查／同次窄复核关闭四项Important与一项Minor；最终21/21受影响定向、两个新增真实启动窗口2/2自然保存exit0、必要1秒纠错assemble通过，旧热工／六业务与保存挂起证据按阶段保留。PM实核33源／658class／1542资源零漂移、两测试域无文件载荷泄漏，已净提交候选；main管理员源码／34bedc81…包与世界／配置保持。当前只待[03集中手测](docs/reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，01／01R未验门合并承接、不追认通过，02闭环及main合入不推进；下方执行中／旧四控件／旧制品描述为交付历史。
+
 - 用户2026-10-14明确“可以，开始施工吧”，批准[管理员整合设计](docs/superpowers/specs/2026-10-14-reactor-administrator-gui-design.md)，按[实施卡03](docs/superpowers/plans/2026-10-14-reactor-administrator-gui-03.md)接续原候选：总览/堆芯/保护三页GUI、仅全燃料耗尽才缺料保持、默认1HU/t真实核热值班与一个燃料冷启动。GUI是用户指定的管理员特例，旧无GUI/世界四控件规则对此已取代；维护先于冷却足额扣账，不冒充事故冷却。复用原树/分支/存档与唯一执行者、一次组合窄审，main管理员源码/包不改；01/01R不追认通过，合并本批集中复看，02应力闭环仍待前置验收及修卡，默认最低毛功率维护＋1已批准但本批不实现PI。
 
 - 用户2026-10-14明确“新绘制的logo通过验收了，合并进主分支吧”，按[本次验收](docs/reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)关闭ART-LOGO-11整体视觉门，22条生产/可编辑来源净合main`d8efdc9`。只接已审MOD_LOGO注册、MAIN.icon supplier与两新模型/贴图，现行管网五项和displayItems逐字保持；SVG/透明PNG/工具/旧接收者证明保留，不用旧art Tab/整包覆盖主线。原15/15、2/2、2/2及一次审查复用，唯一主目录11秒增量assemble退出0；两class/两资源与当前输出/JAR一致，其他2149载荷保持，正式冻结34bedc81…包一致，原8c03主包/美术d12包保留。世界/配置/其他dirty未处理、不新树/搬档，管理员候选和01/01R/02人工门及GUI设计不变；下方Logo未合/待验为历史。
