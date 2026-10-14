@@ -1,6 +1,6 @@
 # 项目文档入口
 
-[锅炉蒸汽口停流定位与纠正](reviews/2026-10-14/boiler-steam-output-01/DIAGNOSIS.md)：实际专用汽路无外置泵，用户明确汽口自带主动输出无需补泵。当前核查锅炉主动出汽缺少工业管网接入，原库存/拓扑证据保留，补泵结论已更正；按[窄修卡](superpowers/plans/2026-10-14-boiler-steam-output-fix.md)核最小事务写集，02集中人工门保持。
+[锅炉汽口主动输出已交局部候选](reviews/2026-10-14/boiler-steam-output-01/CANDIDATE.md)：原reactor-load-follow候选c71d690及f23b5cf4…JAR已纳Git，两种汽可沿合法工业管主动输出，无需补外置泵。最终36/36真实与13/13收据、同次组合窄审及最终载荷核对通过；保持过滤/保压/口与管段额度。继续原“新的世界”做[局部复看](reviews/2026-10-14/boiler-steam-output-01/CLIENT-CHECKLIST.md)，原停流/公平RED及旧包保留，02人工门独立，未合main。
 
 [应力余量闭环02已交集中手测](reviews/2026-10-13/reactor-load-follow-02/CANDIDATE.md)：独立候选8eaafd9与86225aea…JAR已纳Git，Ctrl绑定Create应力表，现GUI可设目标余量/最低毛HU，保护优先与原状态续接保持。最终25/25定向、真实4/4自然保存、必要增量包与同次组合审查/三项差异复核通过；当前只待[新增人工门](reviews/2026-10-13/reactor-load-follow-02/CLIENT-CHECKLIST.md)，未合main，用户当前存档已携带。前批管理员已验收合main，正式50d5包保持；下方开工/未实现描述为历史。
 
