@@ -17,6 +17,14 @@ public final class ReactorAutomationGoggles {
         tag.putString("Phase",o.automationState().phase().name()); tag.putString("Reason",o.automationState().reason());
         var port=(ReactorAutomationPortBlockEntity)o.getLevel().getBlockEntity(b.portPos());
         if(port!=null) { tag.putInt("Mode",port.settings().mode().ordinal()); tag.putInt("Depth",port.settings().manualDepthPercent()); tag.putInt("Heat",port.settings().targetHeatHuPerTick()); }
+        if(port!=null) {
+            tag.putInt("ReserveTarget",port.settings().reservePercent());tag.putInt("MinimumHeat",port.settings().minimumHeatHuPerTick());
+            if(port.gaugeLink()!=null)tag.putString("Gauge",port.gaugeLink().position().toShortString());
+            var session=o.automationLoadFollowSession();var stress=session==null?null:session.lastSample();
+            tag.putBoolean("LoadingRebind",session!=null&&session.loading()&&!session.established());
+            tag.putBoolean("StressValid",stress!=null&&stress.status()==ReactorStressSample.Status.VALID);
+            if(stress!=null&&stress.reserveFraction().isPresent())tag.putDouble("StressReserve",stress.reserveFraction().orElseThrow()*100);
+        }
         var sample=o.automationObservation();
         if(sample!=null) {
             tag.putDouble("ActualHeat",sample.generatedHeatHuPerTick()); tag.putDouble("AverageHeat",o.automationAverageHeat());
@@ -32,6 +40,10 @@ public final class ReactorAutomationGoggles {
         tooltip.add(Component.translatable("automation.create_nuclear_industry.phase."+view.getString("Phase").toLowerCase(Locale.ROOT)));
         tooltip.add(Component.translatable("automation.create_nuclear_industry.power",view.getInt("Heat"),String.format(Locale.ROOT,"%.1f",view.getDouble("ActualHeat")),String.format(Locale.ROOT,"%.1f",view.getDouble("AverageHeat"))));
         tooltip.add(Component.translatable("automation.create_nuclear_industry.reason."+view.getString("Reason")));
+        if(view.getInt("Mode")==ReactorAutomationState.Mode.LOAD_FOLLOW.ordinal()) {
+            tooltip.add(Component.translatable("automation.create_nuclear_industry.gui.load_summary",view.getBoolean("StressValid")?String.format(Locale.ROOT,"%.1f%%",view.getDouble("StressReserve")):"—",view.getInt("ReserveTarget"),view.getInt("MinimumHeat")));
+            tooltip.add(Component.translatable("automation.create_nuclear_industry.gui.gauge",view.getString("Gauge")));
+        }
         return true;
     }
 }

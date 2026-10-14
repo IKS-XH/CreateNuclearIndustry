@@ -140,10 +140,12 @@ tasks.named('jar', Jar) {
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorAutomationRetrofitGameTests*.class'
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorGameTests*.class'
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorResumeGameTests*.class'
+    exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorLoadFollowGameTests*.class'
     exclude 'data/cni_reactor_automation/structure/automation_empty.nbt'
     exclude 'data/cni_reactor_automation_retrofit/structure/retrofit_empty.nbt'
     exclude 'data/cni_reactor_administrator/structure/administrator_empty.nbt'
     exclude 'data/cni_reactor_administrator_startup/structure/startup_empty.nbt'
     exclude 'data/cni_reactor_administrator_resume/structure/resume_empty.nbt'
     exclude 'data/cni_reactor_administrator_resume_review/structure/review_empty.nbt'
+    exclude 'data/cni_reactor_load_follow/structure/load_follow_empty.nbt'
 }

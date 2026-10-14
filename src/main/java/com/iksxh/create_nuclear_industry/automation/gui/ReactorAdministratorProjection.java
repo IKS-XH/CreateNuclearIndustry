@@ -51,7 +51,7 @@ public record ReactorAdministratorProjection(CompoundTag data) {
         tag.putBoolean("Valid",true);
         tag.putBoolean("ConfigurationValid",true);
         com.iksxh.create_nuclear_industry.automation.ReactorAutomationParameters p;
-        try {p=ReactorAutomationConfig.parameters();}
+        try {p=ReactorAutomationConfig.parameters();ReactorAutomationConfig.loadFollowParameters();}
         catch(IllegalArgumentException invalidConfig) {
             // 配置故障不是关联丢失：保留真实身份/phase供查看和STOP，不伪造保护阈值或普通数据。
             tag.putBoolean("ConfigurationValid",false);tag.putString("Reason","invalid_config");

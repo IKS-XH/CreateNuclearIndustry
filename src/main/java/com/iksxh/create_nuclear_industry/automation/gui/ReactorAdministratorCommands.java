@@ -13,7 +13,9 @@ import static com.iksxh.create_nuclear_industry.automation.ReactorAutomationStat
 public final class ReactorAdministratorCommands {
     public enum Action { APPLY, START, STOP, RESET }
     /** 完整数值草稿：棒深为百分比，目标为毛HU/t；客户端编辑不授予服务端运行许可。 */
-    public record Draft(Mode mode,int depthPercent,int heatHuPerTick) { }
+    public record Draft(Mode mode,int depthPercent,int heatHuPerTick,int reservePercent,int minimumHeatHuPerTick) {
+        public Draft(Mode mode,int depth,int heat) {this(mode,depth,heat,20,2);}
+    }
     /** 每次打开的随机session独立于循环containerId；同一几何/设定也不能复用已关闭菜单。 */
     public record Request(int containerId,UUID sessionId,BlockPos burnerPos,BlockPos portPos,UUID ownerGeneration,long authorityEpoch,
                           long settingsRevision,long clientSequence,Action action,Draft draft) { }
@@ -21,7 +23,9 @@ public final class ReactorAdministratorCommands {
     private ReactorAdministratorCommands() { }
     public static String validate(Draft draft,int maxHeat) {
         return draft==null || draft.mode()==null || draft.mode()==Mode.STOP || draft.depthPercent()<0 || draft.depthPercent()>100
-                || draft.heatHuPerTick()<0 || draft.heatHuPerTick()>maxHeat?"invalid_value":"";
+                || draft.heatHuPerTick()<0 || draft.heatHuPerTick()>maxHeat
+                ||draft.reservePercent()<0||draft.reservePercent()>90||draft.minimumHeatHuPerTick()<=0
+                ||draft.mode()==Mode.LOAD_FOLLOW&&draft.minimumHeatHuPerTick()>maxHeat?"invalid_value":"";
     }
     /** 唯一GUI写入口：当前玩家菜单和真实实例是权威，客户端owner坐标不能转授权限。 */
     public static Response apply(ServerPlayer player,Request request) {
@@ -52,7 +56,7 @@ public final class ReactorAdministratorCommands {
                 case APPLY -> {
                     reason=validate(request.draft(),parameters.maxTargetHeatHuPerTick());
                     if(!reason.isEmpty()) throw new IllegalArgumentException(reason);
-                    var draft=request.draft(); boolean running=state.phase()==Phase.MANUAL || state.phase()==Phase.CONSTANT;
+                    var draft=request.draft(); boolean running=state.phase()==Phase.MANUAL || state.phase()==Phase.CONSTANT||state.phase()==Phase.LOAD_WARMUP||state.phase()==Phase.LOAD_FOLLOW;
                     // 建立联锁期间活动意图仍在requestedMode；改模式必须撤销旧启动，保存新偏好后另行START。
                     if(state.phase()==Phase.ARMING && draft.mode()!=state.requestedMode()) {
                         state=state.stop("mode_changed",false);submitFull=true;depth=100;
@@ -70,13 +74,17 @@ public final class ReactorAdministratorCommands {
                                     :Math.min(desired,state.commandedDepthPercent()+parameters.maxInsertPercentPerAdjustment());
                             if(ReactorAutomationController.warning(sample,parameters) && draft.heatHuPerTick()>settings.targetHeatHuPerTick()) throw new IllegalArgumentException("warning");
                             if(!ReactorAutomationController.coolantCanCarryNextTick(sample,bounded)) throw new IllegalArgumentException("cold_shortage");
+                        } else if(draft.mode()==Mode.LOAD_FOLLOW&&state.requestedMode()==Mode.LOAD_FOLLOW) {
+                            if(ReactorAutomationController.warning(sample,parameters)&&draft.minimumHeatHuPerTick()>settings.minimumHeatHuPerTick())throw new IllegalArgumentException("warning");
+                            var nextSettings=new ReactorAutomationPortBlockEntity.Settings(draft.mode(),draft.depthPercent(),draft.heatHuPerTick(),draft.reservePercent(),draft.minimumHeatHuPerTick());
+                            if(!ReactorAutomationService.validLoadBand(sample,nextSettings,parameters))throw new IllegalArgumentException("no_operating_band");
                         } else { state=state.stop("mode_changed",false); submitFull=true; depth=100; }
                     }
                     if(draft.mode()==Mode.CONSTANT && draft.heatHuPerTick()==0) {
                         if(state.phase()!=Phase.FAULT) state=state.stop("stopped",false);
                         submitFull=true; depth=100;
                     }
-                    settings=new ReactorAutomationPortBlockEntity.Settings(draft.mode(),draft.depthPercent(),draft.heatHuPerTick());
+                    settings=new ReactorAutomationPortBlockEntity.Settings(draft.mode(),draft.depthPercent(),draft.heatHuPerTick(),draft.reservePercent(),draft.minimumHeatHuPerTick());
                     if(port.settingsRevision()==Long.MAX_VALUE) throw new IllegalArgumentException("invalid_value");
                 }
                 case START -> {
@@ -85,6 +93,10 @@ public final class ReactorAdministratorCommands {
                         throw new IllegalArgumentException("startup_interlock");
                     if(sample==null || !ReactorAutomationController.startupHealthy(sample,parameters) || !sample.signalHigh()) throw new IllegalArgumentException("startup_interlock");
                     if(settings.mode()==Mode.MANUAL && !ReactorAutomationController.coolantCanCarryNextTick(sample,settings.manualDepthPercent())) throw new IllegalArgumentException("cold_shortage");
+                    if(settings.mode()==Mode.LOAD_FOLLOW) {
+                        String rejected=ReactorAutomationService.validateLoadStart(owner,sample,parameters);
+                        if(!rejected.isEmpty())throw new IllegalArgumentException(rejected);
+                    }
                     submitFull=true; depth=100;
                     state=new ReactorAutomationState(true,Phase.ARMING,"arming",100,state.authorityEpoch(),0,0,0,0,settings.mode(),true);
                 }
@@ -101,6 +113,7 @@ public final class ReactorAdministratorCommands {
             if(request.action()==Action.APPLY) port.applySettings(settings);
             if(submitFull) ReactorAutomationService.submitDepth(owner,depth,depth==100);
             owner.setAutomationState(next); owner.setAutomationBinding(binding.withEpoch(next.authorityEpoch()));
+            if(request.action()==Action.START&&settings.mode()==Mode.LOAD_FOLLOW)ReactorAutomationService.beginLoadStart(owner);
             ControlRodSliderService.revokeOwnerSessions(owner); ReactorAutomationBlazeBridge.notifyPermission(owner,binding.burnerPos());
             accepted=true; reason="accepted";
         } catch(IllegalArgumentException | ArithmeticException rejected) { reason=rejected.getMessage()==null?"invalid_value":rejected.getMessage(); }
