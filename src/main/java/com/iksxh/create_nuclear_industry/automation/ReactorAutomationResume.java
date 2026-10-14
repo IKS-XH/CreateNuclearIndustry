@@ -47,6 +47,7 @@ public final class ReactorAutomationResume {
         var tag=new CompoundTag();tag.putInt("Version",1);tag.putString("Phase",state.phase().name());tag.putString("Reason",state.reason());
         tag.putInt("CommandedDepth",state.commandedDepthPercent());tag.putInt("AdjustmentAge",state.adjustmentAge());tag.putInt("ArmingAge",state.armingAge());tag.putInt("Mode",state.requestedMode().ordinal());
         tag.putInt("SettingMode",settings.mode().ordinal());tag.putInt("SettingDepth",settings.manualDepthPercent());tag.putInt("SettingHeat",settings.targetHeatHuPerTick());
+        tag.putInt("SettingReserve",settings.reservePercent());tag.putInt("SettingMinimumHeat",settings.minimumHeatHuPerTick());
         tag.putLong("Port",port.asLong());tag.putLong("Burner",burner.asLong());tag.putBoolean("NormalSave",normalSave);return tag;
     }
     /** NBT只读分类结果：state没有运行许可；session只表示待重新核验意图，savedScram保留初始低沿锁。 */
@@ -59,11 +60,13 @@ public final class ReactorAutomationResume {
         if(tag==null)return new Loaded(inactive(scram?Phase.FAULT:Phase.STOPPED,scram?"external_scram":"stopped",true),null,scram);
         try {
             for(String key:List.of("Version","CommandedDepth","AdjustmentAge","ArmingAge","Mode","SettingMode","SettingDepth","SettingHeat"))if(!tag.contains(key,Tag.TAG_INT))throw new IllegalArgumentException();
-            if(!tag.contains("Phase",Tag.TAG_STRING)||!tag.contains("Reason",Tag.TAG_STRING)||!tag.contains("Port",Tag.TAG_LONG)||!tag.contains("Burner",Tag.TAG_LONG)||!tag.contains("NormalSave",Tag.TAG_BYTE)||tag.getAllKeys().size()!=13||tag.getInt("Version")!=1)throw new IllegalArgumentException();
+            boolean loadFields=tag.contains("SettingReserve",Tag.TAG_INT)&&tag.contains("SettingMinimumHeat",Tag.TAG_INT);
+            if(!tag.contains("Phase",Tag.TAG_STRING)||!tag.contains("Reason",Tag.TAG_STRING)||!tag.contains("Port",Tag.TAG_LONG)||!tag.contains("Burner",Tag.TAG_LONG)||!tag.contains("NormalSave",Tag.TAG_BYTE)||tag.getAllKeys().size()!=(loadFields?15:13)||tag.getInt("Version")!=1)throw new IllegalArgumentException();
             var phase=Phase.valueOf(tag.getString("Phase"));var reason=tag.getString("Reason");
             int mode=tag.getInt("Mode"),settingMode=tag.getInt("SettingMode"),depth=tag.getInt("CommandedDepth"),age=tag.getInt("AdjustmentAge"),arming=tag.getInt("ArmingAge");
             if(reason.length()>128||mode<0||mode>=Mode.values().length||settingMode<0||settingMode>=Mode.values().length||age<0||age>1000000||arming<0||arming>1000000)throw new IllegalArgumentException();
-            var settings=new ReactorAutomationPortBlockEntity.Settings(Mode.values()[settingMode],tag.getInt("SettingDepth"),tag.getInt("SettingHeat"));
+            if(Mode.values()[settingMode]==Mode.LOAD_FOLLOW&&!loadFields)throw new IllegalArgumentException();
+            var settings=new ReactorAutomationPortBlockEntity.Settings(Mode.values()[settingMode],tag.getInt("SettingDepth"),tag.getInt("SettingHeat"),loadFields?tag.getInt("SettingReserve"):20,loadFields?tag.getInt("SettingMinimumHeat"):2);
             var intent=new ReactorAutomationState(true,phase,reason,depth,1,age,0,0,arming,Mode.values()[mode],false);
             var port=BlockPos.of(tag.getLong("Port"));var burner=BlockPos.of(tag.getLong("Burner"));
             if(port.getY()!=burner.getY()||port.distManhattan(burner)!=1)throw new IllegalArgumentException();
@@ -72,7 +75,7 @@ public final class ReactorAutomationResume {
             if(phase==Phase.STOPPED)return new Loaded(inactive(Phase.STOPPED,"stopped",true),null,scram);
             if(scram)return new Loaded(inactive(Phase.FAULT,"external_scram",true),null,true);
             if(!tag.getBoolean("NormalSave"))return new Loaded(inactive(Phase.STOPPED,"stopped",true),null,false);
-            if(settings.mode()==Mode.STOP||intent.requestedMode()!=settings.mode()||phase==Phase.MANUAL&&settings.mode()!=Mode.MANUAL||phase==Phase.CONSTANT&&settings.mode()!=Mode.CONSTANT||settings.mode()==Mode.CONSTANT&&settings.targetHeatHuPerTick()==0)throw new IllegalArgumentException();
+            if(settings.mode()==Mode.STOP||intent.requestedMode()!=settings.mode()||phase==Phase.MANUAL&&settings.mode()!=Mode.MANUAL||phase==Phase.CONSTANT&&settings.mode()!=Mode.CONSTANT||(phase==Phase.LOAD_WARMUP||phase==Phase.LOAD_FOLLOW)&&settings.mode()!=Mode.LOAD_FOLLOW||settings.mode()==Mode.CONSTANT&&settings.targetHeatHuPerTick()==0)throw new IllegalArgumentException();
             var session=new Session(intent,settings,port,burner);
             return new Loaded(new ReactorAutomationState(true,Phase.ARMING,"arming",depth,1,age,0,0,arming,settings.mode(),false),session,false);
         } catch(IllegalArgumentException corrupt) {return new Loaded(inactive(Phase.FAULT,"invalid_value",true),null,scram);}
@@ -91,6 +94,8 @@ public final class ReactorAutomationResume {
         private ReactorAutomationBinding currentBinding;
         private Session(ReactorAutomationState intent,ReactorAutomationPortBlockEntity.Settings settings,BlockPos port,BlockPos burner) {this.intent=intent;this.settings=settings;this.port=port;this.burner=burner;}
         public ReactorAutomationState intent() {return intent;}
+        /** 待续接的保存偏好，仅用于当前实例重新核验，不含许可或积分。 */
+        public ReactorAutomationPortBlockEntity.Settings settings() {return settings;}
         /** 本次新实例的初始化tick窗口；重复调用不延长，逆行时间拒绝，离线墙钟不计入。 */
         public boolean withinWait(long time,int timeoutTicks) {
             if(time<0||timeoutTicks<=0||lastTime!=Long.MIN_VALUE&&time<lastTime)return false;
@@ -213,5 +218,7 @@ public final class ReactorAutomationResume {
         var old=s.intent;owner.setAutomationResumeSession(null);
         var next=new ReactorAutomationState(true,old.phase(),old.reason(),old.commandedDepthPercent(),Math.addExact(owner.automationState().authorityEpoch(),1),old.adjustmentAge(),0,0,old.armingAge(),old.requestedMode(),true);
         owner.setAutomationState(next);owner.setAutomationBinding(owner.automationBinding().withEpoch(next.authorityEpoch()));
+        // 首次实际核费仍沿04付款；其后新建有限C0加载等待，不恢复旧积分或网络权，也不要求先建容量。
+        if(old.requestedMode()==Mode.LOAD_FOLLOW)ReactorAutomationService.beginLoadResume(owner);
     }
 }

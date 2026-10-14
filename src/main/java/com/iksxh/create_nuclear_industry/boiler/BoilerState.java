@@ -148,6 +148,44 @@ public final class BoilerState {
         int n = Math.min(Math.max(0, amount), remainingDrain(kind, port, now));
         if (!simulate && n > 0) { removeSteam(kind, n); spend(port, n, now); } return n;
     }
+    /**
+     * 服务端主动管路的同步取汽收据；仅本包控制器可创建，mB/HU来自真实原池扣账。
+     * 预扣同一物理口额度，目标短收在调用返回前撤销未交付部分，不新增可保存库存。
+     */
+    SteamReceipt withdrawSteam(BoilerSteamInventoryKind kind, BlockPos port, int amount, long now) {
+        double before = steamHu(kind);
+        int taken = drainSteam(kind, port, amount, false, now);
+        return new SteamReceipt(this, kind, port.immutable(), now, taken, before - steamHu(kind));
+    }
+    /** 一次性同步收据；只能返还自身未交付mB及同比例真实HU，close全退未结算收据。 */
+    public static final class SteamReceipt implements AutoCloseable {
+        private final BoilerState owner;
+        private final BoilerSteamInventoryKind kind;
+        private final BlockPos port;
+        private final long tick;
+        private final int amount;
+        private final double hu;
+        private boolean settled;
+        private SteamReceipt(BoilerState owner, BoilerSteamInventoryKind kind, BlockPos port, long tick, int amount, double hu) {
+            this.owner = owner; this.kind = kind; this.port = port; this.tick = tick; this.amount = amount; this.hu = hu;
+        }
+        public int amount() { return amount; }
+        public double hu() { return hu; }
+        /** actual是目标本次实际接收mB；不能传任意库存/热量，重复提交拒绝。 */
+        public void settle(int actual) {
+            if (settled) throw new IllegalStateException("蒸汽收据已结算");
+            if (actual < 0 || actual > amount) throw new IllegalArgumentException("实际交付量超过本次蒸汽收据");
+            settled = true;
+            int returned = amount - actual;
+            if (returned == 0) return;
+            int index = kind.ordinal();
+            owner.steamMb[index] += returned;
+            owner.steamHeat[index] += actual == 0 ? hu : hu * ((double)returned / amount);
+            // 原tick其他合法抽取保留；旧收据无权减少下一tick重新建立的口预算。
+            if (owner.flowTick == tick) owner.usedByPort.compute(port.asLong(), (key, used) -> Math.max(0, (used == null ? 0 : used) - returned));
+        }
+        @Override public void close() { if (!settled) settle(0); }
+    }
     /** 库存/已付热/共同压力的真实可抽量；不含本tick口额度，可用作原生压力资格而不会因额度耗尽毁拓扑。 */
     public int removableSteam(BoilerSteamInventoryKind kind) {
         return outputQualified(kind) ? pressureLimitedAmount(kind, minimumPressure()) : 0;

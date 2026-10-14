@@ -41,6 +41,7 @@ public final class ReactorAutomationService {
     public static void onPortRemoved(ReactorInstrumentPortBlockEntity o,ReactorAutomationPortBlockEntity removed) {
         if(o==null || o.getLevel()==null || o.getLevel().isClientSide || o.automationPort()!=removed) return;
         ReactorAutomationHeatSupply.invalidate(o);
+        o.setAutomationLoadFollowSession(null);
         var binding=o.automationBinding();
         o.setAutomationPort(null);o.setAutomationObservation(null);o.automationCurve().clear();
         if(o.automationState().claimed()&&!ReactorAutomationResume.normalShutdownActive(o)) {
@@ -75,12 +76,16 @@ public final class ReactorAutomationService {
             ReactorAutomationBlazeBridge.notifyPermission(o,next.burnerPos());
         }
         if(!o.beginAutomationTick(time)) return;
+        if(o.automationState().requestedMode()==Mode.LOAD_FOLLOW&&!checkLoadIdentity(o,time))return;
         var previous=o.automationObservation();
         if(previous==null) return;
         var observation=observe(o,previous.generatedHeatHuPerTick(),previous.convertedCoolantMb(),previous.newDamage(),previous.sampleTime(),time);
         if (observation.fuelCount() == 0) { revoke(o,"fuel_lost"); return; }
         var decision=ReactorAutomationController.decide(o.automationState(),observation,p);
+        boolean adjustmentDue=o.automationState().adjustmentAge()+1>=p.adjustIntervalTicks();
         applyDecision(o,decision);
+        if(o.automationState().requestedMode()==Mode.LOAD_FOLLOW&&(o.automationState().phase()==Phase.LOAD_WARMUP||o.automationState().phase()==Phase.LOAD_FOLLOW))
+            regulateLoad(o,observation,p,time,adjustmentDue,decision.blockRodLift());
     }
     public static void afterReactorTick(ReactorInstrumentPortBlockEntity o,ReactorServerTick.Result result,ReactorAutomationParameters p,long time) {
         if(!o.automationState().claimed()) return;
@@ -91,11 +96,12 @@ public final class ReactorAutomationService {
         o.recordAutomationDisplayHeat(sample.generatedHeatHuPerTick(),p.displayAverageWindowTicks());
         String trip=ReactorAutomationController.tripReason(sample,p);
         if(!trip.isEmpty()) revoke(o,trip);
-        else if((o.automationState().phase()==Phase.MANUAL || o.automationState().phase()==Phase.CONSTANT)
+        else if((o.automationState().phase()==Phase.MANUAL || o.automationState().phase()==Phase.CONSTANT||o.automationState().phase()==Phase.LOAD_WARMUP||o.automationState().phase()==Phase.LOAD_FOLLOW)
                 && !ReactorAutomationController.coolantCanCarrySnapshot(sample,ReactorAutomationController.warning(sample,p)?ReactorAutomationController.safetySnapshot(sample.snapshot(),0):sample.snapshot())) revoke(o,"cold_shortage");
     }
     public static void onTickFailure(ReactorInstrumentPortBlockEntity o,long time) {
         ReactorAutomationHeatSupply.invalidate(o);
+        o.setAutomationLoadFollowSession(null);
         // 只有正常停服事件已到且服务器实际退出中，解绑才不覆盖最终保存意图；运行中卸载仍FAULT。
         if(ReactorAutomationResume.normalShutdownActive(o)) {o.setAutomationObservation(null);return;}
         o.setAutomationObservation(null);
@@ -171,5 +177,71 @@ public final class ReactorAutomationService {
     /** 旧世界控件入口已撤下；不接受没有当前GUI菜单会话的设置命令。 */
     public static Response applyCommand(ServerPlayer player,Request request) {
         return new Response(false,"gui_required",null,null,request==null?0:request.clientSequence());
+    }
+    /** 正最低档必须存在于当前真实曲线和既有管理员上限内，不能把低于最小正档的HU交给旧选档器。 */
+    public static boolean validLoadBand(ReactorAutomationObservation sample,ReactorAutomationPortBlockEntity.Settings settings,ReactorAutomationParameters p) {
+        if(sample==null)return false;double max=Math.min(p.maxTargetHeatHuPerTick(),Arrays.stream(sample.curve()).max().orElse(0));
+        return ReactorStressPiController.chooseOperatingDepth(sample.curve(),settings.minimumHeatHuPerTick(),settings.minimumHeatHuPerTick(),max).isPresent();
+    }
+    public static String validateLoadStart(ReactorInstrumentPortBlockEntity owner,ReactorAutomationObservation sample,ReactorAutomationParameters p) {
+        com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.loadFollowParameters();
+        if(!validLoadBand(sample,owner.automationPort().settings(),p))return "no_operating_band";
+        if(ReactorStressGaugeService.gauge(owner)==null)return "stress_sample_lost";
+        var stress=ReactorStressGaugeService.sample(owner,owner.getLevel().getGameTime());
+        if(stress.status()==ReactorStressSample.Status.UNAVAILABLE)return "stress_sample_lost";
+        return stress.networkId()!=null&&!ReactorStressGaugeService.available(owner,stress.networkId())?"stress_network_busy":"";
+    }
+    /** START捕获真实表实例，正常重进在04首付后才捕获新表；两者不保存容量/积分/网权。 */
+    public static void beginLoadStart(ReactorInstrumentPortBlockEntity owner) {beginLoad(owner,false);}
+    public static void beginLoadResume(ReactorInstrumentPortBlockEntity owner) {beginLoad(owner,true);}
+    private static void beginLoad(ReactorInstrumentPortBlockEntity owner,boolean loading) {
+        var gauge=ReactorStressGaugeService.gauge(owner);
+        if(gauge==null) {revoke(owner,"stress_sample_lost");return;}
+        owner.setAutomationLoadFollowSession(new ReactorLoadFollowSession(gauge,owner.automationGeneration(),loading));
+        checkLoadIdentity(owner,owner.getLevel().getGameTime());
+    }
+    private static boolean checkLoadIdentity(ReactorInstrumentPortBlockEntity owner,long time) {
+        var session=owner.automationLoadFollowSession();
+        if(session==null) {revoke(owner,"stress_sample_lost");return false;}
+        if(!session.generation().equals(owner.automationGeneration())) {revoke(owner,"structure_changed");return false;}
+        var stress=ReactorStressGaugeService.sample(owner,time);
+        var p=com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.loadFollowParameters();
+        String bad=session.acceptSample(ReactorStressGaugeService.gauge(owner),stress,p.stressEstablishmentTimeoutTicks());
+        if(!bad.isEmpty()) {
+            if(bad.equals("stress_network_changed"))ReactorStressGaugeService.revokeMergedNetwork(owner,stress.networkId());
+            revoke(owner,bad);return false;
+        }
+        // ARMING、C0预热和首付后的加载等待也持已知网的互斥权；null不造网，容量仍不成为04首付前置。
+        if(session.network()!=null&&!ReactorStressGaugeService.claim(owner,session.network())) {revoke(owner,"stress_network_busy");return false;}
+        return true;
+    }
+    /** 库存保护已先执行；加载C0只保当前棒位真实结算，首次预热C0才逐步到最低正档。 */
+    private static void regulateLoad(ReactorInstrumentPortBlockEntity owner,ReactorAutomationObservation observation,ReactorAutomationParameters p,long time,boolean due,boolean warning) {
+        var session=owner.automationLoadFollowSession();if(session==null)return;
+        var settings=owner.automationPort().settings();double max=Math.min(p.maxTargetHeatHuPerTick(),Arrays.stream(observation.curve()).max().orElse(0));
+        if(!validLoadBand(observation,settings,p)) {revoke(owner,"no_operating_band");return;}
+        var state=owner.automationState();
+        if(warning) {
+            if(session.pi().initialized())session.applied(ReactorStressPiController.trackProtected(session.pi(),session.lastSample(),
+                    com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.loadFollowParameters(),observation.curve()[state.commandedDepthPercent()],time));
+            return;
+        }
+        if(!session.established()&&session.loading())return;
+        if(!due)return;
+        session.configure(settings,max);
+        ReactorStressPiController.State nextPi=session.pi();double target=settings.minimumHeatHuPerTick();
+        if(session.established()) {
+            var decision=ReactorStressPiController.step(session.pi(),session.lastSample(),new ReactorStressPiController.Settings(settings.reservePercent(),settings.minimumHeatHuPerTick()),
+                    com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.loadFollowParameters(),max,observation.generatedHeatHuPerTick(),false,time);
+            if(decision.targetHeat().isEmpty()) {revoke(owner,decision.reason());return;}
+            target=decision.targetHeat().orElseThrow();nextPi=decision.nextState();
+        }
+        int desired=ReactorStressPiController.chooseOperatingDepth(observation.curve(),target,settings.minimumHeatHuPerTick(),max).orElseThrow();
+        int current=state.commandedDepthPercent();int bounded=desired<current?Math.max(desired,current-p.maxLiftPercentPerAdjustment()):Math.min(desired,current+p.maxInsertPercentPerAdjustment());
+        if(!ReactorAutomationController.coolantCanCarryNextTick(observation,bounded)) {revoke(owner,"cold_shortage");return;}
+        var phase=session.established()?Phase.LOAD_FOLLOW:Phase.LOAD_WARMUP;
+        var next=new ReactorAutomationState(true,phase,session.established()?"regulating":"stress_waiting",bounded,state.authorityEpoch(),0,0,0,0,Mode.LOAD_FOLLOW,true);
+        applyDecision(owner,new ReactorAutomationController.Decision(next,bounded==current?OptionalInt.empty():OptionalInt.of(bounded),15,next.reason()));
+        if(session.established())session.applied(ReactorStressPiController.trackApplied(nextPi,observation.curve()[bounded],bounded!=desired));
     }
 }
