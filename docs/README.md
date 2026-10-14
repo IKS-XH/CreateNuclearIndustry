@@ -1,5 +1,7 @@
 # 项目文档入口
 
+[应力余量闭环02已准备开工](reviews/2026-10-13/reactor-load-follow-02/DISPATCH.md)：同级reactor-load-follow从已集成main建立，用户当前世界及配置完整携带；交原唯一执行者按现GUI/PI/最低毛HU/库存保护及04续接实施，新增人工门独立。
+
 管理员已按用户联合手测[合入main并跟踪正式JAR](reviews/2026-10-14/reactor-administrator-accepted-integration/INTEGRATION.md)：70来源b3960fe、制品87d9ad4／50d5bd9b…，干净来源唯一assemble12秒exit0，组合窄审无剩余必改；最新美术及其他dirty保持。下一批[应力余量闭环02](superpowers/plans/2026-10-13-reactor-load-follow-02.md)条件授权前置已过，沿当前GUI与原状态续接派发，不重复前批人工门。
 
 管理员03／04及承接01／01R已获用户[联合手测通过](reviews/2026-10-14/reactor-administrator-accepted-integration/ACCEPTANCE.md)，正在按[06卡](superpowers/plans/2026-10-14-reactor-administrator-accepted-integration-06.md)精确组合main最新美术与已验管理员，保护其他dirty和原世界。02条件授权前置已过，执行卡先映射当前GUI、默认维护＋1毛HU及04续接，再开闭环批次；05偶发事故仍保留未复现记录，不冒称代码修复。下方原管理员人工未验状态是交付历史。
