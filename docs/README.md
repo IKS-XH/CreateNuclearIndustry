@@ -1,5 +1,9 @@
 # 项目文档入口
 
+管理员已按用户联合手测[合入main并跟踪正式JAR](reviews/2026-10-14/reactor-administrator-accepted-integration/INTEGRATION.md)：70来源b3960fe、制品87d9ad4／50d5bd9b…，干净来源唯一assemble12秒exit0，组合窄审无剩余必改；最新美术及其他dirty保持。下一批[应力余量闭环02](superpowers/plans/2026-10-13-reactor-load-follow-02.md)条件授权前置已过，沿当前GUI与原状态续接派发，不重复前批人工门。
+
+管理员03／04及承接01／01R已获用户[联合手测通过](reviews/2026-10-14/reactor-administrator-accepted-integration/ACCEPTANCE.md)，正在按[06卡](superpowers/plans/2026-10-14-reactor-administrator-accepted-integration-06.md)精确组合main最新美术与已验管理员，保护其他dirty和原世界。02条件授权前置已过，执行卡先映射当前GUI、默认维护＋1毛HU及04续接，再开闭环批次；05偶发事故仍保留未复现记录，不冒称代码修复。下方原管理员人工未验状态是交付历史。
+
 管理员一次GUI常驻崩溃已按[05只读诊断及六分钟观察](reviews/2026-10-14/reactor-administrator-05/OBSERVATION.md)登记：第一次日志为GL_OUT_OF_MEMORY，没有确定具体代码根因；本次355样本显存有余量且回落，用户确认正常运行、没有再崩溃。记录未复现，不冒称修复，源码/JAR保持dc82候选，不要求继续机械重测；04/03及其承接人工门仍未验，main管理员功能合入和02 PI保持。
 
 管理员04已交[原状态续接候选](reviews/2026-10-14/reactor-administrator-04/CANDIDATE.md)`d217196`／dc82b20a…：正常保存重进保模式、目标、逐棒实际/目标深度与调节进度，不先全插或重新START。最终10/10受影响定向、四纠错真实4/4自然保存、原一次审查及同次复核和唯一增量assemble通过；精确源与JAR已纳入Git。按[04局部清单](reviews/2026-10-14/reactor-administrator-04/CLIENT-CHECKLIST.md)复看保存重进并承接[03其余人工门](reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，不追认通过或推进02/main功能合入；真实区块卸载、独立进程restart和GPU仍未验。

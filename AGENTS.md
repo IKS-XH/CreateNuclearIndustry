@@ -15,6 +15,10 @@
 
 ## 项目治理
 
+- 2026-10-14管理员联合手测已通过并按[06集成记录](docs/reviews/2026-10-14/reactor-administrator-accepted-integration/INTEGRATION.md)合入main：70来源b3960fe，正式3193873B／50d5bd9b…包提交87d9ad4；干净Git导出6111文件精确、唯一assemble12秒exit0，原组合审查/同次制品补核无必改，661class／1548资源及Manifest零漂移。最新Logo/原物品清单/语言旧键保留，其他dirty与全部世界配置保持，原26cb/dc82包保留，不重跑原测试。02条件前置已过，当前GUI/维护＋1毛HU/04续接映射已入卡，建立同级候选携带当前已保存世界后派原执行者；本包不含PI。05偶发事故不称已修复，下方集成中/人工待验是历史时点。
+
+- 用户2026-10-14明确保存重进手测全过，随后确认管理员其余项目也全部通过，按[联合人工验收](docs/reviews/2026-10-14/reactor-administrator-accepted-integration/ACCEPTANCE.md)关闭当前03/04及承接的01/01R人工门，不重问或重跑原功能套。当前候选d217196/dc82零包漂移，当前世界已12:46:57正常保存退出。按[06精确集成卡](docs/superpowers/plans/2026-10-14-reactor-administrator-accepted-integration-06.md)交原唯一执行者，只接70个已审来源净差异，保留main最新美术和其他dirty；先源提交再从干净Git树唯一必要assemble，原审查者只组合差异及制品补核，正式JAR跟踪Git。02条件授权前置已过，先映射当前GUI/维护＋1默认毛HU/04续接再派，未经修卡不扩闭环。05事故仍未归因，仅保留未复现，不要求机械重测；本条替代下方原人工未过的历史状态。
+
 - 管理员START后GUI常驻一次崩溃按[05卡](docs/superpowers/plans/2026-10-14-reactor-administrator-client-crash-05.md)完成[只读诊断与实际观察](docs/reviews/2026-10-14/reactor-administrator-05/OBSERVATION.md)。原事故明确GL_OUT_OF_MEMORY/buffer data分配失败、无Java栈，未归因到具体源码；原执行者冻结事故后15日志/38世界/27配置，唯一3秒观察工具烟测通过。用户自行重开客户端并确认START常驻，PM六分钟355样本显示游戏全程alive、全卡2050～2487MiB/8192、游戏WDDM独立峰值约535MiB、有波动回落；用户明确“正常运行，没有再崩溃”。仅登记本次未复现，不称已修复。源/JAR仍d217196/dc82、无测试或构建/环境改变；原事故、脚本与曲线保留，用户新存档不回滚。待再发时有证据再精确扩卡，不要求机械重测；04/03/01/01R其余人工门、main功能合入及02保持未过。
 
 - 管理员04按用户确认的[原状态续接卡](docs/superpowers/plans/2026-10-14-reactor-administrator-resume-04.md)已交[原树候选](docs/reviews/2026-10-14/reactor-administrator-04/CANDIDATE.md)`d217196`／dc82b20a…：正常保存重进保模式、目标、逐棒actual/target及调节进度，加载冻结本机结算，经当前核验与真实首费后直接续接；STOP/FAULT/SCRAM和运行中真实失联保护保持。原唯一执行者及一次原组合审查/同次差异复核关闭稀疏空燃料列误拒和反馈期代际变化两项Important，无剩余必改。最终10/10定向、四整改真实4/4自然保存exit0、唯一1秒增量assemble；原11/最终region证据分阶段复用，不称新15项整套。PM实核12来源/661class/1546资源及生成MANIFEST共2208文件零漂移，本批测试载荷无泄漏，源与JAR已净提交；38世界/27配置/main26cb18d0…正式包保持。当前只待04及03/01/01R承接人工门，真正区块卸载/进程restart/GPU未验；不推进02或main功能合入、不研究旧版迁移，下方04执行中/879c包为历史。

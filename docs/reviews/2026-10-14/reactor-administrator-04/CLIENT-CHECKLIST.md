@@ -1,6 +1,6 @@
 # 管理员04保存重进局部复看
 
-状态：内部完成，候选源码`d217196`／JAR `dc82b20a…`已提交，等待本次局部手测；当前不是手测通过记录。正式源码/JAR身份见[CANDIDATE](CANDIDATE.md)。
+状态（2026-10-14）：用户明确“保存重进的手动测试都通过了”，本组人工门关闭，实际接受候选`d217196`／dc82b20a…。依据见[联合验收](../reactor-administrator-accepted-integration/ACCEPTANCE.md)，下表保留当时测试说明，不补造用户未给出的现场数值。正式身份见[CANDIDATE](CANDIDATE.md)。
 
 沿用 `E:/MyMC/NewMod/Create_NuclearIndustry-reactor-automation` 的当前测试世界，不搬档、不回写main。
 

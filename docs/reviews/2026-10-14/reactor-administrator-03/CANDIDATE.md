@@ -1,6 +1,6 @@
 # 反应堆管理员03客户端候选
 
-2026-10-14。本批内部交付完成，原独立审查者同次窄复核关闭四项Important与一项Minor，无剩余必改。33条已审来源净提交原候选`78acd5d`，绑定下方879c制品；当前待集中客户端手测，main集成及02闭环均未完成。
+2026-10-14验收更新：用户确认保存重进与管理员其余项目全部通过，见[联合验收](../reactor-administrator-accepted-integration/ACCEPTANCE.md)。实际已验组合为d217196/dc82b20a…，已[精确合入main](../reactor-administrator-accepted-integration/INTEGRATION.md)；02条件前置已过，新增闭环仍未实现。下方33来源/78acd5d/879c及原审查为03内部交付历史，不替换回旧包或重复测试。
 
 ## 功能与操作
 

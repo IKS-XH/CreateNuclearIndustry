@@ -1,6 +1,6 @@
 # 管理员03集中客户端复看
 
-状态：内部交付完成，待集中手测。源码`78acd5d`／879c3d72…候选由[CANDIDATE](CANDIDATE.md)绑定；增量包与同次审查已完成，此清单承接01/01R未关闭的人工门，用户验收前不得登记通过。
+状态（2026-10-14）：用户确认管理员其余项目全部通过，按[联合验收](../reactor-administrator-accepted-integration/ACCEPTANCE.md)关闭本清单及承接的01/01R门。实际接受组合为`d217196`／dc82b20a…，本页下方是当时的操作清单，不改写或重跑原自动证据。保存重进另已明确全过。
 
 沿用`E:/MyMC/NewMod/Create_NuclearIndustry-reactor-automation`及其中当前测试世界，不必重搭16³；GUI最大截面可利用现有大堆观察。主目录世界不回写。
 
