@@ -15,7 +15,7 @@
 ### 精确写集
 
 - 四个生产文件：`src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerControllerBlockEntity.java`、`boiler/BoilerState.java`、`industrial/IndustrialTopology.java`、`industrial/IndustrialNetworkScheduler.java`（后三项相对同一Java包根）。不得重构工业泵缓存/许可、Create禁运Mixin、现有注册/资源/配置或其他设备。
-- 定向测试：新增`src/main/java/com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests.java`，复用既有工业空模板、单独测试域；原`src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerDualSteamInventoryTest.java`只新增收据/退款/零写行为测试。不生成新空模板。
+- 定向测试：新增`src/main/java/com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests.java`，复用既有工业空模板；原`src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerDualSteamInventoryTest.java`只新增收据/退款/零写行为测试。不生成新空模板。锁定NF按模板namespace筛域，且MC先放模板再执行BeforeBatch，不能借内存别名隔离；因此复用原industrial域一次组合实际原代表与新增例，日志分开统计，不改生产注册或注入测试框架。真实RED已核本版本共24例，其中新增1失败、原23通过（包含两个跨块实例），不能沿历史20例计数。
 - `build.gradle`仅在既有JAR排除块加新真实测试类排除，不更改运行时、依赖、版本、测试任务或旧排除项。
 - 报告仅本批`docs/reviews/2026-10-14/boiler-steam-output-01/`下研究、实施、候选、局部清单、审查及本批报告目录。允许原`build/reports/boiler-steam-output-01/**`下增加工具/日志/冻结证据，不改原只读输入或02冻结。源码和正式制品提交由PM进行。
 
@@ -34,6 +34,18 @@
 按实际受影响范围运行账本定向JUnit和原工业代表域，不跑全部工程/管理员/美术旧矩阵。冻结RED/首次失败与最终GREEN完整日志，真实服务器断言及自然保存退出分开记录。最后一次必要增量assemble，核当前生产源码/输出class/资源与正式JAR全载荷，明确新真实类不进入包；原86225包备份保留。稳定后交原工业审查者一次规格/质量组合窄审，若有必改只同次差异复核及必要受影响检查/纠错包。
 
 交付候选留原reactor-load-follow树，正式JAR纳Git；不合main、不覆盖世界/配置。局部手测只要求现有无外置泵汽路恢复输出与过滤/下限观察，不重开已验管理员；02闭环集中人工门仍独立。
+
+### 同次审查整改
+
+初34/34真实、13/13收据及12增量assemble/13冻结保留。同一组合窄审仅发现1项Important：两组先后与组内首位共用cursor导致奇偶耦合，在两汽源与一泵共享4096瓶颈时可让一个汽源永久零交付。原执行者只在既有Scheduler及新真实测试类整改，让组内起点在本组获得优先机会时独立推进；同速逐tick加一的两个计数不是修复。先用原实现证明饥饿RED，再核多周期两个汽源及泵都获得正实收、每tick合计不超过4096。复用未受影响收据与原初证据，仅必要真实组合及纠错增量包/新冻结；原审查者同次差异补核，不另开审查或重跑全量。
+
+来源组整改14真实RED/15真实35项GREEN已核，17冻结及8c67包保留。同一次Important还有目标侧的同因缺口：主动源目标首位仍依赖世界tick奇偶，可能使此源始终交付给同一个目标。仅继续原Scheduler与新真实类，使每个主动源的目标轮转按自身实际交付机会推进；无额度/零交付不消耗轮次。窄验须区分本主动源与泵的交付，证明此源对两个持续可收目标都正交付，不把另一罐可能收到的泵供液误计为本源公平。原世界/原包/来源组正确性和未受影响收据证据复用，必要本项RED→GREEN及纠错增量包后同次最终差异复核。
+
+## 最终交付：只待局部手测
+
+源码与最终JAR已由PM提交原候选`c71d690`，主线只登记文档。19最终36/36真实自然保存exit0，包含原23和新增13；收据13/13未变证据复用。20第三次必要纠错assemble与21冻结通过，最终3248823B／`f23b5cf49a3bc6ec464f14efb722af1c65067658a51b378e336379be0bab0f57`。原组合窄审同次补核关闭唯一轮转Important，PM独立核2078源、2230正式JAR载荷与Git blob零差异，9输入实际哈希不变；原86225/e93/8c67及全部RED保留。main正式50d5包、其他dirty与世界配置保持。
+
+按[候选](../../reviews/2026-10-14/boiler-steam-output-01/CANDIDATE.md)在原reactor-load-follow目录/世界复看无泵汽路、过滤与出汽下限。未反馈前不登记局部或02人工通过，不合main、不追加测试构建或其他主线。
 
 ## 当前合同与边界
 
