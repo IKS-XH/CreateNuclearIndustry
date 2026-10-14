@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 管理员START后GUI常驻一次崩溃按[05卡](docs/superpowers/plans/2026-10-14-reactor-administrator-client-crash-05.md)完成[只读诊断与实际观察](docs/reviews/2026-10-14/reactor-administrator-05/OBSERVATION.md)。原事故明确GL_OUT_OF_MEMORY/buffer data分配失败、无Java栈，未归因到具体源码；原执行者冻结事故后15日志/38世界/27配置，唯一3秒观察工具烟测通过。用户自行重开客户端并确认START常驻，PM六分钟355样本显示游戏全程alive、全卡2050～2487MiB/8192、游戏WDDM独立峰值约535MiB、有波动回落；用户明确“正常运行，没有再崩溃”。仅登记本次未复现，不称已修复。源/JAR仍d217196/dc82、无测试或构建/环境改变；原事故、脚本与曲线保留，用户新存档不回滚。待再发时有证据再精确扩卡，不要求机械重测；04/03/01/01R其余人工门、main功能合入及02保持未过。
+
 - 管理员04按用户确认的[原状态续接卡](docs/superpowers/plans/2026-10-14-reactor-administrator-resume-04.md)已交[原树候选](docs/reviews/2026-10-14/reactor-administrator-04/CANDIDATE.md)`d217196`／dc82b20a…：正常保存重进保模式、目标、逐棒actual/target及调节进度，加载冻结本机结算，经当前核验与真实首费后直接续接；STOP/FAULT/SCRAM和运行中真实失联保护保持。原唯一执行者及一次原组合审查/同次差异复核关闭稀疏空燃料列误拒和反馈期代际变化两项Important，无剩余必改。最终10/10定向、四整改真实4/4自然保存exit0、唯一1秒增量assemble；原11/最终region证据分阶段复用，不称新15项整套。PM实核12来源/661class/1546资源及生成MANIFEST共2208文件零漂移，本批测试载荷无泄漏，源与JAR已净提交；38世界/27配置/main26cb18d0…正式包保持。当前只待04及03/01/01R承接人工门，真正区块卸载/进程restart/GPU未验；不推进02或main功能合入、不研究旧版迁移，下方04执行中/879c包为历史。
 
 - 用户2026-10-14要求“合并最新的美术分支；把最终构建产物jar也纳入git管理中”，已按[集成记录](docs/reviews/2026-10-14/latest-art-jar-integration/INTEGRATION.md)完成：美术1151非日志／缓存来源净提交88b8fd2，main补齐166个文档／宣传／历史来源，保留已更新Java／资源／窗口工具及物品列表，双亲合并48dc8d1。干净已提交Git树标准build52秒exit0，609通过、3项显式Sodium夹具按设计跳过、0失败；首轮导出与构建重叠的protected编译失败保留，没有功能修补。正式3049912B／26cb18d0…JAR已在build/libs跟踪，制品提交4290bcb，609class／1543资源与输出零漂移、当前文件等于Git blob；原34bedc包备份、107无关dirty及全部世界／配置保持。管理员879c候选和01／01R／03人工门、02等待不变，下方main旧包身份为历史。正式JAR为明确生成物特例，其他build／缓存不跟踪，不自动发布或删来源树。
