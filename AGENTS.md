@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 管理员04按用户确认的[原状态续接卡](docs/superpowers/plans/2026-10-14-reactor-administrator-resume-04.md)已交[原树候选](docs/reviews/2026-10-14/reactor-administrator-04/CANDIDATE.md)`d217196`／dc82b20a…：正常保存重进保模式、目标、逐棒actual/target及调节进度，加载冻结本机结算，经当前核验与真实首费后直接续接；STOP/FAULT/SCRAM和运行中真实失联保护保持。原唯一执行者及一次原组合审查/同次差异复核关闭稀疏空燃料列误拒和反馈期代际变化两项Important，无剩余必改。最终10/10定向、四整改真实4/4自然保存exit0、唯一1秒增量assemble；原11/最终region证据分阶段复用，不称新15项整套。PM实核12来源/661class/1546资源及生成MANIFEST共2208文件零漂移，本批测试载荷无泄漏，源与JAR已净提交；38世界/27配置/main26cb18d0…正式包保持。当前只待04及03/01/01R承接人工门，真正区块卸载/进程restart/GPU未验；不推进02或main功能合入、不研究旧版迁移，下方04执行中/879c包为历史。
+
 - 用户2026-10-14要求“合并最新的美术分支；把最终构建产物jar也纳入git管理中”，已按[集成记录](docs/reviews/2026-10-14/latest-art-jar-integration/INTEGRATION.md)完成：美术1151非日志／缓存来源净提交88b8fd2，main补齐166个文档／宣传／历史来源，保留已更新Java／资源／窗口工具及物品列表，双亲合并48dc8d1。干净已提交Git树标准build52秒exit0，609通过、3项显式Sodium夹具按设计跳过、0失败；首轮导出与构建重叠的protected编译失败保留，没有功能修补。正式3049912B／26cb18d0…JAR已在build/libs跟踪，制品提交4290bcb，609class／1543资源与输出零漂移、当前文件等于Git blob；原34bedc包备份、107无关dirty及全部世界／配置保持。管理员879c候选和01／01R／03人工门、02等待不变，下方main旧包身份为历史。正式JAR为明确生成物特例，其他build／缓存不跟踪，不自动发布或删来源树。
 
 - 管理员03按用户2026-10-14开工授权已交[集中客户端候选](docs/reviews/2026-10-14/reactor-administrator-03/CANDIDATE.md)`78acd5d`／879c3d72…：总览／堆芯／保护GUI、仅全部可用燃料耗尽才缺料保持、默认1HU/t真实核热值班与普通燃料冷启动。原唯一执行者及一次组合审查／同次窄复核关闭四项Important与一项Minor；最终21/21受影响定向、两个新增真实启动窗口2/2自然保存exit0、必要1秒纠错assemble通过，旧热工／六业务与保存挂起证据按阶段保留。PM实核33源／658class／1542资源零漂移、两测试域无文件载荷泄漏，已净提交候选；main管理员源码／34bedc81…包与世界／配置保持。当前只待[03集中手测](docs/reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，01／01R未验门合并承接、不追认通过，02闭环及main合入不推进；下方执行中／旧四控件／旧制品描述为交付历史。

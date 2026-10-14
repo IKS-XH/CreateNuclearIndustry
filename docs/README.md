@@ -1,5 +1,7 @@
 # 项目文档入口
 
+管理员04已交[原状态续接候选](reviews/2026-10-14/reactor-administrator-04/CANDIDATE.md)`d217196`／dc82b20a…：正常保存重进保模式、目标、逐棒实际/目标深度与调节进度，不先全插或重新START。最终10/10受影响定向、四纠错真实4/4自然保存、原一次审查及同次复核和唯一增量assemble通过；精确源与JAR已纳入Git。按[04局部清单](reviews/2026-10-14/reactor-administrator-04/CLIENT-CHECKLIST.md)复看保存重进并承接[03其余人工门](reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，不追认通过或推进02/main功能合入；真实区块卸载、独立进程restart和GPU仍未验。
+
 最新美术分支已[合并并纳入正式JAR版本管理](reviews/2026-10-14/latest-art-jar-integration/INTEGRATION.md)：高清Logo、MC百科R1封面与缺少的可编辑／历史交付来源已补齐；双亲合并48dc8d1，正式26cb18d0…包提交4290bcb。干净Git树标准build52秒exit0，609通过／3项显式Sodium夹具跳过／0失败，主目录107个无关dirty保持。管理员03仍留原候选，以下主34bedc身份为上一制品时点。
 
 管理员03已交[三页GUI／连续换料／核热值班候选](reviews/2026-10-14/reactor-administrator-03/CANDIDATE.md)`78acd5d`／879c3d72…，原唯一执行者及一次组合审查的整改项已关闭。最终21/21受影响定向、两个新增启动窗口2/2自然保存exit0和必要增量包通过，旧六业务／热工及保存挂起按阶段保留；33来源与当前制品零漂移。继续原候选目录和存档做[03集中手测](reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，01／01R未验门承接同一清单，main管理员源码／包不改、02仍未派发。下方旧控件及包身份是历史交付时点。
