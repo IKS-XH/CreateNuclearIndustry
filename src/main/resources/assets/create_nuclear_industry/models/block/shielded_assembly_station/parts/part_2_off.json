@@ -1,23 +1,83 @@
 {
-  "credit": "EXT-A-FUEL-02E",
+  "credit": "ART-SHIELDED-ASSEMBLY-15B 已选C八格外壳",
   "ambientocclusion": true,
   "textures": {
-    "lead": "create_nuclear_industry:block/shielded_assembly_multiblock_lead",
-    "steel": "create_nuclear_industry:block/shielded_assembly_multiblock_steel",
-    "brass": "create_nuclear_industry:block/shielded_assembly_multiblock_brass",
-    "window": "create_nuclear_industry:block/shielded_assembly_multiblock_window",
-    "deck": "create_nuclear_industry:block/shielded_assembly_multiblock_deck",
-    "top": "create_nuclear_industry:block/shielded_assembly_multiblock_top",
-    "bottom": "create_nuclear_industry:block/shielded_assembly_multiblock_bottom",
-    "port": "create_nuclear_industry:block/shielded_assembly_multiblock_port",
-    "lamp_off": "create_nuclear_industry:block/shielded_assembly_multiblock_lamp_off",
-    "lamp_on": "create_nuclear_industry:block/shielded_assembly_multiblock_lamp_on",
-    "particle": "create_nuclear_industry:block/shielded_assembly_multiblock_lead"
+    "lead": "create_nuclear_industry:block/shielded_assembly_15c_lead",
+    "steel": "create_nuclear_industry:block/shielded_assembly_15c_steel",
+    "machined": "create_nuclear_industry:block/shielded_assembly_15c_machined",
+    "fastener": "create_nuclear_industry:block/shielded_assembly_15c_fastener",
+    "brass": "create_nuclear_industry:block/shielded_assembly_15c_brass",
+    "window": "create_nuclear_industry:block/shielded_assembly_15c_window",
+    "lamp_off": "create_nuclear_industry:block/shielded_assembly_15c_lamp_off",
+    "lamp_on": "create_nuclear_industry:block/shielded_assembly_15c_lamp_on",
+    "deck": "create_nuclear_industry:block/shielded_assembly_15c_deck",
+    "particle": "create_nuclear_industry:block/shielded_assembly_15c_lead"
   },
   "elements": [
     {
+      "name": "主控轴孔围台",
       "from": [
-        2,
+        0,
+        0,
+        0
+      ],
+      "to": [
+        6,
+        4,
+        16
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            6,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        10,
         0,
         0
       ],
@@ -27,20 +87,20 @@
         16
       ],
       "faces": {
-        "west": {
+        "south": {
           "texture": "#steel",
           "uv": [
-            0,
+            10,
             12,
             16,
             16
           ]
         },
-        "down": {
+        "west": {
           "texture": "#steel",
           "uv": [
-            2,
             0,
+            12,
             16,
             16
           ]
@@ -48,17 +108,17 @@
         "up": {
           "texture": "#steel",
           "uv": [
-            2,
+            10,
             0,
             16,
             16
           ]
         },
-        "south": {
+        "down": {
           "texture": "#steel",
           "uv": [
-            2,
-            12,
+            10,
+            0,
             16,
             16
           ]
@@ -66,23 +126,24 @@
       }
     },
     {
+      "name": "主控轴孔围台",
       "from": [
-        0,
+        6,
         0,
         0
       ],
       "to": [
-        2,
+        10,
         4,
-        14
+        16
       ],
       "faces": {
-        "west": {
+        "south": {
           "texture": "#steel",
           "uv": [
-            0,
+            6,
             12,
-            14,
+            10,
             16
           ]
         },
@@ -91,40 +152,41 @@
           "uv": [
             0,
             12,
-            14,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            0,
+            10,
             16
           ]
         },
         "down": {
           "texture": "#steel",
           "uv": [
+            6,
             0,
-            0,
-            2,
-            14
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            2,
-            14
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            12,
-            2,
+            10,
             16
           ]
         }
       }
     },
     {
+      "name": "检修下座",
       "from": [
         1,
         4,
@@ -132,28 +194,28 @@
       ],
       "to": [
         16,
-        7,
+        6.5,
         15
       ],
       "faces": {
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            9.5,
+            16,
+            12
+          ]
+        },
         "west": {
           "texture": "#lead",
           "uv": [
             0,
-            9,
+            9.5,
             15,
             12
           ]
         },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            0,
-            16,
-            15
-          ]
-        },
         "up": {
           "texture": "#lead",
           "uv": [
@@ -163,1398 +225,510 @@
             15
           ]
         },
-        "south": {
+        "down": {
           "texture": "#lead",
           "uv": [
             1,
-            9,
-            16,
-            12
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        7,
-        0
-      ],
-      "to": [
-        5,
-        8,
-        11
-      ],
-      "faces": {
-        "west": {
-          "texture": "#deck",
-          "uv": [
-            0,
-            8,
-            11,
-            9
-          ]
-        },
-        "down": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            0,
-            5,
-            11
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        7,
-        11
-      ],
-      "to": [
-        5,
-        8,
-        13
-      ],
-      "faces": {
-        "west": {
-          "texture": "#deck",
-          "uv": [
-            11,
-            8,
-            13,
-            9
-          ]
-        },
-        "down": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            11,
-            5,
-            13
-          ]
-        },
-        "south": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            8,
-            5,
-            9
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        0
-      ],
-      "to": [
-        5,
-        9,
-        11
-      ],
-      "faces": {
-        "west": {
-          "texture": "#deck",
-          "uv": [
-            0,
-            7,
-            11,
-            8
-          ]
-        },
-        "up": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            0,
-            5,
-            11
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        11
-      ],
-      "to": [
-        5,
-        9,
-        13
-      ],
-      "faces": {
-        "up": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            11,
-            5,
-            13
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5,
-        7,
-        0
-      ],
-      "to": [
-        16,
-        8,
-        11
-      ],
-      "faces": {
-        "down": {
-          "texture": "#deck",
-          "uv": [
-            5,
             0,
             16,
-            11
+            15
           ]
         }
       }
     },
     {
-      "from": [
-        5,
-        7,
-        11
-      ],
-      "to": [
-        16,
-        8,
-        13
-      ],
-      "faces": {
-        "down": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            11,
-            16,
-            13
-          ]
-        },
-        "south": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            8,
-            16,
-            9
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5,
-        8,
-        0
-      ],
-      "to": [
-        16,
-        9,
-        11
-      ],
-      "faces": {
-        "up": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            0,
-            16,
-            11
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5,
-        8,
-        11
-      ],
-      "to": [
-        16,
-        9,
-        13
-      ],
-      "faces": {
-        "up": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            11,
-            16,
-            13
-          ]
-        },
-        "south": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            7,
-            16,
-            8
-          ]
-        }
-      }
-    },
-    {
+      "name": "分段下托层",
       "from": [
         2,
-        8,
+        6.5,
         0
-      ],
-      "to": [
-        3,
-        10,
-        11
-      ],
-      "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            6,
-            11,
-            8
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            0,
-            3,
-            11
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        8,
-        11
-      ],
-      "to": [
-        3,
-        10,
-        12
-      ],
-      "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            11,
-            6,
-            12,
-            8
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            11,
-            3,
-            12
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        8,
-        12
-      ],
-      "to": [
-        3,
-        10,
-        13
-      ],
-      "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            12,
-            6,
-            13,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            12,
-            3,
-            13
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            12,
-            3,
-            13
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            6,
-            3,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        0
-      ],
-      "to": [
-        5,
-        10,
-        11
-      ],
-      "faces": {
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            6,
-            11,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            0,
-            5,
-            11
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            0,
-            5,
-            11
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        11
-      ],
-      "to": [
-        5,
-        10,
-        12
-      ],
-      "faces": {
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            11,
-            6,
-            12,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        12
-      ],
-      "to": [
-        5,
-        10,
-        13
-      ],
-      "faces": {
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            12,
-            6,
-            13,
-            8
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            6,
-            5,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        11
       ],
       "to": [
         16,
-        10,
+        8,
         14
       ],
       "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            11,
-            6,
-            14,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            11,
-            16,
-            14
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            11,
-            16,
-            14
-          ]
-        },
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            6,
-            16,
-            8
-          ]
-        },
         "south": {
-          "texture": "#brass",
+          "texture": "#steel",
           "uv": [
-            3,
-            6,
-            16,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4,
-        12,
-        13
-      ],
-      "to": [
-        6,
-        16,
-        15
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            13,
-            0,
-            15,
-            4
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            13,
-            6,
-            15
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            0,
-            6,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4,
-        12,
-        15
-      ],
-      "to": [
-        6,
-        16,
-        16
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            15,
-            0,
-            16,
-            4
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            15,
-            6,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            0,
-            6,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        6,
-        12,
-        13
-      ],
-      "to": [
-        12,
-        16,
-        15
-      ],
-      "faces": {
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            13,
-            12,
-            15
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            0,
-            12,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        6,
-        12,
-        15
-      ],
-      "to": [
-        12,
-        16,
-        16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            15,
-            12,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        12,
-        12,
-        13
-      ],
-      "to": [
-        16,
-        16,
-        15
-      ],
-      "faces": {
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            13,
-            16,
-            15
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        12,
-        12,
-        15
-      ],
-      "to": [
-        16,
-        16,
-        16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            15,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        12,
-        14,
-        12
-      ],
-      "to": [
-        16,
-        16,
-        13
-      ],
-      "faces": {
-        "west": {
-          "texture": "#window",
-          "uv": [
-            12,
-            0,
-            13,
-            2
-          ]
-        },
-        "down": {
-          "texture": "#window",
-          "uv": [
-            12,
-            12,
-            16,
-            13
-          ]
-        },
-        "north": {
-          "texture": "#window",
-          "uv": [
-            0.0,
-            12.0,
+            2,
             8.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#window",
-          "uv": [
-            12,
-            0,
             16,
-            2
+            9.5
           ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        8,
-        0
-      ],
-      "to": [
-        1,
-        10,
-        6
-      ],
-      "faces": {
+        },
         "west": {
-          "texture": "#lead",
+          "texture": "#steel",
           "uv": [
             0,
-            6,
-            6,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            0,
-            1,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        8,
-        6
-      ],
-      "to": [
-        1,
-        10,
-        12
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            6,
-            12,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            6,
-            1,
-            12
-          ]
-        },
-        "south": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            6,
-            1,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        10,
-        0
-      ],
-      "to": [
-        1,
-        16,
-        6
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            0,
-            6,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        8,
-        0
-      ],
-      "to": [
-        3,
-        10,
-        6
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            6,
-            6,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            0,
-            3,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        8,
-        6
-      ],
-      "to": [
-        3,
-        10,
-        12
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            6,
-            12,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            6,
-            3,
-            12
-          ]
-        },
-        "south": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            6,
-            3,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        10,
-        0
-      ],
-      "to": [
-        3,
-        16,
-        6
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            0,
-            6,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        10,
-        6
-      ],
-      "to": [
-        3,
-        16,
-        12
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            0,
-            12,
-            6
-          ]
-        },
-        "south": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            0,
-            3,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        10,
-        6
-      ],
-      "to": [
-        1,
-        16,
-        12
-      ],
-      "faces": {
-        "west": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#port",
-          "uv": [
-            0,
-            6,
-            1,
-            12
+            8.0,
+            14,
+            9.5
           ]
         },
         "up": {
-          "texture": "#port",
+          "texture": "#steel",
           "uv": [
-            0,
-            6,
-            1,
-            12
-          ]
-        },
-        "north": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
-            1,
-            6
-          ]
-        },
-        "south": {
-          "texture": "#port",
-          "uv": [
-            0,
+            2,
             0,
             16,
-            16
+            14
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            0,
+            16,
+            14
           ]
         }
       }
     },
     {
+      "name": "室内工作底板",
       "from": [
-        6,
-        10,
-        15
+        3,
+        9.5,
+        0
       ],
       "to": [
+        16,
+        10.5,
+        13
+      ],
+      "faces": {
+        "south": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            5.5,
+            16,
+            6.5
+          ]
+        },
+        "west": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            5.5,
+            13,
+            6.5
+          ]
+        },
+        "up": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            0,
+            16,
+            13
+          ]
+        },
+        "down": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            0,
+            16,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "name": "中央夹具静止座",
+      "from": [
         12,
+        10.5,
+        0
+      ],
+      "to": [
+        16,
+        11,
+        6
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            5.0,
+            16,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            5.0,
+            6,
+            5.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            0,
+            16,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            0,
+            16,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "左后轨",
+      "from": [
+        4.5,
+        10.5,
+        8
+      ],
+      "to": [
+        6,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            0.0,
+            6.0,
+            5.5
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            0.0,
+            6.0,
+            5.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            0.0,
+            11,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            0.0,
+            11,
+            5.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            8,
+            6.0,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        0,
+        8,
+        13
+      ],
+      "to": [
+        3,
         16,
         16
       ],
       "faces": {
-        "west": {
-          "texture": "#port",
+        "north": {
+          "texture": "#steel",
           "uv": [
             0,
             0,
-            16,
-            16
+            3,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
           ]
         },
         "east": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#port",
-          "uv": [
-            6,
-            15,
-            12,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#port",
-          "uv": [
-            6,
-            15,
-            12,
-            16
-          ]
-        },
-        "north": {
-          "texture": "#port",
-          "uv": [
-            6,
-            0,
-            12,
-            6
-          ]
-        },
-        "south": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5,
-        10,
-        9
-      ],
-      "to": [
-        16,
-        11,
-        13
-      ],
-      "faces": {
-        "west": {
           "texture": "#steel",
           "uv": [
-            9,
-            5,
             13,
-            6
+            0,
+            16,
+            8
           ]
         },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            5,
-            9,
-            16,
-            13
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            5,
-            9,
-            16,
-            13
-          ]
-        },
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            5,
-            5,
-            16,
-            6
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            5,
-            5,
-            16,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        12,
-        9,
-        0
-      ],
-      "to": [
-        16,
-        11,
-        6
-      ],
-      "faces": {
         "west": {
-          "texture": "#brass",
+          "texture": "#steel",
           "uv": [
+            13,
             0,
-            5,
-            6,
-            7
+            16,
+            8
           ]
         },
         "down": {
-          "texture": "#brass",
+          "texture": "#steel",
           "uv": [
-            12,
             0,
-            16,
-            6
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            12,
-            0,
-            16,
-            6
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            12,
-            5,
-            16,
-            7
+            13,
+            3,
+            16
           ]
         }
       }
     },
     {
+      "name": "侧模块内收护板",
       "from": [
-        0.10000000000000009,
-        0.03125,
-        14.149999999999999
+        0.5,
+        8,
+        0.5
       ],
       "to": [
         2.5,
-        3.96875,
-        15.25
+        16,
+        13
       ],
       "faces": {
         "north": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.10000000000000009,
-            12.03125,
+            0.5,
+            0,
             2.5,
-            15.96875
+            8
           ]
         },
         "south": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.10000000000000009,
-            12.03125,
+            0.5,
+            0,
             2.5,
-            15.96875
+            8
           ]
         },
         "east": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            14.149999999999999,
-            12.03125,
-            15.25,
-            15.96875
+            0.5,
+            0,
+            13.0,
+            8
           ]
         },
         "west": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            14.149999999999999,
-            12.03125,
-            15.25,
-            15.96875
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0.10000000000000009,
-            14.149999999999999,
-            2.5,
-            15.25
+            0.5,
+            0,
+            13.0,
+            8
           ]
         },
         "down": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.10000000000000009,
-            14.149999999999999,
+            0.5,
+            0.5,
             2.5,
-            15.25
+            13.0
           ]
         }
-      },
-      "rotation": {
-        "origin": [
-          1.3,
-          0.03125,
-          14.7
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
       }
     },
     {
+      "name": "侧模块凹接缝",
       "from": [
-        0.19999999999999973,
-        7,
-        12.849999999999998
+        0.75,
+        8,
+        0
       ],
       "to": [
-        4.4,
+        2.25,
         16,
-        14.55
+        0.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            0,
+            2.25,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            0,
+            2.25,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块护板",
+      "from": [
+        3,
+        8,
+        13.5
+      ],
+      "to": [
+        15.5,
+        16,
+        15.5
       ],
       "faces": {
         "north": {
           "texture": "#lead",
           "uv": [
-            0.19999999999999973,
+            3,
             0,
-            4.4,
-            9
+            15.5,
+            8
           ]
         },
         "south": {
           "texture": "#lead",
           "uv": [
-            0.19999999999999973,
+            3,
             0,
-            4.4,
-            9
+            15.5,
+            8
           ]
         },
         "east": {
           "texture": "#lead",
           "uv": [
-            12.849999999999998,
+            13.5,
             0,
-            14.55,
-            9
+            15.5,
+            8
           ]
         },
         "west": {
           "texture": "#lead",
           "uv": [
-            12.849999999999998,
+            13.5,
             0,
-            14.55,
-            9
-          ]
-        },
-        "up": {
-          "texture": "#lead",
-          "uv": [
-            0.19999999999999973,
-            12.849999999999998,
-            4.4,
-            14.55
+            15.5,
+            8
           ]
         },
         "down": {
           "texture": "#lead",
           "uv": [
-            0.19999999999999973,
-            12.849999999999998,
-            4.4,
-            14.55
+            3,
+            13.5,
+            15.5,
+            15.5
           ]
         }
-      },
-      "rotation": {
-        "origin": [
-          2.3,
-          7,
-          13.7
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
+      }
+    },
+    {
+      "name": "后模块接缝",
+      "from": [
+        15.5,
+        8,
+        14
+      ],
+      "to": [
+        16,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            14,
+            0,
+            15,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            14,
+            16.0,
+            15
+          ]
+        }
       }
     }
   ]

@@ -1,0 +1,426 @@
+{
+  "credit": "ART-SHIELDED-ASSEMBLY-15C 原C精确分组：fixture_carriage",
+  "ambientocclusion": true,
+  "textures": {
+    "lead": "create_nuclear_industry:block/shielded_assembly_15c_lead",
+    "steel": "create_nuclear_industry:block/shielded_assembly_15c_steel",
+    "machined": "create_nuclear_industry:block/shielded_assembly_15c_machined",
+    "fastener": "create_nuclear_industry:block/shielded_assembly_15c_fastener",
+    "brass": "create_nuclear_industry:block/shielded_assembly_15c_brass",
+    "window": "create_nuclear_industry:block/shielded_assembly_15c_window",
+    "lamp_off": "create_nuclear_industry:block/shielded_assembly_15c_lamp_off",
+    "lamp_on": "create_nuclear_industry:block/shielded_assembly_15c_lamp_on",
+    "deck": "create_nuclear_industry:block/shielded_assembly_15c_deck",
+    "particle": "create_nuclear_industry:block/shielded_assembly_15c_lead"
+  },
+  "elements": [
+    {
+      "name": "工作台锁固圈",
+      "from": [
+        13,
+        14,
+        13
+      ],
+      "to": [
+        16,
+        15.25,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            0.75,
+            16,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            0.75,
+            16,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            13,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            13,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "工作台锁固圈",
+      "from": [
+        13,
+        14,
+        16
+      ],
+      "to": [
+        16,
+        15.25,
+        19
+      ],
+      "faces": {
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            0.75,
+            16,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            0.75,
+            3,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            0,
+            16,
+            3
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            0,
+            16,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "工作台锁固圈",
+      "from": [
+        16,
+        14,
+        13
+      ],
+      "to": [
+        19,
+        15.25,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            0.75,
+            3,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            13,
+            0.75,
+            16,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            13,
+            3,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            13,
+            3,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "工作台锁固圈",
+      "from": [
+        16,
+        14,
+        16
+      ],
+      "to": [
+        19,
+        15.25,
+        19
+      ],
+      "faces": {
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            0.75,
+            3,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            0.75,
+            3,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "精加工台面",
+      "from": [
+        13.5,
+        15.25,
+        13.5
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            0.0,
+            16.0,
+            0.75
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            0.0,
+            16.0,
+            0.75
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            13.5,
+            16.0,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            13.5,
+            16.0,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "精加工台面",
+      "from": [
+        13.5,
+        15.25,
+        16
+      ],
+      "to": [
+        16,
+        16,
+        18.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            0.0,
+            16.0,
+            0.75
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.0,
+            2.5,
+            0.75
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            0,
+            16.0,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            0,
+            16.0,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "精加工台面",
+      "from": [
+        16,
+        15.25,
+        13.5
+      ],
+      "to": [
+        18.5,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.0,
+            2.5,
+            0.75
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            13.5,
+            0.0,
+            16.0,
+            0.75
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            13.5,
+            2.5,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            13.5,
+            2.5,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "精加工台面",
+      "from": [
+        16,
+        15.25,
+        16
+      ],
+      "to": [
+        18.5,
+        16,
+        18.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.0,
+            2.5,
+            0.75
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.0,
+            2.5,
+            0.75
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0,
+            2.5,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0,
+            2.5,
+            2.5
+          ]
+        }
+      }
+    }
+  ]
+}

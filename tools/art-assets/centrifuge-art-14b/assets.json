@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "task": "ART-CENTRIFUGE-14B",
+  "status": "installed",
+  "sourceConcept": {
+    "id": "a",
+    "contract": "tools/art-assets/centrifuge-concepts-14/assets/concepts.json",
+    "sha256": "6634afc2c06b183d759519a351d61d2166f78b22e04662cd882d0d1b89f16ee6",
+    "revision": "r3",
+    "refinement": "long-shaft"
+  },
+  "models": {
+    "lower": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/lower.json",
+      "sourceSha256": "f6ad16540a88a772164a938aea582dbcbd32c2fa97ba5f83c6477300832cdf9e",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/lower.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge.json",
+      "sha256": "57b5c1800ffe08be091087cf2f77110f84ee988249b7858d51dd06ec62eee108",
+      "elements": 167
+    },
+    "upper": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/upper.json",
+      "sourceSha256": "b87583793ceb04d4caa30aaacb3aa876aef270ca064de3d6e3c119f3048aa77a",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/upper.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_upper.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_upper.json",
+      "sha256": "e87835976fe2e47f3fa66ed101c190ee858025558dc5f97c093c2f54bfb4bd6f",
+      "elements": 155
+    },
+    "rotor": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/rotor.json",
+      "sourceSha256": "6f14e8de365c4f8cc2272858cbdfde2d303155ecb623d41f4d7c46b4936784c2",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/rotor.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_rotor.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_rotor.json",
+      "sha256": "fac212776533f747857d37d70c6454b2a6455480ce71c315f8238c2a8bd72dbb",
+      "elements": 23
+    },
+    "shaft": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/shaft.json",
+      "sourceSha256": "7f2aa8884c48b33721fe90b2a8112285a85dbb509ca7945ea9ba5e5dd97af90a",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/shaft.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_shaft.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_shaft.json",
+      "sha256": "fdee9fe839cd313e17b0204fe484d2de7d46746ab4dbbd9cdf5075dde07ea2c2",
+      "elements": 1
+    },
+    "item": {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_item.json",
+      "sourceSha256": "e895316aeaaddb469df4e24703e9cba80f2a2f154f85fe598b5a1a2f773a3183",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_item.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_item.json",
+      "sha256": "4b58664e37bcd57d50a5fcadde16f139e61a89f6f2087dadfbd2feeecaa89179",
+      "elements": 346,
+      "composition": [
+        "lower",
+        "upper+16",
+        "rotor",
+        "shaft"
+      ]
+    }
+  },
+  "textures": {
+    "casing": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/casing.svg",
+      "sourceSha256": "239bed8773dec4826cb5f692cc557e30710674996cad3430b091b5878e1eeaa7",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/casing.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_casing.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_casing.png",
+      "sha256": "bc4a0edbf5b30ae7b480275e6f6243387a534dce45ae3be2d4eae0d12a0d037b",
+      "pixelSha256": "8bdadfcedde11ee11b533cc7d3f20cec299998085094416699f5bc5a4dfc57c1",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    "brass": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/brass.svg",
+      "sourceSha256": "dedec4bb799a61a2a076a11eba8cc0ae403f848c5cc22170afc72a026d6c74ef",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/brass.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_brass.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_brass.png",
+      "sha256": "9e62159047ab59c8a7b5ff87529ad238611adb9db7941aa3c8950bca4711f68c",
+      "pixelSha256": "9c23fd10cbbc4419bb3c9843a1be52d07df33819cc95db241e37d9a76fa9fdd6",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    "glass": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/glass.svg",
+      "sourceSha256": "698985ba813fa521a9149ff379818d33faae9e804409d27d2156878e7e9377c7",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/glass.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_glass.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_glass.png",
+      "sha256": "66761c11d51c79397b2c3083062359d2fb4ba2e5851716c6041079fd24381e33",
+      "pixelSha256": "77b69abdd06a6f1f8bbea7a090f68426859fae13bde487dcd3333b9792e055a2",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    "dark": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/dark.svg",
+      "sourceSha256": "740c0b2447982714ad4e1c2206e2a5b09e5a74f6a4a089963d96293d0c4bf7fe",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/dark.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_dark.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_dark.png",
+      "sha256": "8647e20168fffea5226faa0e09f5dc16248b8957b45a708462067acebb2eda8e",
+      "pixelSha256": "3311bff5c8d3aa891e6af08f805d9e649ae1e33f3c526505b6103f18487f5158",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    "machined": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/machined.svg",
+      "sourceSha256": "df44f1d9f2f5a1dfe271a277a52dc666f072d24639b780bbf584fd6851ef300b",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/machined.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_machined.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_machined.png",
+      "sha256": "05f99910edcd897968ca1db197b74409523aac2ff3853ff1fd66ed643b9414df",
+      "pixelSha256": "3e405c2fbdfc679ca6a12d32a2e40b9d9bae1a42ce21dcab823d417a093dc7e0",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    "fastener": {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/fastener.svg",
+      "sourceSha256": "3326a872cc86fbea3df3c4b92a3675b755e6a8b3bf952dfc199259f6f201b229",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/fastener.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_fastener.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_fastener.png",
+      "sha256": "72fc12a99714a1cbef7ddc0eeec0cf4a9e72b7cbf3974697256294fc5a141808",
+      "pixelSha256": "f4419614b31c3db1ab86f7f4fcdf5121a31cea74ca51b3569e1fbece092b36fd",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "sourceIdentities": {
+    "tools/art-assets/centrifuge-concepts-14/assets/concepts.json": "6634afc2c06b183d759519a351d61d2166f78b22e04662cd882d0d1b89f16ee6",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/lower.json": "f6ad16540a88a772164a938aea582dbcbd32c2fa97ba5f83c6477300832cdf9e",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/upper.json": "b87583793ceb04d4caa30aaacb3aa876aef270ca064de3d6e3c119f3048aa77a",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/rotor.json": "6f14e8de365c4f8cc2272858cbdfde2d303155ecb623d41f4d7c46b4936784c2",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/shaft.json": "7f2aa8884c48b33721fe90b2a8112285a85dbb509ca7945ea9ba5e5dd97af90a",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/casing.svg": "239bed8773dec4826cb5f692cc557e30710674996cad3430b091b5878e1eeaa7",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/brass.svg": "dedec4bb799a61a2a076a11eba8cc0ae403f848c5cc22170afc72a026d6c74ef",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/glass.svg": "698985ba813fa521a9149ff379818d33faae9e804409d27d2156878e7e9377c7",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/dark.svg": "740c0b2447982714ad4e1c2206e2a5b09e5a74f6a4a089963d96293d0c4bf7fe",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/machined.svg": "df44f1d9f2f5a1dfe271a277a52dc666f072d24639b780bbf584fd6851ef300b",
+    "tools/art-assets/centrifuge-concepts-14/assets/a/fastener.svg": "3326a872cc86fbea3df3c4b92a3675b755e6a8b3bf952dfc199259f6f201b229",
+    "src/main/resources/assets/create_nuclear_industry/blockstates/enrichment_centrifuge.json": "28a3d413b5290a444a43b386e3e1ea2a1b273c440b6939512b186abd595405de",
+    "src/main/resources/assets/create_nuclear_industry/models/item/enrichment_centrifuge.json": "0a9e7d0e85d005ef07e727fd691b1397ca0b88364671d9e8fa24501c21df8c63",
+    "tools/art-assets/centrifuge-concepts-14/make-assets.py": "47f60ab118c30e7be802c1c47d1a9a1d76865e12b28251cd9fed5d84ca21b690",
+    "tools/art-assets/export.py": "a32bddbd8f20c54e142057f5a5e7befd1711f210554707bf460554bc279ac84b"
+  },
+  "producer": {
+    "path": "tools/art-assets/centrifuge-art-14b/produce.py",
+    "sha256": "6f54f51257672559e0d4779e6066c26150e31aea8f9eef8da27c1b8c953d35c5"
+  },
+  "installationCount": 11,
+  "installation": [
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/lower.json",
+      "sourceSha256": "f6ad16540a88a772164a938aea582dbcbd32c2fa97ba5f83c6477300832cdf9e",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/lower.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge.json",
+      "sha256": "57b5c1800ffe08be091087cf2f77110f84ee988249b7858d51dd06ec62eee108",
+      "elements": 167
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/upper.json",
+      "sourceSha256": "b87583793ceb04d4caa30aaacb3aa876aef270ca064de3d6e3c119f3048aa77a",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/upper.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_upper.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_upper.json",
+      "sha256": "e87835976fe2e47f3fa66ed101c190ee858025558dc5f97c093c2f54bfb4bd6f",
+      "elements": 155
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/rotor.json",
+      "sourceSha256": "6f14e8de365c4f8cc2272858cbdfde2d303155ecb623d41f4d7c46b4936784c2",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/rotor.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_rotor.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_rotor.json",
+      "sha256": "fac212776533f747857d37d70c6454b2a6455480ce71c315f8238c2a8bd72dbb",
+      "elements": 23
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/shaft.json",
+      "sourceSha256": "7f2aa8884c48b33721fe90b2a8112285a85dbb509ca7945ea9ba5e5dd97af90a",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/shaft.json",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_shaft.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_shaft.json",
+      "sha256": "fdee9fe839cd313e17b0204fe484d2de7d46746ab4dbbd9cdf5075dde07ea2c2",
+      "elements": 1
+    },
+    {
+      "source": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_item.json",
+      "sourceSha256": "e895316aeaaddb469df4e24703e9cba80f2a2f154f85fe598b5a1a2f773a3183",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_item.json",
+      "installed": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_item.json",
+      "sha256": "4b58664e37bcd57d50a5fcadde16f139e61a89f6f2087dadfbd2feeecaa89179",
+      "elements": 346,
+      "composition": [
+        "lower",
+        "upper+16",
+        "rotor",
+        "shaft"
+      ]
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/casing.svg",
+      "sourceSha256": "239bed8773dec4826cb5f692cc557e30710674996cad3430b091b5878e1eeaa7",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/casing.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_casing.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_casing.png",
+      "sha256": "bc4a0edbf5b30ae7b480275e6f6243387a534dce45ae3be2d4eae0d12a0d037b",
+      "pixelSha256": "8bdadfcedde11ee11b533cc7d3f20cec299998085094416699f5bc5a4dfc57c1",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/brass.svg",
+      "sourceSha256": "dedec4bb799a61a2a076a11eba8cc0ae403f848c5cc22170afc72a026d6c74ef",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/brass.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_brass.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_brass.png",
+      "sha256": "9e62159047ab59c8a7b5ff87529ad238611adb9db7941aa3c8950bca4711f68c",
+      "pixelSha256": "9c23fd10cbbc4419bb3c9843a1be52d07df33819cc95db241e37d9a76fa9fdd6",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/glass.svg",
+      "sourceSha256": "698985ba813fa521a9149ff379818d33faae9e804409d27d2156878e7e9377c7",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/glass.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_glass.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_glass.png",
+      "sha256": "66761c11d51c79397b2c3083062359d2fb4ba2e5851716c6041079fd24381e33",
+      "pixelSha256": "77b69abdd06a6f1f8bbea7a090f68426859fae13bde487dcd3333b9792e055a2",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/dark.svg",
+      "sourceSha256": "740c0b2447982714ad4e1c2206e2a5b09e5a74f6a4a089963d96293d0c4bf7fe",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/dark.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_dark.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_dark.png",
+      "sha256": "8647e20168fffea5226faa0e09f5dc16248b8957b45a708462067acebb2eda8e",
+      "pixelSha256": "3311bff5c8d3aa891e6af08f805d9e649ae1e33f3c526505b6103f18487f5158",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/machined.svg",
+      "sourceSha256": "df44f1d9f2f5a1dfe271a277a52dc666f072d24639b780bbf584fd6851ef300b",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/machined.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_machined.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_machined.png",
+      "sha256": "05f99910edcd897968ca1db197b74409523aac2ff3853ff1fd66ed643b9414df",
+      "pixelSha256": "3e405c2fbdfc679ca6a12d32a2e40b9d9bae1a42ce21dcab823d417a093dc7e0",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "source": "tools/art-assets/centrifuge-concepts-14/assets/a/fastener.svg",
+      "sourceSha256": "3326a872cc86fbea3df3c4b92a3675b755e6a8b3bf952dfc199259f6f201b229",
+      "sourceCopy": "tools/art-assets/centrifuge-art-14b/assets/source/fastener.svg",
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_fastener.png",
+      "installed": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_fastener.png",
+      "sha256": "72fc12a99714a1cbef7ddc0eeec0cf4a9e72b7cbf3974697256294fc5a141808",
+      "pixelSha256": "f4419614b31c3db1ab86f7f4fcdf5121a31cea74ca51b3569e1fbece092b36fd",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "sweepEvidenceReused": "build/reports/art/ART-CENTRIFUGE-14A/assets/r3-long/checks.json",
+  "installedResources": {
+    "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge.json": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge.json",
+      "sha256": "57b5c1800ffe08be091087cf2f77110f84ee988249b7858d51dd06ec62eee108",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_upper.json": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_upper.json",
+      "sha256": "e87835976fe2e47f3fa66ed101c190ee858025558dc5f97c093c2f54bfb4bd6f",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_rotor.json": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_rotor.json",
+      "sha256": "fac212776533f747857d37d70c6454b2a6455480ce71c315f8238c2a8bd72dbb",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_shaft.json": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_shaft.json",
+      "sha256": "fdee9fe839cd313e17b0204fe484d2de7d46746ab4dbbd9cdf5075dde07ea2c2",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_item.json": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/models/enrichment_centrifuge_item.json",
+      "sha256": "4b58664e37bcd57d50a5fcadde16f139e61a89f6f2087dadfbd2feeecaa89179",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_casing.png": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_casing.png",
+      "sha256": "bc4a0edbf5b30ae7b480275e6f6243387a534dce45ae3be2d4eae0d12a0d037b",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_brass.png": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_brass.png",
+      "sha256": "9e62159047ab59c8a7b5ff87529ad238611adb9db7941aa3c8950bca4711f68c",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_glass.png": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_glass.png",
+      "sha256": "66761c11d51c79397b2c3083062359d2fb4ba2e5851716c6041079fd24381e33",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_dark.png": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_dark.png",
+      "sha256": "8647e20168fffea5226faa0e09f5dc16248b8957b45a708462067acebb2eda8e",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_machined.png": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_machined.png",
+      "sha256": "05f99910edcd897968ca1db197b74409523aac2ff3853ff1fd66ed643b9414df",
+      "byteEqual": true
+    },
+    "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_fastener.png": {
+      "candidate": "tools/art-assets/centrifuge-art-14b/assets/textures/enrichment_centrifuge_fastener.png",
+      "sha256": "72fc12a99714a1cbef7ddc0eeec0cf4a9e72b7cbf3974697256294fc5a141808",
+      "byteEqual": true
+    }
+  }
+}

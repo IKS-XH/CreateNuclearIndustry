@@ -1,0 +1,427 @@
+{
+  "schemaVersion": 1,
+  "task": "ART-SHIELDED-ASSEMBLY-15C",
+  "rig": "rig.json",
+  "rigPath": "rig.json",
+  "rigSha256": "c2a25527cfa2983f6ff246f730a43fa8d34d57d7c7333177f735845ddac056ba",
+  "productionMappings": [
+    {
+      "group": "left_base",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_base.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_base.json",
+      "sha256": "de19ae76aa4ffbf1af624cf132beb05afe4a6907e00addbc2b44bcfc26b24f1c"
+    },
+    {
+      "group": "left_tool",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_tool.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_tool.json",
+      "sha256": "a84332fb7ac48de01bf1f3695d94a5e5f110bb648df04630c7ea3d02bc7b8899"
+    },
+    {
+      "group": "right_base",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_base.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_base.json",
+      "sha256": "98bf26128cdc8909aa62121d6e598486a8b48d3099f925f6d37bf1f8b097f362"
+    },
+    {
+      "group": "right_tool",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_tool.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_tool.json",
+      "sha256": "b74a839c40b749f358bdc5e950755313f6db0371bf03b220791500190bb23765"
+    },
+    {
+      "group": "fixture_base",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_base.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_base.json",
+      "sha256": "17c2418ff531e6b9e119f3779efc03fa170309a9a8f99e34ea40fb42d20b63f4"
+    },
+    {
+      "group": "fixture_carriage",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_carriage.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_carriage.json",
+      "sha256": "7743c436e566510eb7835faa0e84b4a47539bc8c5dee6818f4379052478e3eaf"
+    },
+    {
+      "group": "fixture_jaw_left",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_left.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_left.json",
+      "sha256": "07b9c6fb22d39a2306c0268afcefafd1bc68c2e13ee23183201d55e283402b12"
+    },
+    {
+      "group": "fixture_jaw_right",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_right.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_right.json",
+      "sha256": "e5f7914b5cdc07575861d5ab42f537f674cce4f408f15f7d333fa43becbe1656"
+    }
+  ],
+  "groups": {
+    "left_base": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/left_base",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_base.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_base.json",
+      "parent": null,
+      "sourcePartial": "left_arm",
+      "sourceIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        28
+      ],
+      "sourceElementNames": [
+        "肩左轨",
+        "肩左轨",
+        "肩右轨",
+        "肩右轨",
+        "肩上加工盖",
+        "肩上加工盖",
+        "肩中央关节体",
+        "肩中央关节体",
+        "肩前功能锁圈",
+        "关节前端钢盖",
+        "肩检修薄盖"
+      ],
+      "pivot": [
+        10,
+        21.5,
+        16
+      ],
+      "fixed": true,
+      "pivotMeaning": "实际导柱/台面/钳口连接基准；固定组不转动",
+      "domains": [
+        "idle"
+      ]
+    },
+    "left_tool": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/left_tool",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_tool.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_tool.json",
+      "parent": null,
+      "sourcePartial": "left_arm",
+      "sourceIndices": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "sourceElementNames": [
+        "执行杆加工钢芯",
+        "执行杆加工钢芯",
+        "执行杆加工钢芯",
+        "执行杆加工钢芯",
+        "功能黄铜锁圈",
+        "功能黄铜锁圈",
+        "执行杆左导条",
+        "执行杆左导条",
+        "执行杆左导条",
+        "执行杆左导条",
+        "执行杆右导条",
+        "执行杆右导条",
+        "执行杆右导条",
+        "执行杆右导条",
+        "腕部钢座",
+        "左夹指",
+        "右夹指",
+        "夹爪中锁片"
+      ],
+      "pivot": [
+        10,
+        20,
+        14.5
+      ],
+      "fixed": false,
+      "pivotMeaning": "实际执行杆顶面中心",
+      "domains": [
+        "manufacture_align",
+        "sealing_lock"
+      ]
+    },
+    "right_base": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/right_base",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_base.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_base.json",
+      "parent": null,
+      "sourcePartial": "right_arm",
+      "sourceIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        28
+      ],
+      "sourceElementNames": [
+        "肩左轨",
+        "肩左轨",
+        "肩右轨",
+        "肩右轨",
+        "肩上加工盖",
+        "肩上加工盖",
+        "肩中央关节体",
+        "肩中央关节体",
+        "肩前功能锁圈",
+        "关节前端钢盖",
+        "肩检修薄盖"
+      ],
+      "pivot": [
+        22,
+        21.5,
+        16
+      ],
+      "fixed": true,
+      "pivotMeaning": "实际导柱/台面/钳口连接基准；固定组不转动",
+      "domains": [
+        "idle"
+      ]
+    },
+    "right_tool": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/right_tool",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_tool.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_tool.json",
+      "parent": null,
+      "sourcePartial": "right_arm",
+      "sourceIndices": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "sourceElementNames": [
+        "执行杆加工钢芯",
+        "执行杆加工钢芯",
+        "执行杆加工钢芯",
+        "执行杆加工钢芯",
+        "功能黄铜锁圈",
+        "功能黄铜锁圈",
+        "执行杆左导条",
+        "执行杆左导条",
+        "执行杆左导条",
+        "执行杆左导条",
+        "执行杆右导条",
+        "执行杆右导条",
+        "执行杆右导条",
+        "执行杆右导条",
+        "腕部钢座",
+        "左夹指",
+        "右夹指",
+        "夹爪中锁片"
+      ],
+      "pivot": [
+        22,
+        20,
+        14.5
+      ],
+      "fixed": false,
+      "pivotMeaning": "实际执行杆顶面中心",
+      "domains": [
+        "manufacture_align",
+        "sealing_lock"
+      ]
+    },
+    "fixture_base": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/fixture_base",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_base.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_base.json",
+      "parent": null,
+      "sourcePartial": "fixture",
+      "sourceIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        26,
+        27
+      ],
+      "sourceElementNames": [
+        "夹具升降座",
+        "夹具升降座",
+        "夹具升降座",
+        "夹具升降座",
+        "座前加工盖",
+        "座前加工盖",
+        "升降中柱",
+        "升降中柱",
+        "升降中柱",
+        "升降中柱",
+        "升降检修侧盖",
+        "升降检修侧盖"
+      ],
+      "pivot": [
+        16,
+        13.5,
+        16
+      ],
+      "fixed": true,
+      "pivotMeaning": "实际导柱/台面/钳口连接基准；固定组不转动",
+      "domains": [
+        "idle"
+      ]
+    },
+    "fixture_carriage": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/fixture_carriage",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_carriage.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_carriage.json",
+      "parent": null,
+      "sourcePartial": "fixture",
+      "sourceIndices": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "sourceElementNames": [
+        "工作台锁固圈",
+        "工作台锁固圈",
+        "工作台锁固圈",
+        "工作台锁固圈",
+        "精加工台面",
+        "精加工台面",
+        "精加工台面",
+        "精加工台面"
+      ],
+      "pivot": [
+        16,
+        15,
+        16
+      ],
+      "fixed": false,
+      "pivotMeaning": "实际导柱/台面/钳口连接基准；固定组不转动",
+      "domains": [
+        "fixture_press"
+      ]
+    },
+    "fixture_jaw_left": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/fixture_jaw_left",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_left.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_left.json",
+      "parent": "fixture_carriage",
+      "sourcePartial": "fixture",
+      "sourceIndices": [
+        18,
+        19,
+        22,
+        23
+      ],
+      "sourceElementNames": [
+        "左夹具钳口",
+        "左夹具钳口",
+        "钳口左压片",
+        "钳口左压片"
+      ],
+      "pivot": [
+        15.4375,
+        16,
+        16
+      ],
+      "fixed": false,
+      "pivotMeaning": "实际导柱/台面/钳口连接基准；固定组不转动",
+      "domains": [
+        "fixture_press"
+      ]
+    },
+    "fixture_jaw_right": {
+      "model": "create_nuclear_industry:block/shielded_assembly_station/animation/fixture_jaw_right",
+      "candidate": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_right.json",
+      "production": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_right.json",
+      "parent": "fixture_carriage",
+      "sourcePartial": "fixture",
+      "sourceIndices": [
+        20,
+        21,
+        24,
+        25
+      ],
+      "sourceElementNames": [
+        "右夹具钳口",
+        "右夹具钳口",
+        "钳口右压片",
+        "钳口右压片"
+      ],
+      "pivot": [
+        16.5625,
+        16,
+        16
+      ],
+      "fixed": false,
+      "pivotMeaning": "实际导柱/台面/钳口连接基准；固定组不转动",
+      "domains": [
+        "fixture_press"
+      ]
+    }
+  },
+  "sourcePartials": {
+    "left_arm": {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/left_arm.json",
+      "sha256": "228b0e0ff98551e3b7aeaf1cf07cae3ce3707b76f2f4d2dddf74b3a3592a5423"
+    },
+    "right_arm": {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/right_arm.json",
+      "sha256": "ae18358b2a5d10ce40f22cea633f4eeea3456a9d065eed8c3278e3392c52f7e0"
+    },
+    "fixture": {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/fixture.json",
+      "sha256": "2adc467dc7bbc0c292e4af3437c38039d19c0f7b90667071234953f06ce37f9f"
+    }
+  },
+  "models": {
+    "left_base": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_base.json",
+    "left_tool": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_tool.json",
+    "right_base": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_base.json",
+    "right_tool": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_tool.json",
+    "fixture_base": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_base.json",
+    "fixture_carriage": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_carriage.json",
+    "fixture_jaw_left": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_left.json",
+    "fixture_jaw_right": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_right.json"
+  },
+  "totalOriginalElements": 86,
+  "status": "候选生成；只安装八新增animation分件"
+}

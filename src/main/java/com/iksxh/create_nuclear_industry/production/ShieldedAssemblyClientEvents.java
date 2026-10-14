@@ -12,7 +12,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 public final class ShieldedAssemblyClientEvents {
     private ShieldedAssemblyClientEvents() {}
     @SubscribeEvent public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        // 显式读取静态列表，令renderer在首次ModelEvent.RegisterAdditional前初始化三个PartialModel。
+        // 显式读取静态列表，令renderer在首次ModelEvent.RegisterAdditional前初始化全部活动分件。
         var partialModels = ShieldedAssemblyRenderer.PARTIAL_MODELS;
         event.registerBlockEntityRenderer(FuelProcessingContent.SHIELDED_ASSEMBLY_BE.get(), ShieldedAssemblyRenderer::new);
     }

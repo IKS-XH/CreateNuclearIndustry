@@ -1,0 +1,258 @@
+{
+  "credit": "ART-SHIELDED-ASSEMBLY-15C 原C精确分组：fixture_jaw_left",
+  "ambientocclusion": true,
+  "textures": {
+    "lead": "create_nuclear_industry:block/shielded_assembly_15c_lead",
+    "steel": "create_nuclear_industry:block/shielded_assembly_15c_steel",
+    "machined": "create_nuclear_industry:block/shielded_assembly_15c_machined",
+    "fastener": "create_nuclear_industry:block/shielded_assembly_15c_fastener",
+    "brass": "create_nuclear_industry:block/shielded_assembly_15c_brass",
+    "window": "create_nuclear_industry:block/shielded_assembly_15c_window",
+    "lamp_off": "create_nuclear_industry:block/shielded_assembly_15c_lamp_off",
+    "lamp_on": "create_nuclear_industry:block/shielded_assembly_15c_lamp_on",
+    "deck": "create_nuclear_industry:block/shielded_assembly_15c_deck",
+    "particle": "create_nuclear_industry:block/shielded_assembly_15c_lead"
+  },
+  "elements": [
+    {
+      "name": "左夹具钳口",
+      "from": [
+        15,
+        16,
+        14
+      ],
+      "to": [
+        15.625,
+        18,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            15,
+            14,
+            15.625,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            14,
+            14,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            14,
+            14,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            15,
+            14,
+            15.625,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            15,
+            14,
+            15.625,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "左夹具钳口",
+      "from": [
+        15,
+        16,
+        16
+      ],
+      "to": [
+        15.625,
+        18,
+        18
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            15,
+            14,
+            15.625,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            2,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            2,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            15,
+            0,
+            15.625,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            15,
+            0,
+            15.625,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "钳口左压片",
+      "from": [
+        15.625,
+        16.5,
+        14.5
+      ],
+      "to": [
+        15.875,
+        17.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            15.625,
+            14.5,
+            15.875,
+            15.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            14.5,
+            14.5,
+            16.0,
+            15.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            14.5,
+            14.5,
+            16.0,
+            15.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            15.625,
+            14.5,
+            15.875,
+            16.0
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            15.625,
+            14.5,
+            15.875,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "钳口左压片",
+      "from": [
+        15.625,
+        16.5,
+        16
+      ],
+      "to": [
+        15.875,
+        17.5,
+        17.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            15.625,
+            14.5,
+            15.875,
+            15.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            14.5,
+            1.5,
+            15.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            14.5,
+            1.5,
+            15.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            15.625,
+            0,
+            15.875,
+            1.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            15.625,
+            0,
+            15.875,
+            1.5
+          ]
+        }
+      }
+    }
+  ]
+}

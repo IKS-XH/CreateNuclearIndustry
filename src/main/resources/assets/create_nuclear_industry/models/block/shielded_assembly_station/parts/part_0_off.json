@@ -1,23 +1,83 @@
 {
-  "credit": "EXT-A-FUEL-02E",
+  "credit": "ART-SHIELDED-ASSEMBLY-15B 已选C八格外壳",
   "ambientocclusion": true,
   "textures": {
-    "lead": "create_nuclear_industry:block/shielded_assembly_multiblock_lead",
-    "steel": "create_nuclear_industry:block/shielded_assembly_multiblock_steel",
-    "brass": "create_nuclear_industry:block/shielded_assembly_multiblock_brass",
-    "window": "create_nuclear_industry:block/shielded_assembly_multiblock_window",
-    "deck": "create_nuclear_industry:block/shielded_assembly_multiblock_deck",
-    "top": "create_nuclear_industry:block/shielded_assembly_multiblock_top",
-    "bottom": "create_nuclear_industry:block/shielded_assembly_multiblock_bottom",
-    "port": "create_nuclear_industry:block/shielded_assembly_multiblock_port",
-    "lamp_off": "create_nuclear_industry:block/shielded_assembly_multiblock_lamp_off",
-    "lamp_on": "create_nuclear_industry:block/shielded_assembly_multiblock_lamp_on",
-    "particle": "create_nuclear_industry:block/shielded_assembly_multiblock_lead"
+    "lead": "create_nuclear_industry:block/shielded_assembly_15c_lead",
+    "steel": "create_nuclear_industry:block/shielded_assembly_15c_steel",
+    "machined": "create_nuclear_industry:block/shielded_assembly_15c_machined",
+    "fastener": "create_nuclear_industry:block/shielded_assembly_15c_fastener",
+    "brass": "create_nuclear_industry:block/shielded_assembly_15c_brass",
+    "window": "create_nuclear_industry:block/shielded_assembly_15c_window",
+    "lamp_off": "create_nuclear_industry:block/shielded_assembly_15c_lamp_off",
+    "lamp_on": "create_nuclear_industry:block/shielded_assembly_15c_lamp_on",
+    "deck": "create_nuclear_industry:block/shielded_assembly_15c_deck",
+    "particle": "create_nuclear_industry:block/shielded_assembly_15c_lead"
   },
   "elements": [
     {
+      "name": "主控轴孔围台",
       "from": [
-        2,
+        0,
+        0,
+        0
+      ],
+      "to": [
+        6,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            6,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        10,
         0,
         0
       ],
@@ -27,20 +87,20 @@
         16
       ],
       "faces": {
-        "west": {
+        "north": {
           "texture": "#steel",
           "uv": [
-            0,
+            10,
             12,
             16,
             16
           ]
         },
-        "down": {
-          "texture": "#bottom",
+        "west": {
+          "texture": "#steel",
           "uv": [
-            2,
             0,
+            12,
             16,
             16
           ]
@@ -48,17 +108,17 @@
         "up": {
           "texture": "#steel",
           "uv": [
-            2,
+            10,
             0,
             16,
             16
           ]
         },
-        "north": {
+        "down": {
           "texture": "#steel",
           "uv": [
-            2,
-            12,
+            10,
+            0,
             16,
             16
           ]
@@ -66,65 +126,136 @@
       }
     },
     {
+      "name": "主控轴孔围台",
       "from": [
+        6,
         0,
-        0,
-        2
+        0
       ],
       "to": [
-        2,
+        10,
         4,
-        16
+        6
       ],
       "faces": {
-        "west": {
+        "north": {
           "texture": "#steel",
           "uv": [
-            2,
+            6,
             12,
-            16,
+            10,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            12,
+            10,
             16
           ]
         },
         "east": {
           "texture": "#steel",
           "uv": [
-            2,
+            0,
             12,
-            16,
+            6,
             16
           ]
         },
-        "down": {
+        "west": {
           "texture": "#steel",
           "uv": [
             0,
-            2,
-            2,
+            12,
+            6,
             16
           ]
         },
         "up": {
           "texture": "#steel",
           "uv": [
+            6,
             0,
-            2,
-            2,
-            16
+            10,
+            6
           ]
         },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        6,
+        0,
+        10
+      ],
+      "to": [
+        10,
+        4,
+        16
+      ],
+      "faces": {
         "north": {
           "texture": "#steel",
           "uv": [
-            0,
+            6,
             12,
-            2,
+            10,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            10,
+            10,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            10,
+            10,
             16
           ]
         }
       }
     },
     {
+      "name": "检修下座",
       "from": [
         1,
         4,
@@ -132,225 +263,42 @@
       ],
       "to": [
         16,
-        7,
+        6.5,
         16
       ],
       "faces": {
-        "west": {
+        "north": {
           "texture": "#lead",
           "uv": [
             1,
-            9,
+            9.5,
             16,
             12
           ]
         },
-        "down": {
+        "west": {
           "texture": "#lead",
           "uv": [
             1,
-            1,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            1,
-            16,
-            16
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            9,
+            9.5,
             16,
             12
           ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        7,
-        3
-      ],
-      "to": [
-        5,
-        8,
-        5
-      ],
-      "faces": {
-        "west": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            8,
-            5,
-            9
-          ]
-        },
-        "down": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            3,
-            5,
-            5
-          ]
-        },
-        "north": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            8,
-            5,
-            9
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        7,
-        5
-      ],
-      "to": [
-        5,
-        8,
-        16
-      ],
-      "faces": {
-        "west": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            8,
-            16,
-            9
-          ]
-        },
-        "down": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            5,
-            5,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        3
-      ],
-      "to": [
-        5,
-        9,
-        5
-      ],
-      "faces": {
-        "up": {
-          "texture": "#deck",
-          "uv": [
-            3,
-            3,
-            5,
-            5
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        5
-      ],
-      "to": [
-        5,
-        9,
-        16
-      ],
-      "faces": {
-        "west": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            7,
-            16,
-            8
-          ]
         },
         "up": {
-          "texture": "#deck",
+          "texture": "#lead",
           "uv": [
-            3,
-            5,
-            5,
+            1,
+            1,
+            16,
             16
           ]
-        }
-      }
-    },
-    {
-      "from": [
-        5,
-        7,
-        3
-      ],
-      "to": [
-        16,
-        8,
-        5
-      ],
-      "faces": {
-        "down": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            3,
-            16,
-            5
-          ]
         },
-        "north": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            8,
-            16,
-            9
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5,
-        7,
-        5
-      ],
-      "to": [
-        16,
-        8,
-        16
-      ],
-      "faces": {
         "down": {
-          "texture": "#deck",
+          "texture": "#lead",
           "uv": [
-            5,
-            5,
+            1,
+            1,
             16,
             16
           ]
@@ -358,852 +306,101 @@
       }
     },
     {
-      "from": [
-        5,
-        8,
-        3
-      ],
-      "to": [
-        16,
-        9,
-        5
-      ],
-      "faces": {
-        "up": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            3,
-            16,
-            5
-          ]
-        },
-        "north": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            7,
-            16,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5,
-        8,
-        5
-      ],
-      "to": [
-        16,
-        9,
-        16
-      ],
-      "faces": {
-        "up": {
-          "texture": "#deck",
-          "uv": [
-            5,
-            5,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
+      "name": "分段下托层",
       "from": [
         2,
-        8,
-        3
-      ],
-      "to": [
-        3,
-        10,
-        4
-      ],
-      "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            6,
-            4,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            3,
-            3,
-            4
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            3,
-            3,
-            4
-          ]
-        },
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            6,
-            3,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        8,
-        4
-      ],
-      "to": [
-        3,
-        10,
-        5
-      ],
-      "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            4,
-            6,
-            5,
-            8
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            4,
-            3,
-            5
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        8,
-        5
-      ],
-      "to": [
-        3,
-        10,
-        16
-      ],
-      "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            5,
-            6,
-            16,
-            8
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            2,
-            5,
-            3,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        3
-      ],
-      "to": [
-        5,
-        10,
-        4
-      ],
-      "faces": {
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            6,
-            4,
-            8
-          ]
-        },
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            6,
-            5,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        4
-      ],
-      "to": [
-        5,
-        10,
-        5
-      ],
-      "faces": {
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            4,
-            6,
-            5,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        5
-      ],
-      "to": [
-        5,
-        10,
-        16
-      ],
-      "faces": {
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            5,
-            6,
-            16,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            5,
-            5,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            5,
-            5,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
+        6.5,
         2
       ],
       "to": [
         16,
-        10,
-        5
+        8,
+        16
       ],
       "faces": {
-        "west": {
-          "texture": "#brass",
+        "north": {
+          "texture": "#steel",
           "uv": [
             2,
-            6,
-            5,
-            8
+            8.0,
+            16,
+            9.5
           ]
         },
-        "down": {
-          "texture": "#brass",
+        "west": {
+          "texture": "#steel",
           "uv": [
-            3,
             2,
+            8.0,
             16,
-            5
+            9.5
           ]
         },
         "up": {
-          "texture": "#brass",
+          "texture": "#steel",
           "uv": [
-            3,
+            2,
             2,
             16,
-            5
+            16
           ]
         },
-        "north": {
-          "texture": "#brass",
+        "down": {
+          "texture": "#steel",
           "uv": [
-            3,
-            6,
+            2,
+            2,
             16,
-            8
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            3,
-            6,
-            16,
-            8
+            16
           ]
         }
       }
     },
     {
+      "name": "室内工作底板",
       "from": [
-        4,
-        8,
-        0
+        3,
+        9.5,
+        3
       ],
       "to": [
         16,
-        12,
-        2
+        10.5,
+        16
       ],
       "faces": {
-        "west": {
-          "texture": "#lead",
+        "north": {
+          "texture": "#deck",
           "uv": [
-            0,
-            4,
-            2,
-            8
+            3,
+            5.5,
+            16,
+            6.5
           ]
         },
-        "down": {
-          "texture": "#lead",
+        "west": {
+          "texture": "#deck",
           "uv": [
-            4,
-            0,
+            3,
+            5.5,
             16,
-            2
+            6.5
           ]
         },
         "up": {
-          "texture": "#lead",
+          "texture": "#deck",
           "uv": [
-            4,
-            0,
-            16,
-            2
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            4,
-            16,
-            8
-          ]
-        },
-        "south": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            4,
-            16,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4,
-        12,
-        0
-      ],
-      "to": [
-        5,
-        16,
-        2
-      ],
-      "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            2,
-            4
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            2,
-            4
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            4,
-            0,
-            5,
-            2
-          ]
-        },
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            4,
-            0,
-            5,
-            4
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            4,
-            0,
-            5,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        8,
-        4
-      ],
-      "to": [
-        1,
-        10,
-        6
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            6,
-            6,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            4,
-            1,
-            6
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            6,
-            1,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        8,
-        6
-      ],
-      "to": [
-        1,
-        10,
-        12
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            6,
-            12,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            6,
-            1,
-            12
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        8,
-        12
-      ],
-      "to": [
-        1,
-        10,
-        16
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            6,
-            16,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            12,
-            1,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        10,
-        4
-      ],
-      "to": [
-        1,
-        16,
-        6
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            0,
-            6,
-            6
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            0,
-            0,
-            1,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        10,
-        12
-      ],
-      "to": [
-        1,
-        16,
-        16
-      ],
-      "faces": {
-        "west": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            0,
-            16,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        8,
-        4
-      ],
-      "to": [
-        3,
-        10,
-        6
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            6,
-            6,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            4,
             3,
-            6
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            6,
             3,
-            8
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        8,
-        6
-      ],
-      "to": [
-        3,
-        10,
-        12
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            6,
-            12,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            6,
-            3,
-            12
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        8,
-        12
-      ],
-      "to": [
-        3,
-        10,
-        16
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            6,
-            16,
-            8
-          ]
-        },
-        "down": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            12,
-            3,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        10,
-        4
-      ],
-      "to": [
-        3,
-        16,
-        6
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            4,
-            0,
-            6,
-            6
-          ]
-        },
-        "north": {
-          "texture": "#lead",
-          "uv": [
-            1,
-            0,
-            3,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        10,
-        6
-      ],
-      "to": [
-        3,
-        16,
-        12
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            6,
-            0,
-            12,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        1,
-        10,
-        12
-      ],
-      "to": [
-        3,
-        16,
-        16
-      ],
-      "faces": {
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            12,
-            0,
-            16,
-            6
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        10,
-        6
-      ],
-      "to": [
-        1,
-        16,
-        12
-      ],
-      "faces": {
-        "west": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
             16,
             16
           ]
         },
         "down": {
-          "texture": "#port",
+          "texture": "#deck",
           "uv": [
-            0,
-            6,
-            1,
-            12
-          ]
-        },
-        "up": {
-          "texture": "#port",
-          "uv": [
-            0,
-            6,
-            1,
-            12
-          ]
-        },
-        "north": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
-            1,
-            6
-          ]
-        },
-        "south": {
-          "texture": "#port",
-          "uv": [
-            0,
-            0,
+            3,
+            3,
             16,
             16
           ]
@@ -1211,109 +408,10 @@
       }
     },
     {
-      "from": [
-        4,
-        9,
-        6
-      ],
-      "to": [
-        6,
-        16,
-        7
-      ],
-      "faces": {
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            6,
-            0,
-            7,
-            7
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            6,
-            0,
-            7,
-            7
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            4,
-            6,
-            6,
-            7
-          ]
-        },
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            4,
-            0,
-            6,
-            7
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4,
-        9,
-        7
-      ],
-      "to": [
-        6,
-        16,
-        8
-      ],
-      "faces": {
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            7,
-            0,
-            8,
-            7
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            7,
-            0,
-            8,
-            7
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            4,
-            7,
-            6,
-            8
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            4,
-            0,
-            6,
-            7
-          ]
-        }
-      }
-    },
-    {
+      "name": "中央夹具静止座",
       "from": [
         12,
-        9,
+        10.5,
         11
       ],
       "to": [
@@ -1322,26 +420,26 @@
         16
       ],
       "faces": {
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            11,
-            5,
-            16,
-            7
-          ]
-        },
-        "down": {
-          "texture": "#brass",
+        "north": {
+          "texture": "#steel",
           "uv": [
             12,
-            11,
+            5.0,
             16,
-            16
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            5.0,
+            16,
+            5.5
           ]
         },
         "up": {
-          "texture": "#brass",
+          "texture": "#steel",
           "uv": [
             12,
             11,
@@ -1349,172 +447,539 @@
             16
           ]
         },
-        "north": {
-          "texture": "#brass",
+        "down": {
+          "texture": "#steel",
           "uv": [
             12,
-            5,
+            11,
             16,
-            7
+            16
           ]
         }
       }
     },
     {
+      "name": "四角钢梁",
       "from": [
-        0.10000000000000009,
-        0.03125,
-        0.75
+        0,
+        8,
+        0
+      ],
+      "to": [
+        3,
+        16,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        0.5,
+        8,
+        3
       ],
       "to": [
         2.5,
-        3.96875,
-        1.85
+        16,
+        15.5
       ],
       "faces": {
         "north": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.10000000000000009,
-            12.03125,
+            0.5,
+            0,
             2.5,
-            15.96875
+            8
           ]
         },
         "south": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.10000000000000009,
-            12.03125,
+            0.5,
+            0,
             2.5,
-            15.96875
+            8
           ]
         },
         "east": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.75,
-            12.03125,
-            1.85,
-            15.96875
+            3,
+            0,
+            15.5,
+            8
           ]
         },
         "west": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.75,
-            12.03125,
-            1.85,
-            15.96875
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0.10000000000000009,
-            0.75,
-            2.5,
-            1.85
+            3,
+            0,
+            15.5,
+            8
           ]
         },
         "down": {
-          "texture": "#steel",
+          "texture": "#lead",
           "uv": [
-            0.10000000000000009,
-            0.75,
+            0.5,
+            3,
             2.5,
-            1.85
+            15.5
           ]
         }
-      },
-      "rotation": {
-        "origin": [
-          1.3,
-          0.03125,
-          1.3
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
       }
     },
     {
+      "name": "侧模块凹接缝",
       "from": [
-        0.19999999999999973,
-        7,
-        1.4499999999999997
+        0.75,
+        8,
+        15.5
       ],
       "to": [
-        4.4,
+        2.25,
         16,
-        3.15
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            0,
+            2.25,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            15.5,
+            2.25,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "前下检修护板",
+      "from": [
+        3,
+        8,
+        0.75
+      ],
+      "to": [
+        16,
+        12.5,
+        2.5
       ],
       "faces": {
         "north": {
           "texture": "#lead",
           "uv": [
-            0.19999999999999973,
-            0,
-            4.4,
-            9
+            3,
+            3.5,
+            16,
+            8
           ]
         },
         "south": {
           "texture": "#lead",
           "uv": [
-            0.19999999999999973,
-            0,
-            4.4,
-            9
-          ]
-        },
-        "east": {
-          "texture": "#lead",
-          "uv": [
-            1.4499999999999997,
-            0,
-            3.15,
-            9
+            3,
+            3.5,
+            16,
+            8
           ]
         },
         "west": {
           "texture": "#lead",
           "uv": [
-            1.4499999999999997,
-            0,
-            3.15,
-            9
+            0.75,
+            3.5,
+            2.5,
+            8
           ]
         },
         "up": {
           "texture": "#lead",
           "uv": [
-            0.19999999999999973,
-            1.4499999999999997,
-            4.4,
-            3.15
+            3,
+            0.75,
+            16,
+            2.5
           ]
         },
         "down": {
           "texture": "#lead",
           "uv": [
-            0.19999999999999973,
-            1.4499999999999997,
-            4.4,
-            3.15
+            3,
+            0.75,
+            16,
+            2.5
           ]
         }
-      },
-      "rotation": {
-        "origin": [
-          2.3,
-          7,
-          2.3
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
+      }
+    },
+    {
+      "name": "窗模块竖梁",
+      "from": [
+        3,
+        12.5,
+        0.5
+      ],
+      "to": [
+        5,
+        16,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0.0,
+            5,
+            3.5
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0.0,
+            5,
+            3.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            0.0,
+            2.5,
+            3.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            0.0,
+            2.5,
+            3.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0.5,
+            5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块横梁",
+      "from": [
+        5,
+        12.5,
+        0.5
+      ],
+      "to": [
+        16,
+        13.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            2.5,
+            16,
+            3.5
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            2.5,
+            16,
+            3.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0.5,
+            2.5,
+            2.5,
+            3.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            0.5,
+            16,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            0.5,
+            16,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "独立横窗模块",
+      "from": [
+        5,
+        13.5,
+        1.5
+      ],
+      "to": [
+        16,
+        16,
+        1.625
+      ],
+      "faces": {
+        "north": {
+          "texture": "#window",
+          "uv": [
+            5,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "south": {
+          "texture": "#window",
+          "uv": [
+            5,
+            0.0,
+            16,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "下护板小检修压盖",
+      "from": [
+        5,
+        9,
+        0.25
+      ],
+      "to": [
+        11,
+        11.5,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            4.5,
+            11,
+            7
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            4.5,
+            11,
+            7
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.25,
+            4.5,
+            0.75,
+            7
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.25,
+            4.5,
+            0.75,
+            7
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.25,
+            11,
+            0.75
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.25,
+            11,
+            0.75
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗框钢紧固头",
+      "from": [
+        3.5,
+        14,
+        0.25
+      ],
+      "to": [
+        4.5,
+        15,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            1,
+            4.5,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            1,
+            4.5,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            1,
+            0.5,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            1,
+            0.5,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            0.25,
+            4.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            0.25,
+            4.5,
+            0.5
+          ]
+        }
       }
     }
-  ]
+  ],
+  "render_type": "minecraft:cutout_mipped"
 }

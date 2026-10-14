@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>屏蔽装配室 · 三套静态设计稿</title>
+  <link rel="stylesheet" href="/preview/style.css">
+  <script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+</head>
+<body>
+  <header><p class="eyebrow">CREATE: NUCLEAR INDUSTRY / DESIGN STUDY 15</p><h1>屏蔽装配室 <span>三套静态设计稿</span></h1><p>铅板与铸钢骨架，双机械臂和中央夹具。拖动任一稿，三稿同步观察。</p></header>
+  <main>
+    <div class="toolbar">
+      <div class="control"><span>观察方向</span><div class="buttons"><button data-view="default" class="active">统一斜视</button><button data-view="front">正面</button><button data-view="back">背面</button><button data-view="side">侧面</button><button data-view="top">俯视</button><button data-view="bottom">底部</button></div></div>
+      <div class="control"><span>查看机构</span><div class="buttons"><button id="cut" aria-pressed="false">机壳剖视</button><button id="hide" aria-pressed="false">隐藏机壳</button></div></div>
+      <div class="control"><span>状态灯贴图</span><div class="buttons"><button id="off" class="active">熄灭</button><button id="on">点亮</button></div></div>
+      <div class="control"><span>对照与视图</span><div class="buttons"><button id="baseline" aria-pressed="false" disabled>旧原机模型已存档</button><button id="reset">重置</button></div></div>
+      <p class="hint">2×2×2 格 · 同一相机与照明 · 滚轮缩放 · 机构保持待机，状态灯只作静态贴图对照。</p>
+    </div>
+    <p id="status" role="status">正在读取三套模型和像素材质…</p><pre id="error" hidden></pre>
+    <div id="cards" class="cards"></div>
+    <section class="notes"><p>底部半轴来自 Create，保留在主控格下方。选定方向后，再处理正式八格模型和实际工序动画。</p></section>
+    <footer><span>静态选稿预览 · 尚未安装游戏资源</span><button id="capture" disabled>保存当前三稿观察图</button></footer>
+  </main>
+  <script type="module" src="/preview/scene.mjs"></script>
+</body>
+</html>

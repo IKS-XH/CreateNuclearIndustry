@@ -1,0 +1,977 @@
+{
+  "schemaVersion": 1,
+  "task": "ART-SHIELDED-ASSEMBLY-15C",
+  "rigSha256": "c2a25527cfa2983f6ff246f730a43fa8d34d57d7c7333177f735845ddac056ba",
+  "units": "model_pixels_degrees",
+  "easing": "smoothstep",
+  "rotationOrder": "XYZ",
+  "facingPivot": [
+    8,
+    0,
+    8
+  ],
+  "groups": {
+    "left_base": {
+      "pivot": [
+        10,
+        21.5,
+        16
+      ],
+      "parent": null,
+      "fixed": true
+    },
+    "left_tool": {
+      "pivot": [
+        10,
+        20,
+        14.5
+      ],
+      "parent": null,
+      "fixed": false
+    },
+    "right_base": {
+      "pivot": [
+        22,
+        21.5,
+        16
+      ],
+      "parent": null,
+      "fixed": true
+    },
+    "right_tool": {
+      "pivot": [
+        22,
+        20,
+        14.5
+      ],
+      "parent": null,
+      "fixed": false
+    },
+    "fixture_base": {
+      "pivot": [
+        16,
+        13.5,
+        16
+      ],
+      "parent": null,
+      "fixed": true
+    },
+    "fixture_carriage": {
+      "pivot": [
+        16,
+        15,
+        16
+      ],
+      "parent": null,
+      "fixed": false
+    },
+    "fixture_jaw_left": {
+      "pivot": [
+        15.4375,
+        16,
+        16
+      ],
+      "parent": "fixture_carriage",
+      "fixed": false
+    },
+    "fixture_jaw_right": {
+      "pivot": [
+        16.5625,
+        16,
+        16
+      ],
+      "parent": "fixture_carriage",
+      "fixed": false
+    }
+  },
+  "domains": {
+    "idle": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    "manufacture_align": {
+      "left_tool": {
+        "translationMin": [
+          0,
+          0,
+          0
+        ],
+        "translationMax": [
+          0.25,
+          0,
+          0
+        ],
+        "rotationMin": [
+          0,
+          0,
+          0
+        ],
+        "rotationMax": [
+          0,
+          0,
+          14
+        ]
+      },
+      "right_tool": {
+        "translationMin": [
+          -0.25,
+          0,
+          0
+        ],
+        "translationMax": [
+          0,
+          0,
+          0
+        ],
+        "rotationMin": [
+          0,
+          0,
+          -14
+        ],
+        "rotationMax": [
+          0,
+          0,
+          0
+        ]
+      },
+      "carriageY": 0,
+      "rule": "制造对齐，Z倾斜与短侧滑可组合；Y锁紧必须0，左右交替。"
+    },
+    "sealing_lock": {
+      "left_tool": {
+        "translationMin": [
+          0,
+          0,
+          0
+        ],
+        "translationMax": [
+          1.5,
+          0,
+          0
+        ],
+        "rotationMin": [
+          0,
+          -6,
+          0
+        ],
+        "rotationMax": [
+          0,
+          6,
+          0
+        ]
+      },
+      "right_tool": {
+        "translationMin": [
+          -1.5,
+          0,
+          0
+        ],
+        "translationMax": [
+          0,
+          0,
+          0
+        ],
+        "rotationMin": [
+          0,
+          -6,
+          0
+        ],
+        "rotationMax": [
+          0,
+          6,
+          0
+        ]
+      },
+      "carriageY": 0,
+      "rule": "封装合拢/短锁紧；Z必须0，不与制造倾斜域叠加。"
+    },
+    "fixture_press": {
+      "fixture_carriage": {
+        "translationMin": [
+          0,
+          0,
+          0
+        ],
+        "translationMax": [
+          0,
+          1,
+          0
+        ],
+        "rotationMin": [
+          0,
+          0,
+          0
+        ],
+        "rotationMax": [
+          0,
+          0,
+          0
+        ]
+      },
+      "fixture_jaw_left": {
+        "translationMin": [
+          -0.5,
+          0,
+          0
+        ],
+        "translationMax": [
+          0.1,
+          0,
+          0
+        ],
+        "rotationMin": [
+          0,
+          0,
+          0
+        ],
+        "rotationMax": [
+          0,
+          0,
+          0
+        ]
+      },
+      "fixture_jaw_right": {
+        "translationMin": [
+          -0.1,
+          0,
+          0
+        ],
+        "translationMax": [
+          0.5,
+          0,
+          0
+        ],
+        "rotationMin": [
+          0,
+          0,
+          0
+        ],
+        "rotationMax": [
+          0,
+          0,
+          0
+        ]
+      },
+      "rule": "jaw局部X叠父carriage升降；carriage非零时双tool严格待机，base全部零变换。"
+    }
+  },
+  "operations": {
+    "manufacture": {
+      "toolDomain": "manufacture_align",
+      "frames": [
+        {
+          "at": 0,
+          "stage": "左臂送入",
+          "pose": {}
+        },
+        {
+          "at": 0.06,
+          "stage": "左臂对齐",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                14
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.18,
+          "stage": "左臂退回",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                14
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.25,
+          "stage": "右臂送入",
+          "pose": {}
+        },
+        {
+          "at": 0.31,
+          "stage": "右臂对齐",
+          "pose": {
+            "right_tool": {
+              "translation": [
+                -0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                -14
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.43,
+          "stage": "右臂退回",
+          "pose": {
+            "right_tool": {
+              "translation": [
+                -0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                -14
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.5,
+          "stage": "双臂对齐",
+          "pose": {}
+        },
+        {
+          "at": 0.57,
+          "stage": "保持对齐",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                14
+              ]
+            },
+            "right_tool": {
+              "translation": [
+                -0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                -14
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.66,
+          "stage": "双臂退回",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                14
+              ]
+            },
+            "right_tool": {
+              "translation": [
+                -0.25,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                -14
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.73,
+          "stage": "夹具合拢",
+          "pose": {}
+        },
+        {
+          "at": 0.78,
+          "stage": "夹具压装",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.84,
+          "stage": "夹具回落",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_carriage": {
+              "translation": [
+                0,
+                1,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.89,
+          "stage": "夹具松开",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.95,
+          "stage": "恢复待机",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                -0.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                0.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.99,
+          "stage": "待机",
+          "pose": {}
+        },
+        {
+          "at": 1,
+          "stage": "待机",
+          "pose": {}
+        }
+      ]
+    },
+    "sealing": {
+      "toolDomain": "sealing_lock",
+      "frames": [
+        {
+          "at": 0,
+          "stage": "夹具固定",
+          "pose": {}
+        },
+        {
+          "at": 0.08,
+          "stage": "固定保持",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.16,
+          "stage": "双臂合拢",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.3,
+          "stage": "短行程锁紧",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "right_tool": {
+              "translation": [
+                -1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.4,
+          "stage": "回扭锁紧",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                6,
+                0
+              ]
+            },
+            "right_tool": {
+              "translation": [
+                -1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                -6,
+                0
+              ]
+            },
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.49,
+          "stage": "短行程锁紧",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                -6,
+                0
+              ]
+            },
+            "right_tool": {
+              "translation": [
+                -1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                6,
+                0
+              ]
+            },
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.58,
+          "stage": "锁紧完成",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                6,
+                0
+              ]
+            },
+            "right_tool": {
+              "translation": [
+                -1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                -6,
+                0
+              ]
+            },
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.65,
+          "stage": "双臂退回",
+          "pose": {
+            "left_tool": {
+              "translation": [
+                1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "right_tool": {
+              "translation": [
+                -1.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.8,
+          "stage": "夹具松开",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                -0.1,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.9,
+          "stage": "恢复待机",
+          "pose": {
+            "fixture_jaw_left": {
+              "translation": [
+                -0.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            },
+            "fixture_jaw_right": {
+              "translation": [
+                0.5,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "at": 0.97,
+          "stage": "待机",
+          "pose": {}
+        },
+        {
+          "at": 1,
+          "stage": "待机",
+          "pose": {}
+        }
+      ]
+    }
+  }
+}

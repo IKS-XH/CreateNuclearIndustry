@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "baseline": {
+    "models": {
+      "lower": {
+        "path": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge.json",
+        "sha256": "1d0ae8e06fbeb9d612cc9697d410ee2ae31c1229df953805affcdb2f46e285be",
+        "elements": 60
+      },
+      "upper": {
+        "path": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_upper.json",
+        "sha256": "06b78e6f689efa390311d89ad0b2c0428119f55e4af62e9a6d21f06e850d4f9e",
+        "elements": 62
+      },
+      "rotor": {
+        "path": "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_rotor.json",
+        "sha256": "6283b89db2958ef17129ed823ba4e94df66faaa0ffb4219dc13d75001fa66e92",
+        "elements": 23
+      }
+    },
+    "textures": {
+      "casing": {
+        "path": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_casing.png",
+        "sha256": "f6d76a76e5193114a91d2c3ccfcde08787e324192e78bca6c2ff65d61218328d"
+      },
+      "brass": {
+        "path": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_brass.png",
+        "sha256": "00675e6d11ea472cee61ec2ae598e11ca413a7d9879a7ca7c054dfd9dc2566ce"
+      },
+      "glass": {
+        "path": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_glass.png",
+        "sha256": "4d5ae6f32ab8c6369aa26f5dc863d2c8bc13f1d284fb3f6a8830ef08cef40b54"
+      },
+      "dark": {
+        "path": "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_dark.png",
+        "sha256": "537b2e358b295cd1ca4fc364e4f93a84ac6498db274d40b7d5a8ad73dc6fbefd"
+      }
+    },
+    "rotorAxis": {
+      "origin": [
+        8,
+        16,
+        8
+      ],
+      "direction": [
+        0,
+        1,
+        0
+      ],
+      "coordinates": "lower-local",
+      "description": "转子23元素坐标以lower底面为原点；Y5..27；实际rotateCentered绕Direction.UP，Y参考点不改变轴线。"
+    },
+    "upperOffset": [
+      0,
+      16,
+      0
+    ],
+    "interfaces": [
+      {
+        "half": "upper",
+        "face": "up",
+        "position": [
+          8,
+          16,
+          8
+        ],
+        "role": "矿浆输入/回取",
+        "geometry": "顶帽中央x=7..9,z=7..9现有孔；upper-local"
+      },
+      {
+        "half": "lower",
+        "face": "down",
+        "position": [
+          8,
+          0,
+          8
+        ],
+        "role": "唯一动力输入",
+        "geometry": "底部中心；lower-local；Y轴"
+      },
+      {
+        "half": "lower+upper",
+        "faces": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ],
+        "role": "清水及两种粉末输出",
+        "geometry": "上下两段全部四水平面均有效，不假定某单独侧口或新增管嘴"
+      },
+      {
+        "half": "lower",
+        "face": "north",
+        "position": [
+          8,
+          3,
+          0.5
+        ],
+        "role": "停转后轴承检修",
+        "geometry": "默认facing=north既有小盖；随方块facing旋转，不是物料出口"
+      }
+    ],
+    "window": "正式glass槽为染色窄孔缘；本批保留实际观察孔，不把整机替换成透明壳。",
+    "sources": {
+      "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge.json": "1d0ae8e06fbeb9d612cc9697d410ee2ae31c1229df953805affcdb2f46e285be",
+      "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_upper.json": "06b78e6f689efa390311d89ad0b2c0428119f55e4af62e9a6d21f06e850d4f9e",
+      "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_rotor.json": "6283b89db2958ef17129ed823ba4e94df66faaa0ffb4219dc13d75001fa66e92",
+      "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_casing.png": "f6d76a76e5193114a91d2c3ccfcde08787e324192e78bca6c2ff65d61218328d",
+      "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_brass.png": "00675e6d11ea472cee61ec2ae598e11ca413a7d9879a7ca7c054dfd9dc2566ce",
+      "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_glass.png": "4d5ae6f32ab8c6369aa26f5dc863d2c8bc13f1d284fb3f6a8830ef08cef40b54",
+      "src/main/resources/assets/create_nuclear_industry/textures/block/enrichment_centrifuge_dark.png": "537b2e358b295cd1ca4fc364e4f93a84ac6498db274d40b7d5a8ad73dc6fbefd",
+      "src/main/java/com/iksxh/create_nuclear_industry/production/CentrifugeRenderer.java": "9e5b3b2621e7fa11bb533967c30c1457394392a4951f5cf7b59d1d2340cb7122",
+      "src/main/java/com/iksxh/create_nuclear_industry/production/CentrifugeBlock.java": "45303a95ca86c1d04022a49d1ce123e432aeb66a30324318a9f28a9b65f77fc9",
+      "src/main/java/com/iksxh/create_nuclear_industry/production/CentrifugeBlockEntity.java": "824eb51b1db232801bd17ee0b7e21f5cb5a7049b219cf982d176b2c42fd4e0f7",
+      "tools/art-assets/centrifuge_01d_preview.py": "71a1773c420a6c78a14301b96e72cfc333194e0493a165b5fe56aaf2520ad908",
+      "src/main/resources/assets/create_nuclear_industry/models/block/enrichment_centrifuge_item.json": "e895316aeaaddb469df4e24703e9cba80f2a2f154f85fe598b5a1a2f773a3183",
+      "src/main/resources/assets/create_nuclear_industry/blockstates/enrichment_centrifuge.json": "28a3d413b5290a444a43b386e3e1ea2a1b273c440b6939512b186abd595405de",
+      "src/main/resources/data/create_nuclear_industry/recipe/mechanical_crafting/enrichment_centrifuge.json": "a8c8a3292aeae4d8d7bd45cc101ac871beb9d670e7b35129cdaee36c3904bd06"
+    }
+  },
+  "revision": "r3",
+  "revisionDescription": "底部独立4×4钢短轴Y0..4与原转子同相位；静止四角脚及6.4围孔轴座，上端约.02嵌入原端板单列装配接触",
+  "concepts": [
+    {
+      "id": "a",
+      "name": "A 精密钢筒",
+      "description": "中亮钢灰长窗、简洁纵向骨架与细金色端环；突出两格钢筒及窗内钢制转子。",
+      "palette": {
+        "steel": "#77848A",
+        "light": "#A3ADB0",
+        "shade": "#59666C",
+        "dark": "#303E46",
+        "gold": "#B58C51",
+        "goldLight": "#D4AD6A",
+        "glass": "#52717B",
+        "mark": "#718D96",
+        "machined": "#87959B",
+        "machinedLight": "#B0BCC0"
+      },
+      "models": {
+        "lower": "a/lower.json",
+        "upper": "a/upper.json",
+        "rotor": "a/rotor.json",
+        "shaft": "a/shaft.json"
+      },
+      "textures": {
+        "casing": "a/casing.svg",
+        "brass": "a/brass.svg",
+        "glass": "a/glass.svg",
+        "dark": "a/dark.svg",
+        "machined": "a/machined.svg",
+        "fastener": "a/fastener.svg"
+      }
+    },
+    {
+      "id": "b",
+      "name": "B 铸钢加强壳",
+      "description": "深钢灰厚端座、八条宽加强筋与克制金色轴承件；突出铸钢重量和独立转子。",
+      "palette": {
+        "steel": "#4C5961",
+        "light": "#7C898E",
+        "shade": "#3B474E",
+        "dark": "#252F36",
+        "gold": "#9C7644",
+        "goldLight": "#C09A58",
+        "glass": "#425F68",
+        "mark": "#6E858B",
+        "machined": "#73838A",
+        "machinedLight": "#9AA9AF"
+      },
+      "models": {
+        "lower": "b/lower.json",
+        "upper": "b/upper.json",
+        "rotor": "b/rotor.json",
+        "shaft": "b/shaft.json"
+      },
+      "textures": {
+        "casing": "b/casing.svg",
+        "brass": "b/brass.svg",
+        "glass": "b/glass.svg",
+        "dark": "b/dark.svg",
+        "machined": "b/machined.svg",
+        "fastener": "b/fastener.svg"
+      }
+    },
+    {
+      "id": "c",
+      "name": "C 分段检修机壳",
+      "description": "暖浅灰分段检修护板、深钢骨架与上下分区；蓝色窗缘及赭色既有顶部圈辅助辨识。",
+      "palette": {
+        "steel": "#A2A09A",
+        "light": "#C0BDB4",
+        "shade": "#777E7F",
+        "dark": "#35444D",
+        "gold": "#A7824F",
+        "goldLight": "#C4A368",
+        "glass": "#426B80",
+        "mark": "#658B9B",
+        "machined": "#839197",
+        "machinedLight": "#9DACB2"
+      },
+      "models": {
+        "lower": "c/lower.json",
+        "upper": "c/upper.json",
+        "rotor": "c/rotor.json",
+        "shaft": "c/shaft.json"
+      },
+      "textures": {
+        "casing": "c/casing.svg",
+        "brass": "c/brass.svg",
+        "glass": "c/glass.svg",
+        "dark": "c/dark.svg",
+        "machined": "c/machined.svg",
+        "fastener": "c/fastener.svg"
+      }
+    }
+  ],
+  "rotorSizing": {
+    "unit": "模型单位1/16格",
+    "xzScaleElements1To22": 1.28,
+    "shaftElement0Width": 1.3,
+    "elementCount": 23,
+    "shaftReason": "原细轴Y5..27已嵌入闭合上下端座，不扩大既有接触；并非全23件均匀缩放",
+    "concepts": {
+      "a": {
+        "sweepEnvelopeDiameterBefore": 7.874802,
+        "sweepEnvelopeDiameterAfter": 10.079747,
+        "eightRodsWidthBeforeAfter": [
+          0.76,
+          0.9728
+        ],
+        "minimumDistanceExcludingUnchangedShaft": 0.96,
+        "minimumRadialGapAtOverlappingYExcludingShaft": 1.770126
+      },
+      "b": {
+        "sweepEnvelopeDiameterBefore": 7.874802,
+        "sweepEnvelopeDiameterAfter": 10.079747,
+        "eightRodsWidthBeforeAfter": [
+          0.76,
+          0.9728
+        ],
+        "minimumDistanceExcludingUnchangedShaft": 0.96,
+        "minimumRadialGapAtOverlappingYExcludingShaft": 1.640126
+      },
+      "c": {
+        "sweepEnvelopeDiameterBefore": 7.874802,
+        "sweepEnvelopeDiameterAfter": 10.079747,
+        "eightRodsWidthBeforeAfter": [
+          0.76,
+          0.9728
+        ],
+        "minimumDistanceExcludingUnchangedShaft": 0.96,
+        "minimumRadialGapAtOverlappingYExcludingShaft": 1.730126
+      }
+    }
+  },
+  "shaft": {
+    "coordinates": "lower-local",
+    "axis": {
+      "origin": [
+        8,
+        16,
+        8
+      ],
+      "direction": [
+        0,
+        1,
+        0
+      ]
+    },
+    "section": [
+      4,
+      4
+    ],
+    "y": [
+      0,
+      4
+    ],
+    "material": "machined",
+    "phase": "same-as-rotor",
+    "staticOpeningWidth": 6.4,
+    "minimum360ClearanceExcludingAssembly": 0.371573,
+    "assemblyContactY": [
+      3.98,
+      4
+    ],
+    "modelsKey": "shaft"
+  }
+}

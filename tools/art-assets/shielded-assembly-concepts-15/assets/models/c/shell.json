@@ -1,0 +1,6015 @@
+{
+  "credit": "ART-SHIELDED-ASSEMBLY-15A 原创候选，未安装",
+  "ambientocclusion": true,
+  "textures": {
+    "lead": "cni_concept15:block/c/lead",
+    "steel": "cni_concept15:block/c/steel",
+    "machined": "cni_concept15:block/c/machined",
+    "fastener": "cni_concept15:block/c/fastener",
+    "brass": "cni_concept15:block/c/brass",
+    "window": "cni_concept15:block/c/window",
+    "lamp_off": "cni_concept15:block/c/lamp_off",
+    "lamp_on": "cni_concept15:block/c/lamp_on",
+    "deck": "cni_concept15:block/c/deck",
+    "particle": "cni_concept15:block/c/lead"
+  },
+  "elements": [
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        6,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            6,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        0,
+        0,
+        16
+      ],
+      "to": [
+        6,
+        4,
+        32
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            6,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            6,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        10,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        10,
+        0,
+        16
+      ],
+      "to": [
+        16,
+        4,
+        32
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        16,
+        0,
+        0
+      ],
+      "to": [
+        32,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        16,
+        0,
+        16
+      ],
+      "to": [
+        32,
+        4,
+        32
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        6,
+        0,
+        0
+      ],
+      "to": [
+        10,
+        4,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            6,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            6,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            0,
+            10,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        6,
+        0,
+        10
+      ],
+      "to": [
+        10,
+        4,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            10,
+            10,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            10,
+            10,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "主控轴孔围台",
+      "from": [
+        6,
+        0,
+        16
+      ],
+      "to": [
+        10,
+        4,
+        32
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            12,
+            10,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            12,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "检修下座",
+      "from": [
+        1,
+        4,
+        1
+      ],
+      "to": [
+        16,
+        6.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            1,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            1,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "检修下座",
+      "from": [
+        1,
+        4,
+        16
+      ],
+      "to": [
+        16,
+        6.5,
+        31
+      ],
+      "faces": {
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            9.5,
+            15,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            0,
+            16,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            0,
+            16,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "检修下座",
+      "from": [
+        16,
+        4,
+        1
+      ],
+      "to": [
+        31,
+        6.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            9.5,
+            15,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            1,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            1,
+            15,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            1,
+            15,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "检修下座",
+      "from": [
+        16,
+        4,
+        16
+      ],
+      "to": [
+        31,
+        6.5,
+        31
+      ],
+      "faces": {
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            9.5,
+            15,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            9.5,
+            15,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0,
+            15,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "分段下托层",
+      "from": [
+        2,
+        6.5,
+        2
+      ],
+      "to": [
+        16,
+        8,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            8.0,
+            16,
+            9.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            8.0,
+            16,
+            9.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "分段下托层",
+      "from": [
+        2,
+        6.5,
+        16
+      ],
+      "to": [
+        16,
+        8,
+        30
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            8.0,
+            16,
+            9.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            8.0,
+            14,
+            9.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            0,
+            16,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            0,
+            16,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "name": "分段下托层",
+      "from": [
+        16,
+        6.5,
+        2
+      ],
+      "to": [
+        30,
+        8,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            8.0,
+            14,
+            9.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            8.0,
+            16,
+            9.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2,
+            14,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2,
+            14,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "分段下托层",
+      "from": [
+        16,
+        6.5,
+        16
+      ],
+      "to": [
+        30,
+        8,
+        30
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            8.0,
+            14,
+            9.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            8.0,
+            14,
+            9.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "name": "室内工作底板",
+      "from": [
+        3,
+        9.5,
+        3
+      ],
+      "to": [
+        16,
+        10.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            5.5,
+            16,
+            6.5
+          ]
+        },
+        "west": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            5.5,
+            16,
+            6.5
+          ]
+        },
+        "up": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            3,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            3,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "室内工作底板",
+      "from": [
+        3,
+        9.5,
+        16
+      ],
+      "to": [
+        16,
+        10.5,
+        29
+      ],
+      "faces": {
+        "south": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            5.5,
+            16,
+            6.5
+          ]
+        },
+        "west": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            5.5,
+            13,
+            6.5
+          ]
+        },
+        "up": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            0,
+            16,
+            13
+          ]
+        },
+        "down": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            0,
+            16,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "name": "室内工作底板",
+      "from": [
+        16,
+        9.5,
+        3
+      ],
+      "to": [
+        29,
+        10.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            5.5,
+            13,
+            6.5
+          ]
+        },
+        "east": {
+          "texture": "#deck",
+          "uv": [
+            3,
+            5.5,
+            16,
+            6.5
+          ]
+        },
+        "up": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            3,
+            13,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            3,
+            13,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "室内工作底板",
+      "from": [
+        16,
+        9.5,
+        16
+      ],
+      "to": [
+        29,
+        10.5,
+        29
+      ],
+      "faces": {
+        "south": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            5.5,
+            13,
+            6.5
+          ]
+        },
+        "east": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            5.5,
+            13,
+            6.5
+          ]
+        },
+        "up": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            0,
+            13,
+            13
+          ]
+        },
+        "down": {
+          "texture": "#deck",
+          "uv": [
+            0,
+            0,
+            13,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "name": "中央夹具静止座",
+      "from": [
+        12,
+        10.5,
+        11
+      ],
+      "to": [
+        16,
+        11,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            5.0,
+            16,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            5.0,
+            16,
+            5.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            11,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            11,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "中央夹具静止座",
+      "from": [
+        12,
+        10.5,
+        16
+      ],
+      "to": [
+        16,
+        11,
+        22
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            5.0,
+            16,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            5.0,
+            6,
+            5.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            0,
+            16,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            0,
+            16,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "中央夹具静止座",
+      "from": [
+        16,
+        10.5,
+        11
+      ],
+      "to": [
+        20,
+        11,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            5.0,
+            4,
+            5.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            5.0,
+            16,
+            5.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            11,
+            4,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            11,
+            4,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "中央夹具静止座",
+      "from": [
+        16,
+        10.5,
+        16
+      ],
+      "to": [
+        20,
+        11,
+        22
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            5.0,
+            4,
+            5.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            5.0,
+            6,
+            5.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            4,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            4,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "左后轨",
+      "from": [
+        4.5,
+        10.5,
+        24
+      ],
+      "to": [
+        6,
+        16,
+        27
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            0.0,
+            6.0,
+            5.5
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            0.0,
+            6.0,
+            5.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            0.0,
+            11,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            0.0,
+            11,
+            5.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            8,
+            6.0,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "name": "左后轨",
+      "from": [
+        4.5,
+        16,
+        24
+      ],
+      "to": [
+        6,
+        25.5,
+        27
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            6.5,
+            6.0,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            6.5,
+            6.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            6.5,
+            11,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            6.5,
+            11,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            4.5,
+            8,
+            6.0,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "name": "右后轨",
+      "from": [
+        26,
+        10.5,
+        24
+      ],
+      "to": [
+        27.5,
+        16,
+        27
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            0.0,
+            11.5,
+            5.5
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            0.0,
+            11.5,
+            5.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            0.0,
+            11,
+            5.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            0.0,
+            11,
+            5.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            8,
+            11.5,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "name": "右后轨",
+      "from": [
+        26,
+        16,
+        24
+      ],
+      "to": [
+        27.5,
+        25.5,
+        27
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            6.5,
+            11.5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            6.5,
+            11.5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            6.5,
+            11,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            8,
+            6.5,
+            11,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            8,
+            11.5,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        0,
+        8,
+        0
+      ],
+      "to": [
+        3,
+        16,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        0,
+        16,
+        0
+      ],
+      "to": [
+        3,
+        29.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        0,
+        8,
+        29
+      ],
+      "to": [
+        3,
+        16,
+        32
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            13,
+            3,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        0,
+        16,
+        29
+      ],
+      "to": [
+        3,
+        29.5,
+        32
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            13,
+            3,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        29,
+        8,
+        0
+      ],
+      "to": [
+        32,
+        16,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            3,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        29,
+        16,
+        0
+      ],
+      "to": [
+        32,
+        29.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            3,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        29,
+        8,
+        29
+      ],
+      "to": [
+        32,
+        16,
+        32
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0,
+            16,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            13,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "四角钢梁",
+      "from": [
+        29,
+        16,
+        29
+      ],
+      "to": [
+        32,
+        29.5,
+        32
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            2.5,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            13,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        0.5,
+        8,
+        3
+      ],
+      "to": [
+        2.5,
+        16,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            2.5,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            2.5,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            3,
+            2.5,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        0.5,
+        16,
+        3
+      ],
+      "to": [
+        2.5,
+        28,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            2.5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            2.5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            3,
+            2.5,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        0.5,
+        8,
+        16.5
+      ],
+      "to": [
+        2.5,
+        16,
+        29
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            2.5,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            2.5,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            13.0,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            13.0,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0.5,
+            2.5,
+            13.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        0.5,
+        16,
+        16.5
+      ],
+      "to": [
+        2.5,
+        28,
+        29
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            2.5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            2.5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            13.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            13.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0.5,
+            2.5,
+            13.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        0.75,
+        8,
+        15.5
+      ],
+      "to": [
+        2.25,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            0,
+            2.25,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            15.5,
+            2.25,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        0.75,
+        8,
+        16
+      ],
+      "to": [
+        2.25,
+        16,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            0,
+            2.25,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            0,
+            2.25,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        0.75,
+        16,
+        15.5
+      ],
+      "to": [
+        2.25,
+        28,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            4,
+            2.25,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            4,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            4,
+            16.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            15.5,
+            2.25,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        0.75,
+        16,
+        16
+      ],
+      "to": [
+        2.25,
+        28,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            4,
+            2.25,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            4,
+            0.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            4,
+            0.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0.75,
+            0,
+            2.25,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        29.5,
+        8,
+        3
+      ],
+      "to": [
+        31.5,
+        16,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            3,
+            15.5,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        29.5,
+        16,
+        3
+      ],
+      "to": [
+        31.5,
+        28,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            3,
+            15.5,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        29.5,
+        8,
+        16.5
+      ],
+      "to": [
+        31.5,
+        16,
+        29
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            13.0,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            13.0,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0.5,
+            15.5,
+            13.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块内收护板",
+      "from": [
+        29.5,
+        16,
+        16.5
+      ],
+      "to": [
+        31.5,
+        28,
+        29
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            13.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            13.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0.5,
+            15.5,
+            13.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        29.75,
+        8,
+        15.5
+      ],
+      "to": [
+        31.25,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            0,
+            15.25,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            15.5,
+            15.25,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        29.75,
+        8,
+        16
+      ],
+      "to": [
+        31.25,
+        16,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            0,
+            15.25,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            0,
+            15.25,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        29.75,
+        16,
+        15.5
+      ],
+      "to": [
+        31.25,
+        28,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            4,
+            15.25,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            4,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            4,
+            16.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            15.5,
+            15.25,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "侧模块凹接缝",
+      "from": [
+        29.75,
+        16,
+        16
+      ],
+      "to": [
+        31.25,
+        28,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            4,
+            15.25,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            4,
+            0.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            4,
+            0.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            13.75,
+            0,
+            15.25,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块护板",
+      "from": [
+        3,
+        8,
+        29.5
+      ],
+      "to": [
+        15.5,
+        16,
+        31.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            13.5,
+            15.5,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块护板",
+      "from": [
+        3,
+        16,
+        29.5
+      ],
+      "to": [
+        15.5,
+        28,
+        31.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            13.5,
+            15.5,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块护板",
+      "from": [
+        16.5,
+        8,
+        29.5
+      ],
+      "to": [
+        29,
+        16,
+        31.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            13.0,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            13.0,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0,
+            15.5,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            13.5,
+            13.0,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块护板",
+      "from": [
+        16.5,
+        16,
+        29.5
+      ],
+      "to": [
+        29,
+        28,
+        31.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            13.0,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            4,
+            13.0,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            15.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            13.5,
+            13.0,
+            15.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块接缝",
+      "from": [
+        15.5,
+        8,
+        30
+      ],
+      "to": [
+        16,
+        16,
+        31
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            14,
+            0,
+            15,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            14,
+            16.0,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块接缝",
+      "from": [
+        15.5,
+        16,
+        30
+      ],
+      "to": [
+        16,
+        28,
+        31
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            4,
+            16.0,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            4,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            14,
+            4,
+            15,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            14,
+            16.0,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块接缝",
+      "from": [
+        16,
+        8,
+        30
+      ],
+      "to": [
+        16.5,
+        16,
+        31
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            14,
+            0,
+            15,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            0.5,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "后模块接缝",
+      "from": [
+        16,
+        16,
+        30
+      ],
+      "to": [
+        16.5,
+        28,
+        31
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            4,
+            0.5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            4,
+            0.5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            14,
+            4,
+            15,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            0.5,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "前下检修护板",
+      "from": [
+        3,
+        8,
+        0.75
+      ],
+      "to": [
+        16,
+        12.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            3.5,
+            16,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            3.5,
+            16,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            3.5,
+            2.5,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            16,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            16,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前下检修护板",
+      "from": [
+        16,
+        8,
+        0.75
+      ],
+      "to": [
+        29,
+        12.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            3.5,
+            13,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            3.5,
+            13,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            3.5,
+            2.5,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.75,
+            13,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.75,
+            13,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        3,
+        24.5,
+        0.75
+      ],
+      "to": [
+        13.5,
+        26,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            6.0,
+            13.5,
+            7.5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            6.0,
+            13.5,
+            7.5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            13.5,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            13.5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        3,
+        26,
+        0.75
+      ],
+      "to": [
+        13.5,
+        27,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            5,
+            13.5,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            5,
+            13.5,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            13.5,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            13.5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        3,
+        27,
+        0.75
+      ],
+      "to": [
+        13.5,
+        28,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            13.5,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            4,
+            13.5,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            13.5,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            3,
+            0.75,
+            13.5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        13.5,
+        24.5,
+        0.75
+      ],
+      "to": [
+        16,
+        26,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            6.0,
+            16.0,
+            7.5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            6.0,
+            16.0,
+            7.5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0.75,
+            16.0,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0.75,
+            16.0,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        16,
+        24.5,
+        0.75
+      ],
+      "to": [
+        18.5,
+        26,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.75,
+            2.5,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.75,
+            2.5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "上梁灯槽背板",
+      "from": [
+        13.5,
+        26,
+        1.25
+      ],
+      "to": [
+        16,
+        27,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            5,
+            16.0,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            5,
+            16.0,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            1.25,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            1.25,
+            16.0,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            1.25,
+            16.0,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "上梁灯槽背板",
+      "from": [
+        16,
+        26,
+        1.25
+      ],
+      "to": [
+        18.5,
+        27,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            1.25,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            1.25,
+            2.5,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            1.25,
+            2.5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "原工作灯静态对照",
+      "from": [
+        13.5,
+        26,
+        0.75
+      ],
+      "to": [
+        16,
+        27,
+        1.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lamp_off",
+          "uv": [
+            13.5,
+            5,
+            16.0,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "原工作灯静态对照",
+      "from": [
+        16,
+        26,
+        0.75
+      ],
+      "to": [
+        18.5,
+        27,
+        1.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lamp_off",
+          "uv": [
+            0,
+            5,
+            2.5,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        13.5,
+        27,
+        0.75
+      ],
+      "to": [
+        16,
+        28,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            16.0,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            4,
+            16.0,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0.75,
+            16.0,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            13.5,
+            0.75,
+            16.0,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        16,
+        27,
+        0.75
+      ],
+      "to": [
+        18.5,
+        28,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.75,
+            2.5,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.75,
+            2.5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        18.5,
+        24.5,
+        0.75
+      ],
+      "to": [
+        29,
+        26,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            6.0,
+            13.0,
+            7.5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            6.0,
+            13.0,
+            7.5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            6.0,
+            2.5,
+            7.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            0.75,
+            13.0,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            0.75,
+            13.0,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        18.5,
+        26,
+        0.75
+      ],
+      "to": [
+        29,
+        27,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            5,
+            13.0,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            5,
+            13.0,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            5,
+            2.5,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            0.75,
+            13.0,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            0.75,
+            13.0,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "前上护板",
+      "from": [
+        18.5,
+        27,
+        0.75
+      ],
+      "to": [
+        29,
+        28,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            4,
+            13.0,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            4,
+            13.0,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0.75,
+            4,
+            2.5,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            0.75,
+            13.0,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            2.5,
+            0.75,
+            13.0,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块竖梁",
+      "from": [
+        3,
+        12.5,
+        0.5
+      ],
+      "to": [
+        5,
+        16,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0.0,
+            5,
+            3.5
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0.0,
+            5,
+            3.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            0.0,
+            2.5,
+            3.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            0.0,
+            2.5,
+            3.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0.5,
+            5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块竖梁",
+      "from": [
+        3,
+        16,
+        0.5
+      ],
+      "to": [
+        5,
+        24.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            7.5,
+            5,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            7.5,
+            5,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            7.5,
+            2.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            7.5,
+            2.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0.5,
+            5,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块竖梁",
+      "from": [
+        27,
+        12.5,
+        0.5
+      ],
+      "to": [
+        29,
+        16,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            0.0,
+            13,
+            3.5
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            0.0,
+            13,
+            3.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            0.0,
+            2.5,
+            3.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            0.0,
+            2.5,
+            3.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            0.5,
+            13,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块竖梁",
+      "from": [
+        27,
+        16,
+        0.5
+      ],
+      "to": [
+        29,
+        24.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            7.5,
+            13,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            7.5,
+            13,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            7.5,
+            2.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.5,
+            7.5,
+            2.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            11,
+            0.5,
+            13,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块横梁",
+      "from": [
+        5,
+        12.5,
+        0.5
+      ],
+      "to": [
+        16,
+        13.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            2.5,
+            16,
+            3.5
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            2.5,
+            16,
+            3.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0.5,
+            2.5,
+            2.5,
+            3.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            0.5,
+            16,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            0.5,
+            16,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块横梁",
+      "from": [
+        16,
+        12.5,
+        0.5
+      ],
+      "to": [
+        27,
+        13.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            2.5,
+            11,
+            3.5
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            2.5,
+            11,
+            3.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            0.5,
+            2.5,
+            2.5,
+            3.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.5,
+            11,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.5,
+            11,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块横梁",
+      "from": [
+        5,
+        23.5,
+        0.5
+      ],
+      "to": [
+        16,
+        24.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            7.5,
+            16,
+            8.5
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            7.5,
+            16,
+            8.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0.5,
+            7.5,
+            2.5,
+            8.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            0.5,
+            16,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            0.5,
+            16,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗模块横梁",
+      "from": [
+        16,
+        23.5,
+        0.5
+      ],
+      "to": [
+        27,
+        24.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            7.5,
+            11,
+            8.5
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            7.5,
+            11,
+            8.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            0.5,
+            7.5,
+            2.5,
+            8.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.5,
+            11,
+            2.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.5,
+            11,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "独立横窗模块",
+      "from": [
+        5,
+        13.5,
+        1.5
+      ],
+      "to": [
+        16,
+        16,
+        1.625
+      ],
+      "faces": {
+        "north": {
+          "texture": "#window",
+          "uv": [
+            5,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "south": {
+          "texture": "#window",
+          "uv": [
+            5,
+            0.0,
+            16,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "独立横窗模块",
+      "from": [
+        5,
+        16,
+        1.5
+      ],
+      "to": [
+        16,
+        23.5,
+        1.625
+      ],
+      "faces": {
+        "north": {
+          "texture": "#window",
+          "uv": [
+            5,
+            8.5,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#window",
+          "uv": [
+            5,
+            8.5,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "独立横窗模块",
+      "from": [
+        16,
+        13.5,
+        1.5
+      ],
+      "to": [
+        27,
+        16,
+        1.625
+      ],
+      "faces": {
+        "north": {
+          "texture": "#window",
+          "uv": [
+            0,
+            0.0,
+            11,
+            2.5
+          ]
+        },
+        "south": {
+          "texture": "#window",
+          "uv": [
+            0,
+            0.0,
+            11,
+            2.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "独立横窗模块",
+      "from": [
+        16,
+        16,
+        1.5
+      ],
+      "to": [
+        27,
+        23.5,
+        1.625
+      ],
+      "faces": {
+        "north": {
+          "texture": "#window",
+          "uv": [
+            0,
+            8.5,
+            11,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#window",
+          "uv": [
+            0,
+            8.5,
+            11,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶检修内托层",
+      "from": [
+        2,
+        28,
+        2
+      ],
+      "to": [
+        16,
+        29.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2.5,
+            16,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2.5,
+            16,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶检修内托层",
+      "from": [
+        2,
+        28,
+        16
+      ],
+      "to": [
+        16,
+        29.5,
+        30
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2.5,
+            16,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            14,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            0,
+            16,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            0,
+            16,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶检修内托层",
+      "from": [
+        16,
+        28,
+        2
+      ],
+      "to": [
+        30,
+        29.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            14,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            2,
+            2.5,
+            16,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2,
+            14,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2,
+            14,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶检修内托层",
+      "from": [
+        16,
+        28,
+        16
+      ],
+      "to": [
+        30,
+        29.5,
+        30
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            14,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            2.5,
+            14,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            14,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "name": "两片模块铅顶",
+      "from": [
+        0,
+        29.5,
+        0
+      ],
+      "to": [
+        15.5,
+        32,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            15.5,
+            2.5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0,
+            15.5,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0,
+            15.5,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "两片模块铅顶",
+      "from": [
+        0,
+        29.5,
+        16
+      ],
+      "to": [
+        15.5,
+        32,
+        32
+      ],
+      "faces": {
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            15.5,
+            2.5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0,
+            15.5,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0,
+            15.5,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "两片模块铅顶",
+      "from": [
+        16.5,
+        29.5,
+        0
+      ],
+      "to": [
+        32,
+        32,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0.0,
+            16.0,
+            2.5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            16.0,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "两片模块铅顶",
+      "from": [
+        16.5,
+        29.5,
+        16
+      ],
+      "to": [
+        32,
+        32,
+        32
+      ],
+      "faces": {
+        "south": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0.0,
+            16.0,
+            2.5
+          ]
+        },
+        "east": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "west": {
+          "texture": "#lead",
+          "uv": [
+            0,
+            0.0,
+            16,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            16.0,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#lead",
+          "uv": [
+            0.5,
+            0,
+            16.0,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶盖凹中缝",
+      "from": [
+        15.5,
+        29.5,
+        1
+      ],
+      "to": [
+        16,
+        31.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0.5,
+            16.0,
+            2.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            1,
+            0.5,
+            16,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            1,
+            16.0,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            1,
+            16.0,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶盖凹中缝",
+      "from": [
+        15.5,
+        29.5,
+        16
+      ],
+      "to": [
+        16,
+        31.5,
+        31
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0.5,
+            16.0,
+            2.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.5,
+            15,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            15.5,
+            0,
+            16.0,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶盖凹中缝",
+      "from": [
+        16,
+        29.5,
+        1
+      ],
+      "to": [
+        16.5,
+        31.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.5,
+            0.5,
+            2.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            1,
+            0.5,
+            16,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            1,
+            0.5,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            1,
+            0.5,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "顶盖凹中缝",
+      "from": [
+        16,
+        29.5,
+        16
+      ],
+      "to": [
+        16.5,
+        31.5,
+        31
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.5,
+            0.5,
+            2.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.5,
+            15,
+            2.5
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0,
+            0.5,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "name": "下护板小检修压盖",
+      "from": [
+        5,
+        9,
+        0.25
+      ],
+      "to": [
+        11,
+        11.5,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            4.5,
+            11,
+            7
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            4.5,
+            11,
+            7
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.25,
+            4.5,
+            0.75,
+            7
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.25,
+            4.5,
+            0.75,
+            7
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.25,
+            11,
+            0.75
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.25,
+            11,
+            0.75
+          ]
+        }
+      }
+    },
+    {
+      "name": "下护板小检修压盖",
+      "from": [
+        21,
+        9,
+        0.25
+      ],
+      "to": [
+        27,
+        11.5,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            4.5,
+            11,
+            7
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            4.5,
+            11,
+            7
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0.25,
+            4.5,
+            0.75,
+            7
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0.25,
+            4.5,
+            0.75,
+            7
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.25,
+            11,
+            0.75
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.25,
+            11,
+            0.75
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗框钢紧固头",
+      "from": [
+        3.5,
+        14,
+        0.25
+      ],
+      "to": [
+        4.5,
+        15,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            1,
+            4.5,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            1,
+            4.5,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            1,
+            0.5,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            1,
+            0.5,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            0.25,
+            4.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            0.25,
+            4.5,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗框钢紧固头",
+      "from": [
+        3.5,
+        22,
+        0.25
+      ],
+      "to": [
+        4.5,
+        23,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            9,
+            4.5,
+            10
+          ]
+        },
+        "south": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            9,
+            4.5,
+            10
+          ]
+        },
+        "east": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            9,
+            0.5,
+            10
+          ]
+        },
+        "west": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            9,
+            0.5,
+            10
+          ]
+        },
+        "up": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            0.25,
+            4.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#fastener",
+          "uv": [
+            3.5,
+            0.25,
+            4.5,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗框钢紧固头",
+      "from": [
+        27.5,
+        14,
+        0.25
+      ],
+      "to": [
+        28.5,
+        15,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            1,
+            12.5,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            1,
+            12.5,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            1,
+            0.5,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            1,
+            0.5,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            0.25,
+            12.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            0.25,
+            12.5,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "窗框钢紧固头",
+      "from": [
+        27.5,
+        22,
+        0.25
+      ],
+      "to": [
+        28.5,
+        23,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            9,
+            12.5,
+            10
+          ]
+        },
+        "south": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            9,
+            12.5,
+            10
+          ]
+        },
+        "east": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            9,
+            0.5,
+            10
+          ]
+        },
+        "west": {
+          "texture": "#fastener",
+          "uv": [
+            0.25,
+            9,
+            0.5,
+            10
+          ]
+        },
+        "up": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            0.25,
+            12.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#fastener",
+          "uv": [
+            11.5,
+            0.25,
+            12.5,
+            0.5
+          ]
+        }
+      }
+    }
+  ]
+}
