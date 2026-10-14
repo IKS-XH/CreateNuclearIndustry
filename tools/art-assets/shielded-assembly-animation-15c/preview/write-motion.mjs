@@ -1,0 +1,21 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),rigBytes=readFileSync(resolve(root,'rig.json'));
+const rigSha256=createHash('sha256').update(rigBytes).digest('hex');
+if(rigSha256!=='c2a25527cfa2983f6ff246f730a43fa8d34d57d7c7333177f735845ddac056ba')throw new Error('需最终批准rig，不能静默换约束');
+const rig=JSON.parse(rigBytes),groups=Object.fromEntries(Object.entries(rig.groups).map(([name,group])=>[name,{pivot:group.pivot,parent:group.parent,fixed:group.fixed}]));
+const transform=(translation=[0,0,0],rotation=[0,0,0])=>({translation,rotation});
+const alignLeft=transform([.25,0,0],[0,0,14]),alignRight=transform([-.25,0,0],[0,0,-14]);
+const jaws={fixture_jaw_left:transform([.1,0,0]),fixture_jaw_right:transform([-.1,0,0])};
+const open={fixture_jaw_left:transform([-.5,0,0]),fixture_jaw_right:transform([.5,0,0])};
+const seal=(angle=0)=>({left_tool:transform([1.5,0,0],[0,angle,0]),right_tool:transform([-1.5,0,0],[0,-angle,0]),...jaws});
+const frame=(at,stage,pose={})=>({at,stage,pose});
+// 阶段仅解释已同步工时；不定义物料/事务或独立工件，所有活动件在批末先退回。
+const manufacture=[frame(0,'左臂送入'),frame(.06,'左臂对齐',{left_tool:alignLeft}),frame(.18,'左臂退回',{left_tool:alignLeft}),frame(.25,'右臂送入'),frame(.31,'右臂对齐',{right_tool:alignRight}),frame(.43,'右臂退回',{right_tool:alignRight}),frame(.50,'双臂对齐'),frame(.57,'保持对齐',{left_tool:alignLeft,right_tool:alignRight}),frame(.66,'双臂退回',{left_tool:alignLeft,right_tool:alignRight}),frame(.73,'夹具合拢'),frame(.78,'夹具压装',jaws),frame(.84,'夹具回落',{...jaws,fixture_carriage:transform([0,1,0])}),frame(.89,'夹具松开',jaws),frame(.95,'恢复待机',open),frame(.99,'待机'),frame(1,'待机')];
+const sealing=[frame(0,'夹具固定'),frame(.08,'固定保持',jaws),frame(.16,'双臂合拢',jaws),frame(.30,'短行程锁紧',seal()),frame(.40,'回扭锁紧',seal(6)),frame(.49,'短行程锁紧',seal(-6)),frame(.58,'锁紧完成',seal(6)),frame(.65,'双臂退回',seal()),frame(.80,'夹具松开',jaws),frame(.90,'恢复待机',open),frame(.97,'待机'),frame(1,'待机')];
+const data={schemaVersion:1,task:'ART-SHIELDED-ASSEMBLY-15C',rigSha256,units:'model_pixels_degrees',easing:'smoothstep',rotationOrder:'XYZ',facingPivot:[8,0,8],groups,domains:rig.motionDomains,operations:{manufacture:{toolDomain:'manufacture_align',frames:manufacture},sealing:{toolDomain:'sealing_lock',frames:sealing}}};
+const target=resolve(root,'../../../src/main/resources/assets/create_nuclear_industry/shielded_assembly/animation.json');
+mkdirSync(dirname(target),{recursive:true});writeFileSync(target,JSON.stringify(data,null,2)+'\n');
+console.log(JSON.stringify({target,rigSha256,animationSha256:createHash('sha256').update(readFileSync(target)).digest('hex'),frames:{manufacture:manufacture.length,sealing:sealing.length}}));

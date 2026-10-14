@@ -1,0 +1,99 @@
+{
+  "entries": [
+    {
+      "sha256": "bbd1d6226933a4b29b365a449e87ecff1f851965f82f802c0800747b530a0576",
+      "archive": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.simibubi.create/create-1.21.1/6.0.10-280/92471e8fc5ed4e3c2279001d77ebcec6fd38bcab/create-1.21.1-6.0.10-280-slim.jar",
+      "archiveSha256": "f0652bee27460f2d26a748f537cb5d687981441378d3a526d17ffaab5a1072bb",
+      "entry": "assets/create/models/block/shaft_half.json",
+      "url": "/preview/refs/assets/create/models/block/shaft_half.json",
+      "bytes": 666
+    },
+    {
+      "sha256": "0ae58aa6fcc369fee5a49270827bfa572631078f57163b8344f97ea5fcde2441",
+      "archive": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.simibubi.create/create-1.21.1/6.0.10-280/92471e8fc5ed4e3c2279001d77ebcec6fd38bcab/create-1.21.1-6.0.10-280-slim.jar",
+      "archiveSha256": "f0652bee27460f2d26a748f537cb5d687981441378d3a526d17ffaab5a1072bb",
+      "entry": "assets/create/textures/block/axis.png",
+      "url": "/preview/refs/assets/create/textures/block/axis.png",
+      "bytes": 161
+    },
+    {
+      "sha256": "d96400565f72e7270eeb9daaab2b1cf2a450e9491bbd488d217ed5f7e49c4bc3",
+      "archive": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.simibubi.create/create-1.21.1/6.0.10-280/92471e8fc5ed4e3c2279001d77ebcec6fd38bcab/create-1.21.1-6.0.10-280-slim.jar",
+      "archiveSha256": "f0652bee27460f2d26a748f537cb5d687981441378d3a526d17ffaab5a1072bb",
+      "entry": "assets/create/textures/block/axis_top.png",
+      "url": "/preview/refs/assets/create/textures/block/axis_top.png",
+      "bytes": 124
+    },
+    {
+      "sha256": "6d17ba37eef6d763a7042a50dc541149735c0bf596a055989faab30c9cea1a8d",
+      "archive": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.simibubi.create/create-1.21.1/6.0.10-280/92471e8fc5ed4e3c2279001d77ebcec6fd38bcab/create-1.21.1-6.0.10-280-slim.jar",
+      "archiveSha256": "f0652bee27460f2d26a748f537cb5d687981441378d3a526d17ffaab5a1072bb",
+      "entry": "META-INF/neoforge.mods.toml",
+      "url": "/preview/refs/META-INF/neoforge.mods.toml",
+      "bytes": 2989
+    },
+    {
+      "sha256": "3ef6c442f1ab55d2a57fa58e28bb831268159052659f12b453b637b31ded1da8",
+      "archive": "C:/Users/IKSXH/.gradle/caches/neoformruntime/artifacts/minecraft_1.21.1_client.jar",
+      "archiveSha256": "499f6897d1837516680f3114072d8106e11c9adcd933fe5cf051b551089b0c99",
+      "entry": "assets/minecraft/models/block/block.json",
+      "url": "/preview/refs/assets/minecraft/models/block/block.json",
+      "bytes": 997
+    }
+  ],
+  "mapping": {
+    "archiveSha256": "0cf4611ad853042b689ac386184c5bbe02950efcffddb49e5f604e82baddb0dc",
+    "downHorizontal": 0,
+    "archive": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.createmod.ponder/ponder-neoforge/1.0.82+mc1.21.1/b10a04f40b9d6d33c346fb38df33f10f7e51b713/ponder-neoforge-1.0.82+mc1.21.1.jar",
+    "chain": "CachedBuffers.partialFacing -> rotateToFace -> center -> rotateYDegrees(horizontalAngle) -> rotateXDegrees(verticalAngle) -> uncenter",
+    "downVertical": 90
+  },
+  "attribution": {
+    "licenseDeclaration": "META-INF/neoforge.mods.toml: Read attached LICENSE.md",
+    "create": "Creators of Create / simibubi",
+    "projectUrl": "https://github.com/Creators-of-Create/Create",
+    "minecraft": "Mojang Minecraft 1.21.1原始block/block父模型；仅本地预览依赖，不安装或发布",
+    "licenseText": "该slim JAR未含LICENSE.md；本批只读引用原资源并保留第三方身份，未宣称CNI原创或重新许可"
+  },
+  "task": "ART-SHIELDED-ASSEMBLY-15A",
+  "schemaVersion": 1,
+  "shaft": {
+    "scale": 0.0625,
+    "contactModel": [
+      8,
+      0,
+      8
+    ],
+    "boundsModel": [
+      [
+        6,
+        0,
+        6
+      ],
+      [
+        10,
+        8,
+        10
+      ]
+    ],
+    "id": "create:block/shaft_half",
+    "rotationPivotModel": [
+      8,
+      8,
+      8
+    ],
+    "field": "AllPartialModels.SHAFT_HALF",
+    "rotationDegrees": [
+      90,
+      0,
+      0
+    ],
+    "facing": "DOWN",
+    "sourceFacing": "SOUTH",
+    "sceneTranslation": [
+      -0.5,
+      0.5,
+      -0.5
+    ]
+  }
+}

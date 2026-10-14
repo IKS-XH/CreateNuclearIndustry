@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>离心机 · 三稿模型对照</title>
+  <link rel="stylesheet" href="/preview/style.css">
+  <script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+</head>
+<body>
+  <header><div class="eyebrow">CREATE: NUCLEAR INDUSTRY / ART-CENTRIFUGE-14A</div><h1>铀浓缩离心机 <span>三稿模型对照</span></h1><p>实际候选模型 · SVG 像素纹理 · 上下两格机身与独立竖轴转子</p></header>
+  <main>
+    <section class="toolbar" aria-label="统一观察设置">
+      <div class="control"><span>观察角度</span><div class="buttons"><button data-view="default" class="active">统一斜视</button><button data-view="front">正面</button><button data-view="back">背面</button><button data-view="side">侧面</button><button data-view="top">俯视</button><button data-view="bottom">底部</button></div></div>
+      <div class="control"><span>结构查看</span><div class="buttons"><button id="cut" aria-pressed="false">壳体剖视</button><button id="turn" aria-pressed="false">观察转台</button><button id="baseline" aria-pressed="false">显示原机对照</button></div></div>
+      <div class="control"><span>转子演示</span><div class="buttons"><button id="stop" class="active">停止</button><button id="slow">低速演示</button><button id="reset">重置角度与相位</button></div></div>
+      <p class="hint">拖动任一模型可同步旋转视角；滚轮同步近看。低速为网页姿态演示，非游戏实际 RPM。</p>
+    </section>
+    <p id="status" role="status">正在读取真实模型与纹理…</p><pre id="error" hidden></pre>
+    <section id="cards" class="cards" aria-label="三稿同条件对照"></section>
+    <section class="notes"><h2>接口与观察说明</h2><div class="notes-grid"><p><b>顶部 / UP</b><br>上段矿浆输入与回取，中心孔位保持。</p><p><b>四个水平面</b><br>上下段均可接清水与两类粉末输出；本稿没有新增独立功能管口。</p><p><b>底部 / DOWN</b><br>下段中心动力输入。正面下段为轴承检修盖，随整机朝向旋转。</p><p><b>壳体剖视</b><br>沿中心 Z=8 裁去北侧半壳，转子完整保留；是网页查看工具，不是游戏结构。</p></div></section>
+    <footer><span>模型单位 1/16 格 · Minecraft 1.21.1 · block-model-renderer 2.20.0 · Three 0.180.0</span><button id="capture" disabled>保存本页观察证据</button></footer>
+  </main>
+  <script type="module" src="/preview/scene.mjs"></script>
+</body></html>

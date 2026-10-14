@@ -1,0 +1,646 @@
+{
+  "schemaVersion": 1,
+  "task": "ART-SHIELDED-ASSEMBLY-15B",
+  "selectedConcept": "c",
+  "name": "模块检修舱",
+  "approvedContractSha256": "b666789912cce985a7363e71d7dbb8c81cd294b490f86dc41ac3ab8bb79e41a2",
+  "approvedContract": "assets/source/approved-concepts.json",
+  "models": {
+    "parts": [
+      {
+        "part": 0,
+        "offset": [
+          0,
+          0,
+          0
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json"
+      },
+      {
+        "part": 1,
+        "offset": [
+          16,
+          0,
+          0
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json"
+      },
+      {
+        "part": 2,
+        "offset": [
+          0,
+          0,
+          16
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_on.json"
+      },
+      {
+        "part": 3,
+        "offset": [
+          16,
+          0,
+          16
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_on.json"
+      },
+      {
+        "part": 4,
+        "offset": [
+          0,
+          16,
+          0
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json"
+      },
+      {
+        "part": 5,
+        "offset": [
+          16,
+          16,
+          0
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json"
+      },
+      {
+        "part": 6,
+        "offset": [
+          0,
+          16,
+          16
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_on.json"
+      },
+      {
+        "part": 7,
+        "offset": [
+          16,
+          16,
+          16
+        ],
+        "off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_off.json",
+        "on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_on.json"
+      }
+    ],
+    "partials": {
+      "left_arm": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/left_arm.json",
+      "right_arm": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/right_arm.json",
+      "fixture": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/fixture.json"
+    },
+    "item": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station_item.json"
+  },
+  "textures": {
+    "lead": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lead.png",
+    "steel": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_steel.png",
+    "machined": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_machined.png",
+    "fastener": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_fastener.png",
+    "brass": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_brass.png",
+    "window": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_window.png",
+    "lamp_off": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_off.png",
+    "lamp_on": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_on.png",
+    "deck": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_deck.png"
+  },
+  "productionMappings": [
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json",
+      "sha256": "829a0da3b7e42fcfc05fb0db0b64dd95a9717de14749093edd8acdfa32e691ed"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json",
+      "sha256": "829a0da3b7e42fcfc05fb0db0b64dd95a9717de14749093edd8acdfa32e691ed"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json",
+      "sha256": "6b9de033b2b2787c6ac626e32dea063218b3a57c5d7e06dee58892315e9432b9"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json",
+      "sha256": "6b9de033b2b2787c6ac626e32dea063218b3a57c5d7e06dee58892315e9432b9"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_off.json",
+      "sha256": "55475a2741457cc9b987d634cc08c5ddb6fe9187b2e55391e68d7b7a9a7778b7"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_on.json",
+      "sha256": "55475a2741457cc9b987d634cc08c5ddb6fe9187b2e55391e68d7b7a9a7778b7"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_off.json",
+      "sha256": "76b92d22f7151d426858411bb00b162e6c582ddb918c67db956c60fc1786435b"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_on.json",
+      "sha256": "76b92d22f7151d426858411bb00b162e6c582ddb918c67db956c60fc1786435b"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json",
+      "sha256": "56ae05f06487d95563a7f50181f35632b8014a0ec7a323e8912d3d5767f30f1e"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json",
+      "sha256": "dec7410b0c546d9fd486eda3a336b3bb7faa21c1532fde9f9d7bc1ccc3f3993f"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json",
+      "sha256": "d49ed527414296a8dcf2c7ea8f6c66d93a6ca9bac8489ceebf624d4d6b592709"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json",
+      "sha256": "64a796c5f41f0769abf57b5f805ad9e0597012690431002bcd6625d76ffc9c66"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_off.json",
+      "sha256": "17e1c46ae8f63b5a3c94b1a836668a403ef63ad23b6f816c731956e69979e96a"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_on.json",
+      "sha256": "17e1c46ae8f63b5a3c94b1a836668a403ef63ad23b6f816c731956e69979e96a"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_off.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_off.json",
+      "sha256": "af10c8dfde23ae7b79ac173cedeb447c8c8cecc389e3b318066429559693603e"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_on.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_on.json",
+      "sha256": "af10c8dfde23ae7b79ac173cedeb447c8c8cecc389e3b318066429559693603e"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/left_arm.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/left_arm.json",
+      "sha256": "228b0e0ff98551e3b7aeaf1cf07cae3ce3707b76f2f4d2dddf74b3a3592a5423"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/right_arm.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/right_arm.json",
+      "sha256": "ae18358b2a5d10ce40f22cea633f4eeea3456a9d065eed8c3278e3392c52f7e0"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/fixture.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/fixture.json",
+      "sha256": "2adc467dc7bbc0c292e4af3437c38039d19c0f7b90667071234953f06ce37f9f"
+    },
+    {
+      "kind": "model",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station_item.json",
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station_item.json",
+      "sha256": "d53bafeeb3cc01aafc66c4a4d0d88e30b31d56aafa059d8ac50979bc1115cfe8"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lead.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lead.png",
+      "sha256": "11178481d5bd0c4304ca047141208cecca100aa8df3d2ed1be2a590a58cd991d"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_steel.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_steel.png",
+      "sha256": "185f5008ead86ba515f2d3a7fd7091e7c3430d76da3a85cb64af4860f1a72874"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_machined.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_machined.png",
+      "sha256": "c4c36ef098296a5303fc01e867e88638e59019bc58c4b5c0e8be799542654198"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_fastener.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_fastener.png",
+      "sha256": "16a9665cc97f03a7f161744cf9ff0214c5002349d13e2b013322a4396cd84555"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_brass.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_brass.png",
+      "sha256": "059539bb358c3e7fe162326085678a3b8a43569e63a5a9194005f82abd963b0a"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_window.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_window.png",
+      "sha256": "e813f44c2b7465805cd0060915e2aaa29692f34bb02d82cf9438fb94d71017e5"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_off.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_off.png",
+      "sha256": "0d57956c8f94460d1a537c7b3b46110e0c00ea6007d5e469718233bbe32cd9f2"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_on.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_on.png",
+      "sha256": "e181d736509885a2abf3082d0b19fb36ef445a5f1c4ebc84ec14779c8395ee58"
+    },
+    {
+      "kind": "texture",
+      "source": "assets/candidate/src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_deck.png",
+      "target": "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_deck.png",
+      "sha256": "7f60826eef6e531ca0b42543bbf7e9694d412db78344440a0a2dff5f668c47d4"
+    }
+  ],
+  "backupModels": [
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json",
+      "sha256": "5dea7058076aced106c719a546f0ced9c8614975b9b8549195818c1e13778270",
+      "bytes": 24809
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json",
+      "sha256": "5dea7058076aced106c719a546f0ced9c8614975b9b8549195818c1e13778270",
+      "bytes": 24809
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json",
+      "sha256": "c1d2c4dea850db8dfddecb2191d776aff27a9b2ac535e43e35306dfe5a72a8c1",
+      "bytes": 24928
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json",
+      "sha256": "c1d2c4dea850db8dfddecb2191d776aff27a9b2ac535e43e35306dfe5a72a8c1",
+      "bytes": 24928
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_off.json",
+      "sha256": "2305ad56149dace8bee9d70979c979d3d1d93606b36310b19ec4e327652b30fe",
+      "bytes": 25642
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_on.json",
+      "sha256": "2305ad56149dace8bee9d70979c979d3d1d93606b36310b19ec4e327652b30fe",
+      "bytes": 25642
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_off.json",
+      "sha256": "09e4b7831169043673e7b3d60ebcb186bddf52131d12475e04b18415bb16c39e",
+      "bytes": 24580
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_on.json",
+      "sha256": "09e4b7831169043673e7b3d60ebcb186bddf52131d12475e04b18415bb16c39e",
+      "bytes": 24580
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json",
+      "sha256": "ae09856898846a3f8cc70ba75ba3e68b8b05ce23cd06cfd9cc1d3c7a02c0022a",
+      "bytes": 32082
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json",
+      "sha256": "de06e9252c2d63276f81e7deaf04a48f61614f3b0421edb9fb0971f06bc93fed",
+      "bytes": 32077
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json",
+      "sha256": "077cf7845fed3e5538e2b7b9470dfb7d26c1d4c05deeb7265250fbe65292baf1",
+      "bytes": 32228
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json",
+      "sha256": "f214a18156a64e5ad0d2adfa1abd1198cc9efc5a00437cec655e59e2286c4b0d",
+      "bytes": 32223
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_off.json",
+      "sha256": "1ffd020562eede97ddf89d065501eab61f56e188a74f44fb45d565b57f2b3218",
+      "bytes": 29409
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_on.json",
+      "sha256": "1ffd020562eede97ddf89d065501eab61f56e188a74f44fb45d565b57f2b3218",
+      "bytes": 29409
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_off.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_off.json",
+      "sha256": "296af89dcbe1a21e5abd902c2146d72cc658b3c225a519772b50bd3b06714cb3",
+      "bytes": 27068
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_on.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_on.json",
+      "sha256": "296af89dcbe1a21e5abd902c2146d72cc658b3c225a519772b50bd3b06714cb3",
+      "bytes": 27068
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/left_arm.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/left_arm.json",
+      "sha256": "9ad863a329f1e59a0de608dd32cd449e60c1c2512a0c3dbb1b2eec3bcd5361ac",
+      "bytes": 4401
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/right_arm.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/right_arm.json",
+      "sha256": "ea8a8c793b2536a63d50286657051a7e7b338367a72e0791f5026c1905647379",
+      "bytes": 4392
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/fixture.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/fixture.json",
+      "sha256": "20db9a8013c08fe944a28d97122b0b13479ad67e14b99c2a570d09e74b621d79",
+      "bytes": 4400
+    },
+    {
+      "target": "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station_item.json",
+      "backup": "assets/backup/src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station_item.json",
+      "sha256": "1c605d82f3daf21dbc0f4092afeb9f90748b798e56a375c182742933e1e90410",
+      "bytes": 229402
+    }
+  ],
+  "sources": {
+    "assets/source/approved-concepts.json": {
+      "sha256": "b666789912cce985a7363e71d7dbb8c81cd294b490f86dc41ac3ab8bb79e41a2",
+      "bytes": 26430
+    },
+    "assets/source/models/c/fixture.json": {
+      "sha256": "e70aae23748a218d17f6afc02cb1aa2d8e95c25084144e4074769d0c48c579d5",
+      "bytes": 27077
+    },
+    "assets/source/models/c/left_arm.json": {
+      "sha256": "e35c47da8fe94d712fbf274aa3eeb57d5a7d66ff1a38cd327fa50697c0ae2a13",
+      "bytes": 30058
+    },
+    "assets/source/models/c/right_arm.json": {
+      "sha256": "edb9ad637ad4ced7b9b332388747a04f24883f7b5797f3a0cabb769189a8927d",
+      "bytes": 30010
+    },
+    "assets/source/models/c/shell.json": {
+      "sha256": "a2a21feb2845622f312fce587679523edd99b89bab63a61c350545216d17df55",
+      "bytes": 102296
+    },
+    "assets/source/textures/c/brass.svg": {
+      "sha256": "2a27dfa285535417a22ce33ec9da30f80ea5f2bcc0ba26d6890ee3af2ede36b6",
+      "bytes": 298
+    },
+    "assets/source/textures/c/deck.svg": {
+      "sha256": "148a9fd3f17685e60adbdeee7d37143cdf3f4771b5b26b2af944dfc40c9c7962",
+      "bytes": 532
+    },
+    "assets/source/textures/c/fastener.svg": {
+      "sha256": "9c02f79c661d075e697798312bcc1124b3253c78f881c4505de38ae047e2ca73",
+      "bytes": 356
+    },
+    "assets/source/textures/c/lamp_off.svg": {
+      "sha256": "8481e83f69c9623f4a1b2f0a75017a9e82f18a24c5614d1ab0c91376138b4402",
+      "bytes": 239
+    },
+    "assets/source/textures/c/lamp_on.svg": {
+      "sha256": "ef1a0464cc7b868beafa2f4b75689f0a852e7b97a7a46f3c231f8bc6be311e1d",
+      "bytes": 239
+    },
+    "assets/source/textures/c/lead.svg": {
+      "sha256": "ea1d022c6ad684e734d5dcd0703d724920dd7169e6f9620d8c0ca5dd397cad50",
+      "bytes": 415
+    },
+    "assets/source/textures/c/machined.svg": {
+      "sha256": "dd16a8782144f1deb6a9b6766aed7ad54b7822c01940d4dc9401f0e8b0a4349e",
+      "bytes": 415
+    },
+    "assets/source/textures/c/steel.svg": {
+      "sha256": "fb71c38fc26025069232ca37bc485ae3eee424b378a4095008a4416665a6da81",
+      "bytes": 414
+    },
+    "assets/source/textures/c/window.svg": {
+      "sha256": "203bd61d47bdc3eda171644a833d21c7325ab44613213ba1aca82b6dc2421917",
+      "bytes": 295
+    }
+  },
+  "coordinates": {
+    "units": "16模型单位=1格",
+    "origin": "北向主控格最小角",
+    "axes": {
+      "x": "east",
+      "y": "up",
+      "z": "south"
+    },
+    "machineBounds": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        32,
+        32,
+        32
+      ]
+    ],
+    "partFormula": "x+2*z+4*y",
+    "partOffset": "[16*x,16*y,16*z]仅用于原八part对照，不用于候选partial",
+    "facingPivotXZ": [
+      8,
+      8
+    ],
+    "partialOffset": [
+      0,
+      0,
+      0
+    ],
+    "shaftCenter": [
+      8,
+      0,
+      8
+    ],
+    "shaftAperture": [
+      [
+        6,
+        0,
+        6
+      ],
+      [
+        10,
+        4,
+        10
+      ]
+    ],
+    "shaftSource": "Create原生SHAFT_HALF，预览执行者只读处理；候选没有静态轴"
+  },
+  "rig": {
+    "left_arm": {
+      "pivot": [
+        9,
+        21,
+        15
+      ],
+      "axis": "+X",
+      "travel": [
+        0,
+        1
+      ],
+      "idle_bounds": [
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          13,
+          23,
+          22
+        ]
+      ],
+      "swept_bounds": [
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          14,
+          23,
+          22
+        ]
+      ]
+    },
+    "right_arm": {
+      "pivot": [
+        23,
+        21,
+        15
+      ],
+      "axis": "-X",
+      "travel": [
+        0,
+        1
+      ],
+      "idle_bounds": [
+        [
+          19,
+          13,
+          10
+        ],
+        [
+          25,
+          23,
+          22
+        ]
+      ],
+      "swept_bounds": [
+        [
+          18,
+          13,
+          10
+        ],
+        [
+          25,
+          23,
+          22
+        ]
+      ]
+    },
+    "fixture": {
+      "pivot": [
+        16,
+        13,
+        16
+      ],
+      "axis": "+Y",
+      "travel": [
+        0,
+        3
+      ],
+      "idle_bounds": [
+        [
+          13,
+          11,
+          12
+        ],
+        [
+          19,
+          18,
+          20
+        ]
+      ],
+      "swept_bounds": [
+        [
+          13,
+          11,
+          12
+        ],
+        [
+          19,
+          21,
+          20
+        ]
+      ]
+    }
+  },
+  "status": "候选生成；生产安装须预览执行者ready后单独执行--install",
+  "state": "on仅实际灯面绑定lamp_on；三partial是原待机姿态，无工序动画，Create SHAFT_HALF仍由原Renderer消费。",
+  "reuse": "15A最终checks/单次REVIEW与负责人C实图按源SHA复用，不重跑三稿/旧全矩阵。",
+  "renderLayerR1": {
+    "task": "ART-SHIELDED-ASSEMBLY-15B-R1",
+    "changedTargets": [
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json",
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json",
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json",
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json",
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json",
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json",
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json",
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json"
+    ],
+    "baselineJarSha256": "a92a0bed0f948fc000b58800cad34f84c03ffb314b167fea3a839f117b12ff7f",
+    "baselineJarBytes": 2812280,
+    "renderType": "minecraft:cutout_mipped",
+    "nativeRed": "build/reports/art/ART-SHIELDED-ASSEMBLY-15B-R1/assets/native-red.json",
+    "scope": "仅静态透明面层声明；几何/UV/PNG/partial/item保持，GREEN和局部Minecraft复看另记录"
+  }
+}

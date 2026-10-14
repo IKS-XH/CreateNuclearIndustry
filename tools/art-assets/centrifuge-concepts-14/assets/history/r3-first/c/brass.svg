@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+<title>C 分段检修机壳：brass，原创16×16像素纹理</title>
+<rect x="0" y="0" width="16" height="16" fill="#A7824F"/>
+<rect x="0" y="0" width="16" height="2" fill="#C4A368"/>
+<rect x="0" y="14" width="16" height="2" fill="#777E7F"/>
+<rect x="0" y="2" width="1" height="12" fill="#C4A368"/>
+<rect x="15" y="2" width="1" height="12" fill="#777E7F"/>
+<rect x="4" y="3" width="1" height="10" fill="#777E7F"/>
+<rect x="11" y="3" width="1" height="10" fill="#777E7F"/>
+</svg>

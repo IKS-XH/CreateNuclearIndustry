@@ -14,10 +14,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 
-/** 只在有效下段渲染跨两格的独立转子；本机渲染框覆盖整机高度。 */
+/** 客户端只在有效下段同相位渲染独立转子与底部输入轴；两者复用真实有符号RPM，渲染框覆盖整机两格。 */
 public final class CentrifugeRenderer extends KineticBlockEntityRenderer<CentrifugeBlockEntity> {
     public static final PartialModel ROTOR = PartialModel.of(
             ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "block/enrichment_centrifuge_rotor"));
+    public static final PartialModel SHAFT = PartialModel.of(
+            ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "block/enrichment_centrifuge_shaft"));
 
     public CentrifugeRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
@@ -37,6 +39,10 @@ public final class CentrifugeRenderer extends KineticBlockEntityRenderer<Centrif
         float angle = powered ? ((AnimationTickHolder.getRenderTime(machine.getLevel()) * speed * 3f / 10f) % 360f)
                 * (float) Math.PI / 180f : 0f;
         CachedBuffers.partial(ROTOR, machine.getBlockState())
+                .rotateCentered(angle, Direction.UP).light(light)
+                .renderInto(pose, buffers.getBuffer(RenderType.cutoutMipped()));
+        // 输入轴与转子共享原有有符号角度和停转条件；不调用super重复绘制通用轴，也不让静态轴座跟转。
+        CachedBuffers.partial(SHAFT, machine.getBlockState())
                 .rotateCentered(angle, Direction.UP).light(light)
                 .renderInto(pose, buffers.getBuffer(RenderType.cutoutMipped()));
     }

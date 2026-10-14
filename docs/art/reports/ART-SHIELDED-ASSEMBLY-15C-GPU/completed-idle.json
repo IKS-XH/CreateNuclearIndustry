@@ -1,0 +1,4060 @@
+{
+  "task": "ART-SHIELDED-ASSEMBLY-15C",
+  "ready": true,
+  "errors": [],
+  "sourceMode": "production",
+  "state": {
+    "yaw": 2.3500000000000014,
+    "pitch": 0.7999999999999987,
+    "zoom": 1,
+    "cut": true,
+    "hide": false,
+    "facing": "east",
+    "operation": "sealing",
+    "rpm": 32,
+    "running": false,
+    "paused": false,
+    "overloaded": false
+  },
+  "demo": {
+    "connectedToGame": false,
+    "tick": 18039.460000000257,
+    "work": 12800,
+    "actualProgress": 0,
+    "receivedProgress": 0,
+    "output": true,
+    "frame": {
+      "progress": 0,
+      "phase": 0
+    }
+  },
+  "pose": {
+    "stage": "待机",
+    "groups": {
+      "left_base": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "left_tool": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "right_base": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "right_tool": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "fixture_base": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "fixture_carriage": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "fixture_jaw_left": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "fixture_jaw_right": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  },
+  "parity": {
+    "passed": true,
+    "poseCases": 9,
+    "groupComparisons": 72
+  },
+  "centerProof": [
+    {
+      "group": "left_base",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          -0.5625,
+          1.25,
+          -0.375
+        ],
+        "max": [
+          -0.1875,
+          1.4375,
+          0.375
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          -0.5625,
+          1.25,
+          -0.375
+        ],
+        "max": [
+          -0.1875,
+          1.4375,
+          0.375
+        ]
+      }
+    },
+    {
+      "group": "left_tool",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          -0.5,
+          0.8125,
+          -0.25
+        ],
+        "max": [
+          -0.25,
+          1.25,
+          0.0625
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          -0.5,
+          0.8125,
+          -0.25
+        ],
+        "max": [
+          -0.25,
+          1.25,
+          0.0625
+        ]
+      }
+    },
+    {
+      "group": "right_base",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          0.1875,
+          1.25,
+          -0.375
+        ],
+        "max": [
+          0.5625,
+          1.4375,
+          0.375
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          0.1875,
+          1.25,
+          -0.375
+        ],
+        "max": [
+          0.5625,
+          1.4375,
+          0.375
+        ]
+      }
+    },
+    {
+      "group": "right_tool",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          0.25,
+          0.8125,
+          -0.25
+        ],
+        "max": [
+          0.5,
+          1.25,
+          0.0625
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          0.25,
+          0.8125,
+          -0.25
+        ],
+        "max": [
+          0.5,
+          1.25,
+          0.0625
+        ]
+      }
+    },
+    {
+      "group": "fixture_base",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          -0.140625,
+          0.6875,
+          -0.25
+        ],
+        "max": [
+          0.125,
+          0.9375,
+          0.25
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          -0.140625,
+          0.6875,
+          -0.25
+        ],
+        "max": [
+          0.125,
+          0.9375,
+          0.25
+        ]
+      }
+    },
+    {
+      "group": "fixture_carriage",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          -0.1875,
+          0.875,
+          -0.1875
+        ],
+        "max": [
+          0.1875,
+          1,
+          0.1875
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          -0.1875,
+          0.875,
+          -0.1875
+        ],
+        "max": [
+          0.1875,
+          1,
+          0.1875
+        ]
+      }
+    },
+    {
+      "group": "fixture_jaw_left",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          -0.0625,
+          1,
+          -0.125
+        ],
+        "max": [
+          -0.0078125,
+          1.125,
+          0.125
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          -0.0625,
+          1,
+          -0.125
+        ],
+        "max": [
+          -0.0078125,
+          1.125,
+          0.125
+        ]
+      }
+    },
+    {
+      "group": "fixture_jaw_right",
+      "scale": 0.0625,
+      "normalizer": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "sceneOffset": [
+        -1,
+        0,
+        -1
+      ],
+      "actualBox": {
+        "min": [
+          0.0078125,
+          1,
+          -0.125
+        ],
+        "max": [
+          0.0625,
+          1.125,
+          0.125
+        ]
+      },
+      "expectedBox": {
+        "min": [
+          0.0078125,
+          1,
+          -0.125
+        ],
+        "max": [
+          0.0625,
+          1.125,
+          0.125
+        ]
+      }
+    }
+  ],
+  "pointProof": [
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.4104544,
+        0.9613253,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.41045441526428056,
+        0.9613253523973511,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.4104544,
+        0.9613253,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.41045441526428056,
+        0.9613253523973511,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.78125,
+        0.9613253,
+        -0.4104544
+      ],
+      "threeScenePoint": [
+        -0.781250006555193,
+        0.9613253523973511,
+        -0.4104544358532162
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.5895456,
+        0.9613253,
+        -0.78125003
+      ],
+      "threeScenePoint": [
+        -0.5895455977885901,
+        0.9613253523973511,
+        -0.7812499958441705
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.03,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.21875,
+        0.9613253,
+        -0.58954555
+      ],
+      "threeScenePoint": [
+        -0.21875000655519466,
+        0.9613253523973511,
+        -0.5895456053246546
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.3671388,
+        0.9582042,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.36713882047790564,
+        0.9582041788911521,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.3671388,
+        0.9582042,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.36713882047790564,
+        0.9582041788911521,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.78125,
+        0.9582042,
+        -0.3671388
+      ],
+      "threeScenePoint": [
+        -0.7812500097261157,
+        0.9582041788911521,
+        -0.36713884106684147
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.63286126,
+        0.9582042,
+        -0.78125003
+      ],
+      "threeScenePoint": [
+        -0.6328611925749649,
+        0.9582041788911521,
+        -0.7812499938338848
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.1,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.21875,
+        0.9582042,
+        -0.6328612
+      ],
+      "threeScenePoint": [
+        -0.2187500097261173,
+        0.9582041788911521,
+        -0.6328612001110293
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.2155301999999999,
+        0.9960045,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        0.2155301132472811,
+        0.9960044750786001,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.78125,
+        0.96875,
+        -0.453125
+      ],
+      "threeScenePoint": [
+        -0.7812500034314885,
+        0.96875,
+        -0.4531250205889355
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.5468750600000001,
+        0.96875,
+        -0.7812500099999999
+      ],
+      "threeScenePoint": [
+        -0.5468750130528706,
+        0.96875,
+        -0.7812499978245211
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.36,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.21875,
+        0.96875,
+        -0.546875
+      ],
+      "threeScenePoint": [
+        -0.21875000343148998,
+        0.96875,
+        -0.5468750205889353
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.3671388,
+        0.9582042,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.36713882047790564,
+        0.9582041788911521,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.2155301999999999,
+        0.9960045,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        0.2155301132472811,
+        0.9960044750786001,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.3671388,
+        0.9582042,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.36713882047790564,
+        0.9582041788911521,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.78125,
+        0.9582042,
+        -0.3671388
+      ],
+      "threeScenePoint": [
+        -0.7812500097261157,
+        0.9582041788911521,
+        -0.36713884106684147
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.63286126,
+        0.9582042,
+        -0.78125003
+      ],
+      "threeScenePoint": [
+        -0.6328611925749649,
+        0.9582041788911521,
+        -0.7812499938338848
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.6,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.21875,
+        0.9582042,
+        -0.6328612
+      ],
+      "threeScenePoint": [
+        -0.2187500097261173,
+        0.9582041788911521,
+        -0.6328612001110293
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.9375,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.9375,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.05625000000000002,
+        1.0625,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.05625000000000002,
+        1.0625,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.01718749999999991,
+        1.0625,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.01718749999999991,
+        1.0625,
+        -0.125
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.78125,
+        0.96875,
+        -0.453125
+      ],
+      "threeScenePoint": [
+        -0.7812500034314885,
+        0.96875,
+        -0.4531250205889355
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.5468750600000001,
+        0.96875,
+        -0.7812500099999999
+      ],
+      "threeScenePoint": [
+        -0.5468750130528706,
+        0.96875,
+        -0.7812499978245211
+      ]
+    },
+    {
+      "operation": "manufacture",
+      "phase": 0.84,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.21875,
+        0.96875,
+        -0.546875
+      ],
+      "threeScenePoint": [
+        -0.21875000343148998,
+        0.96875,
+        -0.5468750205889353
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.359375,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.359375,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.203125,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        0.203125,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.05625000000000002,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.05625000000000002,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.01718749999999991,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.01718749999999991,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.359375,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.359375,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.78125,
+        0.96875,
+        -0.359375
+      ],
+      "threeScenePoint": [
+        -0.781250010294467,
+        0.96875,
+        -0.3593750205889358
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.6406250600000001,
+        0.96875,
+        -0.7812500099999999
+      ],
+      "threeScenePoint": [
+        -0.6406250130528705,
+        0.96875,
+        -0.7812499934735643
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.3,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.21875,
+        0.96875,
+        -0.640625
+      ],
+      "threeScenePoint": [
+        -0.2187500102944684,
+        0.96875,
+        -0.6406250205889351
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.3720131,
+        0.96875,
+        -0.20989895000000003
+      ],
+      "threeScenePoint": [
+        -0.372013080984103,
+        0.96875,
+        -0.2098989507282487
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.2166189999999999,
+        0.96875,
+        -0.22623150000000003
+      ],
+      "threeScenePoint": [
+        0.21661903483281042,
+        0.96875,
+        -0.2262315231138196
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.05625000000000002,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.05625000000000002,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.01718749999999991,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.01718749999999991,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.3720131,
+        0.96875,
+        -0.20989895000000003
+      ],
+      "threeScenePoint": [
+        -0.372013080984103,
+        0.96875,
+        -0.2098989507282487
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.79010107,
+        0.96875,
+        -0.3720131
+      ],
+      "threeScenePoint": [
+        -0.7901010586410462,
+        0.96875,
+        -0.3720131022209807
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.62798697,
+        0.96875,
+        -0.79010107
+      ],
+      "threeScenePoint": [
+        -0.6279869324795465,
+        0.96875,
+        -0.7901010433318515
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.4,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.20989895000000003,
+        0.96875,
+        -0.6279869
+      ],
+      "threeScenePoint": [
+        -0.20989896009754533,
+        0.96875,
+        -0.6279869402527739
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.345881,
+        0.96875,
+        -0.22623146000000005
+      ],
+      "threeScenePoint": [
+        -0.3458809651671897,
+        0.96875,
+        -0.2262315231138196
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.19048690000000001,
+        0.96875,
+        -0.2098989
+      ],
+      "threeScenePoint": [
+        0.19048691901589698,
+        0.96875,
+        -0.2098989507282486
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.05625000000000002,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.05625000000000002,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.01718749999999991,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.01718749999999991,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.345881,
+        0.96875,
+        -0.22623146000000005
+      ],
+      "threeScenePoint": [
+        -0.3458809651671897,
+        0.96875,
+        -0.2262315231138196
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.77376847,
+        0.96875,
+        -0.345881
+      ],
+      "threeScenePoint": [
+        -0.7737684881684797,
+        0.96875,
+        -0.3458809852084399
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.65411907,
+        0.96875,
+        -0.7737685400000001
+      ],
+      "threeScenePoint": [
+        -0.6541190475384617,
+        0.96875,
+        -0.7737684697334839
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.49,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.22623146000000005,
+        0.96875,
+        -0.654119
+      ],
+      "threeScenePoint": [
+        -0.22623153439612004,
+        0.96875,
+        -0.6541190548740596
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "left_base",
+      "facing": "north",
+      "source": [
+        7,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        -1,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        -0.5625,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "right_base",
+      "facing": "north",
+      "source": [
+        23.75,
+        20,
+        10
+      ],
+      "nativeVertex": [
+        15.75,
+        12,
+        2
+      ],
+      "javaScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ],
+      "threeScenePoint": [
+        0.484375,
+        1.25,
+        -0.375
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "right_tool",
+      "facing": "north",
+      "source": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        12.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        0.296875,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "fixture_base",
+      "facing": "north",
+      "source": [
+        14,
+        11,
+        12.5
+      ],
+      "nativeVertex": [
+        6,
+        3,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.125,
+        0.6875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "fixture_carriage",
+      "facing": "north",
+      "source": [
+        13,
+        14,
+        13
+      ],
+      "nativeVertex": [
+        5,
+        6,
+        5
+      ],
+      "javaScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ],
+      "threeScenePoint": [
+        -0.1875,
+        0.875,
+        -0.1875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "fixture_jaw_left",
+      "facing": "north",
+      "source": [
+        15,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        7,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        -0.0625,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "fixture_jaw_right",
+      "facing": "north",
+      "source": [
+        16.375,
+        16,
+        14
+      ],
+      "nativeVertex": [
+        8.375,
+        8,
+        6
+      ],
+      "javaScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ],
+      "threeScenePoint": [
+        0.0234375,
+        1,
+        -0.125
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "left_tool",
+      "facing": "north",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ],
+      "threeScenePoint": [
+        -0.453125,
+        0.96875,
+        -0.21875
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "left_tool",
+      "facing": "east",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.78125,
+        0.96875,
+        -0.453125
+      ],
+      "threeScenePoint": [
+        -0.7812500034314885,
+        0.96875,
+        -0.4531250205889355
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "left_tool",
+      "facing": "south",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.5468750600000001,
+        0.96875,
+        -0.7812500099999999
+      ],
+      "threeScenePoint": [
+        -0.5468750130528706,
+        0.96875,
+        -0.7812499978245211
+      ]
+    },
+    {
+      "operation": "sealing",
+      "phase": 0.98,
+      "group": "left_tool",
+      "facing": "west",
+      "source": [
+        8.75,
+        15.5,
+        12.5
+      ],
+      "nativeVertex": [
+        0.75,
+        7.5,
+        4.5
+      ],
+      "javaScenePoint": [
+        -0.21875,
+        0.96875,
+        -0.546875
+      ],
+      "threeScenePoint": [
+        -0.21875000343148998,
+        0.96875,
+        -0.5468750205889353
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "url": "/assets.json",
+      "bytes": 15673,
+      "sha256": "728713dd028ca6655d18d652911b85455bbe559aac7ec5ece023c97f6ac9697b"
+    },
+    {
+      "url": "/static-assets.json",
+      "bytes": 31231,
+      "sha256": "d3101d33ea810a16d669e99f10ea5b26077e4e851cdc95857b5598ae036efbe9"
+    },
+    {
+      "url": "/rig.json",
+      "bytes": 16003,
+      "sha256": "c2a25527cfa2983f6ff246f730a43fa8d34d57d7c7333177f735845ddac056ba"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/shielded_assembly/animation.json",
+      "bytes": 18908,
+      "sha256": "f94c46fd1fb8d4c1bf99a7fa1553953bb6e9cebc3ae26a47eb3be77ff32cb47f"
+    },
+    {
+      "url": "/pose-parity.json",
+      "bytes": 26655,
+      "sha256": "0a817e431046a1229f1efd2f858335aefddedefa81674440fcad3e09c94842cc"
+    },
+    {
+      "url": "/refs/reference.json",
+      "bytes": 4223,
+      "sha256": "22c0522d8893238087060b7968321fb57b6191293b249481c765c618152dc9b1"
+    },
+    {
+      "url": "/refs/assets/create/models/block/shaft_half.json",
+      "bytes": 666,
+      "sha256": "bbd1d6226933a4b29b365a449e87ecff1f851965f82f802c0800747b530a0576"
+    },
+    {
+      "url": "/refs/assets/create/textures/block/axis.png",
+      "bytes": 161,
+      "sha256": "0ae58aa6fcc369fee5a49270827bfa572631078f57163b8344f97ea5fcde2441"
+    },
+    {
+      "url": "/refs/assets/create/textures/block/axis_top.png",
+      "bytes": 124,
+      "sha256": "d96400565f72e7270eeb9daaab2b1cf2a450e9491bbd488d217ed5f7e49c4bc3"
+    },
+    {
+      "url": "/refs/assets/minecraft/models/block/block.json",
+      "bytes": 997,
+      "sha256": "3ef6c442f1ab55d2a57fa58e28bb831268159052659f12b453b637b31ded1da8"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lead.png",
+      "bytes": 121,
+      "sha256": "11178481d5bd0c4304ca047141208cecca100aa8df3d2ed1be2a590a58cd991d"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_steel.png",
+      "bytes": 130,
+      "sha256": "185f5008ead86ba515f2d3a7fd7091e7c3430d76da3a85cb64af4860f1a72874"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_machined.png",
+      "bytes": 115,
+      "sha256": "c4c36ef098296a5303fc01e867e88638e59019bc58c4b5c0e8be799542654198"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_fastener.png",
+      "bytes": 120,
+      "sha256": "16a9665cc97f03a7f161744cf9ff0214c5002349d13e2b013322a4396cd84555"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_brass.png",
+      "bytes": 106,
+      "sha256": "059539bb358c3e7fe162326085678a3b8a43569e63a5a9194005f82abd963b0a"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_window.png",
+      "bytes": 108,
+      "sha256": "e813f44c2b7465805cd0060915e2aaa29692f34bb02d82cf9438fb94d71017e5"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_off.png",
+      "bytes": 100,
+      "sha256": "0d57956c8f94460d1a537c7b3b46110e0c00ea6007d5e469718233bbe32cd9f2"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_lamp_on.png",
+      "bytes": 101,
+      "sha256": "e181d736509885a2abf3082d0b19fb36ef445a5f1c4ebc84ec14779c8395ee58"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/textures/block/shielded_assembly_15c_deck.png",
+      "bytes": 135,
+      "sha256": "7f60826eef6e531ca0b42543bbf7e9694d412db78344440a0a2dff5f668c47d4"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json",
+      "bytes": 17286,
+      "sha256": "829a0da3b7e42fcfc05fb0db0b64dd95a9717de14749093edd8acdfa32e691ed"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json",
+      "bytes": 17286,
+      "sha256": "829a0da3b7e42fcfc05fb0db0b64dd95a9717de14749093edd8acdfa32e691ed"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json",
+      "bytes": 14144,
+      "sha256": "6b9de033b2b2787c6ac626e32dea063218b3a57c5d7e06dee58892315e9432b9"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json",
+      "bytes": 14144,
+      "sha256": "6b9de033b2b2787c6ac626e32dea063218b3a57c5d7e06dee58892315e9432b9"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_off.json",
+      "bytes": 12930,
+      "sha256": "55475a2741457cc9b987d634cc08c5ddb6fe9187b2e55391e68d7b7a9a7778b7"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_on.json",
+      "bytes": 12930,
+      "sha256": "55475a2741457cc9b987d634cc08c5ddb6fe9187b2e55391e68d7b7a9a7778b7"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_off.json",
+      "bytes": 10930,
+      "sha256": "76b92d22f7151d426858411bb00b162e6c582ddb918c67db956c60fc1786435b"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_on.json",
+      "bytes": 10930,
+      "sha256": "76b92d22f7151d426858411bb00b162e6c582ddb918c67db956c60fc1786435b"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json",
+      "bytes": 17435,
+      "sha256": "56ae05f06487d95563a7f50181f35632b8014a0ec7a323e8912d3d5767f30f1e"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json",
+      "bytes": 17434,
+      "sha256": "dec7410b0c546d9fd486eda3a336b3bb7faa21c1532fde9f9d7bc1ccc3f3993f"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json",
+      "bytes": 17431,
+      "sha256": "d49ed527414296a8dcf2c7ea8f6c66d93a6ca9bac8489ceebf624d4d6b592709"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json",
+      "bytes": 17430,
+      "sha256": "64a796c5f41f0769abf57b5f805ad9e0597012690431002bcd6625d76ffc9c66"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_off.json",
+      "bytes": 9436,
+      "sha256": "17e1c46ae8f63b5a3c94b1a836668a403ef63ad23b6f816c731956e69979e96a"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_on.json",
+      "bytes": 9436,
+      "sha256": "17e1c46ae8f63b5a3c94b1a836668a403ef63ad23b6f816c731956e69979e96a"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_off.json",
+      "bytes": 9444,
+      "sha256": "af10c8dfde23ae7b79ac173cedeb447c8c8cecc389e3b318066429559693603e"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_on.json",
+      "bytes": 9444,
+      "sha256": "af10c8dfde23ae7b79ac173cedeb447c8c8cecc389e3b318066429559693603e"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_base.json",
+      "bytes": 12872,
+      "sha256": "de19ae76aa4ffbf1af624cf132beb05afe4a6907e00addbc2b44bcfc26b24f1c"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/left_tool.json",
+      "bytes": 18411,
+      "sha256": "a84332fb7ac48de01bf1f3695d94a5e5f110bb648df04630c7ea3d02bc7b8899"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_base.json",
+      "bytes": 12853,
+      "sha256": "98bf26128cdc8909aa62121d6e598486a8b48d3099f925f6d37bf1f8b097f362"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/right_tool.json",
+      "bytes": 18384,
+      "sha256": "b74a839c40b749f358bdc5e950755313f6db0371bf03b220791500190bb23765"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_base.json",
+      "bytes": 12004,
+      "sha256": "17c2418ff531e6b9e119f3779efc03fa170309a9a8f99e34ea40fb42d20b63f4"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_carriage.json",
+      "bytes": 7884,
+      "sha256": "7743c436e566510eb7835faa0e84b4a47539bc8c5dee6818f4379052478e3eaf"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_left.json",
+      "bytes": 5146,
+      "sha256": "07b9c6fb22d39a2306c0268afcefafd1bc68c2e13ee23183201d55e283402b12"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station/animation/fixture_jaw_right.json",
+      "bytes": 5135,
+      "sha256": "e5f7914b5cdc07575861d5ab42f537f674cce4f408f15f7d333fa43becbe1656"
+    },
+    {
+      "url": "/production/assets/create_nuclear_industry/models/block/shielded_assembly_station_item.json",
+      "bytes": 190814,
+      "sha256": "d53bafeeb3cc01aafc66c4a4d0d88e30b31d56aafa059d8ac50979bc1115cfe8"
+    }
+  ],
+  "rigSha256": "c2a25527cfa2983f6ff246f730a43fa8d34d57d7c7333177f735845ddac056ba",
+  "shaft": {
+    "scale": 0.0625,
+    "contactModel": [
+      8,
+      0,
+      8
+    ],
+    "boundsModel": [
+      [
+        6,
+        0,
+        6
+      ],
+      [
+        10,
+        8,
+        10
+      ]
+    ],
+    "id": "create:block/shaft_half",
+    "rotationPivotModel": [
+      8,
+      8,
+      8
+    ],
+    "field": "AllPartialModels.SHAFT_HALF",
+    "rotationDegrees": [
+      90,
+      0,
+      0
+    ],
+    "facing": "DOWN",
+    "sourceFacing": "SOUTH",
+    "sceneTranslation": [
+      -0.5,
+      0.5,
+      -0.5
+    ]
+  },
+  "renderer": "2.20.0",
+  "three": "180",
+  "units": [
+    {
+      "id": "machine",
+      "camera": {
+        "position": [
+          0.20499870931944394,
+          1.0698109016957262,
+          -4.995307995227301
+        ],
+        "target": [
+          0,
+          1,
+          0
+        ]
+      },
+      "drawCalls": 65,
+      "triangles": 1796,
+      "transforms": {
+        "left_base": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "left_tool": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "right_base": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "right_tool": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "fixture_base": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "fixture_carriage": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "fixture_jaw_left": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "fixture_jaw_right": {
+          "translation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "matrix": [
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            6.123233995736766e-17,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "item",
+      "camera": {
+        "position": [
+          2.9129661543943155,
+          -1.3949555301961467,
+          3.8169002151128315
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": 8,
+      "triangles": 1784,
+      "transforms": {
+        "static": true
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-animation-15c\\index.html",
+      "bytes": 3093,
+      "sha256": "00eb94a3e8575cf664e70cc5171440be9c75110e7cd71b8dc5a9d50930dad1be"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-animation-15c\\preview\\style.css",
+      "bytes": 4367,
+      "sha256": "886d9d9ee9d965611fa0721d47280ee7918b05a7a5cbadb22e0c4d837716b00a"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-animation-15c\\preview\\scene.mjs",
+      "bytes": 19150,
+      "sha256": "b3d3eb69ebd00457e66c630767d88bd5406f949771c4596383a183d437e87fa9"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry\\tools\\nuclear-plant-3d\\vendor\\three.module.js",
+      "bytes": 603113,
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\block-model-renderer\\dist\\block-model-renderer.min.js",
+      "bytes": 276252,
+      "sha256": "389f93408a9b667f0c84eea6c90524caa02277156398d4bc74dc521bdb42ebf0"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-animation-15c\\preview\\motion.mjs",
+      "bytes": 6393,
+      "sha256": "b6c92adce6b2bfd99b559f9f0b8a8d67507778a8159339bc319ed684bfdf4378"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry\\tools\\nuclear-plant-3d\\vendor\\three.core.js",
+      "bytes": 1403454,
+      "sha256": "94337bbcde63e61eb954f00d2ad72d122d1cc3dc3e0de68e57277eca3d30af47"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-animation-15c\\assets.json",
+      "bytes": 15673,
+      "sha256": "728713dd028ca6655d18d652911b85455bbe559aac7ec5ece023c97f6ac9697b"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-art-15b\\assets.json",
+      "bytes": 31231,
+      "sha256": "d3101d33ea810a16d669e99f10ea5b26077e4e851cdc95857b5598ae036efbe9"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-animation-15c\\rig.json",
+      "bytes": 16003,
+      "sha256": "c2a25527cfa2983f6ff246f730a43fa8d34d57d7c7333177f735845ddac056ba"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\shielded_assembly\\animation.json",
+      "bytes": 18908,
+      "sha256": "f94c46fd1fb8d4c1bf99a7fa1553953bb6e9cebc3ae26a47eb3be77ff32cb47f"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\build\\reports\\art\\ART-SHIELDED-ASSEMBLY-15C\\client\\pose-parity.json",
+      "bytes": 26655,
+      "sha256": "0a817e431046a1229f1efd2f858335aefddedefa81674440fcad3e09c94842cc"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-concepts-15\\preview\\refs\\reference.json",
+      "bytes": 4223,
+      "sha256": "22c0522d8893238087060b7968321fb57b6191293b249481c765c618152dc9b1"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-concepts-15\\preview\\refs\\assets\\create\\models\\block\\shaft_half.json",
+      "bytes": 666,
+      "sha256": "bbd1d6226933a4b29b365a449e87ecff1f851965f82f802c0800747b530a0576"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-concepts-15\\preview\\refs\\assets\\create\\textures\\block\\axis.png",
+      "bytes": 161,
+      "sha256": "0ae58aa6fcc369fee5a49270827bfa572631078f57163b8344f97ea5fcde2441"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-concepts-15\\preview\\refs\\assets\\create\\textures\\block\\axis_top.png",
+      "bytes": 124,
+      "sha256": "d96400565f72e7270eeb9daaab2b1cf2a450e9491bbd488d217ed5f7e49c4bc3"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\shielded-assembly-concepts-15\\preview\\refs\\assets\\minecraft\\models\\block\\block.json",
+      "bytes": 997,
+      "sha256": "3ef6c442f1ab55d2a57fa58e28bb831268159052659f12b453b637b31ded1da8"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_lead.png",
+      "bytes": 121,
+      "sha256": "11178481d5bd0c4304ca047141208cecca100aa8df3d2ed1be2a590a58cd991d"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_steel.png",
+      "bytes": 130,
+      "sha256": "185f5008ead86ba515f2d3a7fd7091e7c3430d76da3a85cb64af4860f1a72874"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_machined.png",
+      "bytes": 115,
+      "sha256": "c4c36ef098296a5303fc01e867e88638e59019bc58c4b5c0e8be799542654198"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_fastener.png",
+      "bytes": 120,
+      "sha256": "16a9665cc97f03a7f161744cf9ff0214c5002349d13e2b013322a4396cd84555"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_brass.png",
+      "bytes": 106,
+      "sha256": "059539bb358c3e7fe162326085678a3b8a43569e63a5a9194005f82abd963b0a"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_window.png",
+      "bytes": 108,
+      "sha256": "e813f44c2b7465805cd0060915e2aaa29692f34bb02d82cf9438fb94d71017e5"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_lamp_off.png",
+      "bytes": 100,
+      "sha256": "0d57956c8f94460d1a537c7b3b46110e0c00ea6007d5e469718233bbe32cd9f2"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_lamp_on.png",
+      "bytes": 101,
+      "sha256": "e181d736509885a2abf3082d0b19fb36ef445a5f1c4ebc84ec14779c8395ee58"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\textures\\block\\shielded_assembly_15c_deck.png",
+      "bytes": 135,
+      "sha256": "7f60826eef6e531ca0b42543bbf7e9694d412db78344440a0a2dff5f668c47d4"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_0_off.json",
+      "bytes": 17286,
+      "sha256": "829a0da3b7e42fcfc05fb0db0b64dd95a9717de14749093edd8acdfa32e691ed"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_0_on.json",
+      "bytes": 17286,
+      "sha256": "829a0da3b7e42fcfc05fb0db0b64dd95a9717de14749093edd8acdfa32e691ed"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_1_off.json",
+      "bytes": 14144,
+      "sha256": "6b9de033b2b2787c6ac626e32dea063218b3a57c5d7e06dee58892315e9432b9"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_1_on.json",
+      "bytes": 14144,
+      "sha256": "6b9de033b2b2787c6ac626e32dea063218b3a57c5d7e06dee58892315e9432b9"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_2_off.json",
+      "bytes": 12930,
+      "sha256": "55475a2741457cc9b987d634cc08c5ddb6fe9187b2e55391e68d7b7a9a7778b7"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_2_on.json",
+      "bytes": 12930,
+      "sha256": "55475a2741457cc9b987d634cc08c5ddb6fe9187b2e55391e68d7b7a9a7778b7"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_3_off.json",
+      "bytes": 10930,
+      "sha256": "76b92d22f7151d426858411bb00b162e6c582ddb918c67db956c60fc1786435b"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_3_on.json",
+      "bytes": 10930,
+      "sha256": "76b92d22f7151d426858411bb00b162e6c582ddb918c67db956c60fc1786435b"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_4_off.json",
+      "bytes": 17435,
+      "sha256": "56ae05f06487d95563a7f50181f35632b8014a0ec7a323e8912d3d5767f30f1e"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_4_on.json",
+      "bytes": 17434,
+      "sha256": "dec7410b0c546d9fd486eda3a336b3bb7faa21c1532fde9f9d7bc1ccc3f3993f"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_5_off.json",
+      "bytes": 17431,
+      "sha256": "d49ed527414296a8dcf2c7ea8f6c66d93a6ca9bac8489ceebf624d4d6b592709"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_5_on.json",
+      "bytes": 17430,
+      "sha256": "64a796c5f41f0769abf57b5f805ad9e0597012690431002bcd6625d76ffc9c66"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_6_off.json",
+      "bytes": 9436,
+      "sha256": "17e1c46ae8f63b5a3c94b1a836668a403ef63ad23b6f816c731956e69979e96a"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_6_on.json",
+      "bytes": 9436,
+      "sha256": "17e1c46ae8f63b5a3c94b1a836668a403ef63ad23b6f816c731956e69979e96a"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_7_off.json",
+      "bytes": 9444,
+      "sha256": "af10c8dfde23ae7b79ac173cedeb447c8c8cecc389e3b318066429559693603e"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\parts\\part_7_on.json",
+      "bytes": 9444,
+      "sha256": "af10c8dfde23ae7b79ac173cedeb447c8c8cecc389e3b318066429559693603e"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\left_base.json",
+      "bytes": 12872,
+      "sha256": "de19ae76aa4ffbf1af624cf132beb05afe4a6907e00addbc2b44bcfc26b24f1c"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\left_tool.json",
+      "bytes": 18411,
+      "sha256": "a84332fb7ac48de01bf1f3695d94a5e5f110bb648df04630c7ea3d02bc7b8899"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\right_base.json",
+      "bytes": 12853,
+      "sha256": "98bf26128cdc8909aa62121d6e598486a8b48d3099f925f6d37bf1f8b097f362"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\right_tool.json",
+      "bytes": 18384,
+      "sha256": "b74a839c40b749f358bdc5e950755313f6db0371bf03b220791500190bb23765"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\fixture_base.json",
+      "bytes": 12004,
+      "sha256": "17c2418ff531e6b9e119f3779efc03fa170309a9a8f99e34ea40fb42d20b63f4"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\fixture_carriage.json",
+      "bytes": 7884,
+      "sha256": "7743c436e566510eb7835faa0e84b4a47539bc8c5dee6818f4379052478e3eaf"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\fixture_jaw_left.json",
+      "bytes": 5146,
+      "sha256": "07b9c6fb22d39a2306c0268afcefafd1bc68c2e13ee23183201d55e283402b12"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station\\animation\\fixture_jaw_right.json",
+      "bytes": 5135,
+      "sha256": "e5f7914b5cdc07575861d5ab42f537f674cce4f408f15f7d333fa43becbe1656"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\src\\main\\resources\\assets\\create_nuclear_industry\\models\\block\\shielded_assembly_station_item.json",
+      "bytes": 190814,
+      "sha256": "d53bafeeb3cc01aafc66c4a4d0d88e30b31d56aafa059d8ac50979bc1115cfe8"
+    },
+    {
+      "path": "E:\\MyMC\\NewMod\\block-model-renderer\\dist\\block_model_renderer_bg.wasm",
+      "bytes": 53592,
+      "sha256": "1a56198d78c7529e8d171dd06619c9d00c7c1250f2baf355308a4ad1c8a4efb8"
+    }
+  ]
+}

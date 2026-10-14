@@ -1,0 +1,905 @@
+{
+  "schemaVersion": 1,
+  "task": "ART-SHIELDED-ASSEMBLY-15A",
+  "baseline": {
+    "head": "88b8fd289d49df90d7e3c655b6e81381ad01130f",
+    "branch": "codex/art-studio",
+    "sources": {
+      "tools/art-assets/sources/fuel-02e/rig.json": {
+        "sha256": "a29df2353d83ff737816d06f6d95dde5ac3a5e02b80bae2218b452aaa1d13a7d",
+        "bytes": 2572
+      },
+      "tools/art-assets/fuel_02e_assets.py": {
+        "sha256": "ab6c8ef65d5f8f00d2958c52bb219c8c03ebc15a9f3ba9eb4b08a39a831c587c",
+        "bytes": 43060
+      },
+      "gradle.properties": {
+        "sha256": "b2655e6635970ee2fa120daa5638e403144e81769d0e15132998a1e5d9a541ce",
+        "bytes": 661
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_off.json": {
+        "sha256": "5dea7058076aced106c719a546f0ced9c8614975b9b8549195818c1e13778270",
+        "bytes": 24809
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_0_on.json": {
+        "sha256": "5dea7058076aced106c719a546f0ced9c8614975b9b8549195818c1e13778270",
+        "bytes": 24809
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_off.json": {
+        "sha256": "c1d2c4dea850db8dfddecb2191d776aff27a9b2ac535e43e35306dfe5a72a8c1",
+        "bytes": 24928
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_1_on.json": {
+        "sha256": "c1d2c4dea850db8dfddecb2191d776aff27a9b2ac535e43e35306dfe5a72a8c1",
+        "bytes": 24928
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_off.json": {
+        "sha256": "2305ad56149dace8bee9d70979c979d3d1d93606b36310b19ec4e327652b30fe",
+        "bytes": 25642
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_2_on.json": {
+        "sha256": "2305ad56149dace8bee9d70979c979d3d1d93606b36310b19ec4e327652b30fe",
+        "bytes": 25642
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_off.json": {
+        "sha256": "09e4b7831169043673e7b3d60ebcb186bddf52131d12475e04b18415bb16c39e",
+        "bytes": 24580
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_3_on.json": {
+        "sha256": "09e4b7831169043673e7b3d60ebcb186bddf52131d12475e04b18415bb16c39e",
+        "bytes": 24580
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_off.json": {
+        "sha256": "ae09856898846a3f8cc70ba75ba3e68b8b05ce23cd06cfd9cc1d3c7a02c0022a",
+        "bytes": 32082
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_4_on.json": {
+        "sha256": "de06e9252c2d63276f81e7deaf04a48f61614f3b0421edb9fb0971f06bc93fed",
+        "bytes": 32077
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_off.json": {
+        "sha256": "077cf7845fed3e5538e2b7b9470dfb7d26c1d4c05deeb7265250fbe65292baf1",
+        "bytes": 32228
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_5_on.json": {
+        "sha256": "f214a18156a64e5ad0d2adfa1abd1198cc9efc5a00437cec655e59e2286c4b0d",
+        "bytes": 32223
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_off.json": {
+        "sha256": "1ffd020562eede97ddf89d065501eab61f56e188a74f44fb45d565b57f2b3218",
+        "bytes": 29409
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_6_on.json": {
+        "sha256": "1ffd020562eede97ddf89d065501eab61f56e188a74f44fb45d565b57f2b3218",
+        "bytes": 29409
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_off.json": {
+        "sha256": "296af89dcbe1a21e5abd902c2146d72cc658b3c225a519772b50bd3b06714cb3",
+        "bytes": 27068
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/parts/part_7_on.json": {
+        "sha256": "296af89dcbe1a21e5abd902c2146d72cc658b3c225a519772b50bd3b06714cb3",
+        "bytes": 27068
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/fixture.json": {
+        "sha256": "20db9a8013c08fe944a28d97122b0b13479ad67e14b99c2a570d09e74b621d79",
+        "bytes": 4400
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/left_arm.json": {
+        "sha256": "9ad863a329f1e59a0de608dd32cd449e60c1c2512a0c3dbb1b2eec3bcd5361ac",
+        "bytes": 4401
+      },
+      "src/main/resources/assets/create_nuclear_industry/models/block/shielded_assembly_station/partials/right_arm.json": {
+        "sha256": "ea8a8c793b2536a63d50286657051a7e7b338367a72e0791f5026c1905647379",
+        "bytes": 4392
+      },
+      "src/main/resources/assets/create_nuclear_industry/blockstates/shielded_assembly_station.json": {
+        "sha256": "10a3657d23e44b1ebbfb7db2ee0d8278b42f6f6f40414997e89c4725c077cce6",
+        "bytes": 2935
+      },
+      "src/main/resources/assets/create_nuclear_industry/blockstates/shielded_assembly_part.json": {
+        "sha256": "66e793fa94c8571f6317ce7dcc4642e8fd178ed2c2667ebc1c9cdad8265d16e8",
+        "bytes": 10149
+      },
+      "src/main/java/com/iksxh/create_nuclear_industry/production/ShieldedAssemblyRenderer.java": {
+        "sha256": "677e7a3ef02f2c641bab10526b2b8c89c13db606044810c13742283d829a43a9",
+        "bytes": 3999
+      },
+      "src/main/java/com/iksxh/create_nuclear_industry/production/ShieldedAssemblyLayout.java": {
+        "sha256": "ceccbbd1f2f3e6f4e16d7c28cb0c3fd1cb30e0d784a598f202ddbd46a97503b5",
+        "bytes": 1494
+      },
+      "src/main/java/com/iksxh/create_nuclear_industry/production/ShieldedAssemblyBlockEntity.java": {
+        "sha256": "3e1a8006f8131e8345fbb3b3860c12fb7d4dec6d22fb1423056281b46f15f81a",
+        "bytes": 14559
+      },
+      "src/main/resources/data/create_nuclear_industry/recipe/mechanical_crafting/shielded_assembly_station.json": {
+        "sha256": "eecb6134abf14518da2fee4f15495a2de2c46c6c1a4c97091644d7af55e48b45",
+        "bytes": 479
+      },
+      "src/main/resources/data/create_nuclear_industry/recipe/shielded_assembly/fresh_fuel_assembly.json": {
+        "sha256": "fa9bf8bceb35a7c8c68af366fa36247e48a3e58fdb813c15cd298b5cbe54b0ad",
+        "bytes": 704
+      },
+      "src/main/resources/data/create_nuclear_industry/recipe/shielded_assembly/sealed_spent_fuel_cask.json": {
+        "sha256": "74c54b7d7c5225a832aa59a9fdca6805cf88c0a4c1b0a07d48f9dfeb9e3fc7d1",
+        "bytes": 617
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_bottom.svg": {
+        "sha256": "0d0646fb9f18574e12c0d008f12cb5c43e7bda921140f4c0d5ba87bd1136f763",
+        "bytes": 470
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_brass.svg": {
+        "sha256": "1a000182d87ddafc0fcca9709c2b1a75091f0173a38f49bc96920fde25e4eef7",
+        "bytes": 356
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_deck.svg": {
+        "sha256": "a8647afb7b3eefa08a037f943d97925707b99e2f7f205a055a987a1b05c14dfd",
+        "bytes": 532
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_lamp_off.svg": {
+        "sha256": "b3f236cb85053213d883a48f0d62078386b531054e2c1b918346d3db6aecb9dc",
+        "bytes": 412
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_lamp_on.svg": {
+        "sha256": "74ae4324868314f633b1d00adf083030d4307f5bc78d4021cea2cc3de146b36e",
+        "bytes": 412
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_lead.svg": {
+        "sha256": "aac63d924ae0673028ba516172c7df6f3fbb231500114d2cd8cc0d9ca3c5339b",
+        "bytes": 647
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_port.svg": {
+        "sha256": "ab33968795d7d5bdb20dc721608ea6d292bda65853859ce9362335b530cf9845",
+        "bytes": 470
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_steel.svg": {
+        "sha256": "9f6afa1b7bc4c11264ae371ed90e8fbdb7883452d03b9a9a455ec4d621f23f45",
+        "bytes": 415
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_top.svg": {
+        "sha256": "5a3c6712c85c916c91b499ea557c8d744f730e21d956e38b8f6399e30c5a11f7",
+        "bytes": 705
+      },
+      "tools/art-assets/sources/fuel-02e/shielded_assembly_multiblock_window.svg": {
+        "sha256": "4b7180726ffdd692f27c6917077f6715aef97953a4c71ed9b5442c99439c53c4",
+        "bytes": 471
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_bottom.png": {
+        "sha256": "b40f8e142c246e74f03cf28e35c345232b16a9d93903149fca00ca45f9916b73",
+        "bytes": 176
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_brass.png": {
+        "sha256": "1e53d287ff22dc040b0adbbeb337c948d6519796351754300a164d4a53a7b64f",
+        "bytes": 118
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_deck.png": {
+        "sha256": "67de5146537b0620d1c1a7f3468e4aa4d966298a14ab01a63166379e544e907f",
+        "bytes": 143
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_lamp_off.png": {
+        "sha256": "8628f0a56f538e4f20585aa882652a7d1d5e3b62093bb23e520149e2855d5ab7",
+        "bytes": 149
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_lamp_on.png": {
+        "sha256": "7718d05a92f5701e00d41d7a02777a480fd5a192a676fcbace360e2bdd6697f5",
+        "bytes": 151
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_lead.png": {
+        "sha256": "582fb7b64e4c28ffc70bed7662a7c814645bf576f4620642e6c573fdb58cba48",
+        "bytes": 156
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_port.png": {
+        "sha256": "4fbd97fc2a47f16168bff797d9b0aadaeba300b99ca5cf4441828547278162dc",
+        "bytes": 180
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_steel.png": {
+        "sha256": "971431e7e0d69797e8404f4014581eba90c9ea75f290fabdbc06db4164cb9f48",
+        "bytes": 125
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_top.png": {
+        "sha256": "316677d556c173a94decf21ed25eee755830efab8f32ce981ef9468f646a2509",
+        "bytes": 180
+      },
+      "src/main/resources/assets/create_nuclear_industry/textures/block/shielded_assembly_multiblock_window.png": {
+        "sha256": "43ad391c195b3c90032e17df27d7fe64db20d011cbd77750ec8da2a2b94ad07a",
+        "bytes": 163
+      }
+    },
+    "sourceRig": "tools/art-assets/sources/fuel-02e/rig.json",
+    "registration": [
+      "shielded_assembly_station",
+      "shielded_assembly_part"
+    ],
+    "materials": "实际配方的铅板、钢板、两个Create机械手、辐射传感器；少量黄铜限原机械手功能件。",
+    "renderState": "current/expanded 时原Renderer绘制三件idle机构及原Create SHAFT_HALF；WORKING仅静态灯素材对照。"
+  },
+  "coordinates": {
+    "units": "16模型单位=1格",
+    "origin": "北向主控格最小角",
+    "axes": {
+      "x": "east",
+      "y": "up",
+      "z": "south"
+    },
+    "machineBounds": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        32,
+        32,
+        32
+      ]
+    ],
+    "partFormula": "x+2*z+4*y",
+    "partOffset": "[16*x,16*y,16*z]仅用于原八part对照，不用于候选partial",
+    "facingPivotXZ": [
+      8,
+      8
+    ],
+    "partialOffset": [
+      0,
+      0,
+      0
+    ],
+    "shaftCenter": [
+      8,
+      0,
+      8
+    ],
+    "shaftAperture": [
+      [
+        6,
+        0,
+        6
+      ],
+      [
+        10,
+        4,
+        10
+      ]
+    ],
+    "shaftSource": "Create原生SHAFT_HALF，预览执行者只读处理；候选没有静态轴"
+  },
+  "concepts": {
+    "a": {
+      "name": "厚壁屏蔽热室",
+      "label": "A · 厚壁屏蔽热室",
+      "description": "厚铅大板、退台宽窗、层叠顶肩与重型底台。",
+      "palette": {
+        "lead": "#879397",
+        "light": "#B1BBBD",
+        "shadow": "#69797E",
+        "steel": "#52656D",
+        "dark": "#34464E",
+        "machined": "#9CAFB6",
+        "edge": "#C5D2D5",
+        "brass": "#AA9161",
+        "brasslight": "#C5AC76",
+        "glass": "#9CB9BE"
+      },
+      "models": {
+        "shell": "models/a/shell.json",
+        "left_arm": "models/a/left_arm.json",
+        "right_arm": "models/a/right_arm.json",
+        "fixture": "models/a/fixture.json"
+      },
+      "textures": {
+        "lead": "textures/a/lead.svg",
+        "steel": "textures/a/steel.svg",
+        "machined": "textures/a/machined.svg",
+        "fastener": "textures/a/fastener.svg",
+        "brass": "textures/a/brass.svg",
+        "window": "textures/a/window.svg",
+        "lamp_off": "textures/a/lamp_off.svg",
+        "lamp_on": "textures/a/lamp_on.svg",
+        "deck": "textures/a/deck.svg"
+      },
+      "rig": {
+        "left_arm": {
+          "pivot": [
+            9,
+            21,
+            15
+          ],
+          "axis": "+X",
+          "travel": [
+            0,
+            1
+          ],
+          "idle_bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              13,
+              23,
+              22
+            ]
+          ],
+          "swept_bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              14,
+              23,
+              22
+            ]
+          ]
+        },
+        "right_arm": {
+          "pivot": [
+            23,
+            21,
+            15
+          ],
+          "axis": "-X",
+          "travel": [
+            0,
+            1
+          ],
+          "idle_bounds": [
+            [
+              19,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ],
+          "swept_bounds": [
+            [
+              18,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ]
+        },
+        "fixture": {
+          "pivot": [
+            16,
+            13,
+            16
+          ],
+          "axis": "+Y",
+          "travel": [
+            0,
+            3
+          ],
+          "idle_bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              18,
+              20
+            ]
+          ],
+          "swept_bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              21,
+              20
+            ]
+          ]
+        }
+      },
+      "geometry": {
+        "shell": {
+          "bounds": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              32,
+              32,
+              32
+            ]
+          ],
+          "elements": 93
+        },
+        "left_arm": {
+          "bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              13,
+              23,
+              22
+            ]
+          ],
+          "elements": 28
+        },
+        "right_arm": {
+          "bounds": [
+            [
+              19,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ],
+          "elements": 28
+        },
+        "fixture": {
+          "bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              18,
+              20
+            ]
+          ],
+          "elements": 26
+        }
+      },
+      "visibility": "前窗可见左右执行杆、双指夹爪和中央双钳口；浏览器剖视与游戏视觉验收分别记录。",
+      "stateComparison": {
+        "off": "lamp_off",
+        "on": "lamp_on",
+        "meaning": "仅真实WORKING灯素材静态对照，无假工序循环"
+      }
+    },
+    "b": {
+      "name": "铸钢装配工作站",
+      "label": "B · 铸钢装配工作站",
+      "description": "铸钢立柱、双观察区、中央加强柱与厚侧筋。",
+      "palette": {
+        "lead": "#89918F",
+        "light": "#B4BBB6",
+        "shadow": "#6B7977",
+        "steel": "#61726E",
+        "dark": "#3F514E",
+        "machined": "#A5B7B3",
+        "edge": "#CED6CF",
+        "brass": "#9C8154",
+        "brasslight": "#BAA16D",
+        "glass": "#ADC5BE"
+      },
+      "models": {
+        "shell": "models/b/shell.json",
+        "left_arm": "models/b/left_arm.json",
+        "right_arm": "models/b/right_arm.json",
+        "fixture": "models/b/fixture.json"
+      },
+      "textures": {
+        "lead": "textures/b/lead.svg",
+        "steel": "textures/b/steel.svg",
+        "machined": "textures/b/machined.svg",
+        "fastener": "textures/b/fastener.svg",
+        "brass": "textures/b/brass.svg",
+        "window": "textures/b/window.svg",
+        "lamp_off": "textures/b/lamp_off.svg",
+        "lamp_on": "textures/b/lamp_on.svg",
+        "deck": "textures/b/deck.svg"
+      },
+      "rig": {
+        "left_arm": {
+          "pivot": [
+            9,
+            21,
+            15
+          ],
+          "axis": "+X",
+          "travel": [
+            0,
+            1
+          ],
+          "idle_bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              13,
+              23,
+              22
+            ]
+          ],
+          "swept_bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              14,
+              23,
+              22
+            ]
+          ]
+        },
+        "right_arm": {
+          "pivot": [
+            23,
+            21,
+            15
+          ],
+          "axis": "-X",
+          "travel": [
+            0,
+            1
+          ],
+          "idle_bounds": [
+            [
+              19,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ],
+          "swept_bounds": [
+            [
+              18,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ]
+        },
+        "fixture": {
+          "pivot": [
+            16,
+            13,
+            16
+          ],
+          "axis": "+Y",
+          "travel": [
+            0,
+            3
+          ],
+          "idle_bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              18,
+              20
+            ]
+          ],
+          "swept_bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              21,
+              20
+            ]
+          ]
+        }
+      },
+      "geometry": {
+        "shell": {
+          "bounds": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              32,
+              32,
+              32
+            ]
+          ],
+          "elements": 101
+        },
+        "left_arm": {
+          "bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              13,
+              23,
+              22
+            ]
+          ],
+          "elements": 29
+        },
+        "right_arm": {
+          "bounds": [
+            [
+              19,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ],
+          "elements": 29
+        },
+        "fixture": {
+          "bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              18,
+              20
+            ]
+          ],
+          "elements": 28
+        }
+      },
+      "visibility": "前窗可见左右执行杆、双指夹爪和中央双钳口；浏览器剖视与游戏视觉验收分别记录。",
+      "stateComparison": {
+        "off": "lamp_off",
+        "on": "lamp_on",
+        "meaning": "仅真实WORKING灯素材静态对照，无假工序循环"
+      }
+    },
+    "c": {
+      "name": "模块检修舱",
+      "label": "C · 模块检修舱",
+      "description": "浅暖分段铅护板、四角钢梁、独立窗模块及凹检修层。",
+      "palette": {
+        "lead": "#A3A6A0",
+        "light": "#C7C9BE",
+        "shadow": "#818B87",
+        "steel": "#687879",
+        "dark": "#47595B",
+        "machined": "#ABBABA",
+        "edge": "#D2D9D1",
+        "brass": "#AC9467",
+        "brasslight": "#CBB57F",
+        "glass": "#B2C7C8"
+      },
+      "models": {
+        "shell": "models/c/shell.json",
+        "left_arm": "models/c/left_arm.json",
+        "right_arm": "models/c/right_arm.json",
+        "fixture": "models/c/fixture.json"
+      },
+      "textures": {
+        "lead": "textures/c/lead.svg",
+        "steel": "textures/c/steel.svg",
+        "machined": "textures/c/machined.svg",
+        "fastener": "textures/c/fastener.svg",
+        "brass": "textures/c/brass.svg",
+        "window": "textures/c/window.svg",
+        "lamp_off": "textures/c/lamp_off.svg",
+        "lamp_on": "textures/c/lamp_on.svg",
+        "deck": "textures/c/deck.svg"
+      },
+      "rig": {
+        "left_arm": {
+          "pivot": [
+            9,
+            21,
+            15
+          ],
+          "axis": "+X",
+          "travel": [
+            0,
+            1
+          ],
+          "idle_bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              13,
+              23,
+              22
+            ]
+          ],
+          "swept_bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              14,
+              23,
+              22
+            ]
+          ]
+        },
+        "right_arm": {
+          "pivot": [
+            23,
+            21,
+            15
+          ],
+          "axis": "-X",
+          "travel": [
+            0,
+            1
+          ],
+          "idle_bounds": [
+            [
+              19,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ],
+          "swept_bounds": [
+            [
+              18,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ]
+        },
+        "fixture": {
+          "pivot": [
+            16,
+            13,
+            16
+          ],
+          "axis": "+Y",
+          "travel": [
+            0,
+            3
+          ],
+          "idle_bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              18,
+              20
+            ]
+          ],
+          "swept_bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              21,
+              20
+            ]
+          ]
+        }
+      },
+      "geometry": {
+        "shell": {
+          "bounds": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              32,
+              32,
+              32
+            ]
+          ],
+          "elements": 107
+        },
+        "left_arm": {
+          "bounds": [
+            [
+              7,
+              13,
+              10
+            ],
+            [
+              13,
+              23,
+              22
+            ]
+          ],
+          "elements": 29
+        },
+        "right_arm": {
+          "bounds": [
+            [
+              19,
+              13,
+              10
+            ],
+            [
+              25,
+              23,
+              22
+            ]
+          ],
+          "elements": 29
+        },
+        "fixture": {
+          "bounds": [
+            [
+              13,
+              11,
+              12
+            ],
+            [
+              19,
+              18,
+              20
+            ]
+          ],
+          "elements": 28
+        }
+      },
+      "visibility": "前窗可见左右执行杆、双指夹爪和中央双钳口；浏览器剖视与游戏视觉验收分别记录。",
+      "stateComparison": {
+        "off": "lamp_off",
+        "on": "lamp_on",
+        "meaning": "仅真实WORKING灯素材静态对照，无假工序循环"
+      }
+    }
+  }
+}

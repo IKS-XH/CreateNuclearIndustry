@@ -1,0 +1,1644 @@
+{
+  "credit": "ART-SHIELDED-ASSEMBLY-15A 原创候选，未安装",
+  "ambientocclusion": true,
+  "textures": {
+    "lead": "cni_concept15:block/a/lead",
+    "steel": "cni_concept15:block/a/steel",
+    "machined": "cni_concept15:block/a/machined",
+    "fastener": "cni_concept15:block/a/fastener",
+    "brass": "cni_concept15:block/a/brass",
+    "window": "cni_concept15:block/a/window",
+    "lamp_off": "cni_concept15:block/a/lamp_off",
+    "lamp_on": "cni_concept15:block/a/lamp_on",
+    "deck": "cni_concept15:block/a/deck",
+    "particle": "cni_concept15:block/a/lead"
+  },
+  "elements": [
+    {
+      "name": "肩左轨",
+      "from": [
+        23.75,
+        20,
+        10
+      ],
+      "to": [
+        25,
+        22.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            7.75,
+            9.5,
+            9.0,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            7.75,
+            10,
+            9.0,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            7.75,
+            10,
+            9.0,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩左轨",
+      "from": [
+        23.75,
+        20,
+        16
+      ],
+      "to": [
+        25,
+        22.5,
+        22
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            7.75,
+            9.5,
+            9.0,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            9.5,
+            6,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            9.5,
+            6,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            7.75,
+            0,
+            9.0,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            7.75,
+            0,
+            9.0,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩右轨",
+      "from": [
+        19,
+        20,
+        10
+      ],
+      "to": [
+        20.25,
+        22.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            9.5,
+            4.25,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            10,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            10,
+            4.25,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            10,
+            4.25,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩右轨",
+      "from": [
+        19,
+        20,
+        16
+      ],
+      "to": [
+        20.25,
+        22.5,
+        22
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            9.5,
+            4.25,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            9.5,
+            6,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            9.5,
+            6,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0,
+            4.25,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            3,
+            0,
+            4.25,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩上加工盖",
+      "from": [
+        20.25,
+        22.5,
+        10
+      ],
+      "to": [
+        23.75,
+        23,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            4.25,
+            9.0,
+            7.75,
+            9.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            10,
+            9.0,
+            16,
+            9.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            10,
+            9.0,
+            16,
+            9.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            4.25,
+            10,
+            7.75,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            4.25,
+            10,
+            7.75,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩上加工盖",
+      "from": [
+        20.25,
+        22.5,
+        16
+      ],
+      "to": [
+        23.75,
+        23,
+        22
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            4.25,
+            9.0,
+            7.75,
+            9.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            9.0,
+            6,
+            9.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            9.0,
+            6,
+            9.5
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            4.25,
+            0,
+            7.75,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            4.25,
+            0,
+            7.75,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩中央关节体",
+      "from": [
+        20.25,
+        20,
+        12
+      ],
+      "to": [
+        23.75,
+        22.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            9.5,
+            7.75,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            12,
+            9.5,
+            16,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            12,
+            7.75,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            12,
+            7.75,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩中央关节体",
+      "from": [
+        20.25,
+        20,
+        16
+      ],
+      "to": [
+        23.75,
+        22.5,
+        19
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            9.5,
+            7.75,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            9.5,
+            3,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            9.5,
+            3,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            0,
+            7.75,
+            3
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            0,
+            7.75,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "name": "肩前功能锁圈",
+      "from": [
+        22.5,
+        20.5,
+        11.25
+      ],
+      "to": [
+        23.5,
+        21.5,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            10.5,
+            7.5,
+            11.5
+          ]
+        },
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            10.5,
+            7.5,
+            11.5
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            11.25,
+            10.5,
+            11.5,
+            11.5
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            11.25,
+            10.5,
+            11.5,
+            11.5
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            11.25,
+            7.5,
+            11.5
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            11.25,
+            7.5,
+            11.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "关节前端钢盖",
+      "from": [
+        20.5,
+        20.25,
+        11.5
+      ],
+      "to": [
+        23.5,
+        22.25,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            4.5,
+            9.75,
+            7.5,
+            11.75
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            4.5,
+            9.75,
+            7.5,
+            11.75
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            11.5,
+            9.75,
+            12.0,
+            11.75
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            11.5,
+            9.75,
+            12.0,
+            11.75
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            4.5,
+            11.5,
+            7.5,
+            12.0
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            4.5,
+            11.5,
+            7.5,
+            12.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆加工钢芯",
+      "from": [
+        20.75,
+        15.5,
+        12.5
+      ],
+      "to": [
+        23.25,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            0.0,
+            7.25,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            12.5,
+            0.0,
+            16.0,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            12.5,
+            0.0,
+            16.0,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            12.5,
+            7.25,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆加工钢芯",
+      "from": [
+        20.75,
+        15.5,
+        16
+      ],
+      "to": [
+        23.25,
+        16,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            0.0,
+            7.25,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            0,
+            7.25,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆加工钢芯",
+      "from": [
+        20.75,
+        16,
+        12.5
+      ],
+      "to": [
+        23.25,
+        20,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            12,
+            7.25,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            12.5,
+            12,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            12.5,
+            12,
+            16.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            12.5,
+            7.25,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆加工钢芯",
+      "from": [
+        20.75,
+        16,
+        16
+      ],
+      "to": [
+        23.25,
+        20,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            12,
+            7.25,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            12,
+            0.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            0,
+            12,
+            0.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            4.75,
+            0,
+            7.25,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "功能黄铜锁圈",
+      "from": [
+        20,
+        18,
+        12
+      ],
+      "to": [
+        24,
+        19.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            4,
+            12.5,
+            8,
+            14
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            12,
+            12.5,
+            16,
+            14
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            12,
+            12.5,
+            16,
+            14
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            4,
+            12,
+            8,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            4,
+            12,
+            8,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "功能黄铜锁圈",
+      "from": [
+        20,
+        18,
+        16
+      ],
+      "to": [
+        24,
+        19.5,
+        17
+      ],
+      "faces": {
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            4,
+            12.5,
+            8,
+            14
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            12.5,
+            1,
+            14
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            12.5,
+            1,
+            14
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            4,
+            0,
+            8,
+            1
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            4,
+            0,
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆左导条",
+      "from": [
+        23.25,
+        15.5,
+        12.5
+      ],
+      "to": [
+        23.75,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            0.0,
+            7.75,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            0.0,
+            16.0,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            0.0,
+            16.0,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            12.5,
+            7.75,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆左导条",
+      "from": [
+        23.25,
+        15.5,
+        16
+      ],
+      "to": [
+        23.75,
+        16,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            0.0,
+            7.75,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            0,
+            7.75,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆左导条",
+      "from": [
+        23.25,
+        16,
+        12.5
+      ],
+      "to": [
+        23.75,
+        18,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            14,
+            7.75,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            14,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            14,
+            16.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            12.5,
+            7.75,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆左导条",
+      "from": [
+        23.25,
+        16,
+        16
+      ],
+      "to": [
+        23.75,
+        18,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            14,
+            7.75,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            0.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            0.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            7.25,
+            0,
+            7.75,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆右导条",
+      "from": [
+        20.25,
+        15.5,
+        12.5
+      ],
+      "to": [
+        20.75,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            0.0,
+            4.75,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            0.0,
+            16.0,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            0.0,
+            16.0,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            12.5,
+            4.75,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆右导条",
+      "from": [
+        20.25,
+        15.5,
+        16
+      ],
+      "to": [
+        20.75,
+        16,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            0.0,
+            4.75,
+            0.5
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            0.5
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            0,
+            4.75,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆右导条",
+      "from": [
+        20.25,
+        16,
+        12.5
+      ],
+      "to": [
+        20.75,
+        18,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            14,
+            4.75,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            14,
+            16.0,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            12.5,
+            14,
+            16.0,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            12.5,
+            4.75,
+            16.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "执行杆右导条",
+      "from": [
+        20.25,
+        16,
+        16
+      ],
+      "to": [
+        20.75,
+        18,
+        16.5
+      ],
+      "faces": {
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            14,
+            4.75,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            0.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            0,
+            14,
+            0.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            4.25,
+            0,
+            4.75,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "name": "腕部钢座",
+      "from": [
+        21,
+        14.75,
+        13
+      ],
+      "to": [
+        23,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.0,
+            7,
+            1.25
+          ]
+        },
+        "south": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            0.0,
+            7,
+            1.25
+          ]
+        },
+        "east": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0.0,
+            16,
+            1.25
+          ]
+        },
+        "west": {
+          "texture": "#steel",
+          "uv": [
+            13,
+            0.0,
+            16,
+            1.25
+          ]
+        },
+        "up": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            13,
+            7,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#steel",
+          "uv": [
+            5,
+            13,
+            7,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "左夹指",
+      "from": [
+        22.5,
+        13,
+        13
+      ],
+      "to": [
+        23,
+        14.75,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            6.5,
+            1.25,
+            7.0,
+            3
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            6.5,
+            1.25,
+            7.0,
+            3
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            13,
+            1.25,
+            16,
+            3
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            13,
+            1.25,
+            16,
+            3
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            6.5,
+            13,
+            7.0,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            6.5,
+            13,
+            7.0,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "右夹指",
+      "from": [
+        21,
+        13,
+        13
+      ],
+      "to": [
+        21.5,
+        14.75,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            1.25,
+            5.5,
+            3
+          ]
+        },
+        "south": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            1.25,
+            5.5,
+            3
+          ]
+        },
+        "east": {
+          "texture": "#machined",
+          "uv": [
+            13,
+            1.25,
+            16,
+            3
+          ]
+        },
+        "west": {
+          "texture": "#machined",
+          "uv": [
+            13,
+            1.25,
+            16,
+            3
+          ]
+        },
+        "up": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            13,
+            5.5,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#machined",
+          "uv": [
+            5,
+            13,
+            5.5,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "夹爪中锁片",
+      "from": [
+        21.5,
+        14.25,
+        13
+      ],
+      "to": [
+        22.5,
+        14.75,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#fastener",
+          "uv": [
+            5.5,
+            1.25,
+            6.5,
+            1.75
+          ]
+        },
+        "south": {
+          "texture": "#fastener",
+          "uv": [
+            5.5,
+            1.25,
+            6.5,
+            1.75
+          ]
+        },
+        "east": {
+          "texture": "#fastener",
+          "uv": [
+            13,
+            1.25,
+            13.5,
+            1.75
+          ]
+        },
+        "west": {
+          "texture": "#fastener",
+          "uv": [
+            13,
+            1.25,
+            13.5,
+            1.75
+          ]
+        },
+        "up": {
+          "texture": "#fastener",
+          "uv": [
+            5.5,
+            13,
+            6.5,
+            13.5
+          ]
+        },
+        "down": {
+          "texture": "#fastener",
+          "uv": [
+            5.5,
+            13,
+            6.5,
+            13.5
+          ]
+        }
+      }
+    }
+  ]
+}

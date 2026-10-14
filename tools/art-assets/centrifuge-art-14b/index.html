@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>离心机 A · 已安装资源预览</title>
+  <link rel="stylesheet" href="/preview/style.css">
+  <script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+</head><body>
+  <header><div class="eyebrow">CREATE: NUCLEAR INDUSTRY / ART-CENTRIFUGE-14B</div><h1>离心机 A <span>已安装资源预览</span></h1><p>四运行模型与整机物品 · 六张真实 PNG · 4×4×8 输入轴及增粗转子</p></header>
+  <main>
+    <section class="toolbar" aria-label="统一观察设置">
+      <div class="control"><span>观察角度</span><div class="buttons"><button data-view="default" class="active">统一斜视</button><button data-view="front">正面</button><button data-view="back">背面</button><button data-view="side">侧面</button><button data-view="top">俯视</button><button data-view="bottom">底部</button></div></div>
+      <div class="control"><span>结构查看</span><div class="buttons"><button id="cut" aria-pressed="false">运行机壳剖视</button><button id="turn" aria-pressed="false">观察转台</button></div></div>
+      <div class="control"><span>运行机姿态</span><div class="buttons"><button id="stop" class="active">停止</button><button id="slow">低速演示</button><button id="reset">重置角度与相位</button></div></div>
+      <p class="hint">拖动或滚轮同步两视图。低速为网页姿态，非游戏实际 RPM；整机物品是静态组合，保持完整显示。</p>
+    </section>
+    <p id="status" role="status">正在读取已安装模型与 PNG…</p><pre id="error" hidden></pre>
+    <section id="cards" class="cards" aria-label="运行机与完整物品模型"></section>
+    <section class="texture-section"><h2>实际安装 PNG · 点击像素近看</h2><div id="textures" class="textures"></div></section>
+    <section class="notes"><h2>结构与接口</h2><p>上段抬升一格；转子与输入轴在下格本地 x=z=8 竖轴上同相位，壳体和轴座保持静止。顶部 UP 矿浆、水平面清水/粉末输出、底部 DOWN 动力位置保持。剖视只裁运行机北半壳，保留完整运动件。</p><p>物品视图展示实际完整组合模型的几何；游戏里的物品 display 参数保持原值。网页观察不代替 Minecraft 客户端验收。</p></section>
+    <footer><span>Minecraft 1.21.1 · block-model-renderer 2.20.0 · Three 0.180.0</span><button id="capture" disabled>保存本页观察证据</button></footer>
+  </main>
+  <script type="module" src="/preview/scene.mjs"></script>
+</body></html>
