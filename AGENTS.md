@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 用户2026-10-14纠正蒸汽停流诊断：“蒸汽端口本身就有主动输出能力啊，不需要泵的啊”。按[锅炉汽口窄修卡](docs/superpowers/plans/2026-10-14-boiler-steam-output-fix.md)接续原reactor-load-follow候选及唯一工业执行者，补两种汽主动接入合法工业管路；原无泵现场证据保留，但要求玩家补泵的结论被替代。四生产文件、精确收据/真实测试及单项打包排除写集已扩卡；原过滤/共同保压/4096物理口和全网额度、SC普通管禁运保持，不放开其他设备无泵或SC邻罐直推。原86225包/当前世界配置保持，必要RED→GREEN/真实代表/一次组合窄审与增量候选，不合main、不关闭02人工门。
+
 - 2026-10-14应力余量闭环02按前批联合手测后的条件授权完成，已交[独立候选](docs/reviews/2026-10-13/reactor-load-follow-02/CANDIDATE.md)8eaafd9，留同级Create_NuclearIndustry-reactor-load-follow／codex/reactor-load-follow。现GUI复用目标余量/最低毛HU，Ctrl绑定真实Create应力表，库存/积热保护优先、正常续接保棒位而新建PI。原唯一执行者与一次组合审查/同次窄复核关闭保护期补积分、C0已知网互斥及隐藏草稿三项Important，无剩余必改；最终25/25定向、真实4/4自然保存exit0与必要纠错增量assemble通过。29来源/678class/1548资源及Manifest与3239779B／86225aea…最终JAR一致，候选源码与JAR已纳Git；38世界/27配置全等，原初包/失败与main50d5包保持。当前停[02集中人工门](docs/reviews/2026-10-13/reactor-load-follow-02/CLIENT-CHECKLIST.md)，未合main；模型和原生受控输入不代替整条热力稳定性，不重开已验管理员、不推进压力或其他主线。下方准备/未实现时点为历史。
 
 - 2026-10-14管理员联合验收及06main集成完成后，02已按[开工交接](docs/reviews/2026-10-13/reactor-load-follow-02/DISPATCH.md)建立同级Create_NuclearIndustry-reactor-load-follow／codex/reactor-load-follow，干净main基线d9f415a；用户当前已保存世界38文件及运行配置27文件已完整携带、哈希零差异，原世界/主目录dirty保持。原唯一执行者按更新02卡任务1～4顺序实施，当前GUI追加余量/最低毛HU、04续接保持、PI/滤波仅暂态，原审查者一次组合窄审。前置已过不重问，技术入口缺口须报最小链后扩卡；不把派发当实现/整定/手测通过，闭环新增人工门独立。
