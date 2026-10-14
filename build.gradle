@@ -141,6 +141,7 @@ tasks.named('jar', Jar) {
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorGameTests*.class'
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorResumeGameTests*.class'
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorLoadFollowGameTests*.class'
+    exclude 'com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests*.class'
     exclude 'data/cni_reactor_automation/structure/automation_empty.nbt'
     exclude 'data/cni_reactor_automation_retrofit/structure/retrofit_empty.nbt'
     exclude 'data/cni_reactor_administrator/structure/administrator_empty.nbt'

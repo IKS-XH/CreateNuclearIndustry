@@ -83,15 +83,25 @@ final class IndustrialTopology {
         return knownEndpoint(level, pos) || capabilityAt(level, pos, entry) != null;
     }
     static Side search(ServerLevel level, IndustrialPumpBlockEntity root, boolean output) {
+        Direction start = output ? root.outputDirection() : root.outputDirection().getOpposite();
+        return searchFrom(level, root.getBlockPos(), start, output);
+    }
+    /** 锅炉汽口是主动源而不是节点；必须先接一段专用管/阀，不能据此开放SC邻罐直推。 */
+    static Side searchBoiler(ServerLevel level, BlockPos port, Direction outward) {
+        if (!(stateAt(level, port.relative(outward)).getBlock() instanceof IndustrialPipeBlock))
+            return new Side(List.of(), Set.of(), Set.of(), "blocked");
+        return searchFrom(level, port, outward, true);
+    }
+    private static Side searchFrom(ServerLevel level, BlockPos root, Direction start, boolean output) {
         List<Endpoint> endpoints = new ArrayList<>(); Set<BlockPos> visited = new HashSet<>(); Set<BlockPos> nodes = new HashSet<>();
         Set<Face> endpointFaces = new HashSet<>();
         Set<net.minecraft.world.level.ChunkPos> missingChunks = new HashSet<>();
-        Queue<Visit> queue = new ArrayDeque<>(); Direction start = output ? root.outputDirection() : root.outputDirection().getOpposite();
-        queue.add(new Visit(root.getBlockPos().relative(start), start.getOpposite(), List.of()));
+        Queue<Visit> queue = new ArrayDeque<>();
+        queue.add(new Visit(root.relative(start), start.getOpposite(), List.of()));
         String failure = "blocked";
         while (!queue.isEmpty()) {
             Visit visit = queue.remove(); BlockPos pos = visit.pos();
-            if (pos.equals(root.getBlockPos())) continue;
+            if (pos.equals(root)) continue;
             if (!level.hasChunkAt(pos)) { missingChunks.add(new net.minecraft.world.level.ChunkPos(pos)); failure = "unloaded"; continue; }
             BlockState state = stateAt(level, pos);
             if (!(state.getBlock() instanceof IndustrialPipeBlock) && !(state.getBlock() instanceof IndustrialPumpBlock)) {

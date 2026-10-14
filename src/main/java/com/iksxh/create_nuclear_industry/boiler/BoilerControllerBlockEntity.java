@@ -280,9 +280,18 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     private void pushSteam(BoilerStructure.Form form, long now) {
         if (form == null) return;
         for (BlockPos p : form.steamPorts()) {
+            Direction side = form.outward(p); BlockPos targetPos = p.relative(side);
+            if (level instanceof ServerLevel server && level.hasChunkAt(targetPos)
+                    && server.getChunkSource().getChunkNow(targetPos.getX() >> 4, targetPos.getZ() >> 4) != null
+                    && server.getChunkSource().getChunkNow(targetPos.getX() >> 4, targetPos.getZ() >> 4).getBlockState(targetPos).getBlock()
+                    instanceof com.iksxh.create_nuclear_industry.industrial.IndustrialPipeBlock) {
+                // 两种汽都保留本口主动能力；专用路径交给统一Post调度，不沿标准能力放开SC。
+                com.iksxh.create_nuclear_industry.industrial.IndustrialNetworkScheduler.offerBoilerSteam(server,
+                        new ActiveSteamSource(new Port(p.immutable(), side, 1), now));
+                continue;
+            }
             var kind = inventoryKind(p); if (kind != BoilerSteamInventoryKind.NORMAL) continue;
             int amount = ledger.remainingDrain(kind, p, now); if (amount == 0) continue;
-            Direction side = form.outward(p); BlockPos targetPos = p.relative(side);
             if (!level.hasChunkAt(targetPos) || FluidPropagator.getPipe(level, targetPos) != null) continue;
             IFluidHandler target = level.getCapability(Capabilities.FluidHandler.BLOCK, targetPos, side.getOpposite());
             if (target == null) continue;
@@ -294,6 +303,34 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
                 ledger.drainSteam(kind, p, Math.min(simulated, actual), false, now);
             }
         }
+    }
+    /**
+     * 仅有效锅炉tick可创建的主动源身份；只公布本口存量和有限收据，不暴露裸能力。
+     * 固定物理口/汽种/成型代次与服务端tick，Post调度遇到换滤器、拆口或卸载立即拒取。
+     */
+    public final class ActiveSteamSource {
+        private final Port port;
+        private final long tick;
+        private final BoilerPortBlockEntity entity;
+        private ActiveSteamSource(Port port, long tick) {
+            this.port = port; this.tick = tick;
+            entity = level.getBlockEntity(port.pos) instanceof BoilerPortBlockEntity current ? current : null;
+        }
+        public BlockPos position() { return port.pos; }
+        public Direction outward() { return port.side; }
+        public boolean valid() {
+            if (!(level instanceof ServerLevel server) || level.getGameTime() != tick || entity == null || entity.isRemoved()) return false;
+            var chunk = server.getChunkSource().getChunkNow(port.pos.getX() >> 4, port.pos.getZ() >> 4);
+            // 相同方块/过滤项的BE替换也必须撤销旧请求；只查加载表，不补读或强载源区块。
+            return chunk != null && chunk.getBlockEntity(port.pos) == entity && port.steamInventory != null && port.valid();
+        }
+        public FluidStack stock() { return valid() ? port.getFluidInTank(0) : FluidStack.EMPTY; }
+        public int remaining() { return valid() ? ledger.remainingDrain(port.steamInventory, port.pos, tick) : 0; }
+        /** 授权仅限原池有限取汽；退款由收据原账本负责，不重新解析可能已改变的过滤项。 */
+        public BoilerState.SteamReceipt withdraw(int requested) {
+            return valid() ? ledger.withdrawSteam(port.steamInventory, port.pos, requested, tick) : null;
+        }
+        public void delivered(int amount) { if (amount > 0) setChanged(); }
     }
     /** 四类端口能力只有外向面可用；结构代次变化使旧句柄永久失效，单口选择只撤销该口旧汽句柄。 */
     public IFluidHandler port(BlockPos p, Direction side, boolean ignoredInput) { return port(p, side); }

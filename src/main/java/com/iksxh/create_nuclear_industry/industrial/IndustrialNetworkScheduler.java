@@ -16,16 +16,24 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 public final class IndustrialNetworkScheduler {
     private static final Map<ServerLevel, World> WORLDS = new WeakHashMap<>();
     private record Routes(long revision, net.minecraft.core.Direction output, IndustrialTopology.Side source, IndustrialTopology.Side target) {}
+    private record ActiveRoutes(long revision, net.minecraft.core.Direction output, IndustrialTopology.Side target) {}
     private static final class World {
         long revision, tick = Long.MIN_VALUE;
-        int cursor;
+        int cursor, pumpCursor, steamCursor;
         List<Number> configuration;
         final Map<BlockPos, IndustrialPumpBlockEntity> pumps = new HashMap<>();
         final Map<BlockPos, Routes> routes = new HashMap<>();
+        final Map<BlockPos, com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity.ActiveSteamSource> steam = new HashMap<>();
+        final Map<BlockPos, ActiveRoutes> steamRoutes = new HashMap<>();
+        final Map<BlockPos, Integer> steamTargetCursor = new HashMap<>();
         final IndustrialFlowBudget budget = new IndustrialFlowBudget();
         final Map<BlockPos, FluidStack> media = new HashMap<>();
     }
     private IndustrialNetworkScheduler() {}
+    /** 仅接收控制器合法tick生成的有限身份；请求不跨tick续用，也不登记其他设备主动源。 */
+    public static void offerBoilerSteam(ServerLevel level, com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity.ActiveSteamSource source) {
+        if (source.valid()) WORLDS.computeIfAbsent(level, ignored -> new World()).steam.put(source.position(), source);
+    }
     public static void register(ServerLevel level, IndustrialPumpBlockEntity pump) { World world = WORLDS.computeIfAbsent(level, ignored -> new World()); world.pumps.put(pump.getBlockPos(), pump); invalidate(level, pump.getBlockPos()); }
     public static void unregister(ServerLevel level, IndustrialPumpBlockEntity pump) { World world = WORLDS.get(level); if (world != null) { world.pumps.remove(pump.getBlockPos(), pump); invalidate(level, pump.getBlockPos()); } }
     /** 仅撤销包含变更格或其邻格的缓存路线；额度账本不随拓扑变更清零。 */
@@ -35,6 +43,10 @@ public final class IndustrialNetworkScheduler {
         world.routes.entrySet().removeIf(entry -> entry.getKey().distManhattan(pos) <= 1
                 || touches(entry.getValue().source(), node -> node.distManhattan(pos) <= 1)
                 || touches(entry.getValue().target(), node -> node.distManhattan(pos) <= 1));
+        world.steamRoutes.entrySet().removeIf(entry -> {
+            boolean changed = entry.getKey().distManhattan(pos) <= 1 || touches(entry.getValue().target(), node -> node.distManhattan(pos) <= 1);
+            if (changed) world.steamTargetCursor.remove(entry.getKey()); return changed;
+        });
     }
     private static boolean touches(IndustrialTopology.Side side, java.util.function.Predicate<BlockPos> predicate) {
         return side.nodes().stream().anyMatch(predicate) || side.endpoints().stream().anyMatch(endpoint -> predicate.test(endpoint.position()));
@@ -44,6 +56,10 @@ public final class IndustrialNetworkScheduler {
         java.util.function.Predicate<BlockPos> inChunk = pos -> new net.minecraft.world.level.ChunkPos(pos).equals(chunk);
         world.routes.entrySet().removeIf(entry -> inChunk.test(entry.getKey()) || touches(entry.getValue().source(), inChunk) || touches(entry.getValue().target(), inChunk)
                 || entry.getValue().source().missingChunks().contains(chunk) || entry.getValue().target().missingChunks().contains(chunk));
+        world.steamRoutes.entrySet().removeIf(entry -> {
+            boolean changed = inChunk.test(entry.getKey()) || touches(entry.getValue().target(), inChunk) || entry.getValue().target().missingChunks().contains(chunk);
+            if (changed) world.steamTargetCursor.remove(entry.getKey()); return changed;
+        });
     }
     @SubscribeEvent public static void chunkLoaded(ChunkEvent.Load event) { if (event.getLevel() instanceof ServerLevel level) invalidateChunk(level, event.getChunk().getPos()); }
     @SubscribeEvent public static void chunkUnloaded(ChunkEvent.Unload event) { if (event.getLevel() instanceof ServerLevel level) invalidateChunk(level, event.getChunk().getPos()); }
@@ -70,15 +86,93 @@ public final class IndustrialNetworkScheduler {
         World world = WORLDS.get(level); if (world == null || world.tick == level.getGameTime()) return; world.tick = level.getGameTime(); world.media.clear();
         var configuration = IndustrialFluidConfig.snapshot();
         if (!configuration.equals(world.configuration)) {
-            world.configuration = configuration; world.routes.clear(); world.revision++;
+            world.configuration = configuration; world.routes.clear(); world.steamRoutes.clear(); world.steamTargetCursor.clear(); world.revision++;
             if (IndustrialFluidConfig.valid()) for (var pump : world.pumps.values()) if (!pump.isRemoved() && pump.hasNetwork())
                 pump.getOrCreateNetwork().updateStressFor(pump, pump.calculateStressApplied());
         }
         List<IndustrialPumpBlockEntity> pumps = world.pumps.values().stream().filter(pump -> !pump.isRemoved() && level.hasChunkAt(pump.getBlockPos()))
                 .sorted(Comparator.comparingLong(pump -> pump.getBlockPos().asLong())).toList();
-        if (pumps.isEmpty()) return;
-        int offset = Math.floorMod(world.cursor++, pumps.size());
-        for (int i = 0; i < pumps.size(); i++) schedule(level, world, pumps.get((offset + i) % pumps.size()));
+        var steam = world.steam.values().stream().filter(source -> source.valid() && level.hasChunkAt(source.position()))
+                .sorted(Comparator.comparingLong(source -> source.position().asLong())).toList();
+        int cursor = world.cursor++;
+        boolean steamFirst = (cursor & 1) == 0;
+        int pumpStart = world.pumpCursor, steamStart = world.steamCursor;
+        // 组内首位只在本组实际先行时推进；对方为空也算先行，不能与组间奇偶每tick同步递增。
+        if (!pumps.isEmpty() && (!steamFirst || steam.isEmpty())) world.pumpCursor = Math.floorMod(pumpStart + 1, pumps.size());
+        if (!steam.isEmpty() && (steamFirst || pumps.isEmpty())) world.steamCursor = Math.floorMod(steamStart + 1, steam.size());
+        Runnable runPumps = () -> { for (int i = 0; i < pumps.size(); i++) schedule(level, world, pumps.get(Math.floorMod(pumpStart + i, pumps.size()))); };
+        Runnable runSteam = () -> { for (int i = 0; i < steam.size(); i++) scheduleSteam(level, world, steam.get(Math.floorMod(steamStart + i, steam.size()))); };
+        try {
+            if (steamFirst) { runSteam.run(); runPumps.run(); }
+            else { runPumps.run(); runSteam.run(); }
+        } finally {
+            world.steam.clear();
+            Set<BlockPos> active = new HashSet<>(); steam.stream().filter(source -> source.valid()).forEach(source -> active.add(source.position()));
+            world.steamRoutes.keySet().retainAll(active);
+            world.steamTargetCursor.keySet().retainAll(active);
+        }
+    }
+    /** 同一原BFS和端点单介质约束；实际路径中的泵必须仍有动力且方向合法。 */
+    private static void scheduleSteam(ServerLevel level, World world, com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity.ActiveSteamSource source) {
+        if (!IndustrialFluidConfig.valid() || !source.valid() || source.remaining() <= 0) return;
+        ActiveRoutes routes = world.steamRoutes.get(source.position());
+        if (routes == null || routes.revision() != world.revision || routes.output() != source.outward() || routes.target().recovered(level)) {
+            routes = new ActiveRoutes(world.revision, source.outward(), IndustrialTopology.searchBoiler(level, source.position(), source.outward()));
+            world.steamRoutes.put(source.position(), routes);
+        }
+        var side = routes.target(); FluidStack selected = source.stock();
+        if (selected.isEmpty() || side.nodes().isEmpty() || side.nodes().size() > IndustrialFluidConfig.MAX_NODES.get()) return;
+        for (var endpoint : side.endpoints()) {
+            var handler = resolve(level, endpoint); if (handler == null) continue;
+            for (int tank = 0; tank < handler.getTanks(); tank++) {
+                FluidStack stack = handler.getFluidInTank(tank);
+                if (!stack.isEmpty() && !FluidStack.isSameFluidSameComponents(selected, stack)) return;
+            }
+        }
+        for (BlockPos node : side.nodes()) if (IndustrialTopology.entityAt(level, node) instanceof IndustrialPumpBlockEntity member) {
+            FluidStack stack = member.cachedFluid();
+            if (!stack.isEmpty() && !FluidStack.isSameFluidSameComponents(selected, stack)) return;
+        }
+        var targets = side.endpoints(); int offset = Math.floorMod(world.steamTargetCursor.getOrDefault(source.position(), 0), Math.max(1, targets.size()));
+        int delivered = 0;
+        for (int i = 0; i < targets.size(); i++) {
+            var target = targets.get((offset + i) % targets.size());
+            if (!target.position().equals(source.position())) delivered += transactSteam(level, world, source, target, selected);
+        }
+        // 每口只在自己真实交付后推进目标首位；无额度/拒收不消耗轮次，不能与组间奇偶同步。
+        if (delivered > 0 && source.valid()) world.steamTargetCursor.put(source.position(), (offset + 1) % targets.size());
+    }
+    /** 收据在此同步边界内闭合；短收退原池mB/HU与本次口额度，管段只按实交付收费。 */
+    private static int transactSteam(ServerLevel level, World world, com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity.ActiveSteamSource source,
+            IndustrialTopology.Endpoint target, FluidStack fluid) {
+        var binding = IndustrialTopology.bindingAt(level, target.position(), target.side());
+        IFluidHandler to = RestrictedFluidHandler.wrap(binding.handler());
+        if (to == null || RestrictionPolicy.restricted(fluid) && !permittedRestrictedEndpoint(level, target)) return 0;
+        var path = target.path(); List<IndustrialFlowBudget.Limit> limits = new ArrayList<>();
+        for (BlockPos node : path) {
+            FluidStack medium = world.media.get(node);
+            if (medium != null && !FluidStack.isSameFluidSameComponents(medium, fluid)) return 0;
+            limits.add(new IndustrialFlowBudget.Limit(node.asLong(), IndustrialTopology.limit(level, node)));
+        }
+        int allowed = world.budget.reserve(level.getGameTime(), limits, source.remaining(), false);
+        if (allowed <= 0) return 0;
+        final long now = level.getGameTime(), revision = world.revision;
+        IndustrialTransferPermit permit = new IndustrialTransferPermit(null, to, allowed,
+                () -> level.getGameTime() == now && world.revision == revision && source.valid() && binding.valid().getAsBoolean()
+                        && path.stream().allMatch(node -> IndustrialTopology.limit(level, node) > 0));
+        IFluidHandler receiver = ((RestrictedFluidHandler)to).authorized(permit);
+        int simulated = Math.min(allowed, Math.max(0, receiver.fill(fluid.copyWithAmount(allowed), IFluidHandler.FluidAction.SIMULATE)));
+        if (simulated == 0 || !source.valid()) return 0;
+        try (var receipt = source.withdraw(simulated)) {
+            if (receipt == null || receipt.amount() == 0) return 0;
+            int delivered = Math.min(receipt.amount(), Math.max(0, receiver.fill(fluid.copyWithAmount(receipt.amount()), IFluidHandler.FluidAction.EXECUTE)));
+            receipt.settle(delivered); source.delivered(delivered);
+            if (delivered > 0) {
+                world.budget.reserve(now, limits, delivered, true);
+                for (BlockPos node : path) world.media.put(node, fluid.copyWithAmount(1));
+            }
+            return delivered;
+        }
     }
     private static void schedule(ServerLevel level, World world, IndustrialPumpBlockEntity pump) {
         if (!IndustrialFluidConfig.valid() || !Float.isFinite(pump.getSpeed())) { pump.display(0, "invalid"); return; }
