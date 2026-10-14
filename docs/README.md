@@ -1,5 +1,7 @@
 # 项目文档入口
 
+最新[离心机／屏蔽装配台美术已合main并生成组合包](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)：双亲`497f64b`，正式JAR为3304595B／33da9002…，包含已验闭环与锅炉修复。干净来源唯一assemble约28秒exit0；原105个dirty保持，15C动画的Minecraft手测仍独立，不补记通过。
+
 2026-10-14：[锅炉主动出汽与应力余量闭环均获用户手测通过并合入main](reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md)，提交`4149a9f`，正式f23b5cf4…包已跟踪。用户追加最新美术合入，按[14B/15B-R1/15C集成卡](superpowers/plans/2026-10-14-latest-production-art-integration.md)组合打包；动画游戏观察仍独立。下方相关“待验/未合main”为当时交付历史。
 
 [锅炉汽口主动输出已交局部候选](reviews/2026-10-14/boiler-steam-output-01/CANDIDATE.md)：原reactor-load-follow候选c71d690及f23b5cf4…JAR已纳Git，两种汽可沿合法工业管主动输出，无需补外置泵。最终36/36真实与13/13收据、同次组合窄审及最终载荷核对通过；保持过滤/保压/口与管段额度。继续原“新的世界”做[局部复看](reviews/2026-10-14/boiler-steam-output-01/CLIENT-CHECKLIST.md)，原停流/公平RED及旧包保留，02人工门独立，未合main。

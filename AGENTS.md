@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 最新14B离心机／15B-R1屏蔽装配台外观及15C动画按用户追加指令已[合入并打包](docs/reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)：479已交来源净提交`794d16a`，main双亲`497f64b`仅两文档PM组合、无代码冲突；54生产/3测试与交付相同。干净Git6592文件完整核后唯一assemble约28秒exit0，3304595B／33da9002…正式包跟踪Git，691class／1569资源及Manifest与输出一致、测试载荷无泄漏。677非美术class和325资源原字节保持，1195文本资源仅CRLF→LF且同Git原字节的精确特例已核准，严格初核失败保留、未重打或拼包。105原dirty及旧f23/dd6、世界/配置/服务保持；原检查/审查复用。15C动画Minecraft手测仍未报告，本次指令授权合入不追认视觉通过；其它主线不推进。下方本次构建中及旧制品身份为历史。
+
 - 用户2026-10-14明确“锅炉修复和应力余量闭环都通过了”，按[联合验收](docs/reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md)关闭02及汽口局部人工门，双亲合main`4149a9f`；36路径与已验候选树及f23b5cf4…跟踪JAR一致，106非重叠dirty原字节保持，旧包/世界/配置原位。复用原25/25、4/4、36/36、13/13与组合审查，不重测或重打同一包。用户随后追加“美术分支最新的变更也合并进去”，按[本次美术合入卡](docs/superpowers/plans/2026-10-14-latest-production-art-integration.md)只接已交14B/15B-R1/15C及可编辑来源、唯一组合打包；15C动画尚未报告Minecraft手测，通过本次指令授权Git合入而不追认视觉通过。下方未合main/两功能待验均为历史时点，不推进新主线。
 
 - 锅炉汽口主动输出01已交原reactor-load-follow候选`c71d690`，源码与3248823B／f23b5cf4…最终JAR已纳Git。四生产文件补两种汽合法工业无泵路径、原池准确收据及原口/全网预算；同一次组合窄审的来源/目标轮转Important已关闭，无剩余必改。最终36/36真实自然保存exit0、13/13收据复用，第三次必要纠错增量assemble；2078当前来源/681class/1548资源与Manifest共2230载荷及Git blob零漂移，新测试类未入包。原无泵/两阶段公平RED和三份旧包保留，9故障输入不变、main50d5包/其他dirty保持。停[本批局部复看](docs/reviews/2026-10-14/boiler-steam-output-01/CLIENT-CHECKLIST.md)，02闭环人工门独立，未合main、不推进其他主线；下方派发与待实现描述为原阶段。
