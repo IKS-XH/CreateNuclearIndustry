@@ -205,6 +205,10 @@ public final class ReactorStructureDefinition {
         }
 
         for (Map.Entry<LocalPosition, String> entry : blocks.entrySet()) {
+            if (!SIDE_PORT_SLOTS.contains(entry.getKey()) && entry.getValue().equals(id("reactor_automation_port"))) {
+                var pos=entry.getKey();
+                return ScanResult.invalid(DiagnosticCode.AUTOMATION_SLOT,pos.x()+", "+pos.y()+", "+pos.z());
+            }
             if (!SIDE_PORT_SLOTS.contains(entry.getKey()) && isPortId(entry.getValue())) {
                 String expected = id(P1ContentIds.REACTOR_CASING_ID);
                 DiagnosticCode code = entry.getValue().equals(id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID))
@@ -239,6 +243,8 @@ public final class ReactorStructureDefinition {
                 ports.get(PortType.COLD_COOLANT).add(position);
             } else if (actual.equals(id(P1ContentIds.REACTOR_HOT_PORT_ID))) {
                 ports.get(PortType.HOT_COOLANT).add(position);
+            } else if (actual.equals(id("reactor_automation_port"))) {
+                ports.get(PortType.AUTOMATION).add(position);
             } else if (!actual.equals(id(P1ContentIds.REACTOR_CASING_ID))
                     && !actual.equals(id(P1ContentIds.REACTOR_WINDOW_ID))) {
                 return ScanResult.invalid(DiagnosticCode.STRUCTURE_BLOCKS,
@@ -258,6 +264,10 @@ public final class ReactorStructureDefinition {
                     "reactor requires at least one hot coolant port");
         }
 
+        if (ports.get(PortType.AUTOMATION).size() > 1) {
+            var pos=ports.get(PortType.AUTOMATION).get(1);
+            return ScanResult.invalid(DiagnosticCode.AUTOMATION_COUNT,pos.x()+", "+pos.y()+", "+pos.z());
+        }
         TreeMap<CoreColumnPosition, ColumnMapping> columns = new TreeMap<>();
         int fuelCount = 0;
         for (int x = 0; x < dimensions.internalWidth(); x++) {
@@ -315,7 +325,8 @@ public final class ReactorStructureDefinition {
     private static boolean isPortId(String id) {
         return id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID).equals(id)
                 || id(P1ContentIds.REACTOR_COLD_PORT_ID).equals(id)
-                || id(P1ContentIds.REACTOR_HOT_PORT_ID).equals(id);
+                || id(P1ContentIds.REACTOR_HOT_PORT_ID).equals(id)
+                || id("reactor_automation_port").equals(id);
     }
 
     private static String id(String path) {
@@ -372,7 +383,8 @@ public final class ReactorStructureDefinition {
     public enum PortType {
         INSTRUMENT,
         COLD_COOLANT,
-        HOT_COOLANT
+        HOT_COOLANT,
+        AUTOMATION
     }
 
     /** 扫描失败或成功结果的稳定诊断类别。 */
@@ -386,6 +398,8 @@ public final class ReactorStructureDefinition {
         NO_FUEL("no_fuel"),
         DIMENSIONS("dimensions"),
         CHUNKS_UNAVAILABLE("chunks_unavailable"),
+        AUTOMATION_SLOT("automation_slot"),
+        AUTOMATION_COUNT("automation_count"),
         GENERIC_FAILURE("generic_failure");
 
         private final String translationSuffix;

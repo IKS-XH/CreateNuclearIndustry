@@ -32,6 +32,16 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity
             "ControlRodIntegrityAvailable";
     private static final String CONTROL_ROD_INTEGRITY_KEY = "ControlRodIntegrity";
     private ControlRodSliderBehaviour slider;
+    private boolean automationLocked;
+    /** 服务端授权的只读显示标记，不持久化、不作为权威锁。 */
+    public boolean automationLocked() { return automationLocked; }
+    public void setServerAutomationLocked(boolean locked) {
+        if (level != null && level.isClientSide) throw new IllegalStateException("客户端不能设置锁");
+        if (automationLocked == locked) return;
+        automationLocked = locked;
+        if (slider != null) slider.setLabel(Component.translatable(locked ? "automation.create_nuclear_industry.individual_locked" : "block.create_nuclear_industry.control_rod_drive"));
+        if (level != null) sendData();
+    }
     private int clientColumnX = -1;
     private int clientColumnZ = -1;
     private Double serverControlRodIntegrity;
@@ -166,6 +176,7 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
         if (clientPacket) {
+            tag.putBoolean("AutomationLocked", automationLocked);
             tag.putInt("ControlRodColumnX", clientColumnX);
             tag.putInt("ControlRodColumnZ", clientColumnZ);
             tag.putBoolean(CONTROL_ROD_INTEGRITY_AVAILABLE_KEY,
@@ -180,6 +191,8 @@ public final class ControlRodDriveBlockEntity extends P1MinimalBlockEntity
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
         if (clientPacket) {
+            automationLocked = tag.getBoolean("AutomationLocked");
+            if (slider != null) slider.setLabel(Component.translatable(automationLocked ? "automation.create_nuclear_industry.individual_locked" : "block.create_nuclear_industry.control_rod_drive"));
             clientColumnX = tag.contains("ControlRodColumnX") ? tag.getInt("ControlRodColumnX") : -1;
             clientColumnZ = tag.contains("ControlRodColumnZ") ? tag.getInt("ControlRodColumnZ") : -1;
             clientControlRodIntegrity = null;

@@ -36,6 +36,7 @@ public final class ModCreativeTabs {
                         output.accept(P1Blocks.REACTOR_CASING_ITEM.get());
                         output.accept(P1Blocks.REACTOR_WINDOW_ITEM.get());
                         output.accept(P1Blocks.REACTOR_INSTRUMENT_PORT_ITEM.get());
+                        output.accept(ReactorAutomationContent.PORT_ITEM.get());
                         output.accept(P1Blocks.REACTOR_COLD_PORT_ITEM.get());
                         output.accept(P1Blocks.REACTOR_HOT_PORT_ITEM.get());
                         output.accept(P1Blocks.REACTOR_REFUELING_PORT_ITEM.get());

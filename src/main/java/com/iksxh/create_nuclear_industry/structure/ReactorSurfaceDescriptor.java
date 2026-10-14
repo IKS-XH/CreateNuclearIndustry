@@ -29,7 +29,8 @@ public record ReactorSurfaceDescriptor(String dimension, BlockPos ownerPos, UUID
     private static final Set<String> BLOCK_IDS = Set.of(INSTRUMENT,
             "create_nuclear_industry:reactor_casing", "create_nuclear_industry:reactor_window",
             "create_nuclear_industry:reactor_cold_port", "create_nuclear_industry:reactor_hot_port",
-            "create_nuclear_industry:reactor_refueling_port", "create_nuclear_industry:control_rod_drive");
+            "create_nuclear_industry:reactor_refueling_port", "create_nuclear_industry:control_rod_drive",
+            "create_nuclear_industry:reactor_automation_port");
 
     public ReactorSurfaceDescriptor {
         if (dimension == null || dimension.length() > 128 || ResourceLocation.tryParse(dimension) == null

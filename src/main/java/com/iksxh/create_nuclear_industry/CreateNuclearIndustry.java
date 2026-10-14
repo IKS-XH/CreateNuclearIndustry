@@ -59,6 +59,8 @@ public final class CreateNuclearIndustry {
     /** 在模组事件总线上完成配置、注册对象、网络协议和能力入口的装配。 */
     public CreateNuclearIndustry(IEventBus modEventBus, ModContainer modContainer) {
         P1ServerConfig.register(modContainer);
+        com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.register(modContainer);
+        com.iksxh.create_nuclear_industry.content.ReactorAutomationContent.register(modEventBus);
         HeatExchangerConfig.register(modContainer);
         BoilerConfig.register(modContainer);
         com.iksxh.create_nuclear_industry.config.IndustrialFluidConfig.register(modContainer);
@@ -121,6 +123,7 @@ public final class CreateNuclearIndustry {
         ShieldedAssemblyArmInteractionPoint.register(modEventBus);
         NeoForge.EVENT_BUS.addListener(ShieldedAssemblyBlock::guardBreak);
         modEventBus.addListener(ControlRodSliderNetwork::registerPayloads);
+        modEventBus.addListener(com.iksxh.create_nuclear_industry.automation.ReactorAutomationNetwork::registerPayloads);
         modEventBus.addListener(CreateNuclearIndustry::registerPonder);
         modEventBus.addListener(CreateNuclearIndustry::registerP0Capabilities);
         modEventBus.addListener(CreateNuclearIndustry::registerP1Capabilities);

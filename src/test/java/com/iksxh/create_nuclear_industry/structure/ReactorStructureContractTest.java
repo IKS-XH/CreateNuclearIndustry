@@ -248,6 +248,7 @@ class ReactorStructureContractTest {
     ) {
         String id = switch (type) {
             case INSTRUMENT -> "create_nuclear_industry:reactor_instrument_port";
+            case AUTOMATION -> "create_nuclear_industry:reactor_automation_port";
             case COLD_COOLANT -> "create_nuclear_industry:reactor_cold_port";
             case HOT_COOLANT -> "create_nuclear_industry:reactor_hot_port";
         };

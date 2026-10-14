@@ -16,8 +16,8 @@ import java.util.TreeMap;
 /**
  * 单个仪表端口的服务端权威红石 SCRAM 转换服务。
  *
- * <p>高电平保存可动控制棒的目标深度并请求插入，低电平恢复仍未卡死控制棒的
- * 目标深度；卡死棒不会被强行恢复。每次结果中的裂变热使用 {@code HU}，用于
+ * <p>高电平保存可动控制棒的目标深度并请求插入；无管理员时低电平恢复原保存目标，
+ * 管理员持锁时低电平将当前全部可动棒目标保持100%。卡死棒不会被强行恢复。每次结果中的裂变热使用 {@code HU}，用于
  * 表达 SCRAM 后是否仍有残余反应，而不是替代正式服务端 tick。</p>
  */
 public final class ControlRodScramService {
@@ -70,7 +70,8 @@ public final class ControlRodScramService {
             if (state.jammed()) {
                 continue;
             }
-            savedTargets.put(entry.getKey(), state.targetDepth());
+            // 管理员持权后的急停恢复基准始终全插入；无管理员继续保存原目标。
+            savedTargets.put(entry.getKey(), instrument.automationState().claimed() ? 1.0D : state.targetDepth());
             controls.put(entry.getKey(), ControlRodStateTransitions.scramInsert(state));
         }
 
@@ -96,11 +97,16 @@ public final class ControlRodScramService {
 
         TreeMap<CoreColumnPosition, ControlRodColumnState> controls =
                 new TreeMap<>(before.controlRodColumns());
-        for (Map.Entry<CoreColumnPosition, Double> entry : before.scramSavedTargetDepths().entrySet()) {
-            ControlRodColumnState state = controls.get(entry.getKey());
-            if (state != null && !state.jammed()) {
-                controls.put(entry.getKey(), ControlRodStateTransitions.restoreTargetDepth(
-                        state, entry.getValue()));
+        if (instrument.automationState().claimed()) {
+            // 首次急停跳过的卡死棒可能刚经原维修解除；持锁释放覆盖当前所有可动棒。
+            controls.replaceAll((column, state) -> state.jammed() ? state
+                    : ControlRodStateTransitions.restoreTargetDepth(state, 1.0D));
+        } else {
+            for (Map.Entry<CoreColumnPosition, Double> entry : before.scramSavedTargetDepths().entrySet()) {
+                ControlRodColumnState state = controls.get(entry.getKey());
+                if (state != null && !state.jammed()) {
+                    controls.put(entry.getKey(), ControlRodStateTransitions.restoreTargetDepth(state, entry.getValue()));
+                }
             }
         }
 

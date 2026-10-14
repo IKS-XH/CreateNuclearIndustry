@@ -69,12 +69,15 @@ public final class ControlRodSliderBehaviour extends ScrollValueBehaviour {
 
     @Override
     public void newSettingHovered(ValueSettings valueSetting) {
-        if (getWorld() != null && getWorld().isClientSide) {
+        if (getWorld() != null && getWorld().isClientSide && !drive.automationLocked()) {
             ControlRodSliderClientAdapter.ensureStarted(
                     drive.getBlockPos(), drive.clientColumnX(), drive.clientColumnZ(),
                     getValue());
         }
     }
+
+    /** 锁只限制输入，继续展示真实棒目标与管理员只读标记。 */
+    @Override public boolean mayInteract(Player player) { return !drive.automationLocked() && super.mayInteract(player); }
 
     public void setServerDisplayedValue(int depthPercent) {
         value = Math.max(0, Math.min(100, depthPercent));

@@ -9,7 +9,7 @@ import java.util.TreeMap;
  * <p>各计算器保持纯函数和确定性；本类统一定义生产顺序：</p>
  *
  * <pre>
- * 控制状态 -> 裂变热量/燃耗 -> 冷却分配 -> 有效热负荷/损伤
+ * 控制状态 -> 裂变热量/燃耗 -> 维护付热 -> 冷却分配 -> 有效热负荷/损伤
  * -> 四向传播 -> 熔毁状态 -> 燃耗持久化
  * </pre>
  */
@@ -55,11 +55,12 @@ public final class ReactorServerTick {
             ReactorThermalResult thermal,
             HeatPropagationResult propagation,
             MeltdownUpdateResult meltdown,
-            double effectiveCoolingHeatHu
+            double effectiveCoolingHeatHu,
+            ReactorMaintenanceHeat.Settlement maintenance
     ) {
         public Result {
             if (snapshot == null || controlSnapshot == null || fission == null
-                    || coolant == null || thermal == null || propagation == null || meltdown == null) {
+                    || coolant == null || thermal == null || propagation == null || meltdown == null || maintenance == null) {
                 throw new IllegalArgumentException("reactor tick stages are required");
             }
             if (!Double.isFinite(effectiveCoolingHeatHu) || effectiveCoolingHeatHu < 0.0D) {
@@ -74,6 +75,12 @@ public final class ReactorServerTick {
             ReactorSimulationParameters parameters,
             CoolantInput coolantInput
     ) {
+        return advance(previous, parameters, coolantInput, 0);
+    }
+
+    /** 服务端一次真实核热事务；维护费单位HU，原三参入口等价于无管理员的零请求。 */
+    public static Result advance(ReactorSnapshot previous, ReactorSimulationParameters parameters,
+                                 CoolantInput coolantInput, double maintenanceHeatHu) {
         if (previous == null || parameters == null || coolantInput == null) {
             throw new IllegalArgumentException("reactor tick inputs are required");
         }
@@ -87,13 +94,22 @@ public final class ReactorServerTick {
                 parameters
         );
 
-        double availableHeatHu = availableFuelHeat(controlSnapshot, fission);
+        ReactorMaintenanceHeat.Settlement maintenance = ReactorMaintenanceHeat.settle(controlSnapshot, fission, maintenanceHeatHu);
+        double fuelExpense=maintenance.removedByColumn().values().stream().mapToDouble(Double::doubleValue).sum();
+        double availableHeatHu = Math.max(0, availableFuelHeat(controlSnapshot, fission) - fuelExpense);
+        var afterMaintenanceRods=new TreeMap<CoreColumnPosition,ControlRodColumnState>(controlSnapshot.controlRodColumns());
+        maintenance.removedFromControlRods().forEach((position,removed)->{
+            var rod=afterMaintenanceRods.get(position);
+            afterMaintenanceRods.put(position,new ControlRodColumnState(rod.integrity(),rod.targetDepth(),rod.actualDepth(),rod.jammed(),Math.max(0,rod.cachedHeatHu()-removed)));
+        });
+        // 维护可以支付杆真实余热，冷却仍只吸收原燃料账本；杆机械状态和事故算法不改。
+        var maintenanceSnapshot=controlSnapshot.withColumns(controlSnapshot.fuelColumns(),afterMaintenanceRods);
 
         // 3. 只转换共享冷却剂账本能够承受的热量；流体 Capability 已将冷端输入结算到快照，
         // ticker 在此消耗共享冷却剂库存。
         ReactorCoolantSimulationAdapter.Result coolant =
                 ReactorCoolantSimulationAdapter.settle(
-                        controlSnapshot,
+                        maintenanceSnapshot,
                         new ReactorCoolantSimulationAdapter.TickInput(
                                 availableHeatHu,
                                 coolantInput.ports(),
@@ -107,12 +123,14 @@ public final class ReactorServerTick {
         Map<CoreColumnPosition, Double> coolingByColumn = allocateHeatRemoval(
                 controlSnapshot,
                 fission,
-                coolant.settlement().removedHeatHu()
+                coolant.settlement().removedHeatHu(), maintenance.removedByColumn()
         );
+        Map<CoreColumnPosition,Double> allRemoved = new TreeMap<>(coolingByColumn);
+        maintenance.removedByColumn().forEach((position,amount) -> allRemoved.merge(position,amount,Double::sum));
         Map<CoreColumnPosition, Double> quantizedRemainderByColumn = allocateQuantizedRemainder(
                 controlSnapshot,
                 fission,
-                coolingByColumn,
+                allRemoved,
                 coolant.quantizedHeatRemainderHu()
         );
 
@@ -120,7 +138,7 @@ public final class ReactorServerTick {
         ReactorThermalResult thermal = ReactorThermalCalculator.settleFissionHeat(
                 coolant.nextSnapshot(),
                 fission,
-                coolingByColumn,
+                allRemoved,
                 quantizedRemainderByColumn,
                 parameters
         );
@@ -132,7 +150,7 @@ public final class ReactorServerTick {
                 parameters
         );
 
-        // 6. 更新单调熔毁状态；实际移除热量即视为满足暂停合同的有效冷却观测。
+        // 6. 维护不是冷却回路证据；只有冷却剂实际移热可暂停原融毁倒计时。
         MeltdownUpdateResult meltdown = ReactorMeltdownStateMachine.update(
                 thermal.snapshot(),
                 propagation,
@@ -152,7 +170,7 @@ public final class ReactorServerTick {
                 thermal,
                 propagation,
                 meltdown,
-                coolant.settlement().removedHeatHu()
+                coolant.settlement().removedHeatHu(), maintenance
         );
     }
 
@@ -174,12 +192,14 @@ public final class ReactorServerTick {
     private static Map<CoreColumnPosition, Double> allocateHeatRemoval(
             ReactorSnapshot snapshot,
             ReactorFissionResult fission,
-            double totalRemovedHeatHu
+            double totalRemovedHeatHu,
+            Map<CoreColumnPosition,Double> maintenanceByColumn
     ) {
         if (!Double.isFinite(totalRemovedHeatHu) || totalRemovedHeatHu < 0.0D) {
             throw new IllegalArgumentException("removed reactor heat must be finite and non-negative");
         }
-        double totalAvailable = availableFuelHeat(snapshot, fission);
+        double totalAvailable = Math.max(0,availableFuelHeat(snapshot, fission)
+                - maintenanceByColumn.values().stream().mapToDouble(Double::doubleValue).sum());
         if (totalRemovedHeatHu <= HEAT_EPSILON || totalAvailable <= HEAT_EPSILON) {
             return Map.of();
         }
@@ -191,7 +211,7 @@ public final class ReactorServerTick {
             CoreColumnPosition position = entry.getKey();
             FuelColumnFissionResult column = fission.columns().get(position);
             double available = (column == null ? 0.0D : column.generatedHeatHu())
-                    + entry.getValue().cachedHeatHu();
+                    + entry.getValue().cachedHeatHu() - maintenanceByColumn.getOrDefault(position,0.0D);
             if (available <= HEAT_EPSILON) {
                 continue;
             }

@@ -78,6 +78,12 @@ public final class ControlRodSliderService {
         }
     }
 
+    /** 管理员命令或换代时原子撤销本所有者旧拖动，其他堆与玩家会话保持。 */
+    public static void revokeOwnerSessions(ReactorInstrumentPortBlockEntity owner) {
+        ACTIVE_DRAGS.values().removeIf(session -> owner.getBlockPos().equals(session.ownerPos())
+                && owner.automationGeneration().equals(session.ownerGeneration()));
+    }
+
     /** 返回当前服务端内存中的活动拖动会话数量，供回归测试观察。 */
     public static int activeSessionCount() {
         return ACTIVE_DRAGS.size();
@@ -152,7 +158,7 @@ public final class ControlRodSliderService {
 
         Target target = validation.target();
         ACTIVE_DRAGS.put(player.getUUID(), new DragSession(
-                target.drive().getBlockPos(), target.column(), payload.dragId()));
+                target.drive().getBlockPos(), target.column(), payload.dragId(), target.owner().getBlockPos(), target.owner().automationGeneration(), target.owner().automationState().authorityEpoch()));
         int current = toPercent(target.state().targetDepth());
         return accepted(payload, target.column(), current);
     }
@@ -178,6 +184,10 @@ public final class ControlRodSliderService {
         }
         Target target = validation.target();
         DragSession session = ACTIVE_DRAGS.get(player.getUUID());
+        // 管理员手动精修也要求当前会话戳；原生包不能以零ID绕过已经撤销的旧拖动。
+        if (target.owner().automationState().claimed() && (session == null || !session.matches(target, session.dragId()))) {
+            return reject(payload, ControlRodSliderStatus.STALE_SESSION, "管理员代际下没有有效拖动会话");
+        }
         if (payload.dragId() != 0L) {
             if (session == null || !session.matches(target, payload.dragId())) {
                 return reject(payload, ControlRodSliderStatus.STALE_SESSION,
@@ -265,9 +275,17 @@ public final class ControlRodSliderService {
             return invalid(payload, ControlRodSliderStatus.INVALID_COLUMN,
                     "client column does not match the server structure mapping");
         }
+        if (requireMovable && target.owner().automationState().rodsLocked()) {
+            return invalid(payload, ControlRodSliderStatus.SCRAM_LOCKED, "管理员控制，逐棒只读");
+        }
         if (requireMovable && target.owner().snapshot().scramActive()) {
             return invalid(payload, ControlRodSliderStatus.SCRAM_LOCKED,
                     "control rod slider is locked while SCRAM is active");
+        }
+        if (requireMovable && target.owner().automationState().claimed()
+                && (payload.phase()==ControlRodSliderPhase.COMMIT || payload.phase()==ControlRodSliderPhase.PREVIEW)
+                && !com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.canSetManualRod(target.owner(),target.column(),payload.depthPercent())) {
+            return invalid(payload,ControlRodSliderStatus.SCRAM_LOCKED,"管理员预警或冷却保护拒绝提棒");
         }
         if (requireMovable && target.state().jammed()) {
             return invalid(payload, ControlRodSliderStatus.INVALID_STATE,
@@ -393,11 +411,13 @@ public final class ControlRodSliderService {
         }
     }
 
-    private record DragSession(BlockPos drivePos, CoreColumnPosition column, long dragId) {
+    private record DragSession(BlockPos drivePos, CoreColumnPosition column, long dragId, BlockPos ownerPos, UUID ownerGeneration, long authorityEpoch) {
         private boolean matches(Target target, long requestedDragId) {
             return dragId == requestedDragId
                     && drivePos.equals(target.drive().getBlockPos())
-                    && column.equals(target.column());
+                    && column.equals(target.column()) && ownerPos.equals(target.owner().getBlockPos())
+                    && ownerGeneration.equals(target.owner().automationGeneration())
+                    && authorityEpoch == target.owner().automationState().authorityEpoch();
         }
     }
 }

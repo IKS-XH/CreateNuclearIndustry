@@ -15,6 +15,9 @@ public final class ReactorStructureDiagnostics {
     /** 根据结构有效性返回失败原因，或返回列与冷却端口统计摘要。 */
     public static Component message(ReactorStructureDefinition.ScanResult result) {
         if (!result.valid()) {
+            if (result.diagnosticCode()==ReactorStructureDefinition.DiagnosticCode.AUTOMATION_SLOT
+                    || result.diagnosticCode()==ReactorStructureDefinition.DiagnosticCode.AUTOMATION_COUNT)
+                return Component.translatable(result.diagnosticCode().translationKey(),result.failureReason());
             return Component.translatable(result.diagnosticCode().translationKey());
         }
 

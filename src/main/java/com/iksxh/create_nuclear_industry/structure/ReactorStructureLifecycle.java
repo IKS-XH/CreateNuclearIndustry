@@ -33,6 +33,18 @@ public final class ReactorStructureLifecycle {
 
     private ReactorStructureLifecycle() {
     }
+    /** 锁定NeoForge正常退出在最终save/unload之前发此事件；崩溃路径不会凭isStopped进入。 */
+    @SubscribeEvent
+    public static void onServerStopping(net.neoforged.neoforge.event.server.ServerStoppingEvent event) {
+        com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.beginNormalShutdown(event.getServer());
+        for(var owners:List.copyOf(OWNERS.values()))for(var owner:List.copyOf(owners))
+            if(owner.getLevel()!=null&&owner.getLevel().getServer()==event.getServer()&&!owner.isRemoved())
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.prepareNormalShutdown(owner);
+    }
+    @SubscribeEvent
+    public static void onServerStopped(net.neoforged.neoforge.event.server.ServerStoppedEvent event) {
+        com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.endNormalShutdown(event.getServer());
+    }
 
     /** 仪表onLoad登记，随后安排一次延后扫描以覆盖端口反向加载。 */
     public static void registerOwner(ReactorInstrumentPortBlockEntity owner) {
@@ -80,6 +92,7 @@ public final class ReactorStructureLifecycle {
     }
     private static void notifyChunk(ServerLevel level, net.minecraft.world.level.ChunkPos chunk, boolean unloading) {
         for (var owner : List.copyOf(OWNERS.getOrDefault(level, Set.of()))) {
+            if(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(owner))continue;
             BlockPos pos = owner.getBlockPos();
             if (Math.abs((long) pos.getX() - (chunk.getMinBlockX() + 8)) > 23
                     || Math.abs((long) pos.getZ() - (chunk.getMinBlockZ() + 8)) > 23) continue;
@@ -333,6 +346,9 @@ public final class ReactorStructureLifecycle {
                 instanceof com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity instrument) {
             registerOwner(instrument);
             instrument.updateStructureCache(scan);
+            // 几何可成型仍可能被权威状态尺寸门拒绝；扳手必须报告最终接受结果。
+            return new ReactorStructureScanner.WorldScanResult(instrument.structureOrigin(),
+                    instrument.structureScan(), scan.blockReadCount());
         }
         return scan;
     }

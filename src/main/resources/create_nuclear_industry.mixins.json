@@ -11,7 +11,9 @@
     "PortableFluidInterfaceRestrictionMixin",
     "FluidNetworkSharedFillMixin",
     "BoilerPipePressureMixin",
-    "BasinHeatLevelMixin"
+    "BasinHeatLevelMixin",
+    "BlazeBurnerAutomationBlockMixin",
+    "BlazeBurnerAutomationEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

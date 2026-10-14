@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "STS",
+    "PIP",
+    "SCS"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "T": {
+      "item": "create:electron_tube"
+    },
+    "P": {
+      "item": "create:precision_mechanism"
+    },
+    "I": {
+      "item": "create_nuclear_industry:industrial_sensor"
+    },
+    "C": {
+      "item": "create_nuclear_industry:reactor_casing"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:reactor_automation_port",
+    "count": 1
+  }
+}

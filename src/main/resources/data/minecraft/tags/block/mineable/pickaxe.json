@@ -47,6 +47,7 @@
     "create_nuclear_industry:ceramic_fluid_pipe",
     "create_nuclear_industry:industrial_fluid_pump",
     "create_nuclear_industry:reinforced_fluid_valve",
-    "create_nuclear_industry:ceramic_fluid_valve"
+    "create_nuclear_industry:ceramic_fluid_valve",
+    "create_nuclear_industry:reactor_automation_port"
   ]
 }

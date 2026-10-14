@@ -114,7 +114,8 @@ public final class ReactorStructureScanner {
     private static boolean wall(String block) {
         return CASING_ID.equals(block) || id(P1ContentIds.REACTOR_WINDOW_ID).equals(block)
                 || INSTRUMENT_ID.equals(block) || id(P1ContentIds.REACTOR_COLD_PORT_ID).equals(block)
-                || id(P1ContentIds.REACTOR_HOT_PORT_ID).equals(block);
+                || id(P1ContentIds.REACTOR_HOT_PORT_ID).equals(block)
+                || id("reactor_automation_port").equals(block);
     }
     private static String id(String path) { return "create_nuclear_industry:" + path; }
 

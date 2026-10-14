@@ -75,6 +75,40 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private ReactorSnapshot snapshot = ReactorSnapshot.empty();
+    private com.iksxh.create_nuclear_industry.automation.ReactorAutomationState automationState = com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.initial();
+    private com.iksxh.create_nuclear_industry.automation.ReactorAutomationBinding automationBinding;
+    private java.util.UUID automationGeneration = java.util.UUID.randomUUID();
+    private com.iksxh.create_nuclear_industry.automation.ReactorAutomationObservation automationObservation;
+    private com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.Session automationResumeSession;
+    private CompoundTag automationNormalStopCheckpoint;
+    private boolean automationSavedScramAwaitingHigh;
+    private boolean automationInactiveLoadPending;
+    private long automationInactiveLoadStarted=Long.MIN_VALUE;
+    private java.util.Set<CoreColumnPosition> automationLoadedFuelLayout;
+    /** 服务端本次NBT读取的完整物理FUEL位置副本；null代表缺失/坏证据，扫描刷新不覆盖它。 */
+    public java.util.Set<CoreColumnPosition> automationLoadedFuelLayout() {return automationLoadedFuelLayout;}
+    /** 新实例加载交接，只有当前核验通过并真实付费后才恢复运行；不持久化本对象。 */
+    public com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.Session automationResumeSession() {return automationResumeSession;}
+    public void setAutomationResumeSession(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.Session session) {automationResumeSession=session;}
+    /** 正常停服事件捕获的非权威信封；用于保存顺序，不是旧运行许可或付热收据。 */
+    public CompoundTag automationNormalStopCheckpoint() {return automationNormalStopCheckpoint;}
+    public void setAutomationNormalStopCheckpoint(CompoundTag checkpoint) {automationNormalStopCheckpoint=checkpoint;}
+    private final com.iksxh.create_nuclear_industry.automation.ReactorAutomationController.CurveCache automationCurve = new com.iksxh.create_nuclear_industry.automation.ReactorAutomationController.CurveCache();
+    private long automationTickTime = Long.MIN_VALUE;
+    private Object automationBurner;
+    private com.iksxh.create_nuclear_industry.automation.ReactorAutomationPortBlockEntity automationPort;
+    /** 已加载管理员实例身份，坐标相同的替换也必须换代。 */
+    public Object automationBurner() { return automationBurner; }
+    public void setAutomationBurner(Object burner) { automationBurner = burner; }
+    /** 已加载接口的实例身份；同坐标新BE必须先重新建立安全授权。 */
+    public com.iksxh.create_nuclear_industry.automation.ReactorAutomationPortBlockEntity automationPort() { return automationPort; }
+    public void setAutomationPort(com.iksxh.create_nuclear_industry.automation.ReactorAutomationPortBlockEntity port) { automationPort = port; }
+    private final java.util.ArrayDeque<Double> automationHeatWindow = new java.util.ArrayDeque<>();
+    public void recordAutomationDisplayHeat(double heat, int window) {
+        automationHeatWindow.addLast(heat); while (automationHeatWindow.size() > window) automationHeatWindow.removeFirst();
+    }
+    public double automationAverageHeat() { return automationHeatWindow.stream().mapToDouble(Double::doubleValue).average().orElse(0); }
+
     /** 最后已验证的占据证据只供缺区块拆除防护；不能用于成型、库存或客户端显示。 */
     private ReactorSurfaceDescriptor breakSafetySurface;
     private java.util.Set<CoreColumnPosition> breakSafetyFuelColumns = java.util.Set.of();
@@ -113,10 +147,40 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         super(P1BlockEntities.REACTOR_INSTRUMENT_PORT.get(), pos, state);
     }
 
+    /** 仅服务端控制服务写入；控制权与授权必须先于邻居通知，客户端不能使用此状态提交。 */
+    public com.iksxh.create_nuclear_industry.automation.ReactorAutomationState automationState() { return automationState; }
+    public void setAutomationState(com.iksxh.create_nuclear_industry.automation.ReactorAutomationState state) {
+        if (level != null && level.isClientSide) throw new IllegalStateException("客户端不能提交管理员状态");
+        // 原GUI STOP/保护决定立即取消待续接；普通运行交接由Resume先清session再提交，不能续旧意图。
+        if(state.phase()==com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.Phase.STOPPED
+                ||state.phase()==com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.Phase.FAULT) {
+            automationResumeSession=null;automationInactiveLoadPending=false;
+        }
+        if(!com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(this))automationNormalStopCheckpoint=null;
+        automationState = state;
+        setChanged();
+        syncControlRodDrives();
+    }
+    public com.iksxh.create_nuclear_industry.automation.ReactorAutomationBinding automationBinding() { return automationBinding; }
+    public void setAutomationBinding(com.iksxh.create_nuclear_industry.automation.ReactorAutomationBinding binding) { automationBinding = binding; }
+    public java.util.UUID automationGeneration() { return automationGeneration; }
+    public com.iksxh.create_nuclear_industry.automation.ReactorAutomationObservation automationObservation() { return automationObservation; }
+    public void setAutomationObservation(com.iksxh.create_nuclear_industry.automation.ReactorAutomationObservation sample) { automationObservation = sample; }
+    public com.iksxh.create_nuclear_industry.automation.ReactorAutomationController.CurveCache automationCurve() { return automationCurve; }
+    /** 同一游戏tick最多一次管理员调节，显式诊断结算不加快租约或复位计数。 */
+    public boolean beginAutomationTick(long time) { if (automationTickTime == time) return false; automationTickTime = time; return true; }
+    public ReactorSimulationParameters automationSimulationParameters() { return simulationParameters(); }
+    public ReactorServerTick.CoolantInput automationCoolantInput() { return coolantInput(); }
+
     /** 返回该反应堆不可变的服务端权威快照。 */
     public ReactorSnapshot snapshot() {
         return snapshot;
     }
+
+    private final com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.Account automationHeatAccount =
+            new com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.Account();
+    /** 服务端实例内的已支付短期凭据；不持久化，不由显示包恢复。 */
+    public com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.Account automationHeatAccount() { return automationHeatAccount; }
 
     /** 替换权威快照，并安排持久化与客户端同步。 */
     public void setSnapshot(ReactorSnapshot snapshot) {
@@ -257,13 +321,24 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         }
         clearControlRodTelemetry();
         invalidateRuntimeDescriptor();
+        if (!structureScan.equals(scan.contract()) || !Objects.equals(structureOrigin, scan.origin())) {
+            // 初次合法扫描可建立新代际；交接一旦验证当前结构，后续真实变化必须先撤反馈，不能沿旧绑定首付。
+            if(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.hasVerifiedStructure(this))
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.fail(this,"structure_changed");
+            // 读档的无权STOP/FAULT首次建缓存不是运行期结构变动；真实失败仍由有界加载门转入保护。
+            if (automationState.claimed() && !automationInactiveLoadPending && !com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.pending(this)) com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.revoke(this, "structure_changed");
+            com.iksxh.create_nuclear_industry.control.ControlRodSliderService.revokeOwnerSessions(this);
+            automationGeneration = java.util.UUID.randomUUID();
+            automationObservation = null;
+            automationCurve.clear();
+        }
         structureScan = scan.contract();
         structureOrigin = scan.origin();
         structureScanCount++;
         if (structureScan.valid()) {
-            // 首次成型的空状态采用实际尺寸；已有状态只能按其持久化尺寸恢复，不能借重扫热重组。
+            // 无核状态的初始化/安全清空可绑定新尺寸并保留纯冷液；真实核状态禁止借重扫热重组。
             if (!snapshot.dimensions().equals(structureScan.dimensions())) {
-                if (!snapshot.equals(ReactorSnapshot.empty())) {
+                if (!canInitializeScannedDimensions()) {
                     structureScan = new ReactorStructureDefinition.ScanResult(false,
                             "existing reactor state dimensions differ; destructive maintenance is required",
                             ReactorStructureDefinition.DiagnosticCode.DIMENSIONS, Map.of(), Map.of());
@@ -273,6 +348,13 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                     return;
                 }
                 setSnapshot(snapshot.withDimensions(structureScan.dimensions()));
+            }
+            if(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.pending(this)
+                    &&!com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.matchingColumns(this))
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.fail(this,"structure_changed");
+            if(automationInactiveLoadPending&&!com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.matchingColumns(this)) {
+                automationInactiveLoadPending=false;
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.fail(this,"structure_changed");
             }
             initializeAndSyncControlRods();
             reconcilePortBindings();
@@ -294,6 +376,26 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             setChanged();
         }
         invalidateTelemetry();
+    }
+
+    /**
+     * 在服务端已接受的几何扫描上判断初始化尺寸是否安全；容量及冷液单位均为mB。
+     *
+     * <p>完全停机清空与首次成型之间可能已有冷端实际注液；仅无任何列、热液、控制或
+     * 事故状态且无待迁移燃料时允许原量保留冷液。新容量不足时拒绝，不能截断库存或
+     * 把真实核状态重组到另一尺寸。本判定不扫描、不写状态，调用前必须已有有效扫描。</p>
+     */
+    private boolean canInitializeScannedDimensions() {
+        return snapshot.fuelColumns().isEmpty()
+                && snapshot.controlRodColumns().isEmpty()
+                && snapshot.hotCoolantMb() == 0L
+                && !snapshot.scramRequested()
+                && snapshot.scramSavedTargetDepths().isEmpty()
+                && snapshot.meltdownProgressTicks() == 0L
+                && !snapshot.meltdownCountdownStarted()
+                && !snapshot.meltdownEventPublished()
+                && pendingLegacyFuelAssemblies.isEmpty()
+                && snapshot.coldCoolantMb() <= coolantCapacityMb();
     }
 
     /**
@@ -363,6 +465,12 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("SCRAM can only be changed on the server");
         }
+        // 加载冻结窗口只采样真实电平，不先全插再提棒；保存的SCRAM另锁住初始化低沿，须真实高后才可释放。
+        if(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.pending(this)
+                ||com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(this)
+                ||automationSavedScramAwaitingHigh&&!powered)
+            return new ControlRodScramResult(snapshot.scramRequested()?com.iksxh.create_nuclear_industry.control.ControlRodScramStatus.SCRAM_ALREADY_ACTIVE:com.iksxh.create_nuclear_industry.control.ControlRodScramStatus.SCRAM_NOT_ACTIVE,false,false,0,"administrator initializes current redstone feedback");
+        if(powered)automationSavedScramAwaitingHigh=false;
         return ControlRodScramService.apply(this, powered);
     }
 
@@ -469,7 +577,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 expectedId,
                 snapshot,
                 projectedSnapshot,
-                ReactorSnapshot.empty(),
+                // 原端口在Post重扫前仍可能注液，清空时保留实际尺寸避免退回五格占位。
+                ReactorSnapshot.empty().withDimensions(snapshot.dimensions()),
                 assessment,
                 fuelPorts,
                 pendingLegacyFuelAssemblies,
@@ -625,6 +734,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (!structureValid()) {
             return false;
         }
+        if(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.pending(this)
+                ||automationInactiveLoadPending||com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(this))return false;
         ReactorSnapshot next = ReactorControlRodTick.advance(snapshot);
         if (next == snapshot) {
             return false;
@@ -638,31 +749,55 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         boolean previousSettlementScope = runtimeSettlementInProgress;
         runtimeSettlementInProgress = true;
         try {
+            if(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(this))return false;
+            if(automationInactiveLoadPending&&!finishInactiveAutomationLoad())return false;
+            if(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.pending(this)) {
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationParameters resumeParameters;
+                try {resumeParameters=com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.parameters();}
+                catch(IllegalArgumentException invalidConfig) {com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.fail(this,"invalid_value");return false;}
+                boolean fuelReady=structureValid()&&snapshotMatchesStructure()&&hydrateFuelProjectionsFromPorts();
+                // 交接未完成则整条棒推进/燃耗/热工/维护账本冻结，不能用旧ARMING基准把真实棒位改成100%。
+                if(!com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.allowSettlement(this,resumeParameters,level.getGameTime(),fuelReady))return false;
+            }
             if (level == null || level.isClientSide || !structureValid()
                     || !snapshotMatchesStructure()) {
                 invalidateRuntimeDescriptor();
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
                 return false;
             }
             if (!hydrateFuelProjectionsFromPorts()) {
                 invalidateRuntimeDescriptor();
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
                 return false;
             }
+            com.iksxh.create_nuclear_industry.automation.ReactorAutomationParameters automationParameters = null;
+            try { automationParameters = com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.parameters(); }
+            catch (IllegalArgumentException invalidConfig) {
+                // 非法管理员配置只能降权，不能阻断未任职堆原热工结算或默默提棒。
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level.getGameTime());
+            }
+            // 输入投影完成后处理安全交接；管理员先一次提交目标，再运行原控制/裂变/冷却顺序。
+            if (automationParameters != null) com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.beforeReactorTick(this, automationParameters, level.getGameTime());
             Map<CoreColumnPosition, ItemStack> beforePortItems = captureFuelPortItems();
             if (beforePortItems == null) {
                 invalidateRuntimeDescriptor();
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
                 return false;
             }
             ReactorSimulationParameters parameters = simulationParameters();
             ReactorServerTick.CoolantInput tickCoolantInput = coolantInput();
+            boolean resumingFirstSettlement=com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.firstSettlement(this);
             ReactorServerTick.Result result = ReactorServerTick.advance(
                     snapshot,
                     parameters,
-                    tickCoolantInput
+                    tickCoolantInput,
+                    com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.requestedHeat(this,level.getGameTime())
             );
             Map<CoreColumnPosition, ItemStack> nextPortItems = prepareFuelPortCommit(
                     beforePortItems, result.snapshot());
             if (nextPortItems == null) {
                 invalidateRuntimeDescriptor();
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
                 return false;
             }
             // 只有从未完成状态跨入 COMPLETE 才允许发布；持久化标记覆盖重复 tick 和重载。
@@ -705,19 +840,46 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 // 协议预算或投影缺口只撤销显示，不能把已提交正式 tick 变成玩法失败。
                 invalidateRuntimeDescriptor();
             }
+            if(resumingFirstSettlement) {
+                // 首次恢复的当前duty只能由已提交的真实维护付款证明；不让after保护读到尚未出票的冷燃烧室。
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.commitPayment(this,result,level.getGameTime());
+                com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.finishPayment(this,result);
+            }
+            if (automationParameters != null) com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.afterReactorTick(this, result, automationParameters, level.getGameTime());
             publishTelemetry(ReactorInstrumentTelemetry.from(result));
             // 原遥测包已经携带新完整样本时无需追加；零变化成功 tick 仍按五成功 tick 续租。
             if (runtimeTicksSinceLastSync > 0 && (runtimeRecovered || runtimeTicksSinceLastSync >= 5)) {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
                 runtimeTicksSinceLastSync = 0;
             }
+            com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.commitPayment(this,result,level.getGameTime());
+            if(resumingFirstSettlement)com.iksxh.create_nuclear_industry.automation.ReactorAutomationBlazeBridge.notifyPermission(this,automationBinding==null?null:automationBinding.burnerPos());
             return stateChanged || portChanged;
         } catch (RuntimeException exception) {
             invalidateRuntimeDescriptor();
+            com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
             throw exception;
         } finally {
             runtimeSettlementInProgress = previousSettlementScope;
         }
+    }
+
+    /** 已保存STOP/FAULT仅等待当前首扫和燃料投影，不授许可、不结算；真实失败或现行初始化窗口届满仍保护。 */
+    private boolean finishInactiveAutomationLoad() {
+        if(level==null||level.isClientSide)return false;
+        long time=level.getGameTime();if(automationInactiveLoadStarted==Long.MIN_VALUE)automationInactiveLoadStarted=time;
+        String failure="";int timeout;
+        try {timeout=com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.parameters().armingTimeoutTicks();}
+        catch(IllegalArgumentException invalidConfig) {failure="invalid_value";timeout=0;}
+        if(failure.isEmpty()&&(time<automationInactiveLoadStarted||time-automationInactiveLoadStarted>=timeout))failure="arming_timeout";
+        if(failure.isEmpty()&&!structureValid()&&structureScanCount>0
+                &&structureScan.diagnosticCode()!=ReactorStructureDefinition.DiagnosticCode.CHUNKS_UNAVAILABLE)failure="structure_changed";
+        if(!failure.isEmpty()) {
+            automationInactiveLoadPending=false;
+            com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.fail(this,failure);return false;
+        }
+        if(!structureValid()||!snapshotMatchesStructure()||!hydrateFuelProjectionsFromPorts())return false;
+        automationInactiveLoadPending=false;return true;
     }
 
     /**
@@ -1089,6 +1251,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                     case INSTRUMENT -> id(P1ContentIds.REACTOR_INSTRUMENT_PORT_ID);
                     case COLD_COOLANT -> id(P1ContentIds.REACTOR_COLD_PORT_ID);
                     case HOT_COOLANT -> id(P1ContentIds.REACTOR_HOT_PORT_ID);
+                    case AUTOMATION -> id("reactor_automation_port");
                 };
             }
         }
@@ -1167,6 +1330,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                     entry.getValue().capPosition().y(),
                     entry.getValue().capPosition().z());
             if (level.getBlockEntity(drivePos) instanceof ControlRodDriveBlockEntity drive) {
+                drive.setServerAutomationLocked(automationState.rodsLocked());
                 drive.setServerColumnHint(entry.getKey().x(), entry.getKey().z());
                 if (state == null) {
                     drive.setServerDisplayedDepthPercent(100);
@@ -1531,6 +1695,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /** 客户端清理区块先调用此钩子再 setRemoved；显式保留卸载原因，不依赖事件总线次序。 */
     @Override
     public void onChunkUnloaded() {
+        if(!com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(this))automationInactiveLoadPending=false;
+        com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
         ReactorStructureLifecycle.unregisterOwner(this);
         invalidateRuntimeDescriptor();
         surfaceChunkUnloaded = true;
@@ -1546,6 +1712,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      */
     @Override
     public void invalidate() {
+        if(!com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(this))automationInactiveLoadPending=false;
+        com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
         ReactorStructureLifecycle.unregisterOwner(this);
         invalidateRuntimeDescriptor();
         ReactorSurfaceSyncEvents.publish(this, true, surfaceChunkUnloaded);
@@ -1616,6 +1784,9 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             });
             snapshotTag.put(LEGACY_FUEL_MIGRATION_KEY, migration);
         }
+        tag.putBoolean("AutomationClaimed", automationState.claimed());
+        tag.putLong("AutomationEpoch", automationState.authorityEpoch());
+        if(!clientPacket)tag.put(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.KEY,com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.checkpointForSave(this));
         tag.put(SNAPSHOT_KEY, snapshotTag);
         if (!clientPacket && breakSafetySurface != null) {
             tag.put("BreakSafetySurface", breakSafetySurface.encode());
@@ -1644,20 +1815,41 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 ReactorSnapshotNbtCodec.decodeWithMigration(snapshotTag);
         snapshot = decoded.snapshot().withoutFuelAssemblies();
         if (!clientPacket) {
+            com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.invalidate(this);
+            // 当前正常停服只恢复原意图；旧许可/样本/热票据不恢复，实际棒位由完整核快照保持。
+            var loaded=com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.decode(
+                    tag.contains(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.KEY)?tag.getCompound(com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.KEY):null,
+                    tag.getBoolean("AutomationClaimed"),snapshot);
+            automationState=loaded.state();automationResumeSession=loaded.session();automationSavedScramAwaitingHigh=loaded.savedScram();automationNormalStopCheckpoint=null;
+            automationInactiveLoadPending=loaded.state().claimed()&&loaded.session()==null;automationInactiveLoadStarted=Long.MIN_VALUE;
+            automationGeneration = java.util.UUID.randomUUID();
+            automationBinding = null; automationObservation = null; automationBurner = null; automationPort = null; automationCurve.clear(); automationHeatWindow.clear();
+            automationTickTime=Long.MIN_VALUE;
             breakSafetySurface = ReactorSurfaceDescriptor.decode(tag.contains("BreakSafetySurface")
                     ? tag.getCompound("BreakSafetySurface") : null).orElse(null);
             breakSafetyAwaitingRestoreScan = breakSafetySurface != null;
             var protectedColumns = new java.util.HashSet<CoreColumnPosition>();
             var list = tag.getList("BreakSafetyFuelColumns", net.minecraft.nbt.Tag.TAG_COMPOUND);
+            // 原拆除防护仍按既有容错读；04续接单独要求完整、类型正确、无重复且属于同尺寸的本版本证据。
+            boolean layoutValid=breakSafetySurface!=null&&breakSafetySurface.valid()
+                    &&tag.get("BreakSafetyFuelColumns") instanceof net.minecraft.nbt.ListTag rawLayout
+                    &&(rawLayout.isEmpty()||rawLayout.getElementType()==net.minecraft.nbt.Tag.TAG_COMPOUND)
+                    &&list.size()<=snapshot.dimensions().columnCount()
+                    &&breakSafetySurface.maxInclusive().getX()-breakSafetySurface.origin().getX()+1==snapshot.dimensions().width()
+                    &&breakSafetySurface.maxInclusive().getY()-breakSafetySurface.origin().getY()+1==snapshot.dimensions().height()
+                    &&breakSafetySurface.maxInclusive().getZ()-breakSafetySurface.origin().getZ()+1==snapshot.dimensions().depth();
             if (list.size() <= snapshot.dimensions().columnCount()) {
                 for (int index = 0; index < list.size(); index++) {
                     var entry = list.getCompound(index);
                     int x = entry.getInt("X"), z = entry.getInt("Z");
-                    if (x >= 0 && x < snapshot.dimensions().internalWidth()
-                            && z >= 0 && z < snapshot.dimensions().internalDepth()) protectedColumns.add(new CoreColumnPosition(x, z));
+                    boolean inside=x>=0&&x<snapshot.dimensions().internalWidth()&&z>=0&&z<snapshot.dimensions().internalDepth();
+                    if(!inside||!entry.contains("X",net.minecraft.nbt.Tag.TAG_INT)||!entry.contains("Z",net.minecraft.nbt.Tag.TAG_INT)
+                            ||!entry.getAllKeys().equals(java.util.Set.of("X","Z")))layoutValid=false;
+                    if(inside&&!protectedColumns.add(new CoreColumnPosition(x,z)))layoutValid=false;
                 }
             }
             breakSafetyFuelColumns = java.util.Set.copyOf(protectedColumns);
+            automationLoadedFuelLayout=layoutValid?java.util.Set.copyOf(protectedColumns):null;
         }
         TreeMap<CoreColumnPosition, FuelAssemblyState> pending =
                 new TreeMap<>(decoded.legacyFuelAssemblies());
