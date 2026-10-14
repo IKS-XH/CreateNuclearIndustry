@@ -15,6 +15,8 @@
 
 ## 项目治理
 
+- 2026-10-14应力余量闭环02按前批联合手测后的条件授权完成，已交[独立候选](docs/reviews/2026-10-13/reactor-load-follow-02/CANDIDATE.md)8eaafd9，留同级Create_NuclearIndustry-reactor-load-follow／codex/reactor-load-follow。现GUI复用目标余量/最低毛HU，Ctrl绑定真实Create应力表，库存/积热保护优先、正常续接保棒位而新建PI。原唯一执行者与一次组合审查/同次窄复核关闭保护期补积分、C0已知网互斥及隐藏草稿三项Important，无剩余必改；最终25/25定向、真实4/4自然保存exit0与必要纠错增量assemble通过。29来源/678class/1548资源及Manifest与3239779B／86225aea…最终JAR一致，候选源码与JAR已纳Git；38世界/27配置全等，原初包/失败与main50d5包保持。当前停[02集中人工门](docs/reviews/2026-10-13/reactor-load-follow-02/CLIENT-CHECKLIST.md)，未合main；模型和原生受控输入不代替整条热力稳定性，不重开已验管理员、不推进压力或其他主线。下方准备/未实现时点为历史。
+
 - 2026-10-14管理员联合验收及06main集成完成后，02已按[开工交接](docs/reviews/2026-10-13/reactor-load-follow-02/DISPATCH.md)建立同级Create_NuclearIndustry-reactor-load-follow／codex/reactor-load-follow，干净main基线d9f415a；用户当前已保存世界38文件及运行配置27文件已完整携带、哈希零差异，原世界/主目录dirty保持。原唯一执行者按更新02卡任务1～4顺序实施，当前GUI追加余量/最低毛HU、04续接保持、PI/滤波仅暂态，原审查者一次组合窄审。前置已过不重问，技术入口缺口须报最小链后扩卡；不把派发当实现/整定/手测通过，闭环新增人工门独立。
 
 - 2026-10-14管理员联合手测已通过并按[06集成记录](docs/reviews/2026-10-14/reactor-administrator-accepted-integration/INTEGRATION.md)合入main：70来源b3960fe，正式3193873B／50d5bd9b…包提交87d9ad4；干净Git导出6111文件精确、唯一assemble12秒exit0，原组合审查/同次制品补核无必改，661class／1548资源及Manifest零漂移。最新Logo/原物品清单/语言旧键保留，其他dirty与全部世界配置保持，原26cb/dc82包保留，不重跑原测试。02条件前置已过，当前GUI/维护＋1毛HU/04续接映射已入卡，建立同级候选携带当前已保存世界后派原执行者；本包不含PI。05偶发事故不称已修复，下方集成中/人工待验是历史时点。

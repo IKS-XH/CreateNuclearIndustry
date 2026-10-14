@@ -1,5 +1,7 @@
 # 项目文档入口
 
+[应力余量闭环02已交集中手测](reviews/2026-10-13/reactor-load-follow-02/CANDIDATE.md)：独立候选8eaafd9与86225aea…JAR已纳Git，Ctrl绑定Create应力表，现GUI可设目标余量/最低毛HU，保护优先与原状态续接保持。最终25/25定向、真实4/4自然保存、必要增量包与同次组合审查/三项差异复核通过；当前只待[新增人工门](reviews/2026-10-13/reactor-load-follow-02/CLIENT-CHECKLIST.md)，未合main，用户当前存档已携带。前批管理员已验收合main，正式50d5包保持；下方开工/未实现描述为历史。
+
 [应力余量闭环02已准备开工](reviews/2026-10-13/reactor-load-follow-02/DISPATCH.md)：同级reactor-load-follow从已集成main建立，用户当前世界及配置完整携带；交原唯一执行者按现GUI/PI/最低毛HU/库存保护及04续接实施，新增人工门独立。
 
 管理员已按用户联合手测[合入main并跟踪正式JAR](reviews/2026-10-14/reactor-administrator-accepted-integration/INTEGRATION.md)：70来源b3960fe、制品87d9ad4／50d5bd9b…，干净来源唯一assemble12秒exit0，组合窄审无剩余必改；最新美术及其他dirty保持。下一批[应力余量闭环02](superpowers/plans/2026-10-13-reactor-load-follow-02.md)条件授权前置已过，沿当前GUI与原状态续接派发，不重复前批人工门。
