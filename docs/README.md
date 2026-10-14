@@ -1,5 +1,7 @@
 # 项目文档入口
 
+[锅炉蒸汽口停流只读定位](reviews/2026-10-14/boiler-steam-output-01/DIAGNOSIS.md)：闭环候选当前保存现场的SC汽路缺工业泵、北侧SC口仅直贴罐、普通汽池为空；给出(-12,-56,-14)向西补泵接法。源码/世界/配置/JAR未改，无测试或构建，实际接法调整后输出仍待玩家观察；02集中人工门保持。
+
 [应力余量闭环02已交集中手测](reviews/2026-10-13/reactor-load-follow-02/CANDIDATE.md)：独立候选8eaafd9与86225aea…JAR已纳Git，Ctrl绑定Create应力表，现GUI可设目标余量/最低毛HU，保护优先与原状态续接保持。最终25/25定向、真实4/4自然保存、必要增量包与同次组合审查/三项差异复核通过；当前只待[新增人工门](reviews/2026-10-13/reactor-load-follow-02/CLIENT-CHECKLIST.md)，未合main，用户当前存档已携带。前批管理员已验收合main，正式50d5包保持；下方开工/未实现描述为历史。
 
 [应力余量闭环02已准备开工](reviews/2026-10-13/reactor-load-follow-02/DISPATCH.md)：同级reactor-load-follow从已集成main建立，用户当前世界及配置完整携带；交原唯一执行者按现GUI/PI/最低毛HU/库存保护及04续接实施，新增人工门独立。
