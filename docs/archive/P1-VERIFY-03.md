@@ -25,8 +25,8 @@
 
 ## 保存与接续
 
-- [最终交接原文及源码清单 ZIP](../handoffs/2026-09-29/P1-final-handoff.zip)。
-- [本轮验证原始证据 ZIP](../handoffs/2026-09-29/P1-VERIFY-02-evidence.zip)，校验值见 VERIFY-02 归档。
+- [最终交接原文及源码清单 ZIP](2026-10-15/handoffs/2026-09-29/P1-final-handoff.zip)。
+- [本轮验证原始证据 ZIP](2026-10-15/handoffs/2026-09-29/P1-VERIFY-02-evidence.zip)，校验值见 VERIFY-02 归档。
 - 将两个 ZIP 解压到同一仓库的 `build/reports/p1/` 后，原报告与证据之间的相对链接可恢复；源码清单链接指向仓库现有 Java 文件。
 - 后续先按青金石粉任务卡审查和整改已有候选；其 GameTest 与纹理/客户端验收仍未完成。首发扩展的生产配方及热端实现继续遵守准备计划的批次参数和接口门，不重复确认已批准的 D-01 至 D-03d。
 

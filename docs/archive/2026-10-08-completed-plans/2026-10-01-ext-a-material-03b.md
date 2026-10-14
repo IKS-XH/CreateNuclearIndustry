@@ -1,10 +1,10 @@
 # EXT-A-MATERIAL-03B：回归中断定位、修复与钢材整合
 
-**状态：已完成。** 用户在PM说明“先解决回归、合入主工程，再整理基础零件参数”后明确要求“开始吧”。本轮已修复遥测测试调度，155项required断言全过，候选与main各新跑265项JUnit/build通过；随`e8ef02e`整合main。保存退出停滞仍单列，见[验收记录](../../reviews/2026-10-01/material-03b/README.md)。材料03客户端完整清单已通过，名称已简化为钢；不重复整链手测。
+**状态：已完成。** 用户在PM说明“先解决回归、合入主工程，再整理基础零件参数”后明确要求“开始吧”。本轮已修复遥测测试调度，155项required断言全过，候选与main各新跑265项JUnit/build通过；随`e8ef02e`整合main。保存退出停滞仍单列，见[验收记录](../2026-10-15/reviews/2026-10-01/material-03b/README.md)。材料03客户端完整清单已通过，名称已简化为钢；不重复整链手测。
 
 **基线与角色：** 主工程`E:/MyMC/NewMod/Create_NuclearIndustry` / main `92c730e`；同级候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition` / `codex/ore-acquisition` / `508178c`干净，复用候选。主工程既有`.vscode/launch.json` SHA-256 `65EBB9ECB32C45F3254E2F511D3D134B17829E2FF0D73B7CB8094583EDE18C07`必须保留。只有PM做文档、任务状态与Git写；执行者不再派发。因涉及运行器与真实服务端隔离，主执行者采用标准模型较高思考，简洁差异审查优先高速模型。
 
-**必读：** AGENTS、治理、材料03/03A卡、[03A只读诊断](../../reviews/2026-10-01/material-03a/EXT-A-MATERIAL-03A-REGRESSION-AUDIT.md)及原始两次异常；实际应用`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`，systematic-debugging与verification-before-completion。锁定MC1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6，不升级依赖。
+**必读：** AGENTS、治理、材料03/03A卡、[03A只读诊断](../2026-10-15/reviews/2026-10-01/material-03a/EXT-A-MATERIAL-03A-REGRESSION-AUDIT.md)及原始两次异常；实际应用`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`，systematic-debugging与verification-before-completion。锁定MC1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6，不升级依赖。
 
 ## 目标与写集
 

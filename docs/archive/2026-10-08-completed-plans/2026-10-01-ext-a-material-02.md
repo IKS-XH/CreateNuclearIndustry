@@ -2,7 +2,7 @@
 
 > 执行方式：PM 按 `superpowers:writing-plans` / `subagent-driven-development` 拆卡并审查；执行者禁止 Git 写、派发、核心文档修改和自行验收。用户已授权自动派发，已确认的参数不重复询问。
 
-**状态：** 已由02A完成整改、人工验收并合入main，见 [收尾记录](../../reviews/2026-10-01/material-02-acceptance.md)。用户确认完整复测清单通过，水洗副产物暂缓；具体整改合同见 [02A/03A/04卡](2026-10-01-material-02a-feedback.md)。下文为首轮实现合同与证据，原“粉碎料不得直熔”限制已被取代，不可继续据此拒绝补齐路线。
+**状态：** 已由02A完成整改、人工验收并合入main，见 [收尾记录](../2026-10-15/reviews/2026-10-01/material-02-acceptance.md)。用户确认完整复测清单通过，水洗副产物暂缓；具体整改合同见 [02A/03A/04卡](2026-10-01-material-02a-feedback.md)。下文为首轮实现合同与证据，原“粉碎料不得直熔”限制已被取代，不可继续据此拒绝补齐路线。
 **目标：** 铅锡粗矿经熔炉/高炉产锭，Create 压片机产板；四个物品在同一候选中可见、可获取、支持通用标签。
 **架构：** 只增加注册、原生数据配方和资源；使用 Minecraft 与 Create 既有机器，不新增设备逻辑、JEI 插件或自定义配方类型。
 **位置：** 复用 `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、`codex/ore-acquisition`；PM 将本卡同步后记录精确基线。用户主工程 `.vscode/launch.json`、存档和现有手测世界不得改动。
@@ -72,6 +72,6 @@
 - 开工基线 `7d01b86`。A/B写集无交叉，唯一共享接口是四个物品模型使用两张既有锭PNG与两张新增板PNG；A的Gradle在B停止写入后串行执行。默认标签负例与外部标签模拟分开运行，输入仍遵守通用标签合同。
 - B已交付并停止写入：两新图、53路径白名单、两次导出/安装与拒绝检查完成；PM已看两页预览，安排高速模型 `plate_art_review` 只读独立复核。A已获独占Gradle/GameTest窗口，先RED再实现并GREEN。
 - B首次验证时旧脚本误写 `EXT-ART-02A/verification.json` 和 `commands.json`。PM已将误写版本存入03报告的 `overwritten-02a/`，并从已提交 `coolant-restore-evidence.zip` 精确恢复两旧文件；恢复哈希记录在 `EXT-ART-03/pm-restored-02a-evidence.json`。脚本当前只向03证据目录写入，既有游戏素材未改变。该副作用不隐瞒为全程无越界。
-- A首次隔离init设置了会被MDG覆盖的 `workingDir`，RED/GREEN及普通服首启实际写入既有候选 `run/`。PM停止后续启动、备份现场后，核实执行者修正的模型与任务 `gameDirectory` 均位于报告目录，再放行复验。原配置无旧备份，未虚称还原；详见 [目录偏差记录](../../reviews/2026-10-01/material-02-isolation-incident.md)。
-- 最终265项JUnit与build退出0；修正后125项GameTest断言全过，保存挂起后退出1。独立普通服完成实际标签重载三态并全维保存，退出0由A进程结果记录。独立审查无生产实现阻塞；两板离线检查通过、旧51图原字节保留。候选实现 `3a57a88` 已保存，证据见 [索引](../../reviews/2026-10-01/material-02/README.md)。
+- A首次隔离init设置了会被MDG覆盖的 `workingDir`，RED/GREEN及普通服首启实际写入既有候选 `run/`。PM停止后续启动、备份现场后，核实执行者修正的模型与任务 `gameDirectory` 均位于报告目录，再放行复验。原配置无旧备份，未虚称还原；详见 [目录偏差记录](../2026-10-15/reviews/2026-10-01/material-02-isolation-incident.md)。
+- 最终265项JUnit与build退出0；修正后125项GameTest断言全过，保存挂起后退出1。独立普通服完成实际标签重载三态并全维保存，退出0由A进程结果记录。独立审查无生产实现阻塞；两板离线检查通过、旧51图原字节保留。候选实现 `3a57a88` 已保存，证据见 [索引](../2026-10-15/reviews/2026-10-01/material-02/README.md)。
 - 所有执行者已停止写入。新材料批仅进入待验收，须用户检查熔炼/高炉、压片和动力恢复、JEI、四物品外观与保存重进；不重复旧三矿批验收，也不越过此门推进钢材或设备。

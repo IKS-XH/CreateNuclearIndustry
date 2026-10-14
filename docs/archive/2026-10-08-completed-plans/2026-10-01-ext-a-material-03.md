@@ -4,10 +4,10 @@
 
 **目标：** 玩家用粉碎轮制铁/碳粉，无热搅拌成钢粉，经熔炼成钢锭并压成现有维修钢板。
 **架构：** 五个普通物品身份、原生数据配方与通用标签，复用 Minecraft/Create 机器和 JEI 自动识别；不新增配方类型、机器逻辑或客户端状态。
-**需求：** [已确认路线与参数](2026-10-01-mainline-material-03-proposal.md)、[配方5.4](../../recipes.md#54-钢材陶瓷与建筑材料)、内容清单3.2。用户已答复“采用这组推荐参数”。
+**需求：** [已确认路线与参数](2026-10-01-mainline-material-03-proposal.md)、[配方5.4](../2026-10-15/snapshots/docs/recipes.md#54-钢材陶瓷与建筑材料)、内容清单3.2。用户已答复“采用这组推荐参数”。
 **工作区：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支 `codex/ore-acquisition`；功能基线 `27bf103`，PM同步本卡后记录开工提交。主工程既有 `.vscode/launch.json` 不动。
 **版本：** MC1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6；保留 JEI、许可证、构建和依赖版本。
-**状态：已完成。** 用户于2026-10-01确认完整客户端清单通过，普通“合金钢”已简称“钢”；03B修复剩余测试运行异常后，155项required断言全过，候选及main各新跑265项JUnit/build通过，钢材随`e8ef02e`合入main。保存退出停滞仍单列，见[最终验收](../../reviews/2026-10-01/material-03b/README.md)。[初次候选证据](../../reviews/2026-10-01/material-03/README.md)保留原语境；开工提交为`9097338`。
+**状态：已完成。** 用户于2026-10-01确认完整客户端清单通过，普通“合金钢”已简称“钢”；03B修复剩余测试运行异常后，155项required断言全过，候选及main各新跑265项JUnit/build通过，钢材随`e8ef02e`合入main。保存退出停滞仍单列，见[最终验收](../2026-10-15/reviews/2026-10-01/material-03b/README.md)。[初次候选证据](../2026-10-15/reviews/2026-10-01/material-03/README.md)保留原语境；开工提交为`9097338`。
 
 ## 冻结合同与评审重点
 
@@ -80,7 +80,7 @@ A、B资源与代码写集分离，B独占美术导出，A独占后续Gradle；�
 ## 执行记录
 
 - 开工前已确认参数；技术差异预检完成，未运行游戏，原始报告保留当时待参数的语境。
-- A/B于 `9097338` 启动；A已回报实际HEAD及干净候选。PM复核并纠正预检中风扇SMOKING解释：它用于同输出排除，不是优先产出；[更正预检](../../reviews/2026-10-01/material-03/EXT-A-MATERIAL-03-REVISION-PRECHECK.md)记录锁定源码依据。
+- A/B于 `9097338` 启动；A已回报实际HEAD及干净候选。PM复核并纠正预检中风扇SMOKING解释：它用于同输出排除，不是优先产出；[更正预检](../2026-10-15/reviews/2026-10-01/material-03/EXT-A-MATERIAL-03-REVISION-PRECHECK.md)记录锁定源码依据。
 - B修正总览末行裁切及钢锭轮廓后交付；PM已查看最终五物品/钢板对照并独立核对55旧图哈希，差异0，游戏60图。B的导出器验证通过，已冻结资源；A已获准运行14项新测试及实现/回归。
 - B独立审查派给 `native_lead_tin_audit` 高速执行者；只读本卡B、EXT-ART-05报告、`build/reports/extension/EXT-ART-05-review-inputs.md`及最终文件。唯一写集为候选 `build/reports/extension/EXT-ART-05-REVIEW.md`；禁止运行Gradle、游戏、导出/verify、Git写或其他文件修改。须分别报告合同符合性和实现质量，读取并应用modding/testing/resource-pack技能。审查不代替客户端视觉验收。
 - A及整批独立审查：真实机器扣料、堵塞恢复、测试证据与原生配方接入交由独立高级模型复核。唯一写集为候选 `build/reports/extension/EXT-A-MATERIAL-03-REVIEW.md`；读取本卡、批准方案、`EXT-A-MATERIAL-03-review-inputs.md`、A/B报告及审查证据，应用modding/testing技能。只读最终文件，不运行测试/导出、改实现、Git写或派发。自动证据尚未完成时先报告静态结论及未决验证门，证据齐备后补最终结论，不先行宣告验收。

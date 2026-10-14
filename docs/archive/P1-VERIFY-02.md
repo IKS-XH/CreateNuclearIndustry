@@ -31,8 +31,8 @@
 
 ## 证据保全与技能
 
-- [本轮原始报告及证据 ZIP](../handoffs/2026-09-29/P1-VERIFY-02-evidence.zip)：报告、两套 JUnit XML、命令输出/退出记录、GameTest 保存诊断、历史引用副本及两份自动日志原样备份。SHA-256：`0FF8E990B9A33266765B97D4867BF6A01DDA6C16340FCF1B65321A7A5A58869A`。报告中曾误引未生成的排除日志检查文件，PM 发现后已由执行者纠正为实际工具输出证据，未补造历史日志或重跑测试。
-- [历史 A 及换机资料](../handoffs/2026-09-28/README.md)：2026-09-22 独立服务端完整原始证据继续保留在其 `previous-task-evidence.zip`，没有改写历史报告。
+- [本轮原始报告及证据 ZIP](2026-10-15/handoffs/2026-09-29/P1-VERIFY-02-evidence.zip)：报告、两套 JUnit XML、命令输出/退出记录、GameTest 保存诊断、历史引用副本及两份自动日志原样备份。SHA-256：`0FF8E990B9A33266765B97D4867BF6A01DDA6C16340FCF1B65321A7A5A58869A`。报告中曾误引未生成的排除日志检查文件，PM 发现后已由执行者纠正为实际工具输出证据，未补造历史日志或重跑测试。
+- [历史 A 及换机资料](2026-10-15/handoffs/2026-09-28/README.md)：2026-09-22 独立服务端完整原始证据继续保留在其 `previous-task-evidence.zip`，没有改写历史报告。
 - 主工作区交付入口：`build/reports/p1/P1-VERIFY-02.md` 及同名证据目录；ZIP 使忽略目录中的证据可随仓库保存。
 - 本轮构建制品 `create_nuclear_industry-0.1.0.jar` 的 SHA-256：`21C6723F4F60CB8200364FEF7D4457DDE8C06BF1B215D658091DC2A83321D3BA`。这是开发快照构建，不是公开发布或版本升级。
 - 执行者及 PM 实际读取并应用本机 `C:/Users/IKSXH/.codex/skills/` 下的 `minecraft-modding`、`minecraft-testing`；PM 使用 `minecraft-ci-release` 核对交接和制品边界。固定 MC 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。

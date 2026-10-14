@@ -1,6 +1,6 @@
 # EXT-B-BOILER-REWORK-01C：持续供热调压与汽轮机联动排错
 
-> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../../reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
+> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../2026-10-15/reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
 
 **状态：** 出汽停流已复现并完成三入口最小修复，专用5项GameTest、增量assemble及一次规格/质量合并审查通过。用户随后反馈汽轮机持续残转未能复现，该项排查暂缓，不认定修复或要求本轮专项复现。指定的[01D汽口选择](2026-10-07-boiler-steam-port-selection.md)已按纯过滤、不降级规则交付并通过新域4项、增量assemble和一次审查；01C源码保留其中，当前候选`99a526c`。锅炉集中人工门尚未关闭，未合入main，不接其他主线或教学。以下01C过程和证据保留历史语境。
 
@@ -54,7 +54,7 @@ PM据此追加以下最小生产写集，不改变任何热工或汽轮机平衡
 
 - 原失败轮大型及空罐停止接汽，原生network.source能力为null而当前FlowSource能力有效。修复后800tick空罐实收77636mB、自然切种64次；大型实收75180mB、切种34次；中型实收56592mB，原故障不再出现。真实每tick汽质量及HU边界、外部异种背压、双端四齿轮箱回接停开均通过。
 - 最终专用域5/5、服务端正常保存退出、Gradle exit0/24秒；只运行该域，复用未改账本单测。不将旧人工种子证据冒充持续生产证据。
-- 增量assemble exit0/1秒，JAR2207578字节，SHA-256 B3BF640B296561533EA1FDBAC802DBEAC11AFCA530C58879940325DA76E6E911。实施及失败原始证据见[排错报告](../../reviews/2026-10-07/boiler-rework-01/continuous-flow-diagnosis.md)，一次独立审查见[合并审查](../../reviews/2026-10-07/boiler-rework-01/continuous-flow-review.md)。原始日志保存在同级候选build/reports/extension/EXT-B-BOILER-REWORK-01C/。
+- 增量assemble exit0/1秒，JAR2207578字节，SHA-256 B3BF640B296561533EA1FDBAC802DBEAC11AFCA530C58879940325DA76E6E911。实施及失败原始证据见[排错报告](../2026-10-15/reviews/2026-10-07/boiler-rework-01/continuous-flow-diagnosis.md)，一次独立审查见[合并审查](../2026-10-15/reviews/2026-10-07/boiler-rework-01/continuous-flow-review.md)。原始日志保存在同级候选build/reports/extension/EXT-B-BOILER-REWORK-01C/。
 - 动力生产代码未改。真实直连与双端回接均能自行停止，用户现场永久残转未复现，不能宣称已解决。PM交付出汽修复后，请同次复测原装置；仍残转时收集前后轴及外接轴Source/Network/Speed，再继续针对性排错。
 - 首段汽管夹具没有单独覆盖汽口直接邻接机械泵；该端型只有静态同接口依据，不记为实际测过。桥接不改drain/SIMULATE实现，本次未重复所有账本纯读单测；相关既有证据继续复用。
 - 实施/root/boiler_turbine_flow_01c使用gpt-6.1-sol/high，跨真实流体、能力缓存和动力时序；审查/root/turbine_stop_cause_audit优先gpt-6-luna/high，未重复运行测试。PM读取锁定源码、差异、失败与最终日志及制品，维护文档/Git；客户端集中门仍保留。

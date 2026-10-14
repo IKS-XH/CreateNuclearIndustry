@@ -1,6 +1,6 @@
 # 燃料02A：生芯块与专用烧结炉方案
 
-**状态：2026-10-03用户确认02A全部手测及[02B](2026-10-03-ext-a-fuel-02b.md)整格外观、工作台/高炉制造复测通过，已验收合入main，见[最终验收](../../reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)。** 本页为当前批准合同；02A原候选的9格动力合成器/燃烧室配件/矮炉体已被取代。之后再做包壳/焊料/格架、屏蔽装配台和燃料组件直接装配，具体配比与运行细节另卡确认；用户已取消新燃料棒中间步骤，本批不修改现有正式组件耐久或反应堆燃耗。
+**状态：2026-10-03用户确认02A全部手测及[02B](2026-10-03-ext-a-fuel-02b.md)整格外观、工作台/高炉制造复测通过，已验收合入main，见[最终验收](../2026-10-15/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)。** 本页为当前批准合同；02A原候选的9格动力合成器/燃烧室配件/矮炉体已被取代。之后再做包壳/焊料/格架、屏蔽装配台和燃料组件直接装配，具体配比与运行细节另卡确认；用户已取消新燃料棒中间步骤，本批不修改现有正式组件耐久或反应堆燃耗。
 
 ## 已确认要求
 
@@ -49,7 +49,7 @@
 
 沿用正式规划ID：`green_fuel_pellet`、`sintered_fuel_pellet`、`fuel_sintering_furnace`，对应生燃料芯块、烧结燃料芯块、燃料烧结炉。核材料保持专用身份，不加入普通铀粉标签。专用烧结配方支持JEI显示输入、输出、最低热级与时间。
 
-[锁定版本源码核查](../../reviews/2026-10-02/fuel-02a/design-probe.md)确认Create `BlazeBurnerBlock.getHeatLevelOf`与`HeatCondition.HEATED`可表达门槛：FADING/KINDLED/SEETHING通过，NONE/SMOULDERING拒绝；按每tick真实状态读取，不创建另一套燃烧燃料账本。1:1压片可直接使用`create:pressing`。这是静态可行性，不是游戏验证。
+[锁定版本源码核查](../2026-10-15/reviews/2026-10-02/fuel-02a/design-probe.md)确认Create `BlazeBurnerBlock.getHeatLevelOf`与`HeatCondition.HEATED`可表达门槛：FADING/KINDLED/SEETHING通过，NONE/SMOULDERING拒绝；按每tick真实状态读取，不创建另一套燃烧燃料账本。1:1压片可直接使用`create:pressing`。这是静态可行性，不是游戏验证。
 
 ## 执行与最小验收
 

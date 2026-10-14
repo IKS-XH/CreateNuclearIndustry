@@ -6,7 +6,7 @@
 
 ## 必读与版本
 
-主工程及执行工作树 `AGENTS.md`、主工程 `docs/project-governance.md`、本卡、[原美术合同](2026-09-29-ext-art-02.md)、[客户端检查点](../../reviews/2026-09-29/implementation/README.md)。实际读取 `C:/Users/IKSXH/.codex/skills/` 下 `minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`、`minecraft-resource-pack/SKILL.md` 并记录应用。固定 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。
+主工程及执行工作树 `AGENTS.md`、主工程 `docs/project-governance.md`、本卡、[原美术合同](2026-09-29-ext-art-02.md)、[客户端检查点](../2026-10-15/reviews/2026-09-29/implementation/README.md)。实际读取 `C:/Users/IKSXH/.codex/skills/` 下 `minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`、`minecraft-resource-pack/SKILL.md` 并记录应用。固定 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。
 
 ## 精确范围与行为
 
@@ -23,4 +23,4 @@
 3. 实际查看冷却剂对照预览，确认显示的最终候选是旧外观。报告实际技能、命令、结果、未验证项；无需启动游戏或全量 GameTest，PM 统一运行资源处理/打包验证。
 4. PM 审核并保存修订候选后暂停于用户冷却剂视觉复验；三矿自然生成和采集已获用户确认，粉碎轮加工也于 2026-10-01 获用户确认。用户随后于 2026-10-01 确认粗矿 9:1 合成/拆解、保存重进及两种冷却剂回退测试通过，本轮人工门已解除。后续材料与设备仍须冻结各自参数。
 
-**交付核对：** 八项与重绘前原图逐字节一致，另外 43 项保持整合候选原值。两次默认导出、两次安装、30 类非法 SVG 与六种 CLI 失败不写出检查通过；PM 实际查看恢复预览，并运行 `processResources jar prepareClientRun` 退出 0，JAR 内 51 项逐字节核对通过。未重跑全量 JUnit/GameTest，未启动客户端。报告与当前包见 [客户端检查点](../../reviews/2026-09-29/implementation/README.md)。
+**交付核对：** 八项与重绘前原图逐字节一致，另外 43 项保持整合候选原值。两次默认导出、两次安装、30 类非法 SVG 与六种 CLI 失败不写出检查通过；PM 实际查看恢复预览，并运行 `processResources jar prepareClientRun` 退出 0，JAR 内 51 项逐字节核对通过。未重跑全量 JUnit/GameTest，未启动客户端。报告与当前包见 [客户端检查点](../2026-10-15/reviews/2026-09-29/implementation/README.md)。

@@ -26,4 +26,4 @@
 
 ## 交付与人工门
 
-执行者`/root/boiler01d_impl`、审查者`/root/boiler01d_review`均使用高速模型。功能写集为锅炉结构/控制器与GameTest三份文件；18项最终定向GameTest、增量assemble及补强后的独立审查通过，复用01C的12项账本JUnit。原始证据、执行过程和仅两项人工操作见[候选验收说明](../../reviews/2026-10-04/boiler-01d/README.md)。用户后续已确认人工通过，已合入main，见[最终验收](../../reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。
+执行者`/root/boiler01d_impl`、审查者`/root/boiler01d_review`均使用高速模型。功能写集为锅炉结构/控制器与GameTest三份文件；18项最终定向GameTest、增量assemble及补强后的独立审查通过，复用01C的12项账本JUnit。原始证据、执行过程和仅两项人工操作见[候选验收说明](../2026-10-15/reviews/2026-10-04/boiler-01d/README.md)。用户后续已确认人工通过，已合入main，见[最终验收](../2026-10-15/reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。

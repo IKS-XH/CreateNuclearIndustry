@@ -2,7 +2,7 @@
 
 > PM使用systematic-debugging、writing-plans和subagent-driven-development组织单一整改与一次规格/质量联合审查；执行者不得派发其他代理、改核心文档或执行Git写操作。治理5.1精简验证优先于通用技能的重复流程。
 
-**状态：修复、定向验证、独立审查与现场复测通过，已合入main。** 功能提交8273aff；用户先确认单项停机/恢复，再明确全部联调与外观范围通过，见[联合验收](../../reviews/2026-10-05/condense-01/ACCEPTANCE.md)。原故障与诊断过程保留，运行参数未改。
+**状态：修复、定向验证、独立审查与现场复测通过，已合入main。** 功能提交8273aff；用户先确认单项停机/恢复，再明确全部联调与外观范围通过，见[联合验收](../2026-10-15/reviews/2026-10-05/condense-01/ACCEPTANCE.md)。原故障与诊断过程保留，运行参数未改。
 
 **目标：** 修复已批准01F“流量衰减后本机动力归零”合同内的生命周期缺陷，不更改玩法参数。
 
@@ -13,7 +13,7 @@
 ## 写集与职责
 
 - 候选`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，`codex/ore-acquisition`，派发前HEAD `ecc6305`。保留`logs/debug.log`、`logs/latest.log`及`tools/art-assets/__pycache__/`，不得覆盖其他任务或用户改动。
-- 必读AGENTS、治理5.1/5.2、本卡、01F规格、冷凝[合并联调](../../reviews/2026-10-05/condense-01/manual-checklist.md)。实际读取技能`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`及superpowers的systematic-debugging；按既有注册/模板实现，版本示例不替换仓库基线。
+- 必读AGENTS、治理5.1/5.2、本卡、01F规格、冷凝[合并联调](../2026-10-15/reviews/2026-10-05/condense-01/manual-checklist.md)。实际读取技能`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、`minecraft-testing/SKILL.md`及superpowers的systematic-debugging；按既有注册/模板实现，版本示例不替换仓库基线。
 - 功能仅允许修改`turbine/TurbineShaftPowerSource.java`、`TurbineOutputShaftBlockEntity.java`、`TurbineControllerBlockEntity.java`、`TurbineState.java`，均位于`src/main/java/com/iksxh/create_nuclear_industry/`。只修改实际根因所需文件，不借机重构。
 - 测试仅允许修改`gametest/ExtensionTurbineGameTests.java`、`gametest/turbine/`既有Java文件、`src/test/java/com/iksxh/create_nuclear_industry/turbine/TurbineStateTest.java`。若需要隔离新增GameTest类/模板或其他文件，先报告PM确定准确路径。
 - 报告与临时探针写`build/reports/extension/EXT-B-TURBINE-01G/`；隔离测试服使用`build/runtime-01g-*`。禁止写docs、配置、配方、美术、其他设备、构建脚本及全局mixins，禁止编辑用户世界或停止用户客户端。

@@ -122,6 +122,6 @@
 
 ## 本轮交付（2026-10-04）
 
-配置A：30项JUnit、默认4项及非默认1项GameTest；双轴B：3项真实Create探针；C0：同tick恢复修复后的9项JUnit；正式C：默认3项、非默认1项GameTest及最终assemble全部通过。资源D已完成SVG/OBJ静态检查，实际客户端视觉未验收。详见[交付证据](../../reviews/2026-10-04/turbine-01a/README.md)及[配置指南](../../server-config.md)。
+配置A：30项JUnit、默认4项及非默认1项GameTest；双轴B：3项真实Create探针；C0：同tick恢复修复后的9项JUnit；正式C：默认3项、非默认1项GameTest及最终assemble全部通过。资源D已完成SVG/OBJ静态检查，实际客户端视觉未验收。详见[交付证据](../2026-10-15/reviews/2026-10-04/turbine-01a/README.md)及[配置指南](../../server-config.md)。
 
-- [ ] 用户完成[合并人工复测](../../reviews/2026-10-04/turbine-01a/manual-checklist.md)并确认；通过前不合入main功能、不推进冷凝回水。
+- [ ] 用户完成[合并人工复测](../2026-10-15/reviews/2026-10-04/turbine-01a/manual-checklist.md)并确认；通过前不合入main功能、不推进冷凝回水。

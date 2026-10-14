@@ -1,173 +1,139 @@
-# 设备服务端配置
+# 服务端配置
 
-> **流量首批01已验收合入（2026-10-12）：** 功能及01R2外观由用户确认通过，按[联合验收](./reviews/2026-10-12/turbine-fluid-accepted-integration/ACCEPTANCE.md)净合main `151ceba`，下面记录实际配置键。反应堆现有冷热口与锅炉冷热口默认2048mB/t，锅炉给水/汽口4096；两档专用管阀8192/32768，一种专用泵16384mB/t@256RPM、16SU/RPM（4096SU@256RPM）。热液/SC只走专用管泵，Create罐保留；新管网压力后置。已有实例显式设置不自动覆盖，16³锅炉仍是独立候选。
+更新：2026-10-15。本文统一记录当前main配置，不混用独立16³锅炉候选或历史字段。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
 
-> **版本边界：** 三档结构、256RPM、01E共享双轴、01F流量效率/微周转、01G停机及冷凝配置已完成现行联合验收并合入main，见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。已有实例的显式设置不会因代码默认值改变而自动覆盖；主目录与候选各使用自己的运行配置。
+## 文件和生效
 
-三设备配置化随[01A](archive/2026-10-08-completed-plans/2026-10-04-ext-b-turbine-01a.md)实施并经后续各批接续，当前数值与行为按下表及SERVER配置执行。数值调整由服务器决定，客户端护目镜读取服务端同步结果。
+配置类型为NeoForge SERVER。锁定21.1.219默认在实例config生成，世界serverconfig中同名文件优先覆盖。main开发实例在run/config，候选各有自己的run/config和世界。退出世界/服务器后修改实际生效文件，重启并用护目镜核对；已有显式值不会因代码默认改变被覆盖，不承诺所有键在线重载。
 
-**反应堆总产热（2026-10-06确认）：** [总产热取整任务](archive/2026-10-08-completed-plans/2026-10-06-reactor-heat-rounding-01.md)将新生裂变热汇总并限幅后向上取整为整数HU/t，冷却与遥测共用。沿用现有产热和吸热配置，不新增平衡开关；默认0.5HU/mB时100HU/t对应200mB/t。自定义吸热系数或变化的运行工况仍按实际账本结算，不承诺所有管路与负载都无波动；缓存余热不再取整。本项已在[封存/配方/取整联合验收](./reviews/2026-10-06/store-01/ACCEPTANCE.md)通过并合入main。
+| 文件 | 范围 |
+| --- | --- |
+| create_nuclear_industry-server.toml | reactor节：尺寸、热工、燃耗、损伤、冷却 |
+| create_nuclear_industry-reactor-automation-server.toml | 管理员及余量闭环，顶层键 |
+| create_nuclear_industry-industrial-fluid.toml | 专用管网，顶层键 |
+| create_nuclear_industry-boiler.toml | 锅炉，顶层键 |
+| create_nuclear_industry-heat-exchanger.toml | 换热/冷凝/盆炉核热，顶层键 |
+| create_nuclear_industry-turbine.toml | 三档汽轮机，顶层键 |
+| create_nuclear_industry-storage.toml | spentFuelStorage节：贮存架 |
 
-## 文件位置与修改方式
+容量调小不删除现有物料，超额拒收；机器合法性还检查跨字段关系，不能只看单值范围。材料数量和工时由数据配方控制，不在设备配置复制一份。
 
-**反应堆可变尺寸（2026-10-12已验收合main）：** [组合验收](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)确认main `6bdef37`包含P1 SERVER配置`reactor`节的`minDimension=5`、`maxDimension=16`，三边分别受同一范围约束，允许跨区块；组合需满足5≤min≤max≤16，非法组合拒绝成型。既有产热、燃耗、吸热、每口流量和每格容量数值保持，只按实际内部高度/列图计算；空列及控制棒列的主体格×每格容量为冷热共用容量。每列仍一个燃料组件。配置缩小保留已有库存并拒收超额输入，不生成或删除流体。
+## 反应堆
 
-配置类型为 NeoForge SERVER。当前锁定的 NeoForge 21.1.219 默认在实例的 `config/` 目录生成；世界的 `serverconfig/` 中已有同名文件时，该世界优先使用覆盖文件：
+键位于reactor节，来源为[P1ServerConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/P1ServerConfig.java)。
 
-- `create_nuclear_industry-boiler.toml`：高压锅炉。
-- `create_nuclear_industry-heat-exchanger.toml`：核换热器，保留原文件和已有键。
-- `create_nuclear_industry-turbine.toml`：三档汽轮机。
-- `create_nuclear_industry-storage.toml`：已验收的轻量封存与干式贮存架。
-- `create_nuclear_industry-industrial-fluid.toml`：本批专用管网候选，所有键在顶层。
+| 键 | 默认 | 单位/意义 |
+| --- | ---: | --- |
+| minDimension / maxDimension | 5 / 16 | 三边各自外尺寸，组合5≤min≤max≤16，允许跨区块 |
+| baseHeatPerFuelBlockHuPerTick | 1 | 每有效燃料主体格基础HU/t |
+| fuelBurnTimeHours | 3 | 完整组件基准燃烧小时，高度/控制/反馈/损伤另乘 |
+| coolantAbsorptionHuPerMb | 0.5 | 每mB工质吸热HU，反应堆与换热器共用 |
+| perPortFlowMbPerTick | 2048 | 每个冷/热物理口共享mB/t额度，0为禁流 |
+| coolantCapacityPerEmptyBlockMb | 1000 | 每可计空气格冷热共享mB容量 |
+| damageHeatThresholdHuPerTick | 0.25 | 真实未覆盖热负荷的损伤阈值 |
+| damageRatePerTickHuLoad | 0.0000005 | 完整度扣除速率/(tick·HU/t) |
+| fuelColumnDamageHeatMultiplier / fuelColumnDamageBurnMultiplier | 2 / 3 | 全损伤端点，须1＜热倍率＜燃耗倍率 |
+| damageTransferRate | 0.25 | 相邻失效燃料的残余热传播比例 |
+| controlRodFailureThreshold | 0 | 控制棒卡死完整度阈值 |
+| meltdownTriggerFraction / meltdownCountdownTicks | 0.2 / 900 | 有效失效覆盖比例与倒计时tick |
+| controlResponseExponent | 1 | 插深响应指数 |
+| overclockHeatMultiplier / overclockBurnMultiplier | 10 / 10 | 反馈热/燃耗倍率上限 |
+| overclockFeedbackGain / overclockFeedbackExponent | 0.15 / 0.5 | 相邻反馈参数 |
+| totalHeatMultiplierCap | 20 | 全堆新生裂变热限幅 |
 
-本批流量候选配置目录为 `E:/MyMC/NewMod/Create_NuclearIndustry-fluid-network/run/config/`；独立16³锅炉候选仍在 `E:/MyMC/NewMod/Create_NuclearIndustry-art-integration/run/config/`，主目录启动读取主目录自己的 `run/config/`。本批只携带世界、未复制来源实例配置，新的默认由候选源码生成；世界若有同名serverconfig仍优先使用。如需仅对某个单人世界生效，可将相应文件复制到 `run/saves/<世界名>/serverconfig/` 再修改。不要混淆运行目录。
+总新生裂变热汇总限幅后向上取整，缓存余热不再次取整。默认100HU/t对应200mB/t，不把管理员维护自耗当冷却需求；无隐藏全堆流量封顶。完整算法见[反应堆合同](reactor-local-control-revision-design.md)。
 
-退出世界或关闭服务器，修改当前实际生效的 TOML，重新进入或启动后核对护目镜。本文不承诺在线热重载，也不把旧版Forge默认的存档路径说明当作当前版本行为。路径依据为锁定版 `ServerLifecycleHooks.handleServerAboutToStart` 与 `ConfigTracker.resolveBasePath`，并由本批隔离服务端实际生成文件核实。
+## 管理员
 
-## 专用流体管网（流量首批候选）
+来源为[ReactorAutomationConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/ReactorAutomationConfig.java)，行为见[管理员合同](reactor-automation.md)。
 
-文件：`create_nuclear_industry-industrial-fluid.toml`，SERVER配置，全部顶层键。
+| 键 | 默认 | 意义 |
+| --- | ---: | --- |
+| adjustIntervalTicks / displayAverageWindowTicks | 10 / 40 | 调棒周期/显示平均窗口tick |
+| maxLiftPercentPerAdjustment / maxInsertPercentPerAdjustment | 1 / 5 | 每次升功率提出/降功率插入百分点 |
+| powerDeadbandFraction | 0.02 | 恒功率比例死区 |
+| maxTargetHeatHuPerTick | 1000000 | GUI目标上限HU/t，不是物理功率上限 |
+| startupColdFraction / startupMaxHotFraction | 0.25 / 0.75 | 启动库存条件 |
+| warningColdFraction / warningHotFraction / tripHotFraction | 0.15 / 0.85 / 0.95 | 库存预警/停堆阈值比例 |
+| warningHeatThresholdFraction | 0.5 | 列积热预警比例 |
+| resetStableTicks / controlLeaseTicks / armingTimeoutTicks | 100 / 20 / 40 | 复位稳定/控制租约/建立联锁超时tick |
+| burnerMaintenanceHuPerTick | 1 | 真实核热值班HU/t，须正有限 |
+| defaultTargetStressReservePercent | 20 | 新管理员目标应力余量%，0～90 |
+| defaultMinimumOperatingHeatHuPerTick | 2 | 新管理员最低毛HU/t，默认维护1＋净输出1 |
+| stressReserveDeadbandFraction / stressFilterTimeTicks | 0.03 / 40 | 余量比例死区/滤波时间常数tick |
+| stressPiProportionalFraction / stressPiIntegralFractionPerSecond | 0.25 / 0.01 | PI增益，乘当前堆可达最大HU/t；积分为每秒 |
+| stressEstablishmentTimeoutTicks | 1200 | 当前网建立/读档重建等待tick |
 
-| 键 | 默认 | 含义 |
-| :--- | ---: | :--- |
-| `reinforcedFlowMbPerTick` | 8192 | 二级强化钢管及阀的单节点共享mB/t额度 |
-| `ceramicFlowMbPerTick` | 32768 | 三级陶瓷内衬管及阀的单节点共享mB/t额度 |
-| `pumpFlowMbPerTick` | 16384 | 唯一工业泵的额定mB/t及最大周转mB；缩小配置保留现有余量并拒收超额 |
-| `ratedRpm` | 256 | 达到泵额定流量的RPM，实际转速绝对值线性换算并封顶 |
-| `stressSuPerRpm` | 16 | 每RPM的泵应力SU；256RPM默认4096SU |
-| `searchDistance` | 256 | 每侧最多搜寻的专用管段数；不强载缺失区块 |
-| `maxNetworkNodes` | 4096 | 连接拓扑最大节点数，超出停止交易并提示 |
+机器显式模式/目标保存于自身状态，默认参数不覆盖已有设定。最低值保留默认2时按维护成本＋1初始化；PI/滤波暂态重建，保存续接不恢复旧积分。
 
-流量公式为floor(`pumpFlowMbPerTick`×clamp(abs(RPM)/`ratedRpm`,0,1))，再受路径、阀、源量、设备口及接收量限制；串泵不相加，共用物理管段额度，多泵独立路线可并联。阀的0～100%开度在世界内设置，红石关闭优先。缓存是原已扣源的同份工质，管段不存液；模拟不收费，目标短收保留同泵缓存，恢复后继续交付，不换种或降级。冷热液和两种汽各走独立介质路线。
+## 专用流体管网
 
-原P1 SERVER文件的`reactor.perPortFlowMbPerTick`在本候选默认2048，反应堆每个冷/热物理口共用其自身额度。锅炉分项见下表；不新增工业口ID或配方，不提升原热工功率或汽轮机耗汽上限。
+来源为[IndustrialFluidConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/IndustrialFluidConfig.java)。
+
+| 键 | 默认 | 意义 |
+| --- | ---: | --- |
+| reinforcedFlowMbPerTick / ceramicFlowMbPerTick | 8192 / 32768 | 二/三级管阀节点共享mB/t额度 |
+| pumpFlowMbPerTick / ratedRpm | 16384 / 256 | 唯一工业泵额定mB/t、最大周转mB及额定RPM |
+| stressSuPerRpm | 16 | SU/RPM，256RPM默认4096SU |
+| searchDistance / maxNetworkNodes | 256 / 4096 | 每侧最大搜索管段/拓扑节点数，不强载区块 |
+
+泵流量为floor(额定流量×clamp(abs(RPM)/额定RPM,0,1))，再受路径/阀/源/物理口/接收量限制。串泵不叠额度，独立路线可并联。热液/SC经专用管网，Create罐保留；锅炉汽口可主动接合法工业管，无须外置泵。未实现管网压力。
 
 ## 锅炉
 
-**01F现行配置（2026-10-08已验收合入main）：** [双汽库存](archive/2026-10-08-completed-plans/2026-10-07-boiler-dual-steam-inventory-01f.md)替代下文01B/01D整炉瞬时切种规则。两种汽各自保存真实mB/HU，共用`steamCapacityPerCellMb`计算的一份总容量；新批次按实际温压归类，库存不自动换种，各口只取所选库存。`supercriticalPressure`用于新批次定种，已有SC仍须已付热合格，低于该生产门槛可排至公共出汽压力下限。配置键与默认数值不增加、不改变，见[验收](./reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。
+来源为[BoilerConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/BoilerConfig.java)。main默认5～11；16³候选另有人工门，不能混作main默认。
 
-**锅炉版本边界：** [内置换热、分区、可变尺寸及温压](archive/2026-10-08-completed-plans/2026-10-07-high-pressure-boiler-rework-proposal.md)和01A～01F整改已于2026-10-08验收合入main。下列字段适用于新版锅炉，主目录runClient已包含实现；此前固定锅炉数值仅保留为[历史合同](archive/2026-10-08-completed-plans/2026-10-04-ext-b-turbine-01a.md)。主目录与同级候选仍分别读取自己的运行配置。
+| 键 | 默认 | 意义 |
+| --- | ---: | --- |
+| dimensionRange | [5,11] | 外尺寸闭区间，两整数；当前main原校验上限32，独立候选改为16 |
+| waterCapacityPerCellMb / steamCapacityPerCellMb | 2000 / 2000 | 每有效水区/汽区格mB；双汽共用汽容量 |
+| coolantPortFlowMbPerTick / waterSteamPortFlowMbPerTick | 2048 / 4096 | 冷热口/给水汽口mB/t，主被动及专用交易共用 |
+| pairHeatHuPerTick | 18 | 每有效热力回路HU/t上限 |
+| boilingTemperature / supercriticalTemperature | 1 / 2 | 游戏归一温度，后者须更高 |
+| wallHeatCapacityHuPerWaterCell | 1600 | 每水区格HU/温升 |
+| waterSpecificHeatHuPerMb / steamSpecificHeatHuPerMb | 0.1 / 0.2 | HU/mB/温升 |
+| vaporizationLatentHeatHuPerMb | 0.7 | 汽化潜热HU/mB |
+| supercriticalPressure | 0.5 | 新批次SC归一炉压门槛，不改写已有库存 |
+| outputMinPressure | 0.6 | 默认出汽下限，[0,1]对应控件0～100% |
+| valveOpenPressure / valveClosePressure | 0.9 / 0.8 | 安全阀开/关炉压 |
+| valveFlowPerSteamCellMbPerTick | 32 | 每汽区格泄放mB/t |
+| idleWaterCoolingHuPerCellPerTick / idleSteamCoolingHuPerCellPerTick | 0.9 / 0.1 | 无实际收热时每格散热HU/t |
 
-文件：`create_nuclear_industry-boiler.toml`。所有键在文件顶层。
-
-**尺寸调整候选（2026-10-12）：** [BOILER-SIZE-LIMIT-01](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)将默认和可配置上限统一为16，合法组合5≤min≤max≤16；最小5、跨区块与分区容量/温压保持。代码与服务端定向检查已完成，客户端新增尺寸门独立待验，尚未合main。候选实例配置已备份后仅将`dimensionRange`由[5,11]改[5,16]，代码默认改变不会覆盖其他实例的显式11。
-
-| 键 | 默认 | 含义 |
-| :--- | ---: | :--- |
-| `dimensionRange` | main和流量候选 `[5, 11]`；独立尺寸候选 `[5, 16]` | 三边分别允许的整数闭区间；恰好两值；独立尺寸候选5≤min≤max≤16，main/流量候选原校验上限32 |
-| `waterCapacityPerCellMb` / `steamCapacityPerCellMb` | 各2000 | 每个有效水区/汽区格的mB容量；01F两种汽共用汽区总容量 |
-| `coolantPortFlowMbPerTick` | 2048 | 每个热液/冷液物理口的mB/t额度，主动/被动/专用交易共用 |
-| `waterSteamPortFlowMbPerTick` | 4096 | 每个给水/蒸汽物理口的mB/t额度，主动/被动/专用交易共用 |
-| `pairHeatHuPerTick` | 18 | 每有效换热器/再加热段配对的HU/t上限 |
-| `boilingTemperature` / `supercriticalTemperature` | 1 / 2 | 归一游戏温度，后者须大于前者 |
-| `wallHeatCapacityHuPerWaterCell` | 1600 | 每个水区格提供的炉壁热容，HU/温升 |
-| `waterSpecificHeatHuPerMb` / `steamSpecificHeatHuPerMb` | 0.1 / 0.2 | 水/汽比热，HU/mB/温升 |
-| `vaporizationLatentHeatHuPerMb` | 0.7 | 汽化追加潜热，HU/mB |
-| `supercriticalPressure` | 0.5 | 01F新增批次归为超临界汽的归一炉压门槛；不重标已有库存 |
-| `outputMinPressure` | 0.6 | 默认出汽压力下限，合法范围[0,1]，控件按0～100%逐整数设置 |
-| `valveOpenPressure` / `valveClosePressure` | 0.9 / 0.8 | 阀开/关炉压，开启线也用于堵阀保护 |
-| `valveFlowPerSteamCellMbPerTick` | 32 | 每汽区格提供的泄放速率，mB/t |
-| `idleWaterCoolingHuPerCellPerTick` | 0.9 | 无实际收热时每水区格显热损失，HU/t |
-| `idleSteamCoolingHuPerCellPerTick` | 0.1 | 无实际收热时每汽区格高于沸点的显热损失，HU/t |
-
-冷热库存容量读取换热器`hotCapacityMb`/`coldCapacityMb`并乘炉内换热器数，实际热功率还受换热器额定上限约束；不新增重复字段。完整隔层上下空气格分别决定容量，有效配对取换热器和再加热段数量的最小值，增加端口不扩容。配置合法性包括组合关系及long乘积预检；main和本批流量候选保持原扫描/传输保守工程封顶32，独立尺寸候选合法搭建上限为16。16³隔层localY=8示例水区1372格、汽区1176格，默认水2744000mB、汽2352000mB；隔层高度仍由现行结构规则决定，自动检查不代替客户端性能验收。
-
-控制器沿用01B单一出汽压力下限，显式机器设置独立保存，不由默认配置覆盖。01F新批次按实际批次汽温及加量后的共同炉压归类，已有两种库存不变身份；炉压由两种汽量和各自实际汽温共同决定，与Create运输压力分开。压力下限可设100%，可能因安全阀先泄放而停止正常出汽；它不是目标炉压，也不强制产生普通汽。默认5³居中隔层上下各9格、水汽各18000mB，汽容量由两种共用；全部汽温为2时，下限0.6对应保留10800mB。冷水至沸点汽共0.8HU/mB、至目标SC汽共1HU/mB；已有汽再热和输出HU均实际扣账，普通汽不因再热变SC，欠热SC等待再热。散热不扣潜热、不模拟炉内凝水，安全阀排放仍消耗工质和热量。
-
-历史配置键说明见已归档的重构合同，当前仅使用上表键；本次不删除用户配置或世界。
-
-本批流量候选以冷热、水汽两个键替代main旧`portFlowMbPerTick=256`，不新增旧字段迁移或兼容别名；各实例显式设置按其实际运行配置生效。本批锅炉尺寸仍使用已验收main默认[5,11]与原校验，不夹带待验16³源。SC仅经专用管泵抽取，停止原生管加压和邻罐直推；普通蒸汽主动输出保持。
-
-**汽口选择（01F现行）：** 沿用01D原生选项“蒸汽 / 超临界蒸汽”，默认超临界，各口独立保存。每个口只抽所选的真实库存，无对应库存、欠热或无保压余量时等待；已有SC在低于生产炉压门槛后仍可按公共下限输出。两种可同时经各自独立管路交付，不降级、混装、转换或清除外部异种流体。控制器不增加汽种开关，所有配置数值保持原值。01D历史4项证据保留，本批25项账本/11个不同真实用例及独立审查见候选说明，客户端门已由2026-10-08集中验收关闭。
+冷热容量由炉内换热器数×其hotCapacityMb/coldCapacityMb派生，有效回路取换热器/再加热段最小值。出汽下限不是目标炉压或安全阀阈值；普通/SC各存mB/HU、共总容量，汽口只取所选库存，不转换/降级。既有合格SC可低于生产压力门槛后排至共同下限，实际热量仍扣账。
 
 ## 换热器
 
-文件：`create_nuclear_industry-heat-exchanger.toml`。所有键在文件顶层。
+来源为[HeatExchangerConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/HeatExchangerConfig.java)。
 
-| 键 | 默认 | 含义 |
-| :--- | ---: | :--- |
-| `heatLevel` | 18 | Create锅炉最高热等级，1～18 |
-| `huPerLevel` | 1 | 每级每tick耗热，HU |
-| `bufferTicks` | 40 | 储热/断流余热窗口，tick |
-| `hotCapacityMb` | 4000 | 每台热液罐容量，mB |
-| `coldCapacityMb` | 4000 | 每台冷液罐容量，mB |
-| `maxLineLength` | 16 | 同向共享直列最多台数，1～64 |
+| 键 | 默认 | 意义 |
+| --- | ---: | --- |
+| heatLevel / huPerLevel / bufferTicks | 18 / 1 / 40 | 锅炉热级、HU/(级·tick)、储热/余热tick |
+| hotCapacityMb / coldCapacityMb / maxLineLength | 4000 / 4000 / 16 | 单台热/冷mB、同向直列台数 |
+| basinHeatLevelEquivalent | 2 | 工作盆/烧结炉固定耗热等效热级，共用费用 |
+| condensationRateMbPerTick / condensationRecoveryPermille | 54 / 1000 | 蒸汽mB/t、回水千分比 |
+| condensationSteamCapacityMb / condensationWaterCapacityMb | 4000 / 4000 | 冷凝输入/输出mB |
+| condensationSnowMeltAfterMb / condensationIceMeltAfterMb | 100000 / 100000 | 实际冷凝累计量，融水mB阈值 |
+| condensationPackedIceMeltAfterMb | 900000 | 浮冰融水mB阈值 |
+| condensationWaterEvaporateAfterMb | 100000 | 水源蒸发mB阈值 |
 
-额定热功率由 `heatLevel × huPerLevel` 派生，储热上限再乘 `bufferTicks`。专用锅炉实际收热同时受换热器额定热功率、锅炉每段收热上限及实时需求限制；只改一端不能越过另一端的上限。
-
-工质密度继续使用原 P1 SERVER 配置中的 `coolantAbsorptionHuPerMb`（默认0.5HU/mB），不新增第二份密度。它同时影响反应堆冷却语义，不能当作只调整换热器的局部参数。
-
-**持续加工热源（2026-10-09）：** 工作盆02R1已经[用户手测验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)，在同一配置文件顶层使用下列一键；旧两个批次等效tick键撤下。[烧结炉供热03](./superpowers/plans/2026-10-09-ext-b-exchanger-03-sintering.md)沿用此键与费用，独立实施/手测，不新增一份费用配置。
-
-| 键 | 默认 | 含义 |
-| :--- | ---: | :--- |
-| `basinHeatLevelEquivalent` | 2 | 工作盆及本批烧结炉持续供热的锅炉等效热级，1～18；每tick费用为此值×`huPerLevel`，不改变已付持续热等级或烧结工时 |
-
-原生超级燃烧室的锅炉热级为2，因此默认固定消耗2HU/t，即4mB热液/t转成等量冷液。只要顶部有工作盆，即使空盆、无搅拌器、停转或加工受阻也照常耗热；供液不足或冷液满立即停止加热，不使用`bufferTicks`余热续烧。修改`huPerLevel`会同步改变锅炉与盆的持续耗热，固定成本超过`heatLevel × huPerLevel`额定转换能力时仅停用盆路径并提示。整数mB尾差有界累计，不截断丢失工质；查询不耗热，不按批次加收费用。
-
-**冷凝增量（2026-10-05，已通过联合手测并合入main）：** [冷凝回水01](archive/2026-10-08-completed-plans/2026-10-05-ext-b-condense-01.md)在同一文件顶层追加下表，不改变现有核热字段的含义。默认8字段及非默认回收率/容量已由真实SERVER断言核对，证据见[候选交付](./reviews/2026-10-05/condense-01/README.md)；最终运行验收见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。
-
-| 键 | 默认 | 含义 |
-| :--- | ---: | :--- |
-| `condensationRateMbPerTick` | 54 | 每台冷凝最高处理蒸汽量，mB/t |
-| `condensationRecoveryPermille` | 1000 | 回水千分比，1～1000；默认1mB蒸汽产1mB水 |
-| `condensationSteamCapacityMb` | 4000 | 每台冷凝输入蒸汽容量，mB |
-| `condensationWaterCapacityMb` | 4000 | 每台冷凝输出水容量，mB |
-| `condensationSnowMeltAfterMb` | 100000 | 雪块变水源前累计冷凝蒸汽量，mB |
-| `condensationIceMeltAfterMb` | 100000 | 冰变水源前累计冷凝蒸汽量，mB |
-| `condensationPackedIceMeltAfterMb` | 900000 | 浮冰变水源前累计冷凝蒸汽量，mB |
-| `condensationWaterEvaporateAfterMb` | 100000 | 水源变空气前累计冷凝蒸汽量，mB |
-
-只认可每台正上方相邻一格的水源、雪块、冰、浮冰或蓝冰；流水、含水方块和雪层无效。蓝冰持续作冷源；其他源按本机实际成功冷凝量消耗，暂停不计量。融化后水源阶段重新从零开始，单格水蒸发后按原版规则补水；冷源变化不增减机内回水。回收率小于1000时小数尾量按单机累计，不能用逐包取整产生额外损失。默认满流量、20TPS下100000mB约93秒。
+吸热密度复用reactor.coolantAbsorptionHuPerMb。盆/炉存在即按basinHeatLevelEquivalent×huPerLevel持续耗HU，不检测工作状态，断流/堵塞立即停热、不用bufferTicks续烧；默认4mB/t。冷凝正上方仅水源/雪块/冰/浮冰/蓝冰有效，蓝冰不消耗，其他源按实际冷凝量变化，不认可流水/雪层/含水方块。
 
 ## 汽轮机
 
-**01F修订（2026-10-05，已通过联合手测并合入main）：** 用户已确认三档最高倍率1.2/1.5/1.8、大型额定耗汽216mB/t、最低倍率0.5及30%启动门槛，并取消大储罐、保留极小周转缓存。以下表格记录[01F](archive/2026-10-08-completed-plans/2026-10-05-ext-b-turbine-01f.md)字段与默认值；部署和验证结果见[本批交付](./reviews/2026-10-05/turbine-01f/README.md)，最终运行验收见[联合验收](./reviews/2026-10-05/condense-01/ACCEPTANCE.md)。
+来源为[TurbineConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/TurbineConfig.java)。三档键使用short/medium/long前缀。
 
-文件：`create_nuclear_industry-turbine.toml`。三档字段使用 `short`、`medium`、`long` 前缀，例如 `shortRotorCount`。
+| 后缀/键 | 默认 | 意义 |
+| --- | ---: | --- |
+| RotorCount / Diameter | 3/6/9；3/5/7 | 转子节数/外径，三档组合才合法 |
+| RateMbPerTick | 54/108/216 | 全机进/排汽mB/t上限 |
+| MaxEfficiencyMultiplier | 1.2/1.5/1.8 | 满流量效率 |
+| rpm / suPerMbPerTick | 256 / 32768 | RPM、每mB/t平均实际排汽对应基准SU |
+| smoothingTicks / turnoverTicks | 40 / 1 | 流量平均窗口/额定量周转tick |
+| minEfficiencyMultiplier / minimumOperatingFlowRatio | 0.5 / 0.3 | 启动点效率/额定流量门槛比例 |
+| inletPortFlowMbPerTick / exhaustPortFlowMbPerTick | 256 / 256 | 单进/排物理口mB/t，全机上限仍优先 |
 
-| 键后缀 | 短/中/长默认 | 含义 |
-| :--- | :--- | :--- |
-| `RotorCount` | 3 / 6 / 9 | 内部转子节数，轴向总长度为节数＋2 |
-| `Diameter` | 3 / 5 / 7 | 外径，单位格；只支持已有网格3、5、7，其他值拒绝成型 |
-| `RateMbPerTick` | 54 / 108 / 216 | 全机每tick最高进汽及排汽量，mB/t；所有端口合计受此限制 |
-| `MaxEfficiencyMultiplier` | 1.2 / 1.5 / 1.8 | 满流量时本档最高效率倍率 |
+低于额定30%仍耗汽排汽但无动力；达到后从0.5线性升至满流量倍率。两端共享唯一SU，堵塞保留微周转，断汽按窗口归零。代码仍声明的frontShare已废弃、不控制两端份额，不列作有效调节项。
 
-| 全局键 | 默认 | 含义 |
-| :--- | ---: | :--- |
-| `rpm` | 256 | 工作转速，不能超过当前Create服务器配置上限 |
-| `suPerMbPerTick` | 32768 | 每mB/t实际平均排汽量对应的基准SU，计算时另乘效率倍率 |
-| `smoothingTicks` | 40 | 实际排汽量的移动平均窗口，tick |
-| `turnoverTicks` | 1 | 全机唯一排汽周转量容量为本档RateMbPerTick乘此值，默认54/108/216mB |
-| `minEfficiencyMultiplier` | 0.5 | 恰到工作流量门槛时的倍率，不能高于任一档最高倍率 |
-| `minimumOperatingFlowRatio` | 0.30 | 平均实际排汽流量占额定值的最低工作比例；低于此值仍耗汽排汽，但无本机动力 |
-| `inletPortFlowMbPerTick` | 256 | 每个物理进汽口限流，mB/t |
-| `exhaustPortFlowMbPerTick` | 256 | 每个物理排汽口限流，mB/t |
-| `frontShare` | 0.5 | 01E起已废弃，不再控制前后份额 |
+## 贮存架
 
-只允许配置中的三档合法组合，转子数各不相同且在3～16之间，截面为对应`Diameter`的八边形。默认外尺寸为3×5×3、5×8×5、7×11×7（宽×轴长×高）。不能用配方或额外端口突破所选档位的处理率。修改转子数或直径会改变合法搭法，既有结构需按新规格重新核验。
-
-2026-10-05用户确认[01E共享容量](archive/2026-10-08-completed-plans/2026-10-05-ext-b-turbine-01e.md)，当前已验收实现：完整汽轮机两端内部贯通，同属一个Create动力网；只接任意一端即可使用全部容量，同时接出合计负载、共同过载，不翻倍总SU。现有`frontShare`标记为废弃，不再生效；红石立即停机，断汽沿用40tick窗口衰减归零，均不抹除同网外部动力源。
-
-设平均排汽流量`q`、额定流量`R`、工作比例`x=clamp(q/R,0,1)`、门槛`t`、最低倍率`m`、本档最高倍率`M`。当`x<t`时本机SU为0；否则倍率为`m+(M-m)*(x-t)/(1-t)`，总SU为`q*suPerMbPerTick*倍率`。不将平均流量取整；默认三档启动门槛16.2/32.4/64.8mB/t。
-
-旧`InputCapacityMb`、`ExhaustCapacityMb`字段退出汽轮机配置。入口接受超临界蒸汽即等量转入周转空间，只有真实排汽才计流量；SIMULATE不占量、不计功。堵塞时最多填满剩余周转空间，满后拒收，不丢弃残留。当前版本保存周转残留，但不保存动力历史；重载后重新积累流量。红石停机或结构失效立即撤销本机动力；断流/堵塞沿窗口衰减并在低于门槛时归零。排汽为等体积蒸汽，不能再次输入汽轮机发电。
-
-
-## 乏燃料贮存架
-
-文件：`create_nuclear_industry-storage.toml`，NeoForge SERVER；轻量封存已[联合验收合入main](./reviews/2026-10-06/store-01/ACCEPTANCE.md)，实施历史见[STORE-01卡](archive/2026-10-08-completed-plans/2026-10-06-ext-a-store-01.md)。
-
-| 键 | 默认 | 含义 |
-| :--- | ---: | :--- |
-| `spentFuelStorage.rackSlots` | 16 | 每架可插入的单件封装桶位，范围1～16 |
-
-降低容量会保留全部已有桶，并允许从全部原槽取出；新插入同时受有效槽范围和全架总桶数限制，已用数达到或超过新容量时全架拒收。四档外观仅表示占用比例，护目镜显示实际桶数和当前容量。修改生效方式沿用本文的SERVER路径与重进步骤。
-
-玻璃碎料、固化基材、制桶和造架的数量/工时，以及屏蔽装配台的两种工序均由本批数据配方控制。封存默认12800 RPM·tick，64RPM下约10秒；原新燃料仍25600 RPM·tick，约20秒。架子容量配置不改变配方、单桶唯一载荷或输入输出方向。
-
-## 存量与合法性
-
-容量调小不直接删除已存液体，超过新上限的罐拒绝新增输入，原库存仍可处理或排出。安全阀等正常运行规则继续有效。修改换算系数、余热或平滑窗口时，不可复用的过程尾差会清除，不按新参数放大已支付的热量或动力。
-
-TOML注释记录单位和数值范围；跨字段组合无效时机器停机并显示配置错误。配方仍为数据包JSON，材料数量通过配方覆盖调整。注册ID、核热冷热流体等体积转换、坐标算法和只支持3/5/7外径的网格集合属于结构规则，不作为平衡开关；冷凝回收率按上述独立字段配置。
+create_nuclear_industry-storage.toml中的spentFuelStorage.rackSlots默认16、合法1～16。容量降低保留全部已有桶并允许取出，达到/超过新容量拒收；不改变单桶载荷或封存配方。来源为[SpentFuelStorageConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/SpentFuelStorageConfig.java)。

@@ -1,6 +1,6 @@
 # EXT-B-BOILER-REWORK-01B：压力控件、自动汽种与冷液连续输出整改
 
-> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../../reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
+> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../2026-10-15/reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
 
 > **执行技能：** 使用superpowers:subagent-driven-development，一名执行者持有本次控件与共享账本修改，一次规格/质量合并审查。治理5.1的定向验证、PM持有Git和既有人工门优先于通用技能的重复全量、执行者提交或清理步骤。
 
@@ -12,7 +12,7 @@
 
 **规格与授权：** 用户2026-10-07六项手测反馈及明确选择“按实际汽温和炉压自动决定：达标出超临界蒸汽，否则出蒸汽”。这是对[原方案](2026-10-07-high-pressure-boiler-rework-proposal.md)手动两汽种及“不自动切换”规则的替代；01A底层热口几何规则保留。无需重复确认。
 
-**状态：** 实现、定向验证及一次合并审查通过，已保存候选功能快照`32e6f897c03d8d8813f776dd4702bdf5cfe87b7f`。实施基线候选HEAD `7b263d7`，主工程HEAD `8a5f598`；锅炉仍未人工验收或合入main。本卡并入[现有锅炉人工门](../../reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，不派发下一主线或教学。
+**状态：** 实现、定向验证及一次合并审查通过，已保存候选功能快照`32e6f897c03d8d8813f776dd4702bdf5cfe87b7f`。实施基线候选HEAD `7b263d7`，主工程HEAD `8a5f598`；锅炉仍未人工验收或合入main。本卡并入[现有锅炉人工门](../2026-10-15/reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)，不派发下一主线或教学。
 
 ## 已冻结规则
 
@@ -54,7 +54,7 @@
 - [x] 定向JUnit：`./gradlew.bat test --tests com.iksxh.create_nuclear_industry.boiler.BoilerStateTest --console=plain`。15项通过，覆盖门槛两侧、单压力中间值/0/100、无免费HU、模拟/同tick逐口额度、当前保存恢复。既有独立换热器16项未改不重跑。
 - [x] 专用实际GameTest域：`./gradlew.bat runGameTestServer -PgameTestNamespace=create_nuclear_industry_boiler_controls -PgameTestDirectory=run/verification/boiler-controls-01b --console=plain`。3项实际通过，证明原生数值提交17/43/70和0/100正确且tick不覆盖；真实Create冷液泵持续运行时调压与自动汽种跨门槛无需拆管；真实蒸汽管路能更新种类且不因类型改变丢汽/HU，旧结构句柄仍按原规则撤销。首轮夹具观测基线错误保留，仅修该夹具复验专用域，不重跑全套。
 - [x] 增量assemble一次，exit0、2秒；最终JAR2,193,605字节，SHA-256 `94F5B6481AB62BDB4B8594AAD1044B2FB693DCAB009A6FA644A77CEBE818AA2F`。不clean/build全套，失败证据保留，未操作用户客户端。
-- [x] `/root/boiler_controls_01b_review`（gpt-6-luna/high）一次规格/质量合并只读审查，未发现确定性阻断缺陷，无全套复测；报告[controls-review](../../reviews/2026-10-07/boiler-rework-01/controls-review.md)。
+- [x] `/root/boiler_controls_01b_review`（gpt-6-luna/high）一次规格/质量合并只读审查，未发现确定性阻断缺陷，无全套复测；报告[controls-review](../2026-10-15/reviews/2026-10-07/boiler-rework-01/controls-review.md)。
 - [x] PM读取实现、审查及原始证据，核对封包语言/NBT与源码相同、旧ModeBehaviour不再封包、最终哈希，并维护文档及候选快照/Git；停在已有锅炉集中手测门。两目录均保存01B制品，原01/01A快照保留。不得把自动通过写成人工通过。
 - [x] 本卡继续适用的规则已随2026-10-08最终01F精简验收通过；被后续方案替代的旧操作不作为现行测试要求，具体范围见本页收尾说明及验收记录。
 

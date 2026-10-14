@@ -2,7 +2,7 @@
 
 > 后续变更：用户手测反馈后要求删除精密构件，现由[锅炉01B](2026-10-04-ext-b-boiler-01b.md)执行两工序整改。下文保留旧三工序合同与原始证据，不再作为当前制造说明。
 
-**状态：2026-10-04实现、定向验证及独立审查通过，候选待人工验收、未合main。** 与锅炉01A按[同一清单](../../reviews/2026-10-04/boiler-01a/CLIENT-CHECKLIST.md)手测。该用户主动追加修改不解除锅炉人工门，不推进汽轮机。
+**状态：2026-10-04实现、定向验证及独立审查通过，候选待人工验收、未合main。** 与锅炉01A按[同一清单](../2026-10-15/reviews/2026-10-04/boiler-01a/CLIENT-CHECKLIST.md)手测。该用户主动追加修改不解除锅炉人工门，不推进汽轮机。
 
 ## 批准合同
 
@@ -30,6 +30,6 @@
 
 ## 派发记录
 
-- 实现：`/root/reinforced_plate_impl`，`gpt-6-luna/high`已交付；[执行报告和最终日志](../../reviews/2026-10-04/reinforced-plate-01/EXT-B-REINFORCED-PLATE-01.md)已归档。
+- 实现：`/root/reinforced_plate_impl`，`gpt-6-luna/high`已交付；[执行报告和最终日志](../2026-10-15/reviews/2026-10-04/reinforced-plate-01/EXT-B-REINFORCED-PLATE-01.md)已归档。
 - 验证：最终增量assemble通过，现有heat-exchanger namespace的13项required GameTest全过且正常退出；初版测试覆盖范围整改后重新验证，初版结果不计最终证据。
-- 审查：`/root/reinforced_plate_review`，`gpt-6-luna/high`，[一次只读规格与质量审查](../../reviews/2026-10-04/reinforced-plate-01/EXT-B-REINFORCED-PLATE-01-REVIEW.md)未发现须修问题，复用最终证据，未重复执行测试。PM已核对写集、原测试保留、日志和半成品预览；客户端显示与JEI体验仍待人工门。
+- 审查：`/root/reinforced_plate_review`，`gpt-6-luna/high`，[一次只读规格与质量审查](../2026-10-15/reviews/2026-10-04/reinforced-plate-01/EXT-B-REINFORCED-PLATE-01-REVIEW.md)未发现须修问题，复用最终证据，未重复执行测试。PM已核对写集、原测试保留、日志和半成品预览；客户端显示与JEI体验仍待人工门。

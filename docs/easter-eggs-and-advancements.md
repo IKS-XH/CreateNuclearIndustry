@@ -1,5 +1,7 @@
 # 《机械动力：核工业》隐藏彩蛋与进度设计
 
+状态：后置设计，尚未实现当前服务端触发器/奖励，不是现有玩法或本次开工授权。前置由[路线图](implementation-roadmap.md)维护；反应堆可变尺寸/管理员已合入，其当前规则以[项目设计](project.md)与[管理员合同](reactor-automation.md)为准，本文旧P1阶段措辞仅表达设计背景。
+
 **对应玩法文档：** [project.md](./project.md)  
 **实施路线：** [implementation-roadmap.md](./implementation-roadmap.md)
 

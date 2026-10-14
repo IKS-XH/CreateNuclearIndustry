@@ -1,6 +1,6 @@
 # EXT-B-EXCHANGER-01D：定向接口与直列共享流体
 
-**最新状态（2026-10-04）：** 本卡及后续锅炉01C/01D、换热器01E均已获用户手测通过并合入main，见[最终验收](../../reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。下文保留当时实施合同与证据，不再表示当前暂停或未合入。
+**最新状态（2026-10-04）：** 本卡及后续锅炉01C/01D、换热器01E均已获用户手测通过并合入main，见[最终验收](../2026-10-15/reviews/2026-10-04/boiler-01d/ACCEPTANCE.md)。下文保留当时实施合同与证据，不再表示当前暂停或未合入。
 
 **状态：2026-10-04用户已确认[整套方案](2026-10-04-heat-exchanger-chain-proposal.md)，候选实现、定向验证和独立审查通过，暂停于联合人工门。** 候选为`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`、分支`codex/ore-acquisition`、Git基线`9e8690b`，叠加正在执行的锅炉01B未提交改动。PM已明确授权本卡，执行者禁止修改其他任务写集、核心文档或执行Git写操作；不得转派。保留用户日志、缓存、客户端配置和世界。
 
@@ -47,4 +47,4 @@
 
 ## 本轮候选交付
 
-[联合交付与证据](../../reviews/2026-10-04/boiler-01b/CANDIDATE.md)：22项相关JUnit、40项required GameTest及最终增量assemble通过，独立审查发现的Create接面恢复问题已整改并复验。PM核对代码/资源写集和原始日志，未重复全量；[三组人工清单](../../reviews/2026-10-04/boiler-01b/CLIENT-CHECKLIST.md)仍待用户，未合main、不启动汽轮机。
+[联合交付与证据](../2026-10-15/reviews/2026-10-04/boiler-01b/CANDIDATE.md)：22项相关JUnit、40项required GameTest及最终增量assemble通过，独立审查发现的Create接面恢复问题已整改并复验。PM核对代码/资源写集和原始日志，未重复全量；[三组人工清单](../2026-10-15/reviews/2026-10-04/boiler-01b/CLIENT-CHECKLIST.md)仍待用户，未合main、不启动汽轮机。

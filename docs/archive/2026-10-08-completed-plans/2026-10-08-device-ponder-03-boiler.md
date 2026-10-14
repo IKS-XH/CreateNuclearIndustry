@@ -31,7 +31,7 @@
 - **审核与交付：** PM核对源码/锁定Ponder实现及定向证据，由原审查者仅复核本次崩溃整改；修正进入同级候选后，用户重新按W并继续原四幕清单。未通过播放不合入main，不接其他任务。
 
 - **任务ID：** DEVICE-PONDER-03-BOILER。
-- **状态：** 已完成；前三幕获用户播放认可，R3删页`064fae9`定稿与R2修正已整合main`58a965e`，一次定向检查及唯一main增量打包通过。[验收记录](../../reviews/2026-10-08/boiler-ponder-03/ACCEPTANCE.md)关闭本批，原失败与历史证据保留，不重复人工门、不自动接下一项。
+- **状态：** 已完成；前三幕获用户播放认可，R3删页`064fae9`定稿与R2修正已整合main`58a965e`，一次定向检查及唯一main增量打包通过。[验收记录](../2026-10-15/reviews/2026-10-08/boiler-ponder-03/ACCEPTANCE.md)关闭本批，原失败与历史证据保留，不重复人工门、不自动接下一项。
 - **维护者：** 用户任命的现任项目经理；实现和合并规格/质量审查分别由执行者承担。
 - **前置：** 锅炉REWORK-01～01F集中手测与main合入已完成；离心机、反应堆教学已独立通过，不重复验收。
 - **执行根：** `E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，分支 `codex/ore-acquisition`，基准 `b18c41c`；main当前 `b04a37c`。两根源码、思索工具及项目文档相同，使用已有同级候选，不创建新工作树。
@@ -153,6 +153,6 @@
 
 ## 初版/R1候选交付（2026-10-08，历史证据）
 
-功能提交 `c113447`，见[交付入口](../../reviews/2026-10-08/boiler-ponder-03/README.md)、[实施及R1](../../reviews/2026-10-08/boiler-ponder-03/implementation.md)、[独立审查及复核](../../reviews/2026-10-08/boiler-ponder-03/review.md)、[唯一播放清单](../../reviews/2026-10-08/boiler-ponder-03/PLAYBACK.md)。初版9项定向检查通过；审查发现剖视返回值、故障时序、调压演示、实际NBT占位验证及启动顺序五项问题，已在同批修复，R1仅新跑锅炉3项，未变P1六项复用。最后0～100文案补回仅静态核对和增量打包，不重跑JUnit。原失败与制品保留，未启动客户端。
+功能提交 `c113447`，见[交付入口](../2026-10-15/reviews/2026-10-08/boiler-ponder-03/README.md)、[实施及R1](../2026-10-15/reviews/2026-10-08/boiler-ponder-03/implementation.md)、[独立审查及复核](../2026-10-15/reviews/2026-10-08/boiler-ponder-03/review.md)、[唯一播放清单](../2026-10-15/reviews/2026-10-08/boiler-ponder-03/PLAYBACK.md)。初版9项定向检查通过；审查发现剖视返回值、故障时序、调压演示、实际NBT占位验证及启动顺序五项问题，已在同批修复，R1仅新跑锅炉3项，未变P1六项复用。最后0～100文案补回仅静态核对和增量打包，不重跑JUnit。原失败与制品保留，未启动客户端。
 
 最终JAR为 `build/reports/extension/DEVICE-PONDER-03-BOILER-R1/create_nuclear_industry-0.1.0-R1-final.jar`，2,283,254字节，SHA-256 `A5EA3E8B371FB542CB171B4017392AF58981A2B37CA43347E198AF2FBD33FD3A`。PM读取最终构建退出0/5秒、R1 XML三项零失败，以及10/10封包资源/编译class逐字节一致证据。生产代码、现有教学、模板基线及运行配置未改；本台等待用户四幕集中播放确认，不接下一台或其他主线。

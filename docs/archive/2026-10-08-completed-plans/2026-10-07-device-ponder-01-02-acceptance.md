@@ -31,5 +31,5 @@
 ## 收尾清单
 
 - [x] PM只合入六个教学功能提交，确认13文件与原候选一致，无锅炉夹带。
-- [x] 单一高速执行者`/root/ponder_acceptance_build`（gpt-6-luna/medium）完成一次main增量assemble（exit0、11秒）和制品核对7/7，提交[integration.md](../../reviews/2026-10-07/ponder-acceptance-01/integration.md)。
-- [x] PM读取实际日志/退出码/资源记录并独立核对JAR哈希，保存[验收页](../../reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)、更新活动任务/治理/入口并提交收尾；没有再次运行Gradle或测试。
+- [x] 单一高速执行者`/root/ponder_acceptance_build`（gpt-6-luna/medium）完成一次main增量assemble（exit0、11秒）和制品核对7/7，提交[integration.md](../2026-10-15/reviews/2026-10-07/ponder-acceptance-01/integration.md)。
+- [x] PM读取实际日志/退出码/资源记录并独立核对JAR哈希，保存[验收页](../2026-10-15/reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)、更新活动任务/治理/入口并提交收尾；没有再次运行Gradle或测试。

@@ -1,8 +1,10 @@
 # 原创像素 SVG 美术管线
 
+本页保留各批历史导出合同和使用方式，其中“待验收”“未合main”仅表示该批当时状态。当前素材与制品范围见[美术入口](../../docs/art/README.md)和[当前状态](../../docs/STATUS.md)；旧固定清单不要用于覆盖后来新增的资源。
+
 ## 反应堆制造01素材
 
-本批独立入口`reactor_01_assets.py`管理`sources/reactor-01/`下12份可编辑SVG：6种材料、5种序列半成品和屏蔽混凝土纹理。当前脚本与素材仅在同级候选工作树，main先同步说明；待人工验收后再合入。仅生成本批16×16 PNG及对应物品/普通方块模型，不重绘已有反应堆模型、不修改共用manifest；运行状态与人工边界见[两批交接](../../docs/reviews/2026-10-03/reactor-01/README.md)。
+本批独立入口`reactor_01_assets.py`管理`sources/reactor-01/`下12份可编辑SVG：6种材料、5种序列半成品和屏蔽混凝土纹理。当前脚本与素材仅在同级候选工作树，main先同步说明；待人工验收后再合入。仅生成本批16×16 PNG及对应物品/普通方块模型，不重绘已有反应堆模型、不修改共用manifest；运行状态与人工边界见[两批交接](../../docs/archive/2026-10-15/reviews/2026-10-03/reactor-01/README.md)。
 
 ```powershell
 Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
@@ -11,19 +13,19 @@ Set-Location 'E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition'
 
 已有SVG保留编辑，缺失时才建立初始源稿。专用脚本按精确12条输出路径工作，对其它现有PNG做前后字节核对；114张是本次基线数量，不能变成后续增加素材后的运行限制。明暗底原尺寸/最近邻预览和本次核对写入`build/reports/extension/EXT-A-REACTOR-01-ART/`，不运行Gradle或客户端。
 
-EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/流动料浆共13张游戏纹理，并提供机器与尾矿砖JSON模型。该历史导出清单含82张游戏纹理，复用已有铀精矿，开工前69张PNG保持原字节。后续原生桶、两格模型及端盖整改已完成人工验收并合入main；见[最终验收](../../docs/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)。历史清单数量不代表后续独立生成器的新增资源总数。
+EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/流动料浆共13张游戏纹理，并提供机器与尾矿砖JSON模型。该历史导出清单含82张游戏纹理，复用已有铀精矿，开工前69张PNG保持原字节。后续原生桶、两格模型及端盖整改已完成人工验收并合入main；见[最终验收](../../docs/archive/2026-10-15/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)。历史清单数量不代表后续独立生成器的新增资源总数。
 
 ## 材料01B青金石粉接入
 
-[01B候选](../../docs/reviews/2026-10-03/material-01b/README.md)直接将已认可的`generated/item/lapis_dust.png`接入游戏同名物品路径；该新增物品与配方尚待客户端验收，main尚无此运行内容。旧共用manifest及pipeline固定采用82个游戏路径加1个工具候选，保持原样，不能仅将lapis的`game:null`改为游戏路径。游戏PNG与已认可产物逐字节一致，今后若修改lapis SVG，导出后仅单独复制此PNG到游戏路径；不要为该项运行历史全量install。以下旧清单的数量和“工具候选”是其历史导出合同，不代表01B注册状态。
+[01B候选](../../docs/archive/2026-10-15/reviews/2026-10-03/material-01b/README.md)直接将已认可的`generated/item/lapis_dust.png`接入游戏同名物品路径；该新增物品与配方尚待客户端验收，main尚无此运行内容。旧共用manifest及pipeline固定采用82个游戏路径加1个工具候选，保持原样，不能仅将lapis的`game:null`改为游戏路径。游戏PNG与已认可产物逐字节一致，今后若修改lapis SVG，导出后仅单独复制此PNG到游戏路径；不要为该项运行历史全量install。以下旧清单的数量和“工具候选”是其历史导出合同，不代表01B注册状态。
 
 ## 燃料02E八格装配台模型维护
 
-`fuel_02e_assets.py`沿用已认可SVG材质，生成八格静态模型、三个待机活动件和完整物品模型。R2增加共面裁切及旋转端盖微小内缩，检查实际旋转面、完整物品和运动端点；证据默认写入`build/reports/extension/EXT-A-FUEL-02E-R2/`。113张当时已有PNG保持原字节，当前基线和客户端边界见[02E验收](../../docs/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)。后续动画继续使用原`rig.json`，本工具不实现动画时序。
+`fuel_02e_assets.py`沿用已认可SVG材质，生成八格静态模型、三个待机活动件和完整物品模型。R2增加共面裁切及旋转端盖微小内缩，检查实际旋转面、完整物品和运动端点；证据默认写入`build/reports/extension/EXT-A-FUEL-02E-R2/`。113张当时已有PNG保持原字节，当前基线和客户端边界见[02E验收](../../docs/archive/2026-10-15/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)。后续动画继续使用原`rig.json`，本工具不实现动画时序。
 
 ## 燃料02C装配材料素材
 
-本批新增锡铅焊料、包壳管、钢网、钢格架和格架半成品五项16×16像素SVG，已全部手测通过并合入main，见[02C最终验收](../../docs/reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。使用独立`fuel_02c_assets.py`复用严格SVG渲染器，不扩写共用manifest，不重新导出旧素材。93张已有游戏PNG保留原字节。
+本批新增锡铅焊料、包壳管、钢网、钢格架和格架半成品五项16×16像素SVG，已全部手测通过并合入main，见[02C最终验收](../../docs/archive/2026-10-15/reviews/2026-10-03/fuel-02c/ACCEPTANCE.md)。使用独立`fuel_02c_assets.py`复用严格SVG渲染器，不扩写共用manifest，不重新导出旧素材。93张已有游戏PNG保留原字节。
 
 在包含本批实现的仓库根目录运行：
 
@@ -35,7 +37,7 @@ EXT-ART-08新增离心机六面、尾矿砖、三种粉末、料浆桶和静止/
 
 ## 燃料02A/02B专用素材
 
-燃料02A新增两枚芯块及单格烧结炉；02B将八棱炉体扩大到整格外包范围。全部人工门已通过并合入main，见[最终验收](../../docs/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)。继续使用独立`fuel_02a_assets.py`，不扩大旧manifest或修改共用导出器。
+燃料02A新增两枚芯块及单格烧结炉；02B将八棱炉体扩大到整格外包范围。全部人工门已通过并合入main，见[最终验收](../../docs/archive/2026-10-15/reviews/2026-10-03/fuel-02b/ACCEPTANCE.md)。继续使用独立`fuel_02a_assets.py`，不扩大旧manifest或修改共用导出器。
 
 在仓库根目录运行：
 
@@ -91,7 +93,7 @@ EXT-ART-02A 的历史验证覆盖51条既有路径/尺寸、冷却剂原图字�
 
 EXT-ART-06本批证据归档于 `docs/reviews/2026-10-01/material-04/art/`：`verification.json` 和 `commands.json`记录66条清单/65张游戏图，导出与安装各两次一致、30类SVG负例拒绝和6类CLI失败不写；`baseline-60-game-png-sha256.json`记录开工60图并用于保留核对。PM实际查看五图原尺寸、明暗底放大对照，锡条调整为易与锡锭区分的细长方条。用户于2026-10-01另行确认完整客户端清单通过，包含本批五项外观，素材已验收并合入main；见 `docs/reviews/2026-10-01/material-04/ACCEPTANCE.md`。离线与客户端证据分别保留。
 
-EXT-ART-07离线证据归档于`docs/reviews/2026-10-02/material-05/art/`：70条清单、69张游戏PNG、66个SVG来源，原65图哈希快照保留；四项原尺寸与明暗底对照图已由执行者及PM实际查看。原51项基线及8冷却剂原图保护继续有效。素材更新限制已整改并复审：合法SVG编辑可显式安装，相同字节跳过写入，清单外路径/错误尺寸/冷却剂字节保护仍保留；可恢复像素修改的RED→GREEN→还原证据单列。用户于2026-10-02确认完整客户端清单通过，包含四项外观；素材与材料加工已验收并合入main，见[最终验收](../../docs/reviews/2026-10-02/material-05/ACCEPTANCE.md)。离线与客户端证据分别保留。
+EXT-ART-07离线证据归档于`docs/reviews/2026-10-02/material-05/art/`：70条清单、69张游戏PNG、66个SVG来源，原65图哈希快照保留；四项原尺寸与明暗底对照图已由执行者及PM实际查看。原51项基线及8冷却剂原图保护继续有效。素材更新限制已整改并复审：合法SVG编辑可显式安装，相同字节跳过写入，清单外路径/错误尺寸/冷却剂字节保护仍保留；可恢复像素修改的RED→GREEN→还原证据单列。用户于2026-10-02确认完整客户端清单通过，包含四项外观；素材与材料加工已验收并合入main，见[最终验收](../../docs/archive/2026-10-15/reviews/2026-10-02/material-05/ACCEPTANCE.md)。离线与客户端证据分别保留。
 
 EXT-ART-02A、EXT-ART-03与EXT-ART-03A的历史报告分别记录了当时查看的预览范围及审查结果；EXT-ART-04实际查看铅粒、锡粒与铅锡锭、粗矿、板材的放大对照图。EXT-ART-05实际查看`items-3.png`中的五种新物品（原尺寸、明暗底、2×平铺）和报告目录中的五物品/钢板放大对照预览；钢锭采用锡锭式平顶厚锭轮廓。PNG查看不是Minecraft客户端验收。重复周期、游戏环境光、物品手持表现及流体UV最终需在客户端判断。跨Pillow版本的编码/预览字体字节不保证相同。
 

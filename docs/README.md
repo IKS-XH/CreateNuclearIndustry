@@ -1,103 +1,25 @@
 # 项目文档入口
 
-最新[离心机／屏蔽装配台美术已合main并生成组合包](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)：双亲`497f64b`，正式JAR为3304595B／33da9002…，包含已验闭环与锅炉修复。干净来源唯一assemble约28秒exit0；原105个dirty保持，15C动画的Minecraft手测仍独立，不补记通过。
+更新：2026-10-15。文档按职责组织；旧方案、阶段候选与执行时间线进入[归档](archive/README.md)，旧待实现/未合main不是当前状态。
 
-2026-10-14：[锅炉主动出汽与应力余量闭环均获用户手测通过并合入main](reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md)，提交`4149a9f`，正式f23b5cf4…包已跟踪。用户追加最新美术合入，按[14B/15B-R1/15C集成卡](superpowers/plans/2026-10-14-latest-production-art-integration.md)组合打包；动画游戏观察仍独立。下方相关“待验/未合main”为当时交付历史。
+| 要查什么 | 入口 |
+| --- | --- |
+| 已合入、正式JAR、验收和未闭门 | [当前状态](STATUS.md) |
+| 下一步、后置范围与依赖 | [路线图](implementation-roadmap.md) |
+| 产品与现行设备规则 | [项目设计](project.md) |
+| 堆芯、局部控制、热工和损伤 | [反应堆合同](reactor-local-control-revision-design.md) |
+| 管理员GUI、恒功率、闭环和续接 | [管理员](reactor-automation.md) |
+| 真实ID与资源路径 | [内容清单](content-catalog.md) |
+| 实际加工关系与配方规则 | [配方](recipes.md) |
+| 文件、键、默认值、单位 | [配置](server-config.md) |
+| 角色、技能、验证和Git | [AGENTS](../AGENTS.md)、[治理](project-governance.md) |
+| 美术来源和现候选 | [美术入口](art/README.md) |
+| 原方案/失败/审查/验收 | [归档索引](archive/README.md) |
 
-[锅炉汽口主动输出已交局部候选](reviews/2026-10-14/boiler-steam-output-01/CANDIDATE.md)：原reactor-load-follow候选c71d690及f23b5cf4…JAR已纳Git，两种汽可沿合法工业管主动输出，无需补外置泵。最终36/36真实与13/13收据、同次组合窄审及最终载荷核对通过；保持过滤/保压/口与管段额度。继续原“新的世界”做[局部复看](reviews/2026-10-14/boiler-steam-output-01/CLIENT-CHECKLIST.md)，原停流/公平RED及旧包保留，02人工门独立，未合main。
+当前活动卡：
 
-[应力余量闭环02已交集中手测](reviews/2026-10-13/reactor-load-follow-02/CANDIDATE.md)：独立候选8eaafd9与86225aea…JAR已纳Git，Ctrl绑定Create应力表，现GUI可设目标余量/最低毛HU，保护优先与原状态续接保持。最终25/25定向、真实4/4自然保存、必要增量包与同次组合审查/三项差异复核通过；当前只待[新增人工门](reviews/2026-10-13/reactor-load-follow-02/CLIENT-CHECKLIST.md)，未合main，用户当前存档已携带。前批管理员已验收合main，正式50d5包保持；下方开工/未实现描述为历史。
+- [锅炉16³](superpowers/plans/2026-10-12-boiler-size-limit-01.md)：人工门暂缓、未合main。
+- [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
+- [模拟器02B](superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)、[三维工具](superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：辅助任务仍无整体验收，不自动改跑。
 
-[应力余量闭环02已准备开工](reviews/2026-10-13/reactor-load-follow-02/DISPATCH.md)：同级reactor-load-follow从已集成main建立，用户当前世界及配置完整携带；交原唯一执行者按现GUI/PI/最低毛HU/库存保护及04续接实施，新增人工门独立。
-
-管理员已按用户联合手测[合入main并跟踪正式JAR](reviews/2026-10-14/reactor-administrator-accepted-integration/INTEGRATION.md)：70来源b3960fe、制品87d9ad4／50d5bd9b…，干净来源唯一assemble12秒exit0，组合窄审无剩余必改；最新美术及其他dirty保持。下一批[应力余量闭环02](superpowers/plans/2026-10-13-reactor-load-follow-02.md)条件授权前置已过，沿当前GUI与原状态续接派发，不重复前批人工门。
-
-管理员03／04及承接01／01R已获用户[联合手测通过](reviews/2026-10-14/reactor-administrator-accepted-integration/ACCEPTANCE.md)，正在按[06卡](superpowers/plans/2026-10-14-reactor-administrator-accepted-integration-06.md)精确组合main最新美术与已验管理员，保护其他dirty和原世界。02条件授权前置已过，执行卡先映射当前GUI、默认维护＋1毛HU及04续接，再开闭环批次；05偶发事故仍保留未复现记录，不冒称代码修复。下方原管理员人工未验状态是交付历史。
-
-管理员一次GUI常驻崩溃已按[05只读诊断及六分钟观察](reviews/2026-10-14/reactor-administrator-05/OBSERVATION.md)登记：第一次日志为GL_OUT_OF_MEMORY，没有确定具体代码根因；本次355样本显存有余量且回落，用户确认正常运行、没有再崩溃。记录未复现，不冒称修复，源码/JAR保持dc82候选，不要求继续机械重测；04/03及其承接人工门仍未验，main管理员功能合入和02 PI保持。
-
-管理员04已交[原状态续接候选](reviews/2026-10-14/reactor-administrator-04/CANDIDATE.md)`d217196`／dc82b20a…：正常保存重进保模式、目标、逐棒实际/目标深度与调节进度，不先全插或重新START。最终10/10受影响定向、四纠错真实4/4自然保存、原一次审查及同次复核和唯一增量assemble通过；精确源与JAR已纳入Git。按[04局部清单](reviews/2026-10-14/reactor-administrator-04/CLIENT-CHECKLIST.md)复看保存重进并承接[03其余人工门](reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，不追认通过或推进02/main功能合入；真实区块卸载、独立进程restart和GPU仍未验。
-
-最新美术分支已[合并并纳入正式JAR版本管理](reviews/2026-10-14/latest-art-jar-integration/INTEGRATION.md)：高清Logo、MC百科R1封面与缺少的可编辑／历史交付来源已补齐；双亲合并48dc8d1，正式26cb18d0…包提交4290bcb。干净Git树标准build52秒exit0，609通过／3项显式Sodium夹具跳过／0失败，主目录107个无关dirty保持。管理员03仍留原候选，以下主34bedc身份为上一制品时点。
-
-管理员03已交[三页GUI／连续换料／核热值班候选](reviews/2026-10-14/reactor-administrator-03/CANDIDATE.md)`78acd5d`／879c3d72…，原唯一执行者及一次组合审查的整改项已关闭。最终21/21受影响定向、两个新增启动窗口2/2自然保存exit0和必要增量包通过，旧六业务／热工及保存挂起按阶段保留；33来源与当前制品零漂移。继续原候选目录和存档做[03集中手测](reviews/2026-10-14/reactor-administrator-03/CLIENT-CHECKLIST.md)，01／01R未验门承接同一清单，main管理员源码／包不改、02仍未派发。下方旧控件及包身份是历史交付时点。
-
-Logo已获用户验收并[合入main`d8efdc9`](reviews/2026-10-14/logo-accepted-integration/ACCEPTANCE.md)，创造标签改用齿轮＋蓝核芯图标，可编辑SVG和工具保留。唯一主目录增量assemble通过，正式包为34bedc81…；原物品列表、世界与其他人工门保持。
-
-管理员01手测的“换接口后扳手成功、护目镜不可用”已交[01R局部复看候选](reviews/2026-10-13/reactor-automation-retrofit-fix/CANDIDATE.md)`2dff787`/`5e04c667…`：安全拆壳保实际尺寸，纯冷液无核状态且容量足够时原量恢复，扳手返回实际接受结果。18/18定向、真实3/3自然退出、唯一增量包及一次窄审通过；原目录/世界继续手测，未合main，01集中人工门与02待派发状态保持。
-
-应力余量闭环[设计02](superpowers/specs/2026-10-13-reactor-load-follow-design.md)及[实施计划02](superpowers/plans/2026-10-13-reactor-load-follow-02.md)已按用户要求形成：绑定Create应力表、PI维持可设余量（默认20%）、正最低运行HU及原库存/积热保护。只准备文档，明确等01手测通过后沿唯一执行者/一次组合窄审派发；尚未实现，不新增流量测量或库存保持模式。
-
-反应堆自动控制[首批候选](reviews/2026-10-13/reactor-automation-01/CANDIDATE.md)已交：同级`Create_NuclearIndustry-reactor-automation`的`codex/reactor-automation-basic`、源码`4757f27`。自动化接口、燃烧室四控件、统一调棒/恒定HU/t/故障保持与15参数/有序配方已实现；定向及真实代表、增量包和一次组合审查通过，最新补充夹具保存挂起与自然退出证据分列。世界27文件/6配置已携带、原件保留。当前停[集中手测](reviews/2026-10-13/reactor-automation-01/CLIENT-CHECKLIST.md)，未合main；负载跟随与其他原人工门独立保持。下方此前管理员后置、管网未合main的准备文字是历史时点。
-
-**更新：2026-10-12。** 已接受的反应堆可变尺寸、快捷换料、窗口与顶面控件及重进存档窄修现已[净合main `6bdef37`](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原定向证据和冻结组合JAR复用。此前美术集成main `fba424fc`及设备教学验收保持。当前分级流量候选待集中手测；锅炉16³上限仍是独立待验候选。
-
-## 当前执行与接续
-
-当前[分级流量候选a5d1fe6](./reviews/2026-10-12/tiered-fluid-flow-01/CANDIDATE.md)已完成543/543标准build及一次独立组合审查，留同级`Create_NuclearIndustry-fluid-network`，按[集中检查单](./reviews/2026-10-12/tiered-fluid-flow-01/CLIENT-CHECKLIST.md)启动手测。二/三级管阀8192/32768、单泵16384mB/t@256RPM与4096SU；现有反应堆/锅炉冷热口2048、水汽口4096，全部配置。热液/SC仅专用运输且保留Create罐，当前世界已携带。源码/JAR未合main；锅炉16³、独立美术门及用户dirty源保持。停本批人工门，管理员和管网压力不自动推进；下段未决/未实现描述保留原准备时点。
-
-用户2026-10-12明确开始多级专用管网，热冷却液与超临界蒸汽只走专用管泵，保留Create普通/创造储罐；随后明确本批只做流量，管网压力与超压损坏后置。已确认新增工业反应堆冷热口、管网优先、管理员随后；[首批流量设计](./superpowers/specs/2026-10-12-tiered-fluid-network-design.md)列出二/三级流量、配方及锅炉工业接入建议，[锁定Create禁运核查](./reviews/2026-10-12/tiered-pipe-preparation/RESTRICTION-STUDY.md)提供真实事务边界。新增数值和接口范围待集中确认后自动派发；原锅炉温压与16³独立人工门保持，旧[分阶段准备稿](./superpowers/plans/2026-10-12-large-reactor-infrastructure-preparation.md)的首批一档建议已被替代。
-
-用户2026-10-12明确通过可变反应堆、快捷换料、窗口/顶盖控件及重进存档复看，已按[联合验收](./reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)净合main `6bdef37`，同源冻结包复用，未重复测试构建或回写世界。下方旧候选等待描述为历史。用户指定的[锅炉16³上限](./superpowers/plans/2026-10-12-boiler-size-limit-01.md)已交[候选 `30020e4`](./reviews/2026-10-12/boiler-size-limit-01/CANDIDATE.md)，29/29定向、真实3/3及独立窄审通过，新范围独立留候选手测；按用户答复继续当前测试存档。
-
-候选进入原存档的换热器弱集合并发故障已交[窄修候选5d01314](./reviews/2026-10-12/exchanger-load-crash-01/CANDIDATE.md)，30/30定向、真实Basin7/7、唯一增量打包及独立窄审通过。现候选JAR仅桥class改变，快捷换料/ART09输入保持；从同一候选目录重启并进入原世界复看，本故障及其他人工门分别保持，未合main。
-
-用户2026-10-12指定[换料端口枯竭组件快捷替换](./superpowers/plans/2026-10-12-refueling-quick-swap-01.md)，在现有可变尺寸候选树实施；仍有耐久者禁止替换，空槽装料和机械臂规则保持。已到[候选客户端门](./reviews/2026-10-12/refueling-quick-swap-01/CANDIDATE.md)，源码`d811f84`、12/12事务与最终1/1真实服务端、必要增量打包及一次独立窄审通过。ART09顶盖辨识/深度控件也净接入同包，原证据复用；在现有候选集中复看，各项人工门分别保持，未合main。
-
-用户2026-10-12要求的[反应堆可变尺寸01](./superpowers/plans/2026-10-12-reactor-variable-size-01.md)已交[候选`0840906`](./reviews/2026-10-12/reactor-variable-size/CANDIDATE.md)：宽高深各5～16整数，允许跨区块，棒列规则及既定容量/热工保持。完整514/514、审查窄修后51/51与真实安全探针通过，独立审查已关闭必改项；主世界已备份并携带。请从同级候选目录按[集中检查单](./reviews/2026-10-12/reactor-variable-size/CLIENT-CHECKLIST.md)启动；main正式功能仍5³，源码待本批人工验收后合入，其他主线暂停。
-
-用户2026-10-11确认锅炉美术重置验收通过并要求合入：05B连接外观/观察窗与06R1汽雾、两种蒸汽动画已净合main `81a161e`，见[验收与合入](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md)。唯一4秒增量assemble通过，主目录JAR已更新，原包备份；本批整体视觉门关闭，其他工程主线暂停。
-
-用户2026-10-11报告“存储架的思索也测试通过了”，[干式贮存架思索08](./superpowers/plans/2026-10-11-device-ponder-08-storage.md)已[单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)并净合main `d2b9345`。七路径与已审候选`f87185a`一致，复用原10/10定向检查、最终增量打包及一次独立窄审；主目录JAR已更新，原制品留作备份。本页只讲存取与自动化用法，正式贮存功能不改，其他工程主线仍暂缓。
-
-主分支加液遮挡控制棒故障已按[REACTOR-ROD-COOLANT-01验收](./reviews/2026-10-11/reactor-rod-coolant-01/ACCEPTANCE.md)关闭：修复main `79ca4e4`，29/29定向检查、增量JAR及独立差异复核通过，用户2026-10-11回复“这次对了”确认本故障视觉正确。原证据复用，未重复测试/构建，不覆盖其他独立美术视觉记录。
-
-主分支完整build故障已按[MAIN-BUILD-01验收](./reviews/2026-10-11/main-build-01/ACCEPTANCE.md)关闭：main `8fa6363`修复测试报告目录依赖，454项全部通过，美术净同步`3e3045f`。该次制品身份与原集成打包记录保持历史；当前JAR身份以[锅炉美术集成验收](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md#当前制品)为准。
-
-| 工作 | 状态与入口 |
-| :--- | :--- |
-| 锅炉美术05B＋06R1 | 用户整体视觉验收通过，连接外观、观察窗、加浓汽雾及两种蒸汽动画已[合入main](./reviews/2026-10-11/boiler-art-integration/ACCEPTANCE.md) `81a161e`；原测试/窄审复用，仅新增一次增量打包 |
-| 锅炉汽雾容量读数前置 | [实际HANDOFF](./reviews/2026-10-11/boiler-steam-capacity-view-01/HANDOFF.md)已交：仅公开已有同步容量，唯一3秒jar、ABI/字节码及窄审通过，main `eb196c6`、美术 `a3540b2`；06可接通，不扩网络或追认视觉通过 |
-| 锅炉美术共享显示前置 | [实际HANDOFF](./reviews/2026-10-11/boiler-surface-display-01/HANDOFF.md)已交：29/29、1/1真实探针及独立窄审通过，main `eb3ec43`、美术`53d699b`，05B可接独立CT消费者；玩法及最终视觉门保持 |
-| 干式贮存架思索08 | [单页播放验收](./reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)通过，手动存取、漏斗自动化、占用及满架等待；main净教学提交`d2b9345`，原自动检查与独立窄审复用 |
-| 燃料烧结炉思索06 | [两幕播放验收](./reviews/2026-10-10/fuel-sintering-ponder-06/ACCEPTANCE.md)通过；复用3/3定向检查、增量assemble与一次独立审查，8路径一致，main净教学提交`57763f8` |
-| 屏蔽装配台思索07-R1 | [单页播放验收](./reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)通过：仅搭建与接口，不讲具体配方；7路径与已审候选及冻结源SHA一致，复用3/3定向合同、增量打包与独立窄审，main净教学提交`3f17657` |
-| 汽轮机思索04 | 原三幕及`a94f2ea`取景/文案[播放验收](./reviews/2026-10-09/turbine-ponder-framing/ACCEPTANCE.md)通过，净教学整合main |
-| 美术并行工作 | [美术负责人入口](./art/README.md)：独立工作树，专属规划/派发，跨逻辑协调与最终Git集成由本PM主持 |
-| 普通冷热冷却剂材质/动画04 | 已按用户授权[合入main](./reviews/2026-10-11/art-integration/INTEGRATION.md)：八帧固定循环、alpha255；[原候选来源](./reviews/2026-10-10/coolant-fluid-art-04/HANDOFF.md)和视觉记录保留 |
-| 反应堆内部运行动画03 | 已按用户授权[合入main](./reviews/2026-10-11/art-integration/INTEGRATION.md)，包含03R3液体浸泡、完整方杆和顶面控件；复用[原组合候选](./reviews/2026-10-10/reactor-animation-03/HANDOFF.md#03r3组合候选登记)的23/23定向检查及独立窄审，不补写游戏视觉/鼠标通过 |
-| 反应堆运行动画共享前置 | 用户直接确认动画及按库存连续混色；[L2实物API/写集交付](./reviews/2026-10-10/reactor-runtime-display-02/HANDOFF.md)自动与独立审查通过，main `cb123c9`、美术净同步`4cb0d7f`；美术按边界接运行消费者，动画与02R1视觉门独立保留 |
-| L2真暂停租约窄修 | [R2任务](./superpowers/plans/2026-10-10-reactor-runtime-display-02-pause.md)自动与独立窄审通过，main `93d0a20`、美术净同步`2bece5b`；10/10定向生命周期、一次增量assemble和12/12源核对；最新冻结/API见HANDOFF R2，暂停/恢复观察并入美术视觉门 |
-| 成型反应堆连接纹理 | 02R1最终材质/窗簇消费者已[合入main](./reviews/2026-10-11/art-integration/INTEGRATION.md)，复用17/17定向检查及独立窄审；[L1接口](./reviews/2026-10-09/reactor-surface-display-01/HANDOFF.md)和原视觉记录保持 |
-| 换热器工作盆供热 | `ab91356`实现及复核通过，用户手测通过，见[验收](./reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)；持续超级加热，默认4mB/t，缺液或冷满立即停热 |
-| 换热器烧结炉供热 | `094a925`实现/复核及3/3真实测试通过，工时/物流不变；[用户手测验收](./reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md)通过，净功能整合main |
-| 换热器分情景思索 | 五幕及R4剖面复看[用户手测通过](./reviews/2026-10-09/heat-exchanger-ponder-05/ACCEPTANCE.md)，复用定向合同、增量打包及独立复核；main净教学提交`b036776` |
-
-主目录现提供已验收供热、八类设备教学及本批合入美术；可直接使用主目录`build/libs/create_nuclear_industry-0.1.0.jar`。逻辑与美术工作树保留来源及历史证据，各目录仍分别使用自己的运行配置和世界，不自动回写候选存档。
-
-## 权威文档
-
-| 入口 | 职责 |
-| :--- | :--- |
-| [实施路线图](./implementation-roadmap.md) | 当前阶段、已通过批次、未完成范围及人工门 |
-| [项目策划](./project.md) | 现行玩法与明确的后续边界 |
-| [反应堆局部控制](./reactor-local-control-revision-design.md) | 棒列邻接、反馈、热工、损伤与停堆合同 |
-| [内容清单](./content-catalog.md) | 注册身份、资源、教学覆盖；阶段目标不等于已实现 |
-| [配方表](./recipes.md) | 材料工序及现行配方规则 |
-| [服务端配置指南](./server-config.md) | 锅炉、换热器、汽轮机配置键、单位和默认值 |
-| [治理协议](./project-governance.md)、[根AGENTS](../AGENTS.md) | PM/执行者权限、技能、派发与精简验证 |
-| [首发扩展入口](./superpowers/plans/2026-09-22-first-release-extension-preparation-plan.md) | 有效后续依赖与派发边界 |
-| [彩蛋与进度](./easter-eggs-and-advancements.md) | 彩蛋、进度及其范围限制 |
-
-## 仍有效的后置工作
-
-- 反应堆可变尺寸已到候选人工门；辅助热、二级耐压、自动控制、具体事故与辐射、其他设备动画及发布完善仍按路线图安排，未实现行为不提前教学。
-- [事故教学与发布总验收](./superpowers/plans/2026-09-12-post-accident-ponder-plan.md)继续保留；已有设备基础教学无需等待事故实现。
-- [损伤倍率模拟器02B](./superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)和[三维辅助工具](./superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)未完成整体验收，不阻塞近期任务，不在人工门等待期间自行接续。
-- [生产成本草案](./superpowers/plans/2026-09-24-first-production-cost-draft.md)保留核算口径；旧比较值不是未批准的新配方授权。铅锡洗矿副产物议题仍暂缓。
-
-换热器输入超临界蒸汽及降级供热路线已取消。现有核热换热和普通蒸汽冷凝保留，后续工作盆复用核热。首发前不研究旧存档兼容；当前版本保存加载仍按范围验证。
-
-## 历史与验收
-
-完成/被替代的计划见[归档索引](./archive/README.md)，验收报告保留在 `docs/reviews/`。历史待测和失败描述只代表原时点，不重新开启已关闭人工门。主要完成批次由[路线图](./implementation-roadmap.md#1-已验收范围)统一索引，不在此重复维护时间线。换机与P1证据见[2026-09-29交接](./handoffs/2026-09-29/README.md)。
+已完成卡不列作待派发，文档存在不授权实现新功能。工具说明在各tools目录，main和候选各用独立世界/配置。

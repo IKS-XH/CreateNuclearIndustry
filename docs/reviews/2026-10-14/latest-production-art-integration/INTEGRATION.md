@@ -1,6 +1,6 @@
 # 最新离心机与屏蔽装配台美术集成
 
-2026-10-14，用户在确认锅炉修复与应力余量闭环均手测通过、要求合入之后，追加要求最新美术也合入。功能联合验收与main`4149a9f`见[前批记录](../load-follow-boiler-accepted-integration/ACCEPTANCE.md)。本次按[活动卡](../../../superpowers/plans/2026-10-14-latest-production-art-integration.md)只接已交美术来源及组合正式包。
+2026-10-14，用户在确认锅炉修复与应力余量闭环均手测通过、要求合入之后，追加要求最新美术也合入。功能联合验收与main`4149a9f`见[前批记录](../../../archive/2026-10-15/reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md)。本次按[活动卡](../../../archive/2026-10-15/plans/2026-10-14-latest-production-art-integration.md)只接已交美术来源及组合正式包。
 
 ## 来源与Git合并
 

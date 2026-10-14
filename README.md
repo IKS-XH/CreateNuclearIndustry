@@ -2,14 +2,6 @@
 
 > **Create: Nuclear Industry** — 面向《机械动力》（Create）的核工业附属模组。
 
-![Minecraft 1.21.1](https://img.shields.io/badge/Minecraft-1.21.1-62B47A)
-![NeoForge 21.1.219](https://img.shields.io/badge/NeoForge-21.1.219-EA6A28)
-![Create 6.0.10](https://img.shields.io/badge/Create-6.0.10-6F4E37)
-![Java 21](https://img.shields.io/badge/Java-21-ED8B00)
-![Development status](https://img.shields.io/badge/status-Alpha%20开发中-D9A441)
-![Code license](https://img.shields.io/badge/code-MPL--2.0-blue)
-![Assets license](https://img.shields.io/badge/assets-All%20Rights%20Reserved-lightgrey)
-
 《机械动力：核工业》希望在 Create 的机械美学和自动化语言中，构建一套可读、可控制、会发生真实因果故障的核工业玩法。玩家需要布置堆芯、调节控制棒、维持冷却剂回路、处理燃料与余热，并最终通过换热器、锅炉和汽轮机向 Create 应力网络提供大规模旋转动力。
 
 本项目强调“看懂系统并搭出控制回路”，而不是随机事故或复杂查表。热量、流量、燃耗、损伤与安全联锁均由服务端权威结算，并通过 Create 风格交互和工程师护目镜呈现。
@@ -19,9 +11,9 @@
 
 ## 当前开发基线
 
-基础材料和燃料制造、固定实验反应堆、核换热与蒸汽回水闭环、三档汽轮机、轻量乏燃料封存及可变尺寸温压锅炉已按批验收合入main。反应堆具体事故世界效果、辐射和复杂再处理仍后置；当前完成范围与证据见[实施路线图](docs/implementation-roadmap.md)。
+基础材料/燃料制造、5～16格可变反应堆、核热与蒸汽回水、三档汽轮机、温压锅炉、专用流体管网、乏燃料封存及反应堆管理员已按相应范围验收合入main。管理员提供三页GUI、核热值班、恒功率、应力余量闭环和保存续接；完整范围、制品与未闭门见[当前状态](docs/STATUS.md)。
 
-离心机、反应堆、高压锅炉、汽轮机、换热器和燃料烧结炉的思索教学均已通过播放验收并整合main；换热器对工作盆和燃料烧结炉的持续供热也已通过手测。下一台按已确认顺序准备屏蔽装配台教学，见[当前任务入口](docs/README.md)。
+八类设备基础思索和换热器对工作盆/烧结炉的持续供热已通过各自手测。最新离心机外观、屏蔽装配台外观及动画已合入；新动画游戏内观察仍独立，锅炉16³上限仍为未合main候选。
 
 ## 设计方向
 
@@ -33,7 +25,7 @@
                                                 └─→ Create 原生供热与蒸汽设备
 ```
 
-首发目标能源是Create旋转应力（SU）。基础燃料生产、核换热器供热、专用锅炉、三档汽轮机及蒸汽冷凝回水已完成现行验收；乏燃料基础封存及可变尺寸温压锅炉也已实现；辐射系统、可变尺寸反应堆及烈焰人反应堆管理员后置。各设备当前实现范围以活动计划和验收记录为准。
+首发目标能源是Create旋转应力（SU）。热液/SC走专用工业管网，Create储罐保留；管网压力、事故世界效果、辐射与复杂再处理后置。规则见[项目设计](docs/project.md)，后续见[路线图](docs/implementation-roadmap.md)。
 
 ## 版本与依赖
 
@@ -68,7 +60,7 @@ Linux / macOS：
 ./gradlew runClient
 ```
 
-构建成功后，开发 JAR 位于 `build/libs/`。
+构建成功后，开发JAR位于build/libs；[正式开发JAR](build/libs/create_nuclear_industry-0.1.0.jar)已跟踪Git，版本身份见[STATUS](docs/STATUS.md)。
 
 开发客户端 `runClient`、`runClientA`、`runClientB` 自动加载 JEI，版本固定在 `gradle.properties` 的 `jei_version`。JEI 仅用于开发时查看物品和配方，不进入服务端/GameTest/JUnit、发布依赖或模组 JAR。配置变更后需重启开发客户端。三矿与最终素材已在 main 生效；下一批未验收功能继续在同级隔离工作树测试，具体位置见任务卡。
 
@@ -85,8 +77,8 @@ Linux / macOS：
 ## 已知边界
 
 - 当前没有稳定发布包，也不承诺开发存档向后兼容。
-- 当前实验反应堆固定`5×5×5`；高压锅炉已支持配置范围内的整数长宽高，默认各边[5,11]，水汽容量按分区容积计算。汽轮机只支持三档预设尺寸。
-- 已有设备提供现行静态资源与多边形模型；连接纹理、运行状态动画、粒子和音效按后续批次完善。
+- 反应堆默认三边5～16，main锅炉默认三边5～11，汽轮机三档固定规格；候选尺寸不要混作main。
+- 已有设备美术与部分动画已接入，剩余动画/声音/粒子按各自批次验收。
 - 基础矿物、材料、燃料组件、现有设备制造和乏燃料基础封存已可生存获取；复杂再处理尚未实现。
 - 核换热器供Create原生锅炉、专用锅炉核热产汽、三档超临界汽轮机及蒸汽冷凝闭环已实现并验收；温压、双汽库存及工作盆/烧结炉持续核热已实现并验收。
 - 不实现受污染复合冷却剂、冷却剂净化器、工业仪表或独立 SCRAM 联锁器。
@@ -107,4 +99,4 @@ Linux / macOS：
 
 ## English summary
 
-**Create: Nuclear Industry** is an in-development NeoForge 1.21.1 addon that brings reactor control, coolant circulation, fuel management, thermal damage and safety systems into Create's mechanical automation language. The Alpha includes fuel production, a fixed `5×5×5` experimental reactor, variable-size pressure boilers, three turbine sizes, a coolant/steam recovery loop and basic spent-fuel storage. Device tutorials are being added one at a time; radiation, concrete accident effects and reprocessing remain future work.
+**Create: Nuclear Industry** is an in-development NeoForge 1.21.1 addon for fuel production, variable-size reactors (5–16 blocks per side), thermal boilers, three turbine sizes, dedicated fluid transport and spent-fuel storage. A Blaze Burner administrator provides a three-page GUI, power regulation, stress-reserve control and save/resume continuity. Eight basic device tutorials are accepted; radiation, concrete accident effects, pressure transport and reprocessing remain future work. See the [current status](docs/STATUS.md) for separate candidate and visual-review gates.

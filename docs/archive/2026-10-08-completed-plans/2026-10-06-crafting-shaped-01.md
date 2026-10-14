@@ -2,7 +2,7 @@
 
 **需求来源（2026-10-06）：** 用户确认铅屏蔽桶R1手测通过，要求检查新增无序工作台配方，避免Create搅拌机自动转换；随后明确粗矿块和金属锭拆解保持无序，只改设备与零件。
 
-**状态：** 用户2026-10-06确认联合手测全部通过，已随STORE-01合入main，见[最终验收](../../reviews/2026-10-06/store-01/ACCEPTANCE.md)。源提交`f2cbb593ce1751bad28ce6406a878f6601c851c1`；13条设备配方与三个导出器同步，五条拆解保留无序。原静态/资源证据复用，不重跑功能测试。
+**状态：** 用户2026-10-06确认联合手测全部通过，已随STORE-01合入main，见[最终验收](../2026-10-15/reviews/2026-10-06/store-01/ACCEPTANCE.md)。源提交`f2cbb593ce1751bad28ce6406a878f6601c851c1`；13条设备配方与三个导出器同步，五条拆解保留无序。原静态/资源证据复用，不重跑功能测试。
 
 **目标与合同：** 把下列13条`minecraft:crafting_shapeless`改为`minecraft:crafting_shaped`。材料标签/item身份、重复材料数量、result完整对象、配方ID、产量及其他属性保持不变；不新增原料、工序或序列装配。只改变工作台格子布局。原铅桶R1有序布局保持不变。
 
@@ -64,4 +64,4 @@
 
 流程裁定：这是已存在原生配方的有限修改，用户已明确类型、目的、材料守恒及豁免，按治理2/4直接派发，不重复审批。精简验证优先于技能通用的测试/复审/提交步骤。
 
-**实际证据：** 基线、静态核对见`tools/art-assets/crafting-shaped-01/{baseline,verification}.json`；[执行报告](../../reviews/2026-10-06/store-01/crafting-shaped.md)列明13条布局。PM读实际diff发现的空格及文件尾换行问题已由执行者在打包前修复，静态核对通过。唯一资源打包3秒exit0，compileJava保持UP-TO-DATE；最终JAR2,145,081字节、SHA-256 `670F89993F555A89FDE0690D8A29F76A9DC51B7F6BC63CB49C6393A34EC9A1E7`。PM复核19条JAR/源一致及六个保留文件基线SHA一致，不重复构建或行为测试。main只同步受影响文档，日志/缓存/launch配置保留。
+**实际证据：** 基线、静态核对见`tools/art-assets/crafting-shaped-01/{baseline,verification}.json`；[执行报告](../2026-10-15/reviews/2026-10-06/store-01/crafting-shaped.md)列明13条布局。PM读实际diff发现的空格及文件尾换行问题已由执行者在打包前修复，静态核对通过。唯一资源打包3秒exit0，compileJava保持UP-TO-DATE；最终JAR2,145,081字节、SHA-256 `670F89993F555A89FDE0690D8A29F76A9DC51B7F6BC63CB49C6393A34EC9A1E7`。PM复核19条JAR/源一致及六个保留文件基线SHA一致，不重复构建或行为测试。main只同步受影响文档，日志/缓存/launch配置保留。

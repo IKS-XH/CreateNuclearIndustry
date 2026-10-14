@@ -4,13 +4,13 @@
 
 | 历史范围 | 现行结果与证据 |
 | :--- | :--- |
-| 三矿、SVG素材、JEI、材料02～05 | 基础获取/加工已验收；冷却剂回退例外保留，铅锡洗矿副产物仍暂缓。见[材料02](../../reviews/2026-10-01/material-02-acceptance.md)、[材料05](../../reviews/2026-10-02/material-05/ACCEPTANCE.md) |
-| 铀加工、离心机、烧结炉、屏蔽装配台、实验堆生存制造 | 以各批验收为准；02E模型修复的静态证据不扩展成额外播放确认。见[离心机](../../reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[装配台](../../reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)、[实验堆制造](../../reviews/2026-10-03/reactor-01/ACCEPTANCE.md) |
-| 封存、有序工作台配方、反应堆产热取整 | 已[联合验收](../../reviews/2026-10-06/store-01/ACCEPTANCE.md)；保留原料与产量，不恢复旧无序零件路线 |
+| 三矿、SVG素材、JEI、材料02～05 | 基础获取/加工已验收；冷却剂回退例外保留，铅锡洗矿副产物仍暂缓。见[材料02](../2026-10-15/reviews/2026-10-01/material-02-acceptance.md)、[材料05](../2026-10-15/reviews/2026-10-02/material-05/ACCEPTANCE.md) |
+| 铀加工、离心机、烧结炉、屏蔽装配台、实验堆生存制造 | 以各批验收为准；02E模型修复的静态证据不扩展成额外播放确认。见[离心机](../2026-10-15/reviews/2026-10-02/fuel-01/ACCEPTANCE.md)、[装配台](../2026-10-15/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)、[实验堆制造](../2026-10-15/reviews/2026-10-03/reactor-01/ACCEPTANCE.md) |
+| 封存、有序工作台配方、反应堆产热取整 | 已[联合验收](../2026-10-15/reviews/2026-10-06/store-01/ACCEPTANCE.md)；保留原料与产量，不恢复旧无序零件路线 |
 | 核换热器、定向直列、首期锅炉 | 已验收；固定5×5×5锅炉和外置底部换热的旧合同被分区重构替代 |
-| 汽轮机01A～01G及冷凝回水 | 已[联合验收](../../reviews/2026-10-05/condense-01/ACCEPTANCE.md)；三档尺寸、双轴共享、流量效率与微周转为现行规则 |
-| 锅炉REWORK-01及01A～01F | 已[集中验收](../../reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)；现行双汽库存替代瞬时汽种切换，控制器无汽种开关 |
-| 离心机/反应堆/锅炉思索及整改 | 已逐批播放验收，见[前两台](../../reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)、[锅炉三幕](../../reviews/2026-10-08/boiler-ponder-03/ACCEPTANCE.md)；旧第四幕已删除 |
+| 汽轮机01A～01G及冷凝回水 | 已[联合验收](../2026-10-15/reviews/2026-10-05/condense-01/ACCEPTANCE.md)；三档尺寸、双轴共享、流量效率与微周转为现行规则 |
+| 锅炉REWORK-01及01A～01F | 已[集中验收](../2026-10-15/reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)；现行双汽库存替代瞬时汽种切换，控制器无汽种开关 |
+| 离心机/反应堆/锅炉思索及整改 | 已逐批播放验收，见[前两台](../2026-10-15/reviews/2026-10-07/ponder-acceptance-01/ACCEPTANCE.md)、[锅炉三幕](../2026-10-15/reviews/2026-10-08/boiler-ponder-03/ACCEPTANCE.md)；旧第四幕已删除 |
 
 以下记录尤其不能作为待实现授权：
 

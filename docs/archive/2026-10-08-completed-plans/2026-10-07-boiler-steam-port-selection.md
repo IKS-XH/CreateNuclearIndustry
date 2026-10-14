@@ -1,6 +1,6 @@
 # EXT-B-BOILER-REWORK-01D：蒸汽出口独立汽种过滤
 
-> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../../reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
+> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../2026-10-15/reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
 
 **后续现场反馈：** 用户在6×6×5、四汽口汇入同一管路的场景发现调压后出汽异常，并成功复现汽轮机持续残转（首次发生后稳定复现，重新成型消除）。由[01E](2026-10-07-boiler-multiport-turbine-stop-01e.md)接续整改；本卡下方“暂缓排查”为01D交付时历史状态，不再作为当前排期。01D自动证据保留，集中人工门未通过。
 
@@ -52,7 +52,7 @@
 
 人工门前停在本候选；不要求为已暂缓的持续残转另做专项复现。
 
-实施`/root/boiler_steam_selection_01d`使用gpt-6.1-sol/high（逐口真实能力与已知来源缓存风险），唯一只读审查`/root/boiler_steam_selection_01d_review`使用gpt-6-luna/high。最终新域4/4、exit0/19.79秒，唯一assemble exit0/5.42秒；增量JAR2,227,784字节，SHA-256 `C699C2A97E84D318CFBDA33A79A4409AD3ED0D88C038DD5E33678620A72A5412`。PM核对11个生产class、两语言及NBT与构建输出/资源一致；原始失败轮保留，未重跑旧域/账本/汽轮机测试。最后仅遥测和槽位布局由assemble核对，客户端点击与当前设置退出重载待人工；见[实施报告](../../reviews/2026-10-07/boiler-rework-01/steam-port-selection.md)、[合并审查](../../reviews/2026-10-07/boiler-rework-01/steam-port-selection-review.md)及[候选说明](../../reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。PM使用Minecraft开发/测试技能设计与审证，CI/release技能仅核对候选版本/制品边界，不改变版本、许可证或发布范围。
+实施`/root/boiler_steam_selection_01d`使用gpt-6.1-sol/high（逐口真实能力与已知来源缓存风险），唯一只读审查`/root/boiler_steam_selection_01d_review`使用gpt-6-luna/high。最终新域4/4、exit0/19.79秒，唯一assemble exit0/5.42秒；增量JAR2,227,784字节，SHA-256 `C699C2A97E84D318CFBDA33A79A4409AD3ED0D88C038DD5E33678620A72A5412`。PM核对11个生产class、两语言及NBT与构建输出/资源一致；原始失败轮保留，未重跑旧域/账本/汽轮机测试。最后仅遥测和槽位布局由assemble核对，客户端点击与当前设置退出重载待人工；见[实施报告](../2026-10-15/reviews/2026-10-07/boiler-rework-01/steam-port-selection.md)、[合并审查](../2026-10-15/reviews/2026-10-07/boiler-rework-01/steam-port-selection-review.md)及[候选说明](../2026-10-15/reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。PM使用Minecraft开发/测试技能设计与审证，CI/release技能仅核对候选版本/制品边界，不改变版本、许可证或发布范围。
 
 ## 技能入口
 

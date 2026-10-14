@@ -1,6 +1,6 @@
 # EXT-B-EXCHANGER-01A：首台核热换热器
 
-**最终状态（2026-10-04）：** 首期换热器含01B制造/模型与01C运行整改已完成当前人工验收并合入main，见[最终验收](../../reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)。下文保留原派发与候选交接语境，当前状态以最终验收为准。
+**最终状态（2026-10-04）：** 首期换热器含01B制造/模型与01C运行整改已完成当前人工验收并合入main，见[最终验收](../2026-10-15/reviews/2026-10-04/exchanger-01c/ACCEPTANCE.md)。下文保留原派发与候选交接语境，当前状态以最终验收为准。
 
 **2026-10-04运行修订：** [01C守恒修复](2026-10-04-heat-exchanger-loop-diagnosis.md)与用户已确认的[自适应供热](2026-10-04-heat-exchanger-adaptive-output-proposal.md)正在实施。下文固定满功率及40tick整罐预热仅为01A历史合同，不再作为新供热行为的验收标准；其他未变合同继续有效。
 
@@ -13,7 +13,7 @@
 - 候选：`E:/MyMC/NewMod/Create_NuclearIndustry-ore-acquisition`，`codex/ore-acquisition`；运行基线`851a848c98ee19343974855f0e774543d5a2f1f0`，开工时接收本卡的纯文档提交。
 - 主目录`E:/MyMC/NewMod/Create_NuclearIndustry`暂不合入本批运行实现。保留用户`.vscode/launch.json`；候选保留`tools/art-assets/__pycache__/`，不清理、不暂存。
 - Minecraft1.21.1 / Java21 / NeoForge21.1.219 / Create6.0.10-280 / Ponder1.0.82 / Flywheel1.0.6 / JEI19.27.0.340；禁止升级依赖或改构建配置。
-- 材料、燃料、冷却剂和实验堆制造已人工验收。锅炉API静态依据为[01A报告](../../reviews/2026-10-03/heat-api-01a/EXT-B-API-01A.md)，真实运行由本卡补证，不能据此宣称完整EXT-B-API-01完成。
+- 材料、燃料、冷却剂和实验堆制造已人工验收。锅炉API静态依据为[01A报告](../2026-10-15/reviews/2026-10-03/heat-api-01a/EXT-B-API-01A.md)，真实运行由本卡补证，不能据此宣称完整EXT-B-API-01完成。
 
 ## 必读与技能
 
@@ -93,4 +93,4 @@ $env:JAVA_HOME='C:/Program Files/Java/jdk-21'
 
 ## 2026-10-04交付记录
 
-候选实现采用上述写集；7个不同账本JUnit分两次通过，最终10/10定向GameTest及增量assemble通过。首轮测试准备错误及独立复审发现的FULL但非ticking缓存热缺陷均已定位整改；失败与成功原始证据保留于[交付页](../../reviews/2026-10-03/exchanger-01a/README.md)。新增边界验证使用真实区块上的受控原生FullStatus门；不冒称自然票据迁移或磁盘重载已通过。测试运行生成的两份已跟踪根日志由PM备份后恢复，原用户配置及pycache保持。运行候选不合入main，按交付页三组清单等人工验收。
+候选实现采用上述写集；7个不同账本JUnit分两次通过，最终10/10定向GameTest及增量assemble通过。首轮测试准备错误及独立复审发现的FULL但非ticking缓存热缺陷均已定位整改；失败与成功原始证据保留于[交付页](../2026-10-15/reviews/2026-10-03/exchanger-01a/README.md)。新增边界验证使用真实区块上的受控原生FullStatus门；不冒称自然票据迁移或磁盘重载已通过。测试运行生成的两份已跟踪根日志由PM备份后恢复，原用户配置及pycache保持。运行候选不合入main，按交付页三组清单等人工验收。

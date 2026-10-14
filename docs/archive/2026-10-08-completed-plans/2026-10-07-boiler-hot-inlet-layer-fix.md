@@ -1,6 +1,6 @@
 # EXT-B-BOILER-REWORK-01A：底层热液入口与棱边成型整改
 
-> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../../reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
+> **2026-10-08收尾：** 用户确认最终01F精简手测通过；本卡继续适用的锅炉规则已随REWORK-01～01F[验收合入main](../2026-10-15/reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)。被01F替代的整炉瞬时切种不再要求复测。下方候选、失败及待验收描述保留历史含义，不作为当前人工门；不扩展为所有动力场景或首发验收，不自动接其他主线/教学。
 
 **状态：** 2026-10-07定向整改已实施，3项真实GameTest通过，必要增量打包和审查完成，功能快照`cca0dbeb5eefb82d4022938497c0e545f1f3f077`。热液入口必须与底部换热器同层，且可以组成棱边；本项并入锅炉待验收候选，不开启其他主线或教学。
 
@@ -53,4 +53,4 @@ PM维护文档、审查与Git；单一高速执行者实施代码并持有本轮
 
 2026-10-07派发并完成`/root/boiler_hot_inlet_fix`（gpt-6-luna/medium），复用现有同级隔离工作树，不新建工作区。PM已读取Minecraft开发/测试技能、核对锁定版本、Git工作树与原校验/能力调用；本卡兼作当前整改进度账。原计划共享账本与本次几何修改不冲突，不增加账本重测。
 
-PM已读取最终`gametest-retry-3.log`（真实3/3、exit0、正常保存退出）及`assemble-final.log`（2秒、exit0）；复核代码写集及JAR资源封包。最终JAR为2,186,418字节，SHA-256 `577CB895A33175AB18F08A65096B24E059271C94D95570622FC30638AFEC4414`，保存于两目录的`build/reports/extension/EXT-B-BOILER-REWORK-01A/client-candidate/`。原重构制品与失败证据保留。实施及PM审查记录见[报告](../../reviews/2026-10-07/boiler-rework-01/hot-inlet-layer.md)，人工门见[候选页](../../reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。
+PM已读取最终`gametest-retry-3.log`（真实3/3、exit0、正常保存退出）及`assemble-final.log`（2秒、exit0）；复核代码写集及JAR资源封包。最终JAR为2,186,418字节，SHA-256 `577CB895A33175AB18F08A65096B24E059271C94D95570622FC30638AFEC4414`，保存于两目录的`build/reports/extension/EXT-B-BOILER-REWORK-01A/client-candidate/`。原重构制品与失败证据保留。实施及PM审查记录见[报告](../2026-10-15/reviews/2026-10-07/boiler-rework-01/hot-inlet-layer.md)，人工门见[候选页](../2026-10-15/reviews/2026-10-07/boiler-rework-01/CANDIDATE.md)。
