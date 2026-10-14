@@ -1,5 +1,7 @@
 # 应力余量闭环02候选
 
+更新：用户已明确本项及锅炉修复手测均通过，按[联合验收](../../2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md)合入main`4149a9f`。下方候选身份/待验描述保留交付历史；最新正式包由本次后续美术集成记录管理。
+
 2026-10-14，管理员前批全部手测已登记并合入main，02按已批准的条件授权完成。本批源码与正式候选JAR提交 `8eaafd9`，分支 `codex/reactor-load-follow`，目录 `E:/MyMC/NewMod/Create_NuclearIndustry-reactor-load-follow`。
 
 当前支持绑定一个Create应力表，PI保持玩家设定的应力余量（默认20%），设置正最低毛发热量，输出全堆统一棒深；库存、逐列积热和红石保护仍优先停堆。现三页GUI总览复用两个输入，不增加页面或配方。正常保存继续原模式、目标与棒位，当前表重新核验，PI积分和网权不读盘。
