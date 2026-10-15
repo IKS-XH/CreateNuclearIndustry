@@ -1,17 +1,13 @@
 package com.iksxh.create_nuclear_industry.structure.client;
 
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
-import com.iksxh.create_nuclear_industry.structure.ReactorRuntimeDescriptor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import java.util.function.ToIntFunction;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -32,21 +28,13 @@ public final class ReactorInternalRenderer implements BlockEntityRenderer<Reacto
     @Override public void render(ReactorInstrumentPortBlockEntity instrument,float partial,PoseStack pose,MultiBufferSource buffers,int light,int overlay) {
         ReactorAnimationClientEvents.synchronizeWorld();var level=instrument.getLevel();if(level==null || level!=Minecraft.getInstance().level)return;
         var snapshot=ReactorRuntimeSnapshots.capture(level);
-        var owner=snapshot.findOwner(instrument.getBlockPos()).orElse(null);if(owner==null) { invalidatePosition(instrument.getBlockPos().asLong());return; }
+        var owner=snapshot.findOwner(instrument.getBlockPos()).orElse(null);if(owner==null) { invalidatePosition(instrument.getBlockPos().asLong());ReactorGlowMeshCache.invalidatePosition(instrument.getBlockPos().asLong());return; }
         var key=identity(owner);
-        if(!matches(level,owner.ownerPos(),"create_nuclear_industry:reactor_instrument_port")) { invalidate(key);return; }
-        for(var column:owner.columns()) if(!matches(level,column)) { invalidate(key);return; }
+        if(!matches(level,owner.ownerPos(),"create_nuclear_industry:reactor_instrument_port")) { invalidate(key);ReactorGlowMeshCache.invalidatePosition(key.owner());return; }
+        for(var column:owner.columns()) if(!matches(level,column)) { invalidate(key);ReactorGlowMeshCache.invalidatePosition(key.owner());return; }
         var base=instrument.getBlockPos();
-        for(var column:owner.columns()) if(column instanceof ReactorRuntimeDescriptor.FuelColumn fuel) {
-            double alpha=glow(fuel.fuelUsable(),fuel.fissionHeatHuPerTick());if(alpha<=0)continue;
-            for(var body:fuel.bodyPositions()) {
-                pose.pushPose();pose.translate(body.getX()-base.getX(),body.getY()-base.getY(),body.getZ()-base.getZ());
-                // 偏置已逐管烘焙，不做XZ缩放；仅管身全亮且关闭diffuse，钢板仍由静态模型绘制。
-                CachedBuffers.partial(ReactorAnimationModels.GLOW,level.getBlockState(body)).disableDiffuse()
-                        .color(255,255,255,(int)Math.round(alpha*255)).light(LightTexture.FULL_BRIGHT).overlay(OverlayTexture.NO_OVERLAY)
-                        .renderInto(pose,buffers.getBuffer(RenderType.translucent()));pose.popPose();
-            }
-        }
+        var glowMesh=ReactorGlowMeshCache.prepare(key,owner,level);
+        if(glowMesh!=null)glowMesh.draw(pose.last(),ReactorInternalRenderBuffers.glow(buffers));
         double fill=fill(owner.coldCoolantMb(),owner.hotCoolantMb(),owner.coolantCapacityMb());if(fill<=0)return;
         var minecraft=Minecraft.getInstance();double time=CLOCK.time(partial,minecraft.isPaused());
         var mesh=mesh(key,owner,fill,time);if(mesh.isEmpty())return;

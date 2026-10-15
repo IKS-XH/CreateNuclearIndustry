@@ -14,6 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** 使用锁定原生BufferSource的真实切换与空批次刷新；不调用GPU、不复制调度算法。 */
 class ReactorInternalRenderBuffersTest {
+    @Test void columnGlowSharesOpaqueRodLayerWithoutTransparentSorting() {
+        try(var buffers=registered(false)) {
+            assertSame(buffers.getBuffer(RenderType.cutoutMipped()),ReactorInternalRenderBuffers.glow(buffers));
+            assertFalse(RenderType.cutoutMipped().sortOnUpload());
+            ReactorInternalRenderer.liquidBuffer(buffers,texture(0));
+            assertTrue(buffers.active(RenderType.cutoutMipped()));assertTrue(buffers.active(liquid(0)));
+            ReactorInternalRenderBuffers.finish(RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES,buffers);
+            assertEquals(List.of(RenderType.cutoutMipped(),liquid(0)),buffers.ended);
+        }
+    }
     static ResourceLocation texture(int slot) {
         return ResourceLocation.fromNamespaceAndPath("create_nuclear_industry","dynamic/reactor_coolant/slot_"+slot);
     }

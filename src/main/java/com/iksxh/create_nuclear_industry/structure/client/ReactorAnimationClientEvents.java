@@ -30,12 +30,14 @@ public final class ReactorAnimationClientEvents {
         event.registerBlockEntityRenderer(P1BlockEntities.CONTROL_ROD_DRIVE.get(), ReactorControlRodRenderer::new);
     }
     @SubscribeEvent public static void reload(RegisterClientReloadListenersEvent event) { event.registerReloadListener(new ReactorAnimationMaterials()); }
+    /** 模型与atlas应用后撤掉旧UV模板；监听不捕获ModelManager或世界。 */
+    @SubscribeEvent public static void baked(ModelEvent.BakingCompleted event) { ReactorGlowMeshCache.reload(); }
     public static long session() { return session; }
     /** 世界身份仅弱引用；切换时先提交旧批次，数值会话不跨Level复用。 */
     public static void synchronizeWorld() {
         ClientLevel next=Minecraft.getInstance().level;
         if(world.get()==next && !pendingClear)return;
-        ReactorAnimationMaterials.flushAndClear(); ReactorAnimationVisualState.clear();
+        ReactorAnimationMaterials.flushAndClear(); ReactorAnimationVisualState.clear();ReactorGlowMeshCache.clear();
         world=new WeakReference<>(next);session++;pendingClear=false;
     }
     /** 游戏事件独立订阅，不修改L1/L2的租约、同步与登记。 */
@@ -51,14 +53,16 @@ public final class ReactorAnimationClientEvents {
             ReactorAnimationMaterials.boundary(snapshot,ReactorAnimationVisualState.CLOCK.tick());
             ReactorAnimationVisualState.boundary(snapshot);
             ReactorAnimationVisualState.expire();
+            ReactorGlowMeshCache.boundary(snapshot);
         }
         @SubscribeEvent public static void unload(LevelEvent.Unload event) {
-            if(event.getLevel()==world.get()) { pendingClear=true; ReactorAnimationVisualState.clear(); }
+            if(event.getLevel()==world.get()) { pendingClear=true; ReactorAnimationVisualState.clear();ReactorGlowMeshCache.clear(); }
         }
         @SubscribeEvent public static void chunkUnload(ChunkEvent.Unload event) {
             if(event.getLevel()!=world.get())return;
             // 撤下位姿立即完成，GPU槽等下一安全tick与L2发布快照共同核实，避免抢同帧纹理。
             ReactorAnimationVisualState.RODS.clear();
+            ReactorGlowMeshCache.clear();
         }
     }
 }

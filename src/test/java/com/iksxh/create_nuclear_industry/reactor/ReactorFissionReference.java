@@ -1,0 +1,184 @@
+package com.iksxh.create_nuclear_industry.reactor;
+
+import java.util.Map;
+import java.util.TreeMap;
+
+/** S3 改动前冻结的 Java 数值基准；仅供测试，不参与生产或性能制品。 */
+public final class ReactorFissionReference {
+    private static final int MAX_FEEDBACK_ITERATIONS = 256;
+    private static final double FEEDBACK_EPSILON = 1.0E-9D;
+
+    private ReactorFissionReference() {
+    }
+
+    /** 根据快照和数值参数计算一 tick 的裂变结果，不修改输入快照。 */
+    public static ReactorFissionResult calculate(
+            ReactorSnapshot snapshot,
+            ReactorSimulationParameters parameters
+    ) {
+        if (snapshot == null || parameters == null) {
+            throw new IllegalArgumentException("snapshot and parameters are required");
+        }
+
+        Map<CoreColumnPosition, Double> controlled = new TreeMap<>();
+        Map<CoreColumnPosition, Boolean> overclocked = new TreeMap<>();
+        for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : snapshot.fuelColumns().entrySet()) {
+            CoreColumnPosition position = entry.getKey();
+            FuelColumnState fuel = entry.getValue();
+            if (!fuel.hasUsableFuel()) {
+                continue;
+            }
+            double meanDepth = position.cardinalNeighbours(snapshot.dimensions()).stream()
+                    .map(snapshot.controlRodColumns()::get)
+                    .filter(control -> control != null)
+                    .mapToDouble(ControlRodColumnState::actualDepth)
+                    .average()
+                    .orElse(0.0D);
+            double controlledIntensity = Math.pow(
+                    clamp01(1.0D - meanDepth), parameters.controlResponseExponent());
+            controlled.put(position, controlledIntensity);
+            overclocked.put(position, position.cardinalNeighbours(snapshot.dimensions()).stream()
+                    .map(snapshot.fuelColumns()::get)
+                    .anyMatch(neighbour -> neighbour != null && neighbour.hasUsableFuel()));
+        }
+
+        Map<CoreColumnPosition, Double> heatIntensity = new TreeMap<>();
+        Map<CoreColumnPosition, Double> burnIntensity = new TreeMap<>();
+        for (CoreColumnPosition position : controlled.keySet()) {
+            // 反馈迭代从本列的控制抑制强度开始，避免第一轮反馈绕过控制棒。
+            heatIntensity.put(position, controlled.get(position));
+            burnIntensity.put(position, controlled.get(position));
+        }
+
+        for (int iteration = 0; iteration < MAX_FEEDBACK_ITERATIONS; iteration++) {
+            Map<CoreColumnPosition, Double> currentHeatIntensity = heatIntensity;
+            Map<CoreColumnPosition, Double> nextHeat = new TreeMap<>();
+            Map<CoreColumnPosition, Double> nextBurn = new TreeMap<>();
+            double largestDelta = 0.0D;
+            for (CoreColumnPosition position : controlled.keySet()) {
+                if (!overclocked.get(position)) {
+                    nextHeat.put(position, controlled.get(position));
+                    nextBurn.put(position, controlled.get(position));
+                    continue;
+                }
+                double signal = position.cardinalNeighbours(snapshot.dimensions()).stream()
+                        .filter(controlled::containsKey)
+                        .mapToDouble(neighbour -> currentHeatIntensity.getOrDefault(neighbour, 1.0D))
+                        .sum();
+                double activation = 1.0D - Math.exp(-parameters.overclockFeedbackGain()
+                        * Math.pow(Math.max(0.0D, signal), parameters.overclockFeedbackExponent()));
+                double controlFactor = controlled.get(position);
+                // 反馈只放大控制后的基础强度；控制强度为零时热、燃耗和后续信号都为零。
+                nextHeat.put(position, controlFactor * (1.0D + (parameters.overclockHeatMultiplier() - 1.0D)
+                        * clamp01(activation)));
+                nextBurn.put(position, controlFactor * (1.0D + (parameters.overclockBurnMultiplier() - 1.0D)
+                        * clamp01(activation)));
+            }
+            for (CoreColumnPosition position : controlled.keySet()) {
+                largestDelta = Math.max(largestDelta,
+                        Math.abs(nextHeat.get(position) - heatIntensity.get(position)));
+                largestDelta = Math.max(largestDelta,
+                        Math.abs(nextBurn.get(position) - burnIntensity.get(position)));
+            }
+            heatIntensity = nextHeat;
+            burnIntensity = nextBurn;
+            if (largestDelta <= FEEDBACK_EPSILON) {
+                break;
+            }
+        }
+
+        Map<CoreColumnPosition, FuelColumnFissionResult> rawResults = new TreeMap<>();
+        double rawHeat = 0.0D;
+        double totalBurn = 0.0D;
+        int installedFuelColumns = 0;
+        for (Map.Entry<CoreColumnPosition, FuelColumnState> entry : snapshot.fuelColumns().entrySet()) {
+            CoreColumnPosition position = entry.getKey();
+            FuelColumnState fuel = entry.getValue();
+            if (fuel.hasUsableFuel()) {
+                installedFuelColumns++;
+            }
+            if (!fuel.hasUsableFuel()) {
+                rawResults.put(position, FuelColumnFissionResult.inactive());
+                continue;
+            }
+            double damageFraction = 1.0D - clamp01(fuel.integrity());
+            double damageHeatMultiplier = 1.0D
+                    + (parameters.fuelColumnDamageHeatMultiplier() - 1.0D) * damageFraction;
+            double damageBurnMultiplier = 1.0D
+                    + (parameters.fuelColumnDamageBurnMultiplier() - 1.0D) * damageFraction;
+            double columnHeat = finiteNonNegative(parameters.baseHeatPerFuelBlockHuPerTick()
+                    * snapshot.dimensions().internalHeight() * heatIntensity.get(position) * damageHeatMultiplier);
+            double columnBurn = finiteNonNegative(parameters.baseBurnPerFuelBlockPerTick()
+                    * snapshot.dimensions().internalHeight() * burnIntensity.get(position) * damageBurnMultiplier);
+            rawResults.put(position, new FuelColumnFissionResult(
+                    controlled.get(position),
+                    heatIntensity.get(position),
+                    burnIntensity.get(position),
+                    damageHeatMultiplier,
+                    damageBurnMultiplier,
+                    columnHeat,
+                    columnBurn,
+                    overclocked.get(position)
+            ));
+            rawHeat += columnHeat;
+            totalBurn += columnBurn;
+        }
+
+        double heatCap = parameters.baseHeatPerFuelBlockHuPerTick()
+                * snapshot.dimensions().internalHeight()
+                * installedFuelColumns
+                * parameters.totalHeatMultiplierCap();
+        // 服务端每 tick 只对限幅后的全堆新生热取整一次；诊断原始热和燃耗均保留原公式。
+        double limitedHeat = finiteNonNegative(Math.min(rawHeat, heatCap));
+        double generatedHeat = Math.ceil(limitedHeat);
+        CoreColumnPosition lastPositive = null;
+        if (generatedHeat > 0.0D) {
+            for (Map.Entry<CoreColumnPosition, FuelColumnFissionResult> entry : rawResults.entrySet()) {
+                if (entry.getValue().generatedHeatHu() > 0.0D) {
+                    lastPositive = entry.getKey();
+                }
+            }
+        }
+        Map<CoreColumnPosition, FuelColumnFissionResult> settled = new TreeMap<>();
+        double assignedHeat = 0.0D;
+        for (Map.Entry<CoreColumnPosition, FuelColumnFissionResult> entry : rawResults.entrySet()) {
+            FuelColumnFissionResult raw = entry.getValue();
+            // 坐标顺序固定，最后一个正产热列接收剩余量，避免尾差影响整数 mB 冷却；零热列不分配。
+            double settledHeat = 0.0D;
+            if (generatedHeat > 0.0D && raw.generatedHeatHu() > 0.0D) {
+                double remainingHeat = Math.max(0.0D, generatedHeat - assignedHeat);
+                settledHeat = entry.getKey().equals(lastPositive) ? remainingHeat
+                        : Math.min(remainingHeat, raw.generatedHeatHu() / rawHeat * generatedHeat);
+            }
+            settled.put(entry.getKey(), new FuelColumnFissionResult(
+                    raw.controlledIntensity(),
+                    raw.heatIntensity(),
+                    raw.burnIntensity(),
+                    raw.damageHeatMultiplier(),
+                    raw.damageBurnMultiplier(),
+                    settledHeat,
+                    raw.plannedFuelBurnUnits(),
+                    raw.overclocked()
+            ));
+            assignedHeat += settledHeat;
+        }
+        return new ReactorFissionResult(settled, rawHeat, generatedHeat, totalBurn);
+    }
+
+    /** 兼容旧调用方；SCRAM 由控制棒实际深度决定，不再使用全局布尔值清零裂变。 */
+    public static ReactorFissionResult calculate(
+            ReactorSnapshot snapshot,
+            ReactorSimulationParameters parameters,
+            boolean ignoredScramActive
+    ) {
+        return calculate(snapshot, parameters);
+    }
+
+    private static double clamp01(double value) {
+        return Math.max(0.0D, Math.min(1.0D, finiteNonNegative(value)));
+    }
+
+    private static double finiteNonNegative(double value) {
+        return Double.isFinite(value) && value > 0.0D ? value : 0.0D;
+    }
+}

@@ -11,6 +11,7 @@ import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import java.util.List;
 import java.util.stream.IntStream;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 /**
  * 客户端反应堆液体批次：沿用现有256个纹理槽，在全部BER提交后才绘制液体。
@@ -24,6 +25,8 @@ public final class ReactorInternalRenderBuffers {
     private ReactorInternalRenderBuffers() {}
     /** 返回原生缓存层；与材质池现有槽ID一致，不另建shader或改变深度状态。 */
     static RenderType layer(ResourceLocation texture) { return RenderType.entityTranslucent(texture); }
+    /** 整列辉光复用棒体镂空层；保留纹理alpha裁切、深度写入，无透明排序或额外shader。 */
+    static VertexConsumer glow(MultiBufferSource buffers) { return buffers.getBuffer(RenderType.cutoutMipped()); }
     /** 物理客户端初始化时为每个有界槽注册固定缓冲，避免共享层切换提前画液体。 */
     @SubscribeEvent public static void register(RegisterRenderBuffersEvent event) {
         for(var layer:LIQUIDS)event.registerRenderBuffer(layer);

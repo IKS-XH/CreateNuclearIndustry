@@ -53,6 +53,7 @@ import org.slf4j.Logger;
 import java.util.Objects;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -149,6 +150,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private boolean surfaceChunkUnloaded;
     private final Set<ReactorPortBlockEntity> boundPorts =
             Collections.newSetFromMap(new IdentityHashMap<>());
+    /** 服务端当前绑定的逐列索引；仅随重扫/解绑维护，不持久化，命中仍须核对实时身份。 */
+    private final Map<CoreColumnPosition, ReactorPortBlockEntity> refuelingPortsByColumn = new HashMap<>();
 
     public ReactorInstrumentPortBlockEntity(BlockPos pos, BlockState state) {
         super(P1BlockEntities.REACTOR_INSTRUMENT_PORT.get(), pos, state);
@@ -1362,6 +1365,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         if (!structureScan.valid() || structureOrigin == null || level == null || level.isClientSide) {
             return;
         }
+        refuelingPortsByColumn.clear();
         Map<BlockPos, PortBindingSpec> expected = new LinkedHashMap<>();
         addExpectedPorts(expected, ReactorStructureDefinition.PortType.COLD_COOLANT,
                 ReactorPortBlockEntity.BindingType.COLD_COOLANT, null);
@@ -1390,6 +1394,9 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             if (level.getBlockEntity(entry.getKey()) instanceof ReactorPortBlockEntity port
                     && port.bindTo(this, entry.getValue().type(), entry.getValue().column())) {
                 boundPorts.add(port);
+                if (entry.getValue().type() == ReactorPortBlockEntity.BindingType.REFUELING) {
+                    refuelingPortsByColumn.put(entry.getValue().column(), port);
+                }
             }
         }
     }
@@ -1477,18 +1484,18 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         return true;
     }
 
-    /** 返回当前结构绑定指定燃料列的唯一换料端口，不扫描世界。 */
+    /** 按列读取服务端绑定索引；保留结构、职责、归属及当前BE身份校验，不加载缺失区块。 */
     private ReactorPortBlockEntity findRefuelingPort(CoreColumnPosition position) {
-        if (position == null) {
+        if (position == null || level == null || level.isClientSide) {
             return null;
         }
-        for (ReactorPortBlockEntity port : boundPorts(
-                ReactorPortBlockEntity.BindingType.REFUELING)) {
-            if (position.equals(port.boundColumn())) {
-                return port;
-            }
+        ReactorPortBlockEntity port = refuelingPortsByColumn.get(position);
+        if (port == null || port.bindingType() != ReactorPortBlockEntity.BindingType.REFUELING
+                || !port.isBoundTo(this, ReactorPortBlockEntity.BindingType.REFUELING, position)
+                || level.getBlockEntity(port.getBlockPos()) != port) {
+            return null;
         }
-        return null;
+        return port;
     }
 
     /** 捕获快照已拥有或端口已装料的列物品，缺失端口时直接拒绝结算。 */
@@ -1670,6 +1677,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
 
     /** 清理本仪表端口上一次扫描建立的全部运行时绑定。 */
     private void clearPortBindings(boolean structureInvalidated) {
+        refuelingPortsByColumn.clear();
         for (ReactorPortBlockEntity port : List.copyOf(boundPorts)) {
             port.clearBinding(this, structureInvalidated);
         }
@@ -1680,6 +1688,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     void detachPort(ReactorPortBlockEntity port) {
         if (port != null) {
             boundPorts.remove(port);
+            // clearBinding先清空端口自身绑定，再回调本方法；按实例移除，旧BE不能撤销同坐标新BE。
+            refuelingPortsByColumn.values().removeIf(boundPort -> boundPort == port);
         }
     }
 
