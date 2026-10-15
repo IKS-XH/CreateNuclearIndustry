@@ -73,10 +73,10 @@ public final class ExtensionBoilerGameTests {
     public static void elevenBoundaryAndOffCenterPartition(GameTestHelper h) {
         build(h, 11, 11, 11, 3);
         h.runAfterDelay(4, () -> {
-            var f = owner(h).currentForm(); h.assertTrue(f != null && f.width() == 11 && f.height() == 11 && f.depth() == 11, "11边界未成型");
+            var f = owner(h).currentForm(); h.assertTrue(f != null && f.width() == 11 && f.height() == 11 && f.depth() == 11, "11格参考结构未成型");
             h.assertTrue(f.waterCells() == 162 && f.steamCells() == 486 && f.partitionY() == h.absolutePos(BASE.above(3)).getY(), "偏心分区格数错误");
-            build(h, 12, 11, 11, 3); owner(h).invalidateForm();
-            h.assertTrue(owner(h).currentForm() == null, "默认范围错误接受12格外边长"); h.succeed();
+            build(h, 17, 11, 11, 3); owner(h).invalidateForm();
+            h.assertTrue(owner(h).currentForm() == null, "默认范围错误接受17格外边长"); h.succeed();
         });
     }
     @GameTest(template = "boiler_empty", timeoutTicks = 50)

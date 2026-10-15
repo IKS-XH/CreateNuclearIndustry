@@ -20,7 +20,7 @@ public final class BoilerState {
             double valveOpenPressure, double valveClosePressure, int valveFlowPerSteamCellMbPerTick,
             double idleWaterCoolingHuPerCellPerTick, double idleSteamCoolingHuPerCellPerTick) {
         public boolean valid() {
-            if (minDimension < 5 || minDimension > maxDimension || maxDimension > 32
+            if (minDimension < 5 || minDimension > maxDimension || maxDimension > 16
                     || waterCapacityPerCellMb < 1 || steamCapacityPerCellMb < 1 || coolantPortFlowMbPerTick < 1 || waterSteamPortFlowMbPerTick < 1
                     || valveFlowPerSteamCellMbPerTick < 1) return false;
             for (double v : new double[]{pairHeatHuPerTick, boilingTemperature, supercriticalTemperature,
@@ -41,7 +41,7 @@ public final class BoilerState {
         public int waterCapacityMb() { return 9 * waterCapacityPerCellMb; }
         public int steamCapacityMb() { return 9 * steamCapacityPerCellMb; }
     }
-    public static final Settings DEFAULT = new Settings(5, 11, 2000, 2000, 2048, 4096, 18, 1, 2,
+    public static final Settings DEFAULT = new Settings(5, 16, 2000, 2000, 2048, 4096, 18, 1, 2,
             1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
     private Settings settings = DEFAULT;
     private int waterCells = 9, steamCells = 9, exchangers = 1, pairs = 1, hotCapacity = 4000, coldCapacity = 4000;

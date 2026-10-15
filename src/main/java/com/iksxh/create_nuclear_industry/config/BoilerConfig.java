@@ -17,8 +17,8 @@ public final class BoilerConfig {
             VALVE_OPEN_PRESSURE, VALVE_CLOSE_PRESSURE, WATER_COOLING, STEAM_COOLING;
     static {
         var b = new ModConfigSpec.Builder();
-        DIMENSION_RANGE = b.comment("外部长宽高各自允许的闭区间，恰好两个整数，5≤min≤max≤32。")
-                .defineList("dimensionRange", List.of(5, 11), value -> value instanceof Integer n && n >= 5 && n <= 32);
+        DIMENSION_RANGE = b.comment("外部长宽高各自允许的闭区间，恰好两个整数，5≤min≤max≤16。")
+                .defineList("dimensionRange", List.of(5, 16), value -> value instanceof Integer n && n >= 5 && n <= 16);
         WATER_CAPACITY_PER_CELL_MB = b.comment("每格有效水区容量，单位 mB。") .defineInRange("waterCapacityPerCellMb", 2000, 1, 1_000_000);
         STEAM_CAPACITY_PER_CELL_MB = b.comment("每格有效汽区容量，单位 mB。") .defineInRange("steamCapacityPerCellMb", 2000, 1, 1_000_000);
         COOLANT_PORT_FLOW_MB_PER_TICK = b.comment("每个冷热液物理口共用主被动及专用额度 mB/t。") .defineInRange("coolantPortFlowMbPerTick", 2048, 1, 1_000_000);

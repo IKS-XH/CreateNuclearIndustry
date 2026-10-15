@@ -2,8 +2,11 @@ package com.iksxh.create_nuclear_industry.boiler;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static com.iksxh.create_nuclear_industry.boiler.BoilerSteamInventoryKind.*;
+import com.iksxh.create_nuclear_industry.config.BoilerConfig;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.junit.jupiter.api.Test;
 
 /** 直接验证可支付的质量/热量不变量，不将温压资格误当作免费工质升级。 */
@@ -13,6 +16,29 @@ class BoilerStateTest {
     private static BoilerState state(int water, int steam, double waterHu, double steamHu) {
         var s = new BoilerState(); var tag = s.save(); tag.putInt("Water", water); tag.putInt("SupercriticalSteam", steam);
         tag.putDouble("WaterHu", waterHu); tag.putDouble("SupercriticalSteamHu", steamHu); s.load(tag); return s;
+    }
+    @Test void defaultGeometryRangeAllowsSixteenAndSettingsRejectSeventeen() {
+        assertEquals(List.of(5, 16), BoilerConfig.DIMENSION_RANGE.getDefault(), "新配置默认须允许16格外边长");
+        assertEquals(5, BoilerState.DEFAULT.minDimension());
+        assertEquals(16, BoilerState.DEFAULT.maxDimension(), "独立账本默认须与配置默认一致");
+    }
+    @Test void settingsRejectSeventeenDimensionBeforeTransactions() {
+        var bad = new BoilerState.Settings(5, 17, 2000, 2000, 2048, 4096, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
+        assertFalse(bad.valid(), "运行快照不能接受17格上限");
+        var s = new BoilerState(); s.setSettings(bad);
+        assertEquals(0, s.fillWater(A, 10, false, 1), "非法上限不能交易");
+    }
+    @Test void configDimensionElementsRejectSeventeen() {
+        ModConfigSpec.ValueSpec range = BoilerConfig.SPEC.getSpec().get("dimensionRange");
+        assertTrue(range.test(List.of(5, 16)));
+        assertFalse(range.test(List.of(5, 17)), "配置元素校验不能接受17格");
+    }
+    @Test void maximumGeometryCapacityGrowthKeepsExistingMassAndHeat() {
+        var s = state(100, 200, 500, 200);
+        double before = s.totalHu();
+        s.setGeometry(1372, 1176, 196, 196, 784000, 784000);
+        assertEquals(2744000, s.waterCapacity()); assertEquals(2352000, s.steamCapacity());
+        assertEquals(100, s.water()); assertEquals(200, s.steam()); assertEquals(before, s.totalHu(), EPS);
     }
     @Test void actualThresholdsChooseSteamAndMinimumIsIndependent() {
         var lowPressure = state(0, 8999, 0, 8999);
@@ -129,10 +155,12 @@ class BoilerStateTest {
         var valid = new BoilerState.Settings(6, 12, 500, 600, 128, 128, 10, 1, 3, 100, .2, .3, .8, .4, .5, .9, .7, 16, 0, 0);
         assertTrue(valid.valid()); var s = new BoilerState(); s.setSettings(valid); s.setGeometry(12, 24, 3, 2, 2000, 3000);
         assertEquals(6000, s.waterCapacity()); assertEquals(14400, s.steamCapacity());
-        for (int[] range : new int[][]{{4, 11}, {12, 5}, {5, 33}}) {
+        for (int[] range : new int[][]{{4, 11}, {12, 5}, {5, 17}}) {
             var bad = new BoilerState.Settings(range[0], range[1], 2000, 2000, 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
             assertFalse(bad.valid()); s.setSettings(bad); assertEquals(0, s.fillWater(A, 10, false, 1));
         }
-        assertFalse(new BoilerState.Settings(5, 32, 1000000, 1000000, 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1).valid());
+        // 合法最大16下2352格的最坏分区乘积超int；分别守住水、汽容量和阀泄放额度的long预检。
+        for (int[] products : new int[][]{{1000000, 2000, 32}, {2000, 1000000, 32}, {2000, 2000, 1000000}})
+            assertFalse(new BoilerState.Settings(5, 16, products[0], products[1], 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, products[2], .9, .1).valid());
     }
 }
