@@ -1,12 +1,12 @@
 # 当前状态与验收
 
-更新：2026-10-15。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
+更新：2026-10-16。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
 
 ## 主分支与正式包
 
-- 已提交生产来源b5a36865482930e144e535bed741d1f18155591c，接入已验烧结炉A版外观，保留5ea9c50反应堆计算/客户端优化、锅炉16³、闭环及主动出汽。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3333622 bytes，SHA256 `78175a55e81f3e610304a6b01586898044be5febf698777793760dbfd4fbb88e`，按用户要求跟踪Git。
-- 最近准确Git来源assemble 14.949秒exit0，仅12项烧结炉资源变化；699class及全部非目标载荷与前8405包逐字相同。原静态/网页/组合审查和用户手测按范围复用，见[外观集成](reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)，此前[性能记录](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)保持；不把assemble当全build或新的Minecraft验收。
+- 已提交生产来源850904df6220487f8903b00cc9936b8f68307d32，修复微小尾热导致反应堆永远不能完全停机拆除；保留烧结炉A版、5ea9c50计算/客户端优化、锅炉16³、闭环及主动出汽。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3333619 bytes，SHA256 `a963b483260ab732b16b74fe0c2c625d8e58328e882be675a0497c469b173ca3`，按用户要求跟踪Git。
+- 最近准确Git来源assemble 15.473秒exit0；相对前78175包仅两项反应堆class变化，其余697class及全部资源/Manifest逐字相同。55项受影响JUnit和真实安全拆壳/缺冷液拒拆证据已核，见[本批集成](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)。原[外观](reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)及[性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持；不把assemble当全build或用户原场景复看。
 
 ## 已合入并按相应范围验收
 
@@ -24,6 +24,7 @@
 | 锅炉尺寸与外观 | 三边5～16、长方体及跨区块；用户确认尺寸上限与锅炉外观手测通过，尺寸净增量已接入main | [本批验收](reviews/2026-10-15/boiler-size-accepted-integration/ACCEPTANCE.md) |
 | 已验美术 | 反应堆/锅炉/汽轮机、Logo、离心机、装配台黑窗与烧结炉A版；反应堆Sodium上下文窄修 | [前批美术](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)、[烧结炉验收](reviews/2026-10-15/sintering-art-accepted-integration/ACCEPTANCE.md)、[Sodium局部验收](archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md) |
 | 反应堆性能 | 端口索引、精确反馈缓存、客户端辉光缓存和整列低面镂空全亮；用户认可效果并要求合main，液体/控制棒保留 | [验收](reviews/2026-10-15/reactor-performance-accepted-integration/ACCEPTANCE.md)、[集成/边界](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)；C2继续后置 |
+| 停机拆除尾热 | 冷却充足时正确识别微小安全余数，不丢缓存热或工质；55项JUnit及真实安全/拒拆通过，原16³场景用户复看另列 | [根因、验证与正式包](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)、[组合审查](reviews/2026-10-16/reactor-shutdown-01/REVIEW.md) |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果、辐射与再处理未实现。
 
@@ -31,6 +32,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
+| 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |
 | 历史窄修观察 | 泵静止箭头/加载2048后的现场流量、冷液桶标记创造罐暂无明确独立客户端通过反馈；原管网和两端三角验收不重开。见[静止箭头/配置](archive/2026-10-15/reviews/2026-10-13/industrial-pump-idle-arrow-flow-config/CANDIDATE.md)、[桶交互](archive/2026-10-15/reviews/2026-10-12/industrial-pump-tank-interaction-fix/CANDIDATE.md) |
 | 辅助工具 | 模拟器02B单文件及3D工具整体验收独立，不阻塞已验机组或自动插入主线 |
