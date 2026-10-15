@@ -12,6 +12,36 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ReactorCoolantSimulationAdapterTest {
     private static final double EPSILON = 1.0E-12D;
 
+    /** 冷液充足时，远小于一个mB的正热仍是安全量化子集，不能落入停机阈值死区。 */
+    @Test
+    void tinyPositiveHeatRetainsSafeQuantizationWithoutChangingFluid() {
+        for (double heat : new double[]{5.247766665661402E-10D, 7.5E-13D}) {
+            var previous = snapshot(658_000L, 0L);
+            var result = ReactorCoolantSimulationAdapter.settle(previous,
+                    new ReactorCoolantSimulationAdapter.TickInput(
+                            heat, ports(2048D, 2048D), 0D, 0D, 658_000L, 0.5D));
+            assertEquals(previous, result.nextSnapshot());
+            assertEquals(0D, result.settlement().removedHeatHu());
+            assertEquals(heat, result.settlement().remainingHeatHu());
+            assertEquals(heat, result.quantizedHeatRemainderHu());
+        }
+    }
+
+    /** 没有真实冷液时，微小热和普通小数热都不能被伪装成安全尾数。 */
+    @Test
+    void missingColdKeepsTinyAndOrdinaryHeatAsRealShortage() {
+        for (double heat : new double[]{5.247766665661402E-10D, 0.49D}) {
+            var previous = snapshot(0L, 658_000L);
+            var result = ReactorCoolantSimulationAdapter.settle(previous,
+                    new ReactorCoolantSimulationAdapter.TickInput(
+                            heat, ports(0D, 0D), 0D, 0D, 658_000L, 0.5D));
+            assertEquals(previous, result.nextSnapshot());
+            assertEquals(heat, result.settlement().remainingHeatHu());
+            assertEquals(0D, result.settlement().removedHeatHu());
+            assertEquals(0D, result.quantizedHeatRemainderHu());
+        }
+    }
+
     @Test
     void convertsWholeMillibucketsIntoTheAuthoritativeSnapshot() {
         ReactorSnapshot previous = snapshot(100L, 0L);

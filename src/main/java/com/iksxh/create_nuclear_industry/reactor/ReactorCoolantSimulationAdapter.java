@@ -120,7 +120,9 @@ public final class ReactorCoolantSimulationAdapter {
         // 只要本 tick 存在至少一个真实 mB 的冷却能力，就可以把热量除以吸热量后
         // 的小数部分单独归入量化余数；能力为零时（例如冷库存为空且热端堵塞），
         // 0.49 HU 仍然是完整的真实短缺，不能获得免损伤标记。
-        return availableHeatHu > WHOLE_MB_EPSILON
+        // HU尾热只要求严格为正；mB整数边界的epsilon不能成为热量资格门，
+        // 否则1e-12～1e-9 HU会既无法转化也不被标记，永远阻止完全停机。
+        return availableHeatHu > 0.0D
                 && integerCoolingCapacityMb > WHOLE_MB_EPSILON;
     }
 

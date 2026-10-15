@@ -250,7 +250,9 @@ public final class ReactorServerTick {
             double removed = Math.min(available,
                     removedHeatByColumn.getOrDefault(entry.getKey(), 0.0D));
             double remaining = Math.max(0.0D, available - removed);
-            if (remaining > HEAT_EPSILON) {
+            // 安全余数按每列真实正余额分配；单列低于epsilon的尾热相加后仍可能
+            // 超过全堆停机门，不能在逐列筛选时漏掉。缓存本身及总预算均不删除。
+            if (remaining > 0.0D) {
                 remainingByColumn.put(entry.getKey(), remaining);
                 totalRemaining += remaining;
             }

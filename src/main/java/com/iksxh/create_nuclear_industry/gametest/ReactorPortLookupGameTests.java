@@ -23,7 +23,7 @@ import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-/** S1真实服务端定向回归：列查询分配预算、绑定生命周期和完整燃料事务；不提供生产测试入口。 */
+/** 真实服务端定向回归：列索引、绑定事务和停机量化尾热；不提供生产测试入口。 */
 @GameTestHolder("cni_reactor_port_lookup")
 @PrefixGameTestTemplate(false)
 public final class ReactorPortLookupGameTests {
@@ -35,6 +35,70 @@ public final class ReactorPortLookupGameTests {
     private static final CoreColumnPosition OTHER_COLUMN = new CoreColumnPosition(2, 2);
 
     private ReactorPortLookupGameTests() { }
+
+    /** 真实冷液将微小缓存标记为安全尾数后，正式BreakEvent应完成清空事务并允许拆壳。 */
+    @GameTest(template = TEMPLATE, templateNamespace = "create_nuclear_industry", timeoutTicks = 100)
+    public static void tinyQuantizedResidualAllowsRealMaintenanceBreak(GameTestHelper helper) {
+        ready(helper, () -> {
+            var owner = owner(helper);
+            installResidual(owner, 5.247766665661402E-10D, 100L, 0L);
+            check(helper, owner.tickReactor(), "微小余热夹具未完成正式tick");
+            check(helper, com.iksxh.create_nuclear_industry.reactor.ReactorFullShutdownAssessment
+                    .assess(owner.snapshot(), owner.automationSimulationParameters()).fullyStopped(),
+                    "真实冷液存在时微小余热仍阻止完全停机");
+            var pos = helper.absolutePos(BlockPos.ZERO);
+            var event = new net.neoforged.neoforge.event.level.BlockEvent.BreakEvent(
+                    helper.getLevel(), pos, helper.getBlockState(BlockPos.ZERO),
+                    helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL));
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
+            check(helper, !event.isCanceled(), "安全量化尾热错误取消真实拆壳事件");
+            check(helper, owner.snapshot().fuelColumns().isEmpty()
+                    && owner.snapshot().coldCoolantMb() == 0L
+                    && port(helper, CAP).fuelAssembly().isEmpty(), "安全维护未完成原有清空事务");
+            check(helper, helper.getLevel().removeBlock(pos, false), "已放行事件无法移除外壳");
+            helper.runAfterDelay(3, () -> {
+                check(helper, !owner.structureValid(), "实际移除外壳后结构仍有效");
+                helper.succeed();
+            });
+        });
+    }
+
+    /** 缺冷液的真实小数热不得借全插棒或量化标记放行，取消事件必须保留物品与缓存。 */
+    @GameTest(template = TEMPLATE, templateNamespace = "create_nuclear_industry", timeoutTicks = 100)
+    public static void realResidualWithoutColdStillRejectsMaintenanceBreak(GameTestHelper helper) {
+        ready(helper, () -> {
+            var owner = owner(helper);
+            installResidual(owner, 0.49D, 0L, 100L);
+            long sample = owner.runtimeDescriptor().orElseThrow().sample();
+            owner.tickReactor();
+            var runtime = owner.runtimeDescriptor().orElseThrow();
+            check(helper, runtime.available() && runtime.sample() == sample + 1,
+                    "缺冷液夹具未完成正式权威结算");
+            check(helper, !com.iksxh.create_nuclear_industry.reactor.ReactorFullShutdownAssessment
+                    .assess(owner.snapshot(), owner.automationSimulationParameters()).fullyStopped(),
+                    "缺冷液的真实活动余热被错误标为已停机");
+            var before = owner.snapshot();
+            var stored = port(helper, CAP).fuelAssembly();
+            var event = new net.neoforged.neoforge.event.level.BlockEvent.BreakEvent(
+                    helper.getLevel(), helper.absolutePos(BlockPos.ZERO), helper.getBlockState(BlockPos.ZERO),
+                    helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL));
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
+            check(helper, event.isCanceled(), "没有冷液的真实余热被错误放行");
+            check(helper, owner.snapshot().equals(before)
+                    && ItemStack.matches(stored, port(helper, CAP).fuelAssembly()),
+                    "拒绝拆除后快照或实际燃料被修改");
+            helper.succeed();
+        });
+    }
+
+    /** 仅在测试中设置HU缓存和mB库存；保留真实成型映射、物品投影与全插棒。 */
+    private static void installResidual(ReactorInstrumentPortBlockEntity owner, double heat, long cold, long hot) {
+        var before = owner.snapshot();
+        var fuels = new java.util.TreeMap<>(before.fuelColumns());
+        fuels.replaceAll((pos, state) -> new com.iksxh.create_nuclear_industry.reactor.FuelColumnState(
+                state.fuelAssembly(), state.integrity(), heat / fuels.size(), state.fuelBurnRemainder(), 0D));
+        owner.setSnapshot(before.withColumns(fuels, before.controlRodColumns()).withCoolantInventories(cold, hot));
+    }
 
     /** 重复只读查询不得重建整组端口集合；预算允许每次256字节，远宽于直接索引本身。 */
     @GameTest(template = TEMPLATE, templateNamespace = "create_nuclear_industry", timeoutTicks = 160)
