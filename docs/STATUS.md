@@ -4,9 +4,9 @@
 
 ## 主分支与正式包
 
-- 已提交生产来源5ea9c509187a3656a08248843e0142d3d7ddca67，接入已验S1/S3/C1/C1L反应堆计算和客户端性能优化，保留锅炉16³、闭环、主动出汽及最新美术。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3323054 bytes，SHA256 `8405e4cb6ad010f4b3f4e7a0e475a39d5e09918605f488c8c7466fc822981d5f`，按用户要求跟踪Git。
-- 最近准确Git来源assemble 18.749秒exit0，699class/1571资源/Manifest与输出一致；与已手测性能包仅两个已解释的内部类调试位置差异，没有新增测试/探针泄漏。原定向、真实测试和用户反馈按范围复用，见[性能集成](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)；不把assemble当全build或新一轮Minecraft/性能验收。
+- 已提交生产来源b5a36865482930e144e535bed741d1f18155591c，接入已验烧结炉A版外观，保留5ea9c50反应堆计算/客户端优化、锅炉16³、闭环及主动出汽。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3333622 bytes，SHA256 `78175a55e81f3e610304a6b01586898044be5febf698777793760dbfd4fbb88e`，按用户要求跟踪Git。
+- 最近准确Git来源assemble 14.949秒exit0，仅12项烧结炉资源变化；699class及全部非目标载荷与前8405包逐字相同。原静态/网页/组合审查和用户手测按范围复用，见[外观集成](reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)，此前[性能记录](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)保持；不把assemble当全build或新的Minecraft验收。
 
 ## 已合入并按相应范围验收
 
@@ -22,7 +22,7 @@
 | 管理员 | 三页GUI、统一调棒、恒功率、核热值班、部分缺料不停堆及原状态续接 | [联合验收](archive/2026-10-15/reviews/2026-10-14/reactor-administrator-accepted-integration/ACCEPTANCE.md) |
 | 闭环与锅炉汽口 | 应力表绑定PI控制；汽口沿合法工业管主动出汽，不需补外置泵 | [联合手测/合入](archive/2026-10-15/reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md) |
 | 锅炉尺寸与外观 | 三边5～16、长方体及跨区块；用户确认尺寸上限与锅炉外观手测通过，尺寸净增量已接入main | [本批验收](reviews/2026-10-15/boiler-size-accepted-integration/ACCEPTANCE.md) |
-| 已验美术 | 反应堆/锅炉/汽轮机、Logo、离心机、装配台黑窗；反应堆Sodium上下文窄修 | [美术集成](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)、[Sodium局部验收](archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md) |
+| 已验美术 | 反应堆/锅炉/汽轮机、Logo、离心机、装配台黑窗与烧结炉A版；反应堆Sodium上下文窄修 | [前批美术](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)、[烧结炉验收](reviews/2026-10-15/sintering-art-accepted-integration/ACCEPTANCE.md)、[Sodium局部验收](archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md) |
 | 反应堆性能 | 端口索引、精确反馈缓存、客户端辉光缓存和整列低面镂空全亮；用户认可效果并要求合main，液体/控制棒保留 | [验收](reviews/2026-10-15/reactor-performance-accepted-integration/ACCEPTANCE.md)、[集成/边界](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)；C2继续后置 |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果、辐射与再处理未实现。
