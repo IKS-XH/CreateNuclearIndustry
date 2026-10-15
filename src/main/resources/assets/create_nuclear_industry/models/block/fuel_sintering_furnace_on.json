@@ -1,3948 +1,5275 @@
 {
-  "parent": "minecraft:block/block",
+  "credit": "Create Nuclear Industry · ART-SINTERING-16B · 16A A",
   "ambientocclusion": true,
   "textures": {
-    "particle": "create_nuclear_industry:block/fuel_sintering_furnace_steel",
     "steel": "create_nuclear_industry:block/fuel_sintering_furnace_steel",
-    "brass": "create_nuclear_industry:block/fuel_sintering_furnace_brass",
-    "refractory": "create_nuclear_industry:block/fuel_sintering_furnace_refractory",
+    "edge": "create_nuclear_industry:block/fuel_sintering_furnace_edge",
+    "ceramic": "create_nuclear_industry:block/fuel_sintering_furnace_refractory",
+    "dark": "create_nuclear_industry:block/fuel_sintering_furnace_dark",
     "window_off": "create_nuclear_industry:block/fuel_sintering_furnace_window_off",
-    "window_on": "create_nuclear_industry:block/fuel_sintering_furnace_window_on"
+    "window_on": "create_nuclear_industry:block/fuel_sintering_furnace_window_on",
+    "sensor": "create_nuclear_industry:block/fuel_sintering_furnace_sensor",
+    "port": "create_nuclear_industry:block/fuel_sintering_furnace_port",
+    "heat": "create_nuclear_industry:block/fuel_sintering_furnace_heat",
+    "particle": "create_nuclear_industry:block/fuel_sintering_furnace_steel"
   },
   "elements": [
     {
+      "name": "厚钢箱体_west裁切0",
       "from": [
-        4.68629150101524,
-        0.0,
-        15.5
+        1,
+        2,
+        3
       ],
       "to": [
-        11.31370849898476,
-        2.451064,
-        16.0
+        1,
+        2.25,
+        4.5
       ],
       "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
         "west": {
-          "texture": "#steel",
           "uv": [
             0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+            10.5,
+            0.25,
+            12
+          ],
+          "texture": "#steel"
         }
       }
     },
     {
+      "name": "厚钢箱体_west裁切1",
       "from": [
-        4.68629150101524,
-        0.0,
-        15.5
+        1,
+        2,
+        11.5
       ],
       "to": [
-        11.31370849898476,
-        2.451064,
-        16.0
+        1,
+        2.25,
+        15
       ],
       "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
         "west": {
-          "texture": "#steel",
           "uv": [
             0,
             0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+            0.25,
+            3.5
+          ],
+          "texture": "#steel"
         }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          1.225532,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
       }
     },
     {
+      "name": "厚钢箱体_west裁切2",
       "from": [
-        15.5,
-        0.0,
-        4.68629150101524
+        1,
+        4.25,
+        3
       ],
       "to": [
-        16.0,
-        2.451064,
-        11.31370849898476
+        1,
+        14,
+        15
       ],
       "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
         "west": {
-          "texture": "#steel",
           "uv": [
+            2.25,
             0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
+            12,
+            12
+          ],
+          "texture": "#steel"
         }
       }
     },
     {
+      "name": "厚钢箱体_west裁切3",
       "from": [
-        4.68629150101524,
-        0.0,
-        0.0
+        1,
+        2.25,
+        3
       ],
       "to": [
-        11.31370849898476,
-        2.451064,
-        0.5
+        1,
+        4.25,
+        5
       ],
       "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
         "west": {
-          "texture": "#steel",
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          1.225532,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        0.0,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        2.451064,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        0.0,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        2.451064,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          1.225532,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        0.0,
-        0.0,
-        4.68629150101524
-      ],
-      "to": [
-        0.5,
-        2.451064,
-        11.31370849898476
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        0.0,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        2.451064,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          1.225532,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4,
-        1.634043,
-        4
-      ],
-      "to": [
-        12,
-        2.451064,
-        12
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        2.451064,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        3.608511,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        2.451064,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        3.608511,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          3.029787,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        15.5,
-        2.451064,
-        4.68629150101524
-      ],
-      "to": [
-        16.0,
-        3.608511,
-        11.31370849898476
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        2.451064,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        3.608511,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          3.029787,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        2.451064,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        3.608511,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        2.451064,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        3.608511,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          3.029787,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        0.0,
-        2.451064,
-        4.68629150101524
-      ],
-      "to": [
-        0.5,
-        3.608511,
-        11.31370849898476
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        2.451064,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        3.608511,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          3.029787,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        3.608511,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        12.731915,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        3.608511,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        12.731915,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          8.170213,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        15.5,
-        3.608511,
-        4.68629150101524
-      ],
-      "to": [
-        16.0,
-        12.731915,
-        11.31370849898476
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        3.608511,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        12.731915,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          8.170213,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        3.608511,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        12.731915,
-        0.5
-      ],
-      "faces": {
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        3.608511,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        12.731915,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          8.170213,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        0.0,
-        3.608511,
-        4.68629150101524
-      ],
-      "to": [
-        0.5,
-        12.731915,
-        11.31370849898476
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        3.608511,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        12.731915,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          8.170213,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        12.731915,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        13.889362,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        12.731915,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        13.889362,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          13.310638,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        15.5,
-        12.731915,
-        4.68629150101524
-      ],
-      "to": [
-        16.0,
-        13.889362,
-        11.31370849898476
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        12.731915,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        13.889362,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          13.310638,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        12.731915,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        13.889362,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        12.731915,
-        0.0
-      ],
-      "to": [
-        11.31370849898476,
-        13.889362,
-        0.5
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          13.310638,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        0.0,
-        12.731915,
-        4.68629150101524
-      ],
-      "to": [
-        0.5,
-        13.889362,
-        11.31370849898476
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        12.731915,
-        15.5
-      ],
-      "to": [
-        11.31370849898476,
-        13.889362,
-        16.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          13.310638,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.934819638439096,
-        13.889362,
-        12.55
-      ],
-      "to": [
-        11.065180361560904,
-        15.795745,
-        15.400000000000002
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.934819638439096,
-        13.889362,
-        12.55
-      ],
-      "to": [
-        11.065180361560904,
-        15.795745,
-        15.400000000000002
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          14.842553,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        12.55,
-        13.889362,
-        4.934819638439096
-      ],
-      "to": [
-        15.400000000000002,
-        15.795745,
-        11.065180361560904
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.934819638439096,
-        13.889362,
-        0.5999999999999994
-      ],
-      "to": [
-        11.065180361560904,
-        15.795745,
-        3.4499999999999993
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          14.842553,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4.934819638439096,
-        13.889362,
-        0.5999999999999994
-      ],
-      "to": [
-        11.065180361560904,
-        15.795745,
-        3.4499999999999993
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.934819638439096,
-        13.889362,
-        0.5999999999999994
-      ],
-      "to": [
-        11.065180361560904,
-        15.795745,
-        3.4499999999999993
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          14.842553,
-          8
-        ],
-        "axis": "y",
-        "angle": 45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        0.5999999999999994,
-        13.889362,
-        4.934819638439096
-      ],
-      "to": [
-        3.4499999999999993,
-        15.795745,
-        11.065180361560904
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.934819638439096,
-        13.889362,
-        12.55
-      ],
-      "to": [
-        11.065180361560904,
-        15.795745,
-        15.400000000000002
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      },
-      "rotation": {
-        "origin": [
-          8,
-          14.842553,
-          8
-        ],
-        "axis": "y",
-        "angle": -45,
-        "rescale": false
-      }
-    },
-    {
-      "from": [
-        4,
-        13.889362,
-        4
-      ],
-      "to": [
-        12,
-        15.795745,
-        12
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.0,
-        15.795745,
-        4.0
-      ],
-      "to": [
-        12.0,
-        16.0,
-        6.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.0,
-        15.795745,
-        10.0
-      ],
-      "to": [
-        12.0,
-        16.0,
-        12.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.0,
-        15.795745,
-        6.0
-      ],
-      "to": [
-        6.0,
-        16.0,
-        10.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        10.0,
-        15.795745,
-        6.0
-      ],
-      "to": [
-        12.0,
-        16.0,
-        10.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        6,
-        15.795745,
-        6
-      ],
-      "to": [
-        10,
-        15.809362,
-        10
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.0,
-        0.0,
-        4.0
-      ],
-      "to": [
-        12.0,
-        1.157447,
-        6.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.0,
-        0.0,
-        10.0
-      ],
-      "to": [
-        12.0,
-        1.157447,
-        12.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.0,
-        0.0,
-        6.0
-      ],
-      "to": [
-        6.0,
-        1.157447,
-        10.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        10.0,
-        0.0,
-        6.0
-      ],
-      "to": [
-        12.0,
-        1.157447,
-        10.0
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        6,
-        0.0,
-        6
-      ],
-      "to": [
-        10,
-        0.068085,
-        10
-      ],
-      "faces": {
-        "north": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "south": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "east": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "west": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "up": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        },
-        "down": {
-          "texture": "#refractory",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        4.68629150101524,
-        3.608511,
-        0
-      ],
-      "to": [
-        5.55,
-        12.731915,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        10.45,
-        3.608511,
-        0
-      ],
-      "to": [
-        11.31370849898476,
-        12.731915,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5.55,
-        3.608511,
-        0
-      ],
-      "to": [
-        10.45,
-        5.787234,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5.55,
-        11.302128,
-        0
-      ],
-      "to": [
-        10.45,
-        12.731915,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#steel",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5.55,
-        5.787234,
-        0
-      ],
-      "to": [
-        10.45,
-        6.53617,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5.55,
-        10.553191,
-        0
-      ],
-      "to": [
-        10.45,
-        11.302128,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5.55,
-        6.53617,
-        0
-      ],
-      "to": [
-        5.8,
-        10.553191,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        10.2,
-        6.53617,
-        0
-      ],
-      "to": [
-        10.45,
-        10.553191,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#brass",
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ]
-        }
-      }
-    },
-    {
-      "from": [
-        5.8,
-        6.53617,
-        0
-      ],
-      "to": [
-        10.2,
-        10.553191,
-        0.08
-      ],
-      "faces": {
-        "north": {
-          "texture": "#window_on",
-          "uv": [
-            6,
-            5,
+            0.25,
             10,
+            2.25,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_west裁切4",
+      "from": [
+        1,
+        2.25,
+        11
+      ],
+      "to": [
+        1,
+        4.25,
+        15
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.25,
+            0,
+            2.25,
+            4
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_east裁切0",
+      "from": [
+        15,
+        2,
+        3
+      ],
+      "to": [
+        15,
+        2.25,
+        4.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            10.5,
+            0.25,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_east裁切1",
+      "from": [
+        15,
+        2,
+        11.5
+      ],
+      "to": [
+        15,
+        2.25,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.25,
+            3.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_east裁切2",
+      "from": [
+        15,
+        4.25,
+        3
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.25,
+            0,
+            12,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_east裁切3",
+      "from": [
+        15,
+        2.25,
+        3
+      ],
+      "to": [
+        15,
+        4.25,
+        5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.25,
+            10,
+            2.25,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_east裁切4",
+      "from": [
+        15,
+        2.25,
+        11
+      ],
+      "to": [
+        15,
+        4.25,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.25,
+            0,
+            2.25,
+            4
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_up裁切0",
+      "from": [
+        1,
+        14,
+        3
+      ],
+      "to": [
+        2,
+        14,
+        15
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            1,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_up裁切1",
+      "from": [
+        14,
+        14,
+        3
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            13,
+            0,
+            14,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_up裁切2",
+      "from": [
+        2,
+        14,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        15
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            1,
+            11,
+            13,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切0",
+      "from": [
+        2.5,
+        2,
+        3
+      ],
+      "to": [
+        4.5,
+        4.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.5,
+            9.5,
+            3.5,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切1",
+      "from": [
+        4.5,
+        2.25,
+        3
+      ],
+      "to": [
+        5,
+        4.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            9.5,
+            4,
+            11.75
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切2",
+      "from": [
+        11.5,
+        2,
+        3
+      ],
+      "to": [
+        13.5,
+        4.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            9.5,
+            12.5,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切3",
+      "from": [
+        11,
+        2.25,
+        3
+      ],
+      "to": [
+        11.5,
+        4.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            9.5,
+            10.5,
+            11.75
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切4",
+      "from": [
+        5,
+        4.25,
+        3
+      ],
+      "to": [
+        11,
+        4.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            9.5,
+            10,
+            9.75
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切5",
+      "from": [
+        3.5,
+        7,
+        3
+      ],
+      "to": [
+        12.5,
+        11.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            2.5,
+            11.5,
+            7
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切6",
+      "from": [
+        13.5,
+        2,
+        3
+      ],
+      "to": [
+        15,
+        4.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.5,
+            9.5,
+            14,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_north裁切7",
+      "from": [
+        1,
+        2,
+        3
+      ],
+      "to": [
+        2.5,
+        4.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            9.5,
+            1.5,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切0",
+      "from": [
+        1,
+        2,
+        15
+      ],
+      "to": [
+        2,
+        14,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            1,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切1",
+      "from": [
+        14,
+        2,
+        15
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            13,
+            0,
+            14,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切2",
+      "from": [
+        2,
+        2,
+        15
+      ],
+      "to": [
+        4.5,
+        7,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            1,
+            7,
+            3.5,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切3",
+      "from": [
+        4.5,
+        2.25,
+        15
+      ],
+      "to": [
+        5,
+        7,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            3.5,
+            7,
+            4,
+            11.75
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切4",
+      "from": [
+        11.5,
+        2,
+        15
+      ],
+      "to": [
+        14,
+        7,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            10.5,
+            7,
+            13,
+            12
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切5",
+      "from": [
+        11,
+        2.25,
+        15
+      ],
+      "to": [
+        11.5,
+        7,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            10,
+            7,
+            10.5,
+            11.75
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切6",
+      "from": [
+        5,
+        4.25,
+        15
+      ],
+      "to": [
+        11,
+        7,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            4,
+            7,
+            10,
+            9.75
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "厚钢箱体_south裁切7",
+      "from": [
+        2,
+        8,
+        15
+      ],
+      "to": [
+        14,
+        14,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            1,
+            0,
+            13,
+            6
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切0",
+      "from": [
+        2,
+        14.75,
+        3
+      ],
+      "to": [
+        5,
+        14.75,
+        14
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            3,
             11
-          ]
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切1",
+      "from": [
+        6,
+        14.75,
+        3
+      ],
+      "to": [
+        10,
+        14.75,
+        5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            4,
+            0,
+            8,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切2",
+      "from": [
+        6,
+        14.75,
+        6
+      ],
+      "to": [
+        10,
+        14.75,
+        10
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            4,
+            3,
+            8,
+            7
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切3",
+      "from": [
+        6,
+        14.75,
+        11
+      ],
+      "to": [
+        10,
+        14.75,
+        14
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            4,
+            8,
+            8,
+            11
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切4",
+      "from": [
+        11,
+        14.75,
+        3
+      ],
+      "to": [
+        14,
+        14.75,
+        14
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            9,
+            0,
+            12,
+            11
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切5",
+      "from": [
+        10,
+        14.75,
+        3
+      ],
+      "to": [
+        11,
+        14.75,
+        5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            8,
+            0,
+            9,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切6",
+      "from": [
+        10,
+        14.75,
+        11
+      ],
+      "to": [
+        11,
+        14.75,
+        14
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            8,
+            8,
+            9,
+            11
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切7",
+      "from": [
+        5,
+        14.75,
+        3
+      ],
+      "to": [
+        6,
+        14.75,
+        5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3,
+            0,
+            4,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖_up裁切8",
+      "from": [
+        5,
+        14.75,
+        11
+      ],
+      "to": [
+        6,
+        14.75,
+        14
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3,
+            8,
+            4,
+            11
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "顶钢盖",
+      "from": [
+        2,
+        14,
+        3
+      ],
+      "to": [
+        14,
+        14.75,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.75
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.75
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            11,
+            0.75
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            11,
+            0.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左_west裁切0",
+      "from": [
+        1,
+        4.5,
+        1
+      ],
+      "to": [
+        1,
+        6,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            0,
+            1.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左_west裁切1",
+      "from": [
+        1,
+        7.5,
+        1
+      ],
+      "to": [
+        1,
+        11,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            3.0,
+            0,
+            6.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左_west裁切2",
+      "from": [
+        1,
+        12.5,
+        1
+      ],
+      "to": [
+        1,
+        14,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            8.0,
+            0,
+            9.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左_east裁切0",
+      "from": [
+        2.5,
+        6.0,
+        1
+      ],
+      "to": [
+        2.5,
+        12.5,
+        1.75
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.5,
+            1.25,
+            8.0,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左_north裁切0",
+      "from": [
+        1,
+        4.5,
+        1
+      ],
+      "to": [
+        2.5,
+        6,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            8,
+            1.5,
+            9.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左_north裁切1",
+      "from": [
+        1,
+        7.5,
+        1
+      ],
+      "to": [
+        2.5,
+        11,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            3,
+            1.5,
+            6.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左_north裁切2",
+      "from": [
+        1,
+        12.5,
+        1
+      ],
+      "to": [
+        2.5,
+        14,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            1.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框左",
+      "from": [
+        1,
+        4.5,
+        1
+      ],
+      "to": [
+        2.5,
+        14,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            2
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_west裁切0",
+      "from": [
+        13.5,
+        7.25,
+        1
+      ],
+      "to": [
+        13.5,
+        11,
+        1.75
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2.75,
+            1.25,
+            6.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_west裁切1",
+      "from": [
+        13.5,
+        12.25,
+        1
+      ],
+      "to": [
+        13.5,
+        12.5,
+        1.75
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            7.75,
+            1.25,
+            8.0,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_east裁切0",
+      "from": [
+        15,
+        4.5,
+        1
+      ],
+      "to": [
+        15,
+        6,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            0,
+            1.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_east裁切1",
+      "from": [
+        15,
+        7.25,
+        1
+      ],
+      "to": [
+        15,
+        11,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.75,
+            0,
+            6.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_east裁切2",
+      "from": [
+        15,
+        12.25,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7.75,
+            0,
+            9.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_east裁切3",
+      "from": [
+        15,
+        11,
+        2
+      ],
+      "to": [
+        15,
+        12.25,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            6.5,
+            0,
+            7.75,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_east裁切4",
+      "from": [
+        15,
+        6,
+        2
+      ],
+      "to": [
+        15,
+        7.25,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.5,
+            0,
+            2.75,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_north裁切0",
+      "from": [
+        13.5,
+        4.5,
+        1
+      ],
+      "to": [
+        15,
+        6,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            8,
+            1.5,
+            9.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_north裁切1",
+      "from": [
+        13.5,
+        7.25,
+        1
+      ],
+      "to": [
+        15,
+        11,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            3,
+            1.5,
+            6.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右_north裁切2",
+      "from": [
+        13.5,
+        12.25,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0,
+            1.5,
+            1.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框右",
+      "from": [
+        13.5,
+        4.5,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            2
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框下_up裁切0",
+      "from": [
+        3.5,
+        6.0,
+        1
+      ],
+      "to": [
+        12.5,
+        6.0,
+        1.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            1.0,
+            0,
+            10.0,
+            0.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框下_up裁切1",
+      "from": [
+        12.5,
+        6.0,
+        1
+      ],
+      "to": [
+        13,
+        6.0,
+        1.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            10.0,
+            0,
+            10.5,
+            0.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框下_up裁切2",
+      "from": [
+        2.5,
+        6.0,
+        1
+      ],
+      "to": [
+        3.5,
+        6.0,
+        1.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.0,
+            0,
+            1.0,
+            0.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框下",
+      "from": [
+        2.5,
+        4.5,
+        1
+      ],
+      "to": [
+        13.5,
+        6.0,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            11.0,
+            1.5
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            11.0,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框上_down裁切0",
+      "from": [
+        3.5,
+        12.5,
+        1
+      ],
+      "to": [
+        12.5,
+        12.5,
+        1.75
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            1.0,
+            0,
+            10.0,
+            0.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框上_down裁切1",
+      "from": [
+        12.5,
+        12.5,
+        1
+      ],
+      "to": [
+        13.5,
+        12.5,
+        1.75
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            10.0,
+            0,
+            11.0,
+            0.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框上_down裁切2",
+      "from": [
+        2.5,
+        12.5,
+        1
+      ],
+      "to": [
+        3.5,
+        12.5,
+        1.75
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            0,
+            1.0,
+            0.75
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框上_north裁切0",
+      "from": [
+        2.5,
+        12.5,
+        1
+      ],
+      "to": [
+        11.5,
+        14,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0,
+            9.0,
+            1.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框上_north裁切1",
+      "from": [
+        11.5,
+        13.5,
+        1
+      ],
+      "to": [
+        13.5,
+        14,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.0,
+            0,
+            11.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "宽门框上",
+      "from": [
+        2.5,
+        12.5,
+        1
+      ],
+      "to": [
+        13.5,
+        14,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            11.0,
+            2
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬左_east裁切0",
+      "from": [
+        3.5,
+        8.25,
+        1.75
+      ],
+      "to": [
+        3.5,
+        10.5,
+        2.65
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.25,
+            0.3500000000000001,
+            4.5,
+            1.25
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬左_east裁切1",
+      "from": [
+        3.5,
+        8.25,
+        2.9
+      ],
+      "to": [
+        3.5,
+        10.5,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.25,
+            0,
+            4.5,
+            0.10000000000000009
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬左_east裁切2",
+      "from": [
+        3.5,
+        10.5,
+        2.5
+      ],
+      "to": [
+        3.5,
+        11.5,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            4.5,
+            0,
+            5.5,
+            0.5
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬左_east裁切3",
+      "from": [
+        3.5,
+        7,
+        2.5
+      ],
+      "to": [
+        3.5,
+        8.25,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1,
+            0,
+            2.25,
+            0.5
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬左",
+      "from": [
+        2.5,
+        6,
+        1.75
+      ],
+      "to": [
+        3.5,
+        12.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1.0,
+            6.5
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬右_west裁切0",
+      "from": [
+        12.5,
+        8.25,
+        1.75
+      ],
+      "to": [
+        12.5,
+        10.5,
+        2.65
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2.25,
+            0.3500000000000001,
+            4.5,
+            1.25
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬右_west裁切1",
+      "from": [
+        12.5,
+        8.25,
+        2.9
+      ],
+      "to": [
+        12.5,
+        10.5,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2.25,
+            0,
+            4.5,
+            0.10000000000000009
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬右_west裁切2",
+      "from": [
+        12.5,
+        10.5,
+        2.5
+      ],
+      "to": [
+        12.5,
+        11.5,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4.5,
+            0,
+            5.5,
+            0.5
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬右_west裁切3",
+      "from": [
+        12.5,
+        7,
+        2.5
+      ],
+      "to": [
+        12.5,
+        8.25,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            1,
+            0,
+            2.25,
+            0.5
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬右_north裁切0",
+      "from": [
+        12.5,
+        6,
+        1.75
+      ],
+      "to": [
+        13,
+        12.5,
+        1.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            0.5,
+            6.5
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬右_north裁切1",
+      "from": [
+        13,
+        7.25,
+        1.75
+      ],
+      "to": [
+        13.5,
+        11,
+        1.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            1.5,
+            1.0,
+            5.25
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬右_north裁切2",
+      "from": [
+        13,
+        12.25,
+        1.75
+      ],
+      "to": [
+        13.5,
+        12.5,
+        1.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            0.0,
+            1.0,
+            0.25
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬下_up裁切0",
+      "from": [
+        3.5,
+        7,
+        2.5
+      ],
+      "to": [
+        12.5,
+        7,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.0,
+            0.75,
+            9.0,
+            1.25
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬下",
+      "from": [
+        3.5,
+        6,
+        1.75
+      ],
+      "to": [
+        12.5,
+        7,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬上_down裁切0",
+      "from": [
+        3.5,
+        11.5,
+        2.5
+      ],
+      "to": [
+        12.5,
+        11.5,
+        3
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            0.75,
+            9.0,
+            1.25
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "耐火内衬上",
+      "from": [
+        3.5,
+        11.5,
+        1.75
+      ],
+      "to": [
+        12.5,
+        12.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1.0
+          ],
+          "texture": "#ceramic"
+        }
+      }
+    },
+    {
+      "name": "固定门下钢板_west裁切0",
+      "from": [
+        3.5,
+        7,
+        1.5
+      ],
+      "to": [
+        3.5,
+        8.25,
+        1.75
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0.75,
+            1.25,
+            1.0
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定门下钢板_east裁切0",
+      "from": [
+        12.5,
+        7,
+        1.5
+      ],
+      "to": [
+        12.5,
+        8.25,
+        1.75
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0.75,
+            1.25,
+            1.0
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定门下钢板_down裁切0",
+      "from": [
+        3.5,
+        7,
+        1.5
+      ],
+      "to": [
+        12.5,
+        7,
+        1.75
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            9.0,
+            0.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定门下钢板",
+      "from": [
+        3.5,
+        7,
+        1.5
+      ],
+      "to": [
+        12.5,
+        8.25,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1.25
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1.25
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1.0
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定门上钢板_west裁切0",
+      "from": [
+        3.5,
+        10.5,
+        1.5
+      ],
+      "to": [
+        3.5,
+        11.5,
+        1.75
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            0.75,
+            1.0,
+            1.0
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定门上钢板_east裁切0",
+      "from": [
+        12.5,
+        10.5,
+        1.5
+      ],
+      "to": [
+        12.5,
+        11.5,
+        1.75
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            0.75,
+            1.0,
+            1.0
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定门上钢板_up裁切0",
+      "from": [
+        3.5,
+        11.5,
+        1.5
+      ],
+      "to": [
+        12.5,
+        11.5,
+        1.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            9.0,
+            0.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定门上钢板",
+      "from": [
+        3.5,
+        10.5,
+        1.5
+      ],
+      "to": [
+        12.5,
+        11.5,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1.0
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1.0
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            1.0
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "窄窗炉膛背壁",
+      "from": [
+        3.5,
+        8.25,
+        2.65
+      ],
+      "to": [
+        12.5,
+        10.5,
+        2.9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#window_on"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            2.25
+          ],
+          "texture": "#dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            0.25
+          ],
+          "texture": "#dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            9.0,
+            0.25
+          ],
+          "texture": "#dark"
+        }
+      }
+    },
+    {
+      "name": "实体铰座6_east裁切0",
+      "from": [
+        2.5,
+        6,
+        0.5
+      ],
+      "to": [
+        2.5,
+        7.5,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            2,
+            1.5,
+            2.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座6_down裁切0",
+      "from": [
+        0.5,
+        6,
+        0.5
+      ],
+      "to": [
+        1,
+        6,
+        3
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.5,
+            2.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座6_down裁切1",
+      "from": [
+        1,
+        6,
+        0.5
+      ],
+      "to": [
+        2.5,
+        6,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.5,
+            0.0,
+            2.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座6_up裁切0",
+      "from": [
+        0.5,
+        7.5,
+        0.5
+      ],
+      "to": [
+        1,
+        7.5,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.5,
+            2.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座6_up裁切1",
+      "from": [
+        1,
+        7.5,
+        0.5
+      ],
+      "to": [
+        2.5,
+        7.5,
+        1
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.5,
+            0.0,
+            2.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座6_south裁切0",
+      "from": [
+        0.5,
+        6,
+        3
+      ],
+      "to": [
+        1,
+        7.5,
+        3
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.5,
+            1.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座6",
+      "from": [
+        0.5,
+        6,
+        0.5
+      ],
+      "to": [
+        2.5,
+        7.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.0,
+            1.5
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            1.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_west裁切0",
+      "from": [
+        13,
+        6,
+        0.5
+      ],
+      "to": [
+        13,
+        7.25,
+        1.75
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0.25,
+            1.25,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_down裁切0",
+      "from": [
+        13,
+        6,
+        0.5
+      ],
+      "to": [
+        13.5,
+        6,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            0.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_down裁切1",
+      "from": [
+        15,
+        6,
+        0.5
+      ],
+      "to": [
+        15.5,
+        6,
+        2
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            2,
+            0.0,
+            2.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_down裁切2",
+      "from": [
+        13.5,
+        6,
+        0.5
+      ],
+      "to": [
+        15,
+        6,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.5,
+            0.0,
+            2,
+            0.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_up裁切0",
+      "from": [
+        13,
+        7.25,
+        0.5
+      ],
+      "to": [
+        13.5,
+        7.25,
+        1.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            1.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_up裁切1",
+      "from": [
+        15,
+        7.25,
+        0.5
+      ],
+      "to": [
+        15.5,
+        7.25,
+        2
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2,
+            0.0,
+            2.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_up裁切2",
+      "from": [
+        13.5,
+        7.25,
+        0.5
+      ],
+      "to": [
+        15,
+        7.25,
+        1
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.5,
+            0.0,
+            2,
+            0.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6_south裁切0",
+      "from": [
+        15,
+        6,
+        2
+      ],
+      "to": [
+        15.5,
+        7.25,
+        2
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            2,
+            0.0,
+            2.5,
+            1.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧6",
+      "from": [
+        13,
+        6,
+        0.5
+      ],
+      "to": [
+        15.5,
+        7.25,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            1.25
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            1.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "实体铰座11_east裁切0",
+      "from": [
+        2.5,
+        11,
+        0.5
+      ],
+      "to": [
+        2.5,
+        12.5,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            2,
+            1.5,
+            2.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座11_down裁切0",
+      "from": [
+        0.5,
+        11,
+        0.5
+      ],
+      "to": [
+        1,
+        11,
+        3
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            0.5,
+            2.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座11_down裁切1",
+      "from": [
+        1,
+        11,
+        0.5
+      ],
+      "to": [
+        2.5,
+        11,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.5,
+            0.0,
+            2.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座11_up裁切0",
+      "from": [
+        0.5,
+        12.5,
+        0.5
+      ],
+      "to": [
+        1,
+        12.5,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            0.5,
+            2.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座11_up裁切1",
+      "from": [
+        1,
+        12.5,
+        0.5
+      ],
+      "to": [
+        2.5,
+        12.5,
+        1
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.5,
+            0.0,
+            2.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座11_south裁切0",
+      "from": [
+        0.5,
+        11,
+        3
+      ],
+      "to": [
+        1,
+        12.5,
+        3
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            0.5,
+            1.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "实体铰座11",
+      "from": [
+        0.5,
+        11,
+        0.5
+      ],
+      "to": [
+        2.5,
+        12.5,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.0,
+            1.5
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            1.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_west裁切0",
+      "from": [
+        13,
+        11,
+        0.5
+      ],
+      "to": [
+        13,
+        12,
+        1.75
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0.25,
+            1,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_west裁切1",
+      "from": [
+        13,
+        12,
+        1
+      ],
+      "to": [
+        13,
+        12.25,
+        1.75
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            1,
+            0.25,
+            1.25,
+            1
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_down裁切0",
+      "from": [
+        13,
+        11,
+        0.5
+      ],
+      "to": [
+        13.5,
+        11,
+        1.75
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            0.5,
+            1.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_down裁切1",
+      "from": [
+        15,
+        11,
+        0.5
+      ],
+      "to": [
+        15.5,
+        11,
+        2
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            2,
+            0.0,
+            2.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_down裁切2",
+      "from": [
+        13.5,
+        11,
+        0.5
+      ],
+      "to": [
+        15,
+        11,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.5,
+            0.0,
+            2,
+            0.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_up裁切0",
+      "from": [
+        13,
+        12.25,
+        1
+      ],
+      "to": [
+        13.5,
+        12.25,
+        1.75
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0.5,
+            0.5,
+            1.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_up裁切1",
+      "from": [
+        15,
+        12.25,
+        0.5
+      ],
+      "to": [
+        15.5,
+        12.25,
+        2
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2,
+            0.0,
+            2.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_up裁切2",
+      "from": [
+        13.5,
+        12.25,
+        0.5
+      ],
+      "to": [
+        15,
+        12.25,
+        1
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.5,
+            0.0,
+            2,
+            0.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11_south裁切0",
+      "from": [
+        15,
+        11,
+        2
+      ],
+      "to": [
+        15.5,
+        12.25,
+        2
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            2,
+            0.0,
+            2.5,
+            1.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "固定锁紧11",
+      "from": [
+        13,
+        11,
+        0.5
+      ],
+      "to": [
+        15.5,
+        12.25,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            2.5,
+            1.25
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            1.25
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "背部检修加强梁",
+      "from": [
+        2,
+        7,
+        15
+      ],
+      "to": [
+        14,
+        8,
+        15.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            12,
+            1
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            1
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            1
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.5
+          ],
+          "texture": "#edge"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "传感器_east裁切0",
+      "from": [
+        13.5,
+        12.25,
+        0.5
+      ],
+      "to": [
+        13.5,
+        13.5,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.25,
+            0,
+            1.5,
+            0.5
+          ],
+          "texture": "#sensor"
+        }
+      }
+    },
+    {
+      "name": "传感器_down裁切0",
+      "from": [
+        11.5,
+        12,
+        0.5
+      ],
+      "to": [
+        13,
+        12,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            1.5,
+            0.5
+          ],
+          "texture": "#sensor"
+        }
+      }
+    },
+    {
+      "name": "传感器_north裁切0",
+      "from": [
+        11.5,
+        12,
+        0.5
+      ],
+      "to": [
+        13,
+        13.5,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            1.5,
+            1.5
+          ],
+          "texture": "#sensor"
+        }
+      }
+    },
+    {
+      "name": "传感器_north裁切1",
+      "from": [
+        13,
+        12.25,
+        0.5
+      ],
+      "to": [
+        13.5,
+        13.5,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.5,
+            0.0,
+            2.0,
+            1.25
+          ],
+          "texture": "#sensor"
+        }
+      }
+    },
+    {
+      "name": "传感器_south裁切0",
+      "from": [
+        11.5,
+        12,
+        1
+      ],
+      "to": [
+        13,
+        12.5,
+        1
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0.0,
+            1.0,
+            1.5,
+            1.5
+          ],
+          "texture": "#sensor"
+        }
+      }
+    },
+    {
+      "name": "传感器_south裁切1",
+      "from": [
+        13,
+        12.25,
+        1
+      ],
+      "to": [
+        13.5,
+        12.5,
+        1
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            1.5,
+            1.0,
+            2.0,
+            1.25
+          ],
+          "texture": "#sensor"
+        }
+      }
+    },
+    {
+      "name": "传感器",
+      "from": [
+        11.5,
+        12,
+        0.5
+      ],
+      "to": [
+        13.5,
+        13.5,
+        1
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            1.5
+          ],
+          "texture": "#sensor"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.0,
+            0.5
+          ],
+          "texture": "#sensor"
+        }
+      }
+    },
+    {
+      "name": "进料口左唇_east裁切0",
+      "from": [
+        6,
+        14.75,
+        6
+      ],
+      "to": [
+        6,
+        16,
+        10
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            1,
+            1.25,
+            5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "进料口左唇",
+      "from": [
+        5,
+        14.75,
+        5
+      ],
+      "to": [
+        6,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            6,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1,
+            6
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "进料口右唇_west裁切0",
+      "from": [
+        10,
+        14.75,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            1,
+            1.25,
+            5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "进料口右唇",
+      "from": [
+        10,
+        14.75,
+        5
+      ],
+      "to": [
+        11,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            6,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            1,
+            6
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "进料口前唇",
+      "from": [
+        6,
+        14.75,
+        5
+      ],
+      "to": [
+        10,
+        16,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            4,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            4,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "进料口后唇",
+      "from": [
+        6,
+        14.75,
+        10
+      ],
+      "to": [
+        10,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            4,
+            1.25
+          ],
+          "texture": "#edge"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            4,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "底部受热接触块_west裁切0",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        4,
+        0.5,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ],
+          "texture": "#heat"
+        }
+      }
+    },
+    {
+      "name": "底部受热接触块_east裁切0",
+      "from": [
+        12,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        0.5,
+        12
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.5,
+            8
+          ],
+          "texture": "#heat"
+        }
+      }
+    },
+    {
+      "name": "底部受热接触块_north裁切0",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        0.5,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            1.5,
+            8,
+            2
+          ],
+          "texture": "#heat"
+        }
+      }
+    },
+    {
+      "name": "底部受热接触块_south裁切0",
+      "from": [
+        4,
+        0,
+        12
+      ],
+      "to": [
+        12,
+        0.5,
+        12
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            1.5,
+            8,
+            2
+          ],
+          "texture": "#heat"
+        }
+      }
+    },
+    {
+      "name": "底部受热接触块",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        2,
+        12
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#heat"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_west裁切0",
+      "from": [
+        1,
+        0.5,
+        1
+      ],
+      "to": [
+        1,
+        1.75,
+        15
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            0,
+            1.25,
+            14
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_west裁切1",
+      "from": [
+        1,
+        1.75,
+        1
+      ],
+      "to": [
+        1,
+        2,
+        4.5
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            1.25,
+            10.5,
+            1.5,
+            14
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_west裁切2",
+      "from": [
+        1,
+        1.75,
+        11.5
+      ],
+      "to": [
+        1,
+        2,
+        15
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            1.25,
+            0,
+            1.5,
+            3.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_east裁切0",
+      "from": [
+        15,
+        0.5,
+        1
+      ],
+      "to": [
+        15,
+        1.75,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            0,
+            1.25,
+            14
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_east裁切1",
+      "from": [
+        15,
+        1.75,
+        1
+      ],
+      "to": [
+        15,
+        2,
+        4.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.25,
+            10.5,
+            1.5,
+            14
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_east裁切2",
+      "from": [
+        15,
+        1.75,
+        11.5
+      ],
+      "to": [
+        15,
+        2,
+        15
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.25,
+            0,
+            1.5,
+            3.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_down裁切0",
+      "from": [
+        1,
+        0.5,
+        1
+      ],
+      "to": [
+        4,
+        0.5,
+        15
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            3,
+            14
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_down裁切1",
+      "from": [
+        12,
+        0.5,
+        1
+      ],
+      "to": [
+        15,
+        0.5,
+        15
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            11,
+            0,
+            14,
+            14
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_down裁切2",
+      "from": [
+        4,
+        0.5,
+        1
+      ],
+      "to": [
+        12,
+        0.5,
+        4
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            3,
+            0,
+            11,
+            3
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_down裁切3",
+      "from": [
+        4,
+        0.5,
+        12
+      ],
+      "to": [
+        12,
+        0.5,
+        15
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            3,
+            11,
+            11,
+            14
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_up裁切0",
+      "from": [
+        1,
+        2,
+        1
+      ],
+      "to": [
+        4.5,
+        2,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            2
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_up裁切1",
+      "from": [
+        11.5,
+        2,
+        1
+      ],
+      "to": [
+        15,
+        2,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            10.5,
+            0,
+            14,
+            2
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_north裁切0",
+      "from": [
+        1,
+        0.5,
+        1
+      ],
+      "to": [
+        4.5,
+        2,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_north裁切1",
+      "from": [
+        11.5,
+        0.5,
+        1
+      ],
+      "to": [
+        15,
+        2,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.5,
+            0,
+            14,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_north裁切2",
+      "from": [
+        4.5,
+        0.5,
+        1
+      ],
+      "to": [
+        11.5,
+        1.75,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            0.25,
+            10.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_south裁切0",
+      "from": [
+        1,
+        0.5,
+        15
+      ],
+      "to": [
+        4.5,
+        2,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            3.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_south裁切1",
+      "from": [
+        11.5,
+        0.5,
+        15
+      ],
+      "to": [
+        15,
+        2,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            10.5,
+            0,
+            14,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "低钢底座_south裁切2",
+      "from": [
+        4.5,
+        0.5,
+        15
+      ],
+      "to": [
+        11.5,
+        1.75,
+        15
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            3.5,
+            0.25,
+            10.5,
+            1.5
+          ],
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "name": "north出料口_west裁切0",
+      "from": [
+        5,
+        2.25,
+        0
+      ],
+      "to": [
+        5,
+        4.25,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            0.25,
+            2.0,
+            3.25
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "north出料口_east裁切0",
+      "from": [
+        11,
+        2.25,
+        0
+      ],
+      "to": [
+        11,
+        4.25,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            0.25,
+            2.0,
+            3.25
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "north出料口_up裁切0",
+      "from": [
+        5,
+        4.25,
+        0
+      ],
+      "to": [
+        11,
+        4.25,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            6,
+            3
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "north出料口",
+      "from": [
+        5,
+        2.25,
+        0
+      ],
+      "to": [
+        11,
+        4.25,
+        3.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇_west裁切0",
+      "from": [
+        4.5,
+        1.75,
+        0
+      ],
+      "to": [
+        4.5,
+        2,
+        1
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            2.25,
+            0.25,
+            3.25
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇_west裁切1",
+      "from": [
+        4.5,
+        2,
+        0
+      ],
+      "to": [
+        4.5,
+        2.25,
+        3
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.25,
+            0.25,
+            0.5,
+            3.25
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇_east裁切0",
+      "from": [
+        11.5,
+        1.75,
+        0
+      ],
+      "to": [
+        11.5,
+        2,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            2.25,
+            0.25,
+            3.25
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇_east裁切1",
+      "from": [
+        11.5,
+        2,
+        0
+      ],
+      "to": [
+        11.5,
+        2.25,
+        3
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.25,
+            0.25,
+            0.5,
+            3.25
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇_down裁切0",
+      "from": [
+        4.5,
+        1.75,
+        0
+      ],
+      "to": [
+        11.5,
+        1.75,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            0,
+            7.0,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇_up裁切0",
+      "from": [
+        4.5,
+        2.25,
+        0
+      ],
+      "to": [
+        5,
+        2.25,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.0,
+            0,
+            0.5,
+            3
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇_up裁切1",
+      "from": [
+        11,
+        2.25,
+        0
+      ],
+      "to": [
+        11.5,
+        2.25,
+        3
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            6.5,
+            0,
+            7.0,
+            3
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "north出料托唇",
+      "from": [
+        4.5,
+        1.75,
+        0
+      ],
+      "to": [
+        11.5,
+        2.25,
+        3.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料口_west裁切0",
+      "from": [
+        5,
+        2.25,
+        15
+      ],
+      "to": [
+        5,
+        4.25,
+        16
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            0,
+            2.0,
+            1
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "south出料口_east裁切0",
+      "from": [
+        11,
+        2.25,
+        15
+      ],
+      "to": [
+        11,
+        4.25,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            0,
+            2.0,
+            1
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "south出料口_up裁切0",
+      "from": [
+        5,
+        4.25,
+        15
+      ],
+      "to": [
+        11,
+        4.25,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            2.25,
+            6,
+            3.25
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "south出料口",
+      "from": [
+        5,
+        2.25,
+        12.75
+      ],
+      "to": [
+        11,
+        4.25,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            6,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇_west裁切0",
+      "from": [
+        4.5,
+        1.75,
+        15
+      ],
+      "to": [
+        4.5,
+        2,
+        16
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.0,
+            0,
+            0.25,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇_west裁切1",
+      "from": [
+        4.5,
+        2,
+        15
+      ],
+      "to": [
+        4.5,
+        2.25,
+        16
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0.25,
+            0,
+            0.5,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇_east裁切0",
+      "from": [
+        11.5,
+        1.75,
+        15
+      ],
+      "to": [
+        11.5,
+        2,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.0,
+            0,
+            0.25,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇_east裁切1",
+      "from": [
+        11.5,
+        2,
+        15
+      ],
+      "to": [
+        11.5,
+        2.25,
+        16
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.25,
+            0,
+            0.5,
+            1
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇_down裁切0",
+      "from": [
+        4.5,
+        1.75,
+        15
+      ],
+      "to": [
+        11.5,
+        1.75,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0.0,
+            2.25,
+            7.0,
+            3.25
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇_up裁切0",
+      "from": [
+        4.5,
+        2.25,
+        15
+      ],
+      "to": [
+        5,
+        2.25,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0.0,
+            2.25,
+            0.5,
+            3.25
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇_up裁切1",
+      "from": [
+        11,
+        2.25,
+        15
+      ],
+      "to": [
+        11.5,
+        2.25,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            6.5,
+            2.25,
+            7.0,
+            3.25
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "south出料托唇",
+      "from": [
+        4.5,
+        1.75,
+        12.75
+      ],
+      "to": [
+        11.5,
+        2.25,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "west出料口_up裁切0",
+      "from": [
+        0,
+        4.25,
+        5
+      ],
+      "to": [
+        1,
+        4.25,
+        11
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            1,
+            6
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "west出料口_north裁切0",
+      "from": [
+        0,
+        2.25,
+        5
+      ],
+      "to": [
+        1,
+        4.25,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            1,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "west出料口_south裁切0",
+      "from": [
+        0,
+        2.25,
+        11
+      ],
+      "to": [
+        1,
+        4.25,
+        11
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            1,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "west出料口",
+      "from": [
+        0,
+        2.25,
+        5
+      ],
+      "to": [
+        3.25,
+        4.25,
+        11
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            6,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "west出料托唇_down裁切0",
+      "from": [
+        0,
+        1.75,
+        4.5
+      ],
+      "to": [
+        1,
+        1.75,
+        11.5
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0.0,
+            1,
+            7.0
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "west出料托唇_up裁切0",
+      "from": [
+        0,
+        2.25,
+        4.5
+      ],
+      "to": [
+        1,
+        2.25,
+        5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0.0,
+            1,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "west出料托唇_up裁切1",
+      "from": [
+        0,
+        2.25,
+        11
+      ],
+      "to": [
+        1,
+        2.25,
+        11.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            6.5,
+            1,
+            7.0
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "west出料托唇_north裁切0",
+      "from": [
+        0,
+        1.75,
+        4.5
+      ],
+      "to": [
+        1,
+        2.25,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0.0,
+            1,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "west出料托唇_south裁切0",
+      "from": [
+        0,
+        1.75,
+        11.5
+      ],
+      "to": [
+        1,
+        2.25,
+        11.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0.0,
+            1,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "west出料托唇",
+      "from": [
+        0,
+        1.75,
+        4.5
+      ],
+      "to": [
+        3.25,
+        2.25,
+        11.5
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "east出料口_up裁切0",
+      "from": [
+        15,
+        4.25,
+        5
+      ],
+      "to": [
+        16,
+        4.25,
+        11
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2.25,
+            0,
+            3.25,
+            6
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "east出料口_north裁切0",
+      "from": [
+        15,
+        2.25,
+        5
+      ],
+      "to": [
+        16,
+        4.25,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            0.0,
+            3.25,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "east出料口_south裁切0",
+      "from": [
+        15,
+        2.25,
+        11
+      ],
+      "to": [
+        16,
+        4.25,
+        11
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            2.25,
+            0.0,
+            3.25,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "east出料口",
+      "from": [
+        12.75,
+        2.25,
+        5
+      ],
+      "to": [
+        16,
+        4.25,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            6,
+            2.0
+          ],
+          "texture": "#port"
+        }
+      }
+    },
+    {
+      "name": "east出料托唇_down裁切0",
+      "from": [
+        15,
+        1.75,
+        4.5
+      ],
+      "to": [
+        16,
+        1.75,
+        11.5
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            2.25,
+            0.0,
+            3.25,
+            7.0
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "east出料托唇_up裁切0",
+      "from": [
+        15,
+        2.25,
+        4.5
+      ],
+      "to": [
+        16,
+        2.25,
+        5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2.25,
+            0.0,
+            3.25,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "east出料托唇_up裁切1",
+      "from": [
+        15,
+        2.25,
+        11
+      ],
+      "to": [
+        16,
+        2.25,
+        11.5
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2.25,
+            6.5,
+            3.25,
+            7.0
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "east出料托唇_north裁切0",
+      "from": [
+        15,
+        1.75,
+        4.5
+      ],
+      "to": [
+        16,
+        2.25,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            0.0,
+            3.25,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "east出料托唇_south裁切0",
+      "from": [
+        15,
+        1.75,
+        11.5
+      ],
+      "to": [
+        16,
+        2.25,
+        11.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            2.25,
+            0.0,
+            3.25,
+            0.5
+          ],
+          "texture": "#edge"
+        }
+      }
+    },
+    {
+      "name": "east出料托唇",
+      "from": [
+        12.75,
+        1.75,
+        4.5
+      ],
+      "to": [
+        16,
+        2.25,
+        11.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            0,
+            7.0,
+            0.5
+          ],
+          "texture": "#edge"
         }
       }
     }
-  ]
+  ],
+  "parent": "minecraft:block/block"
 }
