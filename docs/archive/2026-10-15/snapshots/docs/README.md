@@ -38,7 +38,7 @@ Logo已获用户验收并[合入main`d8efdc9`](../../reviews/2026-10-14/logo-acc
 
 用户2026-10-12明确开始多级专用管网，热冷却液与超临界蒸汽只走专用管泵，保留Create普通/创造储罐；随后明确本批只做流量，管网压力与超压损坏后置。已确认新增工业反应堆冷热口、管网优先、管理员随后；[首批流量设计](../../designs/2026-10-12-tiered-fluid-network-design.md)列出二/三级流量、配方及锅炉工业接入建议，[锁定Create禁运核查](../../reviews/2026-10-12/tiered-pipe-preparation/RESTRICTION-STUDY.md)提供真实事务边界。新增数值和接口范围待集中确认后自动派发；原锅炉温压与16³独立人工门保持，旧[分阶段准备稿](../../plans/2026-10-12-large-reactor-infrastructure-preparation.md)的首批一档建议已被替代。
 
-用户2026-10-12明确通过可变反应堆、快捷换料、窗口/顶盖控件及重进存档复看，已按[联合验收](../../reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)净合main `6bdef37`，同源冻结包复用，未重复测试构建或回写世界。下方旧候选等待描述为历史。用户指定的[锅炉16³上限](../../../../superpowers/plans/2026-10-12-boiler-size-limit-01.md)已交[候选 `30020e4`](../../../../reviews/2026-10-12/boiler-size-limit-01/CANDIDATE.md)，29/29定向、真实3/3及独立窄审通过，新范围独立留候选手测；按用户答复继续当前测试存档。
+用户2026-10-12明确通过可变反应堆、快捷换料、窗口/顶盖控件及重进存档复看，已按[联合验收](../../reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)净合main `6bdef37`，同源冻结包复用，未重复测试构建或回写世界。下方旧候选等待描述为历史。用户指定的[锅炉16³上限](../../plans/2026-10-12-boiler-size-limit-01.md)已交[候选 `30020e4`](../../../../reviews/2026-10-12/boiler-size-limit-01/CANDIDATE.md)，29/29定向、真实3/3及独立窄审通过，新范围独立留候选手测；按用户答复继续当前测试存档。
 
 候选进入原存档的换热器弱集合并发故障已交[窄修候选5d01314](../../reviews/2026-10-12/exchanger-load-crash-01/CANDIDATE.md)，30/30定向、真实Basin7/7、唯一增量打包及独立窄审通过。现候选JAR仅桥class改变，快捷换料/ART09输入保持；从同一候选目录重启并进入原世界复看，本故障及其他人工门分别保持，未合main。
 

@@ -1,6 +1,6 @@
 # 《机械动力：核工业》实施路线图
 
-**更新：2026-10-12。** 用户确认反应堆可变尺寸、快捷换料、观察窗与顶面控件复看通过，最近加载故障也已手测通过；接受组合已[净合main `6bdef37`](../../reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原自动/审查和最终制品复用。此前2026-10-11美术集成main `fba424fc`及各设备教学验收记录保持。当前分级流量候选待手测；[锅炉最大外尺寸16³](../../../../superpowers/plans/2026-10-12-boiler-size-limit-01.md)新增范围仍独立待验。
+**更新：2026-10-12。** 用户确认反应堆可变尺寸、快捷换料、观察窗与顶面控件复看通过，最近加载故障也已手测通过；接受组合已[净合main `6bdef37`](../../reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md)，原自动/审查和最终制品复用。此前2026-10-11美术集成main `fba424fc`及各设备教学验收记录保持。当前分级流量候选待手测；[锅炉最大外尺寸16³](../../plans/2026-10-12-boiler-size-limit-01.md)新增范围仍独立待验。
 
 技术基线：Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。版本仍为0.1.0 Alpha，当前完成批次不等于首个可发布版本出口已完成。
 

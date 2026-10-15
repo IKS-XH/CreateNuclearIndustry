@@ -18,7 +18,6 @@
 
 当前活动卡：
 
-- [锅炉16³](superpowers/plans/2026-10-12-boiler-size-limit-01.md)：人工门暂缓、未合main。
 - [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
 - [模拟器02B](superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)、[三维工具](superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：辅助任务仍无整体验收，不自动改跑。
 

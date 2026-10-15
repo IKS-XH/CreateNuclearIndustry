@@ -41,3 +41,13 @@ JUnit自动更新logs/debug.log及latest.log，原字节完整留在dirty-before
 本轮读取并应用`C:/Users/IKSXH/.codex/skills/minecraft-modding/SKILL.md`、minecraft-testing/SKILL.md、minecraft-ci-release/SKILL.md及superpowers6.4.2 verification-before-completion；核实际MC1.21.1/Java21/NeoForge21.1.219/Create6.0.10-280/Ponder1.0.82/Flywheel1.0.6，不升级栈。Python完整路径`C:/Users/IKSXH/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe`；TEMP/TMP仅本次进程树用E盘并已恢复，不停其他服务/进程。
 
 PM处理日志保持、组合审查并提交准确来源后，执行者才从该干净Git树完整导出/校验并做唯一必要assemble；此报告不把阶段1交付称为正式制品完成。
+
+## 阶段2：准确来源与最终包（2026-10-15）
+
+PM恢复原两日志、核完整保护及一次组合窄审后，提交准确来源`876346979190fb6f49c73e4070e36ef127af9d54`，tree `59db58a8e0d972b3417ab652d845db2f57bb38b2`。执行者直接从全部Git blob完整导出6617文件（1970生产源码/资源），无.git、不带main dirty；全部完成并核零缺项/额外/哈希差异后，才启动唯一`assemble --no-daemon --console=plain`。Gradle19秒、实际19.9850509秒、exit0；compileJava实际FROM-CACHE，未clean/全build/重复测试或GameTest。
+
+可交PM复制的冻结包为`build/reports/boiler-size-accepted-integration/built-c12a7ded.jar`，3304938 bytes，SHA256 `c12a7ded24ef6541eef4564fc3412eeb9aa79eb19805e86b822df52202958c3c`。来源、class真实内部名/SourceFile、资源Git blob、编译输出及JAR逐项绑定通过；701输出class/1577输出资源经15条排除排18项，最终691class＋1569资源＋Manifest共2261文件载荷零漂移。新增Size GameTest及模板和原排除/JUnit文件无泄漏。
+
+相对原正式33da包仅BoilerState、Settings、BoilerConfig和ExtensionBoilerGameTests四class变化；无新增/删除，其他687class、全部1569资源和Manifest原字节保持，EOL差异0。主目录2108前件写集外、七项准确来源、105原dirty、59世界/运行配置单键例外外全等；原33da正式包及本批备份保持。执行者未替换主目录正式JAR，不做Git写入、不写世界或其他树。
+
+完整证据在本批报告根的FINAL.md、final-identity.json、export-manifest.json、assemble-result/log及artifact-summary/artifact-verification.json；原测试日志更新的严格失败和前后日志冻结保持。执行者至此停止写入，剩余制品窄审补核、正式包复制及Git跟踪由PM处理，不以打包补记15C或其他人工门通过。

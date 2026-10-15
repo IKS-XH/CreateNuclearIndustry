@@ -1,6 +1,6 @@
 # 服务端配置
 
-更新：2026-10-15。本文统一记录当前main配置，不混用独立16³锅炉候选或历史字段。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
+更新：2026-10-15。本文统一记录当前main配置，锅炉16³尺寸上限已按用户手测合入。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
 
 ## 文件和生效
 
@@ -81,11 +81,11 @@
 
 ## 锅炉
 
-来源为[BoilerConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/BoilerConfig.java)。main默认5～11；16³候选另有人工门，不能混作main默认。
+来源为[BoilerConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/BoilerConfig.java)。main默认5～16，三边独立判断，允许跨区块；主目录现有配置已备份后仅将尺寸范围同步为[5,16]。
 
 | 键 | 默认 | 意义 |
 | --- | ---: | --- |
-| dimensionRange | [5,11] | 外尺寸闭区间，两整数；当前main原校验上限32，独立候选改为16 |
+| dimensionRange | [5,16] | 外尺寸闭区间，两个整数须满足5≤min≤max≤16，可缩小合法范围 |
 | waterCapacityPerCellMb / steamCapacityPerCellMb | 2000 / 2000 | 每有效水区/汽区格mB；双汽共用汽容量 |
 | coolantPortFlowMbPerTick / waterSteamPortFlowMbPerTick | 2048 / 4096 | 冷热口/给水汽口mB/t，主被动及专用交易共用 |
 | pairHeatHuPerTick | 18 | 每有效热力回路HU/t上限 |

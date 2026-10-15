@@ -4,4 +4,4 @@
 
 原已审来源30020e4；29/29定向、最终真实3/3自然保存exit0及两次必要候选打包记录均见原[实现](../../2026-10-12/boiler-size-limit-01/IMPLEMENTATION.md)和[审查](../../2026-10-12/boiler-size-limit-01/REVIEW.md)。不因人工通过重跑原生产线或全美术矩阵。
 
-按[合入卡](../../../superpowers/plans/2026-10-15-boiler-size-accepted-integration.md)只将尺寸增量接到当前main，不用旧候选JAR覆盖后续管网/管理员/美术。合入结果、对应来源和最终制品由本批集成记录确认。
+按[合入卡](../../../archive/2026-10-15/plans/2026-10-15-boiler-size-accepted-integration.md)只将尺寸增量接到当前main，不用旧候选JAR覆盖后续管网/管理员/美术。合入结果、对应来源和最终制品由本批集成记录确认。
