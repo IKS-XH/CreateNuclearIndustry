@@ -4,9 +4,9 @@
 
 ## 主分支与正式包
 
-- 已提交生产来源876346979190fb6f49c73e4070e36ef127af9d54，含已验锅炉16³上限、应力余量闭环、锅炉主动出汽及最新美术。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3304938 bytes，SHA256 `c12a7ded24ef6541eef4564fc3412eeb9aa79eb19805e86b822df52202958c3c`，已跟踪Git。
-- 最近干净来源assemble约20秒exit0，691class/1569资源/Manifest与输出一致；本次适配定向33/33，原真实测试及用户验收按范围复用。见[尺寸集成](reviews/2026-10-15/boiler-size-accepted-integration/INTEGRATION.md)及[前批美术](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)，不把assemble当全build或新的Minecraft验收。
+- 已提交生产来源5ea9c509187a3656a08248843e0142d3d7ddca67，接入已验S1/S3/C1/C1L反应堆计算和客户端性能优化，保留锅炉16³、闭环、主动出汽及最新美术。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3323054 bytes，SHA256 `8405e4cb6ad010f4b3f4e7a0e475a39d5e09918605f488c8c7466fc822981d5f`，按用户要求跟踪Git。
+- 最近准确Git来源assemble 18.749秒exit0，699class/1571资源/Manifest与输出一致；与已手测性能包仅两个已解释的内部类调试位置差异，没有新增测试/探针泄漏。原定向、真实测试和用户反馈按范围复用，见[性能集成](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)；不把assemble当全build或新一轮Minecraft/性能验收。
 
 ## 已合入并按相应范围验收
 
@@ -23,6 +23,7 @@
 | 闭环与锅炉汽口 | 应力表绑定PI控制；汽口沿合法工业管主动出汽，不需补外置泵 | [联合手测/合入](archive/2026-10-15/reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md) |
 | 锅炉尺寸与外观 | 三边5～16、长方体及跨区块；用户确认尺寸上限与锅炉外观手测通过，尺寸净增量已接入main | [本批验收](reviews/2026-10-15/boiler-size-accepted-integration/ACCEPTANCE.md) |
 | 已验美术 | 反应堆/锅炉/汽轮机、Logo、离心机、装配台黑窗；反应堆Sodium上下文窄修 | [美术集成](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)、[Sodium局部验收](archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md) |
+| 反应堆性能 | 端口索引、精确反馈缓存、客户端辉光缓存和整列低面镂空全亮；用户认可效果并要求合main，液体/控制棒保留 | [验收](reviews/2026-10-15/reactor-performance-accepted-integration/ACCEPTANCE.md)、[集成/边界](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)；C2继续后置 |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果、辐射与再处理未实现。
 
@@ -33,5 +34,6 @@
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |
 | 历史窄修观察 | 泵静止箭头/加载2048后的现场流量、冷液桶标记创造罐暂无明确独立客户端通过反馈；原管网和两端三角验收不重开。见[静止箭头/配置](archive/2026-10-15/reviews/2026-10-13/industrial-pump-idle-arrow-flow-config/CANDIDATE.md)、[桶交互](archive/2026-10-15/reviews/2026-10-12/industrial-pump-tank-interaction-fix/CANDIDATE.md) |
 | 辅助工具 | 模拟器02B单文件及3D工具整体验收独立，不阻塞已验机组或自动插入主线 |
+| 旧GameTest断言 | 性能候选真实服务端保留一条旧控制棒2.25HU断言失败，S1基线同样失败，当前ceil结果3HU；本次未改测试/玩法，不称全GameTest通过。见[审查](reviews/2026-10-15/reactor-performance-accepted-integration/REVIEW.md) |
 
 管理员GUI曾有一次GL_OUT_OF_MEMORY事故，后续六分钟观察及用户反馈未复现，未定位具体源码根因，不能称已修复；仅再次发生并得到证据时恢复诊断。见[原观察](archive/2026-10-15/reviews/2026-10-14/reactor-administrator-05/OBSERVATION.md)。文档整理不关闭上述门或补写未报告操作。
