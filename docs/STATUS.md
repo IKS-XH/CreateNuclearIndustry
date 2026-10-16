@@ -32,7 +32,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 事故与辐射系统 | 已批准整稿及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)候选`Create_NuclearIndustry-radiation`、基准`5e706e5`已交[初次实现](reviews/2026-10-16/radiation-foundation-01/IMPLEMENTATION-INITIAL.md)及41项定向JUnit、9/9真实服/保存/exit0与assemble证据。[组合窄审](reviews/2026-10-16/radiation-foundation-01/REVIEW-INITIAL.md)发现3项P2：移动/射线和实体列表超预算可能永久不完成、未完成态持表同步过快；已交原执行者第1轮整改，未验收/未合main。集中客户端与真人多人手测待后续候选；[派发依据](reviews/2026-10-16/radiation-foundation-01/DISPATCH.md)，后续事故执行与废料封装另批 |
+| 事故与辐射系统 | 已批准整稿及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)候选`Create_NuclearIndustry-radiation`、基准`5e706e5`已交[初次实现](reviews/2026-10-16/radiation-foundation-01/IMPLEMENTATION-INITIAL.md)及41项定向JUnit。[首审](reviews/2026-10-16/radiation-foundation-01/REVIEW-INITIAL.md)3项P2经[第1轮整改](reviews/2026-10-16/radiation-foundation-01/REVIEW-FIX-01.md)和13/13真实服、全维保存/exit0、assemble后，[窄复审](reviews/2026-10-16/radiation-foundation-01/RE-REVIEW-01.md)确认原项闭合，新增1项P2：相关区块加载/卸载未使待完成任务中的屏蔽结果失效。已交同一执行者第2轮定向整改，未验收/未合main。集中客户端与真人多人手测待稳定候选；[派发依据](reviews/2026-10-16/radiation-foundation-01/DISPATCH.md)，后续事故执行与废料封装另批 |
 | 贫化铀材料与装备 | `codex/depleted-uranium-equipment`来源`0a10e36`已实现粉炼锭、9锭存取块，以及模板＋钻石装备＋贫化铀锭的九件升级；下界合金性能，保留附魔/名称/损伤/饰纹，贫化铀锭修复，仅借用原版外观。4项JUnit、3/3真实GT、全维保存/exit0与一次窄审通过；[集中手测](reviews/2026-10-16/depleted-uranium-01/CANDIDATE.md)尚未报告，未合main/替换正式包。核废料基础封存保持，辐射/事故新增合同按上项设计独立推进 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
