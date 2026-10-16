@@ -1,12 +1,12 @@
 # THERMAL-SODIUM-01 锅炉与汽轮机渲染上下文窄修
 
-2026-10-17，主逻辑PM。用户报告专用服中的锅炉、汽轮机没有连接外观，并指出与已验收的反应堆问题相似；本卡承接局部缺陷修复授权，不引入玩法取舍。当前进度只见[STATUS](../../STATUS.md)。
+2026-10-17，主逻辑PM。用户报告专用服中的锅炉、汽轮机没有连接外观，并指出与已验收的反应堆问题相似；本卡承接局部缺陷修复授权，不引入玩法取舍。当前进度只见[STATUS](../../../STATUS.md)。本卡保存执行时合同，后续见[合入记录](../../../reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)。
 
 ## 已核实依据与目标
 
 main基准`0b29d59`，已提交生产来源`850904d`；Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6。工程依赖不升级。
 
-锅炉`BoilerSurfaceSnapshots.capture(context)`仍只接受真实ClientLevel或精确RenderChunkRegion，遇实际Sodium LevelSlice必返回空。汽轮机的`TurbineCasingAppearanceModel.realWorld`有相同类型限制，且被`TurbineWindowConnectedModel`共用，导致中大型外壳atlas与轴向连窗都回退原模型。反应堆已修同类入口，见[上次诊断](../../archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/DIAGNOSIS.md)。
+锅炉`BoilerSurfaceSnapshots.capture(context)`仍只接受真实ClientLevel或精确RenderChunkRegion，遇实际Sodium LevelSlice必返回空。汽轮机的`TurbineCasingAppearanceModel.realWorld`有相同类型限制，且被`TurbineWindowConnectedModel`共用，导致中大型外壳atlas与轴向连窗都回退原模型。反应堆已修同类入口，见[上次诊断](../../../archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/DIAGNOSIS.md)。
 
 当前用户实例Sodium外层SHA256为`075FD258D40438240CD9FB5AD7ACAD14F341076D53C6E031716679FF9D8737DD`，与已核真实字节码相同，可复用其LevelSlice→NeoForgeModelAccess→getModelData调用链证据。仍须在实际真实类夹具中先复现再修复；不凭安装Iris归因，也不把该确定缺陷当现场唯一原因。
 

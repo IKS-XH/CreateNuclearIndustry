@@ -1,6 +1,6 @@
 # THERMAL-SODIUM-01 客户端候选
 
-2026-10-17，主逻辑PM交付记录；当前状态只见[STATUS](../../../STATUS.md)。依据为[局部修复卡](../../../superpowers/plans/2026-10-17-boiler-turbine-sodium-01.md)，执行和证据见[实现报告](IMPLEMENTATION.md)、[一次组合窄审](REVIEW.md)。
+2026-10-17，主逻辑PM交付记录；保留交付时语境，当前状态只见[STATUS](../../../STATUS.md)，后续见[合入记录](INTEGRATION.md)。依据为[局部修复卡](../../../archive/2026-10-17/plans/2026-10-17-boiler-turbine-sodium-01.md)，执行和证据见[实现报告](IMPLEMENTATION.md)、[一次组合窄审](REVIEW.md)。
 
 ## 根因与范围
 
@@ -13,7 +13,7 @@
 - 独立树`E:/MyMC/NewMod/Create_NuclearIndustry-thermal-sodium`，分支`codex/thermal-sodium-surface`，基准`7d8fdaa`。
 - 已提交来源`80153dd9f52bcd9139d4b5909abec666ff92641b`；恰两处生产文件、两类回归测试，[四项实物清单](SOURCE.json)已核身份。
 - 交付前只读核用户实例现有`create_nuclear_industry-0.1.0_261216.jar`：3333619 bytes、SHA256 `A963B483260AB732B16B74FE0C2C625D8E58328E882BE675A0497C469B173CA3`，与本次baseline完全一致，不是辐射或贫化铀独立候选；执行者和PM均未修改该实例。
-- [交付候选JAR](E:/MyMC/NewMod/Create_NuclearIndustry-thermal-sodium/build/reports/thermal-sodium-20261017/candidate/create_nuclear_industry-0.1.0_261017_thermal-sodium.jar)：**3336385 bytes**，SHA256 `B366EB49F8994BB0213B676F530AE395E03A58F53E59CBA23AB9A77B682D7606`。
+- 交付候选原路径`E:/MyMC/NewMod/Create_NuclearIndustry-thermal-sodium/build/reports/thermal-sodium-20261017/candidate/create_nuclear_industry-0.1.0_261017_thermal-sodium.jar`；同字节实物现见[正式JAR](../../../../build/libs/create_nuclear_industry-0.1.0.jar)：**3336385 bytes**，SHA256 `B366EB49F8994BB0213B676F530AE395E03A58F53E59CBA23AB9A77B682D7606`。
 - 最终包按本卡补充裁定由已提交baseline原载荷＋一次assemble的9项目标class生成，[逐项制品证明](ARTIFACT.json)：2269项保持、7替换＋2新增class、0删除/越界；9项均与assemble相同，其余服务器/反应堆class、资源和metadata逐字节相同。没有新增第三方或测试类。
 - 原始assemble包有Windows检出造成的1231项纯CRLF资源差异，分类和原包均保留；原始包不作为本次精确字节门通过的交付候选。最终链接特意指向`candidate/`内窄包，不是工作树`build/libs`或报告根目录的原始包。
 
