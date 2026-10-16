@@ -48,3 +48,7 @@ main基准`0b29d59`，已提交生产来源`850904d`；Minecraft1.21.1、Java21�
 隔离候选拟用`E:/MyMC/NewMod/Create_NuclearIndustry-thermal-sodium`，`codex/thermal-sodium-surface`，基准为本卡提交后的main。其他同级树分别保留独立内容/人工门，不混入本批。原生工作树接口不能指定项目要求的同级目录，因此按已定目录约定用Git工作树命令。
 
 main世界已于2026-10-16 08:20:59保存全部维度，当前session.lock可独占只读打开；本次不停止用户正在联机的整合包客户端。新目标不存在时完整复制main的run/saves和配置，27文件/13337924 bytes按相对路径、长度和SHA256核对。目标若已存在须先完整备份再复制，禁止混合或链接共享；副本不进Git、不启动测试、不回写main。复制身份写报告目录，由PM准备后再派发。
+
+PM派发记录：隔离树已从`7d8fdaa`创建；目标存档原不存在，完整复制后27文件/13337924 bytes逐项哈希一致，run/config与真实Sodium夹具也已携带。执行者为`/root/thermal_sodium_impl`（gpt-6.1-sol/high，涉及真实模型数据消费与跨世界隔离），Git只读。既有TurbineWindowConnectedModelTest固定生成的`build/reports/art/ART-TURBINE-07B-R2/consumer/window-mesh-glass-uv.json`视为正常测试输出例外，允许原样生成但不改测试、不扩美术任务或纳入Git。
+
+制品补充裁定：新树autocrlf检出使原始assemble包有1231项卡外资源/metadata仅行尾字节差异，全部CRLF→LF后与已提交基线一致；class变化恰两处源码所属9项（含2个新增匿名内部类）。为保持窄候选原资源字节，允许在报告目录`candidate/`生成`create_nuclear_industry-0.1.0_261017_thermal-sodium.jar`：以已核基线包的原载荷为底，只替换/新增这9项已编译class，其他载荷逐字节保持。保留原始assemble包、基线、分类和生成证据，不改资源源文件、不再构建、不替换main正式包；最终包身份和差异仍须独立审查，不以行尾语义等价冒称原始包字节相同。

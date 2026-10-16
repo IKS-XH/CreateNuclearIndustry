@@ -1,0 +1,22 @@
+[
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/client/BoilerSurfaceSnapshots.java",
+    "Length": 15324,
+    "SHA256": "927B611A9255AE6DCB61F6CB90A1686353691F4260E774CAEF9E9D89BBA306E0"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineCasingAppearanceModel.java",
+    "Length": 7435,
+    "SHA256": "98A1C2EE2C5EC587286D9CDA16F0F9C35F1C3C51659C94220F1328CDBF74737E"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/client/BoilerSodiumSurfaceTest.java",
+    "Length": 12189,
+    "SHA256": "45A576783B2C9C69352587AEB1D3B4CBD57B9478FCCE3CD529F078203AC75C04"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineSodiumAppearanceTest.java",
+    "Length": 9545,
+    "SHA256": "E92556345A39A08D6B38ADB3336C6D7C07D53CB4A7194A999B7B8BFB3C9C2A89"
+  }
+]

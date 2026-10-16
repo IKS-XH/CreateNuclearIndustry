@@ -1,0 +1,154 @@
+{
+  "Method": "按PM补充裁定：保留baseline所有载荷字节，只替换或加入本次assemble的9项生产class；未重新构建",
+  "Baseline": {
+    "Path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-thermal-sodium\\build\\reports\\thermal-sodium-20261017\\baseline-7d8fdaa.jar",
+    "Length": 3333619,
+    "SHA256": "A963B483260AB732B16B74FE0C2C625D8E58328E882BE675A0497C469B173CA3"
+  },
+  "Assembled": {
+    "Path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-thermal-sodium\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+    "Length": 3347467,
+    "SHA256": "BF46FE4E9E598442DEF6C5F69D5358C485D4351F719535EF70391BE40CBDD0BC"
+  },
+  "Candidate": {
+    "Path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-thermal-sodium\\build\\reports\\thermal-sodium-20261017\\candidate\\create_nuclear_industry-0.1.0_261017_thermal-sodium.jar",
+    "Length": 3336385,
+    "SHA256": "B366EB49F8994BB0213B676F530AE395E03A58F53E59CBA23AB9A77B682D7606"
+  },
+  "BaselinePayloadFiles": 2276,
+  "CandidatePayloadFiles": 2278,
+  "UnchangedPayloadFiles": 2269,
+  "Differences": [
+    {
+      "Name": "com/iksxh/create_nuclear_industry/boiler/client/BoilerSurfaceSnapshots.class",
+      "Baseline": {
+        "Length": 2727,
+        "SHA256": "E4BF6E90910837C5B5E1F4DE0AB66EA09CCE4D6E6C470305572A572EA0C6871A"
+      },
+      "Assembled": {
+        "Length": 3711,
+        "SHA256": "C3B92B898925AE3458CD84CA64D16ACFEA51C5C13460E46038E1582655E16547"
+      },
+      "Candidate": {
+        "Length": 3711,
+        "SHA256": "C3B92B898925AE3458CD84CA64D16ACFEA51C5C13460E46038E1582655E16547"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/boiler/client/BoilerSurfaceSnapshots$1.class",
+      "Baseline": null,
+      "Assembled": {
+        "Length": 2137,
+        "SHA256": "F5DA5EA1C188BB4F2FDC2CF3E70A107774F72A3EF279FEFC89DDC022822EE062"
+      },
+      "Candidate": {
+        "Length": 2137,
+        "SHA256": "F5DA5EA1C188BB4F2FDC2CF3E70A107774F72A3EF279FEFC89DDC022822EE062"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/boiler/client/BoilerSurfaceSnapshots$Bounds.class",
+      "Baseline": {
+        "Length": 2056,
+        "SHA256": "7FDCA0FB1F56170880D3E3923618C781283790978A60A92707957F288BCC3142"
+      },
+      "Assembled": {
+        "Length": 2056,
+        "SHA256": "F8775F3299D38BC6C5D0BAF027C89DC316941ECCE75FEEF6AEA61C4DD407E26F"
+      },
+      "Candidate": {
+        "Length": 2056,
+        "SHA256": "F8775F3299D38BC6C5D0BAF027C89DC316941ECCE75FEEF6AEA61C4DD407E26F"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/boiler/client/BoilerSurfaceSnapshots$Publication.class",
+      "Baseline": {
+        "Length": 2244,
+        "SHA256": "E1C5D3FF5EE14475FAC52781DAE7A3DA9EEFD2BAB2AF12FC856E970AFE3B5A42"
+      },
+      "Assembled": {
+        "Length": 2244,
+        "SHA256": "8B63DCEE59FEC9C79162563127E69E774B6D1D340CEBC2734FE278DA4C7CCFAD"
+      },
+      "Candidate": {
+        "Length": 2244,
+        "SHA256": "8B63DCEE59FEC9C79162563127E69E774B6D1D340CEBC2734FE278DA4C7CCFAD"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/boiler/client/BoilerSurfaceSnapshots$State.class",
+      "Baseline": {
+        "Length": 12838,
+        "SHA256": "A823468B1C948DCAE151D375B07AC94B6829DA08EF0354824F0B868B38978748"
+      },
+      "Assembled": {
+        "Length": 12838,
+        "SHA256": "B0C46D4ADB0FE9E9578F119DCF95250BCDDB6B723A34DCBFBBFCF2895CAADB00"
+      },
+      "Candidate": {
+        "Length": 12838,
+        "SHA256": "B0C46D4ADB0FE9E9578F119DCF95250BCDDB6B723A34DCBFBBFCF2895CAADB00"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/boiler/client/BoilerSurfaceSnapshots$State$Owner.class",
+      "Baseline": {
+        "Length": 845,
+        "SHA256": "92A680D68CAEEA4B3F712F18D948EC3C0028F4963AAFF19B989555C3E22C8466"
+      },
+      "Assembled": {
+        "Length": 845,
+        "SHA256": "736EBF446E11ACDF6887EB407B57F62C1A093226BC1745ADA817AEF8848D405C"
+      },
+      "Candidate": {
+        "Length": 845,
+        "SHA256": "736EBF446E11ACDF6887EB407B57F62C1A093226BC1745ADA817AEF8848D405C"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/turbine/client/TurbineCasingAppearanceModel.class",
+      "Baseline": {
+        "Length": 8874,
+        "SHA256": "4C7B4D56A0830B3E0EF6601550832249AB1336F1B2580454DBE357650069CDEE"
+      },
+      "Assembled": {
+        "Length": 9642,
+        "SHA256": "520D9123EA39580D553D2496CB39324882DFD21F0C1C20C6F49F1AC51CAC1681"
+      },
+      "Candidate": {
+        "Length": 9642,
+        "SHA256": "520D9123EA39580D553D2496CB39324882DFD21F0C1C20C6F49F1AC51CAC1681"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/turbine/client/TurbineCasingAppearanceModel$1.class",
+      "Baseline": null,
+      "Assembled": {
+        "Length": 2164,
+        "SHA256": "7B565424B638B7B99A13B7BD2E3A8E5B6138543A7E595670CE356CAA2DC0F068"
+      },
+      "Candidate": {
+        "Length": 2164,
+        "SHA256": "7B565424B638B7B99A13B7BD2E3A8E5B6138543A7E595670CE356CAA2DC0F068"
+      }
+    },
+    {
+      "Name": "com/iksxh/create_nuclear_industry/turbine/client/TurbineCasingAppearanceModel$Appearance.class",
+      "Baseline": {
+        "Length": 2275,
+        "SHA256": "EED7204D97EF8C0467E9806649A1B901D9679BEF8CCAB392B816A53549B906C8"
+      },
+      "Assembled": {
+        "Length": 2275,
+        "SHA256": "2EA17D0DF003477F68DA944B89D4D897238121F02958900D5C3348621013467B"
+      },
+      "Candidate": {
+        "Length": 2275,
+        "SHA256": "2EA17D0DF003477F68DA944B89D4D897238121F02958900D5C3348621013467B"
+      }
+    }
+  ],
+  "ThirdPartyOrTestFixtureEntries": [],
+  "OtherPayloadByteIdentical": true
+}
