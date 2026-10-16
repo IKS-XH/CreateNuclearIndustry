@@ -677,5 +677,16 @@
   "automation.create_nuclear_industry.gui.result_selection_expired": "Selection expired, replaced or in another dimension; select again",
   "automation.create_nuclear_industry.gui.result_no_operating_band": "Minimum exceeds attainable heat or no positive step exists",
   "automation.create_nuclear_industry.gui.result_stress_sample_lost": "No valid current stress gauge is bound",
-  "automation.create_nuclear_industry.gui.result_stress_network_busy": "Another regulator owns this kinetic network"
+  "automation.create_nuclear_industry.gui.result_stress_network_busy": "Another regulator owns this kinetic network",
+  "item.create_nuclear_industry.depleted_uranium_ingot": "Depleted Uranium Ingot",
+  "block.create_nuclear_industry.depleted_uranium_block": "Block of Depleted Uranium",
+  "item.create_nuclear_industry.depleted_uranium_helmet": "Depleted Uranium Helmet",
+  "item.create_nuclear_industry.depleted_uranium_chestplate": "Depleted Uranium Chestplate",
+  "item.create_nuclear_industry.depleted_uranium_leggings": "Depleted Uranium Leggings",
+  "item.create_nuclear_industry.depleted_uranium_boots": "Depleted Uranium Boots",
+  "item.create_nuclear_industry.depleted_uranium_sword": "Depleted Uranium Sword",
+  "item.create_nuclear_industry.depleted_uranium_pickaxe": "Depleted Uranium Pickaxe",
+  "item.create_nuclear_industry.depleted_uranium_axe": "Depleted Uranium Axe",
+  "item.create_nuclear_industry.depleted_uranium_shovel": "Depleted Uranium Shovel",
+  "item.create_nuclear_industry.depleted_uranium_hoe": "Depleted Uranium Hoe"
 }

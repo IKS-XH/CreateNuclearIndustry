@@ -1,0 +1,16 @@
+{
+  "addition": {
+    "item": "create_nuclear_industry:depleted_uranium_ingot"
+  },
+  "base": {
+    "item": "minecraft:diamond_axe"
+  },
+  "type": "minecraft:smithing_transform",
+  "result": {
+    "count": 1,
+    "id": "create_nuclear_industry:depleted_uranium_axe"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  }
+}

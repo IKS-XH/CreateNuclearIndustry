@@ -1,0 +1,13 @@
+{
+  "ingredient": {
+    "item": "create_nuclear_industry:depleted_uranium_dust"
+  },
+  "result": {
+    "count": 1,
+    "id": "create_nuclear_industry:depleted_uranium_ingot"
+  },
+  "experience": 0.1,
+  "cookingtime": 100,
+  "type": "minecraft:blasting",
+  "category": "misc"
+}

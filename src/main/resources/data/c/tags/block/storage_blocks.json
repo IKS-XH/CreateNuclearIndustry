@@ -3,6 +3,7 @@
   "values": [
     "#c:storage_blocks/raw_lead",
     "#c:storage_blocks/raw_tin",
-    "#c:storage_blocks/raw_uranium"
+    "#c:storage_blocks/raw_uranium",
+    "#c:storage_blocks/depleted_uranium"
   ]
 }
