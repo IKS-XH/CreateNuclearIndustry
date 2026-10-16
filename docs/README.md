@@ -18,6 +18,7 @@
 
 当前活动卡：
 
+- [锅炉/汽轮机Sodium渲染窄修](superpowers/plans/2026-10-17-boiler-turbine-sodium-01.md)：补齐已核LevelSlice上下文入口，保持现有服务器逻辑，实际联机外观单独验收。
 - [事故与辐射设计](superpowers/specs/2026-10-16-accident-radiation-design.md)：整稿和推荐参数/成本已批准；[第一批辐射基础计划](superpowers/plans/2026-10-16-radiation-foundation-01.md)列明使用标记、剂量、物流/封存屏蔽、防护与仪表的写集和验收，进度见STATUS。
 - [贫化铀材料与装备](superpowers/plans/2026-10-16-depleted-uranium-01.md)：补齐锭块及钻石装备锻造升级，本批仅复用原版外观。
 - [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
