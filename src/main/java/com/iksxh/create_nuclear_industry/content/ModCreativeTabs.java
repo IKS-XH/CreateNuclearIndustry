@@ -50,6 +50,11 @@ public final class ModCreativeTabs {
                         output.accept(ReactorCraftingContent.SHIELDED_GLASS.get());
                         output.accept(ReactorCraftingContent.SHIELDING_CONCRETE_ITEM.get());
                         output.accept(ModItems.FRESH_FUEL_ASSEMBLY.get());
+                        output.accept(RadiationContent.HELMET.get());
+                        output.accept(RadiationContent.CHESTPLATE.get());
+                        output.accept(RadiationContent.LEGGINGS.get());
+                        output.accept(RadiationContent.BOOTS.get());
+                        output.accept(RadiationContent.METER.get());
                         output.accept(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
                         output.accept(ModItems.CONTROL_ROD.get());
                         output.accept(ModItems.STEEL_PLATE.get());

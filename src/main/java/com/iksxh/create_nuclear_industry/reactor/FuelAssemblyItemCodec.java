@@ -126,4 +126,13 @@ public final class FuelAssemblyItemCodec {
     public static ItemStack createCooledSpentFuel() {
         return new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
     }
+
+    /** 枯竭时保留原件完整数据组件；乏燃料不再携带可损耗耐久。 */
+    public static ItemStack createCooledSpentFuel(ItemStack original) {
+        ItemStack spent = new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get().builtInRegistryHolder(), 1,
+                original.getComponentsPatch());
+        spent.remove(net.minecraft.core.component.DataComponents.DAMAGE);
+        spent.remove(net.minecraft.core.component.DataComponents.MAX_DAMAGE);
+        return com.iksxh.create_nuclear_industry.radiation.FuelUseHistory.markUsedCopy(spent);
+    }
 }

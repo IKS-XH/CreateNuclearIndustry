@@ -677,5 +677,22 @@
   "automation.create_nuclear_industry.gui.result_selection_expired": "Selection expired, replaced or in another dimension; select again",
   "automation.create_nuclear_industry.gui.result_no_operating_band": "Minimum exceeds attainable heat or no positive step exists",
   "automation.create_nuclear_industry.gui.result_stress_sample_lost": "No valid current stress gauge is bound",
-  "automation.create_nuclear_industry.gui.result_stress_network_busy": "Another regulator owns this kinetic network"
+  "automation.create_nuclear_industry.gui.result_stress_network_busy": "Another regulator owns this kinetic network",
+  "radiation.create_nuclear_industry.used": "Used fuel assembly · Radioactive",
+  "radiation.create_nuclear_industry.spent": "Radioactive spent fuel · Seal for storage",
+  "radiation.create_nuclear_industry.cask": "Lead cask reduces outward radiation from its payload by 95%",
+  "radiation.create_nuclear_industry.exposed": "Radiation exposure detected. Check your meter and move away.",
+  "radiation.create_nuclear_industry.warning": "Accumulated radiation dose reached %s D",
+  "radiation.create_nuclear_industry.meter": "Field %s D/s · Dose %s D · Absorbed %s D/s",
+  "radiation.create_nuclear_industry.sampling": "Radiation meter sampling…",
+  "radiation.create_nuclear_industry.rack": "Intact rack shields outward radiation from its sealed casks",
+  "item.create_nuclear_industry.radiation_helmet": "Radiation Hood",
+  "item.create_nuclear_industry.radiation_chestplate": "Radiation Jacket",
+  "item.create_nuclear_industry.radiation_leggings": "Radiation Leggings",
+  "item.create_nuclear_industry.radiation_boots": "Radiation Boots",
+  "item.create_nuclear_industry.radiation_meter": "Radiation Meter",
+  "death.attack.create_nuclear_industry.radiation": "%1$s received a fatal radiation dose",
+  "radiation.create_nuclear_industry.field": "Field %s D/s",
+  "radiation.create_nuclear_industry.dose": "Accumulated dose %s D",
+  "radiation.create_nuclear_industry.absorbed": "Absorption %s D/s"
 }

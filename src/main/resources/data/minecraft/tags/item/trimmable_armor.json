@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "create_nuclear_industry:radiation_helmet",
+    "create_nuclear_industry:radiation_chestplate",
+    "create_nuclear_industry:radiation_leggings",
+    "create_nuclear_industry:radiation_boots"
+  ]
+}

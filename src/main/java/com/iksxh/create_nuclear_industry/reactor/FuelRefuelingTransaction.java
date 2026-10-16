@@ -220,7 +220,7 @@ public final class FuelRefuelingTransaction {
             if (current.fuelAssembly().exhausted()) {
                 output = FuelAssemblyItemCodec.isCooledSpentFuel(exactStoredFuel)
                         ? exactStoredFuel.copyWithCount(1)
-                        : FuelAssemblyItemCodec.createCooledSpentFuel();
+                        : FuelAssemblyItemCodec.createCooledSpentFuel(exactStoredFuel);
             } else {
                 if (!FuelAssemblyItemCodec.isFreshFuel(exactStoredFuel)) {
                     return failure(Status.WRONG_FUEL_ITEM, current, ItemStack.EMPTY);
