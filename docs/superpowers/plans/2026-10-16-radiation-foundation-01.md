@@ -47,7 +47,7 @@
 | `J/blockentity/ReactorInstrumentPortBlockEntity.java`、`J/blockentity/ReactorPortBlockEntity.java` | 真实tick成功提交时标记、物品/结构变更通知；原有事务顺序和权限保持 |
 | `J/reactor/FuelAssemblyItemCodec.java`、`J/reactor/FuelRefuelingTransaction.java` | 保留完整物品历史，防止当前版本正常提取/转换丢标记；不研究旧格式 |
 | `J/structure/ReactorStructureLifecycle.java`、`J/storage/DryStorageBlockEntity.java` | 已知边界、生命周期/库存变更及护目镜简要屏蔽信息；不修改原结构合法性或架容量 |
-| 新增`J/mixin/Radiation*.java`、`R/create_nuclear_industry.mixins.json` | 只允许本批原版方块变更通知、Create机械臂/带库存只读访问、放射性掉落伤害保护；不改第三方运输行为 |
+| 新增`J/mixin/Radiation*.java`、`R/create_nuclear_industry.mixins.json` | 只允许本批原版方块变更/BE.setChanged脏通知、Create机械臂/带库存只读访问、放射性掉落伤害保护；不改原版脏标记或第三方运输行为 |
 | `R/data/create_nuclear_industry/recipe/crafting/radiation_*.json` | 恰好四件防护服和一个仪表的5条有序配方 |
 | `R/data/create_nuclear_industry/tags/block/radiation_shielding.json`、`R/data/create_nuclear_industry/damage_type/radiation.json`、`R/data/minecraft/tags/damage_type/bypasses_armor.json` | 明确屏蔽名单与辐射伤害，仅追加本批身份 |
 | `R/assets/create_nuclear_industry/models/item/radiation_*.json`、现有`lang/zh_cn.json`与`en_us.json` | 复用原版皮甲/原生仪表图标及防护服饰纹变体；本批玩家文案，不绘图 |
