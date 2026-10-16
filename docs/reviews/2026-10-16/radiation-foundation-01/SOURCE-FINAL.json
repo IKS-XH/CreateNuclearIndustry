@@ -1,0 +1,347 @@
+{
+  "base": "5e706e535d97cbcfe167fa4338265b44a610964d",
+  "branch": "codex/radiation-foundation",
+  "normalization": "只删除两个文件EOF末尾各一个多余CRLF；未运行编译/测试/assemble",
+  "normalizedAtLocal": "2026-10-16T20:56:25.478552",
+  "historicalSourceManifest": "source-review-fix-02.json",
+  "files": [
+    {
+      "path": "build.gradle",
+      "bytes": 6311,
+      "sha256": "FD29834C3CC77C0ECE0DD1E8D0075024B25004F7491AE914F84C8BDE1B85471B"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/CreateNuclearIndustry.java",
+      "bytes": 13560,
+      "sha256": "815F83DC35BDB266655E8175FA84FDF6A21B7EB1D856FD737BA88BD0789E7394"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java",
+      "bytes": 109342,
+      "sha256": "818FBB7B2BA6CADC72A1DCC355B1046BBA237A37D3AC6D4AB408FBA4E4681368"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/config/RadiationConfig.java",
+      "bytes": 4013,
+      "sha256": "5EEA5D722FDD5F0C1D90473D0C9F3B30F37FE6F8CA50D2FD3DFF0D943920480C"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/content/ModCreativeTabs.java",
+      "bytes": 9548,
+      "sha256": "308477AF01F927B1F95B9922B4E7361D02E1208BCCFA2C429542713FBF8CCE4A"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/content/RadiationContent.java",
+      "bytes": 1312,
+      "sha256": "4BA79745FFE12F6356F0EB938F15A943F383A0E096A80E5719F857340516CE45"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests.java",
+      "bytes": 46259,
+      "sha256": "9ECB4AABA4FDE646EA18391B393E9C4086863A42141E5ED8F68F3A3DD08A1D6D"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/RadiationArmAccessor.java",
+      "bytes": 472,
+      "sha256": "8EC5698EFAC99101A5C5460E7304BD04AE2301BE0727CEB14D21E89AD3D077D9"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/RadiationBeltAccessor.java",
+      "bytes": 650,
+      "sha256": "1CD1D7EAE1BF11AD45B73B3D5075ABC4824B40E09DDDEC90F9191F5B205E3FDC"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/RadiationBlockChangeMixin.java",
+      "bytes": 1287,
+      "sha256": "37B6908D67900701E86FEC0FB9488746B6B7AFDB8A2BEA3CB487D2C29FAA7FB6"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/RadiationInventoryChangeMixin.java",
+      "bytes": 860,
+      "sha256": "797567DB7ACD952CB49D528697445E266FC69463C9FFC84DC576042B9EADAF23"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/RadiationItemEntityMixin.java",
+      "bytes": 1512,
+      "sha256": "0025B2FA112409702800AAEF1961EF3695A8CC6A38F3DF3913E083B1AAC7CD08"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/FuelUseHistory.java",
+      "bytes": 1661,
+      "sha256": "3934F95E7B4A4466052F2D5E8A58D8438BE4C6330ABEC2A166C5BFA85368118E"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/ItemSourceSummary.java",
+      "bytes": 318,
+      "sha256": "87A54946CFBF138319415AF6B3BDAD91437F72C1BE14097A69548E6833F3FD46"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationContainment.java",
+      "bytes": 10667,
+      "sha256": "AB2894181F8935D7F78DED3E4CDFC6A80A77686341519C1BF2BA1F3CA3CA87BC"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationDoseCalculator.java",
+      "bytes": 1276,
+      "sha256": "785FDF8A17D68A2300ED4A9B2F1743B2DDBCB863E2E198BC6C734AF252C63037"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationDoseState.java",
+      "bytes": 1082,
+      "sha256": "6295FD79290280C202041B2AE737EDD7BAFF71D10622DFBD79C594728C431EDF"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationEquipment.java",
+      "bytes": 1134,
+      "sha256": "302D01444A2328A7C922647171890CC80F701A090A80CEA4EF6A372BE6844C9D"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationExposurePayload.java",
+      "bytes": 1681,
+      "sha256": "DCFFBF0B1E1C1185001ACFF9869749ACB3D83901C305746070F43B7AF1DBF7A8"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationFieldSample.java",
+      "bytes": 250,
+      "sha256": "6B99884A1B2DD8ED0C3E1EFDC1FD0253CA842F2819E426E0D222E79A0AE41B03"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationItemSources.java",
+      "bytes": 3327,
+      "sha256": "843C00FE0F43E90F96229C729AA6F36B7DD6F06D87B3F49830B31C068E67A556"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationNetwork.java",
+      "bytes": 759,
+      "sha256": "4A50C2BA409508AC4C7BCF14797C6BB7D98957406DCD9B979D38E4BC6125BFB9"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationParameters.java",
+      "bytes": 2593,
+      "sha256": "96A50784560DA011ACC61377E0A4EE1916DA41403E8BD111DA928B27DE6CF63A"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationServerEvents.java",
+      "bytes": 10261,
+      "sha256": "5C19D24B6FE5329E696887F464DF2866DAFEB6CBD3D3FBF4D3B6CAFC1795752A"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationSourceAdapters.java",
+      "bytes": 4832,
+      "sha256": "EC7603BD1EC91D5B42CB56C0D641671271F4AD612525C8F7DD44250547BFDFB2"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationSourceIndex.java",
+      "bytes": 22873,
+      "sha256": "5E1325FF43AF1ED6DE6B2711A4B5BE9D151853369815AD5CA66D53FF91E1DA47"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/client/RadiationClientEvents.java",
+      "bytes": 4059,
+      "sha256": "3C9A7C544F6804F3B384A35A0F34644EA678B4C462CCF35BDEFB5C7B92AC17F2"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/client/RadiationClientRegistration.java",
+      "bytes": 1557,
+      "sha256": "F22856539828CB0A5879593D059919E54C776A34E1BE81E67225D8FCEF2547A0"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/reactor/FuelAssemblyItemCodec.java",
+      "bytes": 6084,
+      "sha256": "0FB4507591EA7779AE2170314BD9748A3902032F1B16357822821DB35B2083F6"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/reactor/FuelRefuelingTransaction.java",
+      "bytes": 11815,
+      "sha256": "8BB6714F22FD0A374BA19A0347F3E7EE6338330586AF15CC4BBA6504183CA030"
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/storage/DryStorageBlockEntity.java",
+      "bytes": 6763,
+      "sha256": "D0DE8B5B721FD410A43FA58DB3BAAE25566ED5D43EE1D5F39FC823BEF9BBFF81"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/lang/en_us.json",
+      "bytes": 72971,
+      "sha256": "2E494715C91E99FA5EE96F28900D179B5C68AA1F5B77839815686E38187EF842"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/lang/zh_cn.json",
+      "bytes": 69193,
+      "sha256": "98C5D9DC2CBF2D0A0224F2CBE914A72CE008C8CF71E5D9B67CBE72832F1D0373"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots.json",
+      "bytes": 50,
+      "sha256": "9EE56CB6AB43581BFDFBC2D46EDCE677C610AB908DF3FB70CB90F1000594A6F3"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate.json",
+      "bytes": 55,
+      "sha256": "58A66C524FAAAD6B11F17190A772E917B2B6785ABE6CEEAFD71B2D98794B8E7E"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet.json",
+      "bytes": 51,
+      "sha256": "AB6C470B7D857F5A1716FE6415AFA64E9832DD923465C824A6CBB3087B86FF1D"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings.json",
+      "bytes": 53,
+      "sha256": "92FFCB1D79A74C65F1218D49B7531C98E73C718E0E52F7F254EC96AE15BFAE5B"
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_meter.json",
+      "bytes": 110,
+      "sha256": "5957AC021A13885D66B8820383415CBC9BD365D2C5BF364D7F904DDBFBC225A3"
+    },
+    {
+      "path": "src/main/resources/create_nuclear_industry.mixins.json",
+      "bytes": 762,
+      "sha256": "D7742666ED5FC5D940FF716F769610D6E81859038F44A1F4BC7A7CAB29669ABA"
+    },
+    {
+      "path": "src/main/resources/data/cni_radiation_foundation/structure/radiation_empty.nbt",
+      "bytes": 114,
+      "sha256": "92A16619841D225884AB9C423B0887A956234A4ADD47DA56D5398ED9D187BEFC"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/damage_type/radiation.json",
+      "bytes": 104,
+      "sha256": "F4E33983AF1F2FC65CA28FC2B8A56A1E948FD49BADD16B08CBBE5DBD8A15C502"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_boots.json",
+      "bytes": 353,
+      "sha256": "4457EE7605DDEB5183CEA719FABB593588A67EE9FDB934815A0CC566C8EBADF4"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_chestplate.json",
+      "bytes": 370,
+      "sha256": "64D917DA214DFFEE03B5F31436D8A7CFFD46D05FF94D9128B446429118B68E0A"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_helmet.json",
+      "bytes": 354,
+      "sha256": "AE61C89F766D0B5E59DF2FF27065B233FAEFDE800054EB845F03C74CB37F5198"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_leggings.json",
+      "bytes": 368,
+      "sha256": "DFD58F534C1A48481831F8D06CE4709CABAB11078CDE53355E263C5AC6DBB5D5"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_meter.json",
+      "bytes": 425,
+      "sha256": "7B73017AE1743E2870EF732F1FBE422AACAA273DF9E02C7CD49D6FFFDC95590E"
+    },
+    {
+      "path": "src/main/resources/data/create_nuclear_industry/tags/block/radiation_shielding.json",
+      "bytes": 191,
+      "sha256": "60FC4A1B09CE898171B17A4CE8F1FA12F1DA4F3BFEEE2CD67B983721F0057386"
+    },
+    {
+      "path": "src/main/resources/data/minecraft/tags/damage_type/bypasses_armor.json",
+      "bytes": 88,
+      "sha256": "8BEF1491A78BB4D244C00E14C0AC269B4321295FE2141FCD1578CFDCFB772E98"
+    },
+    {
+      "path": "src/main/resources/data/minecraft/tags/item/chest_armor.json",
+      "bytes": 99,
+      "sha256": "5925695B63719D51621C6EE659F5C7967711E9AA78722B71C9DDA241C25DE2E8"
+    },
+    {
+      "path": "src/main/resources/data/minecraft/tags/item/enchantable/armor.json",
+      "bytes": 247,
+      "sha256": "01961843AD56C61DC808F88D856E578E5B9785D901D927D35F19FBA569609468"
+    },
+    {
+      "path": "src/main/resources/data/minecraft/tags/item/foot_armor.json",
+      "bytes": 94,
+      "sha256": "9062F544B3DEB052FA7FDBCCDD19F385B5B2C1A66EF23260DBA1E8D0C0E92E3E"
+    },
+    {
+      "path": "src/main/resources/data/minecraft/tags/item/head_armor.json",
+      "bytes": 95,
+      "sha256": "108E4ADD8534D9914DBD3B40DEF14D55B28830F67463B350B662E0C17CDF6C2C"
+    },
+    {
+      "path": "src/main/resources/data/minecraft/tags/item/leg_armor.json",
+      "bytes": 97,
+      "sha256": "8BA61E85C488364DCDAB60D618ADE2E41CD78F3B78448925A1840DC44C436572"
+    },
+    {
+      "path": "src/main/resources/data/minecraft/tags/item/trimmable_armor.json",
+      "bytes": 247,
+      "sha256": "01961843AD56C61DC808F88D856E578E5B9785D901D927D35F19FBA569609468"
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/FoundationContractsTest.java",
+      "bytes": 1184,
+      "sha256": "B17188107ED3621546FD1AE73DA335AA9A782E1BB2EAB7B02EA3BEA187B273EA"
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/FuelUseHistoryTest.java",
+      "bytes": 1853,
+      "sha256": "F765B7C8840A327EB52E22CBCE5E1AB959535DAC40EF641B73552E51DE516F79"
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/RadiationDoseTest.java",
+      "bytes": 1997,
+      "sha256": "18924D5F963E72F90A02BBEFD8BE350C59BBB14FFC8167784F9AE5FAC4F50628"
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/RadiationEquipmentDataTest.java",
+      "bytes": 1722,
+      "sha256": "461559004D50626AAE6EC1A7F3D33262DE524A45B347BDFFF9BE75E7D58C1EE8"
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/RadiationItemSourcesTest.java",
+      "bytes": 3622,
+      "sha256": "69C1A5B65D007B5346C86CE1DF26C50417440DB28325282621549897EF98DE8C"
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/RadiationParametersTest.java",
+      "bytes": 2379,
+      "sha256": "F78E1EF52EB910BF73EC9760F2E4301C9313E9F6FD23398CBF381457D5B59301"
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/RadiationShieldingTest.java",
+      "bytes": 751,
+      "sha256": "387E3CF5EA1C4BEE01CD6666DE6729A3B11E0526E3CA1811FDF0C8C77C592BBA"
+    }
+  ],
+  "changes": [
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/RadiationBeltAccessor.java",
+      "beforeBytes": 652,
+      "afterBytes": 650,
+      "beforeSha256": "18BBB47147C71FB6AAC1643255928FAE58576DA3F1B45BA1500287BCD6D4FA5F",
+      "afterSha256": "1CD1D7EAE1BF11AD45B73B3D5075ABC4824B40E09DDDEC90F9191F5B205E3FDC",
+      "removedHex": "0D0A",
+      "nonWhitespaceContentIdentical": true
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationServerEvents.java",
+      "beforeBytes": 10263,
+      "afterBytes": 10261,
+      "beforeSha256": "7E813F0D56FB3E9C17B364D74621D3C9023194BB7364FC835D8F35AF0F715035",
+      "afterSha256": "5C19D24B6FE5329E696887F464DF2866DAFEB6CBD3D3FBF4D3B6CAFC1795752A",
+      "removedHex": "0D0A",
+      "nonWhitespaceContentIdentical": true
+    }
+  ],
+  "candidateJarReused": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-radiation\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+    "bytes": 3429128,
+    "sha256": "AFAD58C122257112BD4BA05C275D86D30293AB5546F2D0531FFEDE5D38905817",
+    "gameTestEntries": [],
+    "requiredEntriesPresent": {
+      "com/iksxh/create_nuclear_industry/config/RadiationConfig.class": true,
+      "com/iksxh/create_nuclear_industry/radiation/RadiationSourceIndex.class": true,
+      "assets/create_nuclear_industry/models/item/radiation_meter.json": true
+    }
+  },
+  "compiledClassEvidenceReused": "review-fix-02-compiled-jar-match.json",
+  "historicalFix2EvidenceHashesUnchanged": true
+}
