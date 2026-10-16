@@ -17,8 +17,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 仅客户端的机壳装饰包装：按现有PIECE尺寸和世界轴向格坐标选择16像素atlas格。
@@ -28,6 +31,25 @@ public final class TurbineCasingAppearanceModel extends BakedModelWrapper<BakedM
     static final ResourceLocation SOURCE = ResourceLocation.fromNamespaceAndPath("create_nuclear_industry", "block/turbine/turbine_casing_07_panel");
     static final ResourceLocation TARGET = ResourceLocation.fromNamespaceAndPath("create_nuclear_industry", "block/turbine/turbine_casing_07_sparse");
     private static final ModelProperty<Appearance> APPEARANCE = new ModelProperty<>();
+    /**
+     * 只识别已核 Sodium 0.8.12 final LevelSlice 的非 static final ClientLevel 字段。
+     * ClassValue 只缓存只读字段，不加载可选类、不保留世界，不泛搜未知/Ponder 包装器。
+     */
+    private static final ClassValue<Optional<Field>> SODIUM_WORLD_FIELDS = new ClassValue<>() {
+        @Override
+        protected Optional<Field> computeValue(Class<?> type) {
+            if (!type.getName().equals("net.caffeinemc.mods.sodium.client.world.LevelSlice")
+                    || !Modifier.isFinal(type.getModifiers())) return Optional.empty();
+            try {
+                Field field = type.getDeclaredField("level");
+                if (field.getType() != ClientLevel.class || !Modifier.isFinal(field.getModifiers())
+                        || Modifier.isStatic(field.getModifiers()) || !field.trySetAccessible()) return Optional.empty();
+                return Optional.of(field);
+            } catch (ReflectiveOperationException | SecurityException exception) {
+                return Optional.empty();
+            }
+        }
+    };
     private final SpriteShiftEntry shift;
 
     /** 原模型保留几何/RenderType；entry由Catnip每次atlas重载更新，不保存跨重载sprite。 */
@@ -82,8 +104,16 @@ public final class TurbineCasingAppearanceModel extends BakedModelWrapper<BakedM
     }
 
     static boolean realWorld(BlockAndTintGetter world) {
-        // 原生区段和真实客户端世界可读现有显示状态；Ponder/未知包装禁止自行寻找机组。
-        return world instanceof ClientLevel || world != null && world.getClass() == RenderChunkRegion.class;
+        // 这里只验证切片自身绑定世界；后续仍从传入切片读正负各一格，不转读全局世界或查机主。
+        if (world instanceof ClientLevel || world != null && world.getClass() == RenderChunkRegion.class) return true;
+        if (world == null) return false;
+        Optional<Field> field = SODIUM_WORLD_FIELDS.get(world.getClass());
+        if (field.isEmpty()) return false;
+        try {
+            return field.get().get(world) instanceof ClientLevel;
+        } catch (IllegalAccessException exception) {
+            return false;
+        }
     }
 
     private static boolean validCasing(BlockState state) {
