@@ -47,7 +47,7 @@
 | `J/blockentity/ReactorInstrumentPortBlockEntity.java`、`J/blockentity/ReactorPortBlockEntity.java` | 真实tick成功提交时标记、物品/结构变更通知；原有事务顺序和权限保持 |
 | `J/reactor/FuelAssemblyItemCodec.java`、`J/reactor/FuelRefuelingTransaction.java` | 保留完整物品历史，防止当前版本正常提取/转换丢标记；不研究旧格式 |
 | `J/structure/ReactorStructureLifecycle.java`、`J/storage/DryStorageBlockEntity.java` | 已知边界、生命周期/库存变更及护目镜简要屏蔽信息；不修改原结构合法性或架容量 |
-| 新增`J/mixin/Radiation*.java`、`R/create_nuclear_industry.mixins.json` | 只允许本批原版方块变更通知、Create机械臂/带库存只读访问、放射性掉落伤害保护；不改第三方运输行为 |
+| 新增`J/mixin/Radiation*.java`、`R/create_nuclear_industry.mixins.json` | 只允许本批原版方块变更/BE.setChanged脏通知、Create机械臂/带库存只读访问、放射性掉落伤害保护；不改原版脏标记或第三方运输行为 |
 | `R/data/create_nuclear_industry/recipe/crafting/radiation_*.json` | 恰好四件防护服和一个仪表的5条有序配方 |
 | `R/data/create_nuclear_industry/tags/block/radiation_shielding.json`、`R/data/create_nuclear_industry/damage_type/radiation.json`、`R/data/minecraft/tags/damage_type/bypasses_armor.json` | 明确屏蔽名单与辐射伤害，仅追加本批身份 |
 | `R/assets/create_nuclear_industry/models/item/radiation_*.json`、现有`lang/zh_cn.json`与`en_us.json` | 复用原版皮甲/原生仪表图标及防护服饰纹变体；本批玩家文案，不绘图 |
@@ -102,7 +102,7 @@
 
 - [ ] 写并运行定向失败用例：新组件/原料/DU为0，已用1、乏燃料2；距离2格为1/4，半径外0；16个合法桶各2×0.05 D/s而不是32份载荷。`invalidCaskDoesNotEraseSource`要求含乏燃料的非法桶按裸载荷计，空桶0；普通潜影盒套桶只施加一次桶屏蔽。
 - [ ] 做只读库存适配清单：玩家主/副手、背包/装备与原版随身容器组件；ItemEntity；原版箱子/陷阱箱/木桶/潜影盒/漏斗；本模组换料端口、离心机、烧结炉、装配台、干式架；Create传送带、置物台、机械臂、工作盆及物品保险库。其他公开设备库存记录实际可读入口，私有背包/远程网络不作通用保证。嵌套读取使用显式栈和分帧预算，不因深度/预算未完成返回0或递归溢出。
-- [ ] 核Create6.0.10实际源码：带从`BeltBlockEntity`控制端的`BeltInventory`读取真实运输栈，机械臂`ArmBlockEntity.heldItem`需只读Accessor，置物台`getHeldItem()`可直接读；不能在同一时刻又按segment capability把同份栈重算。保险库只读控制库存，本模组多方块只读唯一所有者，不枚举六个面后直接相加。
+- [ ] 核Create6.0.10实际源码：带从`BeltBlockEntity`控制端的`BeltInventory`读取真实运输栈及待入队`toInsert`载荷，按队列真实所有权去重；机械臂`ArmBlockEntity.heldItem`需只读Accessor，置物台`getHeldItem()`可直接读，不能又从segment capability把同份栈重算。保险库每格只读`getInventoryOfBlock()`的真实局部库存，不再读控制端`CombinedInvWrapper`，以保留正确位置/已加载区块边界且只计一份。本模组多方块只读唯一所有者，不枚举六个面后直接相加。
 - [ ] 建每维度/区块索引；区块加载/卸载、实体移动/离开、真实库存变化更新，普通容器/物流缺少变更通知时用附近已加载库存公平低频审计。索引不写回源库存；源一旦迁出检测区不留下永久幽灵。`handoffCountsPayloadOnce`覆盖端口→臂→带→箱→桶→架及移除/同坐标新BE身份，不丢标记、不双算；玩家主/副手和装备已属于其库存，不能额外再算。新加入玩家要能发现已加载静止容器。
 - [ ] 外壳缓存保存已验证结构的边界与完整性派生信息，不保存第二份燃料；来源强度仍逐份读真实栈。燃料端口按堆内对应列位置计源，不能因为端口位于壳面而把载荷错误当外部；端口源与堆聚合源只选一份。持久化已知边界，使正常重进及后续仪表损坏后仍能按同一壳体判断；后续事故复用它，不在本批预建事故任务。
 - [ ] `containmentTracksShellNotRuntime`覆盖完整壳停机/缺料/堆内机构无效仍对外0、壳有真实破口取消整壳屏蔽、补全恢复、堆内不屏蔽。初次形成/载入可有界核壳，之后仅真实相关方块变化使缓存失效；方块变化通知要覆盖玩家、爆炸及命令，不仅监听取消前的BreakEvent。`unloadedChunkIsNotRead`证明只读已加载块、没有强载；不确定完整性不能凭空授予整壳屏蔽。

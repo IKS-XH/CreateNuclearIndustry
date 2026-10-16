@@ -32,7 +32,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 事故与辐射系统 | 用户已批准[整稿与推荐值](superpowers/specs/2026-10-16-accident-radiation-design.md)及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)已完成同级隔离树与存档准备（27文件、13337924 bytes逐项哈希一致），进入派发。后续事故执行与废料封装成套实施，既有事件不等于世界效果已实现 |
+| 事故与辐射系统 | 已批准整稿及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)候选`Create_NuclearIndustry-radiation`来源`a74f55e`已提交。41项定向JUnit、首轮13/13真实服与第2轮2/2受控区块事件回归、全维保存/exit0、增量assemble及制品身份已核；按未变实现复用原证据，未冒称当前全量重跑。[组合窄审和两轮定向复核](reviews/2026-10-16/radiation-foundation-01/RE-REVIEW-02.md)已无剩余代码发现；现停在[集中手测门](reviews/2026-10-16/radiation-foundation-01/CANDIDATE.md)，客户端、真实区块装载/重登和真人多人未验，未合main/替换正式包。[派发依据](reviews/2026-10-16/radiation-foundation-01/DISPATCH.md)；第二批事故执行与回收封装待本批人工门闭合后派发 |
 | 贫化铀材料与装备 | `codex/depleted-uranium-equipment`来源`0a10e36`已实现粉炼锭、9锭存取块，以及模板＋钻石装备＋贫化铀锭的九件升级；下界合金性能，保留附魔/名称/损伤/饰纹，贫化铀锭修复，仅借用原版外观。4项JUnit、3/3真实GT、全维保存/exit0与一次窄审通过；[集中手测](reviews/2026-10-16/depleted-uranium-01/CANDIDATE.md)尚未报告，未合main/替换正式包。核废料基础封存保持，辐射/事故新增合同按上项设计独立推进 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
