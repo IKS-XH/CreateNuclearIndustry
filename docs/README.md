@@ -18,6 +18,7 @@
 
 当前活动卡：
 
+- [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
 - [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
 - [模拟器02B](superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)、[三维工具](superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：辅助任务仍无整体验收，不自动改跑。
 
