@@ -18,6 +18,7 @@
 
 当前活动卡：
 
+- [事故与辐射设计稿](superpowers/specs/2026-10-16-accident-radiation-design.md)：用户已确认主要玩法边界，推荐参数/成本待整稿审阅，尚未派发实现。
 - [贫化铀材料与装备](superpowers/plans/2026-10-16-depleted-uranium-01.md)：补齐锭块及钻石装备锻造升级，本批仅复用原版外观。
 - [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
 - [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
