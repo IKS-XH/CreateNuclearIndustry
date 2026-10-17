@@ -72,6 +72,7 @@ public final class CreateNuclearIndustry {
         ModItems.register(modEventBus);
         OreContent.register(modEventBus);
         BasicMaterialContent.register(modEventBus);
+        com.iksxh.create_nuclear_industry.content.DepletedUraniumContent.register(modEventBus);
         ReactorCraftingContent.register(modEventBus);
         FuelProcessingContent.register(modEventBus);
         SpentFuelStorageContent.register(modEventBus);

@@ -1,0 +1,18 @@
+{
+  "category": "building",
+  "key": {
+    "I": {
+      "item": "create_nuclear_industry:depleted_uranium_ingot"
+    }
+  },
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "count": 1,
+    "id": "create_nuclear_industry:depleted_uranium_block"
+  },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ]
+}

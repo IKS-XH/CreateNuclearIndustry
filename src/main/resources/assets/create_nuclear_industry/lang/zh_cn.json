@@ -677,5 +677,16 @@
   "automation.create_nuclear_industry.gui.result_selection_expired": "选择已过期、换代或跨维度，请重新选表",
   "automation.create_nuclear_industry.gui.result_no_operating_band": "最低功率超过本堆可达范围或没有合法正档",
   "automation.create_nuclear_industry.gui.result_stress_sample_lost": "未绑定有效的当前应力表",
-  "automation.create_nuclear_industry.gui.result_stress_network_busy": "此动力网已有另一闭环管理员"
+  "automation.create_nuclear_industry.gui.result_stress_network_busy": "此动力网已有另一闭环管理员",
+  "item.create_nuclear_industry.depleted_uranium_ingot": "贫化铀锭",
+  "block.create_nuclear_industry.depleted_uranium_block": "贫化铀块",
+  "item.create_nuclear_industry.depleted_uranium_helmet": "贫化铀头盔",
+  "item.create_nuclear_industry.depleted_uranium_chestplate": "贫化铀胸甲",
+  "item.create_nuclear_industry.depleted_uranium_leggings": "贫化铀护腿",
+  "item.create_nuclear_industry.depleted_uranium_boots": "贫化铀靴子",
+  "item.create_nuclear_industry.depleted_uranium_sword": "贫化铀剑",
+  "item.create_nuclear_industry.depleted_uranium_pickaxe": "贫化铀镐",
+  "item.create_nuclear_industry.depleted_uranium_axe": "贫化铀斧",
+  "item.create_nuclear_industry.depleted_uranium_shovel": "贫化铀锹",
+  "item.create_nuclear_industry.depleted_uranium_hoe": "贫化铀锄"
 }

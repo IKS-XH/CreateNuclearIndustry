@@ -4,6 +4,7 @@
     "#c:ingots/lead",
     "#c:ingots/tin",
     "#c:ingots/steel",
-    "#c:ingots/solder"
+    "#c:ingots/solder",
+    "#c:ingots/depleted_uranium"
   ]
 }

@@ -1,6 +1,6 @@
 # 当前内容注册清单
 
-更新：2026-10-15。按当前[注册源码](../src/main/java/com/iksxh/create_nuclear_industry/content/)核对：常规块50、item108，其中同名BlockItem47由块表承接，普通物品仅列61；流体8、fluid_type5。这里只去重展示，不改变注册；条件诊断内容另列。
+更新：2026-10-16。按当前[注册源码](../src/main/java/com/iksxh/create_nuclear_industry/content/)核对：常规块51、item119，其中同名BlockItem48由块表承接，普通物品仅列71；流体8、fluid_type5。这里只去重展示，不改变注册；条件诊断内容另列。
 
 命名空间create_nuclear_industry，ID小写下划线。方块物品通常共用ID；实际模型/状态/贴图在src/main/resources/assets/create_nuclear_industry，具体来源以源码/资源为准，不要求每个ID都存在同名全套文件。流体/桶策略不能由名字推断；热液/SC专用运输、Create罐保留，SC不作为普通桶/世界流体使用。
 
@@ -8,7 +8,7 @@
 
 ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存在不等于可生存获取。
 
-## 块（50）
+## 块（51）
 
 | ID | 源字段 |
 | --- | --- |
@@ -21,6 +21,7 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `deepslate_lead_ore` | `OreContent.LEAD (helper)` |
 | `deepslate_tin_ore` | `OreContent.TIN (helper)` |
 | `deepslate_uranium_ore` | `OreContent.URANIUM (helper)` |
+| `depleted_uranium_block` | `DepletedUraniumContent.BLOCK` |
 | `dry_storage_rack` | `SpentFuelStorageContent.DRY_STORAGE_RACK` |
 | `enrichment_centrifuge` | `FuelProcessingContent.ENRICHMENT_CENTRIFUGE` |
 | `experimental_reactor_casing` | `ModBlocks.EXPERIMENTAL_REACTOR_CASING` |
@@ -63,7 +64,7 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `uranium_slurry` | `FuelProcessingContent.URANIUM_SLURRY_BLOCK` |
 | `uranium_tailings_brick` | `FuelProcessingContent.URANIUM_TAILINGS_BRICK` |
 
-## 普通物品（去掉同名BlockItem后61）
+## 普通物品（去掉同名BlockItem后71）
 
 | ID | 源字段 |
 | --- | --- |
@@ -72,7 +73,17 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `compound_coolant_bucket` | `ModItems.COMPOUND_COOLANT_BUCKET` |
 | `control_rod` | `ModItems.CONTROL_ROD` |
 | `cooled_spent_fuel_assembly` | `ModItems.COOLED_SPENT_FUEL_ASSEMBLY` |
+| `depleted_uranium_axe` | `DepletedUraniumContent.AXE` |
+| `depleted_uranium_boots` | `DepletedUraniumContent.BOOTS` |
+| `depleted_uranium_chestplate` | `DepletedUraniumContent.CHESTPLATE` |
 | `depleted_uranium_dust` | `FuelProcessingContent.DEPLETED_URANIUM_DUST` |
+| `depleted_uranium_helmet` | `DepletedUraniumContent.HELMET` |
+| `depleted_uranium_hoe` | `DepletedUraniumContent.HOE` |
+| `depleted_uranium_ingot` | `DepletedUraniumContent.INGOT` |
+| `depleted_uranium_leggings` | `DepletedUraniumContent.LEGGINGS` |
+| `depleted_uranium_pickaxe` | `DepletedUraniumContent.PICKAXE` |
+| `depleted_uranium_shovel` | `DepletedUraniumContent.SHOVEL` |
+| `depleted_uranium_sword` | `DepletedUraniumContent.SWORD` |
 | `fresh_fuel_assembly` | `ModItems.FRESH_FUEL_ASSEMBLY` |
 | `fuel_cladding_tube` | `BasicMaterialContent.FUEL_CLADDING_TUBE` |
 | `glass_dust` | `SpentFuelStorageContent.GLASS_DUST` |

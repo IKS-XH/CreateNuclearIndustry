@@ -87,6 +87,9 @@ public final class ModCreativeTabs {
                         output.accept(FuelProcessingContent.URANIUM_TAILINGS_BRICK_ITEM.get());
                         output.accept(FuelProcessingContent.LOW_ENRICHED_URANIUM_DUST.get());
                         output.accept(FuelProcessingContent.DEPLETED_URANIUM_DUST.get());
+                        output.accept(DepletedUraniumContent.INGOT.get());
+                        output.accept(DepletedUraniumContent.BLOCK_ITEM.get());
+                        DepletedUraniumContent.EQUIPMENT.forEach(item -> output.accept(item.get()));
                         output.accept(FuelProcessingContent.URANIUM_SLURRY_BUCKET.get());
                         output.accept(FuelProcessingContent.ENRICHMENT_CENTRIFUGE_ITEM.get());
                         output.accept(FuelProcessingContent.GREEN_FUEL_PELLET.get());

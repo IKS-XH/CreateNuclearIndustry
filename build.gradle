@@ -153,3 +153,9 @@ tasks.named('jar', Jar) {
     exclude 'data/cni_reactor_load_follow/structure/load_follow_empty.nbt'
     exclude 'data/create_nuclear_industry_boiler_size/structure/boiler_size_empty.nbt'
 }
+
+// 贫化铀隔离探针仅供开发服务端；发布包排除测试类与模板。
+tasks.withType(Jar).configureEach {
+    exclude 'com/iksxh/create_nuclear_industry/gametest/DepletedUraniumGameTests*.class'
+    exclude 'data/cni_depleted_uranium/**'
+}
