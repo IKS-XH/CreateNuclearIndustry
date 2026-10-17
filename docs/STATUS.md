@@ -1,12 +1,12 @@
 # 当前状态与验收
 
-更新：2026-10-17。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
+更新：2026-10-18。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
 
 ## 主分支与正式包
 
-- 已提交生产来源`af79645f3091831039933ac56df4cade7eafa8b6`，纳入用户手测通过的贫化铀材料/装备、18B外观及锅炉PENDING队列崩溃修复；保留此前Sodium连接外观、微小尾热停机、烧结炉A版、计算/客户端优化、锅炉16³、闭环及主动出汽。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3382155 bytes，SHA256 `9C556236051AB1304BBFEBAC79AC300A1CA1E400DFE9D1DAFF11C38EC1D83F50`，按用户要求跟踪Git；与本次准确已提交输入的原assemble产物逐字节一致。
-- 本批复用三项既有定向验证、组合审查及用户功能/视觉/原服反馈；无代码冲突，仅做一次必要assemble/exit0及来源/载荷核验。47项其他原dirty逐字保持，见[联合集成与正式包](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)。原[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)、[外观](reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)及[性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
+- 已提交生产来源`34e1b77c520233ff37b6f0aa51fa5ad8cb9adbd4`，新增汽轮机S1结构查询优化及C1 Flywheel转子/输出轴实例化。保留此前贫化铀材料/装备与18B外观、锅炉队列崩溃修复、Sodium连接外观、尾热停机、烧结炉A版、反应堆优化、锅炉16³、闭环及主动出汽。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3403459 bytes，SHA256 `9DA77B19BDF3C30EB9FE1EEAA4FF8A6CC6463E950ACC407C62DFE892E5537230`，按用户要求跟踪Git；直接提升原C1候选同字节包，准确已提交源码窄编的14项class已逐字绑定。
+- 本批按用户合入授权无冲突快进，复用S1/C1原定向/真实服/生命周期及性能证据；一次组合窄审无P0/P1/P2，只做必要源/class身份窄编，未重跑全build或矩阵。47项其他原dirty逐字保持，见[本批集成与边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)。原[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)、[外观](reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
 
 ## 已合入并按相应范围验收
 
@@ -25,6 +25,7 @@
 | 已验美术 | 反应堆/锅炉/汽轮机、Logo、离心机、装配台黑窗与烧结炉A版；反应堆Sodium上下文窄修 | [前批美术](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)、[烧结炉验收](reviews/2026-10-15/sintering-art-accepted-integration/ACCEPTANCE.md)、[Sodium局部验收](archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md) |
 | 锅炉/汽轮机Sodium渲染 | 补齐两处LevelSlice入口，用户确认本批渲染手测通过并授权合main；正式包与已测包一致 | [验收与合入](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[组合窄审](reviews/2026-10-17/thermal-sodium-01/REVIEW.md) |
 | 反应堆性能 | 端口索引、精确反馈缓存、客户端辉光缓存和整列低面镂空全亮；用户认可效果并要求合main，液体/控制棒保留 | [验收](reviews/2026-10-15/reactor-performance-accepted-integration/ACCEPTANCE.md)、[集成/边界](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)；C2继续后置 |
+| 汽轮机性能S1/C1 | 真实成员包围盒预筛与静态截面/坐标复用；原转子/轴改用Flywheel实例。用户采纳并授权合main；原定向/真实服/性能证据复用，具体环境及一帧瑕疵见下方 | [来源、收益与合入](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[一次组合窄审](reviews/2026-10-18/thermal-performance-accepted-integration/REVIEW.md)、[已提交源/class绑定](reviews/2026-10-18/thermal-performance-accepted-integration/ARTIFACT.json) |
 | 停机拆除尾热 | 冷却充足时正确识别微小安全余数，不丢缓存热或工质；55项JUnit及真实安全/拒拆通过，原16³场景用户复看另列 | [根因、验证与正式包](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)、[组合审查](reviews/2026-10-16/reactor-shutdown-01/REVIEW.md) |
 | 贫化铀材料/装备与18B外观 | 粉炼锭、锭块存取、九种钻石装备锻造升级及专属图标/块/穿戴层/饰纹；用户确认功能与对应外观手测通过并授权合main | [联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)、[美术来源](art/ART-DEPLETED-URANIUM-18B-ACCEPTED.md) |
 | 锅炉热源刷新队列 | 原子取批和锁外刷新，重入/并发新增留到下一tick；34项定向回归及一次组合窄审保持，用户确认原整合包服务器崩溃修复通过并授权合main | [原诊断](reviews/2026-10-17/heat-pending-01/DIAGNOSIS.md)、[联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md) |
@@ -35,6 +36,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
+| 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 事故与辐射系统 | 已批准整稿及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)候选`Create_NuclearIndustry-radiation`来源`a74f55e`已提交。41项定向JUnit、首轮13/13真实服与第2轮2/2受控区块事件回归、全维保存/exit0、增量assemble及制品身份已核；按未变实现复用原证据，未冒称当前全量重跑。[组合窄审和两轮定向复核](reviews/2026-10-16/radiation-foundation-01/RE-REVIEW-02.md)已无剩余代码发现；现停在[集中手测门](reviews/2026-10-16/radiation-foundation-01/CANDIDATE.md)，客户端、真实区块装载/重登和真人多人未验，未合main/替换正式包。[派发依据](reviews/2026-10-16/radiation-foundation-01/DISPATCH.md)；第二批事故执行与回收封装待本批人工门闭合后派发 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |

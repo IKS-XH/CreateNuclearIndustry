@@ -16,6 +16,7 @@
 
 ## 已归档计划
 
+- [2026-10-18汽轮机S1/C1优化合入](2026-10-18/plans/2026-10-18-thermal-performance-accepted-integration.md)：保留六文件来源、窄编绑定及原候选提升范围；[集成与审查边界](../reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)，锅炉重复同步专项仍后置，当前结果由STATUS维护。
 - [2026-10-17贫化铀与锅炉队列联合合入](2026-10-17/plans/2026-10-17-du-heat-accepted-integration.md)、[贫化铀原执行卡](2026-10-17/plans/2026-10-16-depleted-uranium-01.md)及[锅炉队列窄修卡](2026-10-17/plans/2026-10-17-heat-bridge-pending-01.md)：保留三项原范围；[用户联合验收](../reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)，当前结果由STATUS维护。
 - [2026-10-17锅炉/汽轮机Sodium渲染窄修](2026-10-17/plans/2026-10-17-boiler-turbine-sodium-01.md)：保存两处客户端入口和制品边界；[用户验收及合入记录](../reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)，当前状态由STATUS维护。
 - [2026-10-16现有生存整线核查](2026-10-16/plans/2026-10-16-main-flow-audit.md)：保存只读核查范围，接续集中观察和当前结果由路线图/STATUS维护。

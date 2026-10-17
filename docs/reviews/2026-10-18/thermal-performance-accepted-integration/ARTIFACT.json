@@ -1,0 +1,1327 @@
+{
+  "source_commit": "34e1b77c520233ff37b6f0aa51fa5ad8cb9adbd4",
+  "baseline_commit": "a66d4342200c04d61136afedd539c67268330c01",
+  "branch": "codex/thermal-performance-accepted",
+  "six_file_commit": [
+    "src/main/java/com/iksxh/create_nuclear_industry/turbine/TurbineStructure.java",
+    "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents.java",
+    "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual.java",
+    "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineRotorVisual.java",
+    "src/test/java/com/iksxh/create_nuclear_industry/turbine/TurbineStructureLookupTest.java",
+    "src/test/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineFlywheelTransformTest.java"
+  ],
+  "other_unchanged_main_input_count": 2226,
+  "committed_git_text_matches_worktree_after_crlf_normalization": true,
+  "six_sources": [
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/TurbineStructure.java",
+      "git_blob_sha256": "B9A84252BE1E0134682C07B5255A71A5DA60B4885822A48F6D0CDB7611C9F1C6",
+      "c1_source_byte_sha256": "CF552C6FCCAEDB6CED2F7C59BF5282605FE45F9A9BAC2F7F3F5137A09E369906",
+      "matches_c1_after_crlf_normalization": true,
+      "matches_s1_after_crlf_normalization": true
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents.java",
+      "git_blob_sha256": "A432EE1AC38968DCF2C78B500D7E285EA53E9AF2E3D5C47E62E7BC9BB80F7EC0",
+      "c1_source_byte_sha256": "C7487C3C0E20F239056E047065A6DA3AB42D2A84D9B7CFC41C9E159A7C9AD4E5",
+      "matches_c1_after_crlf_normalization": true
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineRotorVisual.java",
+      "git_blob_sha256": "E74AF2141CDD188719CD8721042C28BF33281C24E7296FA36ECF23BDF9D1A5BE",
+      "c1_source_byte_sha256": "E74AF2141CDD188719CD8721042C28BF33281C24E7296FA36ECF23BDF9D1A5BE",
+      "matches_c1_after_crlf_normalization": true
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual.java",
+      "git_blob_sha256": "C4786D19944780CC25CEB50EA5DAF05670220E8D6560B8821F3696005B0DA3F5",
+      "c1_source_byte_sha256": "C4786D19944780CC25CEB50EA5DAF05670220E8D6560B8821F3696005B0DA3F5",
+      "matches_c1_after_crlf_normalization": true
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/turbine/TurbineStructureLookupTest.java",
+      "git_blob_sha256": "C8AF3C3F64F119AB4B11349AF1CA9FB1DDA5ABC3952B8BE59160549C2F04C287",
+      "c1_source_byte_sha256": "C8AF3C3F64F119AB4B11349AF1CA9FB1DDA5ABC3952B8BE59160549C2F04C287",
+      "matches_c1_after_crlf_normalization": true,
+      "matches_s1_after_crlf_normalization": true
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineFlywheelTransformTest.java",
+      "git_blob_sha256": "A4B65F9A207F97E9C2431DC1E1927C3798FE06E7AD7FB0C0448A96DE9A6E2B4E",
+      "c1_source_byte_sha256": "A4B65F9A207F97E9C2431DC1E1927C3798FE06E7AD7FB0C0448A96DE9A6E2B4E",
+      "matches_c1_after_crlf_normalization": true
+    }
+  ],
+  "javac_version": {
+    "command": [
+      "C:\\Program Files\\Java\\jdk-21\\bin\\javac.exe",
+      "-version"
+    ],
+    "cwd": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration",
+    "exit_code": 0,
+    "stdout_log": "javac-version.stdout.log",
+    "stderr_log": "javac-version.stderr.log"
+  },
+  "compilations": [
+    {
+      "phase": "S1",
+      "original_argfile": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-thermal-performance-diagnosis-20261017\\S1\\tools\\javac-candidate.args",
+      "original_argfile_sha256": "1BB4141E1592143CA19B02A9B80B83E405E8AA711A1AAA7BD4DBF83E521B57D4",
+      "binding_argfile": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\thermal-performance-accepted-20261018\\s1-binding-javac.args",
+      "binding_argfile_sha256": "B45655F8118B45D24751692CBCB94DA35A03320383FB306ED01835FB5988CEC7",
+      "compiler_options": [
+        "-encoding",
+        "UTF-8",
+        "-proc:none",
+        "--release",
+        "21"
+      ],
+      "classpath": [
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/S1/artifacts/baseline.jar",
+          "bytes": 3382155,
+          "sha256": "9C556236051AB1304BBFEBAC79AC300A1CA1E400DFE9D1DAFF11C38EC1D83F50"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.electronwill.night-config/core/3.8.3/b442a95f09e349927f5a945ecb594455870fcf4f/core-3.8.3.jar",
+          "bytes": 382911,
+          "sha256": "971DC88C1C22085611EE1C300F5BBF8595938178E819BEFBB5E98C3CBD272B79"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.electronwill.night-config/toml/3.8.3/90b2fd6efcb4a7d5b9810cf78f9d824994d717f2/toml-3.8.3.jar",
+          "bytes": 39516,
+          "sha256": "CCB92882264BF071E3916AB122FE5EA3E211B8EBF199201698A1324F151F928F"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.github.oshi/oshi-core/6.4.10/b1d8ab82d11d92fd639b56d639f8f46f739dd5fa/oshi-core-6.4.10.jar",
+          "bytes": 979212,
+          "sha256": "FEF001A7A13515C273F30915915580782AFBC45273CC07AA15994E51563EF310"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar",
+          "bytes": 19936,
+          "sha256": "766AD2A0783F2687962C8AD74CEECC38A28B9F72A2D085EE438B7813E928D0C7"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.10.1/b3add478d4382b78ea20b1671390a858002feb6c/gson-2.10.1.jar",
+          "bytes": 283367,
+          "sha256": "4241C14A7727C34FEEA6507EC801318A3D4A90F070E4525681079FB94EE4C593"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar",
+          "bytes": 16017,
+          "sha256": "9E6814CB71816988A4FD1B07A993A8F21BB7058D522C162B1DE849E19BEA54AE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar",
+          "bytes": 4617,
+          "sha256": "A171EE4C734DD2DA837E4B16BE9DF4661AFAB72A41ADAF31EB84DFDAF936CA26"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/32.1.2-jre/5e64ec7e056456bef3a4bc4c6fdaef71e8ab6318/guava-32.1.2-jre.jar",
+          "bytes": 3041591,
+          "sha256": "BC65DEA7CFD9E4DACF8419D8AF0E741655857D27885BB35D943D7187FC3A8FCE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+          "bytes": 2199,
+          "sha256": "B372A037D4230AA57FBEFFDEF30FD6123F9C0C2DB85D0ACED00C91B974F33F99"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/2.8/c85270e307e7b822f1086b93689124b89768e273/j2objc-annotations-2.8.jar",
+          "bytes": 9301,
+          "sha256": "F02A95FA1A5E95EDB3ED859FD0FB7DF709D121A35290EFF8B74DCE2AB7F4D6ED"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.machinezoo.noexception/noexception/1.7.1/b65330c98e38a1f915fa54a6e5eca496505e3f0a/noexception-1.7.1.jar",
+          "bytes": 250861,
+          "sha256": "3D70AAEA3904918587A21BDF99AB6ADE9AB1DD0EAF6119344BA513F60F575816"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/authlib/6.0.54/de8bc95660e1b2fe8793fd427a7a10dcec5b3ea7/authlib-6.0.54.jar",
+          "bytes": 115242,
+          "sha256": "319EA7B53B5E52F62AD3E2B81E9DB7F0751240EDAC548BD74F5F19E35DC21A3B"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/brigadier/1.3.10/d15b53a14cf20fdcaa98f731af5dda654452c010/brigadier-1.3.10.jar",
+          "bytes": 80082,
+          "sha256": "C8EE4136E474AC7723CA2B432EC8D1A2BC88EF7D1EC57C314BA9E33CDC83DD75"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/datafixerupper/8.0.16/67d4de6d7f95d89bcf5862995fb854ebaec02a34/datafixerupper-8.0.16.jar",
+          "bytes": 724313,
+          "sha256": "FFC138BC2596C291781B0D5E211CCAC51F0F2345F27FC2742F335CEDF7E2870D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/logging/1.2.7/24cb95ffb0e3433fd6e844c04e68009e504ca1c0/logging-1.2.7.jar",
+          "bytes": 15343,
+          "sha256": "3DC3190204BAC5F4184D8405BFE1F724F73A6A15A0D3F36EC7F69E6872C1A76C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.15.1/f11560da189ab563a5c8e351941415430e9304ea/commons-io-2.15.1.jar",
+          "bytes": 501218,
+          "sha256": "A58AF12EE1B68CFD2EBB0C27CAEF164F084381A00EC81A48CC275FD7EA54E154"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/cpw.mods/bootstraplauncher/2.0.2/1a2d076cbc33b0520cbacd591224427b2a20047d/bootstraplauncher-2.0.2.jar",
+          "bytes": 11116,
+          "sha256": "D3F29309140540570FD6C709509706AA8FB133C1C8AEF24491688F1A3F4E1D49"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/cpw.mods/modlauncher/11.0.5/b8f0d49294f733fdb6173931b263553e943dc950/modlauncher-11.0.5.jar",
+          "bytes": 116486,
+          "sha256": "FD9B9FC7CF043D2264EA0113EAC6B258F0A71FECE5B00E831BFBDF9726C78A24"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/cpw.mods/securejarhandler/3.0.8/c0ef95cecd8699a0449053ac7d9c160748d902cd/securejarhandler-3.0.8.jar",
+          "bytes": 103765,
+          "sha256": "945C63D6DEAFC821616B0380C23867D9B8C2852438F8A6DF72732AB933FC587D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.97.Final/f8f3d8644afa5e6e1a40a3a6aeb9d9aa970ecb4f/netty-buffer-4.1.97.Final.jar",
+          "bytes": 306590,
+          "sha256": "A4393F5B395486CC74D0325C9B41311ABB9513BA0FD7EF8CF46E9345C3BFFBEA"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.97.Final/384ba4d75670befbedb45c4d3b497a93639c206d/netty-codec-4.1.97.Final.jar",
+          "bytes": 345274,
+          "sha256": "BCC96737A0F912FCF031CF8C45EBDA352A90A40437DB0832CAAD3D5A63618B38"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.97.Final/7cceacaf11df8dc63f23d0fb58e9d4640fc88404/netty-common-4.1.97.Final.jar",
+          "bytes": 659930,
+          "sha256": "A8ACA0C8E9347ACC75C885ECC749195D9775369AA520B9276F2D1128210A6C17"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.97.Final/abb86c6906bf512bf2b797a41cd7d2e8d3cd7c36/netty-handler-4.1.97.Final.jar",
+          "bytes": 560040,
+          "sha256": "BD4771D19149CBC9C7464ED2D58035D79CDFED7ADB59D38718B0D8E7A3DCC2DE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.97.Final/cec8348108dc76c47cf87c669d514be52c922144/netty-resolver-4.1.97.Final.jar",
+          "bytes": 37792,
+          "sha256": "38A018C6D9FB2CB11B72881354782B45080BBD20B9A0AD6CDE28B80D431ED0B1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.97.Final/795da37ded759e862457a82d9d92c4d39ce8ecee/netty-transport-classes-epoll-4.1.97.Final.jar",
+          "bytes": 147139,
+          "sha256": "EE65FA17FE65F18FD22269F92BDDAD85BFB3A263CF65EBA01E116A2F30B86FF5"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.97.Final/54188f271e388e7f313aea995e82f58ce2cdb809/netty-transport-native-epoll-4.1.97.Final-linux-x86_64.jar",
+          "bytes": 38954,
+          "sha256": "1E83FC9F82E5415CDBB688C6A5C6BBBD7D198E9FDD6FDF64B3DC5D54DD1ACFD0"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.97.Final/5514744c588190ffda076b35a9b8c9f24946a960/netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar",
+          "bytes": 40427,
+          "sha256": "93B5FE8F3829DCB5E033D8D40D59159366FF4CF8266C903BBD6A4AEED9E59BAC"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.97.Final/d469d84265ab70095b01b40886cabdd433b6e664/netty-transport-native-unix-common-4.1.97.Final.jar",
+          "bytes": 43897,
+          "sha256": "412FE140257C2DDA5A5E15BEE911298BD61928D03EE6BE4DB588E82C196C5DC6"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.97.Final/f37380d23c9bb079bc702910833b2fd532c9abd0/netty-transport-4.1.97.Final.jar",
+          "bytes": 489624,
+          "sha256": "197FD2D6C6B4AFE677D9E95BF2E36B49A0BCABDFCE0583683FB73F29A3F5A407"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.12/c24946d46824bd528054bface3231d2ecb7e95e8/fastutil-8.5.12.jar",
+          "bytes": 23326598,
+          "sha256": "B5543EE08D062D551CF0A5C9BC0FB70588B0382079029BA48941FA9C9BE8A5D4"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar",
+          "bytes": 1494751,
+          "sha256": "1D45CFE3AE4A2EAB38DC74276803748CF799088986260D6D912E50DDB35D15C5"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.14.0/28934d48aed814f11e4c584da55c49fa7032b31b/jna-platform-5.14.0.jar",
+          "bytes": 1369287,
+          "sha256": "AE4CACEB3840730C2537F9B7FB55A01BABA580286B4122951488BCEE558C2449"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.14.0/67bf3eaea4f0718cb376a181a629e5f88fa1c9dd/jna-5.14.0.jar",
+          "bytes": 1878533,
+          "sha256": "34ED1E1F27FA896BCA50DBC4E99CF3732967CEC387A7A0D5E3486C09673FE8C6"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.jodah/typetools/0.6.3/a01aaa6ddaea9ec07ec4f209487b7a46a526283a/typetools-0.6.3.jar",
+          "bytes": 18281,
+          "sha256": "408300867804BE05D1083CC0287DD3A21295A9E76090E288013BA5A4182DC96D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.minecraftforge/srgutils/0.4.15/ca408b131759478f164e010fae0d73997e125fb5/srgutils-0.4.15.jar",
+          "bytes": 69393,
+          "sha256": "F6BDEBB7FAE108329ACDDFC812F237C7F6328A98E3F282A105EDFC161D0215E3"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.minecrell/terminalconsoleappender/1.3.0/b562e9bb61235c9520e26282cdee71f8f802d1fc/terminalconsoleappender-1.3.0.jar",
+          "bytes": 16949,
+          "sha256": "1AFEA1BCA095068F7F4483F061FEED94753BE34233DDB0DF9EC380FC14D5A985"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged.accesstransformers/at-modlauncher/10.0.1/5aba50202aceead086bc09fbc2751c9f05cb4890/at-modlauncher-10.0.1.jar",
+          "bytes": 2347,
+          "sha256": "2A4B447C6944A2B89E383C1EED9A26BB5CC60330A5BB26EF0A912A38D52DF935"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged.fancymodloader/earlydisplay/4.0.42/46555dbfff14e9e052f1f693aed14d542a74e111/earlydisplay-4.0.42.jar",
+          "bytes": 261718,
+          "sha256": "6410270F0749C4D4666AD9259A97F4066CD2C8CDB88B70B017145DF6CF1502EC"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged.fancymodloader/loader/4.0.42/76e15f98bf676fb44b36c5e776f52a55581ec43a/loader-4.0.42.jar",
+          "bytes": 504899,
+          "sha256": "182FCEE7ED6E2BE4C815BD08D2C766D355C58AB1E227B6FFD84ED26A0F71B6D6"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/JarJarFileSystems/0.4.1/78f59f89defcd032ed788b151ca6a0d40ace796a/JarJarFileSystems-0.4.1.jar",
+          "bytes": 31807,
+          "sha256": "D9F88AF1223FF23395C64FF0B0FE367563288A37BD38709BF667B6B39944BFAB"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/JarJarMetadata/0.4.1/f8da03683dc81694556dc3e177c5e3bb77ae6fcb/JarJarMetadata-0.4.1.jar",
+          "bytes": 15648,
+          "sha256": "05D7B89F09C6DE1A9B61D0E786C8FD808AED044BABF321653E14ABD6740D5546"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/JarJarSelector/0.4.1/fb3cc7a58af22ad2880adb98af6d518128c47dae/JarJarSelector-0.4.1.jar",
+          "bytes": 17168,
+          "sha256": "F34BAB02A5E967650DC52B7CB37A200051A7078F7D1868597699D78697DA2400"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/accesstransformers/10.0.1/fd83b5725f76eae9115e9355fa1c456a6a441400/accesstransformers-10.0.1.jar",
+          "bytes": 67234,
+          "sha256": "89FB0DC3D68F8A5961F309EE110DAD7D2C1094BA204595602B71E02E104838A1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/bus/8.0.5/5b2d33285ab5d1554e9798ad98c40d6ea3868bd5/bus-8.0.5.jar",
+          "bytes": 30340,
+          "sha256": "705E24F37752809499A5CD0C7DD31EAABF3D933C5D3B2060168E94E9EF62593A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/coremods/7.0.3/9147e6f638b4272b3bd5fc8f92ad37802512c6c/coremods-7.0.3.jar",
+          "bytes": 22659,
+          "sha256": "D24C0D3E31AF23CAC36A0F9F98654B875F678B27DDCCD8B28D331C1878A6DE4A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/mergetool/2.0.0/52fe1949be64e3303aabaaa21e315f551db9c9f4/mergetool-2.0.0-api.jar",
+          "bytes": 2550,
+          "sha256": "0260881294D8B218AFE3D673F084D3745A55C28B35205D07D5E62D7F22202A00"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c/jopt-simple-5.0.4.jar",
+          "bytes": 78146,
+          "sha256": "DF26CC58F235F477DB07F753BA5A3AB243EBE5789D9F89ECF68DD62EA9A66C28"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.1/17125bae1d965624e265ef49552f6465a2bfa307/antlr4-runtime-4.13.1.jar",
+          "bytes": 326305,
+          "sha256": "54665D2838CC66458343468EFC539E454FC95B46A8A04B13C6AC43FC9BE63505"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.14.0/1ed471194b02f2c6cb734a0cd6f6f107c673afae/commons-lang3-3.14.0.jar",
+          "bytes": 657952,
+          "sha256": "7B96BF3EE68949ABB5BC465559AC270E0551596FA34523FDDF890EC418DDE13C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.22.1/bea6fede6328fabafd7e68363161a7ea6605abd1/log4j-api-2.22.1.jar",
+          "bytes": 335001,
+          "sha256": "5D7BEAE7FF15D8516D6517121D7F12A79A6AC180DF64B5FCEC55D5BE21056E53"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.22.1/7183a25510a02ad00cc6a95d3b3d2a7d3c5a8dc4/log4j-core-2.22.1.jar",
+          "bytes": 1900022,
+          "sha256": "46DCCECAC556623D8E2CE8648496824A82951D139062A4E61148AFF1A25ED18D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j2-impl/2.22.1/d7e6693c2606cb7e7335047d7bb96dec52db5665/log4j-slf4j2-impl-2.22.1.jar",
+          "bytes": 27364,
+          "sha256": "1920CD69D8682C7EF249BB407A3D0685723AA1785867CF4C53258DA6BF14DA97"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-artifact/3.8.5/4433f50c07debefaed0553bd0068f4f48d449313/maven-artifact-3.8.5.jar",
+          "bytes": 58077,
+          "sha256": "91172BC294D6EAB02FC9F45F4EA01FD0E418962D128CF489ABEA7B6957D988EE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.33.0/de2b60b62da487644fc11f734e73c8b0b431238f/checker-qual-3.33.0.jar",
+          "bytes": 223979,
+          "sha256": "E316255BBFCD9FE50D165314B85ABB2B33CB2A66A93C491DB648E498A82C2DE1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.codehaus.plexus/plexus-utils/3.3.0/cf43b5391de623b36fe066a21127baef82c64022/plexus-utils-3.3.0.jar",
+          "bytes": 263253,
+          "sha256": "76D174792540E2775AF94D03D10FB2D3C776E2CD0AC0EBF427D3E570072BB9CE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.jline/jline-reader/3.20.0/8f15415b022a25b473e8e16c28ae913186ffb9c4/jline-reader-3.20.0.jar",
+          "bytes": 171052,
+          "sha256": "ACD1C94D1E228AA7B7962F69B21ED3A9FD828EB3A63E4BAF9086954E626AF1F0"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.jline/jline-terminal/3.20.0/d0ddcc708ddf527a3454c941b7b9225cc83a15ff/jline-terminal-3.20.0.jar",
+          "bytes": 228481,
+          "sha256": "12125170E795519BA6DC8010C070B53C76AAE92B485C1E37530E54AB5DD08D43"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.joml/joml/1.10.5/22566d58af70ad3d72308bab63b8339906deb649/joml-1.10.5.jar",
+          "bytes": 712082,
+          "sha256": "CAC9F22F83A7AA33EEBDA73C16FF5261E3CB4911B6BAFCF4C79EA486099D0C9A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lz4/lz4-java/1.8.0/4b986a99445e49ea5fbf5d149c4b63f6ed6c6780/lz4-java-1.8.0.jar",
+          "bytes": 682804,
+          "sha256": "D74A3334FB35195009B338A951F918203D6BBCA3D1D359033DC33EDD1CADC9EF"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.openjdk.nashorn/nashorn-core/15.4/f67f5ffaa5f5130cf6fb9b133da00c7df3b532a5/nashorn-core-15.4.jar",
+          "bytes": 2167292,
+          "sha256": "6F816E84DFD63A81D4EAA7829C08337BBAFF3EC683FF3BF6BBD90D017A00DC6F"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.8/b9747a320844b6cb1eacd90d8ecfd260a16c01d3/asm-analysis-9.8.jar",
+          "bytes": 35151,
+          "sha256": "E640732FBCD3C6271925A504F125E38384688F4DFBBF92C8622DFCEE0D09EDB9"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/9.8/36e4d212970388e5bd2c5180292012502df461bb/asm-commons-9.8.jar",
+          "bytes": 73498,
+          "sha256": "3301A1C1CB4C59FCC5292648DAC1D7C5AED4C0F067DFBE88873B8CDFE77404F4"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/9.8/18419ca5b77a2f81097c741e7872e6ab8d2f40d/asm-tree-9.8.jar",
+          "bytes": 51934,
+          "sha256": "14B7880CB7C85EED101E2710432FC3FFB83275532A6A894DC4C4095D49AD59F1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.8/395f1c1f035258511f27bc9b2583d76e4b143f59/asm-util-9.8.jar",
+          "bytes": 94559,
+          "sha256": "8BA0460ECB28FD0E2980E5F3EF3433A513A457BC077F81A53BDC75B587A08D15"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.8/dc19ecb3f7889b7860697215cae99c0f9b6f6b4b/asm-9.8.jar",
+          "bytes": 126113,
+          "sha256": "876EAB6A83DAECAD5CA67EB9FCABB063C97B5AEB8CF1FCA7A989ECDE17522051"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.9/7cf2726fdcfbc8610f9a71fb3ed639871f315340/slf4j-api-2.0.9.jar",
+          "bytes": 64579,
+          "sha256": "0818930DC8D7DEBB403204611691DA58E49D42C50B6FFCFDCE02DADB7C3C2B6C"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry/build/moddev/artifacts/neoforge-21.1.219-client-extra-aka-minecraft-resources.jar",
+          "bytes": 9361844,
+          "sha256": "8E9CF6F4B6EAFB1C6BF745A67A61DD1736F31865CAD409E5B2BEC918667DAB5E"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry/build/moddev/artifacts/neoforge-21.1.219.jar",
+          "bytes": 23519091,
+          "sha256": "2E510BD1CC0C20A02C4723E67A666DB02B83A6D79ED05C0136A4BA916FC327C1"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/S1/server/mods/create-1.21.1-6.0.10-280-slim.jar",
+          "bytes": 17452009,
+          "sha256": "F0652BEE27460F2D26A748F537CB5D687981441378D3A526D17FFAAB5A1072BB"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/S1/server/mods/flywheel-neoforge-1.21.1-1.0.6.jar",
+          "bytes": 873570,
+          "sha256": "31DDA15C205EB596D3B3449EF03F6AF7363A6CD35B3DA4BFE916B304F9E5337E"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/S1/server/mods/ponder-neoforge-1.0.82+mc1.21.1.jar",
+          "bytes": 820109,
+          "sha256": "0CF4611AD853042B689AC386184C5BBE02950EFCFFDDB49E5F604E82BADDB0DC"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/S1/server/mods/Registrate-MC1.21-1.3.0+67.jar",
+          "bytes": 181448,
+          "sha256": "510F4041C41739F1D8EA8850AB8364D3E3A5FADA8529BEED5D9F479E2523DB52"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter/5.11.4/a699f024a4a4706b36bddbeb42d499aff9e09379/junit-jupiter-5.11.4.jar",
+          "bytes": 6367,
+          "sha256": "AA880E4AFBA87D447357E4C1FC098C5CB1D200CB9403496C00D3B35A5BD0E8DB"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.11.4/308315b28e667db4091b2ba1f7aa220d1ddadb97/junit-jupiter-api-5.11.4.jar",
+          "bytes": 216413,
+          "sha256": "AB83EF9E51AC4597D59D26B4B58812129550E2F579A404C8AF7D09F5CE5B4293"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-engine/5.11.4/dc10ec209623986a68ea07f67cdc7d2a65a60355/junit-jupiter-engine-5.11.4.jar",
+          "bytes": 260117,
+          "sha256": "CDF8AC59F3FAD774CA738AD03890950EEB91833EF0E8908753177EDD26F1581C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/5.11.4/e4c86fbe2a39c60c6b87260ef7f7e7c1a1906481/junit-jupiter-params-5.11.4.jar",
+          "bytes": 591594,
+          "sha256": "02A6E015DE7CE94AC7F256E7FA05B8091DEA861FE79A555A7993313D0F6C7D96"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.11.4/8898eea3ed0da2641548d602c3e308804f166303/junit-platform-commons-1.11.4.jar",
+          "bytes": 142008,
+          "sha256": "9EDD969B0D0670C54105BC91AE79BD1C6F503E12115FABA82073B84C86BBC334"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.11.4/21f61b123ad6ac8f7e73971bff3a096c8d8e1cd0/junit-platform-engine-1.11.4.jar",
+          "bytes": 246800,
+          "sha256": "B1DD998F64F9ACADC15966D9CD3D08074662677B3E390F0A38FCBF0BB4C72330"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-launcher/1.11.4/3d83c201899d8c5e74e1a5d628eab900342a0e48/junit-platform-launcher-1.11.4.jar",
+          "bytes": 189006,
+          "sha256": "D7430BD029E7FCCED53EE445E4D2D1A8A1E043EA4C4DF43B6335A857F79761AE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.2/a231e0d844d2721b0fa1b238006d15c6ded6842a/apiguardian-api-1.1.2.jar",
+          "bytes": 6806,
+          "sha256": "B509448AC506D607319F182537F0B35D71007582EC741832A1F111E5B5B70B38"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.3.0/152ea56b3a72f655d4fd677fc0ef2596c3dd5e6e/opentest4j-1.3.0.jar",
+          "bytes": 14304,
+          "sha256": "48E2DF636CAB6563CED64DCDFF8ABB2355627CB236EF0BF37598682DDF742F1B"
+        }
+      ],
+      "source_inputs": [
+        {
+          "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/TurbineStructure.java",
+          "git_blob_sha256": "B9A84252BE1E0134682C07B5255A71A5DA60B4885822A48F6D0CDB7611C9F1C6",
+          "actual_input_sha256": "B9A84252BE1E0134682C07B5255A71A5DA60B4885822A48F6D0CDB7611C9F1C6"
+        }
+      ],
+      "command_record": {
+        "command": [
+          "C:\\Program Files\\Java\\jdk-21\\bin\\javac.exe",
+          "@E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\thermal-performance-accepted-20261018\\s1-binding-javac.args"
+        ],
+        "cwd": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration",
+        "exit_code": 0,
+        "stdout_log": "s1-binding-javac.stdout.log",
+        "stderr_log": "s1-binding-javac.stderr.log"
+      },
+      "classes": [
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Form.class",
+          "compiled_sha256": "798A532AF1F87EF84529CE3ADA70265162AB098A34BC929E57CC1C42F898FB8E",
+          "original_output_sha256": "798A532AF1F87EF84529CE3ADA70265162AB098A34BC929E57CC1C42F898FB8E",
+          "candidate_entry_sha256": "798A532AF1F87EF84529CE3ADA70265162AB098A34BC929E57CC1C42F898FB8E",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Issue.class",
+          "compiled_sha256": "0AC189634C1715B403EE08D71FA6207B2C9B34145C774AA593FA840B657180CA",
+          "original_output_sha256": "0AC189634C1715B403EE08D71FA6207B2C9B34145C774AA593FA840B657180CA",
+          "candidate_entry_sha256": "0AC189634C1715B403EE08D71FA6207B2C9B34145C774AA593FA840B657180CA",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$OwnerEntry.class",
+          "compiled_sha256": "32595D17E0BA861315706314988B4E5BDDD13DEDF79666BA2F4CBAA52727463B",
+          "original_output_sha256": "32595D17E0BA861315706314988B4E5BDDD13DEDF79666BA2F4CBAA52727463B",
+          "candidate_entry_sha256": "32595D17E0BA861315706314988B4E5BDDD13DEDF79666BA2F4CBAA52727463B",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$PartBounds.class",
+          "compiled_sha256": "526A946297C197AC29AB2277862BB313C6590D6DFD808892CABCC0120088CEE6",
+          "original_output_sha256": "526A946297C197AC29AB2277862BB313C6590D6DFD808892CABCC0120088CEE6",
+          "candidate_entry_sha256": "526A946297C197AC29AB2277862BB313C6590D6DFD808892CABCC0120088CEE6",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Result.class",
+          "compiled_sha256": "1A350414F5DB61A8BABC63218ABE10DE76E9394F50E15D3F26839BB2B1597D29",
+          "original_output_sha256": "1A350414F5DB61A8BABC63218ABE10DE76E9394F50E15D3F26839BB2B1597D29",
+          "candidate_entry_sha256": "1A350414F5DB61A8BABC63218ABE10DE76E9394F50E15D3F26839BB2B1597D29",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/TurbineStructure.class",
+          "compiled_sha256": "7E86786DD6AC824F13D32E4A6EB6DF9F30B191B52614D03D2A1B3D527B9466D3",
+          "original_output_sha256": "7E86786DD6AC824F13D32E4A6EB6DF9F30B191B52614D03D2A1B3D527B9466D3",
+          "candidate_entry_sha256": "7E86786DD6AC824F13D32E4A6EB6DF9F30B191B52614D03D2A1B3D527B9466D3",
+          "same_bytes": true
+        }
+      ]
+    },
+    {
+      "phase": "C1",
+      "original_argfile": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-thermal-performance-diagnosis-20261017\\C1\\tools\\javac-candidate.args",
+      "original_argfile_sha256": "B517A1E4FAD302370DB29E5713CFAD92F1B1E4E55579A455106751653B47E1FA",
+      "binding_argfile": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\thermal-performance-accepted-20261018\\c1-binding-javac.args",
+      "binding_argfile_sha256": "456BE0B398F42DCE56218457F5FBD6097F79F32F328199D9C432C78BC77F1412",
+      "compiler_options": [
+        "-encoding",
+        "UTF-8",
+        "-proc:none",
+        "--release",
+        "21"
+      ],
+      "classpath": [
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/C1/artifacts/baseline-S1.jar",
+          "bytes": 3386971,
+          "sha256": "0A01D5709D48FD4207FEFD8031A63ECDF4467F1DA083F9830B0D799B079BF3F8"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.electronwill.night-config/core/3.8.3/b442a95f09e349927f5a945ecb594455870fcf4f/core-3.8.3.jar",
+          "bytes": 382911,
+          "sha256": "971DC88C1C22085611EE1C300F5BBF8595938178E819BEFBB5E98C3CBD272B79"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.electronwill.night-config/toml/3.8.3/90b2fd6efcb4a7d5b9810cf78f9d824994d717f2/toml-3.8.3.jar",
+          "bytes": 39516,
+          "sha256": "CCB92882264BF071E3916AB122FE5EA3E211B8EBF199201698A1324F151F928F"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.github.oshi/oshi-core/6.4.10/b1d8ab82d11d92fd639b56d639f8f46f739dd5fa/oshi-core-6.4.10.jar",
+          "bytes": 979212,
+          "sha256": "FEF001A7A13515C273F30915915580782AFBC45273CC07AA15994E51563EF310"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar",
+          "bytes": 19936,
+          "sha256": "766AD2A0783F2687962C8AD74CEECC38A28B9F72A2D085EE438B7813E928D0C7"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.10.1/b3add478d4382b78ea20b1671390a858002feb6c/gson-2.10.1.jar",
+          "bytes": 283367,
+          "sha256": "4241C14A7727C34FEEA6507EC801318A3D4A90F070E4525681079FB94EE4C593"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar",
+          "bytes": 16017,
+          "sha256": "9E6814CB71816988A4FD1B07A993A8F21BB7058D522C162B1DE849E19BEA54AE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar",
+          "bytes": 4617,
+          "sha256": "A171EE4C734DD2DA837E4B16BE9DF4661AFAB72A41ADAF31EB84DFDAF936CA26"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/32.1.2-jre/5e64ec7e056456bef3a4bc4c6fdaef71e8ab6318/guava-32.1.2-jre.jar",
+          "bytes": 3041591,
+          "sha256": "BC65DEA7CFD9E4DACF8419D8AF0E741655857D27885BB35D943D7187FC3A8FCE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+          "bytes": 2199,
+          "sha256": "B372A037D4230AA57FBEFFDEF30FD6123F9C0C2DB85D0ACED00C91B974F33F99"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/2.8/c85270e307e7b822f1086b93689124b89768e273/j2objc-annotations-2.8.jar",
+          "bytes": 9301,
+          "sha256": "F02A95FA1A5E95EDB3ED859FD0FB7DF709D121A35290EFF8B74DCE2AB7F4D6ED"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.ibm.icu/icu4j/73.2/61ad4ef7f9131fcf6d25c34b817f90d6da06c9e9/icu4j-73.2.jar",
+          "bytes": 14567819,
+          "sha256": "29280822F4B0796ACEF1F79B90B1D0C1EDD86C10E876A848E04B8A6298A16BF9"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.machinezoo.noexception/noexception/1.7.1/b65330c98e38a1f915fa54a6e5eca496505e3f0a/noexception-1.7.1.jar",
+          "bytes": 250861,
+          "sha256": "3D70AAEA3904918587A21BDF99AB6ADE9AB1DD0EAF6119344BA513F60F575816"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/authlib/6.0.54/de8bc95660e1b2fe8793fd427a7a10dcec5b3ea7/authlib-6.0.54.jar",
+          "bytes": 115242,
+          "sha256": "319EA7B53B5E52F62AD3E2B81E9DB7F0751240EDAC548BD74F5F19E35DC21A3B"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/blocklist/1.0.10/5c685c5ffa94c4cd39496c7184c1d122e515ecef/blocklist-1.0.10.jar",
+          "bytes": 964,
+          "sha256": "830BFD639C8DB49236BBD8E45D3A2B8C96C56FF654A10118654958A6235D4C44"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/brigadier/1.3.10/d15b53a14cf20fdcaa98f731af5dda654452c010/brigadier-1.3.10.jar",
+          "bytes": 80082,
+          "sha256": "C8EE4136E474AC7723CA2B432EC8D1A2BC88EF7D1EC57C314BA9E33CDC83DD75"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/datafixerupper/8.0.16/67d4de6d7f95d89bcf5862995fb854ebaec02a34/datafixerupper-8.0.16.jar",
+          "bytes": 724313,
+          "sha256": "FFC138BC2596C291781B0D5E211CCAC51F0F2345F27FC2742F335CEDF7E2870D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/logging/1.2.7/24cb95ffb0e3433fd6e844c04e68009e504ca1c0/logging-1.2.7.jar",
+          "bytes": 15343,
+          "sha256": "3DC3190204BAC5F4184D8405BFE1F724F73A6A15A0D3F36EC7F69E6872C1A76C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/patchy/2.2.10/da05971b07cbb379d002cf7eaec6a2048211fefc/patchy-2.2.10.jar",
+          "bytes": 4439,
+          "sha256": "16D70E7968B45CAFFC81576268EB000F473FB60BF257182D3447DEA8EC919D5A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/com.mojang/text2speech/1.17.9/3cad216e3a7f0c19b4b394388bc9ffc446f13b14/text2speech-1.17.9.jar",
+          "bytes": 12243,
+          "sha256": "C2A95B499E76FADA7DD63E9B0EC797B678D411C2B0EE6F37F4DC674662BFB0AF"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.16.0/4e3eb3d79888d76b54e28b350915b5dc3919c9de/commons-codec-1.16.0.jar",
+          "bytes": 360738,
+          "sha256": "56595FB20B0B85BC91D0D503DAD50BB7F1B9AFC0EED5DFFA6CBB25929000484D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.15.1/f11560da189ab563a5c8e351941415430e9304ea/commons-io-2.15.1.jar",
+          "bytes": 501218,
+          "sha256": "A58AF12EE1B68CFD2EBB0C27CAEF164F084381A00EC81A48CC275FD7EA54E154"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar",
+          "bytes": 61829,
+          "sha256": "DADDEA1EA0BE0F56978AB3006B8AC92834AFEEFBD9B7E4E6316FCA57DF0FA636"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/cpw.mods/bootstraplauncher/2.0.2/1a2d076cbc33b0520cbacd591224427b2a20047d/bootstraplauncher-2.0.2.jar",
+          "bytes": 11116,
+          "sha256": "D3F29309140540570FD6C709509706AA8FB133C1C8AEF24491688F1A3F4E1D49"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/cpw.mods/modlauncher/11.0.5/b8f0d49294f733fdb6173931b263553e943dc950/modlauncher-11.0.5.jar",
+          "bytes": 116486,
+          "sha256": "FD9B9FC7CF043D2264EA0113EAC6B258F0A71FECE5B00E831BFBDF9726C78A24"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/cpw.mods/securejarhandler/3.0.8/c0ef95cecd8699a0449053ac7d9c160748d902cd/securejarhandler-3.0.8.jar",
+          "bytes": 103765,
+          "sha256": "945C63D6DEAFC821616B0380C23867D9B8C2852438F8A6DF72732AB933FC587D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.97.Final/f8f3d8644afa5e6e1a40a3a6aeb9d9aa970ecb4f/netty-buffer-4.1.97.Final.jar",
+          "bytes": 306590,
+          "sha256": "A4393F5B395486CC74D0325C9B41311ABB9513BA0FD7EF8CF46E9345C3BFFBEA"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.97.Final/384ba4d75670befbedb45c4d3b497a93639c206d/netty-codec-4.1.97.Final.jar",
+          "bytes": 345274,
+          "sha256": "BCC96737A0F912FCF031CF8C45EBDA352A90A40437DB0832CAAD3D5A63618B38"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.97.Final/7cceacaf11df8dc63f23d0fb58e9d4640fc88404/netty-common-4.1.97.Final.jar",
+          "bytes": 659930,
+          "sha256": "A8ACA0C8E9347ACC75C885ECC749195D9775369AA520B9276F2D1128210A6C17"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.97.Final/abb86c6906bf512bf2b797a41cd7d2e8d3cd7c36/netty-handler-4.1.97.Final.jar",
+          "bytes": 560040,
+          "sha256": "BD4771D19149CBC9C7464ED2D58035D79CDFED7ADB59D38718B0D8E7A3DCC2DE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.97.Final/cec8348108dc76c47cf87c669d514be52c922144/netty-resolver-4.1.97.Final.jar",
+          "bytes": 37792,
+          "sha256": "38A018C6D9FB2CB11B72881354782B45080BBD20B9A0AD6CDE28B80D431ED0B1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.97.Final/795da37ded759e862457a82d9d92c4d39ce8ecee/netty-transport-classes-epoll-4.1.97.Final.jar",
+          "bytes": 147139,
+          "sha256": "EE65FA17FE65F18FD22269F92BDDAD85BFB3A263CF65EBA01E116A2F30B86FF5"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.97.Final/d469d84265ab70095b01b40886cabdd433b6e664/netty-transport-native-unix-common-4.1.97.Final.jar",
+          "bytes": 43897,
+          "sha256": "412FE140257C2DDA5A5E15BEE911298BD61928D03EE6BE4DB588E82C196C5DC6"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.97.Final/f37380d23c9bb079bc702910833b2fd532c9abd0/netty-transport-4.1.97.Final.jar",
+          "bytes": 489624,
+          "sha256": "197FD2D6C6B4AFE677D9E95BF2E36B49A0BCABDFCE0583683FB73F29A3F5A407"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.12/c24946d46824bd528054bface3231d2ecb7e95e8/fastutil-8.5.12.jar",
+          "bytes": 23326598,
+          "sha256": "B5543EE08D062D551CF0A5C9BC0FB70588B0382079029BA48941FA9C9BE8A5D4"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar",
+          "bytes": 1494751,
+          "sha256": "1D45CFE3AE4A2EAB38DC74276803748CF799088986260D6D912E50DDB35D15C5"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.14.0/28934d48aed814f11e4c584da55c49fa7032b31b/jna-platform-5.14.0.jar",
+          "bytes": 1369287,
+          "sha256": "AE4CACEB3840730C2537F9B7FB55A01BABA580286B4122951488BCEE558C2449"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.14.0/67bf3eaea4f0718cb376a181a629e5f88fa1c9dd/jna-5.14.0.jar",
+          "bytes": 1878533,
+          "sha256": "34ED1E1F27FA896BCA50DBC4E99CF3732967CEC387A7A0D5E3486C09673FE8C6"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.jodah/typetools/0.6.3/a01aaa6ddaea9ec07ec4f209487b7a46a526283a/typetools-0.6.3.jar",
+          "bytes": 18281,
+          "sha256": "408300867804BE05D1083CC0287DD3A21295A9E76090E288013BA5A4182DC96D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.minecraftforge/srgutils/0.4.15/ca408b131759478f164e010fae0d73997e125fb5/srgutils-0.4.15.jar",
+          "bytes": 69393,
+          "sha256": "F6BDEBB7FAE108329ACDDFC812F237C7F6328A98E3F282A105EDFC161D0215E3"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.minecrell/terminalconsoleappender/1.3.0/b562e9bb61235c9520e26282cdee71f8f802d1fc/terminalconsoleappender-1.3.0.jar",
+          "bytes": 16949,
+          "sha256": "1AFEA1BCA095068F7F4483F061FEED94753BE34233DDB0DF9EC380FC14D5A985"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged.accesstransformers/at-modlauncher/10.0.1/5aba50202aceead086bc09fbc2751c9f05cb4890/at-modlauncher-10.0.1.jar",
+          "bytes": 2347,
+          "sha256": "2A4B447C6944A2B89E383C1EED9A26BB5CC60330A5BB26EF0A912A38D52DF935"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged.fancymodloader/earlydisplay/4.0.42/46555dbfff14e9e052f1f693aed14d542a74e111/earlydisplay-4.0.42.jar",
+          "bytes": 261718,
+          "sha256": "6410270F0749C4D4666AD9259A97F4066CD2C8CDB88B70B017145DF6CF1502EC"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged.fancymodloader/loader/4.0.42/76e15f98bf676fb44b36c5e776f52a55581ec43a/loader-4.0.42.jar",
+          "bytes": 504899,
+          "sha256": "182FCEE7ED6E2BE4C815BD08D2C766D355C58AB1E227B6FFD84ED26A0F71B6D6"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/JarJarFileSystems/0.4.1/78f59f89defcd032ed788b151ca6a0d40ace796a/JarJarFileSystems-0.4.1.jar",
+          "bytes": 31807,
+          "sha256": "D9F88AF1223FF23395C64FF0B0FE367563288A37BD38709BF667B6B39944BFAB"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/JarJarMetadata/0.4.1/f8da03683dc81694556dc3e177c5e3bb77ae6fcb/JarJarMetadata-0.4.1.jar",
+          "bytes": 15648,
+          "sha256": "05D7B89F09C6DE1A9B61D0E786C8FD808AED044BABF321653E14ABD6740D5546"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/JarJarSelector/0.4.1/fb3cc7a58af22ad2880adb98af6d518128c47dae/JarJarSelector-0.4.1.jar",
+          "bytes": 17168,
+          "sha256": "F34BAB02A5E967650DC52B7CB37A200051A7078F7D1868597699D78697DA2400"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/accesstransformers/10.0.1/fd83b5725f76eae9115e9355fa1c456a6a441400/accesstransformers-10.0.1.jar",
+          "bytes": 67234,
+          "sha256": "89FB0DC3D68F8A5961F309EE110DAD7D2C1094BA204595602B71E02E104838A1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/bus/8.0.5/5b2d33285ab5d1554e9798ad98c40d6ea3868bd5/bus-8.0.5.jar",
+          "bytes": 30340,
+          "sha256": "705E24F37752809499A5CD0C7DD31EAABF3D933C5D3B2060168E94E9EF62593A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/coremods/7.0.3/9147e6f638b4272b3bd5fc8f92ad37802512c6c/coremods-7.0.3.jar",
+          "bytes": 22659,
+          "sha256": "D24C0D3E31AF23CAC36A0F9F98654B875F678B27DDCCD8B28D331C1878A6DE4A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.neoforged/mergetool/2.0.0/52fe1949be64e3303aabaaa21e315f551db9c9f4/mergetool-2.0.0-api.jar",
+          "bytes": 2550,
+          "sha256": "0260881294D8B218AFE3D673F084D3745A55C28B35205D07D5E62D7F22202A00"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c/jopt-simple-5.0.4.jar",
+          "bytes": 78146,
+          "sha256": "DF26CC58F235F477DB07F753BA5A3AB243EBE5789D9F89ECF68DD62EA9A66C28"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.1/17125bae1d965624e265ef49552f6465a2bfa307/antlr4-runtime-4.13.1.jar",
+          "bytes": 326305,
+          "sha256": "54665D2838CC66458343468EFC539E454FC95B46A8A04B13C6AC43FC9BE63505"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-compress/1.26.0/659feffdd12280201c8aacb8f7be94f9a883c824/commons-compress-1.26.0.jar",
+          "bytes": 1078328,
+          "sha256": "051ACEB8BBCC62D0F5B2B8AC72C53767F9C59BFBD050151E65BEF6F51C8ED9C9"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.14.0/1ed471194b02f2c6cb734a0cd6f6f107c673afae/commons-lang3-3.14.0.jar",
+          "bytes": 657952,
+          "sha256": "7B96BF3EE68949ABB5BC465559AC270E0551596FA34523FDDF890EC418DDE13C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar",
+          "bytes": 780321,
+          "sha256": "6FE9026A566C6A5001608CF3FC32196641F6C1E5E1986D1037CCDBD5F31EF743"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.16/51cf043c87253c9f58b539c9f7e44c8894223850/httpcore-4.4.16.jar",
+          "bytes": 327891,
+          "sha256": "6C9B3DD142A09DC468E23AD39AAD6F75A0F2B85125104469F026E52A474E464F"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.22.1/bea6fede6328fabafd7e68363161a7ea6605abd1/log4j-api-2.22.1.jar",
+          "bytes": 335001,
+          "sha256": "5D7BEAE7FF15D8516D6517121D7F12A79A6AC180DF64B5FCEC55D5BE21056E53"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.22.1/7183a25510a02ad00cc6a95d3b3d2a7d3c5a8dc4/log4j-core-2.22.1.jar",
+          "bytes": 1900022,
+          "sha256": "46DCCECAC556623D8E2CE8648496824A82951D139062A4E61148AFF1A25ED18D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j2-impl/2.22.1/d7e6693c2606cb7e7335047d7bb96dec52db5665/log4j-slf4j2-impl-2.22.1.jar",
+          "bytes": 27364,
+          "sha256": "1920CD69D8682C7EF249BB407A3D0685723AA1785867CF4C53258DA6BF14DA97"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-artifact/3.8.5/4433f50c07debefaed0553bd0068f4f48d449313/maven-artifact-3.8.5.jar",
+          "bytes": 58077,
+          "sha256": "91172BC294D6EAB02FC9F45F4EA01FD0E418962D128CF489ABEA7B6957D988EE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.33.0/de2b60b62da487644fc11f734e73c8b0b431238f/checker-qual-3.33.0.jar",
+          "bytes": 223979,
+          "sha256": "E316255BBFCD9FE50D165314B85ABB2B33CB2A66A93C491DB648E498A82C2DE1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.codehaus.plexus/plexus-utils/3.3.0/cf43b5391de623b36fe066a21127baef82c64022/plexus-utils-3.3.0.jar",
+          "bytes": 263253,
+          "sha256": "76D174792540E2775AF94D03D10FB2D3C776E2CD0AC0EBF427D3E570072BB9CE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.jcraft/jorbis/0.0.17/8872d22b293e8f5d7d56ff92be966e6dc28ebdc6/jorbis-0.0.17.jar",
+          "bytes": 99701,
+          "sha256": "E067F29A3701426B67ED973036949C6E58CA5BB53EEF7240B2E71E286D252A9E"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.jline/jline-reader/3.20.0/8f15415b022a25b473e8e16c28ae913186ffb9c4/jline-reader-3.20.0.jar",
+          "bytes": 171052,
+          "sha256": "ACD1C94D1E228AA7B7962F69B21ED3A9FD828EB3A63E4BAF9086954E626AF1F0"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.jline/jline-terminal/3.20.0/d0ddcc708ddf527a3454c941b7b9225cc83a15ff/jline-terminal-3.20.0.jar",
+          "bytes": 228481,
+          "sha256": "12125170E795519BA6DC8010C070B53C76AAE92B485C1E37530E54AB5DD08D43"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.joml/joml/1.10.5/22566d58af70ad3d72308bab63b8339906deb649/joml-1.10.5.jar",
+          "bytes": 712082,
+          "sha256": "CAC9F22F83A7AA33EEBDA73C16FF5261E3CB4911B6BAFCF4C79EA486099D0C9A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/15a8c1de7f51d07a92eae7ce1222557073a0c0c3/lwjgl-freetype-3.3.3-natives-windows-x86.jar",
+          "bytes": 877480,
+          "sha256": "75A798A5F492E1376D05DC637A9105198E71D06F38A11E9BCE1C5072E0D60B3A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/81091b006dbb43fab04c8c638e9ac87c51b4096d/lwjgl-freetype-3.3.3-natives-windows.jar",
+          "bytes": 1035586,
+          "sha256": "022E59514B1ECB45249413AE62AD094971D7AC88C0DCE9A32C627D06A3C01A1F"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/82028265a0a2ff33523ca75137ada7dc176e5210/lwjgl-freetype-3.3.3-natives-windows-arm64.jar",
+          "bytes": 886068,
+          "sha256": "B589983EC143FF09ACD8D9A215B4EF3F80750855646C1B96279066EA5E44F40C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/a0db6c84a8becc8ca05f9dbfa985edc348a824c7/lwjgl-freetype-3.3.3.jar",
+          "bytes": 450896,
+          "sha256": "E1A7AB07106349D9A8A68F6860B7B73B353C502B81E662ACA77F931C6FDD3DE8"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/32334f3fd5270a59bad9939a93115acb6de36dcf/lwjgl-glfw-3.3.3-natives-windows-x86.jar",
+          "bytes": 157123,
+          "sha256": "9646555D405F0D2A3A9576B506F57C1632AF64F69A8AE58CB0448AE04A9C7824"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/e449e28b4891fc423c54c85fbc5bb0b9efece67a/lwjgl-glfw-3.3.3-natives-windows.jar",
+          "bytes": 166368,
+          "sha256": "98155B451DFC6F585089DEC77A12F9C05789C4DCEB8DA472F9D308160101A70D"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/efa1eb78c5ccd840e9f329717109b5e892d72f8e/lwjgl-glfw-3.3.3.jar",
+          "bytes": 135546,
+          "sha256": "BEDC757FD2B1B255146DB26B74B9CBD1FCF5644B89B47B104FA721C741604259"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/f27018dc74f6289574502b46cce55d52817554e2/lwjgl-glfw-3.3.3-natives-windows-arm64.jar",
+          "bytes": 141970,
+          "sha256": "70CA9DB0D2764CB9DBC8FB5FD425318C5AF597173B134D03259E2030652E94B5"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/426222fc027602a5f21b9c0fe79cde6a4c7a011f/lwjgl-jemalloc-3.3.3-natives-windows.jar",
+          "bytes": 180344,
+          "sha256": "9949C8E49998BD0C878D842884011F1383E2851005091E0B2BCF7B7671B848EB"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/b543467b7ff3c6920539a88ee602d34098628be5/lwjgl-jemalloc-3.3.3.jar",
+          "bytes": 43896,
+          "sha256": "E99E31269E6678A4BFC62EF24C50A481C01CBDD004861ECE9A59BA12768C6516"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/ba1f3fed0ee4be0217eaa41c5bbfb4b9b1383c33/lwjgl-jemalloc-3.3.3-natives-windows-arm64.jar",
+          "bytes": 154415,
+          "sha256": "1F204ACE18E3512765003D83B9A853856F65DDA70B63B9722638483F2D5D34C2"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/f6063b6e0f23be483c5c88d84ce51b39dc69126c/lwjgl-jemalloc-3.3.3-natives-windows-x86.jar",
+          "bytes": 148612,
+          "sha256": "D9B4E06E2A84205583FB05440D2238385A91CB01A060DDB1D376223AE225F14A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/87b8d5050e3adb46bb58fe1cb2669a4a48fce10d/lwjgl-openal-3.3.3-natives-windows-x86.jar",
+          "bytes": 638424,
+          "sha256": "852CA4E36B1FDFDD3EFB6CE42F08B7D0F957B04C4BCFBD78057B0C799F399231"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/8e0615235116b9e4160dfe87bec90f5f6378bf72/lwjgl-openal-3.3.3-natives-windows-arm64.jar",
+          "bytes": 630410,
+          "sha256": "875F81451731DF2CAC48BBE3C4559834A94D36FC15F461C933E4D4ACDD2F1F26"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/cf83862ae95d98496b26915024c7e666d8ab1c8f/lwjgl-openal-3.3.3-natives-windows.jar",
+          "bytes": 698720,
+          "sha256": "E3DA7C3DB25C81DB8D425EF1E3DBFA15000B040D669F008B0813C94333AC96C8"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/daada81ceb5fc0c291fbfdd4433cb8d9423577f2/lwjgl-openal-3.3.3.jar",
+          "bytes": 110586,
+          "sha256": "AE0E82767CACF08921F578FBA9D84753DDEB00CEADA0510A2B4A882BE28FBF95"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/2f6b0147078396a58979125a4c947664e98293a/lwjgl-opengl-3.3.3.jar",
+          "bytes": 929192,
+          "sha256": "5062DA750E5F7EC89E27E8B67B7D40FA8C4B16890159E35F828116CE6C8ECA1E"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/65e956d3735a1abdc82eff4baec1b61174697d4b/lwjgl-opengl-3.3.3-natives-windows-arm64.jar",
+          "bytes": 83095,
+          "sha256": "68C8DBC41436E421FF0B3927E62D2AA533552D8F02D73DE3FD928D7A51FD797A"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/d32d833dcaa2f355a886eaf21f0408b5f03241d/lwjgl-opengl-3.3.3-natives-windows-x86.jar",
+          "bytes": 88612,
+          "sha256": "9D99D203DE4E31286CAE753A1DFB981367C93734F1944644BA71BE521B3AF2CC"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/e6c1eec8be8a71951b830a4d69efc01c6531900c/lwjgl-opengl-3.3.3-natives-windows.jar",
+          "bytes": 101535,
+          "sha256": "F45E5F60596B03B2E3D8B98A123C855EBD0B5154C8155DC2A56B890CCC907477"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/1d9facdf6541de114b0f963be33505b7679c78cb/lwjgl-stb-3.3.3-natives-windows.jar",
+          "bytes": 261297,
+          "sha256": "D12AB866FE1169E924AC5B4D6BB7767AE7842A9FC8652798682C0069BB73FCF2"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/25dd6161988d7e65f71d5065c99902402ee32746/lwjgl-stb-3.3.3.jar",
+          "bytes": 120283,
+          "sha256": "0CFF7AA46EA9D70FCC20857015293EA80FBF21ADCAC34600C84DA9B81A44CA93"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/a584ab44de569708871f0a79561f4d8c37487f2c/lwjgl-stb-3.3.3-natives-windows-arm64.jar",
+          "bytes": 219511,
+          "sha256": "3D1454DFBAD9E1B8A7DA25E2928C16A4A63A14050B27DA1912C3BE0C60B02E7C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/b5c874687b9aac1a936501d4ed2c49567fd1b575/lwjgl-stb-3.3.3-natives-windows-x86.jar",
+          "bytes": 227800,
+          "sha256": "46424E45459733B26C4A7B0DD2695209CB6938DAFA3A9012C6A5682C94A2C40E"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/82d755ca94b102e9ca77283b9e2dc46d1b15fbe5/lwjgl-tinyfd-3.3.3.jar",
+          "bytes": 13400,
+          "sha256": "EE0515054EE19A3F4088426FEE9D879EB2EE657B07E5064E4E2C851F6ADCF14B"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/a6697981b0449a5087c1d546fc08b4f73e8f98c9/lwjgl-tinyfd-3.3.3-natives-windows.jar",
+          "bytes": 130253,
+          "sha256": "02285911F1C881735FA4D0EB141FFEAAFD9A2BB9349D98F7C1FB8A9CB49C0F58"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/a88c494f3006eb91a7433b12a3a55a9a6c20788b/lwjgl-tinyfd-3.3.3-natives-windows-arm64.jar",
+          "bytes": 110867,
+          "sha256": "71076FC5C01788577719F4B1983473026B2EB8CBB02D3DC736F8B5724A49FD8C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/c336c84ee88cccb495c6ffa112395509e7378e8a/lwjgl-tinyfd-3.3.3-natives-windows-x86.jar",
+          "bytes": 111797,
+          "sha256": "43C9264F0661087B06AE29D78AAB98121DFAD69EFE3202424E3419738D5E9994"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar",
+          "bytes": 785029,
+          "sha256": "DC9C7B2D48E8396D68895F8902FFA01E46253DE44DFE927533FF09457EBFEEC4"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/9e670718e050aeaeea0c2d5b907cffb142f2e58f/lwjgl-3.3.3-natives-windows-x86.jar",
+          "bytes": 139653,
+          "sha256": "22A22338262554EB5E133C8441DEEEDAC84DA082EB3BAC84D032DA4FAF369749"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/a5ed18a2b82fc91b81f40d717cb1f64c9dcb0540/lwjgl-3.3.3-natives-windows.jar",
+          "bytes": 165442,
+          "sha256": "5EE63A19187EFE5BB8747FD24F7B13257DB348DF5AD641113A3695E43F213959"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/e9aca8c5479b520a2a7f0d542a118140e812c5e8/lwjgl-3.3.3-natives-windows-arm64.jar",
+          "bytes": 133378,
+          "sha256": "D35582CA7EDFF59D4A5C8F4A0EDEC779CAEA4CA8E26C9AFF8244710049BB4350"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.lz4/lz4-java/1.8.0/4b986a99445e49ea5fbf5d149c4b63f6ed6c6780/lz4-java-1.8.0.jar",
+          "bytes": 682804,
+          "sha256": "D74A3334FB35195009B338A951F918203D6BBCA3D1D359033DC33EDD1CADC9EF"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.openjdk.nashorn/nashorn-core/15.4/f67f5ffaa5f5130cf6fb9b133da00c7df3b532a5/nashorn-core-15.4.jar",
+          "bytes": 2167292,
+          "sha256": "6F816E84DFD63A81D4EAA7829C08337BBAFF3EC683FF3BF6BBD90D017A00DC6F"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.8/b9747a320844b6cb1eacd90d8ecfd260a16c01d3/asm-analysis-9.8.jar",
+          "bytes": 35151,
+          "sha256": "E640732FBCD3C6271925A504F125E38384688F4DFBBF92C8622DFCEE0D09EDB9"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/9.8/36e4d212970388e5bd2c5180292012502df461bb/asm-commons-9.8.jar",
+          "bytes": 73498,
+          "sha256": "3301A1C1CB4C59FCC5292648DAC1D7C5AED4C0F067DFBE88873B8CDFE77404F4"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/9.8/18419ca5b77a2f81097c741e7872e6ab8d2f40d/asm-tree-9.8.jar",
+          "bytes": 51934,
+          "sha256": "14B7880CB7C85EED101E2710432FC3FFB83275532A6A894DC4C4095D49AD59F1"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.8/395f1c1f035258511f27bc9b2583d76e4b143f59/asm-util-9.8.jar",
+          "bytes": 94559,
+          "sha256": "8BA0460ECB28FD0E2980E5F3EF3433A513A457BC077F81A53BDC75B587A08D15"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.8/dc19ecb3f7889b7860697215cae99c0f9b6f6b4b/asm-9.8.jar",
+          "bytes": 126113,
+          "sha256": "876EAB6A83DAECAD5CA67EB9FCABB063C97B5AEB8CF1FCA7A989ECDE17522051"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.9/7cf2726fdcfbc8610f9a71fb3ed639871f315340/slf4j-api-2.0.9.jar",
+          "bytes": 64579,
+          "sha256": "0818930DC8D7DEBB403204611691DA58E49D42C50B6FFCFDCE02DADB7C3C2B6C"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry/build/moddev/artifacts/neoforge-21.1.219-client-extra-aka-minecraft-resources.jar",
+          "bytes": 9361844,
+          "sha256": "8E9CF6F4B6EAFB1C6BF745A67A61DD1736F31865CAD409E5B2BEC918667DAB5E"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry/build/moddev/artifacts/neoforge-21.1.219.jar",
+          "bytes": 23519091,
+          "sha256": "2E510BD1CC0C20A02C4723E67A666DB02B83A6D79ED05C0136A4BA916FC327C1"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/C1/client/mods/create-1.21.1-6.0.10-280-slim.jar",
+          "bytes": 17452009,
+          "sha256": "F0652BEE27460F2D26A748F537CB5D687981441378D3A526D17FFAAB5A1072BB"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/C1/client/mods/flywheel-neoforge-1.21.1-1.0.6.jar",
+          "bytes": 873570,
+          "sha256": "31DDA15C205EB596D3B3449EF03F6AF7363A6CD35B3DA4BFE916B304F9E5337E"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/C1/client/mods/ponder-neoforge-1.0.82+mc1.21.1.jar",
+          "bytes": 820109,
+          "sha256": "0CF4611AD853042B689AC386184C5BBE02950EFCFFDDB49E5F604E82BADDB0DC"
+        },
+        {
+          "path": "E:/MyMC/NewMod/Create_NuclearIndustry-thermal-performance-diagnosis-20261017/C1/client/mods/Registrate-MC1.21-1.3.0+67.jar",
+          "bytes": 181448,
+          "sha256": "510F4041C41739F1D8EA8850AB8364D3E3A5FADA8529BEED5D9F479E2523DB52"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter/5.11.4/a699f024a4a4706b36bddbeb42d499aff9e09379/junit-jupiter-5.11.4.jar",
+          "bytes": 6367,
+          "sha256": "AA880E4AFBA87D447357E4C1FC098C5CB1D200CB9403496C00D3B35A5BD0E8DB"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.11.4/308315b28e667db4091b2ba1f7aa220d1ddadb97/junit-jupiter-api-5.11.4.jar",
+          "bytes": 216413,
+          "sha256": "AB83EF9E51AC4597D59D26B4B58812129550E2F579A404C8AF7D09F5CE5B4293"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-engine/5.11.4/dc10ec209623986a68ea07f67cdc7d2a65a60355/junit-jupiter-engine-5.11.4.jar",
+          "bytes": 260117,
+          "sha256": "CDF8AC59F3FAD774CA738AD03890950EEB91833EF0E8908753177EDD26F1581C"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/5.11.4/e4c86fbe2a39c60c6b87260ef7f7e7c1a1906481/junit-jupiter-params-5.11.4.jar",
+          "bytes": 591594,
+          "sha256": "02A6E015DE7CE94AC7F256E7FA05B8091DEA861FE79A555A7993313D0F6C7D96"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.11.4/8898eea3ed0da2641548d602c3e308804f166303/junit-platform-commons-1.11.4.jar",
+          "bytes": 142008,
+          "sha256": "9EDD969B0D0670C54105BC91AE79BD1C6F503E12115FABA82073B84C86BBC334"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.11.4/21f61b123ad6ac8f7e73971bff3a096c8d8e1cd0/junit-platform-engine-1.11.4.jar",
+          "bytes": 246800,
+          "sha256": "B1DD998F64F9ACADC15966D9CD3D08074662677B3E390F0A38FCBF0BB4C72330"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-launcher/1.11.4/3d83c201899d8c5e74e1a5d628eab900342a0e48/junit-platform-launcher-1.11.4.jar",
+          "bytes": 189006,
+          "sha256": "D7430BD029E7FCCED53EE445E4D2D1A8A1E043EA4C4DF43B6335A857F79761AE"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.2/a231e0d844d2721b0fa1b238006d15c6ded6842a/apiguardian-api-1.1.2.jar",
+          "bytes": 6806,
+          "sha256": "B509448AC506D607319F182537F0B35D71007582EC741832A1F111E5B5B70B38"
+        },
+        {
+          "path": "C:/Users/IKSXH/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.3.0/152ea56b3a72f655d4fd677fc0ef2596c3dd5e6e/opentest4j-1.3.0.jar",
+          "bytes": 14304,
+          "sha256": "48E2DF636CAB6563CED64DCDFF8ABB2355627CB236EF0BF37598682DDF742F1B"
+        }
+      ],
+      "source_inputs": [
+        {
+          "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineRotorVisual.java",
+          "git_blob_sha256": "E74AF2141CDD188719CD8721042C28BF33281C24E7296FA36ECF23BDF9D1A5BE",
+          "actual_input_sha256": "E74AF2141CDD188719CD8721042C28BF33281C24E7296FA36ECF23BDF9D1A5BE"
+        },
+        {
+          "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual.java",
+          "git_blob_sha256": "C4786D19944780CC25CEB50EA5DAF05670220E8D6560B8821F3696005B0DA3F5",
+          "actual_input_sha256": "C4786D19944780CC25CEB50EA5DAF05670220E8D6560B8821F3696005B0DA3F5"
+        },
+        {
+          "path": "src/main/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents.java",
+          "git_blob_sha256": "A432EE1AC38968DCF2C78B500D7E285EA53E9AF2E3D5C47E62E7BC9BB80F7EC0",
+          "actual_input_sha256": "A432EE1AC38968DCF2C78B500D7E285EA53E9AF2E3D5C47E62E7BC9BB80F7EC0"
+        }
+      ],
+      "command_record": {
+        "command": [
+          "C:\\Program Files\\Java\\jdk-21\\bin\\javac.exe",
+          "@E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\thermal-performance-accepted-20261018\\c1-binding-javac.args"
+        ],
+        "cwd": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration",
+        "exit_code": 0,
+        "stdout_log": "c1-binding-javac.stdout.log",
+        "stderr_log": "c1-binding-javac.stderr.log"
+      },
+      "classes": [
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$GameEvents.class",
+          "compiled_sha256": "2419660814F79EBFB0B79686708655C1B5BD50838E0AF455C4C362D0D8186201",
+          "original_output_sha256": "2419660814F79EBFB0B79686708655C1B5BD50838E0AF455C4C362D0D8186201",
+          "candidate_entry_sha256": "2419660814F79EBFB0B79686708655C1B5BD50838E0AF455C4C362D0D8186201",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$RotorPose.class",
+          "compiled_sha256": "C2306A219F1C6E00128E26711E2DEFF5875B4F130AA4A963099434C907D76392",
+          "original_output_sha256": "C2306A219F1C6E00128E26711E2DEFF5875B4F130AA4A963099434C907D76392",
+          "candidate_entry_sha256": "C2306A219F1C6E00128E26711E2DEFF5875B4F130AA4A963099434C907D76392",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$RotorTrack.class",
+          "compiled_sha256": "C9F9A3BD8A96DE2FC0FEAF7722C97897F8CDDBC94408003407339FF0370FD629",
+          "original_output_sha256": "C9F9A3BD8A96DE2FC0FEAF7722C97897F8CDDBC94408003407339FF0370FD629",
+          "candidate_entry_sha256": "C9F9A3BD8A96DE2FC0FEAF7722C97897F8CDDBC94408003407339FF0370FD629",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$ShaftTrack.class",
+          "compiled_sha256": "061A187D201A1F5F11D5B9D07A3D53B1E57BF8474A43B378CFB4412A4212D0A0",
+          "original_output_sha256": "061A187D201A1F5F11D5B9D07A3D53B1E57BF8474A43B378CFB4412A4212D0A0",
+          "candidate_entry_sha256": "061A187D201A1F5F11D5B9D07A3D53B1E57BF8474A43B378CFB4412A4212D0A0",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents.class",
+          "compiled_sha256": "E89F35F0BF3E277B786A48F42ABF07F0AA107D60196BA201A50363DF50F52178",
+          "original_output_sha256": "E89F35F0BF3E277B786A48F42ABF07F0AA107D60196BA201A50363DF50F52178",
+          "candidate_entry_sha256": "E89F35F0BF3E277B786A48F42ABF07F0AA107D60196BA201A50363DF50F52178",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual$1.class",
+          "compiled_sha256": "A95F7850A930FA4BCE53BD8563F4304BB3A1C1B98448A4BB2ED831C16248FA70",
+          "original_output_sha256": "A95F7850A930FA4BCE53BD8563F4304BB3A1C1B98448A4BB2ED831C16248FA70",
+          "candidate_entry_sha256": "A95F7850A930FA4BCE53BD8563F4304BB3A1C1B98448A4BB2ED831C16248FA70",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual.class",
+          "compiled_sha256": "8E5FAE6954AA2D463475F357DC03FE3E5BEE5CACF364D8A219C1970180F691A7",
+          "original_output_sha256": "8E5FAE6954AA2D463475F357DC03FE3E5BEE5CACF364D8A219C1970180F691A7",
+          "candidate_entry_sha256": "8E5FAE6954AA2D463475F357DC03FE3E5BEE5CACF364D8A219C1970180F691A7",
+          "same_bytes": true
+        },
+        {
+          "entry": "com/iksxh/create_nuclear_industry/turbine/client/TurbineRotorVisual.class",
+          "compiled_sha256": "C821EF5BC1CEE3BE3C231208528345B5DB8FE09188677FC2FEF9065EAA5FB2FF",
+          "original_output_sha256": "C821EF5BC1CEE3BE3C231208528345B5DB8FE09188677FC2FEF9065EAA5FB2FF",
+          "candidate_entry_sha256": "C821EF5BC1CEE3BE3C231208528345B5DB8FE09188677FC2FEF9065EAA5FB2FF",
+          "same_bytes": true
+        }
+      ]
+    }
+  ],
+  "zip_counts": {
+    "main": {
+      "all_entries": 2620,
+      "directory_entries": 243,
+      "real_file_entries": 2377,
+      "class_files": 704,
+      "non_class_resource_metadata_files": 1673
+    },
+    "c1": {
+      "all_entries": 2625,
+      "directory_entries": 243,
+      "real_file_entries": 2382,
+      "class_files": 709,
+      "non_class_resource_metadata_files": 1673
+    }
+  },
+  "unchanged_payloads": {
+    "all_entries": 2611,
+    "directory_entries": 243,
+    "real_file_entries": 2368,
+    "class_files": 695,
+    "non_class_resource_metadata_files": 1673
+  },
+  "changed_or_added_class_files": 14,
+  "added_class_files": [
+    "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$OwnerEntry.class",
+    "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$PartBounds.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual$1.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineRotorVisual.class"
+  ],
+  "changed_existing_class_files": [
+    "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Form.class",
+    "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Issue.class",
+    "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Result.class",
+    "com/iksxh/create_nuclear_industry/turbine/TurbineStructure.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$GameEvents.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$RotorPose.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$RotorTrack.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$ShaftTrack.class",
+    "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents.class"
+  ],
+  "candidate": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-thermal-performance-diagnosis-20261017\\C1\\artifacts\\C1-candidate.jar",
+    "bytes": 3403459,
+    "sha256": "9DA77B19BDF3C30EB9FE1EEAA4FF8A6CC6463E950ACC407C62DFE892E5537230"
+  },
+  "final_status_porcelain": "",
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration",
+    "exit_code": 0,
+    "stdout_log": "final-diff-check.stdout.log",
+    "stderr_log": "final-diff-check.stderr.log"
+  },
+  "new_tests_or_world_runs": 0,
+  "candidate_repackaged": false,
+  "source_class_candidate_binding_verified": true
+}
