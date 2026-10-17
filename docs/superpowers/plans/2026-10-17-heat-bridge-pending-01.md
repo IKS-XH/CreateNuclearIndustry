@@ -31,4 +31,4 @@
 
 ## 工作区准备
 
-复用同级干净集成树`E:/MyMC/NewMod/Create_NuclearIndustry-render-accepted-integration`，切新分支`codex/heat-bridge-pending-fix`从main当前`eb1ec32`开始；该树当前无用户世界/dirty且未执行游戏。作为新批次，先核main保存退出和session.lock，完整携带main的run/saves和config并核数量/哈希；若目标同名已存在先完整备份，不混合。不启动用户世界，测试仅局部世界夹具。输入崩溃文件只读，不自动安装或操作生产服。
+复用同级干净集成树`E:/MyMC/NewMod/Create_NuclearIndustry-render-accepted-integration`，切新分支`codex/heat-bridge-pending-fix`；实际基准`b8019db`相对正式来源`eb1ec32`仅多本卡等管理文档。作为新批次，先核main保存退出和session.lock，完整携带main的run/saves和config并核数量/哈希；若目标同名已存在先完整备份，不混合。不启动用户世界，测试仅局部世界夹具。输入崩溃文件只读，不自动安装或操作生产服。
