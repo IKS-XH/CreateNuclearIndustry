@@ -30,14 +30,14 @@
 | 贫化铀材料/装备与18B外观 | 粉炼锭、锭块存取、九种钻石装备锻造升级及专属图标/块/穿戴层/饰纹；用户确认功能与对应外观手测通过并授权合main | [联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)、[美术来源](art/ART-DEPLETED-URANIUM-18B-ACCEPTED.md) |
 | 锅炉热源刷新队列 | 原子取批和锁外刷新，重入/并发新增留到下一tick；34项定向回归及一次组合窄审保持，用户确认原整合包服务器崩溃修复通过并授权合main | [原诊断](reviews/2026-10-17/heat-pending-01/DIAGNOSIS.md)、[联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md) |
 
-结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果、辐射与再处理未实现。
+结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。main尚未接入辐射候选；管网压力、具体事故世界效果与再处理未实现。
 
 ## 独立未闭门
 
 | 事项 | 状态/条件 |
 | --- | --- |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
-| 事故与辐射系统 | 已批准整稿及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)候选`Create_NuclearIndustry-radiation`来源`a74f55e`已提交。41项定向JUnit、首轮13/13真实服与第2轮2/2受控区块事件回归、全维保存/exit0、增量assemble及制品身份已核；按未变实现复用原证据，未冒称当前全量重跑。[组合窄审和两轮定向复核](reviews/2026-10-16/radiation-foundation-01/RE-REVIEW-02.md)已无剩余代码发现；现停在[集中手测门](reviews/2026-10-16/radiation-foundation-01/CANDIDATE.md)，客户端、真实区块装载/重登和真人多人未验，未合main/替换正式包。[派发依据](reviews/2026-10-16/radiation-foundation-01/DISPATCH.md)；第二批事故执行与回收封装待本批人工门闭合后派发 |
+| 事故与辐射系统 | 第一批候选`Create_NuclearIndustry-radiation`原来源a74f55e及41项定向JUnit、13＋2真实服和原组合审查保持。用户2026-10-18报告其余手测项全部通过，原集中清单据此登记通过，不称PM亲自复跑。新增头罩护目镜要求已在原树实现并提交`cc7d4fd`：保留5皮革＋1铅板，额外1工程师护目镜，头部穿戴提供原生护目镜功能；本项1/1定向JUnit、一次增量assemble/exit0及一次组合窄审通过。新候选SHA74950D69…、3429789 bytes，见[本项交付与唯一复看](reviews/2026-10-18/radiation-goggles/CANDIDATE.md)。只余新增头罩合成/穿戴HUD待反馈，未合main/替换正式包；[原证据](reviews/2026-10-16/radiation-foundation-01/CANDIDATE.md)和[补充写集](superpowers/plans/2026-10-16-radiation-foundation-01.md#2026-10-18头罩补充派发)保留，第二批事故执行与回收封装待本补充闭合后派发 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |

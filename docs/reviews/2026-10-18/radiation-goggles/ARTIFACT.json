@@ -1,0 +1,32 @@
+{
+  "baseHead": "82da6aa125c0f3c5028495b503787dbd5324826a",
+  "productionBase": "a74f55e",
+  "sourceState": "baseHead plus three scoped uncommitted files",
+  "jarBytes": 3429789,
+  "jarSHA256": "74950D69971B7F26221A3E061DB5BB7E10FA98559F59146F84238E0630DEC56A",
+  "oldCandidateSHA256": "AFAD58C122257112BD4BA05C275D86D30293AB5546F2D0531FFEDE5D38905817",
+  "changedJarEntries": [
+    "com/iksxh/create_nuclear_industry/content/RadiationContent.class",
+    "data/create_nuclear_industry/recipe/crafting/radiation_helmet.json"
+  ],
+  "addedJarEntries": [],
+  "removedJarEntries": [],
+  "allPackagedModClassesMatchCompiledOutput": true,
+  "checkedModClassCount": 738,
+  "radiationGameTestsExcluded": true,
+  "recipeMatchesSource": true,
+  "sourceFiles": [
+    {
+      "sha256": "966B4F1DDD2B4E5BD760549BB7D104893073B615F8F3CBDCCB104346536461E9",
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/content/RadiationContent.java"
+    },
+    {
+      "sha256": "2CC7AC4446CA3C7A2B171059E6EC5EEE69F8E6099D205DD9C16475D770E8670E",
+      "path": "src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_helmet.json"
+    },
+    {
+      "sha256": "35C68AA298418951622AD30AF550FAB7941D76EB022CE2EFECD57932D7A29F36",
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/radiation/RadiationEquipmentDataTest.java"
+    }
+  ]
+}
