@@ -2,6 +2,7 @@ package com.iksxh.create_nuclear_industry.heat;
 
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  * 一切查找先核对区块已加载，防止源端生命周期通知加载远处控制器。
  */
 public final class HeatExchangerBoilerBridge {
+    /** 待刷新弱表和其位置集合统一加锁；锁内只交接请求，不读取世界或调用热源。 */
+    private static final Object PENDING_LOCK = new Object();
     private static final Map<Level, Set<BlockPos>> PENDING = new WeakHashMap<>();
     /** 两张弱表共用登记锁；仅保护结构修改和引用快照，不保护或执行任何世界操作。 */
     private static final Object SOURCES_LOCK = new Object();
@@ -138,7 +141,11 @@ public final class HeatExchangerBoilerBridge {
                 || !(event.getChunk() instanceof LevelChunk chunk)) return;
         for (var be : chunk.getBlockEntities().values()) if (be instanceof FluidTankBlockEntity tank) {
             BlockPos controller = tank.getController();
-            if (controller != null) PENDING.computeIfAbsent(level, ignored -> new HashSet<>()).add(controller.immutable());
+            if (controller != null) {
+                synchronized (PENDING_LOCK) {
+                    PENDING.computeIfAbsent(level, ignored -> new HashSet<>()).add(controller.immutable());
+                }
+            }
         }
     }
 
@@ -149,10 +156,23 @@ public final class HeatExchangerBoilerBridge {
             if (be instanceof NuclearHeatExchangerBlockEntity machine) machine.suspend();
     }
 
-    /** 仅处理加载事件登记的位置，不逐 tick 扫描整个世界或保存世界引用。 */
+    /**
+     * 原子交接独立位置快照；本轮清理必须早于世界回调，使重入/并发登记保留到下一轮。
+     * 世界强引用仅随本轮局部批次存活，长期队列继续采用弱引用。
+     */
+    private static Map<Level, Set<BlockPos>> takePending() {
+        synchronized (PENDING_LOCK) {
+            if (PENDING.isEmpty()) return Map.of();
+            Map<Level, Set<BlockPos>> batch = new HashMap<>();
+            PENDING.forEach((level, positions) -> batch.put(level, Set.copyOf(positions)));
+            PENDING.clear();
+            return batch;
+        }
+    }
+
+    /** 仅在锁外刷新本轮加载事件登记的位置，不逐 tick 扫描整个世界。 */
     @SubscribeEvent public static void afterServerTick(ServerTickEvent.Post event) {
         auditActiveSources();
-        PENDING.forEach((level, positions) -> positions.forEach(pos -> refresh(level, pos)));
-        PENDING.clear();
+        takePending().forEach((level, positions) -> positions.forEach(pos -> refresh(level, pos)));
     }
 }
