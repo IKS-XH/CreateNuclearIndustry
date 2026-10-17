@@ -15,12 +15,19 @@ class RadiationEquipmentDataTest {
             assertEquals(((ArmorItem)vanilla[i]).getDefense(),((ArmorItem)ours[i]).getDefense());
             assertTrue(ours[i].isValidRepairItem(new ItemStack(ours[i]),new ItemStack(Items.LEATHER)));
         }
-        int leather=0,lead=0;
+        int leather=0,lead=0,goggles=0;
         for(String part:new String[]{"helmet","chestplate","leggings","boots"}) {
             var recipe=JsonParser.parseString(Files.readString(Path.of("src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_"+part+".json"))).getAsJsonObject();
             assertEquals("minecraft:crafting_shaped",recipe.get("type").getAsString());
-            for(var row:recipe.getAsJsonArray("pattern"))for(char c:row.getAsString().toCharArray()){if(c=='L')leather++;if(c=='P')lead++;}
+            for(var row:recipe.getAsJsonArray("pattern"))for(char c:row.getAsString().toCharArray()){
+                if(c=='L')leather++;if(c=='P')lead++;
+                if(c=='G'){
+                    assertEquals("helmet",part);
+                    assertEquals("create:goggles",recipe.getAsJsonObject("key").getAsJsonObject("G").get("item").getAsString());
+                    goggles++;
+                }
+            }
         }
-        assertEquals(24,leather);assertEquals(4,lead);
+        assertEquals(24,leather);assertEquals(4,lead);assertEquals(1,goggles);
     }
 }

@@ -3,7 +3,8 @@
   "category": "equipment",
   "pattern": [
     "LLL",
-    "LPL"
+    "LPL",
+    " G "
   ],
   "key": {
     "L": {
@@ -11,6 +12,9 @@
     },
     "P": {
       "item": "create_nuclear_industry:lead_plate"
+    },
+    "G": {
+      "item": "create:goggles"
     }
   },
   "result": {
