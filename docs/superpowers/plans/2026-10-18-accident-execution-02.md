@@ -39,7 +39,7 @@
 | `J/CreateNuclearIndustry.java`、`J/content/ModCreativeTabs.java` | 仅事故注册、配置/事件接线和创意栏入口 |
 | `J/blockentity/ReactorInstrumentPortBlockEntity.java`、`J/blockentity/ReactorPortBlockEntity.java` | 事故锁/持久化交接、即时撤销热工及交易/管理员许可、按真实物品托管；原正常路径保持 |
 | `J/reactor/ReactorMeltdownEvent.java`、`J/reactor/ReactorMeltdownEvents.java`、`J/structure/ReactorStructureLifecycle.java` | 既有两事故原因/去重与多所有者交接；不另起倒计时或篡改原安全拆除语义 |
-| `J/radiation/RadiationItemSources.java`、`RadiationSourceAdapters.java`、`RadiationContainment.java`、`RadiationServerEvents.java` | 废料/残骸真实源、变更失效与既有掉落保护拓展；剂量算法/常态采样预算不改 |
+| `J/radiation/RadiationItemSources.java`、`RadiationSourceAdapters.java`、`RadiationContainment.java`、`RadiationServerEvents.java`、`RadiationSourceIndex.java` | 废料/残骸真实源、变更失效与既有掉落保护拓展；索引仅按事故ID＋列ID读取本维度账本真实非空托管载荷，定位原列底部并在移交时失效，不扫描全堆或更改剂量算法/半径/常态采样预算 |
 | `J/storage/SpentFuelPayload.java`、`J/production/ShieldedAssemblyRecipe.java`、`ShieldedAssemblyBlockEntity.java` | 桶校验/封装支持一种新载荷；现有配方选择从仅一条sealing扩为两条已知sealing，按实际槽位/配方ID锁定，不能串配/复制工序 |
 | `R/assets/create_nuclear_industry/lang/{en_us,zh_cn}.json`、新增对应corium方块/物品模型及blockstate，`R/data/create_nuclear_industry/loot_table/blocks/reactor_corium.json`（如原生掉落接线需要） | 仅本批玩家措辞与可加载原版占位；不绘新贴图/动画，不改既有资产 |
 | 新增`R/data/create_nuclear_industry/recipe/shielded_assembly/sealed_accident_fuel_waste.json` | 1废料＋1既有固化基材＋1空铅桶→单件既有封装桶，12800工作量；沿用原料标签与真实载荷 |
@@ -97,3 +97,5 @@
 唯一实现/构建执行者按本卡连续完成任务1～4，不向子Agent转授任务。精确派发与实际开始以工具返回和STATUS登记，不因本卡存在就预称已运行。结束后一次独立组合窄审，再停本批集中人工门；源/正式包仅PM管理。
 
 实际派发：新树从main `b39d11690fdbd8861e5d5fa7d06efa7d53d9e8de`创建，初始干净，携带世界与上述冻结清单27项全同，`PREFLIGHT.json`已写候选报告；唯一执行者`/root/accident02_impl`、`gpt-6.1-sol`/xhigh已启动（跨库存/事件/持久化与世界动作提高思考强度，不改变权限）。主分支47项原dirty及已验rad手测原世界保护记录保留。
+
+执行中补齐（2026-10-18）：真实组件由SavedData托管以保证仪表先毁及分批等待期间不丢料，因此精确追加RadiationSourceIndex.java既有采样入口。托管期间按唯一真实所有者计源，转入残骸/返还后原源立即失效；仍遵守原已加载源及跨帧预算规则，不强载区块。此为既定物料/辐射连续性的必要接线，不新增玩法参数。

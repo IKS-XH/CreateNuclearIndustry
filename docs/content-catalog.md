@@ -1,10 +1,10 @@
 # 当前内容注册清单
 
-更新：2026-10-16。按当前[注册源码](../src/main/java/com/iksxh/create_nuclear_industry/content/)核对：常规块51、item119，其中同名BlockItem48由块表承接，普通物品仅列71；流体8、fluid_type5。这里只去重展示，不改变注册；条件诊断内容另列。
+更新：2026-10-18。按当前[注册源码](../src/main/java/com/iksxh/create_nuclear_industry/content/)核对：常规块51、item124，其中同名BlockItem48由块表承接，普通物品仅列76；流体8、fluid_type5。这里只去重展示，不改变注册；条件诊断内容另列。
 
 命名空间create_nuclear_industry，ID小写下划线。方块物品通常共用ID；实际模型/状态/贴图在src/main/resources/assets/create_nuclear_industry，具体来源以源码/资源为准，不要求每个ID都存在同名全套文件。流体/桶策略不能由名字推断；热液/SC专用运输、Create罐保留，SC不作为普通桶/世界流体使用。
 
-未来辐射/再处理/新堆型清单移入[归档策划](archive/2026-10-15/snapshots/docs/content-catalog.md)，不与已注册内容混列。radiation_sensor等材料存在不等于辐射系统已实现；进度看[STATUS](STATUS.md)，配方看[recipes](recipes.md)。
+再处理/新堆型等未来清单移入[归档策划](archive/2026-10-15/snapshots/docs/content-catalog.md)，不与已注册内容混列。辐射传感器是零件，手持测量使用radiation_meter；事故残骸/废料尚在独立候选实施，未列作main注册。进度看[STATUS](STATUS.md)，配方看[recipes](recipes.md)。
 
 ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存在不等于可生存获取。
 
@@ -64,7 +64,7 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `uranium_slurry` | `FuelProcessingContent.URANIUM_SLURRY_BLOCK` |
 | `uranium_tailings_brick` | `FuelProcessingContent.URANIUM_TAILINGS_BRICK` |
 
-## 普通物品（去掉同名BlockItem后71）
+## 普通物品（去掉同名BlockItem后76）
 
 | ID | 源字段 |
 | --- | --- |
@@ -113,6 +113,11 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `nuclear_heat_exchange_bundle` | `HeatMaterialsContent.NUCLEAR_HEAT_EXCHANGE_BUNDLE` |
 | `pressure_fitting` | `ReactorCraftingContent.PRESSURE_FITTING` |
 | `quartz_dust` | `BasicMaterialContent.QUARTZ_DUST` |
+| `radiation_boots` | `RadiationContent.BOOTS` |
+| `radiation_chestplate` | `RadiationContent.CHESTPLATE` |
+| `radiation_helmet` | `RadiationContent.HELMET` |
+| `radiation_leggings` | `RadiationContent.LEGGINGS` |
+| `radiation_meter` | `RadiationContent.METER` |
 | `radiation_sensor` | `BasicMaterialContent.RADIATION_SENSOR` |
 | `raw_lead` | `OreContent.LEAD (helper)` |
 | `raw_tin` | `OreContent.TIN (helper)` |

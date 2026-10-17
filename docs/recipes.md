@@ -1,6 +1,6 @@
 # 当前实际配方索引
 
-更新：2026-10-16。当前常规116个配方、开发探针2个，共18种type。下表列实际ID/type和唯一JSON入口，输入、输出、amount/count、概率和工时由源数据定义，不复制另一套数量表；游戏/数据包覆盖后以实际配方管理器和JEI为准。
+更新：2026-10-18。当前常规121个配方、开发探针2个，共18种type。下表列实际ID/type和唯一JSON入口，输入、输出、amount/count、概率和工时由源数据定义，不复制另一套数量表；游戏/数据包覆盖后以实际配方管理器和JEI为准。
 
 ## 1. 生产关系与工序
 
@@ -24,10 +24,15 @@
 
 `create:sequenced_assembly`的`sequence`是该外层配方内部执行的步骤，`transitional_item`承载序列加工进度，`loops`定义该序列循环；外层`results`才是最终产出。嵌套步骤不另计为独立顶层配方，也不从步骤数量推算材料消耗。
 
-## 常规配方（116）
+## 常规配方（121）
 
 | 配方ID | type | 实际JSON |
 | --- | --- | --- |
+| `create_nuclear_industry:crafting/radiation_boots` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_boots.json) |
+| `create_nuclear_industry:crafting/radiation_chestplate` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_chestplate.json) |
+| `create_nuclear_industry:crafting/radiation_helmet` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_helmet.json) |
+| `create_nuclear_industry:crafting/radiation_leggings` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_leggings.json) |
+| `create_nuclear_industry:crafting/radiation_meter` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_meter.json) |
 | `create_nuclear_industry:compacting/uranium_tailings_brick` | `create:compacting` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/compacting/uranium_tailings_brick.json) |
 | `create_nuclear_industry:crushing/charcoal_dust` | `create:crushing` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crushing/charcoal_dust.json) |
 | `create_nuclear_industry:crushing/coal_dust` | `create:crushing` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crushing/coal_dust.json) |
