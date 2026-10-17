@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "LLL",
+    "LPL",
+    " G "
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "P": {
+      "item": "create_nuclear_industry:lead_plate"
+    },
+    "G": {
+      "item": "create:goggles"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:radiation_helmet",
+    "count": 1
+  }
+}

@@ -59,6 +59,10 @@ public final class CreateNuclearIndustry {
     /** 在模组事件总线上完成配置、注册对象、网络协议和能力入口的装配。 */
     public CreateNuclearIndustry(IEventBus modEventBus, ModContainer modContainer) {
         P1ServerConfig.register(modContainer);
+        com.iksxh.create_nuclear_industry.config.RadiationConfig.register(modContainer,modEventBus);
+        com.iksxh.create_nuclear_industry.content.RadiationContent.register(modEventBus);
+        modEventBus.addListener(com.iksxh.create_nuclear_industry.radiation.RadiationNetwork::registerPayloads);
+        NeoForge.EVENT_BUS.register(com.iksxh.create_nuclear_industry.radiation.RadiationServerEvents.class);
         com.iksxh.create_nuclear_industry.config.ReactorAutomationConfig.register(modContainer);
         com.iksxh.create_nuclear_industry.content.ReactorAutomationContent.register(modEventBus);
         HeatExchangerConfig.register(modContainer);

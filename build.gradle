@@ -136,6 +136,9 @@ tasks.named('wrapper', Wrapper).configure {
 
 // 本批独立真实探针仅留开发运行classpath；发布包不携带其测试类和空模板，旧域保持。
 tasks.named('jar', Jar) {
+    exclude 'com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests*.class'
+    exclude 'data/cni_radiation_foundation/structure/radiation_empty.nbt'
+    exclude { entry -> entry.path.startsWith('data/cni_radiation_foundation') }
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorPortLookupGameTests*.class'
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorAutomationGameTests*.class'
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorAutomationRetrofitGameTests*.class'

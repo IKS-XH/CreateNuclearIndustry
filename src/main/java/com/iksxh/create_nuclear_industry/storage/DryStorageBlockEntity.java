@@ -88,6 +88,7 @@ public final class DryStorageBlockEntity extends BlockEntity implements IHaveGog
         tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.dry_storage_rack")));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.storage.occupied", state.used(), displayedCapacity));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.storage.sealed"));
+        tooltip.add(Component.translatable("radiation.create_nuclear_industry.rack"));
         return true;
     }
     private final class Port implements IItemHandler {

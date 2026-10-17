@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "LLL",
+    "LPL",
+    "L L"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "P": {
+      "item": "create_nuclear_industry:lead_plate"
+    }
+  },
+  "result": {
+    "id": "create_nuclear_industry:radiation_leggings",
+    "count": 1
+  }
+}

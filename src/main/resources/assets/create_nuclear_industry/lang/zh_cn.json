@@ -688,5 +688,22 @@
   "item.create_nuclear_industry.depleted_uranium_pickaxe": "贫化铀镐",
   "item.create_nuclear_industry.depleted_uranium_axe": "贫化铀斧",
   "item.create_nuclear_industry.depleted_uranium_shovel": "贫化铀锹",
-  "item.create_nuclear_industry.depleted_uranium_hoe": "贫化铀锄"
+  "item.create_nuclear_industry.depleted_uranium_hoe": "贫化铀锄",
+  "radiation.create_nuclear_industry.used": "已使用燃料组件 · 具有放射性",
+  "radiation.create_nuclear_industry.spent": "放射性乏燃料 · 建议封装贮存",
+  "radiation.create_nuclear_industry.cask": "铅桶使内部载荷对外辐射降低95%",
+  "radiation.create_nuclear_industry.exposed": "检测到辐射暴露，请查看仪表并远离辐射源",
+  "radiation.create_nuclear_industry.warning": "累计辐射剂量达到 %s D",
+  "radiation.create_nuclear_industry.meter": "场强 %s D/s · 剂量 %s D · 吸收 %s D/s",
+  "radiation.create_nuclear_industry.sampling": "辐射计正在采样…",
+  "radiation.create_nuclear_industry.rack": "完整架屏蔽内部封装桶的对外辐射",
+  "item.create_nuclear_industry.radiation_helmet": "防辐射头罩",
+  "item.create_nuclear_industry.radiation_chestplate": "防辐射上衣",
+  "item.create_nuclear_industry.radiation_leggings": "防辐射护腿",
+  "item.create_nuclear_industry.radiation_boots": "防辐射靴",
+  "item.create_nuclear_industry.radiation_meter": "手持辐射计",
+  "death.attack.create_nuclear_industry.radiation": "%1$s 的辐射剂量过高",
+  "radiation.create_nuclear_industry.field": "场强 %s D/s",
+  "radiation.create_nuclear_industry.dose": "累计剂量 %s D",
+  "radiation.create_nuclear_industry.absorbed": "当前吸收 %s D/s"
 }

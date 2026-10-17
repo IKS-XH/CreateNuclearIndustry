@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "create_nuclear_industry:shielding_concrete",
+    "create_nuclear_industry:reactor_casing",
+    "create_nuclear_industry:reactor_window"
+  ]
+}

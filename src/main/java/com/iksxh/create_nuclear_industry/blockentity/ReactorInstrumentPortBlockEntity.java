@@ -347,6 +347,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
         }
         structureScan = scan.contract();
         structureOrigin = scan.origin();
+        com.iksxh.create_nuclear_industry.radiation.RadiationContainment.remember(this);
         structureScanCount++;
         if (structureScan.valid()) {
             // 无核状态的初始化/安全清空可绑定新尺寸并保留纯冷液；真实核状态禁止借重扫热重组。
@@ -807,7 +808,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                     com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.requestedHeat(this,level.getGameTime())
             );
             Map<CoreColumnPosition, ItemStack> nextPortItems = prepareFuelPortCommit(
-                    beforePortItems, result.snapshot());
+                    beforePortItems, result.snapshot(), result.fission().columns());
             if (nextPortItems == null) {
                 invalidateRuntimeDescriptor();
                 com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.onTickFailure(this, level == null ? 0 : level.getGameTime());
@@ -1516,7 +1517,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /** 在任何端口写入前准备完整下一状态；任一校验失败都会返回空并保持原状态。 */
     private Map<CoreColumnPosition, ItemStack> prepareFuelPortCommit(
             Map<CoreColumnPosition, ItemStack> beforeItems,
-            ReactorSnapshot nextSnapshot
+            ReactorSnapshot nextSnapshot,
+            Map<CoreColumnPosition, FuelColumnFissionResult> fissionColumns
     ) {
         TreeMap<CoreColumnPosition, ItemStack> nextItems = new TreeMap<>();
         for (Map.Entry<CoreColumnPosition, ItemStack> entry : beforeItems.entrySet()) {
@@ -1541,7 +1543,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             } else if (nextColumn.fuelAssembly().exhausted()) {
                 nextItem = FuelAssemblyItemCodec.isCooledSpentFuel(beforeItem)
                         ? beforeItem.copyWithCount(1)
-                        : FuelAssemblyItemCodec.createCooledSpentFuel();
+                        : FuelAssemblyItemCodec.createCooledSpentFuel(beforeItem);
             } else {
                 if (!FuelAssemblyItemCodec.isFreshFuel(beforeItem)
                         || beforeItem.getMaxDamage() != nextColumn.fuelAssembly().maxDamage()) {
@@ -1553,6 +1555,11 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             if (!FuelAssemblyItemCodec.isValidStoredFuel(nextItem)) {
                 return null;
             }
+            // 正燃耗包含不足1耐久的小数；只准备副本，任一端口拒绝则整组不提交。
+            FuelColumnFissionResult fission = fissionColumns.get(position);
+            if (!nextItem.isEmpty() && fission != null)
+                nextItem = com.iksxh.create_nuclear_industry.radiation.FuelUseHistory.prepareBurnCopy(
+                        nextItem, fission.plannedFuelBurnUnits());
             nextItems.put(position, nextItem);
         }
         return nextItems;
