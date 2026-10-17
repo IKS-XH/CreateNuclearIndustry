@@ -33,7 +33,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 换热器锅炉队列崩溃 | 用户提供三次专用服报告，均为HeatExchangerBoilerBridge.afterServerTick:155的ConcurrentModificationException；已确认共享待刷新集合在回调期间可被登记修改，具体线程/外部触发者未证实。[窄修卡](superpowers/plans/2026-10-17-heat-bridge-pending-01.md)准备原子取批/锁外刷新及重入、并发登记回归，不改热工/依赖或归因第三方；尚未实现/现场验收 |
+| 换热器锅炉队列崩溃 | 三份专用服同栈CME，[诊断](reviews/2026-10-17/heat-pending-01/DIAGNOSIS.md)确认本模组PENDING遍历与登记缺口，具体写入线程/外部发起者未知。[窄修卡](superpowers/plans/2026-10-17-heat-bridge-pending-01.md)来源`8712f43`，分支`codex/heat-bridge-pending-fix`；原子取批/锁外刷新，热工与依赖保持。真实旧路径RED、34/34定向GREEN、一次assemble/exit0及[组合窄审](reviews/2026-10-17/heat-pending-01/REVIEW.md)无发现；27文件世界携带/0差异后未启动。[服务器观察候选](reviews/2026-10-17/heat-pending-01/CANDIDATE.md)3336867 bytes、SHA43E399BE…，仅桥接class变化；原整合包多人持续观察未验，未合main/替换正式包或自动安装生产服 |
 | 事故与辐射系统 | 已批准整稿及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)候选`Create_NuclearIndustry-radiation`来源`a74f55e`已提交。41项定向JUnit、首轮13/13真实服与第2轮2/2受控区块事件回归、全维保存/exit0、增量assemble及制品身份已核；按未变实现复用原证据，未冒称当前全量重跑。[组合窄审和两轮定向复核](reviews/2026-10-16/radiation-foundation-01/RE-REVIEW-02.md)已无剩余代码发现；现停在[集中手测门](reviews/2026-10-16/radiation-foundation-01/CANDIDATE.md)，客户端、真实区块装载/重登和真人多人未验，未合main/替换正式包。[派发依据](reviews/2026-10-16/radiation-foundation-01/DISPATCH.md)；第二批事故执行与回收封装待本批人工门闭合后派发 |
 | 贫化铀材料与装备 | `codex/depleted-uranium-equipment`来源`0a10e36`已实现粉炼锭、9锭存取块，以及模板＋钻石装备＋贫化铀锭的九件升级；下界合金性能，保留附魔/名称/损伤/饰纹，贫化铀锭修复，仅借用原版外观。4项JUnit、3/3真实GT、全维保存/exit0与一次窄审通过；[集中手测](reviews/2026-10-16/depleted-uranium-01/CANDIDATE.md)尚未报告，未合main/替换正式包。核废料基础封存保持，辐射/事故新增合同按上项设计独立推进 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |

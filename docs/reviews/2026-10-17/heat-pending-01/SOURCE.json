@@ -1,0 +1,32 @@
+{
+  "src/main/java/com/iksxh/create_nuclear_industry/heat/HeatExchangerBoilerBridge.java": {
+    "worktree_sha256": "21e47fe2eebf5cfba5dabdc6534f5c64c3f09f936a031248ad64f145b2e32a24",
+    "baseline_git_payload_sha256": "94f3a9685ad5e70d8bb62381512bad84f0d361e1764783493764f228e2c0a740",
+    "worktree_bytes": 9417,
+    "normalized_sha256": "ca7349454c072aef0024e856e8383ee0052d1864d7c1ceb7ad73135f47156e71"
+  },
+  "src/test/java/com/iksxh/create_nuclear_industry/heat/HeatExchangerBoilerBridgeTest.java": {
+    "worktree_sha256": "150680c44d6d1dcf77d4daa598c01512d9b2ecd6631e789dc2c049ce12a7991f",
+    "baseline_git_payload_sha256": "8bc458779211c742698ee4f073c790d62ea3cc6f87cbbb98b0fdfbbabf3a7a01",
+    "worktree_bytes": 20319,
+    "normalized_sha256": "23c14227f4493331d2359e6a2bd6a003183187074753f5d9d0cab976c1c1dab7"
+  },
+  "gradle.properties": {
+    "worktree_sha256": "b2655e6635970ee2fa120daa5638e403144e81769d0e15132998a1e5d9a541ce",
+    "baseline_git_payload_sha256": "9c19b4470778c9d0548e3ee60a9586352f2ff4b0704cac9a892a6d74bf30d8a4",
+    "worktree_bytes": 661,
+    "normalized_sha256": "9c19b4470778c9d0548e3ee60a9586352f2ff4b0704cac9a892a6d74bf30d8a4"
+  },
+  "build.gradle": {
+    "worktree_sha256": "4665af4fd093cfe54cef16b42cc287fea541b0e92f2e88f1b456841f5af7f608",
+    "baseline_git_payload_sha256": "81593c7bca21ac286d5807cdc1b3da1c16c46d86fd104ef2b31f760376da6dbf",
+    "worktree_bytes": 6061,
+    "normalized_sha256": "81593c7bca21ac286d5807cdc1b3da1c16c46d86fd104ef2b31f760376da6dbf"
+  },
+  "settings.gradle": {
+    "worktree_sha256": "2ff5118074c2313e6fe407b3562d6f5a149035ca8f821ccdfa54f78574c7b7cd",
+    "baseline_git_payload_sha256": "cbd0739b13b2306a394bbf64fe71bf3dda17a5848a4bdf0c5d14b24a47db6f59",
+    "worktree_bytes": 282,
+    "normalized_sha256": "cbd0739b13b2306a394bbf64fe71bf3dda17a5848a4bdf0c5d14b24a47db6f59"
+  }
+}

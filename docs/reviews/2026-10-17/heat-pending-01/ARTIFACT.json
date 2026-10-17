@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "path": "baseline.jar",
+    "bytes": 3336385,
+    "sha256": "b366eb49f8994bb0213b676f530ae395e03a58f53e59cba23ab9a77b682d7606"
+  },
+  "assemble_original": {
+    "path": "assemble-original.jar",
+    "bytes": 3347852,
+    "sha256": "d4b36429ef94871d0841e14da478414e2bcdd378a937586912bb1045f9804a2b"
+  },
+  "candidate": {
+    "path": "create_nuclear_industry-0.1.0-heat-pending-01.jar",
+    "bytes": 3336867,
+    "sha256": "43e399bebe8c895ecd290a8721ceab73af057f5d2413b39339cdd85f0204e54c"
+  },
+  "changed_payloads": [
+    "com/iksxh/create_nuclear_industry/heat/HeatExchangerBoilerBridge.class"
+  ],
+  "unchanged_payloads": 2515,
+  "metadata_differences": [],
+  "bridge_class_sha256": "9982f84f397e81d2b2168d137da0f3b8ba46f639f54e481f2fef41cc957c06a8",
+  "baseline_bridge_class_sha256": "1f4e4a0fd7cf4c71325554214f351cf87c02983b5120c35b5f478f540c30c1e7",
+  "archive_comment_equal": true
+}
