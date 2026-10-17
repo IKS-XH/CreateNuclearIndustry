@@ -4,7 +4,7 @@
 
 ## 授权与范围
 
-用户先批准[事故与辐射整稿及推荐值](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)，再明确“开始按批派发吧”。本次派发[第一批计划](../../../superpowers/plans/2026-10-16-radiation-foundation-01.md)全部Task 1～4；唯一执行者`/root/radiation_foundation_impl`，模型`gpt-6.1-sol`、high，因跨物品事务/库存/生命周期/屏蔽及网络，需要完整接入判断。结束后一次组合窄审，执行者不再派子Agent。
+用户先批准[事故与辐射整稿及推荐值](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)，再明确“开始按批派发吧”。本次派发[第一批原计划](../../../archive/2026-10-18/plans/2026-10-16-radiation-foundation-01.md)全部Task 1～4；唯一执行者`/root/radiation_foundation_impl`，模型`gpt-6.1-sol`、high，因跨物品事务/库存/生命周期/屏蔽及网络，需要完整接入判断。结束后一次组合窄审，执行者不再派子Agent。
 
 本批只做使用标记、辐射源/剂量、普通物流和封存屏蔽、防护服与仪表。事故世界动作、残骸/新废料及其封装出口为第二批；第一批人工门未闭前不越过依赖。贫化铀候选等独立人工门不追认通过。
 

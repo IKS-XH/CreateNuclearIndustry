@@ -1,6 +1,6 @@
 # RADIATION-01 候选交付与集中手测
 
-2026-10-16，主逻辑PM记录。本文件保存本次交付身份和观察步骤；当前验收状态只见[STATUS](../../../STATUS.md)。依据为[批准设计](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)、[第一批计划](../../../superpowers/plans/2026-10-16-radiation-foundation-01.md)和[派发裁定](DISPATCH.md)。
+2026-10-16，主逻辑PM记录。本文件保存本次交付身份和观察步骤；当前验收状态只见[STATUS](../../../STATUS.md)。依据为[批准设计](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)、[第一批原计划](../../../archive/2026-10-18/plans/2026-10-16-radiation-foundation-01.md)和[派发裁定](DISPATCH.md)。
 
 2026-10-18补充：用户报告本页原手测项全部通过，并要求头罩加入工程师护目镜原料及功能。当前候选已更新，见[头罩补充交付](../../2026-10-18/radiation-goggles/CANDIDATE.md)；下方保留原AFAD候选及原验证语境，不把原手测追认为新增头罩功能已验。
 

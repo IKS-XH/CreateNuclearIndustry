@@ -1,0 +1,84 @@
+{
+  "source": "f819fcfadf75509c7b23899daa9a7b9c59dbc56b",
+  "mainBaseline": "020cae4ba3d919ea90b05cfc305dade27c5191bb",
+  "acceptedRadiationSource": "cc7d4fdc5918d833f40ad0a5e289ea85dfbf8f38",
+  "sourceExport": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\radiation-accepted-20261018\\source-f819fcfadf75509c7b23899daa9a7b9c59dbc56b",
+  "inputCount": 2278,
+  "inputBytes": 11754430,
+  "allGitBlobVerified": true,
+  "sourceEqualsReviewedPhaseA": true,
+  "originalAndExportInputsUnchanged": true,
+  "assemble": {
+    "source": "f819fcfadf75509c7b23899daa9a7b9c59dbc56b",
+    "cwd": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\radiation-accepted-20261018\\source-f819fcfadf75509c7b23899daa9a7b9c59dbc56b",
+    "command": [
+      "cmd.exe",
+      "/d",
+      "/c",
+      "gradlew.bat",
+      "assemble",
+      "--console=plain"
+    ],
+    "start_epoch": 1792262351.9109926,
+    "requested_tasks": [
+      "assemble"
+    ],
+    "exit_code": 0,
+    "end_epoch": 1792262362.720736,
+    "log_sha256": "f902bd1fc56939204551ba10eedd916f1bef27a0400c6e05169224f07a60434d"
+  },
+  "actualTasks": [
+    "> Task :createMinecraftArtifacts",
+    "> Task :compileJava FROM-CACHE",
+    "> Task :processResources",
+    "> Task :classes",
+    "> Task :jarJar NO-SOURCE",
+    "> Task :jar",
+    "> Task :assemble"
+  ],
+  "candidate": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\radiation-accepted-20261018\\built-81E7CD98D589DDC9C0AAF398C06776DC4318EA54C70CD19376F0C127E4A3DE7B.jar",
+    "assembleJar": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\radiation-accepted-20261018\\source-f819fcfadf75509c7b23899daa9a7b9c59dbc56b\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+    "bytes": 3478572,
+    "sha256": "81e7cd98d589ddc9c0aaf398c06776dc4318ea54c70cd19376f0c127e4a3de7b",
+    "unmodifiedAssembleBytes": true
+  },
+  "baseline": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\radiation-accepted-20261018\\main-baseline-9DA77.jar",
+    "bytes": 3403459,
+    "sha256": "9da77b19bdf3c30eb9fe1eeaa4ff8a6cc6463e950acc407c62dfe892e5537230"
+  },
+  "payload": {
+    "baselineEntries": 2382,
+    "candidateEntries": 2435,
+    "added": 53,
+    "changed": 31,
+    "removed": 0,
+    "unchanged": 2351,
+    "packagedClassesExactCompilation": 748,
+    "packagedResourcesExactProcessing": 1686,
+    "criticalMainPayloadExactBaseline": 103,
+    "mainClassesEqualAfterRemovingDebugAttributes": {
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$GameEvents.class": "bec54561c77a12f7aee275ac33cdb5cf1254d3d53416b31c3bb734fe7193fba5",
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$RotorPose.class": "29f2f4c3a1b8110eff1dd9729c1f441b78f7c948f12cad278fc82a5718cdf231",
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$RotorTrack.class": "bb35df01614c8e4f72e437a7ae00c0413e51715f1b0d6fbc2b8b03f1f4209d6b",
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents$ShaftTrack.class": "220c48c948198b304e8de48d85b2122616d39d386f48ce1879d3b9b8300a1071",
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineClientEvents.class": "3f8d204b008cf503910a942cfa9b0bee20aac5a9f0510134bc92c52ad5454979",
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual$1.class": "3b225c882f0e13730636bfd1018148efde95416581c7e13ad4f3d119d2d470d7",
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineOutputShaftVisual.class": "5487dfe7eb2d38d3ad313aa86f5a386001fcd03082428d15617b8291d26bf49d",
+      "com/iksxh/create_nuclear_industry/turbine/client/TurbineRotorVisual.class": "596c96e4bb97a2118ca9c20d8ff20068b1c9856059cc84625132ecc5f6d16965",
+      "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Form.class": "d057be8cdf7092b3d29912110c0add13815cabc14d9266e0fc23cfc54ab2bacd",
+      "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Issue.class": "a3b821a55e182ee1c8b89bf70f60d187f2d75cf5a08a6eba6d03a055e4ab09bd",
+      "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$OwnerEntry.class": "753c210e693657bfc0b228a0441c119fcddbffecc542e88420d8d930c88f8b02",
+      "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$PartBounds.class": "77187a8c27132f36c9ced0457c814892fbfae5aee62ad8e8dc5afa82335dcd05",
+      "com/iksxh/create_nuclear_industry/turbine/TurbineStructure$Result.class": "82aaa4c8c2cbbad9c4979847d0a3f3e46870ee75652394b3c4a1838ca0b882e0",
+      "com/iksxh/create_nuclear_industry/turbine/TurbineStructure.class": "522ea338575bfea4a5379c9cc36ea9d781d47a565e025bcb499f072730db54e5"
+    },
+    "gitEolOnly": [],
+    "radiationAndDuGameTestsExcluded": true,
+    "metadataUnchanged": true
+  },
+  "compilerRemovalWarnings": 0,
+  "stageATestsReused": "RadiationEquipmentDataTest 1 + DepletedUraniumDataContractTest 4 = 5/5, exit0; not rerun",
+  "handoff": "仅交PM提升；未写main正式包、未Git写、未扫描或操作世界。"
+}

@@ -8,7 +8,7 @@
 
 **Tech Stack:** Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Ponder1.0.82、Flywheel1.0.6；JUnit5与现有独立GameTest启动入口，不新增依赖。
 
-**Spec:** [已批准事故与辐射设计](../specs/2026-10-16-accident-radiation-design.md)第3、4、5.3、6.1、7节及第一批范围。当前结果/未闭门仅见[STATUS](../../STATUS.md)。
+**Spec:** [已批准事故与辐射设计](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)第3、4、5.3、6.1、7节及第一批范围。当前结果/未闭门仅见[STATUS](../../../STATUS.md)。本卡归档保留原基础实施与头罩补充合同，接续看[第二批计划](../../../superpowers/plans/2026-10-18-accident-execution-02.md)。
 
 ## Global Constraints
 
