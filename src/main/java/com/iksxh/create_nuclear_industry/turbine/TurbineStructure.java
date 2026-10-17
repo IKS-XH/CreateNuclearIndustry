@@ -22,8 +22,60 @@ import net.minecraft.world.level.block.state.BlockState;
  * +z 从前轴到后轴；读取每格前先确认区块可 tick，核验绝不主动加载区块。
  */
 public final class TurbineStructure {
-    private static final Map<Level, Map<BlockPos, WeakReference<TurbineControllerBlockEntity>>> OWNERS =
+    private static final Map<Level, Map<BlockPos, OwnerEntry>> OWNERS =
             new WeakHashMap<>();
+    private static final int[] AIR_3 = buildAirSection(3);
+    private static final int[] AIR_5 = buildAirSection(5);
+    private static final int[] AIR_7 = buildAirSection(7);
+
+    /** 只索引成型快照的几何，不持有世界或控制器强引用，也不缓存实时运行资格。 */
+    private static final class OwnerEntry {
+        private final WeakReference<TurbineControllerBlockEntity> owner;
+        private Form form;
+        private PartBounds bounds;
+
+        private OwnerEntry(TurbineControllerBlockEntity owner) {
+            this.owner = new WeakReference<>(owner);
+            current(owner);
+        }
+
+        private Form current(TurbineControllerBlockEntity owner) {
+            Form current = owner.currentForm();
+            if (form != current) {
+                form = current;
+                // scan 产生的成员列表不可变；重新成型即更换 Form 身份并重建索引。
+                bounds = current == null ? null : PartBounds.of(current.parts());
+            }
+            return current;
+        }
+    }
+
+    /** 按真实成员计算闭区间包围盒；空集合不能与任何机组冲突。 */
+    private record PartBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        private static PartBounds of(List<BlockPos> parts) {
+            int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE;
+            int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
+            for (BlockPos part : parts) {
+                minX = Math.min(minX, part.getX()); maxX = Math.max(maxX, part.getX());
+                minY = Math.min(minY, part.getY()); maxY = Math.max(maxY, part.getY());
+                minZ = Math.min(minZ, part.getZ()); maxZ = Math.max(maxZ, part.getZ());
+            }
+            return new PartBounds(minX, minY, minZ, maxX, maxY, maxZ);
+        }
+
+        private boolean intersects(PartBounds other) {
+            return minX <= maxX && other.minX <= other.maxX
+                    && minX <= other.maxX && maxX >= other.minX
+                    && minY <= other.maxY && maxY >= other.minY
+                    && minZ <= other.maxZ && maxZ >= other.minZ;
+        }
+
+        private boolean contains(BlockPos part) {
+            return part.getX() >= minX && part.getX() <= maxX
+                    && part.getY() >= minY && part.getY() <= maxY
+                    && part.getZ() >= minZ && part.getZ() <= maxZ;
+        }
+    }
 
     public record Form(Direction facing, int rotors, int diameter, BlockPos front, BlockPos rear,
                        BlockPos controller, List<BlockPos> parts, List<BlockPos> inlets,
@@ -172,14 +224,44 @@ public final class TurbineStructure {
             return false;
         for (BlockPos exhaust : form.exhausts()) if (!level.getBlockState(exhaust).is(TurbineContent.EXHAUST.get()))
             return false;
-        int radius = (form.diameter() - 1) / 2;
+        int[] section = airSection(form.diameter());
+        Direction side = form.facing().getClockWise(), back = form.facing().getOpposite();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int z = 1; z < form.length() - 1; z++)
-            for (int y = -radius; y <= radius; y++) for (int x = -radius; x <= radius; x++) {
-                if (!TurbineGeometry.airSlot(form.diameter(), x, y)) continue;
-                BlockPos pos = at(form.front(), form.facing(), x, y, z);
+            for (int i = 0; i < section.length; i += 2) {
+                setAirPosition(pos, form.front(), side, back, section[i], section[i + 1], z);
                 if (!level.getBlockState(pos).isAir()) return false;
             }
         return true;
+    }
+
+    /** 仅缓存静态横截面，保持原 y/x 顺序；世界空气仍在每次 quickLive 中重新读取。 */
+    private static int[] airSection(int diameter) {
+        return switch (diameter) {
+            case 3 -> AIR_3;
+            case 5 -> AIR_5;
+            case 7 -> AIR_7;
+            default -> buildAirSection(diameter);
+        };
+    }
+
+    private static int[] buildAirSection(int diameter) {
+        int radius = (diameter - 1) / 2;
+        List<Integer> offsets = new ArrayList<>();
+        for (int y = -radius; y <= radius; y++) for (int x = -radius; x <= radius; x++)
+            if (TurbineGeometry.airSlot(diameter, x, y)) {
+                offsets.add(x); offsets.add(y);
+            }
+        int[] result = new int[offsets.size()];
+        for (int i = 0; i < result.length; i++) result[i] = offsets.get(i);
+        return result;
+    }
+
+    /** 与 at 使用同一局部轴变换，只复用本次检查的游标，不把可变坐标保存进索引。 */
+    private static void setAirPosition(BlockPos.MutableBlockPos pos, BlockPos front,
+                                       Direction side, Direction back, int x, int y, int z) {
+        pos.set(front.getX() + side.getStepX() * x + back.getStepX() * z,
+                front.getY() + y, front.getZ() + side.getStepZ() * x + back.getStepZ() * z);
     }
 
     private static boolean middleRow(int length, int z) {
@@ -206,15 +288,19 @@ public final class TurbineStructure {
                 : x < 0 ? facing.getCounterClockWise() : facing.getClockWise();
     }
 
-    /** 重叠核验只比较活机组的坐标集合，不额外扫描世界或加载区块。 */
+    /** 先排除几何不相交机组，再对可能重叠者按原路径检查实时资格与实际成员。 */
     public static boolean unique(Level level, TurbineControllerBlockEntity proposed, Form form) {
-        Map<BlockPos, WeakReference<TurbineControllerBlockEntity>> entries = OWNERS.get(level);
+        Map<BlockPos, OwnerEntry> entries = OWNERS.get(level);
         if (entries == null) return true;
         Set<BlockPos> parts = null;
-        entries.entrySet().removeIf(entry -> entry.getValue().get() == null);
-        for (WeakReference<TurbineControllerBlockEntity> reference : entries.values()) {
-            TurbineControllerBlockEntity other = reference.get();
+        OwnerEntry own = entries.get(proposed.getBlockPos());
+        PartBounds bounds = own != null && own.owner.get() == proposed && own.current(proposed) == form
+                ? own.bounds : PartBounds.of(form.parts());
+        entries.entrySet().removeIf(entry -> entry.getValue().owner.get() == null);
+        for (OwnerEntry entry : entries.values()) {
+            TurbineControllerBlockEntity other = entry.owner.get();
             if (other == null || other == proposed) continue;
+            if (entry.current(other) == null || !bounds.intersects(entry.bounds)) continue;
             Form claimed = other.claimedForm();
             if (claimed == null) continue;
             if (parts == null) parts = new HashSet<>(form.parts());
@@ -224,23 +310,27 @@ public final class TurbineStructure {
     }
 
     public static void claim(Level level, TurbineControllerBlockEntity owner) {
-        OWNERS.computeIfAbsent(level, ignored -> new HashMap<>())
-                .put(owner.getBlockPos().immutable(), new WeakReference<>(owner));
+        Map<BlockPos, OwnerEntry> entries = OWNERS.computeIfAbsent(level, ignored -> new HashMap<>());
+        OwnerEntry entry = entries.get(owner.getBlockPos());
+        if (entry == null || entry.owner.get() != owner)
+            entries.put(owner.getBlockPos().immutable(), new OwnerEntry(owner));
+        else entry.current(owner);
     }
 
     public static void forget(Level level, TurbineControllerBlockEntity owner) {
-        Map<BlockPos, WeakReference<TurbineControllerBlockEntity>> entries = OWNERS.get(level);
-        if (entries != null) entries.entrySet().removeIf(entry -> entry.getValue().get() == null
-                || entry.getValue().get() == owner);
+        Map<BlockPos, OwnerEntry> entries = OWNERS.get(level);
+        if (entries != null) entries.entrySet().removeIf(entry -> entry.getValue().owner.get() == null
+                || entry.getValue().owner.get() == owner);
     }
 
     public static TurbineControllerBlockEntity ownerForPart(Level level, BlockPos part) {
         if (!ticking(level, part)) return null;
-        Map<BlockPos, WeakReference<TurbineControllerBlockEntity>> entries = OWNERS.get(level);
+        Map<BlockPos, OwnerEntry> entries = OWNERS.get(level);
         if (entries == null) return null;
-        for (WeakReference<TurbineControllerBlockEntity> reference : entries.values()) {
-            TurbineControllerBlockEntity owner = reference.get();
-            if (owner != null && owner.currentForm() != null && owner.currentForm().contains(part))
+        for (OwnerEntry entry : entries.values()) {
+            TurbineControllerBlockEntity owner = entry.owner.get();
+            if (owner != null && entry.current(owner) != null && entry.bounds.contains(part)
+                    && entry.form.contains(part))
                 return owner;
         }
         return null;
@@ -249,10 +339,10 @@ public final class TurbineStructure {
     /** 构件或空腔变化通知近邻已加载控制器；上限使用配置允许的最大 18 格轴长。 */
     public static void invalidateNearby(Level level, BlockPos changed) {
         if (level.isClientSide) return;
-        Map<BlockPos, WeakReference<TurbineControllerBlockEntity>> entries = OWNERS.get(level);
-        if (entries != null) for (WeakReference<TurbineControllerBlockEntity> reference :
+        Map<BlockPos, OwnerEntry> entries = OWNERS.get(level);
+        if (entries != null) for (OwnerEntry entry :
                 List.copyOf(entries.values())) {
-            TurbineControllerBlockEntity owner = reference.get();
+            TurbineControllerBlockEntity owner = entry.owner.get();
             if (owner != null && owner.currentForm() != null
                     && withinBox(owner.currentForm(), changed)) owner.invalidateForm();
         }

@@ -7,6 +7,7 @@ import com.iksxh.create_nuclear_industry.turbine.TurbinePartBlock;
 import com.iksxh.create_nuclear_industry.turbine.TurbineRotorBlockEntity;
 import com.iksxh.create_nuclear_industry.turbine.TurbineShaftBlock;
 import com.iksxh.create_nuclear_industry.turbine.display.TurbineRuntimeSample;
+import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,6 +59,8 @@ public final class TurbineClientEvents {
         initializePartials();
         event.registerBlockEntityRenderer(TurbineContent.ROTOR_BE.get(), TurbineRotorRenderer::new);
         event.registerBlockEntityRenderer(TurbineContent.OUTPUT_SHAFT_BE.get(), TurbineOutputShaftRenderer::new);
+        SimpleBlockEntityVisualizer.builder(TurbineContent.ROTOR_BE.get()).factory(TurbineRotorVisual::new).apply();
+        SimpleBlockEntityVisualizer.builder(TurbineContent.OUTPUT_SHAFT_BE.get()).factory(TurbineOutputShaftVisual::new).apply();
     }
 
     @SubscribeEvent public static void reloaded(ModelEvent.BakingCompleted event) {
@@ -70,7 +73,7 @@ public final class TurbineClientEvents {
     }
 
     /** 只有当前已加载世界中的同一个BE可继续相位；未知/Ponder上下文安全静止，不查询邻近机主。 */
-    static double outputAngle(TurbineOutputShaftBlockEntity shaft, ClientLevel current, float partial, boolean paused) {
+    static synchronized double outputAngle(TurbineOutputShaftBlockEntity shaft, ClientLevel current, float partial, boolean paused) {
         current = synchronizeWorld(current);
         long key = shaft.getBlockPos().asLong();
         if (!validShaft(shaft, current)) {
@@ -98,7 +101,7 @@ public final class TurbineClientEvents {
         return rotorPose(rotor, minecraft.level, partial, minecraft.isPaused());
     }
 
-    static RotorPose rotorPose(TurbineRotorBlockEntity rotor, ClientLevel current, float partial, boolean paused) {
+    static synchronized RotorPose rotorPose(TurbineRotorBlockEntity rotor, ClientLevel current, float partial, boolean paused) {
         current = synchronizeWorld(current);
         long key = rotor.getBlockPos().asLong();
         Optional<TurbineRuntimeSample> runtime = runtimeSample(rotor, current);
@@ -128,7 +131,8 @@ public final class TurbineClientEvents {
     }
 
     /** 客户端Post暂停时冻结时间/角度，仍核可靠性并接纳可信Rotor整包；Output暂停不采样新网速。 */
-    static void tickWorld(ClientLevel current, boolean paused) {
+    // Flywheel可并行调用多个visual；共享相位/弱绑定与原BER、tick和卸载必须在同一把锁内更新。
+    static synchronized void tickWorld(ClientLevel current, boolean paused) {
         current = synchronizeWorld(current);
         if (current == null) return;
         CLOCK.tick(paused);
@@ -200,7 +204,7 @@ public final class TurbineClientEvents {
         SHAFT_PHASES.remove(key);
     }
 
-    private static void resetAnimation() {
+    private static synchronized void resetAnimation() {
         SHAFTS.clear();
         SHAFT_PHASES.clear();
         ROTORS.clear();
@@ -209,13 +213,13 @@ public final class TurbineClientEvents {
         session++;
     }
 
-    static void clearWorld() {
+    static synchronized void clearWorld() {
         resetAnimation();
         world = new WeakReference<>(null);
     }
 
     /** 只撤销卸载区块中的本轴；坐标为值对象，清理不获取或加载其他区块。 */
-    private static void chunkUnloaded(ClientLevel current, ChunkPos chunk) {
+    private static synchronized void chunkUnloaded(ClientLevel current, ChunkPos chunk) {
         if (current != world.get()) return;
         for (Iterator<Long> iterator = SHAFTS.keySet().iterator(); iterator.hasNext();) {
             long key = iterator.next();
@@ -303,9 +307,11 @@ public final class TurbineClientEvents {
         }
 
         @SubscribeEvent public static void unloaded(LevelEvent.Unload event) {
-            if (event.getLevel() == world.get()) {
-                ended = new WeakReference<>(world.get());
-                clearWorld();
+            synchronized (TurbineClientEvents.class) {
+                if (event.getLevel() == world.get()) {
+                    ended = new WeakReference<>(world.get());
+                    clearWorld();
+                }
             }
         }
 
