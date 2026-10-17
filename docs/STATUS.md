@@ -26,6 +26,8 @@
 | 锅炉/汽轮机Sodium渲染 | 补齐两处LevelSlice入口，用户确认本批渲染手测通过并授权合main；正式包与已测包一致 | [验收与合入](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[组合窄审](reviews/2026-10-17/thermal-sodium-01/REVIEW.md) |
 | 反应堆性能 | 端口索引、精确反馈缓存、客户端辉光缓存和整列低面镂空全亮；用户认可效果并要求合main，液体/控制棒保留 | [验收](reviews/2026-10-15/reactor-performance-accepted-integration/ACCEPTANCE.md)、[集成/边界](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)；C2继续后置 |
 | 停机拆除尾热 | 冷却充足时正确识别微小安全余数，不丢缓存热或工质；55项JUnit及真实安全/拒拆通过，原16³场景用户复看另列 | [根因、验证与正式包](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)、[组合审查](reviews/2026-10-16/reactor-shutdown-01/REVIEW.md) |
+| 贫化铀材料/装备与18B外观 | 粉炼锭、锭块存取、九种钻石装备锻造升级及专属图标/块/穿戴层/饰纹；用户确认功能与对应外观手测通过并授权合main | [联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)、[美术来源](art/ART-DEPLETED-URANIUM-18B-ACCEPTED.md) |
+| 锅炉热源刷新队列 | 原子取批和锁外刷新，重入/并发新增留到下一tick；34项定向回归及一次组合窄审保持，用户确认原整合包服务器崩溃修复通过并授权合main | [原诊断](reviews/2026-10-17/heat-pending-01/DIAGNOSIS.md)、[联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md) |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果、辐射与再处理未实现。
 
@@ -33,9 +35,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 换热器锅炉队列崩溃 | 三份专用服同栈CME，[诊断](reviews/2026-10-17/heat-pending-01/DIAGNOSIS.md)确认本模组PENDING遍历与登记缺口，具体写入线程/外部发起者未知。[窄修卡](superpowers/plans/2026-10-17-heat-bridge-pending-01.md)来源`8712f43`，分支`codex/heat-bridge-pending-fix`；原子取批/锁外刷新，热工与依赖保持。真实旧路径RED、34/34定向GREEN、一次assemble/exit0及[组合窄审](reviews/2026-10-17/heat-pending-01/REVIEW.md)无发现；27文件世界携带/0差异后未启动。[服务器观察候选](reviews/2026-10-17/heat-pending-01/CANDIDATE.md)3336867 bytes、SHA43E399BE…，仅桥接class变化；原整合包多人持续观察未验，未合main/替换正式包或自动安装生产服 |
 | 事故与辐射系统 | 已批准整稿及按批派发；第一批[辐射基础与封存防护](superpowers/plans/2026-10-16-radiation-foundation-01.md)候选`Create_NuclearIndustry-radiation`来源`a74f55e`已提交。41项定向JUnit、首轮13/13真实服与第2轮2/2受控区块事件回归、全维保存/exit0、增量assemble及制品身份已核；按未变实现复用原证据，未冒称当前全量重跑。[组合窄审和两轮定向复核](reviews/2026-10-16/radiation-foundation-01/RE-REVIEW-02.md)已无剩余代码发现；现停在[集中手测门](reviews/2026-10-16/radiation-foundation-01/CANDIDATE.md)，客户端、真实区块装载/重登和真人多人未验，未合main/替换正式包。[派发依据](reviews/2026-10-16/radiation-foundation-01/DISPATCH.md)；第二批事故执行与回收封装待本批人工门闭合后派发 |
-| 贫化铀材料与装备 | `codex/depleted-uranium-equipment`来源`0a10e36`已实现粉炼锭、9锭存取块，以及模板＋钻石装备＋贫化铀锭的九件升级；下界合金性能，保留附魔/名称/损伤/饰纹，贫化铀锭修复，仅借用原版外观。4项JUnit、3/3真实GT、全维保存/exit0与一次窄审通过；[集中手测](reviews/2026-10-16/depleted-uranium-01/CANDIDATE.md)尚未报告，未合main/替换正式包。核废料基础封存保持，辐射/事故新增合同按上项设计独立推进 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |

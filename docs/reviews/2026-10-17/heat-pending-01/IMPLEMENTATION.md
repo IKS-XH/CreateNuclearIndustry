@@ -1,6 +1,6 @@
 # HEAT-PENDING-01 实现与验证证据
 
-2026-10-17，PM依据唯一执行者的冻结交付整理。原因及不确定性见[诊断](DIAGNOSIS.md)，范围见[窄修卡](../../../superpowers/plans/2026-10-17-heat-bridge-pending-01.md)，当前进度只见[STATUS](../../../STATUS.md)。
+2026-10-17，PM依据唯一执行者的冻结交付整理。原因及不确定性见[诊断](DIAGNOSIS.md)，范围见[归档窄修卡](../../../archive/2026-10-17/plans/2026-10-17-heat-bridge-pending-01.md)，当前进度只见[STATUS](../../../STATUS.md)。
 
 ## 最小改动
 

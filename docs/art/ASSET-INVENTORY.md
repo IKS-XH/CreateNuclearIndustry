@@ -10,5 +10,6 @@
 | 工业管泵阀 | Create原模型调色，实际运输方向由服务器决定；原冲突三角与静止箭头独立留验收 |
 | 其他加工/贮存设备 | 现行heat_exchanger、fuel_sintering_furnace、dry_storage_rack等模型，后续美术不改变工序 |
 | Logo/宣传 | mod_logo游戏图标，HD Logo/MC百科封面可编辑源在tools/art-assets，交付边界见美术README |
+| 贫化铀材料与装备18B | 15张专属PNG、11基础模型与40饰纹模型；公共护甲钩子只绑定穿戴层，属性与原生饰纹保持，见[来源](ART-DEPLETED-URANIUM-18B-ACCEPTED.md) |
 
 游戏资源在src/main/resources/assets/create_nuclear_industry，可编辑SVG/导出/预览在tools/art-assets；使用实际ID，不为未来清单造空内容。第三方来源/许可声明保持，不因调色/归档扩大授权。

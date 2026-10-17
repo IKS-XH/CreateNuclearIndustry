@@ -6,6 +6,8 @@
 
 16B烧结炉A「锻钢箱炉」外观已由用户确认并接入main，三模型/九贴图保持原加工行为；[验收与来源](../reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)。16A/16B可编辑原稿、工具与原审查保留在art提交056e474，不用旧美术整包替换主线。
 
+贫化铀装备18B专属外观由用户确认手测通过；66资源及公共护甲贴图钩子随装备功能集成，见[验收与来源](ART-DEPLETED-URANIUM-18B-ACCEPTED.md)。原稿、预览与运行副本保留，不夹带17B自动化接口外观。
+
 游戏Logo已验收。HD R2 Logo/MC百科13-R1封面为已交宣传素材，合并不补记最终外观选择；来源见[Logo](../archive/2026-10-15/art/ART-LOGO-12-HD-CANDIDATE.md)、[封面](../archive/2026-10-15/art/ART-MCMOD-COVER-13-CANDIDATE.md)。
 
 - [当前计划](PLAN.md)、[资产入口](ASSET-INVENTORY.md)。

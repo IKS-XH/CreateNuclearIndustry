@@ -18,9 +18,7 @@
 
 当前活动卡：
 
-- [换热器与Create锅炉待刷新队列崩溃修复](superpowers/plans/2026-10-17-heat-bridge-pending-01.md)：三份专用服CME同栈，限定队列交接和定向回归，保持供热/加载语义。
 - [事故与辐射设计](superpowers/specs/2026-10-16-accident-radiation-design.md)：整稿和推荐参数/成本已批准；[第一批辐射基础计划](superpowers/plans/2026-10-16-radiation-foundation-01.md)列明使用标记、剂量、物流/封存屏蔽、防护与仪表的写集和验收，进度见STATUS。
-- [贫化铀材料与装备](superpowers/plans/2026-10-16-depleted-uranium-01.md)：补齐锭块及钻石装备锻造升级，本批仅复用原版外观。
 - [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
 - [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
 - [模拟器02B](superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)、[三维工具](superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：辅助任务仍无整体验收，不自动改跑。

@@ -1,6 +1,6 @@
 # HEAT-PENDING-01 待刷新锅炉队列崩溃窄修
 
-2026-10-17，主逻辑PM。用户提供`E:/MyMC/cn_crash_20261017/`三次专用服崩溃，要求定位原因和修复。当前进度只见[STATUS](../../STATUS.md)。
+2026-10-17，主逻辑PM。用户提供`E:/MyMC/cn_crash_20261017/`三次专用服崩溃，要求定位原因和修复。当前进度只见[STATUS](../../../STATUS.md)，后续见[联合验收](../../../reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)。
 
 ## 已证实范围
 

@@ -1,6 +1,8 @@
 # 贫化铀材料与装备：候选手测入口
 
-2026-10-16。实现范围见[执行卡](../../../superpowers/plans/2026-10-16-depleted-uranium-01.md)，当前结果和人工门只在[STATUS](../../../STATUS.md)维护。原始命令与失败证据见[实现报告](IMPLEMENTATION.md)，规格和质量合并于[一次窄审](REVIEW.md)。
+2026-10-16。实现范围见[归档执行卡](../../../archive/2026-10-17/plans/2026-10-16-depleted-uranium-01.md)，当前结果和人工门只在[STATUS](../../../STATUS.md)维护。原始命令与失败证据见[实现报告](IMPLEMENTATION.md)，规格和质量合并于[一次窄审](REVIEW.md)。
+
+2026-10-17后续：用户确认装备及对应18B专属外观手测通过，并要求合main；见[联合验收](../../2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)。下文保留本阶段占位外观候选原交付记录，不作为新的未验门。
 
 ## 启动
 

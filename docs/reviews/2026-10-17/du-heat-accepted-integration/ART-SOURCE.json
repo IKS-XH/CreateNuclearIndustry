@@ -1,0 +1,354 @@
+{
+  "task": "ART-DEPLETED-URANIUM-18B",
+  "files": [
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_ingot.png",
+      "sha256": "6fd340f7a1ef5949abe5ada4fb132e2ccfc3af8c76560e976817158d740a1ae3",
+      "bytes": 256
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_helmet.png",
+      "sha256": "85f1ba44afad2bdecfe10434b5af3e5c55aa78ae584c0a931e9e22dc2399c574",
+      "bytes": 355
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_chestplate.png",
+      "sha256": "aab118c058e364aaede97a5e819b5ad9db245e6e023b329ac58e9c97bbeede9b",
+      "bytes": 406
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_leggings.png",
+      "sha256": "2784e3dcdd3da69b780a19b498065173d7e39430d45fdaeedcb31ee6f02c1ad8",
+      "bytes": 299
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_boots.png",
+      "sha256": "2fd95a576cfa5f156ed5301000b880c3de03ecbd6c4210fdff4d208735e80ba0",
+      "bytes": 306
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_sword.png",
+      "sha256": "b8fa6b58da5c42163d27123c54e99773d777377851e37865f44e33c1f5e53126",
+      "bytes": 306
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_pickaxe.png",
+      "sha256": "20bcd9001d97bf24b9b362b7578a45590133b280bd270c5905d3cbde817f86cf",
+      "bytes": 265
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_axe.png",
+      "sha256": "f11363690f5a66f50a44b0c04cfcdcd11c0e6f1841baf5fd062ca035ee6e09ee",
+      "bytes": 253
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_shovel.png",
+      "sha256": "b38c96492868cca0d144c737a1146a1a0bf34fcf644c791d029eb3977b49ddd6",
+      "bytes": 245
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/item/depleted_uranium_hoe.png",
+      "sha256": "cb80fbf8552d317b5031cb6b495399dbbd49925029299903ef87f01d41ae872e",
+      "bytes": 235
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/depleted_uranium_block_side.png",
+      "sha256": "e5ed6a8ce684c7bb460c3ffe6e5437a9be0881c69d867ad7ef84f0145ab5a189",
+      "bytes": 246
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/depleted_uranium_block_top.png",
+      "sha256": "9814060f9da5916dde96318ed33832a2a96575e9043efd1903eba0df30f06b44",
+      "bytes": 233
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/block/depleted_uranium_block_bottom.png",
+      "sha256": "8a262cf58257a22fd007996bfd67cb62a4c706d3409712ecbc509120fcbf409d",
+      "bytes": 200
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/models/armor/depleted_uranium_layer_1.png",
+      "sha256": "1fb1cb3813d1ecf3817eecf9a009ff68e3a06077693b17a7e71aad0c845ec4d6",
+      "bytes": 912
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/textures/models/armor/depleted_uranium_layer_2.png",
+      "sha256": "f8083d15a8f8f97b42bb7e3af8b36c9f12fb6238a54863d402e3230f11611453",
+      "bytes": 383
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_ingot.json",
+      "sha256": "851cf5a7b792a47b6c387950c88000b7420e8a346c065dd5498dd6841de32890",
+      "bytes": 139
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_quartz_trim.json",
+      "sha256": "2c419e038d567ceaca9352b2dfbd56d75ffcc3b4f0c80eb5c6bfed3b7704c03a",
+      "bytes": 198
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_iron_trim.json",
+      "sha256": "4e45f4a42dcf534261d05d933275043ed085f2c1210368da77e97f73e3860bc4",
+      "bytes": 196
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_netherite_darker_trim.json",
+      "sha256": "21612dd88695693837ada9157fa2a33b64823e7e3cd319a7fb5b54b4d7488d73",
+      "bytes": 208
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_redstone_trim.json",
+      "sha256": "ff9d0d5cda55c00640cea60e4931f1cb1d16ad58d9a5f4ad7ce2fc003c31f87e",
+      "bytes": 200
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_copper_trim.json",
+      "sha256": "b5285016dd36e160dc0bf89b9b23586c115f2f9c73e14e71509006edd52803b4",
+      "bytes": 198
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_gold_trim.json",
+      "sha256": "61e40ad17884a7fe0e1a5a06751400d2d3570f574df9d93fa85e8b264dd50b11",
+      "bytes": 196
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_emerald_trim.json",
+      "sha256": "0d9715d006e241e38c86cc644fbe26e70e8fbd51096793bc94f89cf9dfe8c29d",
+      "bytes": 199
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_diamond_trim.json",
+      "sha256": "11a4642098e2089f622b9f72c71492df8e222311aa281a34388846482730d0d1",
+      "bytes": 199
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_lapis_trim.json",
+      "sha256": "0d05af2438bf1554bf5b7a8306e2fefcacf71d9428535dd9d754ced9ad645d20",
+      "bytes": 197
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet_amethyst_trim.json",
+      "sha256": "c96e7342cde055e6cce5fac9837f51fdb080b4406a8d12b9656b339f67b1902e",
+      "bytes": 200
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_helmet.json",
+      "sha256": "89b725b5f091b49f98dd9abdc5db2ca56fb6608228aed184442810c7358fab21",
+      "bytes": 1740
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_quartz_trim.json",
+      "sha256": "7ef6966d04b508f9967bff4a78497754a7857f584147e119a5368e3ddb7032db",
+      "bytes": 206
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_iron_trim.json",
+      "sha256": "af4639da6ce2c5c76953c21e592e20f7b18537ae8f7884679ecc19abb2ed43b7",
+      "bytes": 204
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_netherite_darker_trim.json",
+      "sha256": "31904b8cc15ef3a602aa584b83980b6365f754a2c015dbfc0d1d3690364c6b28",
+      "bytes": 216
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_redstone_trim.json",
+      "sha256": "e2da2ca1b2b32e77a016cf1ee2e56dc13df2b25cb32028d3b14c9bd929de9954",
+      "bytes": 208
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_copper_trim.json",
+      "sha256": "93dc45ba080e3b45c38866a0863cb096c710ac5ec63fe4fd24ca4d287492b014",
+      "bytes": 206
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_gold_trim.json",
+      "sha256": "01ba6748c6360b1e7c8229c4fa35ec477fd58e12a98f0debd898444f40274779",
+      "bytes": 204
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_emerald_trim.json",
+      "sha256": "15bd982f2abb1573de0f7f221f0575376d914f37c9c696b22c2f6b566a113c3f",
+      "bytes": 207
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_diamond_trim.json",
+      "sha256": "735a36bd1863012ca2a023b38cfade4d1fe2b65c8b4505bbbc964b1064be7cb6",
+      "bytes": 207
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_lapis_trim.json",
+      "sha256": "e1dc19167fae401d269899be3d0c239a4efc8dc60ed8771736fdd2b9328cb39c",
+      "bytes": 205
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate_amethyst_trim.json",
+      "sha256": "a903f1f91d27e57493e26f34481700b36a24039999f1e5584fbc33a80c7d4e2f",
+      "bytes": 208
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_chestplate.json",
+      "sha256": "0912b6d75bbca3d136436532173ed13800f3998bb7281f5975911899449ad73b",
+      "bytes": 1788
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_quartz_trim.json",
+      "sha256": "fa5d435a829709621ab954a1c778f741ae84b7c4936aa408e40afcac300337dd",
+      "bytes": 202
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_iron_trim.json",
+      "sha256": "1a9d459e55a0afcd09a9191e4f8937616eb99b8c6f1bae64dc4f8c8f0e9d9697",
+      "bytes": 200
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_netherite_darker_trim.json",
+      "sha256": "0eb40a7e112fe1af94b5e41927559bfb91c5b5d68fc24911dd79e1e602522ba5",
+      "bytes": 212
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_redstone_trim.json",
+      "sha256": "06d34c095d120dda48977585ea5c22f69a96fd4c7733c166d58e271dd403ed18",
+      "bytes": 204
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_copper_trim.json",
+      "sha256": "07345838dbbdaa033badd8d6f251a9ea262db4593877cbf9058c014e64a1f03c",
+      "bytes": 202
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_gold_trim.json",
+      "sha256": "23599a8f6fa4c6240fcb78477cfe04197e6f3b470e88b9ae11aff996480a38a4",
+      "bytes": 200
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_emerald_trim.json",
+      "sha256": "46fc867c88a42b1b5662b07039240f89b9d52ddb580bbe0abc4270c57f61b93d",
+      "bytes": 203
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_diamond_trim.json",
+      "sha256": "38ec58759e0a2cc73ccc61fb259ddb38b28b98d7121f1877e9dcffc031d392b5",
+      "bytes": 203
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_lapis_trim.json",
+      "sha256": "aca8a43195b2fbcc0f5860261f207786cc2ef80c0676bde238faa2b43f5e3035",
+      "bytes": 201
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings_amethyst_trim.json",
+      "sha256": "313f6cf46a4dfcf3dd8a8fc82670dd631d12907f00fb0a1c999ca2dfa31027fd",
+      "bytes": 204
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_leggings.json",
+      "sha256": "f91fefb87dca278700cfc4a4f02423a4ad7d76b08fdc524311ba6565ae0e0e8d",
+      "bytes": 1764
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_quartz_trim.json",
+      "sha256": "8e186a3f89e6634a7078079f25de53e3fa9fb13d70722c1cdac587ac605aac55",
+      "bytes": 196
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_iron_trim.json",
+      "sha256": "a1174a5079e1f368444c3c55e395d75f8b3ad55e5f76b30057b64f07dc5fb2d8",
+      "bytes": 194
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_netherite_darker_trim.json",
+      "sha256": "94318d783447f3ab7d396ff603b377262f82c227223564858093b5c7e76b6c0d",
+      "bytes": 206
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_redstone_trim.json",
+      "sha256": "3b5c04dbcc6383f8a0e9b06b4f027f92c7def3732e5cd3c290bdcc28aae8815c",
+      "bytes": 198
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_copper_trim.json",
+      "sha256": "a493d37690ccd2177f776cc7f87087c5ddedee09a3144c50eecbdc75c5f448b2",
+      "bytes": 196
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_gold_trim.json",
+      "sha256": "9a4c5e3191c02a42c69f9f10899a5a95019f7a30c52f8729e212b4e9d2bdbd2f",
+      "bytes": 194
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_emerald_trim.json",
+      "sha256": "ec0a042b6e1b41905de3c66d3886e64d13fb6485811a2ff8e0b251acab4bbdc7",
+      "bytes": 197
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_diamond_trim.json",
+      "sha256": "88d4eecfac82044c3d78750a8573e0b2de158dae21f6faa51fef4ec884e57789",
+      "bytes": 197
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_lapis_trim.json",
+      "sha256": "87db2419ab76f03595204841160637922e9338233ee7670be94206b2615b8cf4",
+      "bytes": 195
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots_amethyst_trim.json",
+      "sha256": "f3a9a17bdf2363662595dcaad2c80d0593cbb62aa460738f6e693df109db5cde",
+      "bytes": 198
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_boots.json",
+      "sha256": "b49ebeded899f5bdb040d51d2707e322081fe76d59bf78a9f52b58e4d3600ad6",
+      "bytes": 1728
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_sword.json",
+      "sha256": "c77bd698e3f3c708369dbe3644170572688dfc10b9475a8623cdfb85aa0ae7b3",
+      "bytes": 144
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_pickaxe.json",
+      "sha256": "9c37817d2acddc9f6e2e275a9fe10df7a5926761e8a918ab66b80ba7c07aa171",
+      "bytes": 148
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_axe.json",
+      "sha256": "67722432791199826babeb4dfc63763689bf2dbe11c5dd5ebcb6f3f7b80f3f14",
+      "bytes": 140
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_shovel.json",
+      "sha256": "4eb8499b9fc8bea0c8addf774d823a499ce2c20221b52dc03641d0546877f46e",
+      "bytes": 146
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/item/depleted_uranium_hoe.json",
+      "sha256": "fe54a8fea39a1935dace35f758747c611f7bfcaa4053530d557c90904be4a3b7",
+      "bytes": 140
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/models/block/depleted_uranium_block.json",
+      "sha256": "9bd63d3fc4798a41e8c32550293e547bcbbd13461fb51cb8f33486813b936325",
+      "bytes": 1803
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/equipment/DepletedUraniumArmorItem.java",
+      "sha256": "463d2da935c35148937955485e90311fa36bfa6be4a6b4f1d24fc59eaf113d55",
+      "bytes": 1645
+    }
+  ],
+  "count": 67,
+  "source_head": "0a10e361cee9a8069f8bd0b2a711f2cb60349797",
+  "bundle": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\build\\reports\\art\\ART-DEPLETED-URANIUM-18B\\artifact\\ART-DEPLETED-URANIUM-18B-integration-67-files.zip",
+    "bytes": 31671,
+    "sha256": "f1580cb2e645fbc3a15af7227104a170147fae7a885ca18311db36c0f95918d3"
+  },
+  "candidate_copy": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\build\\reports\\art\\ART-DEPLETED-URANIUM-18B\\artifact\\create_nuclear_industry-0.1.0-ART-DEPLETED-URANIUM-18B.jar",
+    "sha256": "04466d8ac3ada5ba5533d7eaa06f371c5aa9f7f6cb0144d18076bf2685f024ee"
+  },
+  "full_candidate": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-du18b",
+  "world": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-du18b\\run\\saves",
+  "config_source": "DU/run/config按原值完整复制"
+}

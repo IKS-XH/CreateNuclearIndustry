@@ -1,0 +1,100 @@
+{
+  "source": "af79645f3091831039933ac56df4cade7eafa8b6",
+  "source_export": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\du-heat-accepted-20261017\\source-af79645f3091831039933ac56df4cade7eafa8b6",
+  "source_inputs": {
+    "count": 2228,
+    "bytes": 11586450,
+    "all_git_blob_verified": true,
+    "original_and_export_unchanged_after_build": true
+  },
+  "assemble": {
+    "source": "af79645f3091831039933ac56df4cade7eafa8b6",
+    "cwd": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\du-heat-accepted-20261017\\source-af79645f3091831039933ac56df4cade7eafa8b6",
+    "command": [
+      "cmd.exe",
+      "/d",
+      "/c",
+      "gradlew.bat",
+      "assemble",
+      "--console=plain"
+    ],
+    "start_epoch": 1792237080.9681857,
+    "requested_tasks": [
+      "assemble"
+    ],
+    "exit_code": 0,
+    "end_epoch": 1792237098.3180225,
+    "log_sha256": "7b9c6caf2c1262403a6a530193632fd6825764ed3ea5e6511ddd50f7c6153ab3"
+  },
+  "actual_tasks": [
+    "> Task :createMinecraftArtifacts",
+    "> Task :compileJava",
+    "> Task :processResources",
+    "> Task :classes",
+    "> Task :jarJar NO-SOURCE",
+    "> Task :jar",
+    "> Task :assemble"
+  ],
+  "candidate": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\du-heat-accepted-20261017\\built-9C556236051AB1304BBFEBAC79AC300A1CA1E400DFE9D1DAFF11C38EC1D83F50.jar",
+    "assemble_jar": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\du-heat-accepted-20261017\\source-af79645f3091831039933ac56df4cade7eafa8b6\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+    "bytes": 3382155,
+    "sha256": "9c556236051ab1304bbfebac79ac300a1ca1e400dfe9d1daff11c38ec1d83f50",
+    "unmodified_assemble_bytes": true
+  },
+  "baseline": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\du-heat-accepted-20261017\\baseline-main.jar",
+    "bytes": 3336385,
+    "sha256": "b366eb49f8994bb0213b676f530ae395e03a58f53e59cba23ab9a77b682d7606"
+  },
+  "payload": {
+    "baseline_entries": 2278,
+    "candidate_entries": 2377,
+    "added": 99,
+    "changed": 10,
+    "removed": 0,
+    "unchanged": 2268,
+    "classification_counts": {
+      "du_function_resource_added": 30,
+      "art_18b_resource_added": 66,
+      "du_function_or_18b_hook_class_added": 3,
+      "du_function_resource_changed": 7,
+      "du_function_or_18b_hook_class_changed": 2,
+      "heat_bridge_class_changed": 1
+    },
+    "class_bytes_exact_compilation": 704,
+    "resources_exact_process_resources": 1672,
+    "approved_18b_resources_exact_committed_git": 66,
+    "accepted_png_exact": 15,
+    "accepted_art_text_git_crlf_to_lf_only": 52,
+    "meta_inf_differences": [],
+    "source_vs_processed_metadata_differences": [],
+    "line_ending_only_differences_vs_main_baseline": [],
+    "du_test_classes_absent": true,
+    "entire_du_test_resource_domain_absent": true,
+    "radiation_logic_and_tools_absent": true,
+    "existing_radiation_named_resources_equal_baseline": [
+      "assets/create_nuclear_industry/models/item/incomplete_radiation_sensor.json",
+      "assets/create_nuclear_industry/models/item/radiation_sensor.json",
+      "assets/create_nuclear_industry/textures/item/incomplete_radiation_sensor.png",
+      "assets/create_nuclear_industry/textures/item/radiation_sensor.png",
+      "data/create_nuclear_industry/recipe/sequenced_assembly/radiation_sensor.json"
+    ],
+    "automation_port_matches_main_baseline": true
+  },
+  "warnings": {
+    "compiler_removal_count": 36,
+    "summary": [
+      "36条既有EventBusSubscriber bus()/Bus API待删除警告",
+      "编译器另提示既有deprecated/unchecked API；未按提示扩大重编译",
+      "Gradle提供Problems报告及配置缓存建议；没有失败或测试执行"
+    ],
+    "game_or_tests_run": false
+  },
+  "reuse": [
+    "DU来源0a10e36原4项定向JUnit、3项真实GameTest/保存/exit0和用户功能手测",
+    "ART-DEPLETED-URANIUM-18B原4项JUnit、assemble、组合审查和用户外观手测",
+    "Heat来源8712f43原34项定向回归、assemble、组合审查和用户服务器观察"
+  ],
+  "handoff": "阶段B交付；PM读回来源、日志和同字节制品后管理正式包提升。本执行者未写main/formal或执行Git写操作。"
+}

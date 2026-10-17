@@ -1,6 +1,6 @@
 # DU-EQUIPMENT-01：贫化铀材料与钻石装备升级
 
-2026-10-16。当前结果与未闭门统一维护于[STATUS](../../STATUS.md)，本卡用于限定本批执行和验收范围。
+2026-10-16。当前结果与未闭门统一维护于[STATUS](../../../STATUS.md)，本卡保留原执行和验收范围；后续见[联合验收](../../../reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)。
 
 ## 已批准合同
 

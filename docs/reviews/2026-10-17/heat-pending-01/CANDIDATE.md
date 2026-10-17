@@ -2,6 +2,8 @@
 
 2026-10-17。当前进度及未闭门只见[STATUS](../../../STATUS.md)，三次共同根因见[诊断](DIAGNOSIS.md)。
 
+同日后续：用户确认原服务器崩溃修复测试通过，并要求与贫化铀装备/18B外观一起合main；见[联合验收](../du-heat-accepted-integration/ACCEPTANCE.md)。下文保留原候选交付和当时的观察门，不重新打开已确认范围。
+
 ## 来源与文件
 
 - 来源分支`codex/heat-bridge-pending-fix`，生产/测试提交`8712f4310eb1ff6ac8f2af03fde33e4154a71325`；只含桥接队列与既有回归测试两文件。
