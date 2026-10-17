@@ -4,9 +4,9 @@
 
 ## 主分支与正式包
 
-- 已提交生产合入来源`ec2430956c1adf1552f6406398ba0f0ae4b29835`，纳入用户手测通过的锅炉/汽轮机Sodium连接外观修复；保留850904d尾热停机修复、烧结炉A版、5ea9c50计算/客户端优化、锅炉16³、闭环及主动出汽。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3336385 bytes，SHA256 `B366EB49F8994BB0213B676F530AE395E03A58F53E59CBA23AB9A77B682D7606`，按用户要求跟踪Git；与用户已测试客户端包逐字节一致。
-- 本批复用已验来源32/32定向JUnit、一次assemble/exit0与组合窄审；main合入后源码/构建配置相同，直接提升同字节已验窄包，没有重复全build或带入无关dirty。仅两处源码所属9项class变化，其余2269载荷保持，见[验收与正式包](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)。原[停机修复](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)、[外观](reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)及[性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
+- 已提交生产来源`af79645f3091831039933ac56df4cade7eafa8b6`，纳入用户手测通过的贫化铀材料/装备、18B外观及锅炉PENDING队列崩溃修复；保留此前Sodium连接外观、微小尾热停机、烧结炉A版、计算/客户端优化、锅炉16³、闭环及主动出汽。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3382155 bytes，SHA256 `9C556236051AB1304BBFEBAC79AC300A1CA1E400DFE9D1DAFF11C38EC1D83F50`，按用户要求跟踪Git；与本次准确已提交输入的原assemble产物逐字节一致。
+- 本批复用三项既有定向验证、组合审查及用户功能/视觉/原服反馈；无代码冲突，仅做一次必要assemble/exit0及来源/载荷核验。47项其他原dirty逐字保持，见[联合集成与正式包](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)。原[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)、[外观](reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)及[性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
 
 ## 已合入并按相应范围验收
 

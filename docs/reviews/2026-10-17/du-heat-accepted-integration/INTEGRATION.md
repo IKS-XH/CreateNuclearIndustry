@@ -14,7 +14,7 @@
 
 唯一执行者从已提交生产来源`af79645f3091831039933ac56df4cade7eafa8b6`导出准确Git原字节：2228输入、11586450 bytes，逐项核Git blob；原树与导出输入构建前后均未变。一次增量assemble，exit0、16秒、4任务执行，没有clean、强制重跑、全build、JUnit/GameTest或游戏。36项既有EventBusSubscriber removal及deprecated/unchecked提示保留，没有按提示改依赖或扩大任务。
 
-原assemble同字节交付包3382155 bytes，SHA256 `9C556236051AB1304BBFEBAC79AC300A1CA1E400DFE9D1DAFF11C38EC1D83F50`，没有手改JAR。目标正式路径为`build/libs/create_nuclear_industry-0.1.0.jar`；其准确[来源/命令/退出/制品身份](ARTIFACT.json)已由PM读回。
+原assemble同字节交付包3382155 bytes，SHA256 `9C556236051AB1304BBFEBAC79AC300A1CA1E400DFE9D1DAFF11C38EC1D83F50`，没有手改JAR。PM已读回准确[来源/命令/退出/制品身份](ARTIFACT.json)，main快进到含文档归档的`30b01f68eceae2a07edf08922387ef3a790aeeab`后，将该同字节产物复制至正式路径`build/libs/create_nuclear_industry-0.1.0.jar`并再次核SHA。正式JAR继续跟踪Git；没有在main的无关dirty上重新构建。
 
 与main原B366EB49…正式包比较：2278→2377文件载荷，新增99、修改10、删除0、2268保持。增改严格来自DU功能、66项18B资源、三项新增装备class、注册/创造栏两class及Heat桥接一class。全部704入包class匹配本次编译输出，1672资源匹配处理后资源；META-INF及源资源到处理后资源差异0。DU测试class/整个测试资源域排除；main原5项radiation_sensor基础资源与自动化口保持，不带辐射候选、17B外观或辅助工具。
 
@@ -24,4 +24,4 @@
 
 原始报告位于集成树`build/reports/du-heat-accepted-20261017/`：PREPARE.md、FINAL.md/FINAL.json、准确输入清单、构建日志/退出记录、class/资源绑定、逐条载荷变化和已验文本行尾分类。初次准备因PM并行文档被保护检查拦住、两次最终核验因main既有同名radiation资源和原ZIP CRLF SHA粗筛而停止，均保留失败日志；只修核验归因，未改源、重建或改造包。最终完整核验exit0。
 
-main的48项保护清单在报告`preserved-main-status-dirty-before.json`；除本次授权的正式JAR更新外，其余内容必须逐字保持。原DU、art-studio、已验运行副本、原世界和输入日志均保留；不推送、发布、自动安装服务器或删除来源树。本批实际应用minecraft-modding/testing/resource-pack/ci-release与分支收尾、隔离树、完成前核验技能，锁定依赖保持。
+main的48项保护清单在报告`preserved-main-status-dirty-before.json`；正式JAR按本次授权更新，其他47项逐字保持、零漂移，结果保存于`preserved-main-dirty-after.json`。原DU、art-studio、已验运行副本、原世界和输入日志均保留；不推送、发布、自动安装服务器或删除来源树。本批实际应用minecraft-modding/testing/resource-pack/ci-release与分支收尾、隔离树、完成前核验技能，锁定依赖保持。
