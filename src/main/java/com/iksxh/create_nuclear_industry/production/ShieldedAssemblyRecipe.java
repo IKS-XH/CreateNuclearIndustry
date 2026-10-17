@@ -68,15 +68,17 @@ public record ShieldedAssemblyRecipe(String operation, List<Input> inputs, ItemS
         return "manufacture".equals(operation) ? inputs.size() == 4 && result.is(ModItems.FRESH_FUEL_ASSEMBLY.get())
                 && result.getDamageValue() == 0
                 : "sealing".equals(operation) && inputs.size() == 3 && inputs.getFirst().count == 1
-                && inputs.getFirst().test(new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()))
+                && (inputs.getFirst().test(new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()))
+                    || inputs.getFirst().test(new ItemStack(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get())))
                 && result.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get());
     }
     public boolean accepts(int slot, ItemStack stack) {
         return valid() && slot >= 0 && slot < inputs.size() && !stack.isEmpty()
                 && inputs.get(slot).test(stack)
                 && (!"manufacture".equals(operation) || !stack.is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get())
+                    && !stack.is(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get())
                     && !stack.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get()))
-                && (!"sealing".equals(operation) || slot != 0 || stack.is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()));
+                && (!"sealing".equals(operation) || slot != 0 || SpentFuelPayload.allowed(stack));
     }
     public int[] costs() { return inputs.stream().mapToInt(Input::count).toArray(); }
     @Override public boolean matches(RecipeInput input, Level level) {

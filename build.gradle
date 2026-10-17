@@ -159,6 +159,8 @@ tasks.named('jar', Jar) {
 
 // 贫化铀隔离探针仅供开发服务端；发布包排除测试类与模板。
 tasks.withType(Jar).configureEach {
+    exclude 'com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests*.class'
+    exclude 'data/cni_accident_execution/**'
     exclude 'com/iksxh/create_nuclear_industry/gametest/DepletedUraniumGameTests*.class'
     exclude 'data/cni_depleted_uranium/**'
 }

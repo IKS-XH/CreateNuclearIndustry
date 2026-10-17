@@ -116,11 +116,20 @@ public final class ReactorStructureLifecycle {
     }
 
     /**
-     * 在普通 BreakEvent 监听器完成后执行停机破坏决策；所有者先只读预检，之后才提交
-     * 危险事件或安全清空事务。LOWEST 是 NeoForge 常规优先级中最晚的处理点。
+     * LOWEST仅作只读停机预检并可拒拆；最终事务由原生CommonHooks的post返回边界提交，
+     * 因而同优先级更晚监听器的取消也不会提前产生库存或事故副作用。
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        if (!(event.getLevel() instanceof ServerLevel level) || event.isCanceled()) return;
+        if (loadedOwnersNear(level, event.getPos()).stream()
+                .anyMatch(owner -> owner.protectsUnavailableComponent(event.getPos(), event.getState()))
+                || collectDisassemblyPlans(level, event).stream().anyMatch(plan -> plan.action() == ReactorDisassemblyPlan.Action.REJECTED))
+            cancelBreak(event, event.getPlayer(), "not_fully_stopped");
+    }
+
+    /** 原生CommonHooks的post已返回，最终取消态确定；此刻原方块仍在，才能提交拆除与事故托管。 */
+    public static void finishBlockBreak(BlockEvent.BreakEvent event) {
         if (!(event.getLevel() instanceof ServerLevel serverLevel) || event.isCanceled()) {
             return;
         }
@@ -151,6 +160,7 @@ public final class ReactorStructureLifecycle {
             }
             scheduleRescanAround(serverLevel, event.getPos());
         } catch (RuntimeException exception) {
+            com.iksxh.create_nuclear_industry.accident.ReactorAccidentService.abortBatch();
             rollbackDisassemblyPlans(plans);
             cancelBreak(event, event.getPlayer(), "transaction_failed");
         }
@@ -194,6 +204,7 @@ public final class ReactorStructureLifecycle {
                 throw new IllegalStateException("disassembly plan post-check failed");
             }
         }
+        com.iksxh.create_nuclear_industry.accident.ReactorAccidentService.beginBatch();
         for (ReactorDisassemblyPlan plan : plans) {
             if (plan.action() == ReactorDisassemblyPlan.Action.DANGEROUS
                     && plan.publishDangerousEvent()) {
@@ -206,6 +217,7 @@ public final class ReactorStructureLifecycle {
             if (plan.action() == ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET)
                 plan.owner().finishDisassemblySafetyEvidence(plan);
         }
+        com.iksxh.create_nuclear_industry.accident.ReactorAccidentService.commitBatch();
     }
 
     /** 事务失败时按所有者恢复读阶段副本；恢复失败只记录日志，不能吞掉原始异常。 */

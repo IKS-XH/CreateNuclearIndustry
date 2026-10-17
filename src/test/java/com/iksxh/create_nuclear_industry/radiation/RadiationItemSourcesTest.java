@@ -11,6 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class RadiationItemSourcesTest {
     private final RadiationParameters p=RadiationParameters.DEFAULT;
     private ItemStack spent(){return new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());}
+    @Test void accidentWasteSealsOnePhysicalPayloadAndRejectsMixedOrForeignContents() {
+        var waste=new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get());
+        assertTrue(RadiationItemSources.describe(waste,p).radioactivePayload());
+        assertEquals(4,RadiationItemSources.describe(waste,p).dosePerSecond());
+        var sealed=SpentFuelPayload.seal(waste);assertTrue(SpentFuelPayload.isValid(sealed));
+        assertEquals(.2,RadiationItemSources.describe(sealed,p).dosePerSecond(),1e-12);
+        assertTrue(SpentFuelPayload.seal(waste.copyWithCount(2)).isEmpty());
+        assertTrue(SpentFuelPayload.seal(new ItemStack(Items.STONE)).isEmpty());
+        sealed.set(DataComponents.CONTAINER,ItemContainerContents.fromItems(List.of(waste,spent())));
+        assertFalse(SpentFuelPayload.isValid(sealed));assertEquals(6,RadiationItemSources.describe(sealed,p).dosePerSecond());
+    }
     @Test void configuredZeroStrengthStillHasRadioactivePayload() {
         var zero=RadiationParametersTest.change("spentFuelDosePerSecond",0.0);
         var summary=RadiationItemSources.describe(spent(),zero);

@@ -30,7 +30,9 @@ public final class RadiationSourceAdapters {
     public static void read(BlockEntity be, Consumer<LocatedStack> out) {
         Vec3 position=Vec3.atCenterOf(be.getBlockPos());
         Consumer<ItemStack> item=s -> out.accept(new LocatedStack(position,s,false));
-        if(be instanceof ReactorPortBlockEntity port) {
+        if(be instanceof com.iksxh.create_nuclear_industry.accident.ReactorCoriumBlockEntity corium) {
+            item.accept(corium.payload());
+        } else if(be instanceof ReactorPortBlockEntity port) {
             item = s -> out.accept(new LocatedStack(RadiationContainment.sourcePosition((ServerLevel)be.getLevel(),be.getBlockPos()),s,false));
             item.accept(port.fuelAssembly());
         } else if(be instanceof DryStorageBlockEntity rack) {

@@ -34,6 +34,21 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     private static final String FUEL_ASSEMBLY_KEY = "FuelAssembly";
     private static final String UNFORMED_EXTRACTION_ALLOWED_KEY = "UnformedExtractionAllowed";
     private Binding binding;
+    private java.util.UUID accidentGeneration = java.util.UUID.randomUUID();
+    private java.util.UUID accidentLock;
+
+    /** 服务端持久化物理端口身份，替换的同坐标端口不能被旧事故认领。 */
+    public java.util.UUID accidentGeneration() { return accidentGeneration; }
+
+    /** 原所有者核验后锁定并转移真实组件；只返回原物品，绝不从快照重造。 */
+    public ItemStack takeForAccident(ReactorInstrumentPortBlockEntity owner, java.util.UUID id, java.util.UUID generation, ItemStack expected) {
+        if (level == null || level.isClientSide || isRemoved() || level.getBlockEntity(worldPosition) != this
+                || !accidentGeneration.equals(generation) || boundOwner != owner
+                || accidentLock != null && !accidentLock.equals(id) || !ItemStack.matches(fuelAssembly, expected)) return null;
+        accidentLock = id; bindingGeneration++; unformedExtractionAllowed = false;
+        var result = fuelAssembly; fuelAssembly = ItemStack.EMPTY; setChanged();
+        level.invalidateCapabilities(worldPosition); return result;
+    }
     private ReactorInstrumentPortBlockEntity boundOwner;
     /** 每次绑定身份变化递增；旧capability即使同一端口恢复也不能复活，不持久化。 */
     private long bindingGeneration;
@@ -58,7 +73,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
 
     /** 返回端口是否已经绑定到一个有效的仪表端口。 */
     public boolean isBound() {
-        return binding != null && boundOwner != null && !isRemoved()
+        return accidentLock == null && binding != null && boundOwner != null && !isRemoved()
                 && !boundOwner.isRemoved() && boundOwner.structureValid();
     }
 
@@ -81,7 +96,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
      * 返回未成型人工取料许可；该布尔值只表示访问权限，不是热量、完整度或模拟状态副本。
      */
     public boolean isUnformedExtractionAllowed() {
-        return unformedExtractionAllowed;
+        return accidentLock == null && unformedExtractionAllowed;
     }
 
     /**
@@ -91,6 +106,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
      * 数据组件随栈一起保存。该入口不注册 ItemHandler，因此普通漏斗不能绕过换料事务。</p>
      */
     public void setFuelAssembly(ItemStack nextFuelAssembly) {
+        if (accidentLock != null) throw new IllegalStateException("事故已接管端口物料");
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("fuel assembly can only be changed on the server");
         }
@@ -179,7 +195,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
             BindingType expectedType,
             CoreColumnPosition column
     ) {
-        if (owner == null || expectedType == null
+        if (accidentLock != null || owner == null || expectedType == null
                 || (level != null && level.isClientSide)
                 || !owner.structureValid()
                 || bindingType() != expectedType
@@ -530,6 +546,8 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
+        tag.putUUID("AccidentGeneration", accidentGeneration);
+        if (accidentLock != null) tag.putUUID("AccidentLock", accidentLock);
         tag.put(FUEL_ASSEMBLY_KEY, fuelAssembly.saveOptional(registries));
         if (!clientPacket) {
             tag.putBoolean(UNFORMED_EXTRACTION_ALLOWED_KEY, unformedExtractionAllowed);
@@ -552,6 +570,8 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
+        accidentGeneration = tag.hasUUID("AccidentGeneration") ? tag.getUUID("AccidentGeneration") : java.util.UUID.randomUUID();
+        accidentLock = tag.hasUUID("AccidentLock") ? tag.getUUID("AccidentLock") : null;
         fuelAssembly = tag.contains(FUEL_ASSEMBLY_KEY)
                 ? ItemStack.parseOptional(registries, tag.getCompound(FUEL_ASSEMBLY_KEY))
                 : ItemStack.EMPTY;

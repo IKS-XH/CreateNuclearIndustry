@@ -11,11 +11,11 @@ import java.util.Objects;
 /**
  * 服务端反应堆融毁状态完成事件；事件不可取消，也不携带可变世界操作。
  *
- * <p>事件只作为模组内部扩展点，快照是完成时的只读权威状态。后续事故系统可根据
- * {@link Reason} 读取服务端维度和结构坐标，但 P1 本身不为事件注册世界副作用监听器。</p>
+ * <p>快照仅是完成时的只读模拟投影，不是第二份可提取燃料；事故系统须向原物理端口
+ * 托管真实组件，并在发布返回后阻止原tick继续供热或恢复运行结果。</p>
  */
 public final class ReactorMeltdownEvent extends Event {
-    /** 当前 P1 允许发布的完成原因；具体事故行为由后续任务决定。 */
+    /** 唯二正式事故入口，不额外引入倒计时或触发阈值。 */
     public enum Reason {
         COUNTDOWN_COMPLETE,
         DANGEROUS_DISASSEMBLY

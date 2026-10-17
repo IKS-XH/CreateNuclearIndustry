@@ -403,7 +403,7 @@
   "item.create_nuclear_industry.glass_dust": "Glass Dust",
   "item.create_nuclear_industry.vitrification_medium": "Vitrification Medium",
   "item.create_nuclear_industry.lead_shielding_cask": "Lead Shielding Cask",
-  "item.create_nuclear_industry.sealed_spent_fuel_cask": "Sealed Spent Fuel Cask",
+  "item.create_nuclear_industry.sealed_spent_fuel_cask": "Sealed Nuclear Waste Cask",
   "block.create_nuclear_industry.dry_storage_rack": "Dry Storage Rack",
   "gui.create_nuclear_industry.storage.occupied": "Occupied slots: %s / %s",
   "gui.create_nuclear_industry.storage.sealed": "Sealed spent fuel storage",
@@ -705,5 +705,7 @@
   "death.attack.create_nuclear_industry.radiation": "%1$s received a fatal radiation dose",
   "radiation.create_nuclear_industry.field": "Field %s D/s",
   "radiation.create_nuclear_industry.dose": "Accumulated dose %s D",
-  "radiation.create_nuclear_industry.absorbed": "Absorption %s D/s"
+  "radiation.create_nuclear_industry.absorbed": "Absorption %s D/s",
+  "block.create_nuclear_industry.reactor_corium": "Reactor Corium",
+  "item.create_nuclear_industry.accident_fuel_waste": "Accident Fuel Waste"
 }

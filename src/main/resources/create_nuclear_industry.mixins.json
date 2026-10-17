@@ -18,7 +18,8 @@
     "RadiationBeltAccessor",
     "RadiationBlockChangeMixin",
     "RadiationItemEntityMixin",
-    "RadiationInventoryChangeMixin"
+    "RadiationInventoryChangeMixin",
+    "ReactorBreakFinalizationMixin"
   ],
   "injectors": {
     "defaultRequire": 1

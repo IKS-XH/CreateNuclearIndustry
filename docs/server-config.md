@@ -1,6 +1,6 @@
 # 服务端配置
 
-更新：2026-10-15。本文统一记录当前main配置，锅炉16³尺寸上限已按用户手测合入。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
+更新：2026-10-18。本文统一记录本分支配置，含锅炉16³尺寸上限、辐射基础和事故候选参数。数值以实际配置源码和实例TOML为准，main合入与人工门见[STATUS](STATUS.md)。
 
 ## 文件和生效
 
@@ -15,6 +15,8 @@
 | create_nuclear_industry-heat-exchanger.toml | 换热/冷凝/盆炉核热，顶层键 |
 | create_nuclear_industry-turbine.toml | 三档汽轮机，顶层键 |
 | create_nuclear_industry-storage.toml | spentFuelStorage节：贮存架 |
+| create_nuclear_industry-radiation-server.toml | general/sources/shielding/dose/protection节：辐射与防护 |
+| create_nuclear_industry-accident-server.toml | 顶层键：局部事故世界效果与共享动作预算 |
 
 容量调小不删除现有物料，超额拒收；机器合法性还检查跨字段关系，不能只看单值范围。材料数量和工时由数据配方控制，不在设备配置复制一份。
 
@@ -137,3 +139,35 @@
 ## 贮存架
 
 create_nuclear_industry-storage.toml中的spentFuelStorage.rackSlots默认16、合法1～16。容量降低保留全部已有桶并允许取出，达到/超过新容量拒收；不改变单桶载荷或封存配方。来源为[SpentFuelStorageConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/SpentFuelStorageConfig.java)。
+
+## 辐射与防护
+
+来源为[RadiationConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/RadiationConfig.java)及[RadiationParameters](../src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationParameters.java)。单位D是游戏剂量，不代表现实医学单位；场强在穿戴减免前限幅，吸收强度在穿戴后计算。
+
+| 节.键 | 默认 | 单位/意义 |
+| --- | ---: | --- |
+| general.enabled / sampleIntervalTicks / detectionRadiusBlocks | true / 20 / 32 | 启用、结算tick、检测半径格（1～64） |
+| sources.usedFuelDosePerSecond / spentFuelDosePerSecond / accidentWasteDosePerSecond | 1 / 2 / 4 | 每份实际载荷1格内D/s；残骸只读取其真实事故废料载荷，不重复计源 |
+| sources.maxFieldDosePerSecond | 10 | 穿戴前总场强D/s上限 |
+| shielding.caskTransmission / rackTransmission / reactorTransmission / blockTransmission | 0.05 / 0 / 0 / 0.05 | 合法桶、完整架、完整堆对外、每格屏蔽路径的向外比例 |
+| dose.safeAbsorptionPerSecond | 0.01 | 不超过该D/s视为安全，可开始恢复等待 |
+| dose.maxDose / warningDose / symptomDose / damageDose | 100 / 25 / 50 / 80 | 剂量上限、预警、虚弱/迟缓、高剂量伤害阈值D |
+| dose.recoveryDelayTicks / recoveryPerSecond | 100 / 1 | 连续安全等待tick、恢复D/s；离线暂停 |
+| dose.damageIntervalTicks / damageHealthPoints | 40 / 1 | 高剂量伤害周期tick、每次生命值点数 |
+| protection.head / chest / legs / feet / maxReduction | 0.25 / 0.30 / 0.25 / 0.15 / 0.95 | 按实际穿戴部位相加的吸收削减及总上限 |
+
+加载/重载时整组原子校验，非法组合整组回退默认并节流告警。数值须有限非负，比例在[0,1]，阈值满足warning＜symptom＜damage≤max；结算/伤害间隔正数、恢复等待非负。关闭辐射停止新增剂量和伤害，已有剂量按安全规则恢复，物料已使用历史不清除。
+
+## 局部事故
+
+来源为[AccidentConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/AccidentConfig.java)及[AccidentParameters](../src/main/java/com/iksxh/create_nuclear_industry/accident/AccidentParameters.java)。这是本分支第二批候选配置，不替换reactor原有融毁触发比例和倒计时。
+
+| 键 | 默认 | 单位/边界 |
+| --- | ---: | --- |
+| shellAndExternalDestruction | true | 壳体/外部破裂与直接冲击开关；false仍内部报废、生成废料并损失工质 |
+| extensionBlocks | 2 | 原结构边界外最大格数，合法0～2 |
+| externalBlockLimit | 32 | 每事故外壳及外部合计破坏上限，合法0～32 |
+| shockHealthPoints | 8 | 每玩家每事故至多一次近距冲击上限生命值，有限0～8，按距离衰减 |
+| worldActionsPerTick | 64 | 每维度所有事故共享的世界动作/t上限，合法1～64 |
+
+配置加载/重载整组校验，非法组回退默认并节流告警。事故创建时冻结整组参数，后续配置变化不改旧任务产物、扣账和冲击收据；同时有不同冻结预算的未完成事故时，共享预算取其中最小值。冷热工质100%损失、已用组件每件1废料不另设可变倍增参数。任务及载荷保存于本维度SavedData，仪表被破坏后仍可正常保存续接；不强载区块，不研究旧版本迁移。

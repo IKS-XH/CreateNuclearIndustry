@@ -78,50 +78,52 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
         }
     }
 
-    private ShieldedAssemblyRecipe recipeFor(String operation) {
-        if (level == null) return null;
-        ResourceLocation id = "sealing".equals(operation) ? ResourceLocation.fromNamespaceAndPath(
-                CreateNuclearIndustry.MOD_ID, "shielded_assembly/sealed_spent_fuel_cask") : RECIPE_ID;
-        var holder = level.getRecipeManager().byKey(id);
-        if (holder.isEmpty() || !(holder.get().value() instanceof ShieldedAssemblyRecipe recipe)
-                || !recipe.valid() || !recipe.operation().equals(operation)) return null;
-        return recipe;
+    private static final List<String> RECIPE_PATHS = List.of("fresh_fuel_assembly", "sealed_spent_fuel_cask", "sealed_accident_fuel_waste");
+    private ShieldedAssemblyRecipe recipeFor(String path) {
+        if (level == null || !RECIPE_PATHS.contains(path)) return null;
+        var id=ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID,"shielded_assembly/"+path);
+        var holder=level.getRecipeManager().byKey(id);
+        return holder.isPresent() && holder.get().value() instanceof ShieldedAssemblyRecipe recipe && recipe.valid() ? recipe : null;
     }
-    private ShieldedAssemblyRecipe currentRecipe() {
-        return recipeFor(state.operation().isEmpty() ? "manufacture" : state.operation());
+    /** 槽0真实载荷决定两种封装，公共固化材料可先投；绝不只按sealing工序复用进度。 */
+    private String currentPath() {
+        if ("sealing".equals(state.operation())) return state.input(0).is(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get())
+                ? "sealed_accident_fuel_waste" : "sealed_spent_fuel_cask";
+        return "fresh_fuel_assembly";
     }
-    private ShieldedAssemblyRecipe offeredRecipe(int slot, ItemStack offered) {
-        if (!state.operation().isEmpty()) {
-            ShieldedAssemblyRecipe recipe = currentRecipe();
-            return recipe != null && recipe.accepts(slot, offered) ? recipe : null;
-        }
-        for (String mode : List.of("manufacture", "sealing")) {
-            ShieldedAssemblyRecipe recipe = recipeFor(mode);
-            if (recipe != null && recipe.accepts(slot, offered)) return recipe;
+    private ShieldedAssemblyRecipe currentRecipe() { return recipeFor(currentPath()); }
+    private String offeredPath(int slot, ItemStack offered) {
+        for(String path:RECIPE_PATHS) {
+            var recipe=recipeFor(path);
+            if(recipe==null || !recipe.accepts(slot,offered) || !state.operation().isEmpty()&&!state.operation().equals(recipe.operation()))continue;
+            boolean compatible=true;
+            for(int i=0;i<4;i++)if(!state.input(i).isEmpty()&&!recipe.accepts(i,state.input(i)))compatible=false;
+            if(compatible)return path;
         }
         return null;
     }
-    /** 活动配方匹配完整已存栈后绑定数量及工时；重载失效不吞料、不沿用旧配方进度。 */
-    public boolean recipeReady() {
-        ShieldedAssemblyRecipe recipe = currentRecipe();
-        if (recipe == null) return false;
-        for (int slot = 0; slot < 4; slot++) {
-            ItemStack stored = state.input(slot);
-            if (!stored.isEmpty() && !recipe.accepts(slot, stored)) return false;
-        }
-        state.configure(recipe.operation(), recipe.operation(), recipe.costs(), recipe.work());
-        return true;
+    private ShieldedAssemblyRecipe offeredRecipe(int slot,ItemStack offered) {
+        var path=offeredPath(slot,offered);return path==null?null:recipeFor(path);
     }
-    /** 模拟只读，不绑定工序或配方；真正接受首料才修改批次配置和选择。 */
-    private ItemStack insertSlot(int slot, ItemStack offered, boolean simulate) {
-        ShieldedAssemblyRecipe recipe = offeredRecipe(slot, offered);
-        if (recipe == null || level == null || level.isClientSide) return offered.copy();
-        ItemStack preview = state.insert(slot, offered, true, recipe.operation());
-        if (simulate || preview.getCount() == offered.getCount()) return preview;
-        state.configure(recipe.operation(), recipe.operation(), recipe.costs(), recipe.work());
-        ItemStack remainder = state.insert(slot, offered, false, recipe.operation());
-        changed();
-        return remainder;
+    /** 配方ID和材料谓词共同冻结付费批次；数据包换料即废弃工时，正常保存继续同批。 */
+    private void configure(String path,ShieldedAssemblyRecipe recipe) {
+        String fingerprint=recipe.inputs().stream().map(i->java.util.Arrays.stream(i.ingredient().getItems())
+                .map(stack->net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).toString()).sorted()
+                .collect(java.util.stream.Collectors.joining(","))).collect(java.util.stream.Collectors.joining(";"));
+        state.configure(recipe.operation(),CreateNuclearIndustry.MOD_ID+":shielded_assembly/"+path+"#"+fingerprint,recipe.costs(),recipe.work());
+    }
+    public boolean recipeReady() {
+        var path=currentPath();var recipe=recipeFor(path);if(recipe==null)return false;
+        for(int i=0;i<4;i++)if(!state.input(i).isEmpty()&&!recipe.accepts(i,state.input(i)))return false;
+        configure(path,recipe);return true;
+    }
+    /** 模拟只读，真实首料才选择工序；公共材料后补槽0时切配方会清掉另一配方进度。 */
+    private ItemStack insertSlot(int slot,ItemStack offered,boolean simulate) {
+        var path=offeredPath(slot,offered);var recipe=path==null?null:recipeFor(path);
+        if(recipe==null||level==null||level.isClientSide)return offered.copy();
+        var preview=state.insert(slot,offered,true,recipe.operation());
+        if(simulate||preview.getCount()==offered.getCount())return preview;
+        configure(path,recipe);var remainder=state.insert(slot,offered,false,recipe.operation());changed();return remainder;
     }
 
     public IItemHandler itemPort(BlockPos portPos, Direction side) {

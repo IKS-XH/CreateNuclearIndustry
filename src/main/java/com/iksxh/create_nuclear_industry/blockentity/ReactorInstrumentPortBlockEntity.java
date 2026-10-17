@@ -76,6 +76,33 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private ReactorSnapshot snapshot = ReactorSnapshot.empty();
+    private java.util.UUID accidentGeneration = java.util.UUID.randomUUID();
+    private java.util.UUID accidentId;
+    /** 当前真实堆世代，正常保存恢复保持不变，同坐标新仪表另起世代。 */
+    public java.util.UUID accidentGeneration() { return accidentGeneration; }
+    public java.util.UUID accidentId() { return accidentId; }
+
+    /** 服务端原所有者交接；账本已建后调用，立即撤销热工、旧交易及管理员许可。 */
+    public boolean lockForAccident(com.iksxh.create_nuclear_industry.accident.ReactorAccidentLedger ledger) {
+        if (!(level instanceof ServerLevel) || isRemoved() || level.getBlockEntity(worldPosition) != this
+                || !ledger.generation.equals(accidentGeneration) || !ledger.owner.equals(worldPosition)) return false;
+        if (accidentId != null) return accidentId.equals(ledger.id);
+        accidentId = ledger.id;
+        com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.invalidate(this);
+        var oldBinding = automationBinding;
+        automationResumeSession = null; automationInactiveLoadPending = false; automationNormalStopCheckpoint = null;
+        setAutomationState(automationState.stop("binding_lost", true));
+        setAutomationLoadFollowSession(null);
+        automationBinding = null; automationObservation = null; automationBurner = null; automationPort = null;
+        com.iksxh.create_nuclear_industry.control.ControlRodSliderService.revokeOwnerSessions(this);
+        com.iksxh.create_nuclear_industry.automation.ReactorAutomationBlazeBridge.notifyPermission(this,
+                oldBinding == null ? null : oldBinding.burnerPos());
+        snapshot = ReactorSnapshot.empty().withDimensions(snapshot.dimensions());
+        pendingLegacyFuelAssemblies = Map.of();
+        clearPortBindings(true); invalidateRuntimeDescriptor(); invalidateTelemetry();
+        breakSafetySurface = null; breakSafetyFuelColumns = Set.of(); breakSafetyAwaitingRestoreScan = false;
+        setChanged(); return true;
+    }
     private com.iksxh.create_nuclear_industry.automation.ReactorAutomationState automationState = com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.initial();
     private com.iksxh.create_nuclear_industry.automation.ReactorAutomationBinding automationBinding;
     private java.util.UUID automationGeneration = java.util.UUID.randomUUID();
@@ -197,6 +224,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
 
     /** 替换权威快照，并安排持久化与客户端同步。 */
     public void setSnapshot(ReactorSnapshot snapshot) {
+        if (accidentId != null) throw new IllegalStateException("事故仪表不能恢复核状态");
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("reactor state can only be changed on the server");
         }
@@ -221,6 +249,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      * @param hotCoolantMb 替换后的非负热液库存，单位 mB
      */
     public void setCoolantInventories(long coldCoolantMb, long hotCoolantMb) {
+        if (accidentId != null) throw new IllegalStateException("事故仪表不能恢复工质");
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("reactor state can only be changed on the server");
         }
@@ -264,7 +293,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     }
 
     public boolean structureValid() {
-        return structureScan.valid() && structureChunksAvailable();
+        return accidentId == null && structureScan.valid() && structureChunksAvailable();
     }
 
     /** 仅检查缓存包围盒相交的至多四个区块是否可读，不访问方块或强制加载。 */
@@ -328,6 +357,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     }
 
     public void updateStructureCache(ReactorStructureScanner.WorldScanResult scan) {
+        if (accidentId != null) return;
         Objects.requireNonNull(scan, "structure scan is required");
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("structure cache can only be changed on the server");
@@ -417,6 +447,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      * 当前NBT恢复的证据必须匹配本仪表坐标、维度及权威外尺寸，绝不据此宣告成型。
      */
     public boolean protectsUnavailableComponent(BlockPos pos, BlockState state) {
+        if (accidentId != null) return false;
         var geometry = breakSafetySurface;
         if (level == null || level.isClientSide || geometry == null || !geometry.valid()
                 || !geometry.ownerPos().equals(worldPosition)
@@ -503,6 +534,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             BlockPos brokenPos,
             BlockState brokenState
     ) {
+        if (accidentId != null) return null;
         if (!(level instanceof ServerLevel) || level.isClientSide
                 || brokenPos == null || brokenState == null
                 || isRemoved()
@@ -760,6 +792,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
 
     /** 执行一个服务端 tick 的完整 P1 反应堆权威循环。 */
     public boolean tickReactor() {
+        if (accidentId != null) return false;
         boolean previousSettlementScope = runtimeSettlementInProgress;
         runtimeSettlementInProgress = true;
         try {
@@ -840,6 +873,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                         worldPosition,
                         nextSnapshot
                 );
+                // 事故监听器已接管所有权；本tick不能再投影旧result、授权管理员或付款。
+                if (accidentId != null) return true;
             }
             // 提交和事件保持原顺序；只有全部正式阶段完成才冻结同龄样本，write 永远不拼装字段。
             boolean runtimeRecovered = runtimeDescriptor == null || !runtimeDescriptor.available();
@@ -980,6 +1015,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
      * @return 当前服务端能够证明安全时为 {@code true}
      */
     public boolean isSafeForUnformedFuelExtraction() {
+        if (accidentId != null) return false;
         if (level == null || level.isClientSide || snapshot == null
                 || snapshot.meltdownCountdownStarted()) {
             return false;
@@ -1119,6 +1155,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             }
             CoreColumnPosition column = entry.getKey();
             BlockPos portPos = absolutePosition(entry.getValue().capPosition());
+            if (!level.hasChunkAt(portPos)) return null;
             if (!(level.getBlockEntity(portPos) instanceof ReactorPortBlockEntity port)
                     || level.getBlockEntity(portPos) != port
                     || !port.isBoundTo(this, ReactorPortBlockEntity.BindingType.REFUELING, column)) {
@@ -1131,6 +1168,12 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             captures.add(new ReactorDisassemblyPlan.PortCapture(column, port, stored));
         }
         return List.copyOf(captures);
+    }
+
+    /** 事故准备只读枚举已验证列图中的每个真实口；任一不可用或身份不符即等待/拒绝，绝不当空列。 */
+    public List<ReactorDisassemblyPlan.PortCapture> prepareAccidentFuelCustody() {
+        if (!(level instanceof ServerLevel) || !structureValid() || isRemoved() || level.getBlockEntity(worldPosition) != this) return null;
+        return captureFuelPortsForReset();
     }
 
     /** 用读阶段捕获的精确端口物品创建当前燃料投影，不写入快照或端口。 */
@@ -1797,6 +1840,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
+        tag.putUUID("AccidentGeneration", accidentGeneration);
+        if (accidentId != null) tag.putUUID("AccidentId", accidentId);
         CompoundTag snapshotTag = ReactorSnapshotNbtCodec.encode(snapshot);
         if (!pendingLegacyFuelAssemblies.isEmpty()) {
             net.minecraft.nbt.ListTag migration = new net.minecraft.nbt.ListTag();
@@ -1836,6 +1881,8 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
+        accidentGeneration = tag.hasUUID("AccidentGeneration") ? tag.getUUID("AccidentGeneration") : java.util.UUID.randomUUID();
+        accidentId = tag.hasUUID("AccidentId") ? tag.getUUID("AccidentId") : null;
         CompoundTag snapshotTag = tag.contains(SNAPSHOT_KEY)
                 ? tag.getCompound(SNAPSHOT_KEY) : null;
         ReactorSnapshotNbtCodec.DecodedSnapshot decoded =
