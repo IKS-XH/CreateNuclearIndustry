@@ -1,0 +1,16 @@
+{
+  "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-accident\\build\\reports\\accident-execution-20261018\\candidate-accident-execution-02.jar",
+  "build_output_path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-accident\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "size": 3533416,
+  "sha256": "BF6D4D14D6A4C1D55C48C8719A024E5488E339D10ABFBA7F3E7744FCFE0FC4FE",
+  "classes": 762,
+  "resources": 1692,
+  "game_test_domain_excluded": true,
+  "all_entries_match_current_compile_outputs": true,
+  "source_commit": "d839bc7e7f281a935a22a8d6121b45e3fa6027f3",
+  "source_inputs_match_commit": true,
+  "all_inputs_match_committed_blobs": true,
+  "source_binding": "E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/reports/accident-execution-20261018/SOURCE-BINDING.json",
+  "build_output_restored_to_baseline": true,
+  "baseline_sha256": "81E7CD98D589DDC9C0AAF398C06776DC4318EA54C70CD19376F0C127E4A3DE7B"
+}

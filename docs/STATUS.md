@@ -38,7 +38,7 @@
 | 事项 | 状态/条件 |
 | --- | --- |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
-| 事故与辐射第二批 | 首批及头罩人工门已关闭并合main；用户要求继续，已按[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)派发唯一执行者`accident02_impl`，在`Create_NuclearIndustry-accident`、`codex/accident-execution-02`执行。基线b39d116，携带已保存main世界27文件/13337721 bytes、0差异；自动化只用独立测试世界。当前实现事故接管/账本、分批局部破坏、残骸与废料封装出口；生产源已交唯一组合窄审`accident02_review`，执行者补最后定向验证、制品身份和报告。原生最终取消判定及托管辐射源已精确补卡；尚未交付或手测，不把派发/初轮测试记为完成 |
+| 事故与辐射第二批 | [候选已交付，待集中手测](reviews/2026-10-18/accident-execution-02/CANDIDATE.md)。树`Create_NuclearIndustry-accident`、分支`codex/accident-execution-02`、来源d839bc7；事故接管/账本、有界世界动作、残骸与既有封装链、原生最终取消边界及托管辐射源成套交付。定向JUnit18/18，隔离真实服与窄修证据、唯一组合审查、一次assemble/exit0及来源绑定已核；候选3533416 bytes/SHA BF6D4D14…FE0FC4FE。携带已保存main世界27文件/13337721 bytes、0差异，未用于自动事故。真实FULL等待/恢复及正常停服重进已证，物理ChunkEvent.Unload/真人多人/客户端连续体验未证。未合main，正式包仍81E；第三批等本轮人工门 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |
