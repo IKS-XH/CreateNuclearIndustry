@@ -1,3 +1,6 @@
 {
-  "parent": "minecraft:item/iron_ingot"
+  "parent": "minecraft:item/iron_ingot",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/depleted_uranium_ingot"
+  }
 }

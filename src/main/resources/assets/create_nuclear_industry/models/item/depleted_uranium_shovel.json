@@ -1,3 +1,6 @@
 {
-  "parent": "minecraft:item/netherite_shovel"
+  "parent": "minecraft:item/netherite_shovel",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/depleted_uranium_shovel"
+  }
 }

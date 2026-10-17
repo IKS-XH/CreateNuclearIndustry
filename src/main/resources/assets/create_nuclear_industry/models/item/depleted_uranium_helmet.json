@@ -2,64 +2,67 @@
   "parent": "minecraft:item/netherite_helmet",
   "overrides": [
     {
-      "model": "minecraft:item/netherite_helmet_quartz_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_quartz_trim",
       "predicate": {
         "trim_type": 0.1
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_iron_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_iron_trim",
       "predicate": {
         "trim_type": 0.2
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_netherite_darker_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_netherite_darker_trim",
       "predicate": {
         "trim_type": 0.3
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_redstone_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_redstone_trim",
       "predicate": {
         "trim_type": 0.4
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_copper_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_copper_trim",
       "predicate": {
         "trim_type": 0.5
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_gold_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_gold_trim",
       "predicate": {
         "trim_type": 0.6
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_emerald_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_emerald_trim",
       "predicate": {
         "trim_type": 0.7
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_diamond_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_diamond_trim",
       "predicate": {
         "trim_type": 0.8
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_lapis_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_lapis_trim",
       "predicate": {
         "trim_type": 0.9
       }
     },
     {
-      "model": "minecraft:item/netherite_helmet_amethyst_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_helmet_amethyst_trim",
       "predicate": {
         "trim_type": 1.0
       }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "create_nuclear_industry:item/depleted_uranium_helmet"
+  }
 }

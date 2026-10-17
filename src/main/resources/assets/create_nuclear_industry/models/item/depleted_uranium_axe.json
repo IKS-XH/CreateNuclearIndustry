@@ -1,3 +1,6 @@
 {
-  "parent": "minecraft:item/netherite_axe"
+  "parent": "minecraft:item/netherite_axe",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/depleted_uranium_axe"
+  }
 }

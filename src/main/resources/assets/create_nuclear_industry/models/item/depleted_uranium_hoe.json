@@ -1,3 +1,6 @@
 {
-  "parent": "minecraft:item/netherite_hoe"
+  "parent": "minecraft:item/netherite_hoe",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/depleted_uranium_hoe"
+  }
 }

@@ -2,64 +2,67 @@
   "parent": "minecraft:item/netherite_boots",
   "overrides": [
     {
-      "model": "minecraft:item/netherite_boots_quartz_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_quartz_trim",
       "predicate": {
         "trim_type": 0.1
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_iron_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_iron_trim",
       "predicate": {
         "trim_type": 0.2
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_netherite_darker_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_netherite_darker_trim",
       "predicate": {
         "trim_type": 0.3
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_redstone_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_redstone_trim",
       "predicate": {
         "trim_type": 0.4
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_copper_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_copper_trim",
       "predicate": {
         "trim_type": 0.5
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_gold_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_gold_trim",
       "predicate": {
         "trim_type": 0.6
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_emerald_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_emerald_trim",
       "predicate": {
         "trim_type": 0.7
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_diamond_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_diamond_trim",
       "predicate": {
         "trim_type": 0.8
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_lapis_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_lapis_trim",
       "predicate": {
         "trim_type": 0.9
       }
     },
     {
-      "model": "minecraft:item/netherite_boots_amethyst_trim",
+      "model": "create_nuclear_industry:item/depleted_uranium_boots_amethyst_trim",
       "predicate": {
         "trim_type": 1.0
       }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "create_nuclear_industry:item/depleted_uranium_boots"
+  }
 }
