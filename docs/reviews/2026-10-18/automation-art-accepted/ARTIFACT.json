@@ -1,0 +1,221 @@
+{
+  "source": "6fb97c40dfd50d0bf6c8a1835cd609374f514a51",
+  "base": "a00b1b908cd933e048e45cdf78a82ecd0a6915a8",
+  "artSource": "4c354d9caf8cbeeb60763f113b3142200f65f12d",
+  "candidate": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\automation-art-accepted-20261018\\candidate\\create_nuclear_industry-0.1.0.jar",
+    "bytes": 3490000,
+    "sha256": "0763c210f654ccb1e3679e6d70ec9fb3a648f43f29997ef1685dace1b4fbcbed"
+  },
+  "previous": {
+    "path": "build/libs/create_nuclear_industry-0.1.0.jar",
+    "bytes": 3478572,
+    "sha256": "81e7cd98d589ddc9c0aaf398c06776dc4318ea54c70cd19376f0c127e4a3de7b"
+  },
+  "build": {
+    "cwd": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration",
+    "exitCode": 0,
+    "command": "./gradlew.bat assemble --console=plain",
+    "startedUtc": "2026-10-18T11:37:35.2708803Z",
+    "endedUtc": "2026-10-18T11:37:50.1319867Z"
+  },
+  "jar": {
+    "entries": 2436,
+    "classes": 748,
+    "resources": 1687,
+    "manifestSha256": "566ad1a80220026d05099562645ce968ff0e7c36cde22634332605bb34cc3eff",
+    "allOutputBindingsMatch": true,
+    "bindingMismatches": []
+  },
+  "exclusion": {
+    "forbiddenEntries": [],
+    "accidentAddedClassPrefixes": [
+      "com/iksxh/create_nuclear_industry/accident/AccidentParameters",
+      "com/iksxh/create_nuclear_industry/accident/ReactorAccidentExecutor",
+      "com/iksxh/create_nuclear_industry/accident/ReactorAccidentLedger",
+      "com/iksxh/create_nuclear_industry/accident/ReactorAccidentPlan",
+      "com/iksxh/create_nuclear_industry/accident/ReactorAccidentSavedData",
+      "com/iksxh/create_nuclear_industry/accident/ReactorAccidentService",
+      "com/iksxh/create_nuclear_industry/accident/ReactorCoriumBlock",
+      "com/iksxh/create_nuclear_industry/accident/ReactorCoriumBlockEntity",
+      "com/iksxh/create_nuclear_industry/config/AccidentConfig",
+      "com/iksxh/create_nuclear_industry/content/AccidentContent",
+      "com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests",
+      "com/iksxh/create_nuclear_industry/mixin/ReactorBreakFinalizationMixin"
+    ],
+    "excludedClassNames": [
+      "RadiationFoundationGameTests",
+      "ReactorPortLookupGameTests",
+      "ReactorAutomationGameTests",
+      "ReactorAutomationRetrofitGameTests",
+      "ReactorAdministratorGameTests",
+      "ReactorAdministratorResumeGameTests",
+      "ReactorLoadFollowGameTests",
+      "BoilerIndustrialActiveOutputGameTests",
+      "BoilerSizeLimitGameTests",
+      "DepletedUraniumGameTests"
+    ],
+    "excludedDomains": [
+      "cni_radiation_foundation",
+      "cni_reactor_automation",
+      "cni_reactor_automation_retrofit",
+      "cni_reactor_administrator",
+      "cni_reactor_administrator_startup",
+      "cni_reactor_administrator_resume",
+      "cni_reactor_administrator_resume_review",
+      "cni_reactor_load_follow",
+      "create_nuclear_industry_boiler_size",
+      "cni_depleted_uranium",
+      "cni_accident_execution"
+    ],
+    "existingBaselineGameTestClasses": 85,
+    "compiledClassesOmitted": [
+      "com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests$1.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerSizeLimitGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/DepletedUraniumGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$ChunkLifecycleReview.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$PerformanceObserver.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$ReviewFix.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$TestRegistration.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$VulnerableFakePlayer.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorGameTests$StartupWindows.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorResumeGameTests$ReviewWindows.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorResumeGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAutomationGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAutomationRetrofitGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorLoadFollowGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorPortLookupGameTests.class"
+    ],
+    "unexpectedCompiledClassesOmitted": [],
+    "processedResourcesOmitted": [
+      "data/cni_depleted_uranium/structure/depleted_uranium_empty.nbt",
+      "data/cni_radiation_foundation/structure/radiation_empty.nbt",
+      "data/cni_reactor_administrator/structure/administrator_empty.nbt",
+      "data/cni_reactor_administrator_resume/structure/resume_empty.nbt",
+      "data/cni_reactor_administrator_resume_review/structure/review_empty.nbt",
+      "data/cni_reactor_administrator_startup/structure/startup_empty.nbt",
+      "data/cni_reactor_automation/structure/automation_empty.nbt",
+      "data/cni_reactor_automation_retrofit/structure/retrofit_empty.nbt",
+      "data/cni_reactor_load_follow/structure/load_follow_empty.nbt",
+      "data/create_nuclear_industry_boiler_size/structure/boiler_size_empty.nbt"
+    ]
+  },
+  "resources": [
+    {
+      "entry": "assets/create_nuclear_industry/models/block/reactor_automation_port.json",
+      "expectedSha256": "03497963005d2f891974ff54cadba15d70f4d45a69a82d53368acaa02edaa870",
+      "expectedBytes": 363,
+      "sourceSha256": "03497963005d2f891974ff54cadba15d70f4d45a69a82d53368acaa02edaa870",
+      "jarSha256": "03497963005d2f891974ff54cadba15d70f4d45a69a82d53368acaa02edaa870",
+      "jarBytes": 363
+    },
+    {
+      "entry": "assets/create_nuclear_industry/textures/block/reactor_automation_port_side.png",
+      "expectedSha256": "f9cecc1fcb5f9b4348e222dbc82154f07a77f565a7fe5d978a041fe591449d13",
+      "expectedBytes": 237,
+      "sourceSha256": "f9cecc1fcb5f9b4348e222dbc82154f07a77f565a7fe5d978a041fe591449d13",
+      "jarSha256": "f9cecc1fcb5f9b4348e222dbc82154f07a77f565a7fe5d978a041fe591449d13",
+      "jarBytes": 237
+    }
+  ],
+  "restoration": {
+    "jarSha256": "81e7cd98d589ddc9c0aaf398c06776dc4318ea54c70cd19376f0c127e4a3de7b",
+    "jarMatches": true,
+    "logsBefore": [
+      {
+        "path": "logs/2026-10-17-2.log.gz",
+        "sha256": "498bee0d662cf8f219773e795cb13e9833103da72d121c1c3970ce30f49504fa",
+        "bytes": 1464
+      },
+      {
+        "path": "logs/debug-1.log.gz",
+        "sha256": "498bee0d662cf8f219773e795cb13e9833103da72d121c1c3970ce30f49504fa",
+        "bytes": 1464
+      },
+      {
+        "path": "logs/debug.log",
+        "sha256": "b094fa55e95cbd30dd0b2b58647ab547eefb257d63dd22410f754b16ac19e56d",
+        "bytes": 3489
+      },
+      {
+        "path": "logs/latest.log",
+        "sha256": "b094fa55e95cbd30dd0b2b58647ab547eefb257d63dd22410f754b16ac19e56d",
+        "bytes": 3489
+      }
+    ],
+    "logsAfterBuild": [
+      {
+        "path": "logs/2026-10-17-2.log.gz",
+        "sha256": "498bee0d662cf8f219773e795cb13e9833103da72d121c1c3970ce30f49504fa",
+        "bytes": 1464
+      },
+      {
+        "path": "logs/debug-1.log.gz",
+        "sha256": "498bee0d662cf8f219773e795cb13e9833103da72d121c1c3970ce30f49504fa",
+        "bytes": 1464
+      },
+      {
+        "path": "logs/debug.log",
+        "sha256": "b094fa55e95cbd30dd0b2b58647ab547eefb257d63dd22410f754b16ac19e56d",
+        "bytes": 3489
+      },
+      {
+        "path": "logs/latest.log",
+        "sha256": "b094fa55e95cbd30dd0b2b58647ab547eefb257d63dd22410f754b16ac19e56d",
+        "bytes": 3489
+      }
+    ],
+    "logsRestored": true,
+    "newLogFilesRemaining": []
+  },
+  "finalTrackedStatus": "",
+  "errors": [],
+  "verified": true,
+  "strictByteCheck": {
+    "passed": false,
+    "evidence": "ARTIFACT-strict-byte-check.json",
+    "reason": "1325项非目标文本资源仅LF/CRLF差异，不满足最初严格仅2项原始字节变化条件。"
+  },
+  "entryChangesSummary": {
+    "rawChangedEntries": 1327,
+    "eolOnlyEntries": 1325,
+    "actualContentChanges": [
+      {
+        "path": "assets/create_nuclear_industry/models/block/reactor_automation_port.json",
+        "change": "modified",
+        "before": {
+          "bytes": 72,
+          "sha256": "c6ca5bc76d21a6a0b8e34393b151a8f7dbbca1e2ed27ab181aace72d3885d92c"
+        },
+        "after": {
+          "bytes": 363,
+          "sha256": "03497963005d2f891974ff54cadba15d70f4d45a69a82d53368acaa02edaa870"
+        },
+        "lineEndingOnly": false,
+        "beforeNormalizedSha256": "c6ca5bc76d21a6a0b8e34393b151a8f7dbbca1e2ed27ab181aace72d3885d92c",
+        "afterNormalizedSha256": "337d548c71a95bca8cd407c12903b5756c26846f7a065e863f97a690e7b36b6c"
+      },
+      {
+        "path": "assets/create_nuclear_industry/textures/block/reactor_automation_port_side.png",
+        "change": "added",
+        "before": null,
+        "after": {
+          "bytes": 237,
+          "sha256": "f9cecc1fcb5f9b4348e222dbc82154f07a77f565a7fe5d978a041fe591449d13"
+        },
+        "lineEndingOnly": false,
+        "beforeNormalizedSha256": null,
+        "afterNormalizedSha256": "d0484a5926b58ba573d6816e7cca7dacbfcfb6824409c51cedcf7098e75b6bd1"
+      }
+    ],
+    "fullList": "entry-changes-classified.json",
+    "diagnosis": "line-ending-diagnosis.json"
+  },
+  "lineEndingDifferencesVerified": true,
+  "currentRootJarSha256": "81e7cd98d589ddc9c0aaf398c06776dc4318ea54c70cd19376f0c127e4a3de7b",
+  "currentLogsMatchBaseline": true,
+  "verificationBoundary": "构建及精确制品身份核验通过；原始Gradle输出保留1325项有证据的文本换行差异。不是新增Minecraft客户端视觉验收，也未重打包。"
+}

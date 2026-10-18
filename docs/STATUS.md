@@ -4,9 +4,9 @@
 
 ## 主分支与正式包
 
-- 已提交生产来源`f819fcfadf75509c7b23899daa9a7b9c59dbc56b`，合入已手测通过的首批辐射及工程师护目镜头罩。此前S1/C1、贫化铀装备与外观、队列崩溃修复、Sodium连接外观、尾热停机、管理员/闭环与其它已验机组保持。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3478572 bytes，SHA256 `81E7CD98D589DDC9C0AAF398C06776DC4318EA54C70CD19376F0C127E4A3DE7B`，按用户要求跟踪Git；准确已提交源一次assemble原输出，748class与1686资源全部绑定。
-- 本批只处理七JSON资源并集，一次必要装备数据JUnit5/5、一次组合窄审及一次增量assemble/exit0；原辐射与头罩自动/手测证据复用，main47项无关dirty保持，见[本批验收与集成](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)。原[汽轮机性能](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
+- 已提交生产来源`6fb97c40dfd50d0bf6c8a1835cd609374f514a51`，按用户指令合入自动化接口17B C稿两个外观资源。此前首批辐射/头罩、S1/C1、贫化铀装备与外观、队列崩溃修复、Sodium连接外观、尾热停机、管理员/闭环与其它已验机组保持。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3490000 bytes，SHA256 `0763C210F654CCB1E3679E6D70EC9FB3A648F43F29997EF1685DACE1B4FBCBED`，按用户要求跟踪Git；准确已提交源一次assemble原输出，748class与1687资源全部绑定。
+- 本批仅接两资源，复用17B原资源审查，一次增量assemble/exit0及完整入包身份已核，无Java或玩法变更；1325项其它文本仅LF/CRLF差异、归一内容及Git blob逐项全同，main47项原dirty保持，见[外观集成](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)。原[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机性能](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
 
 ## 已合入并按相应范围验收
 
@@ -30,6 +30,7 @@
 | 贫化铀材料/装备与18B外观 | 粉炼锭、锭块存取、九种钻石装备锻造升级及专属图标/块/穿戴层/饰纹；用户确认功能与对应外观手测通过并授权合main | [联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)、[美术来源](art/ART-DEPLETED-URANIUM-18B-ACCEPTED.md) |
 | 锅炉热源刷新队列 | 原子取批和锁外刷新，重入/并发新增留到下一tick；34项定向回归及一次组合窄审保持，用户确认原整合包服务器崩溃修复通过并授权合main | [原诊断](reviews/2026-10-17/heat-pending-01/DIAGNOSIS.md)、[联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md) |
 | 首批辐射与护目镜头罩 | 已用燃料历史、真实物料源/屏蔽、玩家剂量/恢复、防护服与仪表；头罩额外1护目镜并提供原生信息。用户确认原清单及头罩补充手测通过，已合main与正式包 | [联合验收/来源](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[冲突并集窄审](reviews/2026-10-18/radiation-accepted-integration/REVIEW.md) |
+| 自动化接口17B外观 | 用户授权C稿两资源合main与正式包，复用原像素/引用/PNG预览与组合审查；未补记未报告的独立Minecraft视觉观察 | [集成与制品](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md) |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果与再处理未实现。
 
@@ -38,7 +39,7 @@
 | 事项 | 状态/条件 |
 | --- | --- |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
-| 事故与辐射第二批 | [候选已交付，待集中手测](reviews/2026-10-18/accident-execution-02/CANDIDATE.md)。树`Create_NuclearIndustry-accident`、分支`codex/accident-execution-02`、来源d839bc7；事故接管/账本、有界世界动作、残骸与既有封装链、原生最终取消边界及托管辐射源成套交付。定向JUnit18/18，隔离真实服与窄修证据、唯一组合审查、一次assemble/exit0及来源绑定已核；候选3533416 bytes/SHA BF6D4D14…FE0FC4FE。携带已保存main世界27文件/13337721 bytes、0差异，未用于自动事故。真实FULL等待/恢复及正常停服重进已证，物理ChunkEvent.Unload/真人多人/客户端连续体验未证。未合main，正式包仍81E；第三批等本轮人工门 |
+| 事故与辐射第二批 | [候选已交付，待集中手测](reviews/2026-10-18/accident-execution-02/CANDIDATE.md)。树`Create_NuclearIndustry-accident`、分支`codex/accident-execution-02`、来源d839bc7；事故接管/账本、有界世界动作、残骸与既有封装链、原生最终取消边界及托管辐射源成套交付。定向JUnit18/18，隔离真实服与窄修证据、唯一组合审查、一次assemble/exit0及来源绑定已核；候选3533416 bytes/SHA BF6D4D14…FE0FC4FE。携带已保存main世界27文件/13337721 bytes、0差异，未用于自动事故。真实FULL等待/恢复及正常停服重进已证，物理ChunkEvent.Unload/真人多人/客户端连续体验未证。未合main，当前正式包不含事故第二批；第三批等本轮人工门 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |
