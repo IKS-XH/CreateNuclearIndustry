@@ -1,3 +1,9 @@
 {
-  "parent": "create_nuclear_industry:block/reactor_instrument_port"
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "particle": "create_nuclear_industry:block/reactor_automation_port_side",
+    "side": "create_nuclear_industry:block/reactor_automation_port_side",
+    "top": "create_nuclear_industry:block/reactor_casing_top",
+    "bottom": "create_nuclear_industry:block/reactor_casing_bottom"
+  }
 }
