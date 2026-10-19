@@ -47,6 +47,8 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     private boolean available, removalHandled;
     private int capabilityEpoch;
     private Object inventoryIdentity = new Object();
+    // 仅服务端共享几何；不保存，不跨世代复用许可或库存快照。
+    private HeatExchangerLine cachedLine;
     private boolean tickPaused;
     private boolean topologyReady;
     private Object lastBasinOperator;
@@ -89,6 +91,8 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     public boolean isRemovalHandled() { return removalHandled; }
     public void markRemovalHandled() { removalHandled = true; }
     Object inventoryIdentity() { return inventoryIdentity; }
+    HeatExchangerLine cachedLine() { return cachedLine; }
+    void cacheLine(HeatExchangerLine line) { cachedLine = line; }
     /** 直列交易先标记持久化，视图由设备 tick 合并同步，避免每台转换重复广播。 */
     void markInventoryChanged() { setChanged(); }
 
@@ -96,6 +100,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     void invalidateTopology() {
         capabilityEpoch++;
         inventoryIdentity = new Object();
+        cachedLine = null;
         viewHeat = -1;
         viewStatus = "line_unavailable";
         if (level != null && !level.isClientSide) level.invalidateCapabilities(worldPosition);
@@ -175,15 +180,17 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     /** 先记账、再同步外观、最后通知锅炉；回调能见到的热始终已支付。 */
     public static void serverTick(Level level, BlockPos pos, BlockState state, NuclearHeatExchangerBlockEntity machine) {
         if (level.isClientSide || !machine.current()) return;
-        machine.ledger.setSettings(HeatExchangerConfig.settings());
-        machine.ledger.setCondensationSettings(HeatExchangerConfig.condensationSettings());
+        var settings = HeatExchangerConfig.settings();
+        var condensationSettings = HeatExchangerConfig.condensationSettings();
+        machine.ledger.setSettings(settings);
+        machine.ledger.setCondensationSettings(condensationSettings);
         if (!machine.canTick()) { machine.pauseHeat(); return; }
         if (machine.inBoiler()) {
             machine.viewHeat = -1; machine.viewStatus = "in_boiler"; HeatExchangerBoilerBridge.track(machine, false);
             if (level.getGameTime() % 5 == 0) machine.syncView(); return;
         }
         machine.setBoilerOwner(null);
-        HeatExchangerLine line = HeatExchangerLine.find(machine);
+        HeatExchangerLine line = HeatExchangerLine.find(machine, settings, condensationSettings);
         if (line == null) { machine.pauseHeat(); return; }
         if (!machine.topologyReady) {
             // 首次全列可 tick 可能晚于 onLoad；此时重算 Create 管状态才看得到有效能力。
@@ -198,13 +205,13 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         if (line.conflict()) {
             if (level.hasChunkAt(pos.above()) && level.getBlockEntity(pos.above()) instanceof
                     com.simibubi.create.content.processing.basin.BasinBlockEntity) {
-                machine.ledger.tickBasin(level.getGameTime(), false, HeatExchangerConfig.settings(), line);
+                machine.ledger.tickBasin(level.getGameTime(), false, settings, line);
                 boolean statusChanged = machine.updateBasinView(null, "basin_mode_conflict");
                 HeatExchangerBasinBridge.scheduleMixerUpdate(machine, statusChanged);
             } else if (level.hasChunkAt(pos.above())
                     && level.getBlockEntity(pos.above()) instanceof FuelSinteringBlockEntity) {
-                machine.ledger.tickBasin(level.getGameTime(), false, HeatExchangerConfig.settings(), line);
-                machine.updateSinteringView(HeatExchangerConfig.settings().basinHeatCost(), "basin_mode_conflict");
+                machine.ledger.tickBasin(level.getGameTime(), false, settings, line);
+                machine.updateSinteringView(settings.basinHeatCost(), "basin_mode_conflict");
             } else {
                 machine.ledger.pauseMode(level.getGameTime(), "mode_conflict");
                 machine.finishCondensationView(line, "mode_conflict");
@@ -213,7 +220,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         }
         if (line.displayMode() == HeatExchangerMode.CONDENSATION) {
             line.adoptMode(HeatExchangerMode.CONDENSATION);
-            var cfg = HeatExchangerConfig.condensationSettings();
+            var cfg = condensationSettings;
             machine.ledger.tickCondensation(level.getGameTime(), machine.topColdSource(), cfg, line);
             // 仅成功转换达到当前阶段边界才改顶格；下一tick重新检查新水/空气阶段。
             if (machine.ledger.converted() > 0 && machine.ledger.condensation().exhausted(cfg)) {
@@ -233,14 +240,13 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
             if (state.getValue(NuclearHeatExchangerBlock.LIT))
                 level.setBlock(pos, state.setValue(NuclearHeatExchangerBlock.LIT, false), 3);
             HeatExchangerBoilerBridge.track(machine, false);
-            HeatExchangerBasinBridge.tick(machine, HeatExchangerConfig.settings(), line);
+            HeatExchangerBasinBridge.tick(machine, settings, line);
             return;
         }
         machine.observeBasinOperator(null);
         var controller = HeatExchangerBoilerBridge.controller(level, pos);
         BlockPos nextController = controller == null ? null : controller.getBlockPos();
         int previous = machine.viewHeat;
-        var settings = HeatExchangerConfig.settings();
         machine.ledger.tick(level.getGameTime(), HeatExchangerBoilerBridge.qualified(controller), settings, line);
         machine.viewHeat = machine.ledger.heat();
         machine.viewFlow = machine.ledger.converted();
@@ -316,6 +322,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         topologyReady = false;
         capabilityEpoch++;
         inventoryIdentity = new Object();
+        cachedLine = null;
         viewHeat = -1;
         viewStatus = "line_unavailable";
         HeatExchangerBoilerBridge.unregisterLoaded(this);
@@ -336,6 +343,7 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
         topologyReady = false;
         capabilityEpoch++;
         inventoryIdentity = new Object();
+        cachedLine = null;
         viewHeat = -1;
         viewStatus = "line_unavailable";
         topologyChanged(level, worldPosition);
@@ -349,7 +357,6 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
     /** 仅背面列尾输入热液、正面列首输出冷液；内部相接面没有外部流体口。 */
     public IFluidHandler fluidPort(Direction side) {
         if (side == null || !side.getAxis().isHorizontal()) return null;
-        if (level != null && !level.isClientSide) ledger.setSettings(HeatExchangerConfig.settings());
         HeatExchangerLine line = HeatExchangerLine.find(this);
         return line != null && (line.inlet(this, side) || line.outlet(this, side))
                 ? com.iksxh.create_nuclear_industry.industrial.RestrictedFluidHandler.wrap(new Port(side, line)) : null;
@@ -562,16 +569,23 @@ public final class NuclearHeatExchangerBlockEntity extends BlockEntity implement
                     && inputMode(stack) != HeatExchangerMode.EMPTY && now.accepts(inputMode(stack));
         }
         @Override public int fill(FluidStack stack, FluidAction action) {
-            if (!isFluidValid(0, stack)) return 0;
-            queriedInputMode = inputMode(stack);
-            return line().fillInput(stack.getAmount(), inputMode(stack), action.simulate());
+            HeatExchangerLine now = line();
+            var candidate = inputMode(stack);
+            if (now == null || !now.inlet(NuclearHeatExchangerBlockEntity.this, side)
+                    || candidate == HeatExchangerMode.EMPTY || !now.accepts(candidate)) return 0;
+            queriedInputMode = candidate;
+            // 本次无外部回调的交易只校验一次几何；下一次 API 调用仍重新核对所有安全门。
+            return now.fillInput(stack.getAmount(), candidate, action.simulate());
         }
         @Override public FluidStack drain(FluidStack stack, FluidAction action) {
             HeatExchangerLine now = line();
-            return now != null && stack.is(outputFluid(now.displayMode())) ? drain(stack.getAmount(), action) : FluidStack.EMPTY;
+            return now != null && stack.is(outputFluid(now.displayMode())) ? drain(now, stack.getAmount(), action) : FluidStack.EMPTY;
         }
         @Override public FluidStack drain(int amount, FluidAction action) {
             HeatExchangerLine now = line();
+            return drain(now, amount, action);
+        }
+        private FluidStack drain(HeatExchangerLine now, int amount, FluidAction action) {
             if (now == null || !now.outlet(NuclearHeatExchangerBlockEntity.this, side)) return FluidStack.EMPTY;
             int taken = now.drainCold(amount, action.simulate());
             return taken == 0 ? FluidStack.EMPTY : new FluidStack(outputFluid(now.displayMode()), taken);

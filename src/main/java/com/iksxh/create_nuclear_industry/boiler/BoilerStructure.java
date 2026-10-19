@@ -17,20 +17,31 @@ import net.minecraft.world.level.block.state.BlockState;
 /** 有界的长方体分区验证器。结构变更或区块可用性恢复触发全体积扫描，不加载未知区块。 */
 public final class BoilerStructure {
     private static final Map<Level, Map<BlockPos, WeakReference<BoilerControllerBlockEntity>>> LOADED = new WeakHashMap<>();
+    private static final Map<Level, List<WeakReference<BoilerControllerBlockEntity>>> CONTROLLER_SNAPSHOTS = new WeakHashMap<>();
     /** 明确闭包围盒和隔层；全部成员位置不可变，所有归属与管道刷新复用此快照。 */
     public record Form(BlockPos min, BlockPos max, int partitionY, int waterCells, int steamCells,
             List<BlockPos> sections, List<BlockPos> exchangers, List<BlockPos> waterPorts,
             List<BlockPos> steamPorts, List<BlockPos> hotPorts, List<BlockPos> coldPorts,
-            List<BlockPos> windows, BlockPos valve) {
+            List<BlockPos> windows, BlockPos valve, List<BlockPos> ports) {
+        /** 保留原构造入口；派生端口列表只在不可变几何快照创建时合并，顺序不变。 */
+        public Form(BlockPos min, BlockPos max, int partitionY, int waterCells, int steamCells,
+                List<BlockPos> sections, List<BlockPos> exchangers, List<BlockPos> waterPorts,
+                List<BlockPos> steamPorts, List<BlockPos> hotPorts, List<BlockPos> coldPorts,
+                List<BlockPos> windows, BlockPos valve) {
+            this(min,max,partitionY,waterCells,steamCells,sections,exchangers,waterPorts,steamPorts,hotPorts,coldPorts,windows,valve,null);
+        }
+        public Form {
+            waterPorts=List.copyOf(waterPorts); steamPorts=List.copyOf(steamPorts);
+            hotPorts=List.copyOf(hotPorts); coldPorts=List.copyOf(coldPorts);
+            var merged=new ArrayList<BlockPos>(waterPorts.size()+steamPorts.size()+hotPorts.size()+coldPorts.size());
+            merged.addAll(waterPorts); merged.addAll(steamPorts); merged.addAll(hotPorts); merged.addAll(coldPorts);
+            ports=List.copyOf(merged);
+        }
         public int width() { return max.getX() - min.getX() + 1; }
         public int height() { return max.getY() - min.getY() + 1; }
         public int depth() { return max.getZ() - min.getZ() + 1; }
         public boolean contains(BlockPos p) { return p.getX() >= min.getX() && p.getX() <= max.getX()
                 && p.getY() >= min.getY() && p.getY() <= max.getY() && p.getZ() >= min.getZ() && p.getZ() <= max.getZ(); }
-        public List<BlockPos> ports() {
-            var result = new ArrayList<BlockPos>(); result.addAll(waterPorts); result.addAll(steamPorts);
-            result.addAll(hotPorts); result.addAll(coldPorts); return List.copyOf(result);
-        }
         public Direction outward(BlockPos p) { return p.getX() == min.getX() ? Direction.WEST : p.getX() == max.getX()
                 ? Direction.EAST : p.getZ() == min.getZ() ? Direction.NORTH : Direction.SOUTH; }
         public boolean loaded(Level level) {
@@ -46,24 +57,36 @@ public final class BoilerStructure {
     public static void register(Level level, BoilerControllerBlockEntity owner) {
         if (level != null && !level.isClientSide) {
             LOADED.computeIfAbsent(level, ignored -> new HashMap<>()).put(owner.getBlockPos(), new WeakReference<>(owner));
+            CONTROLLER_SNAPSHOTS.remove(level);
             retryFailedPeers(level, owner.getBlockPos());
         }
     }
     public static void forget(Level level, BoilerControllerBlockEntity owner) {
         var entries = LOADED.get(level);
-        if (entries != null) { entries.remove(owner.getBlockPos()); retryFailedPeers(level, owner.getBlockPos()); }
+        if (entries != null) { entries.remove(owner.getBlockPos()); CONTROLLER_SNAPSHOTS.remove(level); retryFailedPeers(level, owner.getBlockPos()); }
     }
-    private static List<BoilerControllerBlockEntity> controllers(Level level) {
+    /** 缓存注册表的弱快照；回调中的注册/撤销不改变当前遍历，不强持owner或世界。 */
+    private static List<WeakReference<BoilerControllerBlockEntity>> controllers(Level level) {
         var entries = LOADED.get(level);
         if (entries == null) return List.of();
+        var cached=CONTROLLER_SNAPSHOTS.get(level);
+        if(cached!=null) {
+            boolean live=true;
+            for(int i=0;i<cached.size();i++) if(cached.get(i).get()==null) { live=false;break; }
+            if(live)return cached;
+        }
         entries.values().removeIf(r -> r.get() == null);
-        return entries.values().stream().map(WeakReference::get).filter(java.util.Objects::nonNull).toList();
+        var snapshot=List.copyOf(entries.values());CONTROLLER_SNAPSHOTS.put(level,snapshot);return snapshot;
     }
     /** 只通知已加载且在工程扫描封顶内的控制器，不枚举世界坐标或加载区块。 */
     public static void invalidateNearby(Level level, BlockPos changed) {
         if (level == null || level.isClientSide) return;
-        for (var owner : controllers(level)) if (near(owner.getBlockPos(), changed) && owner.affectedBy(changed)) {
-            owner.invalidateForm(); retryFailedPeers(level, owner.getBlockPos());
+        var owners=controllers(level);
+        for(int i=0;i<owners.size();i++) {
+            var owner=owners.get(i).get();
+            if(owner!=null&&near(owner.getBlockPos(),changed)&&owner.affectedBy(changed)) {
+                owner.invalidateForm(); retryFailedPeers(level, owner.getBlockPos());
+            }
         }
         if (level.hasChunkAt(changed)) level.invalidateCapabilities(changed);
     }
@@ -73,11 +96,14 @@ public final class BoilerStructure {
     private static boolean possiblePeers(BlockPos a, BlockPos b) { return Math.abs(a.getX() - b.getX()) <= 62
             && Math.abs(a.getY() - b.getY()) <= 62 && Math.abs(a.getZ() - b.getZ()) <= 62; }
     private static void retryFailedPeers(Level level, BlockPos changedController) {
-        for (var owner : controllers(level)) if (possiblePeers(changedController, owner.getBlockPos())) owner.retryFailedForm();
+        var owners=controllers(level);
+        for(int i=0;i<owners.size();i++) {var owner=owners.get(i).get();if(owner!=null&&possiblePeers(changedController,owner.getBlockPos()))owner.retryFailedForm();}
     }
     /** 成型结构占位不可重叠；不会递归调用其他控制器的可变缓存。 */
     static boolean unique(Level level, BlockPos controller, Form form) {
-        for (var other : controllers(level)) {
+        var owners=controllers(level);
+        for(int i=0;i<owners.size();i++) {
+            var other=owners.get(i).get();if(other==null)continue;
             if (other.getBlockPos().equals(controller) || !possiblePeers(controller, other.getBlockPos())) continue;
             Form f = inspect(level, other.getBlockPos());
             if (f != null && form.min().getX() <= f.max().getX() && form.max().getX() >= f.min().getX()
@@ -183,7 +209,9 @@ public final class BoilerStructure {
     public static BoilerControllerBlockEntity ownerOfSection(Level level, BlockPos part) { return owner(level, part); }
     public static BoilerControllerBlockEntity owner(Level level, BlockPos part) {
         if (level == null || level.isClientSide || !level.hasChunkAt(part)) return null;
-        for (var owner : controllers(level)) {
+        var owners=controllers(level);
+        for(int i=0;i<owners.size();i++) {
+            var owner=owners.get(i).get();if(owner==null)continue;
             if (!near(owner.getBlockPos(), part)) continue;
             Form f = owner.currentForm();
             if (f != null && f.contains(part)) return owner;

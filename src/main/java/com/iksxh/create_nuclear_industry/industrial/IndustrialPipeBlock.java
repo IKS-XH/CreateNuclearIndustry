@@ -27,7 +27,8 @@ public class IndustrialPipeBlock extends Block implements IWrenchable {
         BlockState state = stateDefinition.any(); for (var property : CONNECTIONS) state = state.setValue(property, false);
         registerDefaultState(state);
     }
-    public int flowLimit() { return (ceramic ? IndustrialFluidConfig.CERAMIC_FLOW : IndustrialFluidConfig.REINFORCED_FLOW).get(); }
+    /** 普通管不设额定流量；阀沿用原两档配置，不能因继承管类而失去开度限流。 */
+    public int flowLimit() { return this instanceof IndustrialValveBlock ? (ceramic ? IndustrialFluidConfig.CERAMIC_FLOW : IndustrialFluidConfig.REINFORCED_FLOW).get() : Integer.MAX_VALUE; }
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(CONNECTIONS); }
     @Override public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState state = defaultBlockState();

@@ -17,6 +17,7 @@
     "RadiationArmAccessor",
     "RadiationBeltAccessor",
     "RadiationBlockChangeMixin",
+    "TurbinePaletteRevisionMixin",
     "RadiationItemEntityMixin",
     "RadiationInventoryChangeMixin"
   ],

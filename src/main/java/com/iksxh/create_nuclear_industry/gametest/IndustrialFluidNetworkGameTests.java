@@ -121,12 +121,13 @@ public final class IndustrialFluidNetworkGameTests {
         h.setBlock(motor, AllBlocks.CREATIVE_MOTOR.getDefaultState().setValue(CreativeMotorBlock.FACING, Direction.SOUTH));
         ((CreativeMotorBlockEntity) h.getBlockEntity(motor)).generatedSpeed.setValue(speed);
     }
-    /** 短收缓存已经经过输入干线，第二台泵不能再借缓存绕过该干线8192额度。 */
+    /** 短收缓存已经经过输入强化阀，第二台泵不能再借缓存绕过该阀8192额度。 */
     @GameTest(template = "industrial_empty", timeoutTicks = 45)
     public static void sharedInputEdgeChargesExtractedFluidIncludingShortReceipt(GameTestHelper h) {
-        BlockPos source = new BlockPos(7, 2, 2), target = new BlockPos(7, 2, 7);
+        BlockPos source = new BlockPos(7, 2, 1), target = new BlockPos(7, 2, 7);
         h.setBlock(source, AllBlocks.FLUID_TANK.get()); h.setBlock(source.above(), AllBlocks.FLUID_TANK.get());
-        h.setBlock(source.south(), IndustrialFluidContent.REINFORCED_PIPE.get());
+        h.setBlock(source.south(), IndustrialFluidContent.REINFORCED_VALVE.get().defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS, Direction.Axis.Z));
+        h.setBlock(source.south(2), IndustrialFluidContent.REINFORCED_PIPE.get());
         for (int x : new int[]{6, 8}) {
             for (int z : new int[]{3, 4, 6}) h.setBlock(new BlockPos(x, 2, z), IndustrialFluidContent.CERAMIC_PIPE.get());
             BlockPos pump = new BlockPos(x, 2, 5);
@@ -157,7 +158,7 @@ public final class IndustrialFluidNetworkGameTests {
             h.assertTrue(amount(h, source) == 7808 && storage.getFluidAmount() == 2000 && cache == 6192,
                     "共输入边短收收费错误：source=" + amount(h, source) + " target=" + storage.getFluidAmount() + " cache=" + cache);
             h.assertTrue(amount(h, source) + storage.getFluidAmount() + cache == 16000 && a.actualFlow() + b.actualFlow() == 2000, "短收有限守恒/实收统计错误");
-            System.out.println("[industrial] shared input8192 = delivered2000 + cache6192; two powered pumps source7808, finite total16000"); h.succeed();
+            System.out.println("[industrial] shared input valve8192 = delivered2000 + cache6192; two powered pumps source7808, finite total16000"); h.succeed();
         });
     }
     /** 控制器绑定变化而成员能力缓存尚未刷新时，只读取当前同库，缺失控制器不隐式加载。 */

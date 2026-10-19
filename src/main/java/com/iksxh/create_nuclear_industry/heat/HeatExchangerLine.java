@@ -8,30 +8,46 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
 /**
- * 服务端已加载水平直列的瞬时视图；每机仍拥有自己的库存和 HU，视图不持久化。
+ * 服务端水平直列的共享几何；每机仍拥有自己的库存和 HU，几何不持久化。
  * 任一成员无法确认可 tick、边界区块未知或长度超过服务端配置上限时，整列拒绝交易与供热。
  */
 final class HeatExchangerLine implements HeatExchangerState.Exchange {
     private final List<NuclearHeatExchangerBlockEntity> members;
     private final Direction facing;
     private final Object identity;
-    private final List<Object> memberIdentities;
+    private final Object[] memberIdentities;
+    private final BlockPos before, after;
 
     private HeatExchangerLine(List<NuclearHeatExchangerBlockEntity> members, Direction facing) {
         this.members = List.copyOf(members);
         this.facing = facing;
         this.identity = members.getFirst().inventoryIdentity();
-        this.memberIdentities = members.stream().map(NuclearHeatExchangerBlockEntity::inventoryIdentity).toList();
+        this.memberIdentities = new Object[members.size()];
+        for (int i = 0; i < members.size(); i++) memberIdentities[i] = members.get(i).inventoryIdentity();
+        this.before = members.getFirst().getBlockPos().relative(facing.getOpposite());
+        this.after = members.getLast().getBlockPos().relative(facing);
     }
 
     /** 扫描前后各端，先查区块再查方块实体，不触发区块加载。 */
     static HeatExchangerLine find(NuclearHeatExchangerBlockEntity origin) {
+        return find(origin, HeatExchangerConfig.settings(), HeatExchangerConfig.condensationSettings());
+    }
+
+    /** 同次查询共享不可变配置快照；缓存只保存几何，不保存模式、罐量、空位或 tick 许可。 */
+    static HeatExchangerLine find(NuclearHeatExchangerBlockEntity origin, HeatExchangerState.Settings settings,
+            CondensationState.Settings condensation) {
         if (!origin.current() || !origin.canTick() || origin.getLevel().isClientSide || origin.inBoiler()) return null;
         Level level = origin.getLevel();
         Direction facing = origin.getBlockState().getValue(NuclearHeatExchangerBlock.FACING);
+        int maxLength = settings.maxLineLength();
+        HeatExchangerLine cached = origin.cachedLine();
+        if (cached != null && cached.valid(level, facing, maxLength)) {
+            cached.applySettings(settings, condensation);
+            return cached.validModeLength() ? cached : null;
+        }
+        origin.cacheLine(null);
         List<NuclearHeatExchangerBlockEntity> members = new ArrayList<>();
         BlockPos cursor = origin.getBlockPos();
-        int maxLength = HeatExchangerConfig.settings().maxLineLength();
         for (int distance = 0; distance <= maxLength; distance++) {
             BlockPos prior = cursor.relative(facing.getOpposite());
             if (!level.hasChunkAt(prior)) return null;
@@ -45,15 +61,44 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
             if (!(level.getBlockEntity(cursor) instanceof NuclearHeatExchangerBlockEntity member)
                     || !member.current() || !member.canTick()) return null;
             members.add(member);
-            member.ledger().setSettings(HeatExchangerConfig.settings());
-            member.ledger().setCondensationSettings(HeatExchangerConfig.condensationSettings());
+            member.ledger().setSettings(settings);
+            member.ledger().setCondensationSettings(condensation);
             if (members.size() > maxLength) return null;
             cursor = cursor.relative(facing);
         }
         if (!level.hasChunkAt(cursor) || members.isEmpty()) return null;
-        if (members.size() > 16 && members.stream().anyMatch(m -> m.ledger().activeMode() == HeatExchangerMode.CONDENSATION))
-            return null;
-        return new HeatExchangerLine(members, facing);
+        HeatExchangerLine line = new HeatExchangerLine(members, facing);
+        if (!line.validModeLength()) return null;
+        for (var member : members) member.cacheLine(line);
+        return line;
+    }
+
+    /** 两端未知或任一成员身份、方向、归属、原版 tick 门变化即失效；不使用时间窗放宽安全校验。 */
+    private boolean valid(Level level, Direction direction, int maxLength) {
+        if (facing != direction || members.size() > maxLength) return false;
+        for (int i = 0; i < members.size(); i++) {
+            var member = members.get(i);
+            if (member.getLevel() != level || member.inventoryIdentity() != memberIdentities[i]
+                    || !member.current() || !member.canTick() || member.inBoiler()) return false;
+            var state = level.getBlockState(member.getBlockPos());
+            if (!(state.getBlock() instanceof NuclearHeatExchangerBlock)
+                    || state.getValue(NuclearHeatExchangerBlock.FACING) != facing) return false;
+        }
+        return level.hasChunkAt(before) && level.hasChunkAt(after)
+                && !matches(level, before, facing) && !matches(level, after, facing);
+    }
+
+    private void applySettings(HeatExchangerState.Settings settings, CondensationState.Settings condensation) {
+        for (var member : members) {
+            member.ledger().setSettings(settings);
+            member.ledger().setCondensationSettings(condensation);
+        }
+    }
+
+    private boolean validModeLength() {
+        if (members.size() <= 16) return true;
+        for (var member : members) if (member.ledger().activeMode() == HeatExchangerMode.CONDENSATION) return false;
+        return true;
     }
 
     private static boolean matches(Level level, BlockPos pos, Direction facing) {
@@ -83,19 +128,25 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
     }
     boolean accepts(HeatExchangerMode candidate) {
         var selected = mode();
-        return selected != null && (selected == HeatExchangerMode.EMPTY || selected == candidate)
-                && (candidate != HeatExchangerMode.CONDENSATION || members.size() <= 16)
-                && members.stream().allMatch(m -> m.ledger().acceptsMode(candidate)
-                && (candidate == HeatExchangerMode.CONDENSATION ? m.ledger().condensationSettings().valid() : m.ledger().settings().valid()));
+        if (selected == null || selected != HeatExchangerMode.EMPTY && selected != candidate
+                || candidate == HeatExchangerMode.CONDENSATION && members.size() > 16) return false;
+        for (var member : members) if (!member.ledger().acceptsMode(candidate)
+                || !(candidate == HeatExchangerMode.CONDENSATION ? member.ledger().condensationSettings().valid()
+                : member.ledger().settings().valid())) return false;
+        return true;
     }
-    void adoptMode(HeatExchangerMode candidate) { members.forEach(m -> m.ledger().selectMode(candidate)); }
+    void adoptMode(HeatExchangerMode candidate) { for (var member : members) member.ledger().selectMode(candidate); }
     int capacity(HeatExchangerMode candidate, boolean input) {
-        return members.stream().mapToInt(m -> m.ledger().capacityFor(candidate, input)).sum();
+        int sum = 0;
+        for (var member : members) sum += member.ledger().capacityFor(candidate, input);
+        return sum;
     }
     int hotCapacity() { return capacity(displayMode(), true); }
     int coldCapacity() { return capacity(displayMode(), false); }
     int inputSpace(HeatExchangerMode candidate) {
-        return members.stream().mapToInt(m -> Math.max(0, m.ledger().capacityFor(candidate, true) - m.ledger().hot())).sum();
+        int sum = 0;
+        for (var member : members) sum += Math.max(0, member.ledger().capacityFor(candidate, true) - member.ledger().hot());
+        return sum;
     }
     boolean inlet(NuclearHeatExchangerBlockEntity machine, Direction side) {
         return side == facing.getOpposite() && members.getFirst() == machine;
@@ -107,16 +158,30 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
 
     /** 同一拓扑的旧句柄仍要逐成员核对身份，避免拆放后作用于新实体。 */
     boolean sameMembers(HeatExchangerLine other) {
-        return other != null && facing == other.facing && identity == other.identity
-                && members.equals(other.members) && memberIdentities.equals(other.memberIdentities);
+        if (other == this) return true;
+        if (other == null || facing != other.facing || identity != other.identity || members.size() != other.members.size()) return false;
+        for (int i = 0; i < members.size(); i++) if (members.get(i) != other.members.get(i)
+                || memberIdentities[i] != other.memberIdentities[i]) return false;
+        return true;
     }
 
-    int totalHot() { return members.stream().mapToInt(m -> m.ledger().hot()).sum(); }
-    int totalCold() { return members.stream().mapToInt(m -> m.ledger().cold()).sum(); }
+    int totalHot() {
+        int sum = 0;
+        for (var member : members) sum += member.ledger().hot();
+        return sum;
+    }
+    int totalCold() {
+        int sum = 0;
+        for (var member : members) sum += member.ledger().cold();
+        return sum;
+    }
     @Override public int hot() { return totalHot(); }
     @Override public int coldSpace() {
         // 各机缩容后的超额存量不抵销另一台真实空位；只能加入容量内仍有空位的成员。
-        return members.stream().mapToInt(m -> Math.max(0, m.ledger().capacityFor(displayMode(), false) - m.ledger().cold())).sum();
+        var mode = displayMode();
+        int sum = 0;
+        for (var member : members) sum += Math.max(0, member.ledger().capacityFor(mode, false) - member.ledger().cold());
+        return sum;
     }
 
     /** 执行期重新读取各台空位；模拟只返回可接收量，不预约真实库存。 */
@@ -129,14 +194,22 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
         int accepted = Math.min(Math.max(0, amount), space);
         if (simulate) return accepted;
         if (accepted == 0) return 0;
-        adoptMode(candidate);
+        // 配置长度最多64台；位图覆盖实际库存及空成员的模式变化，不分配逐交易容器。
+        long changed = 0;
+        for (int i = 0; i < members.size(); i++) {
+            var ledger = members.get(i).ledger();
+            var previous = ledger.mode();
+            ledger.selectMode(candidate);
+            if (ledger.mode() != previous) changed |= 1L << i;
+        }
         int remaining = accepted;
-        for (var member : members) {
-            int filled = member.ledger().fillInput(remaining, candidate, false);
+        for (int i = 0; i < members.size(); i++) {
+            int filled = members.get(i).ledger().fillInput(remaining, candidate, false);
+            if (filled > 0) changed |= 1L << i;
             remaining -= filled;
             if (remaining == 0) break;
         }
-        if (accepted != remaining) notifyInventoryChanged();
+        if (accepted != remaining) notifyInventoryChanged(changed);
         return accepted - remaining;
     }
 
@@ -145,12 +218,14 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
         int taken = Math.min(Math.max(0, amount), totalCold());
         if (simulate) return taken;
         int remaining = taken;
-        for (var member : members) {
-            int drained = member.ledger().drainCold(remaining, false);
+        long changed = 0;
+        for (int i = 0; i < members.size(); i++) {
+            int drained = members.get(i).ledger().drainCold(remaining, false);
+            if (drained > 0) changed |= 1L << i;
             remaining -= drained;
             if (remaining == 0) break;
         }
-        if (taken != remaining) notifyInventoryChanged();
+        if (taken != remaining) notifyInventoryChanged(changed);
         return taken - remaining;
     }
 
@@ -173,29 +248,34 @@ final class HeatExchangerLine implements HeatExchangerState.Exchange {
 
     private int transfer(int moved, int output) {
         int remaining = moved;
-        for (var member : members) {
-            int drawn = member.ledger().takeHotForConversion(remaining);
+        long changed = 0;
+        for (int i = 0; i < members.size(); i++) {
+            int drawn = members.get(i).ledger().takeHotForConversion(remaining);
+            if (drawn > 0) changed |= 1L << i;
             remaining -= drawn;
             if (remaining == 0) break;
         }
         if (remaining != 0) throw new IllegalStateException("换热直列热液预检与提交不一致");
         remaining = output;
-        for (var member : members) {
-            int added = member.ledger().putColdFromConversion(remaining);
+        for (int i = 0; i < members.size(); i++) {
+            int added = members.get(i).ledger().putColdFromConversion(remaining);
+            if (added > 0) changed |= 1L << i;
             remaining -= added;
             if (remaining == 0) break;
         }
         if (remaining != 0) throw new IllegalStateException("换热直列冷液预检与提交不一致");
-        if (moved > 0) notifyInventoryChanged();
+        if (moved > 0) notifyInventoryChanged(changed);
         return moved;
     }
 
-    private void notifyInventoryChanged() {
+    /** 所有成员仍立即刷新整列显示；只有实际持久状态变化才触发原版/辐射库存通知。 */
+    private void notifyInventoryChanged(long changed) {
         int hot = totalHot();
         int cold = totalCold();
-        for (var member : members) {
+        for (int i = 0; i < members.size(); i++) {
+            var member = members.get(i);
             member.updateLineView(members.size(), hot, cold);
-            member.markInventoryChanged();
+            if ((changed & 1L << i) != 0) member.markInventoryChanged();
         }
     }
 }

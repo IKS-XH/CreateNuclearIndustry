@@ -16,7 +16,20 @@ final class IndustrialTopology {
         /** Load事件可能早于FULL晋升；只探测原缺失边界，恢复时再有界重建该路线。 */
         boolean recovered(ServerLevel level) { return missingChunks.stream().anyMatch(chunk -> level.getChunkSource().getChunkNow(chunk.x, chunk.z) != null); }
     }
-    private record Visit(BlockPos pos, Direction entry, List<BlockPos> path) {}
+    private record Visit(BlockPos pos, Direction entry, PathLink path) {}
+    private static final Direction[] DIRECTIONS=Direction.values();
+    /** BFS前缀按父链接共享，只有端点需要完整路径时物化一次；顺序与原复制列表一致。 */
+    private static final class PathLink {
+        private final BlockPos node;
+        private final PathLink parent;
+        private final int size;
+        private List<BlockPos> flattened;
+        private PathLink(BlockPos node,PathLink parent){this.node=node;this.parent=parent;size=parent==null?1:parent.size+1;}
+        private List<BlockPos> flatten(){
+            if(flattened==null){BlockPos[] values=new BlockPos[size];PathLink link=this;for(int i=size-1;i>=0;i--){values[i]=link.node;link=link.parent;}flattened=List.of(values);}
+            return flattened;
+        }
+    }
     private record Face(BlockPos pos, Direction side) {}
     private IndustrialTopology() {}
 
@@ -39,7 +52,53 @@ final class IndustrialTopology {
         return bindingAt(level, pos, side).handler();
     }
     /** 实体身份与罐控制器共同构成交易绑定，不能沿成员缓存访问卸载或已替换的控制器。 */
-    record Binding(net.neoforged.neoforge.fluids.capability.IFluidHandler handler, java.util.function.BooleanSupplier valid) {}
+    record Binding(net.neoforged.neoforge.fluids.capability.IFluidHandler handler,
+                   java.util.function.BooleanSupplier valid, boolean reusable,
+                   java.util.function.BooleanSupplier reuseGuard) {
+        Binding(net.neoforged.neoforge.fluids.capability.IFluidHandler handler,
+                java.util.function.BooleanSupplier valid) { this(handler, valid, false); }
+        Binding(net.neoforged.neoforge.fluids.capability.IFluidHandler handler,
+                java.util.function.BooleanSupplier valid, boolean reusable) {
+            this(handler, valid, reusable, reusable ? valid : () -> false);
+        }
+    }
+
+    /**
+     * 仅存活于一次同步调度的正绑定；未知能力和空结果每次重查，不能跨tick或跨泵续用。
+     * reusable只由自有汽轮机端口签发，守卫包含成型世代；它不代替端口的实时运行校验。
+     */
+    static final class DispatchBindings {
+        private final java.util.function.BiFunction<BlockPos, Direction, Binding> lookup;
+        private final java.util.Map<Face, Binding> entries = new java.util.HashMap<>();
+
+        DispatchBindings(Level level) { this((pos, side) -> bindingAt(level, pos, side)); }
+        DispatchBindings(java.util.function.BiFunction<BlockPos, Direction, Binding> lookup) {
+            this.lookup = lookup;
+        }
+        Binding get(BlockPos pos, Direction side) {
+            Face key = new Face(pos.immutable(), side);
+            Binding previous = entries.get(key);
+            if (previous != null && previous.valid().getAsBoolean() && previous.reuseGuard().getAsBoolean()) return previous;
+            entries.remove(key);
+            Binding current = lookup.apply(pos, side);
+            if (current.handler() != null && current.reusable() && current.valid().getAsBoolean()
+                    && current.reuseGuard().getAsBoolean())
+                entries.put(key, current);
+            return current;
+        }
+    }
+
+    /** 只跳过自有入口必为空的抽取尝试；原端点列表、混输预检和游标不变。 */
+    static boolean rejectsExtraction(Level level, Endpoint endpoint) {
+        return entityAt(level, endpoint.position()) instanceof com.iksxh.create_nuclear_industry.turbine.TurbinePortBlockEntity
+                && stateAt(level, endpoint.position()).is(com.iksxh.create_nuclear_industry.content.TurbineContent.INLET.get());
+    }
+
+    /** 自有排汽口从不接收填充；未知设备继续原能力路径，不按库存或瞬时资格作负缓存。 */
+    static boolean rejectsInsertion(Level level, Endpoint endpoint) {
+        return entityAt(level, endpoint.position()) instanceof com.iksxh.create_nuclear_industry.turbine.TurbinePortBlockEntity
+                && stateAt(level, endpoint.position()).is(com.iksxh.create_nuclear_industry.content.TurbineContent.EXHAUST.get());
+    }
     static Binding bindingAt(Level level, BlockPos pos, Direction side) {
         Binding absent = new Binding(null, () -> false);
         if (!level.hasChunkAt(pos)) return absent;
@@ -59,13 +118,28 @@ final class IndustrialTopology {
                     && entityAt(level, pos) == tank && !tank.isRemoved() && controllerPos.equals(tank.getController())
                     && entityAt(level, controllerPos) == owner && !owner.isRemoved() && owner.isController());
         }
+        var turbine = member instanceof com.iksxh.create_nuclear_industry.turbine.TurbinePortBlockEntity
+                ? com.iksxh.create_nuclear_industry.turbine.TurbineStructure.ownerForPart(level, pos) : null;
+        var form = turbine == null ? null : turbine.currentForm();
+        int portEpoch = turbine == null ? 0 : turbine.portBindingEpoch();
         var handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, state, member, side);
+        if (handler != null && turbine != null && form != null && turbine.issuedPortBinding(handler, pos, side)
+                && turbine.currentForm() == form && turbine.portBindingEpoch() == portEpoch
+                && (state.is(com.iksxh.create_nuclear_industry.content.TurbineContent.INLET.get())
+                || state.is(com.iksxh.create_nuclear_industry.content.TurbineContent.EXHAUST.get()))) {
+            // 任一身份改变即重新获取能力；红石、票据和内腔仍由每次Port操作实时检查。
+            return new Binding(handler, () -> level.hasChunkAt(pos) && entityAt(level, pos) == member
+                    && !member.isRemoved(), true, () -> level.hasChunkAt(pos) && stateAt(level, pos) == state
+                    && entityAt(level, pos) == member && !member.isRemoved() && !turbine.isRemoved()
+                    && turbine.currentForm() == form && turbine.portBindingEpoch() == portEpoch
+                    && com.iksxh.create_nuclear_industry.turbine.TurbineStructure.ownerForPart(level, pos) == turbine);
+        }
         return new Binding(handler, () -> level.hasChunkAt(pos) && entityAt(level, pos) == member
                 && (member == null || !member.isRemoved()));
     }
 
     /** 机器绑定可能稍后才生效；已知端口须先登记几何端点，每次交易再查实时能力。 */
-    private static boolean knownEndpoint(Level level, BlockPos pos) {
+    static boolean knownEndpoint(Level level, BlockPos pos) {
         var entity = entityAt(level, pos);
         return entity instanceof com.simibubi.create.content.fluids.tank.FluidTankBlockEntity
                 || entity instanceof com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity
@@ -97,7 +171,7 @@ final class IndustrialTopology {
         Set<Face> endpointFaces = new HashSet<>();
         Set<net.minecraft.world.level.ChunkPos> missingChunks = new HashSet<>();
         Queue<Visit> queue = new ArrayDeque<>();
-        queue.add(new Visit(root.relative(start), start.getOpposite(), List.of()));
+        queue.add(new Visit(root.relative(start), start.getOpposite(), null));
         String failure = "blocked";
         while (!queue.isEmpty()) {
             Visit visit = queue.remove(); BlockPos pos = visit.pos();
@@ -106,7 +180,7 @@ final class IndustrialTopology {
             BlockState state = stateAt(level, pos);
             if (!(state.getBlock() instanceof IndustrialPipeBlock) && !(state.getBlock() instanceof IndustrialPumpBlock)) {
                 if (endpointFaces.add(new Face(pos.immutable(), visit.entry())) && (knownEndpoint(level, pos) || capabilityAt(level, pos, visit.entry()) != null))
-                    endpoints.add(new Endpoint(pos.immutable(), visit.entry(), visit.path()));
+                    endpoints.add(new Endpoint(pos.immutable(), visit.entry(), visit.path()==null?List.of():visit.path().flatten()));
                 continue;
             }
             // 有方向节点先验证入口，再去重；非法侧向触达不能吞掉稍后的合法轴向绕行。
@@ -119,9 +193,8 @@ final class IndustrialTopology {
             if (!visited.add(pos)) continue;
             nodes.add(pos.immutable());
             if (nodes.size() > IndustrialFluidConfig.MAX_NODES.get()) return new Side(List.of(), nodes, Set.copyOf(missingChunks), "too_large");
-            if (visit.path().size() >= IndustrialFluidConfig.SEARCH_DISTANCE.get()) { failure = "too_long"; continue; }
-            List<BlockPos> path = new ArrayList<>(visit.path()); path.add(pos.immutable()); path = List.copyOf(path);
-            for (Direction direction : Direction.values()) {
+            PathLink path=new PathLink(pos.immutable(),visit.path());
+            for (Direction direction : DIRECTIONS) {
                 if (direction == visit.entry()) continue;
                 if (state.getBlock() instanceof IndustrialValveBlock && (direction.getAxis() != state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS)
                         || visit.entry().getAxis() != direction.getAxis())) continue;
@@ -136,6 +209,14 @@ final class IndustrialTopology {
         }
         endpoints.sort(Comparator.comparingLong((Endpoint endpoint) -> endpoint.position().asLong()).thenComparing(endpoint -> endpoint.side().ordinal()));
         return new Side(List.copyOf(endpoints), Set.copyOf(nodes), Set.copyOf(missingChunks), endpoints.isEmpty() ? failure : "ready");
+    }
+    /** 原/回退路径同样区分无额度普通管；阀和泵仍在原位置读取动态限额。 */
+    static int prepareLimit(ServerLevel level,BlockPos pos,IndustrialFlowBudget.Path path) {
+        var block=stateAt(level,pos).getBlock();
+        int capacity=limit(level,pos);
+        // 未知子类若重写为有限上限，保守回退仍须尊重它，不能只凭继承关系免除额度。
+        if(block instanceof IndustrialPipeBlock&&!(block instanceof IndustrialValveBlock)&&capacity==Integer.MAX_VALUE){path.addUnbounded(pos.asLong());return capacity;}
+        path.add(pos.asLong(),capacity);return capacity;
     }
     static int limit(ServerLevel level, BlockPos pos) {
         if (!level.hasChunkAt(pos)) return 0;

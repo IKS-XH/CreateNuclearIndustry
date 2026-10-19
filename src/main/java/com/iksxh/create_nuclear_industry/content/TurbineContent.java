@@ -105,14 +105,17 @@ public final class TurbineContent {
     private static void capabilities(RegisterCapabilitiesEvent event) {
         event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
             if (side == null || !state.hasProperty(TurbinePartBlock.OUTWARD)
-                    || state.getValue(TurbinePartBlock.OUTWARD) != side) return null;
-            var owner = TurbineStructure.ownerForPort(level, pos, state, true);
+                    || state.getValue(TurbinePartBlock.OUTWARD) != side
+                    || !state.getValue(TurbinePartBlock.FORMED)) return null;
+            // 归属索引只返回几何所有者；port在此同步调用内统一执行一次完整实时校验。
+            var owner = TurbineStructure.ownerForPart(level, pos);
             return owner == null ? null : owner.port(pos, side, true);
         }, INLET.get());
         event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, blockEntity, side) -> {
             if (side == null || !state.hasProperty(TurbinePartBlock.OUTWARD)
-                    || state.getValue(TurbinePartBlock.OUTWARD) != side) return null;
-            var owner = TurbineStructure.ownerForPort(level, pos, state, false);
+                    || state.getValue(TurbinePartBlock.OUTWARD) != side
+                    || !state.getValue(TurbinePartBlock.FORMED)) return null;
+            var owner = TurbineStructure.ownerForPart(level, pos);
             return owner == null ? null : owner.port(pos, side, false);
         }, EXHAUST.get());
     }

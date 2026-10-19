@@ -155,11 +155,12 @@ public final class BoilerIndustrialActiveOutputGameTests {
         fourPorts(h); BlockPos target = new BlockPos(1, 6, 6);
         h.setBlock(new BlockPos(2, 6, 6), IndustrialFluidContent.REINFORCED_PIPE.get());
         h.setBlock(target, AllBlocks.FLUID_TANK.get()); h.setBlock(target.above(), AllBlocks.FLUID_TANK.get());
+        h.setBlock(target.above(2), AllBlocks.FLUID_TANK.get()); h.setBlock(target.above(3), AllBlocks.FLUID_TANK.get());
         postCheck(h, 8, () -> seed(h, 0, 60000), () -> {
-            h.assertTrue(amount(h, target) == 8192 && owner(h).ledger().steam() == 51808, "四主动口没有共享同一8192节点或不守恒");
+            h.assertTrue(amount(h, target) == 16384 && owner(h).ledger().steam() == 43616, "四主动口未在无管道封顶时各交付4096或不守恒");
             for (BlockPos p : FOUR) h.assertTrue(owner(h).ledger().remainingDrain(BoilerSteamInventoryKind.SUPERCRITICAL, h.absolutePos(p), h.getLevel().getGameTime()) >= 0,
                     "主动口预算出现负数");
-            System.out.println("[boiler-active] four SC ports actual8192 over shared reinforced trunk; source51808");
+            System.out.println("[boiler-active] four SC ports actual16384 over unmetered reinforced trunk; source43616");
         });
     }
     @GameTest(template = "industrial_empty", templateNamespace = "create_nuclear_industry_industrial", timeoutTicks = 60, batch = "boiler_active_scene")

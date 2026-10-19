@@ -74,6 +74,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         com.iksxh.create_nuclear_industry.turbine.display.TurbineRuntimePublisher.revoke(this);
         TurbineStructure.Form old = activeForm;
         activeForm = null;
+        lastIssuedPortBinding = null;
         ledger.stop();
         epoch++;
         steamPressure.release();
@@ -344,10 +345,25 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
     public float totalSu() { return live() && !level.hasNeighborSignal(worldPosition) ? (float) ledger.totalSu() : 0; }
     public float signedRpm() { return live() ? ledger.rpm() : 0; }
 
+    /** 服务端只读成型世代，用于调度内绑定身份；它不代表红石、区块或内腔运行资格。 */
+    public int portBindingEpoch() { return epoch; }
+
+    private IFluidHandler lastIssuedPortBinding;
+    private BlockPos lastIssuedPortPosition;
+    private Direction lastIssuedPortSide;
+
+    /** 仅证明本次能力返回值确由此owner签发；第三方替代能力不能被标记为可复用。 */
+    public boolean issuedPortBinding(IFluidHandler handler, BlockPos part, Direction side) {
+        return handler != null && handler == lastIssuedPortBinding && part.equals(lastIssuedPortPosition)
+                && side == lastIssuedPortSide;
+    }
+
     /** 句柄带成型世代；卸载、拆件或换档后旧管路引用不能继续交易。 */
     public IFluidHandler port(BlockPos part, Direction side, boolean input) {
         if (!validPort(part, input) || level.getBlockState(part).getValue(TurbinePartBlock.OUTWARD) != side) return null;
-        return com.iksxh.create_nuclear_industry.industrial.RestrictedFluidHandler.wrap(new Port(part.immutable(), side, input));
+        lastIssuedPortPosition = part.immutable(); lastIssuedPortSide = side;
+        lastIssuedPortBinding = com.iksxh.create_nuclear_industry.industrial.RestrictedFluidHandler.wrap(new Port(lastIssuedPortPosition, side, input));
+        return lastIssuedPortBinding;
     }
     private final class Port implements IFluidHandler {
         private final BlockPos part;
@@ -364,16 +380,15 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
         }
         @Override public int getTanks() { return valid() ? 1 : 0; }
         @Override public FluidStack getFluidInTank(int tank) {
-            if (!valid() || tank != 0) return FluidStack.EMPTY;
-            int amount = input ? 0 : ledger.exhaust();
-            return amount <= 0 ? FluidStack.EMPTY : new FluidStack(input
-                    ? BoilerContent.SUPERCRITICAL_STEAM.get() : TurbineContent.STEAM.get(), amount);
+            if (tank != 0 || input || !valid()) return FluidStack.EMPTY;
+            int amount = ledger.exhaust();
+            return amount <= 0 ? FluidStack.EMPTY : new FluidStack(TurbineContent.STEAM.get(), amount);
         }
         @Override public int getTankCapacity(int tank) {
-            return valid() && tank == 0 ? ledger.exhaustCapacity() : 0;
+            return tank == 0 && valid() ? ledger.exhaustCapacity() : 0;
         }
         @Override public boolean isFluidValid(int tank, FluidStack stack) {
-            return valid() && input && tank == 0 && TurbineContent.isSupercritical(stack);
+            return input && tank == 0 && TurbineContent.isSupercritical(stack) && valid();
         }
         @Override public int fill(FluidStack stack, FluidAction action) {
             if (!isFluidValid(0, stack)) return 0;
@@ -385,7 +400,7 @@ public final class TurbineControllerBlockEntity extends SmartBlockEntity impleme
             return TurbineContent.isOrdinarySteam(stack) ? drain(stack.getAmount(), action) : FluidStack.EMPTY;
         }
         @Override public FluidStack drain(int amount, FluidAction action) {
-            if (!valid() || input) return FluidStack.EMPTY;
+            if (input || !valid()) return FluidStack.EMPTY;
             int taken = ledger.drainExhaust(part.asLong(), amount, action.simulate(), level.getGameTime());
             if (taken > 0 && action.execute()) changed();
             return taken == 0 ? FluidStack.EMPTY : new FluidStack(TurbineContent.STEAM.get(), taken);

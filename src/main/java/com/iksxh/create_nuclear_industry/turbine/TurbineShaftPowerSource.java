@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
+import java.util.HashSet;
 
 /**
  * 将服务端唯一机主的总 SU 从一个轴发布到 Create 动力网，并通过另一轴传播转动。
@@ -20,6 +21,8 @@ public abstract class TurbineShaftPowerSource extends GeneratingKineticBlockEnti
     private BlockPos lastLinkedShaft;
     private float generatedRpmSnapshot;
     private boolean restoringSavedSource;
+    private boolean sourceAuditPending;
+    private long nextSourceAudit;
 
     protected TurbineShaftPowerSource(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -81,6 +84,7 @@ public abstract class TurbineShaftPowerSource extends GeneratingKineticBlockEnti
         // 当前格式存档恢复后账本历史归零；让 Create 原生 addSilently 核销本轴保存的容量。
         if (level != null && !level.isClientSide && lastCapacityProvided > 0
                 && generatedRpmSnapshot > 0 && hasNetwork() && getGeneratedSpeed() == 0) {
+            float savedGeneratedRpm = generatedRpmSnapshot;
             restoringSavedSource = true;
             try {
                 super.initialize();
@@ -95,16 +99,59 @@ public abstract class TurbineShaftPowerSource extends GeneratingKineticBlockEnti
             // 当前恢复已清空供汽历史，但保存的Speed仍可能非零。初始化阶段须按保存转速拆源，
             // 否则父tick会从尚未清零的下游反向认领Source，形成没有生成源却持续转动的互指环。
             // 原生传播器只撤销本轴的依赖分支；其他真实生成源保留，并可在后续attach重新带动本轴。
-            float previousSpeed = getTheoreticalSpeed();
-            detachKinetics();
-            removeSource();
-            setSpeed(0);
-            setNetwork(null);
-            onSpeedChanged(previousSpeed);
-            sendData();
+            sourceAuditPending = true;
+            auditSourceChain(savedGeneratedRpm);
             return;
         }
         super.initialize();
+    }
+
+    /** 正常供汽、外部动力或加载回接改变转动时，只安排一次零自产轴的上游审计。 */
+    @Override public void onSpeedChanged(float previousSpeed) {
+        super.onSpeedChanged(previousSpeed);
+        if (level != null && !level.isClientSide && getTheoreticalSpeed() != 0 && assignedSu() == 0) {
+            sourceAuditPending = true;
+            nextSourceAudit = 0;
+        }
+    }
+
+    /**
+     * 只沿已加载Source链寻找真实生成源；证明无源终点或环路后，交原生传播器撤销其依赖分支。
+     * 未知/卸载/过长链保守等待，不扫描世界、不清整个网络，也不扣除其他成员的未加载容量。
+     */
+    private void auditSourceChain(float fallbackRpm) {
+        if (!(level instanceof net.minecraft.server.level.ServerLevel server)) return;
+        KineticBlockEntity current = this;
+        var seen = new HashSet<BlockPos>();
+        for (int checked = 0; checked < 4096; checked++) {
+            if (current.getGeneratedSpeed() != 0) { sourceAuditPending = false; return; }
+            if (!seen.add(current.getBlockPos()) || current.source == null) {
+                float previous = current.getTheoreticalSpeed();
+                // 必须先断开旧Source再传播；否则环上的另一段会把正在撤销的节点重新当成上游。
+                if (current.hasNetwork()) {
+                    var network = current.getOrCreateNetwork();
+                    network.sources.remove(current);
+                    network.updateCapacity();
+                }
+                current.removeSource();
+                current.setSpeed(previous != 0 ? previous : fallbackRpm);
+                current.detachKinetics();
+                current.setSpeed(0);
+                current.onSpeedChanged(previous);
+                current.sendData();
+                current.attachKinetics();
+                sourceAuditPending = false;
+                return;
+            }
+            BlockPos at = current.source;
+            var chunk = server.getChunkSource().getChunkNow(at.getX() >> 4, at.getZ() >> 4);
+            if (chunk == null) break;
+            var entity = chunk.getBlockEntity(at, net.minecraft.world.level.chunk.LevelChunk.EntityCreationType.CHECK);
+            if (!(entity instanceof KineticBlockEntity next) || entity.isRemoved()) break;
+            current = next;
+        }
+        sourceAuditPending = true;
+        nextSourceAudit = level.getGameTime() + 20;
     }
 
     @Override
@@ -142,8 +189,23 @@ public abstract class TurbineShaftPowerSource extends GeneratingKineticBlockEnti
                         && hasNetwork() && getTheoreticalSpeed() == 0) {
                     setSpeed(previousRpm);
                 }
+                if (su == 0 && (previousSu > 0 || Float.isNaN(previousSu))) {
+                    if (hasNetwork()) {
+                        var network = getOrCreateNetwork();
+                        network.sources.remove(this);
+                        network.updateCapacity();
+                    }
+                    // 本轴贡献已实际撤销；若仍被外源带动，保存时不能再把旧自产额度记入外源网络。
+                    // 撤销前的标签仍保留原快照，供正常加载按Create账本核销，不能在write中盲目裁剪。
+                    lastCapacityProvided = 0;
+                    generatedRpmSnapshot = 0;
+                    sourceAuditPending = true;
+                    nextSourceAudit = 0;
+                }
                 updateGeneratedRotation();
             }
+            if (sourceAuditPending && level.getGameTime() >= nextSourceAudit)
+                auditSourceChain(rpm);
         }
     }
 }
