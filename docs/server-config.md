@@ -73,12 +73,12 @@
 
 | 键 | 默认 | 意义 |
 | --- | ---: | --- |
-| reinforcedFlowMbPerTick / ceramicFlowMbPerTick | 8192 / 32768 | 二/三级管阀节点共享mB/t额度 |
+| reinforcedFlowMbPerTick / ceramicFlowMbPerTick | 8192 / 32768 | 相应强化/陶瓷阀额定mB/t；普通管段不设流量上限 |
 | pumpFlowMbPerTick / ratedRpm | 16384 / 256 | 唯一工业泵额定mB/t、最大周转mB及额定RPM |
 | stressSuPerRpm | 16 | SU/RPM，256RPM默认4096SU |
-| searchDistance / maxNetworkNodes | 256 / 4096 | 每侧最大搜索管段/拓扑节点数，不强载区块 |
+| searchDistance / maxNetworkNodes | 256 / 4096 | 距离键保留读取但不再限距离；连接图最多物理节点数仍生效，不强载区块 |
 
-泵流量为floor(额定流量×clamp(abs(RPM)/额定RPM,0,1))，再受路径/阀/源/物理口/接收量限制。串泵不叠额度，独立路线可并联。热液/SC经专用管网，Create罐保留；锅炉汽口可主动接合法工业管，无须外置泵。未实现管网压力。
+泵流量为floor(额定流量×clamp(abs(RPM)/额定RPM,0,1))，再受路径中泵/阀、源、物理口和接收量限制。串泵取路径最小能力、不叠额度；独立并联泵可经同一普通主干合计运输。阀开度和红石关闭继续生效，普通管取消限流不解除阀/泵/设备口的逐tick物理额度。热液/SC经专用管网，Create罐保留；锅炉汽口可主动接合法工业管，无须外置泵。未实现管网压力。
 
 ## 锅炉
 

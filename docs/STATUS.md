@@ -1,12 +1,12 @@
 # 当前状态与验收
 
-更新：2026-10-18。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
+更新：2026-10-20。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
 
 ## 主分支与正式包
 
-- 已提交生产来源`6fb97c40dfd50d0bf6c8a1835cd609374f514a51`，按用户指令合入自动化接口17B C稿两个外观资源。此前首批辐射/头罩、S1/C1、贫化铀装备与外观、队列崩溃修复、Sodium连接外观、尾热停机、管理员/闭环与其它已验机组保持。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3490000 bytes，SHA256 `0763C210F654CCB1E3679E6D70EC9FB3A648F43F29997EF1685DACE1B4FBCBED`，按用户要求跟踪Git；准确已提交源一次assemble原输出，748class与1687资源全部绑定。
-- 本批仅接两资源，复用17B原资源审查，一次增量assemble/exit0及完整入包身份已核，无Java或玩法变更；1325项其它文本仅LF/CRLF差异、归一内容及Git blob逐项全同，main47项原dirty保持，见[外观集成](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)。原[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机性能](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
+- 已提交生产来源`a1ca0a6c249e81fd6ed66a25243964f72bab61b2`，按用户指令合入T2→T3→T4→T5→T7→T8→T9→H1累计优化及两条已批准夹具同步；不含T6、B1或事故第二批。此前自动化接口17B C稿、首批辐射/头罩、S1/C1、贫化铀装备与外观、队列崩溃修复、Sodium连接外观、尾热停机、管理员/闭环与其它已验机组保持。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3560094 bytes，SHA256 `88F21A64CD483D2767BC0E5016282052B1F226835CF06F59BCA833DE71E51BBB`，按用户要求跟踪Git；准确已提交源一次增量assemble原输出，构建及全部class/资源绑定见[本批记录](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)。
+- 本批复用同实现原定向/真实服/受控性能证据，完成一次组合窄审及增量assemble/exit0，不把既有GameTest失败记为通过，不称本轮重跑了全部测试。main两项授权源增量与正式包以外45项tracked原始字节保持。原[接口外观](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)、[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机S1/C1](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
 
 ## 已合入并按相应范围验收
 
@@ -31,6 +31,7 @@
 | 锅炉热源刷新队列 | 原子取批和锁外刷新，重入/并发新增留到下一tick；34项定向回归及一次组合窄审保持，用户确认原整合包服务器崩溃修复通过并授权合main | [原诊断](reviews/2026-10-17/heat-pending-01/DIAGNOSIS.md)、[联合验收](reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md) |
 | 首批辐射与护目镜头罩 | 已用燃料历史、真实物料源/屏蔽、玩家剂量/恢复、防护服与仪表；头罩额外1护目镜并提供原生信息。用户确认原清单及头罩补充手测通过，已合main与正式包 | [联合验收/来源](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[冲突并集窄审](reviews/2026-10-18/radiation-accepted-integration/REVIEW.md) |
 | 自动化接口17B外观 | 用户授权C稿两资源合main与正式包，复用原像素/引用/PNG预览与组合审查；未补记未报告的独立Minecraft视觉观察 | [集成与制品](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md) |
+| 累计管网/汽轮机/直列优化 | 用户要求合入最新H1及其真实前置链；结构/图/路径/预算复用、同tick补投与轴本机贡献撤销、换热直列减分配；普通工业管无距离/自身流量封顶，保留阀/泵/物理口额度和节点安全上限。原测试证据复用、组合窄审及准确源一次assemble；H1仅有小幅MSPT/分配收益，不称T8/T9为等负载纯提速 | [范围/证据与边界](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)、[组合审查](reviews/2026-10-20/optimization-accepted/REVIEW.md)、[制品身份](reviews/2026-10-20/optimization-accepted/ARTIFACT.json) |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果与再处理未实现。
 
@@ -46,5 +47,6 @@
 | 历史窄修观察 | 泵静止箭头/加载2048后的现场流量、冷液桶标记创造罐暂无明确独立客户端通过反馈；原管网和两端三角验收不重开。见[静止箭头/配置](archive/2026-10-15/reviews/2026-10-13/industrial-pump-idle-arrow-flow-config/CANDIDATE.md)、[桶交互](archive/2026-10-15/reviews/2026-10-12/industrial-pump-tank-interaction-fix/CANDIDATE.md) |
 | 辅助工具 | 模拟器02B单文件及3D工具整体验收独立，不阻塞已验机组或自动插入主线 |
 | 旧GameTest断言 | 性能候选真实服务端保留一条旧控制棒2.25HU断言失败，S1基线同样失败，当前ceil结果3HU；本次未改测试/玩法，不称全GameTest通过。见[审查](reviews/2026-10-15/reactor-performance-accepted-integration/REVIEW.md) |
+| 累计优化原验证边界 | T9真实服34/37、H1原直列/冷凝9/14，失败均在各自精确基线存在，未扩大修复或计为通过；H1新增真实断言10/10及干净冻结世界重载另记。物理卸载、真人多人及新客户端视觉未因合入补记验收，见[本批记录](reviews/2026-10-20/optimization-accepted/INTEGRATION.md) |
 
 管理员GUI曾有一次GL_OUT_OF_MEMORY事故，后续六分钟观察及用户反馈未复现，未定位具体源码根因，不能称已修复；仅再次发生并得到证据时恢复诊断。见[原观察](archive/2026-10-15/reviews/2026-10-14/reactor-administrator-05/OBSERVATION.md)。文档整理不关闭上述门或补写未报告操作。

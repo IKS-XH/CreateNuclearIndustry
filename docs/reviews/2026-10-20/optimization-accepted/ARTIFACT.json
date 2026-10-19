@@ -1,0 +1,111 @@
+{
+  "task": "OPT-INTEGRATION-20261020",
+  "source_commit": "a1ca0a6c249e81fd6ed66a25243964f72bab61b2",
+  "jar_path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "bytes": 3560094,
+  "sha256": "88f21a64cd483d2767bc0e5016282052b1f226835cf06f59bca833de71e51bbb",
+  "build_command": ".\\gradlew.bat assemble --console=plain",
+  "build_exit_code": 0,
+  "build_count": 1,
+  "build_duration_seconds_reported": 20,
+  "java": "Oracle JDK 21.0.7+8-LTS-245",
+  "versions": {
+    "minecraft": "1.21.1",
+    "neoforge": "21.1.219",
+    "create": "6.0.10-280",
+    "ponder": "1.0.82",
+    "flywheel": "1.0.6",
+    "gradle": "9.0.0"
+  },
+  "source_classification": {
+    "H1_Java": 16,
+    "T8_development_fixture_Java": 2,
+    "H1_mixin_resource": 1,
+    "H1_new_JUnit": 11
+  },
+  "all_2294_tracked_inputs_match_committed_content": true,
+  "all_input_raw_hashes_unchanged_during_build": true,
+  "unexpected_untracked_production_inputs": [],
+  "payload": {
+    "total_entries": 2466,
+    "class_count": 778,
+    "processed_resource_count": 1687,
+    "manifest_count": 1,
+    "all_classes_match_build_classes_output": true,
+    "all_classes_map_to_committed_Java_sources": true,
+    "all_resources_match_processed_build_output": true,
+    "all_resources_map_to_committed_sources_and_live_raw_bytes": true
+  },
+  "H1_comparison": {
+    "H1_sha256": "50f51e376dd373eff4bcebb67cee79c3ba5e261d7ea6c79010fe995eeb22484b",
+    "added_entries": [],
+    "deleted_entries": [],
+    "class_categories": {
+      "raw_identical": 710,
+      "local_variable_metadata_only": 66,
+      "line_number_metadata_only": 1,
+      "authorized_T8_development_fixture": 1
+    },
+    "changed_resource": "create_nuclear_industry.mixins.json",
+    "resource_change_reason": "CRLF_to_LF_only_JSON_equal",
+    "allowed_fixture_source": "src/main/java/com/iksxh/create_nuclear_industry/gametest/IndustrialFluidNetworkGameTests.java",
+    "allowed_fixture_changed_methods": [
+      "lambda$sharedInputEdgeChargesExtractedFluidIncludingShortReceipt$2(Lnet/minecraft/gametest/framework/GameTestHelper;Lnet/minecraft/core/BlockPos;Lcom/iksxh/create_nuclear_industry/gametest/IndustrialFluidNetworkGameTests$1;)V",
+      "sharedInputEdgeChargesExtractedFluidIncludingShortReceipt(Lnet/minecraft/gametest/framework/GameTestHelper;)V"
+    ],
+    "BoilerIndustrialActiveOutputGameTests_excluded": true,
+    "non_fixture_methods_fields_descriptors_annotations_frames_equal_after_debug_table_normalization": true,
+    "unknown_or_unauthorized_non_debug_differences": []
+  },
+  "evidence": [
+    "inputs-before.json",
+    "inputs-after.json",
+    "assemble.log",
+    "assemble-exit.json",
+    "payload-manifest.json",
+    "class-structure.tsv",
+    "class-structure.log",
+    "ClassPayloadAudit.java"
+  ],
+  "tests_rerun": false,
+  "candidate_repacked": false,
+  "git_write_by_executor": false,
+  "evidence_digests": {
+    "inputs-before.json": {
+      "bytes": 1398613,
+      "sha256": "689b220db777285e92a8190f356ae6c987d3d3f3471f8c824ec0048a1868919b"
+    },
+    "inputs-after.json": {
+      "bytes": 192,
+      "sha256": "3e1fe58846db62375dde3390b3d9b730500493aa553168747bcc37ede49ab0c0"
+    },
+    "assemble.log": {
+      "bytes": 5765,
+      "sha256": "be5e4c690a4151fe072b03654b93c64df7068eeb8d0d1b372a1a2638e762befe"
+    },
+    "assemble-exit.json": {
+      "bytes": 15,
+      "sha256": "e81bc160c0843ee56f31f12997bb3aff50528d596002d4866676cb8a1b19195a"
+    },
+    "payload-manifest.json": {
+      "bytes": 1779531,
+      "sha256": "b9333c39637972ec6772b834300cdb1bad303ea45228c614049aa3527fb9d462"
+    },
+    "class-structure.tsv": {
+      "bytes": 27048,
+      "sha256": "d7d1ea47799274cd8d890b7fe700a2c84c6a2217b687364a9aa3f5d878e5013b"
+    },
+    "class-structure.log": {
+      "bytes": 94,
+      "sha256": "833c61584fbe7f2fe40dbbd3bdb2053910f4a2a938dd28ffeee3cf54c89bffa4"
+    },
+    "ClassPayloadAudit.java": {
+      "bytes": 5876,
+      "sha256": "79a63737a6008976c9449a9cfda34bd7f2c83208a663738aea5ba397420560e2"
+    }
+  },
+  "final_jar_identity_rechecked": true,
+  "evidence_root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\optimization-accepted-20261020",
+  "formal_path": "E:/MyMC/NewMod/Create_NuclearIndustry/build/libs/create_nuclear_industry-0.1.0.jar",
+  "formal_git_blob": "0687b291a6034552b8a1a0cf36faee3305b05cac"
+}
