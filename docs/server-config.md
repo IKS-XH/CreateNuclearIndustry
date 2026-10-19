@@ -59,13 +59,8 @@
 | warningHeatThresholdFraction | 0.5 | 列积热预警比例 |
 | resetStableTicks / controlLeaseTicks / armingTimeoutTicks | 100 / 20 / 40 | 复位稳定/控制租约/建立联锁超时tick |
 | burnerMaintenanceHuPerTick | 1 | 真实核热值班HU/t，须正有限 |
-| defaultTargetStressReservePercent | 20 | 新管理员目标应力余量%，0～90 |
-| defaultMinimumOperatingHeatHuPerTick | 2 | 新管理员最低毛HU/t，默认维护1＋净输出1 |
-| stressReserveDeadbandFraction / stressFilterTimeTicks | 0.03 / 40 | 余量比例死区/滤波时间常数tick |
-| stressPiProportionalFraction / stressPiIntegralFractionPerSecond | 0.25 / 0.01 | PI增益，乘当前堆可达最大HU/t；积分为每秒 |
-| stressEstablishmentTimeoutTicks | 1200 | 当前网建立/读档重建等待tick |
 
-机器显式模式/目标保存于自身状态，默认参数不覆盖已有设定。最低值保留默认2时按维护成本＋1初始化；PI/滤波暂态重建，保存续接不恢复旧积分。
+机器显式模式/目标保存于自身状态，默认参数不覆盖已有设定。管理员仅保留统一深度和恒功率，应力余量、最低运行功率与PI相关配置随该模式移除；核热值班成本不变。
 
 ## 专用流体管网
 

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "rg",
+    "-n",
+    "--no-ignore-vcs",
+    "LOAD_FOLLOW|LOAD_WARMUP|ReactorLoadFollow|ReactorStress|reservePercent|minimumHeatHuPerTick|ReserveTarget|MinimumHeat|SettingReserve|SettingMinimumHeat|loadFollowParameters|initialMinimumHeat|LoadingRebind|StressValid|StressReserve|StressGauge|reactor_stress_gauge|cni_reactor_load_follow",
+    "src/main/java",
+    "src/main/resources",
+    "build.gradle"
+  ],
+  "exit_code": 1,
+  "meaning": "no_matches",
+  "production_residue": []
+}

@@ -1,0 +1,24 @@
+{
+  "neoforge": "21.1.219",
+  "source_jar": "C:\\Users\\IKSXH\\.gradle\\caches\\modules-2\\files-2.1\\net.neoforged\\neoforge\\21.1.219\\eefeb66da85d5ced69c1d0bc86b8140ddff77c1\\neoforge-21.1.219-sources.jar",
+  "source_jar_sha256": "814983ff6c233935f176a99b10a495cfa37971ffe1a73a6f8b097e893553ca8c",
+  "entry": "net/neoforged/neoforge/gametest/GameTestHooks.java",
+  "lines_65_72": [
+    "    private static Set<String> getEnabledNamespaces() {",
+    "        String enabledNamespacesStr = System.getProperty(\"neoforge.enabledGameTestNamespaces\");",
+    "        if (enabledNamespacesStr == null) {",
+    "            return Set.of();",
+    "        }",
+    "",
+    "        return Arrays.stream(enabledNamespacesStr.split(\",\")).filter(s -> !s.isBlank()).collect(Collectors.toUnmodifiableSet());",
+    "    }"
+  ],
+  "namespaces": [
+    "cni_reactor_administrator",
+    "cni_reactor_administrator_startup",
+    "cni_reactor_administrator_resume"
+  ],
+  "expected_tests": 19,
+  "directory": "build/reports/reactor-load-follow-removal-20261020/game",
+  "no_closed_loop_domain": true
+}

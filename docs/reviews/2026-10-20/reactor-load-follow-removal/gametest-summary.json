@@ -1,0 +1,15 @@
+{
+  "required_tests": 19,
+  "passed": 19,
+  "failed": 0,
+  "exit_code": 0,
+  "namespaces": [
+    "cni_reactor_administrator",
+    "cni_reactor_administrator_startup",
+    "cni_reactor_administrator_resume"
+  ],
+  "new_game_directory": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\reactor-load-follow-removal-20261020\\game",
+  "normal_save_and_shutdown": true,
+  "no_closed_loop_domain": true,
+  "initial_missing_server_properties_in_new_directory_logged": true
+}

@@ -4,9 +4,9 @@
 
 ## 主分支与正式包
 
-- 已提交生产来源`a1ca0a6c249e81fd6ed66a25243964f72bab61b2`，按用户指令合入T2→T3→T4→T5→T7→T8→T9→H1累计优化及两条已批准夹具同步；不含T6、B1或事故第二批。此前自动化接口17B C稿、首批辐射/头罩、S1/C1、贫化铀装备与外观、队列崩溃修复、Sodium连接外观、尾热停机、管理员/闭环与其它已验机组保持。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3560094 bytes，SHA256 `88F21A64CD483D2767BC0E5016282052B1F226835CF06F59BCA833DE71E51BBB`，按用户要求跟踪Git；准确已提交源一次增量assemble原输出，构建及全部class/资源绑定见[本批记录](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)。
-- 本批复用同实现原定向/真实服/受控性能证据，完成一次组合窄审及增量assemble/exit0，不把既有GameTest失败记为通过，不称本轮重跑了全部测试。main两项授权源增量与正式包以外45项tracked原始字节保持。原[接口外观](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)、[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机S1/C1](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
+- 已提交生产来源`2561b1d1021d4ccf52db2eabab44e1648dd16623`，按用户要求移除管理员应力余量闭环、应力表绑定及其配置/投影/专属测试，保留统一调棒、恒功率、核热值班、保护和续接。此前T2→T3→T4→T5→T7→T8→T9→H1累计优化、锅炉主动汽口、自动化接口17B C稿、首批辐射/头罩及其它已验机组保持；不含T6、B1或事故第二批。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3523047 bytes，SHA256 `74E95F6DCD024802F21B25A7028EBB067FF3FD83AB21D8E90B6A4E79EADD4090`，按用户要求跟踪Git；准确已提交源一次增量assemble原输出，2282输入/762class/1687资源及manifest全部绑定，闭环专用载荷无残留，见[本批记录](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md)。管理员通信协议5，联机两端须同步更新。
+- 本批定向JUnit48/48、三个真实管理员域19/19，均exit0；一轮组合窄审和一次增量assemble/exit0，不重复全量或原性能采样，main45项原tracked状态字节保持。原[累计优化](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)、[接口外观](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)、[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机S1/C1](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
 
 ## 已合入并按相应范围验收
 
@@ -20,7 +20,7 @@
 | 八类基础思索 | 离心机、反应堆、锅炉、汽轮机、换热器、烧结炉、装配台、贮存架 | [装配台单页](archive/2026-10-15/reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)、[贮存架](archive/2026-10-15/reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)及前批播放验收 |
 | 专用流体管网 | 两档管阀、一种工业泵；热液/SC专用运输，现有口2048/4096mB/t | [功能/外观合入](archive/2026-10-15/reviews/2026-10-12/turbine-fluid-accepted-integration/ACCEPTANCE.md) |
 | 管理员 | 三页GUI、统一调棒、恒功率、核热值班、部分缺料不停堆及原状态续接 | [联合验收](archive/2026-10-15/reviews/2026-10-14/reactor-administrator-accepted-integration/ACCEPTANCE.md) |
-| 闭环与锅炉汽口 | 应力表绑定PI控制；汽口沿合法工业管主动出汽，不需补外置泵 | [联合手测/合入](archive/2026-10-15/reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md) |
+| 锅炉主动汽口 | 汽口沿合法工业管主动出汽，不需补外置泵；原联合交付中的管理员闭环已按2026-10-20要求移除 | [原联合验收](archive/2026-10-15/reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md)、[移除边界](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md) |
 | 锅炉尺寸与外观 | 三边5～16、长方体及跨区块；用户确认尺寸上限与锅炉外观手测通过，尺寸净增量已接入main | [本批验收](reviews/2026-10-15/boiler-size-accepted-integration/ACCEPTANCE.md) |
 | 已验美术 | 反应堆/锅炉/汽轮机、Logo、离心机、装配台黑窗与烧结炉A版；反应堆Sodium上下文窄修 | [前批美术](reviews/2026-10-14/latest-production-art-integration/INTEGRATION.md)、[烧结炉验收](reviews/2026-10-15/sintering-art-accepted-integration/ACCEPTANCE.md)、[Sodium局部验收](archive/2026-10-15/reviews/2026-10-13/reactor-sodium-surface-01/ACCEPTANCE.md) |
 | 锅炉/汽轮机Sodium渲染 | 补齐两处LevelSlice入口，用户确认本批渲染手测通过并授权合main；正式包与已测包一致 | [验收与合入](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[组合窄审](reviews/2026-10-17/thermal-sodium-01/REVIEW.md) |
@@ -32,6 +32,7 @@
 | 首批辐射与护目镜头罩 | 已用燃料历史、真实物料源/屏蔽、玩家剂量/恢复、防护服与仪表；头罩额外1护目镜并提供原生信息。用户确认原清单及头罩补充手测通过，已合main与正式包 | [联合验收/来源](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[冲突并集窄审](reviews/2026-10-18/radiation-accepted-integration/REVIEW.md) |
 | 自动化接口17B外观 | 用户授权C稿两资源合main与正式包，复用原像素/引用/PNG预览与组合审查；未补记未报告的独立Minecraft视觉观察 | [集成与制品](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md) |
 | 累计管网/汽轮机/直列优化 | 用户要求合入最新H1及其真实前置链；结构/图/路径/预算复用、同tick补投与轴本机贡献撤销、换热直列减分配；普通工业管无距离/自身流量封顶，保留阀/泵/物理口额度和节点安全上限。原测试证据复用、组合窄审及准确源一次assemble；H1仅有小幅MSPT/分配收益，不称T8/T9为等负载纯提速 | [范围/证据与边界](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)、[组合审查](reviews/2026-10-20/optimization-accepted/REVIEW.md)、[制品身份](reviews/2026-10-20/optimization-accepted/ARTIFACT.json) |
+| 管理员应力闭环移除 | 用户明确要求直接移除main；闭环模式/绑定/PI/相关配置、NBT和显示字段及专属测试已删除。三页GUI、两种保留模式、保护、核热和续接按定向JUnit48/48、真实服19/19验证；准确源一次assemble及删除载荷核验通过，不冒称新的客户端手测 | [集成](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md)、[组合审查](reviews/2026-10-20/reactor-load-follow-removal/REVIEW.md)、[正式身份](reviews/2026-10-20/reactor-load-follow-removal/ARTIFACT.json) |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果与再处理未实现。
 
@@ -41,12 +42,13 @@
 | --- | --- |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 事故与辐射第二批 | [候选已交付，待集中手测](reviews/2026-10-18/accident-execution-02/CANDIDATE.md)。树`Create_NuclearIndustry-accident`、分支`codex/accident-execution-02`、来源d839bc7；事故接管/账本、有界世界动作、残骸与既有封装链、原生最终取消边界及托管辐射源成套交付。定向JUnit18/18，隔离真实服与窄修证据、唯一组合审查、一次assemble/exit0及来源绑定已核；候选3533416 bytes/SHA BF6D4D14…FE0FC4FE。携带已保存main世界27文件/13337721 bytes、0差异，未用于自动事故。真实FULL等待/恢复及正常停服重进已证，物理ChunkEvent.Unload/真人多人/客户端连续体验未证。未合main，当前正式包不含事故第二批；第三批等本轮人工门 |
-| 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想后置，现行管理员应力闭环保留 |
+| 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |
 | 历史窄修观察 | 泵静止箭头/加载2048后的现场流量、冷液桶标记创造罐暂无明确独立客户端通过反馈；原管网和两端三角验收不重开。见[静止箭头/配置](archive/2026-10-15/reviews/2026-10-13/industrial-pump-idle-arrow-flow-config/CANDIDATE.md)、[桶交互](archive/2026-10-15/reviews/2026-10-12/industrial-pump-tank-interaction-fix/CANDIDATE.md) |
 | 辅助工具 | 模拟器02B单文件及3D工具整体验收独立，不阻塞已验机组或自动插入主线 |
 | 旧GameTest断言 | 性能候选真实服务端保留一条旧控制棒2.25HU断言失败，S1基线同样失败，当前ceil结果3HU；本次未改测试/玩法，不称全GameTest通过。见[审查](reviews/2026-10-15/reactor-performance-accepted-integration/REVIEW.md) |
 | 累计优化原验证边界 | T9真实服34/37、H1原直列/冷凝9/14，失败均在各自精确基线存在，未扩大修复或计为通过；H1新增真实断言10/10及干净冻结世界重载另记。物理卸载、真人多人及新客户端视觉未因合入补记验收，见[本批记录](reviews/2026-10-20/optimization-accepted/INTEGRATION.md) |
+| 管理员删除后客户端复看 | 本批源及真实服已验证，GUI只剩统一深度/恒功率且仍为三页、Ctrl不再绑定应力表的实际客户端复看尚待用户反馈；未重开其余已验功能或将自动结果当视觉验收，见[本批记录](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md) |
 
 管理员GUI曾有一次GL_OUT_OF_MEMORY事故，后续六分钟观察及用户反馈未复现，未定位具体源码根因，不能称已修复；仅再次发生并得到证据时恢复诊断。见[原观察](archive/2026-10-15/reviews/2026-10-14/reactor-administrator-05/OBSERVATION.md)。文档整理不关闭上述门或补写未报告操作。

@@ -1,0 +1,249 @@
+{
+  "base_commit": "222930f005a797df6a48e16bd34542b425492804",
+  "modified": 20,
+  "deleted": 12,
+  "total": 32,
+  "all_modified_files_LF": true,
+  "files": [
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationState.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "f97410004263adbc0dc0c75e893b8b7e4ead7e97315e71ded712118e07b52d55",
+      "new_raw_sha256": "7d6760ae44a046223a5b67f0e169bba7fa5ce52c57a9f512a3066a655b8320da",
+      "new_bytes": 1421
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationController.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "76b3106740f6e5845fd45ed9d98362a177e38a4edf71000777e0e3ee733e5d2b",
+      "new_raw_sha256": "245bd09427a235c10083638c5e04867f4eb40a596b8ef169e0906d04fa670cdc",
+      "new_bytes": 12156
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationService.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "9fedd4b04de2457228a4318650f8380aeea71341c1bb0523f1dcf28adab0f672",
+      "new_raw_sha256": "8df9aeca3f4fde600aaefce75045cfa21f762a52df2a04aa09160dad93a0831f",
+      "new_bytes": 14246
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationResume.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "098277af2c911e1b8a91472ec05e87d2bf2fdfd71939e130fc5f9b63ed5311f3",
+      "new_raw_sha256": "04c3e8327b1e620a2d8dd2bb72be48dadc3c761dd77dabb29ee5f403fc4c819a",
+      "new_bytes": 20475
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationPortBlockEntity.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "712429f4fa740fd65730519f0b354c0d7dfc6b73985284ae69e2e1eb087e82a6",
+      "new_raw_sha256": "5e5ebed876e72a7014aa181f2dba9a138ca9013d10271c864c2838d9bf2d382b",
+      "new_bytes": 4395
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationNetwork.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "e7e6fe1d15e7ad3771f4b50fcb03b9051ace4145576e5cf99f04399696324794",
+      "new_raw_sha256": "01b33b1af50583275b08b0a09597c97250da805dd54d3011df8dd7b01307aa91",
+      "new_bytes": 4771
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationGoggles.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "4b9a942ff28a6e50ae5d0d73a7c8e3706eb66e64a1f4e22123c6f24dc7fe5e35",
+      "new_raw_sha256": "a9b67c65d2f9567efc5d5b4b5962ac6aff4f4333aa035b112f53a50a7fa2f586",
+      "new_bytes": 3162
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/client/ReactorAutomationClientEvents.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "f677c1f614e4574bb1e1a9bc336179e563fe2c705ce996a615c9f5ba24384040",
+      "new_raw_sha256": "9fbba99e994f43b4dac8308cdae1f017066cfbec34d013f323bf8861df31b1bc",
+      "new_bytes": 1889
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/client/ReactorAdministratorScreen.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "fd90b346ece4af57545661971c6b1fbe2d6fa8f36b771d0b3650451a05c30850",
+      "new_raw_sha256": "8f189cd23b56343a9ca553ad6f8b976b24b2f9187de816c6a6438893b13ae34e",
+      "new_bytes": 16995
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/client/ReactorAdministratorLayout.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "e016321778afbba12cd7b96c6d1da132a57e188be204661720481bcff39344c3",
+      "new_raw_sha256": "bf0109ab5944f400b7829e21facd15fd68e53c560b25c17d69196194b6f63957",
+      "new_bytes": 2166
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/gui/ReactorAdministratorCommands.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "a022af8e46d323c4e4fe95dea286b84099d4523e63b35989d2a3df3f34792535",
+      "new_raw_sha256": "c8d832de4747ba598eae808e867f1ac68b13e61f6ddf1fe74e806dce433fff31",
+      "new_bytes": 10100
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/gui/ReactorAdministratorProjection.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "e238356c6fdcf510f0a56bded8ff8f60832a72f756c7a6aa5c46743ebf58779a",
+      "new_raw_sha256": "ba9a7f727178a6df00b4b0a9c1dc74dd19f77fff244206abd8a89aaf671b3a72",
+      "new_bytes": 8581
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "c0fe0e1c61dfd1822e969f99e4a31731dc5800e138b21b8856fb211461d28d96",
+      "new_raw_sha256": "501c47287dfb155c501806eadca2d3b7e9c0a73b83e51de19e52b110b586d5bf",
+      "new_bytes": 106290
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/config/ReactorAutomationConfig.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "ec3343f1ed132c4fd058cce1b6b7d561817a3b0f726f43af55c426c9e4212c4b",
+      "new_raw_sha256": "ec1a4258499ecd6175faffbd391ef25a3cfdaa239cf0b5c4339eddda178fee6a",
+      "new_bytes": 2872
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorAdministratorCommandsTest.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "1aa52d75b06785c06d4707a6ea86fa50ee8a9571ffcaea3d2645f33d0a0a0466",
+      "new_raw_sha256": "31e1eb93e1a949f79814520567b3f2e5f4b397659eb3b6bce5f6f400947a9c3a",
+      "new_bytes": 6910
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorAdministratorLayoutTest.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "1a91e4bb25035da3a4808f42ed8802876f2ec2249706d4a7e2207e496d1553a5",
+      "new_raw_sha256": "9fcd021db870088bd29fbef789216f2e1c677e8102a6b22092425238a6ce1afd",
+      "new_bytes": 1839
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationResumeTest.java",
+      "operation": "modify",
+      "baseline_normalized_sha256": "f2788121f6916d49766aa916945d86b46e112d3c936d1ee22a19b23d3a38367d",
+      "new_raw_sha256": "51e937f615eeba7a464ebb46c86f92ff3b2c39576b142bf45e3c038f72d57431",
+      "new_bytes": 9354
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/lang/zh_cn.json",
+      "operation": "modify",
+      "baseline_normalized_sha256": "e57e29d18db22a304f4646abc9ac67b3cc0b1228f2f677a996166b2203143ce0",
+      "new_raw_sha256": "4b9d9fb130f4123edf9756d8918990ac2803cdd788ced6cae3d8abf45ad9b227",
+      "new_bytes": 66646
+    },
+    {
+      "path": "src/main/resources/assets/create_nuclear_industry/lang/en_us.json",
+      "operation": "modify",
+      "baseline_normalized_sha256": "7e2ddc6657396677ff590cd6a13e00a23724bd53fba20d8009e285fe6721e700",
+      "new_raw_sha256": "1ed66e3fea7182b8f4f1ee312cd7a5cbbd45fe7491d33aa26b9d1ab490e8279f",
+      "new_bytes": 70532
+    },
+    {
+      "path": "build.gradle",
+      "operation": "modify",
+      "baseline_normalized_sha256": "172579de34851e0c8d65d74f6f3d9d56d19385a908225da47789c905823547ca",
+      "new_raw_sha256": "5e97d425aa5da76ab360c80a77d029cf9730c5b0ef8220ee687bc2bc5c819f04",
+      "new_bytes": 6243
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorLoadFollowParameters.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "48de0f4bf9ce8d2e1e37cdf36892a346e38f1fb9911bd7ea6a3117d1cce0100a",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorLoadFollowSession.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "a47a9da610f462cfa07f17e6a36dfb4f79886c7e5583526f66d99967de951fcc",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorStressGaugeLink.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "d5d0b309343785dbae4bb00e4199b6338b2a6aa8d666c3348feafeb660b04b73",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorStressGaugeService.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "9ba224d5b4bd2b154dfc2a23027b65b706cdb3709a8e906cc9ccbc550522a7aa",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorStressPiController.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "ed479781227007934c0f1e250a4f0fa15c91a9203b2f318b3eb8bce6f1af377b",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorStressSample.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "3b9e631af73727e90f746bcfb7b3039df23fbe52dae5ec17c7b70cd0fa8dc00e",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/ReactorLoadFollowGameTests.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "9c2f849526e8ffbe6acb29d454d3ce18777a0ff873f74efa357d17cfe83c97b9",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorLoadFollowControlsTest.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "1c8a9ed3c3175d28e5d7b4af35688e1bb6b67dcc761da773405196df5df6cea5",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorLoadFollowLifecycleTest.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "92f894b07fe0e9e3d2e7ffe41fb0645c41bfc71c28815b6756aca18225b31317",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorStressGaugeBindingTest.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "53dc09e15b554e419404ad72330bb5b7b06ed2acca40b7c9450a96c53758b865",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorStressPiControllerTest.java",
+      "operation": "delete",
+      "baseline_normalized_sha256": "3aa421ff367dd4eb71ef0601ec849dde9eca05a43444f987f3651421715455f5",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    },
+    {
+      "path": "src/main/resources/data/cni_reactor_load_follow/structure/load_follow_empty.nbt",
+      "operation": "delete",
+      "baseline_normalized_sha256": "71343a478b844ae6b0044f0f2142fae309499d727cfc731d6e5bbf9f6bc104e4",
+      "new_raw_sha256": null,
+      "new_bytes": 0
+    }
+  ],
+  "retained_modes": [
+    "STOP",
+    "MANUAL",
+    "CONSTANT"
+  ],
+  "retained_phases": [
+    "STOPPED",
+    "ARMING",
+    "MANUAL",
+    "CONSTANT",
+    "FAULT"
+  ],
+  "protocol_version": "5",
+  "invalid_network_modes": "CODEC null + whole-draft validation rejection",
+  "invalid_saved_modes": "non-runnable STOP or failed resume; no migration",
+  "outside_source_hashes_unchanged": true
+}

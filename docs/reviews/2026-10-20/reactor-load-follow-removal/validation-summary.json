@@ -1,0 +1,173 @@
+{
+  "expected_changed_paths": 32,
+  "actual_changed_paths": 32,
+  "outside_source_hash_changes": [],
+  "diff_check_exit": 0,
+  "junit_classes": 9,
+  "junit_tests": 48,
+  "junit_failures": 0,
+  "junit_errors": 0,
+  "junit_skipped": 0,
+  "junit_results": [
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAdministratorCommandsTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAdministratorHeatSupplyTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAdministratorLayoutTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationAuthorityTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationBlazeTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationControllerTest",
+      "tests": "18",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationDataTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationResumeTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationStructureTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "language_removed_keys": {
+    "zh_cn": [
+      "automation.create_nuclear_industry.gui.gauge",
+      "automation.create_nuclear_industry.gui.gauge_none",
+      "automation.create_nuclear_industry.gui.load_follow",
+      "automation.create_nuclear_industry.gui.load_rebinding",
+      "automation.create_nuclear_industry.gui.load_summary",
+      "automation.create_nuclear_industry.gui.minimum",
+      "automation.create_nuclear_industry.gui.reserve",
+      "automation.create_nuclear_industry.gui.result_binding_invalid",
+      "automation.create_nuclear_industry.gui.result_binding_running",
+      "automation.create_nuclear_industry.gui.result_gauge_bound",
+      "automation.create_nuclear_industry.gui.result_gauge_selected",
+      "automation.create_nuclear_industry.gui.result_no_operating_band",
+      "automation.create_nuclear_industry.gui.result_selection_expired",
+      "automation.create_nuclear_industry.gui.result_stress_network_busy",
+      "automation.create_nuclear_industry.gui.result_stress_sample_lost",
+      "automation.create_nuclear_industry.phase.load_follow",
+      "automation.create_nuclear_industry.phase.load_warmup",
+      "automation.create_nuclear_industry.reason.gauge_changed",
+      "automation.create_nuclear_industry.reason.no_operating_band",
+      "automation.create_nuclear_industry.reason.stress_capacity_lost",
+      "automation.create_nuclear_industry.reason.stress_network_busy",
+      "automation.create_nuclear_industry.reason.stress_network_changed",
+      "automation.create_nuclear_industry.reason.stress_sample_lost",
+      "automation.create_nuclear_industry.reason.stress_timeout",
+      "automation.create_nuclear_industry.reason.stress_waiting"
+    ],
+    "en_us": [
+      "automation.create_nuclear_industry.gui.gauge",
+      "automation.create_nuclear_industry.gui.gauge_none",
+      "automation.create_nuclear_industry.gui.load_follow",
+      "automation.create_nuclear_industry.gui.load_rebinding",
+      "automation.create_nuclear_industry.gui.load_summary",
+      "automation.create_nuclear_industry.gui.minimum",
+      "automation.create_nuclear_industry.gui.reserve",
+      "automation.create_nuclear_industry.gui.result_binding_invalid",
+      "automation.create_nuclear_industry.gui.result_binding_running",
+      "automation.create_nuclear_industry.gui.result_gauge_bound",
+      "automation.create_nuclear_industry.gui.result_gauge_selected",
+      "automation.create_nuclear_industry.gui.result_no_operating_band",
+      "automation.create_nuclear_industry.gui.result_selection_expired",
+      "automation.create_nuclear_industry.gui.result_stress_network_busy",
+      "automation.create_nuclear_industry.gui.result_stress_sample_lost",
+      "automation.create_nuclear_industry.phase.load_follow",
+      "automation.create_nuclear_industry.phase.load_warmup",
+      "automation.create_nuclear_industry.reason.gauge_changed",
+      "automation.create_nuclear_industry.reason.no_operating_band",
+      "automation.create_nuclear_industry.reason.stress_capacity_lost",
+      "automation.create_nuclear_industry.reason.stress_network_busy",
+      "automation.create_nuclear_industry.reason.stress_network_changed",
+      "automation.create_nuclear_industry.reason.stress_sample_lost",
+      "automation.create_nuclear_industry.reason.stress_timeout",
+      "automation.create_nuclear_industry.reason.stress_waiting"
+    ]
+  },
+  "deleted_compiled_class_and_template_outputs_absent": true,
+  "jar_untouched_sha256": "88f21a64cd483d2767bc0e5016282052b1f226835cf06f59bca833de71e51bbb",
+  "production_assembly_not_run": true,
+  "gametest": {
+    "required_tests": 19,
+    "passed": 19,
+    "failed": 0,
+    "exit_code": 0,
+    "namespaces": [
+      "cni_reactor_administrator",
+      "cni_reactor_administrator_startup",
+      "cni_reactor_administrator_resume"
+    ],
+    "new_game_directory": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\reactor-load-follow-removal-20261020\\game",
+    "normal_save_and_shutdown": true,
+    "no_closed_loop_domain": true,
+    "initial_missing_server_properties_in_new_directory_logged": true
+  },
+  "source_audit": "SOURCE.json",
+  "implementation_frozen_sha256": {
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationState.java": "7d6760ae44a046223a5b67f0e169bba7fa5ce52c57a9f512a3066a655b8320da",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationController.java": "245bd09427a235c10083638c5e04867f4eb40a596b8ef169e0906d04fa670cdc",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationService.java": "8df9aeca3f4fde600aaefce75045cfa21f762a52df2a04aa09160dad93a0831f",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationResume.java": "04c3e8327b1e620a2d8dd2bb72be48dadc3c761dd77dabb29ee5f403fc4c819a",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationPortBlockEntity.java": "5e5ebed876e72a7014aa181f2dba9a138ca9013d10271c864c2838d9bf2d382b",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationNetwork.java": "01b33b1af50583275b08b0a09597c97250da805dd54d3011df8dd7b01307aa91",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationGoggles.java": "a9b67c65d2f9567efc5d5b4b5962ac6aff4f4333aa035b112f53a50a7fa2f586",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/client/ReactorAutomationClientEvents.java": "9fbba99e994f43b4dac8308cdae1f017066cfbec34d013f323bf8861df31b1bc",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/client/ReactorAdministratorScreen.java": "8f189cd23b56343a9ca553ad6f8b976b24b2f9187de816c6a6438893b13ae34e",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/client/ReactorAdministratorLayout.java": "bf0109ab5944f400b7829e21facd15fd68e53c560b25c17d69196194b6f63957",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/gui/ReactorAdministratorCommands.java": "c8d832de4747ba598eae808e867f1ac68b13e61f6ddf1fe74e806dce433fff31",
+    "src/main/java/com/iksxh/create_nuclear_industry/automation/gui/ReactorAdministratorProjection.java": "ba9a7f727178a6df00b4b0a9c1dc74dd19f77fff244206abd8a89aaf671b3a72",
+    "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java": "501c47287dfb155c501806eadca2d3b7e9c0a73b83e51de19e52b110b586d5bf",
+    "src/main/java/com/iksxh/create_nuclear_industry/config/ReactorAutomationConfig.java": "ec1a4258499ecd6175faffbd391ef25a3cfdaa239cf0b5c4339eddda178fee6a",
+    "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorAdministratorCommandsTest.java": "31e1eb93e1a949f79814520567b3f2e5f4b397659eb3b6bce5f6f400947a9c3a",
+    "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorAdministratorLayoutTest.java": "9fcd021db870088bd29fbef789216f2e1c677e8102a6b22092425238a6ce1afd",
+    "src/test/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationResumeTest.java": "51e937f615eeba7a464ebb46c86f92ff3b2c39576b142bf45e3c038f72d57431",
+    "src/main/resources/assets/create_nuclear_industry/lang/zh_cn.json": "4b9d9fb130f4123edf9756d8918990ac2803cdd788ced6cae3d8abf45ad9b227",
+    "src/main/resources/assets/create_nuclear_industry/lang/en_us.json": "1ed66e3fea7182b8f4f1ee312cd7a5cbbd45fe7491d33aa26b9d1ab490e8279f",
+    "build.gradle": "5e97d425aa5da76ab360c80a77d029cf9730c5b0ef8220ee687bc2bc5c819f04"
+  }
+}

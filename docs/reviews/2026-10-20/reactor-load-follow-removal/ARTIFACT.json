@@ -1,0 +1,99 @@
+{
+  "task": "AUTO-REMOVE-LOAD-20261020",
+  "source_commit": "2561b1d1021d4ccf52db2eabab44e1648dd16623",
+  "baseline_commit": "222930f005a797df6a48e16bd34542b425492804",
+  "jar_path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "bytes": 3523047,
+  "sha256": "74e95f6dcd024802f21b25a7028ebb067ff3fd83ab21d8e90b6a4e79eadd4090",
+  "command": ".\\gradlew.bat assemble --console=plain",
+  "assemble_count": 1,
+  "exit_code": 0,
+  "reported_build_duration_seconds": 1,
+  "build_tasks": {
+    "executed": 1,
+    "up_to_date": 3
+  },
+  "input_count": 2282,
+  "previous_input_count": 2294,
+  "deleted_inputs": 12,
+  "all_inputs_match_committed_content_and_frozen_validation": true,
+  "all_raw_inputs_unchanged_during_build": true,
+  "unexpected_untracked_production_inputs": [],
+  "class_count": 762,
+  "processed_resource_count": 1687,
+  "manifest_count": 1,
+  "all_class_entries_match_build_output_and_committed_SourceFile": true,
+  "all_resource_entries_match_processed_output_and_source": true,
+  "manifest_matches_build_tmp": true,
+  "baseline_jar_sha256": "88f21a64cd483d2767bc0e5016282052b1f226835cf06f59bca833de71e51bbb",
+  "payload_delta_counts": {
+    "language_25_keys_removed": 2,
+    "modified_class": 27,
+    "deleted_class": 16
+  },
+  "all_class_differences_belong_to_authorized_SourceFile": true,
+  "unchanged_class_entries": 735,
+  "unchanged_other_resources": 1685,
+  "unchanged_manifest": true,
+  "language_only_25_keys_removed_per_locale": true,
+  "removed_type_and_template_entry_residue": [],
+  "removed_symbol_class_residue": [],
+  "JUnit_and_GameTests_not_rerun_for_assemble": true,
+  "jar_repacked": false,
+  "clean_or_rerun_tasks_used": false,
+  "git_write_by_executor": false,
+  "versions": {
+    "minecraft": "1.21.1",
+    "java": "21.0.7",
+    "neoforge": "21.1.219",
+    "create": "6.0.10-280",
+    "ponder": "1.0.82",
+    "flywheel": "1.0.6",
+    "gradle": "9.0.0"
+  },
+  "evidence_digests": {
+    "inputs-before.json": {
+      "bytes": 1203873,
+      "sha256": "a1cff68fd51e51eac866d668860eb51d16f2ebf5c5a7b596a24f8f096744d700"
+    },
+    "inputs-after.json": {
+      "bytes": 131,
+      "sha256": "bea5fadc07d466825a75a5ff13740d2d89ed41d6aeca3aab2372a93b166dab7e"
+    },
+    "SOURCE.json": {
+      "bytes": 11524,
+      "sha256": "81459efae3936e95f01da1a3de54c437e53369769306079fc00b7de8fce62d49"
+    },
+    "validation-summary.json": {
+      "bytes": 9419,
+      "sha256": "45ce6d8500aaf1619412b0205a323d9e82e5624f754de4b479ecc568f2ebc23b"
+    },
+    "gametest-summary.json": {
+      "bytes": 502,
+      "sha256": "343c134e15c5fb9f3550cceeefb15a276786f0800a738c27e57a39bb966cab6a"
+    },
+    "assemble.log": {
+      "bytes": 408,
+      "sha256": "518dfb115a2dcc069c7af9798bfbdf2f07e79218278dd75d0365b30e65c87bde"
+    },
+    "assemble-exit.json": {
+      "bytes": 15,
+      "sha256": "e81bc160c0843ee56f31f12997bb3aff50528d596002d4866676cb8a1b19195a"
+    },
+    "payload-manifest.json": {
+      "bytes": 1747512,
+      "sha256": "7a1d2500bdf9888764c782378231f5ef059c0f82113c13f78e99ab76ca2ca13b"
+    },
+    "payload-delta.json": {
+      "bytes": 15170,
+      "sha256": "0950b01bcacac4d0e6d3b08b76fe5b9f50b84e1afb196d187a320ff39614963d"
+    },
+    "bind-artifact.py": {
+      "bytes": 12590,
+      "sha256": "5a7c5b095fc8ff61847dd44f63aabc53ef7d778afa79b901d525b62c0295a216"
+    }
+  },
+  "evidence_root": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-du-accepted-integration\\build\\reports\\reactor-load-follow-removal-20261020",
+  "formal_path": "E:/MyMC/NewMod/Create_NuclearIndustry/build/libs/create_nuclear_industry-0.1.0.jar",
+  "formal_git_blob": "787ab7b6ec2c5a6140c1df0684958e18e72e9e98"
+}
