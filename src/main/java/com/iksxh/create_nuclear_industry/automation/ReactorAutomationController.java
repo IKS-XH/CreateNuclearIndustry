@@ -79,7 +79,6 @@ public final class ReactorAutomationController {
     }
     public static String tripReason(ReactorAutomationObservation o,ReactorAutomationParameters p) {
         if(o.settings().targetHeatHuPerTick()>p.maxTargetHeatHuPerTick()) return "invalid_value";
-        if(o.settings().mode()==Mode.LOAD_FOLLOW&&o.settings().minimumHeatHuPerTick()>p.maxTargetHeatHuPerTick())return "invalid_value";
         if(!o.bindingValid() || o.gameTime()-o.sampleTime()>p.controlLeaseTicks() || o.gameTime()<o.sampleTime()) return "binding_lost";
         if(!o.dutyValid()) return "duty_lost";
         if(o.fuelCount()==0) return "fuel_lost";
@@ -117,7 +116,7 @@ public final class ReactorAutomationController {
                 if(state.armingAge()+1>=p.armingTimeoutTicks()) return result(state.stop("arming_timeout",true),100);
                 return result(new ReactorAutomationState(true,Phase.ARMING,"arming",100,state.authorityEpoch(),0,0,0,state.armingAge()+1,state.requestedMode(),true),null);
             }
-            var phase=state.requestedMode()==Mode.MANUAL?Phase.MANUAL:state.requestedMode()==Mode.LOAD_FOLLOW?Phase.LOAD_WARMUP:Phase.CONSTANT;
+            var phase=state.requestedMode()==Mode.MANUAL?Phase.MANUAL:Phase.CONSTANT;
             if(phase==Phase.MANUAL) {
                 // 降沿到达不解除库存/积热预警。逐棒保留安全基准与启动意图，解除预警后才提交已确认浅目标。
                 if(warning(o,p)) {
@@ -147,8 +146,6 @@ public final class ReactorAutomationController {
         }
         if(age<p.adjustIntervalTicks()) return result(with(state,state.commandedDepthPercent(),age,state.reason()),null);
         if(state.phase()==Phase.MANUAL) return result(with(state,state.commandedDepthPercent(),0,"manual"),null);
-        // 闭环目标来自当前应力会话，纯保护控制器不把无关恒功率草稿0当成停堆请求。
-        if(state.requestedMode()==Mode.LOAD_FOLLOW)return result(with(state,state.commandedDepthPercent(),0,"stress_waiting"),null);
         int desired=state.phase()==Phase.MANUAL?100:chooseDepth(o.curve(),o.settings().targetHeatHuPerTick());
         int current=state.commandedDepthPercent();
         String reason="regulating";

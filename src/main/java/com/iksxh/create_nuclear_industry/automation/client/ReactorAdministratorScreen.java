@@ -28,7 +28,6 @@ public final class ReactorAdministratorScreen extends AbstractContainerScreen<Re
     private ReactorAdministratorCommands.Action pendingAction;
     private String status="";
     private String depthText="100",heatText="0";
-    private String reserveText="20",minimumText="2";
 
     public ReactorAdministratorScreen(ReactorAdministratorMenu menu,Inventory inventory,Component title) {
         super(menu,inventory,title); imageWidth=ReactorAdministratorLayout.WIDTH; imageHeight=ReactorAdministratorLayout.HEIGHT;
@@ -48,18 +47,18 @@ public final class ReactorAdministratorScreen extends AbstractContainerScreen<Re
                 .bounds(leftPos+stop.x(),topPos+stop.y(),stop.width(),stop.height()).build());
         if(page==0 && view().getBoolean("ConfigurationValid")) {
             if(!dirty) loadConfirmed();
-            depth=new EditBox(font,leftPos+80,topPos+143,46,18,text(draftMode==Mode.LOAD_FOLLOW?"reserve":"depth")); depth.setMaxLength(3);
-            heat=new EditBox(font,leftPos+178,topPos+143,76,18,text(draftMode==Mode.LOAD_FOLLOW?"minimum":"heat")); heat.setMaxLength(10);
-            loading=true; depth.setValue(draftMode==Mode.LOAD_FOLLOW?reserveText:depthText);heat.setValue(draftMode==Mode.LOAD_FOLLOW?minimumText:heatText);loading=false;
+            depth=new EditBox(font,leftPos+80,topPos+143,46,18,text("depth")); depth.setMaxLength(3);
+            heat=new EditBox(font,leftPos+178,topPos+143,76,18,text("heat")); heat.setMaxLength(10);
+            loading=true; depth.setValue(depthText);heat.setValue(heatText);loading=false;
             depth.setFilter(s->s.matches("[0-9]*"));heat.setFilter(s->s.matches("[0-9]*"));
-            heat.setTooltip(Tooltip.create(text(draftMode==Mode.LOAD_FOLLOW?"minimum":"heat")));
-            depth.setResponder(s->{if(!loading)beginDraft();if(draftMode==Mode.LOAD_FOLLOW)reserveText=s;else depthText=s;});
-            heat.setResponder(s->{if(!loading)beginDraft();if(draftMode==Mode.LOAD_FOLLOW)minimumText=s;else heatText=s;});
+            heat.setTooltip(Tooltip.create(text("heat")));
+            depth.setResponder(s->{if(!loading)beginDraft();depthText=s;});
+            heat.setResponder(s->{if(!loading)beginDraft();heatText=s;});
             addRenderableWidget(depth);addRenderableWidget(heat);
-            modeButton=addRenderableWidget(Button.builder(text(modeKey(draftMode)),b->{saveText();beginDraft();draftMode=draftMode==Mode.MANUAL?Mode.CONSTANT:draftMode==Mode.CONSTANT?Mode.LOAD_FOLLOW:Mode.MANUAL;init();})
+            modeButton=addRenderableWidget(Button.builder(text(modeKey(draftMode)),b->{saveText();beginDraft();draftMode=draftMode==Mode.MANUAL?Mode.CONSTANT:Mode.MANUAL;init();})
                     .bounds(leftPos+8,topPos+164,112,18).build());
-            addRenderableWidget(Button.builder(Component.literal("−"),b->step(depth,-1,draftMode==Mode.LOAD_FOLLOW?90:100)).bounds(leftPos+60,topPos+143,18,18).build());
-            addRenderableWidget(Button.builder(Component.literal("+"),b->step(depth,1,draftMode==Mode.LOAD_FOLLOW?90:100)).bounds(leftPos+128,topPos+143,18,18).build());
+            addRenderableWidget(Button.builder(Component.literal("−"),b->step(depth,-1,100)).bounds(leftPos+60,topPos+143,18,18).build());
+            addRenderableWidget(Button.builder(Component.literal("+"),b->step(depth,1,100)).bounds(leftPos+128,topPos+143,18,18).build());
             addRenderableWidget(Button.builder(Component.literal("−"),b->step(heat,-1,view().getInt("MaxHeat"))).bounds(leftPos+158,topPos+143,18,18).build());
             addRenderableWidget(Button.builder(Component.literal("+"),b->step(heat,1,view().getInt("MaxHeat"))).bounds(leftPos+256,topPos+143,18,18).build());
             addRenderableWidget(Button.builder(text("apply"),b->send(ReactorAdministratorCommands.Action.APPLY)).bounds(leftPos+124,topPos+164,80,18).build());
@@ -72,10 +71,9 @@ public final class ReactorAdministratorScreen extends AbstractContainerScreen<Re
     private void loadConfirmed() {
         var v=view();draftMode=readMode(v);
         depthText=Integer.toString(v.getInt("Depth"));heatText=Integer.toString(v.getInt("Heat"));
-        reserveText=Integer.toString(v.getInt("ReserveTarget"));minimumText=Integer.toString(v.getInt("MinimumHeat"));
     }
-    private static Mode readMode(CompoundTag view) {return view.getInt("Mode")==Mode.LOAD_FOLLOW.ordinal()?Mode.LOAD_FOLLOW:view.getInt("Mode")==Mode.CONSTANT.ordinal()?Mode.CONSTANT:Mode.MANUAL;}
-    private static String modeKey(Mode mode) {return mode==Mode.LOAD_FOLLOW?"load_follow":mode==Mode.CONSTANT?"constant":"manual";}
+    private static Mode readMode(CompoundTag view) {return view.getInt("Mode")==Mode.CONSTANT.ordinal()?Mode.CONSTANT:Mode.MANUAL;}
+    private static String modeKey(Mode mode) {return mode==Mode.CONSTANT?"constant":"manual";}
     private void beginDraft() {
         if(!dirty) {var v=view();draftRevision=v.getLong("SettingsRevision");draftEpoch=v.getLong("Epoch");dirty=true;}
     }
@@ -90,20 +88,20 @@ public final class ReactorAdministratorScreen extends AbstractContainerScreen<Re
         var v=view();var confirmedMode=readMode(v);
         // 外部已应用模式改变才需要更换输入含义；dirty草稿不会进入此分支或升级其版本。
         if(confirmedMode!=draftMode) {loadConfirmed();init();return;}
-        applyDraftFields(draftFields().synchronize(ReactorAdministratorLayout.DraftFields.confirmed(v),draftMode,false));
+        applyDraftFields(draftFields().synchronize(ReactorAdministratorLayout.DraftFields.confirmed(v),false));
         loading=true;
         try {
-            if(!depth.isFocused()) {String next=Integer.toString(v.getInt(draftMode==Mode.LOAD_FOLLOW?"ReserveTarget":"Depth"));if(!depth.getValue().equals(next))depth.setValue(next);}
-            if(!heat.isFocused()) {String next=Integer.toString(v.getInt(draftMode==Mode.LOAD_FOLLOW?"MinimumHeat":"Heat"));if(!heat.getValue().equals(next))heat.setValue(next);}
+            if(!depth.isFocused()) {String next=Integer.toString(v.getInt("Depth"));if(!depth.getValue().equals(next))depth.setValue(next);}
+            if(!heat.isFocused()) {String next=Integer.toString(v.getInt("Heat"));if(!heat.getValue().equals(next))heat.setValue(next);}
             if(modeButton!=null)modeButton.setMessage(text(modeKey(draftMode)));
         } finally {loading=false;}
     }
     private void saveText() {
-        if(depth!=null) {if(draftMode==Mode.LOAD_FOLLOW)reserveText=depth.getValue();else depthText=depth.getValue();}
-        if(heat!=null) {if(draftMode==Mode.LOAD_FOLLOW)minimumText=heat.getValue();else heatText=heat.getValue();}
+        if(depth!=null) {depthText=depth.getValue();}
+        if(heat!=null) {heatText=heat.getValue();}
     }
-    private ReactorAdministratorLayout.DraftFields draftFields() {return new ReactorAdministratorLayout.DraftFields(depthText,heatText,reserveText,minimumText);}
-    private void applyDraftFields(ReactorAdministratorLayout.DraftFields fields) {depthText=fields.depth();heatText=fields.heat();reserveText=fields.reserve();minimumText=fields.minimum();}
+    private ReactorAdministratorLayout.DraftFields draftFields() {return new ReactorAdministratorLayout.DraftFields(depthText,heatText);}
+    private void applyDraftFields(ReactorAdministratorLayout.DraftFields fields) {depthText=fields.depth();heatText=fields.heat();}
     private void step(EditBox box,int delta,int max) {
         int value;try {value=Integer.parseInt(box.getValue());}catch(NumberFormatException invalid){value=0;}
         box.setValue(Integer.toString(Math.max(0,Math.min(max,value+delta*(hasShiftDown()?100:hasControlDown()?10:1)))));
@@ -149,7 +147,7 @@ public final class ReactorAdministratorScreen extends AbstractContainerScreen<Re
         }
         if(page==0) {
             line(g,46,text("size",v.getInt("Width"),v.getInt("Height"),v.getInt("SizeZ"),number(v.getDouble("MaxReachable"))));
-            line(g,57,v.getBoolean("LoadingRebind")?text("load_rebinding"):Component.translatable("automation.create_nuclear_industry.phase."+v.getString("Phase").toLowerCase(Locale.ROOT)));
+            line(g,57,Component.translatable("automation.create_nuclear_industry.phase."+v.getString("Phase").toLowerCase(Locale.ROOT)));
             line(g,68,text("power",number(v.getDouble("ActualHeat")),number(v.getDouble("NetHeat")),number(v.getDouble("AverageHeat"))));
             line(g,79,text("cached",number(v.getDouble("CacheHeat")),number(v.getDouble("CacheExpense")),number(v.getDouble("Maintenance"))));
             line(g,90,text("inventory",v.getLong("ColdMb"),v.getLong("HotMb"),v.getLong("CapacityMb")));
@@ -157,21 +155,16 @@ public final class ReactorAdministratorScreen extends AbstractContainerScreen<Re
             int hot=capacity<=0?0:(int)Math.min(294-cold,294.0*v.getLong("HotMb")/capacity);
             g.fill(8,100,302,104,0xff4e565c);g.fill(8,100,8+cold,104,0xff6594b7);g.fill(8+cold,100,8+cold+hot,104,0xffc57c4c);
             line(g,106,text("fuel",v.getInt("Usable"),v.getInt("Spent"),v.getInt("EmptyFuel"),number(v.getDouble("DepthAverage"))));
-            if(readMode(v)==Mode.LOAD_FOLLOW) {
-                line(g,117,text("load_summary",v.getBoolean("StressValid")?number(v.getDouble("StressReserve"))+"%":"—",v.getInt("ReserveTarget"),v.getInt("MinimumHeat")));
-                line(g,128,text("gauge",v.contains("Gauge")?v.getString("Gauge"):text("gauge_none")));
-            } else {
-                line(g,117,text("supply",text("supply_"+v.getString("Supply")),v.getInt("ExternalTicks")));
-                line(g,128,text("confirmed",text(modeKey(readMode(v))),v.getInt("Depth"),v.getInt("Heat")));
-            }
-            g.drawString(font,text(draftMode==Mode.LOAD_FOLLOW?"reserve":"depth"),8,147,0xffc1cece,false);
+            line(g,117,text("supply",text("supply_"+v.getString("Supply")),v.getInt("ExternalTicks")));
+            line(g,128,text("confirmed",text(modeKey(readMode(v))),v.getInt("Depth"),v.getInt("Heat")));
+            g.drawString(font,text("depth"),8,147,0xffc1cece,false);
             if(v.getInt("Mode")==Mode.CONSTANT.ordinal()&&v.getInt("Heat")<=v.getDouble("MaintenanceCost"))line(g,184,text("net_warning"));
         } else if(page==1) drawCore(g,v);
         else {
             line(g,47,text("reason",Component.translatable("automation.create_nuclear_industry.reason."+v.getString("Reason"))));
             line(g,60,text("protection",yes(v.getBoolean("Duty")),yes(v.getBoolean("Covered")),yes(!v.getBoolean("Jammed"))));
             line(g,73,text("cooling",yes(v.getBoolean("Sample")),yes(v.getBoolean("NextCooling")),number(v.getDouble("Cooling"))));
-            String expected=switch(v.getString("Phase")) {case "ARMING"->"signal_wait_low";case "MANUAL","CONSTANT","LOAD_WARMUP","LOAD_FOLLOW"->"signal_run_low";case "FAULT"->"signal_fault_high";default->"signal_start_high";};
+            String expected=switch(v.getString("Phase")) {case "ARMING"->"signal_wait_low";case "MANUAL","CONSTANT"->"signal_run_low";case "FAULT"->"signal_fault_high";default->"signal_start_high";};
             line(g,86,text("signal",text(v.getBoolean("SignalHigh")?"signal_high":"signal_low"),text(expected)));
             line(g,99,text("startup",Math.round(v.getDouble("StartupCold")*100),Math.round(v.getDouble("StartupHot")*100)));
             line(g,112,text("warning",Math.round(v.getDouble("WarningCold")*100),Math.round(v.getDouble("WarningHot")*100),Math.round(v.getDouble("TripHot")*100)));

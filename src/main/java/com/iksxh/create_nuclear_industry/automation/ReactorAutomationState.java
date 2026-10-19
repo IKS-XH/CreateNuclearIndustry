@@ -9,8 +9,8 @@ public record ReactorAutomationState(boolean claimed, Phase phase, String reason
                 || authorityEpoch<0 || adjustmentAge<0 || healthyAge<0 || leaseAge<0 || armingAge<0)
             throw new IllegalArgumentException("管理员状态非法");
     }
-    public enum Mode { STOP, MANUAL, CONSTANT, LOAD_FOLLOW }
-    public enum Phase { STOPPED, ARMING, MANUAL, CONSTANT, FAULT, LOAD_WARMUP, LOAD_FOLLOW }
+    public enum Mode { STOP, MANUAL, CONSTANT }
+    public enum Phase { STOPPED, ARMING, MANUAL, CONSTANT, FAULT }
     public static ReactorAutomationState initial() {
         return new ReactorAutomationState(false, Phase.STOPPED, "stopped",100,0,0,0,0,0,Mode.STOP,false);
     }

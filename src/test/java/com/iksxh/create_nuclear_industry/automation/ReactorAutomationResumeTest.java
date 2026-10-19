@@ -18,6 +18,30 @@ class ReactorAutomationResumeTest {
     private static CompoundTag saved(ReactorAutomationState state,boolean normal) {
         return ReactorAutomationResume.encode(state,new ReactorAutomationPortBlockEntity.Settings(state.requestedMode(),42,37),PORT,BURNER,normal);
     }
+    @Test void bothRetainedModesResumeTheirOwnSettingsWithoutClosedLoopFields() {
+        for(var phase:new ReactorAutomationState.Phase[]{ReactorAutomationState.Phase.MANUAL,ReactorAutomationState.Phase.CONSTANT}) {
+            var tag=saved(running(phase,7),true);
+            assertFalse(tag.contains("SettingReserve"));assertFalse(tag.contains("SettingMinimumHeat"));
+            var loaded=ReactorAutomationResume.decode(tag,true,ReactorSnapshot.empty());
+            assertNotNull(loaded.session());assertFalse(loaded.state().runPermission());
+            assertEquals(phase,loaded.session().intent().phase());
+            assertEquals(running(phase,7).requestedMode(),loaded.session().settings().mode());
+            assertEquals(42,loaded.session().settings().manualDepthPercent());assertEquals(37,loaded.session().settings().targetHeatHuPerTick());
+        }
+    }
+    @Test void removedOrInvalidSavedModesAndPhasesCannotResumeOrGrantPermission() {
+        for(int mode:new int[]{3,4,-1,Integer.MAX_VALUE})for(String key:new String[]{"Mode","SettingMode"}) {
+            var tag=saved(running(ReactorAutomationState.Phase.CONSTANT,7),true);tag.putInt(key,mode);
+            var loaded=ReactorAutomationResume.decode(tag,true,ReactorSnapshot.empty());
+            assertNull(loaded.session());assertFalse(loaded.state().runPermission());
+            assertEquals(ReactorAutomationState.Phase.FAULT,loaded.state().phase());
+        }
+        for(String phase:new String[]{"LOAD_WARMUP","LOAD_FOLLOW"}) {
+            var tag=saved(running(ReactorAutomationState.Phase.CONSTANT,7),true);tag.putString("Phase",phase);
+            var loaded=ReactorAutomationResume.decode(tag,true,ReactorSnapshot.empty());
+            assertNull(loaded.session());assertFalse(loaded.state().runPermission());
+        }
+    }
     @Test void normalManualKeepsIntentButCannotRestoreAuthority() {
         var loaded=ReactorAutomationResume.decode(saved(running(ReactorAutomationState.Phase.MANUAL,7),true),true,ReactorSnapshot.empty());
         assertNotNull(loaded.session());assertEquals(ReactorAutomationState.Phase.ARMING,loaded.state().phase());assertFalse(loaded.state().runPermission());

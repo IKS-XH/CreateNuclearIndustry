@@ -19,10 +19,10 @@ public final class ReactorAutomationNetwork {
             public Input decode(RegistryFriendlyByteBuf buffer) {
                 int container=buffer.readVarInt();var session=buffer.readUUID(); var burner=buffer.readBlockPos(); var port=buffer.readBlockPos();
                 var generation=buffer.readUUID(); long epoch=buffer.readLong(), revision=buffer.readLong(), sequence=buffer.readLong();
-                int action=buffer.readVarInt(),mode=buffer.readVarInt(),depth=buffer.readInt(),heat=buffer.readInt(),reserve=buffer.readInt(),minimum=buffer.readInt();
+                int action=buffer.readVarInt(),mode=buffer.readVarInt(),depth=buffer.readInt(),heat=buffer.readInt();
                 return new Input(new ReactorAdministratorCommands.Request(container,session,burner,port,generation,epoch,revision,sequence,
                         action>=0&&action<4?ReactorAdministratorCommands.Action.values()[action]:null,
-                        new ReactorAdministratorCommands.Draft(mode>=0&&mode<ReactorAutomationState.Mode.values().length?ReactorAutomationState.Mode.values()[mode]:null,depth,heat,reserve,minimum)));
+                        new ReactorAdministratorCommands.Draft(mode>=0&&mode<ReactorAutomationState.Mode.values().length?ReactorAutomationState.Mode.values()[mode]:null,depth,heat)));
             }
             public void encode(RegistryFriendlyByteBuf buffer,Input packet) {
                 var r=packet.request(); buffer.writeVarInt(r.containerId());buffer.writeUUID(r.sessionId()); buffer.writeBlockPos(r.burnerPos()); buffer.writeBlockPos(r.portPos());
@@ -30,19 +30,9 @@ public final class ReactorAutomationNetwork {
                 // 三个独立安全动作没有设置草稿；固定宽度空占位不改变其服务器权威语义。
                 buffer.writeVarInt(r.action().ordinal()); buffer.writeVarInt(r.draft()==null?-1:r.draft().mode().ordinal());
                 buffer.writeInt(r.draft()==null?0:r.draft().depthPercent());buffer.writeInt(r.draft()==null?0:r.draft().heatHuPerTick());
-                buffer.writeInt(r.draft()==null?0:r.draft().reservePercent());buffer.writeInt(r.draft()==null?0:r.draft().minimumHeatHuPerTick());
             }
         };
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
-    }
-    /** 独立Ctrl绑定意图，不受GUI菜单序列替代；服务器重新核持物、可达性、选择实例和当前view戳。 */
-    public record Bind(ReactorStressGaugeService.Intent intent) implements CustomPacketPayload {
-        public static final Type<Bind> TYPE=new Type<>(ResourceLocation.parse("create_nuclear_industry:reactor_stress_gauge"));
-        public static final StreamCodec<RegistryFriendlyByteBuf,Bind> CODEC=new StreamCodec<>() {
-            public Bind decode(RegistryFriendlyByteBuf b) {return new Bind(new ReactorStressGaugeService.Intent(b.readBoolean(),b.readBlockPos(),b.readBlockPos(),b.readUUID(),b.readLong(),b.readLong()));}
-            public void encode(RegistryFriendlyByteBuf b,Bind packet) {var r=packet.intent();b.writeBoolean(r.select());b.writeBlockPos(r.position());b.writeBlockPos(r.port());b.writeUUID(r.generation());b.writeLong(r.epoch());b.writeLong(r.sequence());}
-        };
-        public Type<? extends CustomPacketPayload> type() {return TYPE;}
     }
     public record Reply(int containerId,java.util.UUID sessionId,long sequence,boolean accepted,String reason,CompoundTag view) implements CustomPacketPayload {
         public static final Type<Reply> TYPE=new Type<>(ResourceLocation.parse("create_nuclear_industry:reactor_administrator_reply"));
@@ -53,9 +43,7 @@ public final class ReactorAutomationNetwork {
         public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
-        event.registrar("4").playToServer(Bind.TYPE,Bind.CODEC,(packet,context)->context.enqueueWork(()->{
-            if(context.player() instanceof ServerPlayer player)ReactorStressGaugeService.apply(player,packet.intent());
-        })).playToServer(Input.TYPE,Input.CODEC,(packet,context)->context.enqueueWork(()->{
+        event.registrar("5").playToServer(Input.TYPE,Input.CODEC,(packet,context)->context.enqueueWork(()->{
             if(context.player() instanceof ServerPlayer player) {
                 var reply=ReactorAdministratorCommands.apply(player,packet.request());
                 PacketDistributor.sendToPlayer(player,new Reply(packet.request().containerId(),packet.request().sessionId(),reply.sequence(),reply.accepted(),reply.reason(),reply.projection().data()));

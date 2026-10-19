@@ -27,24 +27,4 @@ public final class ReactorAutomationClientEvents {
     /** 已撤下世界控件入口；保留旧开发夹具签名但不注册或发送任何写包。 */
     public static void prepare(ReactorAutomationBehaviours.Control control,ValueSettingsBoard board) { }
     public static void send(ReactorAutomationBehaviours.Control control,int value) { }
-    /** 仅Ctrl+主手扳手的有效目标拦截原右键；普通扳手、潜行拆除、喂料及副手不受影响。 */
-    @EventBusSubscriber(modid="create_nuclear_industry",value=Dist.CLIENT,bus=EventBusSubscriber.Bus.GAME)
-    public static final class WorldBinding {
-        private static long sequence;
-        private WorldBinding() { }
-        @SubscribeEvent public static void interact(net.neoforged.neoforge.client.event.InputEvent.InteractionKeyMappingTriggered event) {
-            var mc=Minecraft.getInstance();
-            if(!event.isUseItem()||event.getHand()!=net.minecraft.world.InteractionHand.MAIN_HAND||mc.player==null||mc.level==null
-                    ||!net.minecraft.client.gui.screens.Screen.hasControlDown()||mc.player.isShiftKeyDown()
-                    ||!com.simibubi.create.AllItems.WRENCH.isIn(mc.player.getMainHandItem())
-                    ||!(mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult hit))return;
-            var target=mc.level.getBlockEntity(hit.getBlockPos());ReactorStressGaugeService.Intent intent;
-            if(target instanceof com.simibubi.create.content.kinetics.gauge.StressGaugeBlockEntity) {
-                intent=new ReactorStressGaugeService.Intent(true,hit.getBlockPos(),net.minecraft.core.BlockPos.ZERO,new java.util.UUID(0,0),0,++sequence);
-            } else if(target instanceof ReactorAutomationBlazeBridge.Access access&&access.cniAutomationView().hasUUID("Generation")) {
-                var view=access.cniAutomationView();intent=new ReactorStressGaugeService.Intent(false,hit.getBlockPos(),net.minecraft.core.BlockPos.of(view.getLong("Port")),view.getUUID("Generation"),view.getLong("Epoch"),++sequence);
-            } else return;
-            event.setCanceled(true);event.setSwingHand(false);net.neoforged.neoforge.network.PacketDistributor.sendToServer(new ReactorAutomationNetwork.Bind(intent));
-        }
-    }
 }

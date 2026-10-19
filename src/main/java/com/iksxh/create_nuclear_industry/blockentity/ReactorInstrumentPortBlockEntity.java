@@ -81,13 +81,6 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     private java.util.UUID automationGeneration = java.util.UUID.randomUUID();
     private com.iksxh.create_nuclear_industry.automation.ReactorAutomationObservation automationObservation;
     private com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.Session automationResumeSession;
-    private com.iksxh.create_nuclear_industry.automation.ReactorLoadFollowSession automationLoadFollowSession;
-    public com.iksxh.create_nuclear_industry.automation.ReactorLoadFollowSession automationLoadFollowSession() {return automationLoadFollowSession;}
-    /** 当前服务端实例的暂态闭环；清理时立即释放同网登记，NBT不保存积分/表引用。 */
-    public void setAutomationLoadFollowSession(com.iksxh.create_nuclear_industry.automation.ReactorLoadFollowSession session) {
-        if(session==null)com.iksxh.create_nuclear_industry.automation.ReactorStressGaugeService.release(this);
-        automationLoadFollowSession=session;
-    }
     private CompoundTag automationNormalStopCheckpoint;
     private boolean automationSavedScramAwaitingHigh;
     private boolean automationInactiveLoadPending;
@@ -166,9 +159,6 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 ||state.phase()==com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.Phase.FAULT) {
             automationResumeSession=null;automationInactiveLoadPending=false;
         }
-        if(state.requestedMode()!=com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.Mode.LOAD_FOLLOW
-                ||state.phase()==com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.Phase.STOPPED
-                ||state.phase()==com.iksxh.create_nuclear_industry.automation.ReactorAutomationState.Phase.FAULT)setAutomationLoadFollowSession(null);
         if(!com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.normalShutdownActive(this))automationNormalStopCheckpoint=null;
         automationState = state;
         setChanged();
@@ -1842,7 +1832,6 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
                 ReactorSnapshotNbtCodec.decodeWithMigration(snapshotTag);
         snapshot = decoded.snapshot().withoutFuelAssemblies();
         if (!clientPacket) {
-            setAutomationLoadFollowSession(null);
             com.iksxh.create_nuclear_industry.automation.ReactorAutomationHeatSupply.invalidate(this);
             // 当前正常停服只恢复原意图；旧许可/样本/热票据不恢复，实际棒位由完整核快照保持。
             var loaded=com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume.decode(
