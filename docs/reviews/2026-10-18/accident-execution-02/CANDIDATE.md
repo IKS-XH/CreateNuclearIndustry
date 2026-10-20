@@ -2,7 +2,7 @@
 
 2026-10-18，PM按已批准[设计](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)及[活动卡](../../../superpowers/plans/2026-10-18-accident-execution-02.md)收件。本页保留原第二批来源和证据；2026-10-20接口退出整改后的当前候选见下段。结果只在[STATUS](../../../STATUS.md)维护，没有合入main或替换正式包。
 
-候选树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`，分支`codex/accident-execution-02`，原事故生产来源`d839bc7e7f281a935a22a8d6121b45e3fa6027f3`；当前另含接口退出窄修，准确来源`96a8421cc6073ea960fd331895f66eb949ea9008`，最新包与复看步骤见[ADMIN-RELEASE-01候选](../../2026-10-20/admin-release-01/CANDIDATE.md)。进入原目录运行`./gradlew.bat runClient`即可测试当前源码。原携带世界27文件/13337721 bytes经数量/哈希核对；本次整改保留之后手测进度，不重新覆盖main世界，自动化另用build隔离目录。
+候选树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`，分支`codex/accident-execution-02`，原事故生产来源`d839bc7e7f281a935a22a8d6121b45e3fa6027f3`；当前另含接口退出和完成事故遗留空口窄修，准确来源`37f50b9e3425992f74beecb8ecd6e2c79514257e`，最新A2D7包与复看步骤见[ACCIDENT-SHUTDOWN-03候选](../../2026-10-20/accident-shutdown-03/CANDIDATE.md)，接口原单项证据见[ADMIN-RELEASE-01](../../2026-10-20/admin-release-01/CANDIDATE.md)。进入原目录运行`./gradlew.bat runClient`即可测试当前源码。原携带世界27文件/13337721 bytes经数量/哈希核对；本次整改保留之后手测进度，不重新覆盖main世界，自动化另用build隔离目录。
 
 ## 玩家可观察变更
 
@@ -12,7 +12,7 @@
 
 ## 原2026-10-18候选包与证据（保留基线）
 
-[原候选JAR](E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/reports/accident-execution-20261018/candidate-accident-execution-02.jar)：3533416 bytes，SHA256 `BF6D4D14D6A4C1D55C48C8719A024E5488E339D10ABFBA7F3E7744FCFE0FC4FE`。当时唯一一次增量assemble/exit0，762class与1692资源逐项绑定编译/处理输出，2120来源输入及44改动文件与准确提交blob一致，测试类/模板文件排除。原身份摘要见[ARTIFACT](ARTIFACT.json)。此包保留作基线；本轮安装应取上方ADMIN-RELEASE-01所列的4B37候选，候选树根build/libs继续保留原正式81E。
+[原候选JAR](E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/reports/accident-execution-20261018/candidate-accident-execution-02.jar)：3533416 bytes，SHA256 `BF6D4D14D6A4C1D55C48C8719A024E5488E339D10ABFBA7F3E7744FCFE0FC4FE`。当时唯一一次增量assemble/exit0，762class与1692资源逐项绑定编译/处理输出，2120来源输入及44改动文件与准确提交blob一致，测试类/模板文件排除。原身份摘要见[ARTIFACT](ARTIFACT.json)。此包保留作基线；本轮安装应取上方ACCIDENT-SHUTDOWN-03所列A2D7候选，候选树根build/libs继续保留原正式81E。
 
 [执行报告](EXECUTION.md)保留全部失败与窄修关系，[组合窄审](REVIEW.md)对照源码和已有证据，未重复跑测试/构建。原始日志、逐文件制品清单和完整来源绑定保存在候选报告目录，不复制大清单到核心文档。
 

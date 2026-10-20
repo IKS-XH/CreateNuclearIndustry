@@ -1,0 +1,37 @@
+{
+  "source_commit": "37f50b9e3425992f74beecb8ecd6e2c79514257e",
+  "source_inputs_match_commit": true,
+  "input_count": 2148,
+  "final_green_source_and_classes_match": true,
+  "command": "./gradlew.bat jar --console=plain",
+  "build_exit_code": 0,
+  "candidate": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-accident\\build\\reports\\accident-shutdown-20261020\\candidate-accident-shutdown-03.jar",
+  "bytes": 3535322,
+  "sha256": "A2D7EE399D32C6392A2872072450971FA700BC73893AFCFE6F168926B0759DF3",
+  "raw_copy_identical": true,
+  "classes": 762,
+  "resources": 1692,
+  "extra_files": 1,
+  "file_entries": 2455,
+  "directory_entries": 249,
+  "empty_directory_entries": 16,
+  "accident_test_class_files": 0,
+  "accident_test_domain_files": 0,
+  "all_files_match_current_outputs": true,
+  "hash_mismatches": 0,
+  "unexplained_missing_outputs": 0,
+  "previous_candidate_comparison": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-accident\\build\\reports\\admin-release-20261020\\candidate-admin-release-accident.jar",
+    "sha256": "4B37F69DC6997F5BA0FFFED5F722FF99302B0E458FA38FD1041758EEFE9E3499",
+    "added_files": [],
+    "removed_files": [],
+    "changed_files": [
+      "com/iksxh/create_nuclear_industry/blockentity/ReactorPortBlockEntity$Binding.class",
+      "com/iksxh/create_nuclear_industry/blockentity/ReactorPortBlockEntity$BindingType.class",
+      "com/iksxh/create_nuclear_industry/blockentity/ReactorPortBlockEntity$FuelColumnRepairEvaluation.class",
+      "com/iksxh/create_nuclear_industry/blockentity/ReactorPortBlockEntity$FuelTransactionEvaluation.class",
+      "com/iksxh/create_nuclear_industry/blockentity/ReactorPortBlockEntity.class"
+    ]
+  },
+  "full_artifact_path": "E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/reports/accident-shutdown-20261020/ARTIFACT.json"
+}
