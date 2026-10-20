@@ -14,6 +14,7 @@
 | 文件、键、默认值、单位 | [配置](server-config.md) |
 | 角色、技能、验证和Git | [AGENTS](../AGENTS.md)、[治理](project-governance.md) |
 | 美术来源和现候选 | [美术入口](art/README.md) |
+| MIT、Logo例外及第三方许可 | [LICENSE](../LICENSE)、[NOTICE](../NOTICE.md) |
 | 原方案/失败/审查/验收 | [归档索引](archive/README.md) |
 
 当前活动卡：

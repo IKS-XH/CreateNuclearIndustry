@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[4,)"
-license="All Rights Reserved"
+# Logo及第三方内容的许可例外见根目录NOTICE.md。
+license="MIT"
 
 [[mods]]
 modId="create_nuclear_industry"

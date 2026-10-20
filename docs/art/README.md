@@ -1,6 +1,8 @@
 # 美术协作入口
 
-更新：2026-10-18。用户任命对话“美术负责人：贴图、建模与动画”管理贴图/模型/动画；工作树E:/MyMC/NewMod/Create_NuclearIndustry-art-studio、分支codex/art-studio。全局逻辑/治理与Git归主PM协调，原选稿/阶段报告见[归档](../archive/2026-10-15/README.md)。
+更新：2026-10-20。用户任命对话“美术负责人：贴图、建模与动画”管理贴图/模型/动画；工作树E:/MyMC/NewMod/Create_NuclearIndustry-art-studio、分支codex/art-studio。全局逻辑/治理与Git归主PM协调，原选稿/阶段报告见[归档](../archive/2026-10-15/README.md)。
+
+用户于2026-10-20明确开放除Logo外的原创美术素材，贴图、模型、动画、音效及其源文件统一适用[MIT](../../LICENSE)。Logo及其在宣传图中的Logo部分保留所有权利；Create派生资产与其他第三方内容不重新许可，准确范围、路径与署名见[NOTICE](../../NOTICE.md)。历史报告中的旧许可描述保留当时语境，以当前声明为准。
 
 最新14B离心机、15B-R1装配台及15C动画已合main，包见[STATUS](../STATUS.md)。离心机外观/黑窗已验，15C游戏制造/封装/停恢复尚未报告，见[观察入口](ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md)与[任务卡](tasks/ART-SHIELDED-ASSEMBLY-15C.md)。
 
