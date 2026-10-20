@@ -41,10 +41,10 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 管理员退出接管 | 用户事故候选手测发现拆接口补壳后逐棒仍只读。主线隔离树`Create_NuclearIndustry-admin-release-fix`/`codex/admin-release-fix`已携带保存世界27文件/13337721bytes、0差异；唯一执行者已取得正式真实RED：formed=true/sameOwner=true/claimed=true/FAULT/Slider=SCRAM_LOCKED/displayLocked=true，原3业务通过，本业务失败exit1。按[整改卡](superpowers/plans/2026-10-20-admin-release-01.md)执行主线/事故同源窄修，保持临时失联/SCRAM保护；尚未交付新候选、不称已修复或手测通过 |
+| 管理员退出接管 | [两份整改候选已交付，待用户复看](reviews/2026-10-20/admin-release-01/CANDIDATE.md)：主线隔离来源`ca9f484`，事故来源`96a8421`，各仅5项生产/测试文件。原正式拆口补壳RED和审查追加的稳定高输入RED均已核，当前真实域主线6/6、事故7/7/exit0，定向JUnit32/32和30/30复用；唯一组合窄审的红石漏采P2已关闭。各一次增量jar/exit0，候选SHA `2257F708…DF08C1D`与`4B37F69D…FE9E3499`，源码/包内输出已绑定；原世界保留，两树干净、main正式包17A未替换。保持临时失联/SCRAM/事故保护，未合main、不称客户端手测通过 |
 | 事故高温与有限熔融物 | 用户2026-10-20选择[扩展设计整稿与推荐初值](proposals/2026-10-20-accident-thermal-corium.md)：接触热伤害/有限火点、有限熔融物凝固、独立深度/总量溶蚀和原链回收均已冻结。先接口整改及本轮复测再派热危害实现；当前尚未编码/改默认配置，不称原第二批已含新机制 |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
-| 事故与辐射第二批 | [候选已交付，待集中手测](reviews/2026-10-18/accident-execution-02/CANDIDATE.md)。树`Create_NuclearIndustry-accident`、分支`codex/accident-execution-02`、来源d839bc7；事故接管/账本、有界世界动作、残骸与既有封装链、原生最终取消边界及托管辐射源成套交付。定向JUnit18/18，隔离真实服与窄修证据、唯一组合审查、一次assemble/exit0及来源绑定已核；候选3533416 bytes/SHA BF6D4D14…FE0FC4FE。携带已保存main世界27文件/13337721 bytes、0差异，未用于自动事故。真实FULL等待/恢复及正常停服重进已证，物理ChunkEvent.Unload/真人多人/客户端连续体验未证。未合main，当前正式包不含事故第二批；第三批等本轮人工门 |
+| 事故与辐射第二批 | [原第二批证据](reviews/2026-10-18/accident-execution-02/CANDIDATE.md)保持，继续使用上行整改后的同树候选`96a8421`/3533989 bytes/SHA `4B37F69D…FE9E3499`。原生产来源d839bc7的事故接管/账本、有界世界动作、残骸与封装链、最终取消边界及托管辐射源未改；原JUnit18/18、真实FULL等待/恢复及正常停服重进证据复用，新增零口退出/事故锁反例见上行。原BF候选作为基线保留，不覆盖手测存档；物理ChunkEvent.Unload/真人多人/客户端连续体验未补记。未合main，当前正式包不含事故第二批；热危害及后续教学等本轮人工门 |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |

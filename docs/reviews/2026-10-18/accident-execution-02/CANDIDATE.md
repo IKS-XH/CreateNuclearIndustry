@@ -1,8 +1,8 @@
 # RADIATION-02 局部事故与回收封存候选
 
-2026-10-18，PM按已批准[设计](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)及[活动卡](../../../superpowers/plans/2026-10-18-accident-execution-02.md)收件。当前自动证据与唯一组合窄审无剩余阻塞，停在本批集中人工门；结果只在[STATUS](../../../STATUS.md)维护，没有合入main或替换正式包。
+2026-10-18，PM按已批准[设计](../../../superpowers/specs/2026-10-16-accident-radiation-design.md)及[活动卡](../../../superpowers/plans/2026-10-18-accident-execution-02.md)收件。本页保留原第二批来源和证据；2026-10-20接口退出整改后的当前候选见下段。结果只在[STATUS](../../../STATUS.md)维护，没有合入main或替换正式包。
 
-候选树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`，分支`codex/accident-execution-02`，准确生产来源`d839bc7e7f281a935a22a8d6121b45e3fa6027f3`。进入该目录运行`./gradlew.bat runClient`可测试本分支代码。已携带main当时保存的世界27文件/13337721 bytes并核数量/哈希；本批自动化仅运行独立`run/accident-execution-gametest`，未启动或再扫描携带世界。
+候选树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`，分支`codex/accident-execution-02`，原事故生产来源`d839bc7e7f281a935a22a8d6121b45e3fa6027f3`；当前另含接口退出窄修，准确来源`96a8421cc6073ea960fd331895f66eb949ea9008`，最新包与复看步骤见[ADMIN-RELEASE-01候选](../../2026-10-20/admin-release-01/CANDIDATE.md)。进入原目录运行`./gradlew.bat runClient`即可测试当前源码。原携带世界27文件/13337721 bytes经数量/哈希核对；本次整改保留之后手测进度，不重新覆盖main世界，自动化另用build隔离目录。
 
 ## 玩家可观察变更
 
@@ -10,16 +10,16 @@
 
 废料复用既有装配台/铅桶/贮存架链，配方为1废料＋1固化基材＋1空铅桶、12800工作量。托管/残骸/掉落/封装只有一个真实载荷来源；空残骸不放射，移走或屏蔽废料后现场强度下降，不留永久区块污染。原燃耗、热工、正常管理员及乏燃料封装保持。
 
-## 候选包与证据
+## 原2026-10-18候选包与证据（保留基线）
 
-[候选JAR](E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/reports/accident-execution-20261018/candidate-accident-execution-02.jar)：3533416 bytes，SHA256 `BF6D4D14D6A4C1D55C48C8719A024E5488E339D10ABFBA7F3E7744FCFE0FC4FE`。唯一一次增量assemble/exit0，762class与1692资源逐项绑定编译/处理输出，2120来源输入及44改动文件与准确提交blob一致，本批测试类/模板/域排除。身份摘要见[ARTIFACT](ARTIFACT.json)。候选树build/libs仍是原正式基线81E；要安装本批候选，应取上述报告目录内的JAR。
+[原候选JAR](E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/reports/accident-execution-20261018/candidate-accident-execution-02.jar)：3533416 bytes，SHA256 `BF6D4D14D6A4C1D55C48C8719A024E5488E339D10ABFBA7F3E7744FCFE0FC4FE`。当时唯一一次增量assemble/exit0，762class与1692资源逐项绑定编译/处理输出，2120来源输入及44改动文件与准确提交blob一致，测试类/模板文件排除。原身份摘要见[ARTIFACT](ARTIFACT.json)。此包保留作基线；本轮安装应取上方ADMIN-RELEASE-01所列的4B37候选，候选树根build/libs继续保留原正式81E。
 
 [执行报告](EXECUTION.md)保留全部失败与窄修关系，[组合窄审](REVIEW.md)对照源码和已有证据，未重复跑测试/构建。原始日志、逐文件制品清单和完整来源绑定保存在候选报告目录，不复制大清单到核心文档。
 
 - 定向JUnit18/18、0失败。隔离真实服覆盖正式末tick撤权、物理载荷/16³共享预算、原生最终取消与多所有者回滚、冲击收据/禁外部破坏、回收封装及正常停服重进。
 - 13轮只实跑1项FULL等待/恢复业务，9项显式SKIP；20轮只实跑2项所有权业务，9项SKIP，不把框架All总数当业务数量。当前不可用区块等待后恢复、邻堆实际损伤/后建新世代保护均有具体证据。
 - 16³为196份组件、2776计划目标、2973预算项，动作峰值64/t；属于本次受控动作记录，不是新的客户端或整包性能承诺。真正ChunkEvent.Unload计数为0，物理卸载事件、真人多人及客户端连续体验不补记通过。
-- PM最终复算候选SHA一致，main47项原dirty原始哈希全同、正式包仍81E；不重复扫描用户世界、不覆盖其它候选进度。
+- 当时PM最终复算候选SHA一致，main47项原dirty原始哈希全同、正式包仍81E；这是原交付时点，当前main正式包身份以STATUS为准。不重复扫描用户世界、不覆盖其它候选进度。
 
 ## 集中人工清单
 
