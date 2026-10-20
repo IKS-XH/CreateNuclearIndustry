@@ -59,6 +59,111 @@ public final class AccidentExecutionGameTests {
         NeoForge.EVENT_BUS.post(e);var ledger=ReactorAccidentSavedData.get(h.getLevel()).byGeneration(owner.accidentGeneration());
         h.assertTrue(ledger!=null,"正式事件没有事故任务");h.assertTrue(ReactorAccidentService.begin(e)==ledger,"事件重放另建任务");return ledger;
     }
+    /** 本次冷态现场的六燃料/三全插棒布局；只补缺失方块，保留事故后实际幸存端口的BE身份。 */
+    private static ReactorInstrumentPortBlockEntity shutdownReactor(GameTestHelper h) {
+        var roles=new TreeMap<CoreColumnPosition,ReactorStructureDefinition.ColumnType>();
+        for(int x=0;x<3;x++)for(int z=0;z<3;z++)roles.put(new CoreColumnPosition(x,z),z==1
+                ?ReactorStructureDefinition.ColumnType.CONTROL_ROD:ReactorStructureDefinition.ColumnType.FUEL);
+        for(var entry:ReactorStructureDefinition.templateFor(roles).entrySet()) {
+            var local=entry.getKey();var pos=BASE.offset(local.x(),local.y(),local.z());
+            var block=net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.parse(entry.getValue()));
+            if(!h.getBlockState(pos).is(block))h.setBlock(pos,block);
+        }
+        var at=BASE.offset(2,2,0);ReactorStructureLifecycle.rescanInstrumentPortNow(h.getLevel(),h.absolutePos(at));
+        var owner=(ReactorInstrumentPortBlockEntity)h.getBlockEntity(at);
+        h.assertTrue(owner.structureValid(),"事故残余重建没有有效几何");return owner;
+    }
+
+    /** 真实事故收据完成后，残余空口不能阻止后建冷堆的原生安全维护；旧锁或每次重扫换代都会使本例失败。 */
+    @GameTest(template=TEMPLATE,timeoutTicks=160)
+    public static void completedAccidentEmptyPortsRebindForColdShutdown(GameTestHelper h) {
+        if(skipFixture(h,"shutdown"))return;
+        var old=shutdownReactor(h);var ports=List.copyOf(old.boundPorts(ReactorPortBlockEntity.BindingType.REFUELING));
+        var cold=old.boundPorts(ReactorPortBlockEntity.BindingType.COLD_COOLANT).getFirst();
+        var staleHandler=ReactorCoolantFluidHandler.forPort(cold);h.assertTrue(staleHandler!=null,"缺少真实旧冷端能力");
+        var fuels=new TreeMap<CoreColumnPosition,FuelColumnState>();
+        for(int i=0;i<ports.size();i++) {
+            var item=i==0?used():fresh();item.set(DataComponents.CUSTOM_NAME,Component.literal("停机原件"+i));
+            ports.get(i).setFuelAssembly(item);fuels.put(ports.get(i).boundColumn(),new FuelColumnState(FuelAssemblyState.empty(),0,4));
+        }
+        old.setSnapshot(old.snapshot().withColumns(fuels,old.snapshot().controlRodColumns())
+                .withMeltdown(P1ServerConfig.VALUES.meltdownCountdownTicks.get()-1L,true));
+        old.tickReactor();h.assertTrue(old.accidentId()!=null,"正式末tick未触发真实事故");
+        var ledger=ReactorAccidentSavedData.get(h.getLevel()).byId(old.accidentId());
+        h.runAfterDelay(30,()->{
+            h.assertTrue(ledger.complete(),"正式事故尚未完成，不能作为过期锁用例");
+            var survivors=ports.stream().filter(p->!p.isRemoved()&&h.getLevel().getBlockEntity(p.getBlockPos())==p).toList();
+            h.assertTrue(!survivors.isEmpty(),"32块壳上限未留下真实空换料口");
+            var locked=survivors.getFirst();var lockedTag=locked.saveWithFullMetadata(h.getLevel().registryAccess());
+            h.assertTrue(lockedTag.hasUUID("AccidentLock")&&ledger.id.equals(lockedTag.getUUID("AccidentLock")),"幸存口不是本事故原始锁");
+            var originalGenerations=survivors.stream().map(ReactorPortBlockEntity::accidentGeneration).toList();
+            var receipt=ledger.save(h.getLevel().registryAccess()).copy();
+            var data=ReactorAccidentSavedData.get(h.getLevel());
+            h.getLevel().getDataStorage().set("create_nuclear_industry_accidents",ReactorAccidentSavedData.load(data.save(new CompoundTag(),h.getLevel().registryAccess()),h.getLevel().registryAccess()));
+            var waste=ledger.columns.stream().filter(ReactorAccidentLedger.Column::waste).findFirst().orElseThrow();
+            var corium=(ReactorCoriumBlockEntity)h.getLevel().getBlockEntity(waste.bottom);
+            var recovered=corium.take();h.assertTrue(recovered.is(AccidentContent.ACCIDENT_FUEL_WASTE.get())&&recovered.getCount()==1,"真实残骸未提供唯一回收载荷");
+            var next=shutdownReactor(h);h.assertTrue(next!=old&&!next.accidentGeneration().equals(old.accidentGeneration()),"未建立后建仪表世代");
+            next.setCoolantInventories(9000,0);
+            var player=net.neoforged.neoforge.common.util.FakePlayerFactory.get(h.getLevel(),new com.mojang.authlib.GameProfile(UUID.randomUUID(),"ShutdownBreak"));
+            var event=net.neoforged.neoforge.common.CommonHooks.fireBlockBreak(h.getLevel(),GameType.SURVIVAL,player,next.getBlockPos(),next.getBlockState());
+            h.assertTrue(!event.isCanceled(),"已完成事故的空口使冷堆原生维护拆除仍被尚未完全停机取消");
+            for(int i=0;i<survivors.size();i++) {
+                var p=survivors.get(i);h.assertTrue(p.isBound()&&!p.accidentGeneration().equals(originalGenerations.get(i)),"真实残余空口未以新物理代际重绑");
+            }
+            h.assertTrue(next.boundPorts(ReactorPortBlockEntity.BindingType.REFUELING).size()==6,"新堆漏绑残余列");
+            var generation=locked.accidentGeneration();long binding=locked.bindingGeneration();
+            var saved=locked.saveWithFullMetadata(h.getLevel().registryAccess());
+            locked.loadWithComponents(saved,h.getLevel().registryAccess());ReactorStructureLifecycle.rescanInstrumentPortNow(h.getLevel(),next.getBlockPos());
+            h.assertTrue(locked.isBound()&&generation.equals(locked.accidentGeneration())&&binding==locked.bindingGeneration(),"当前格式保存/重扫重复换代或失效绑定");
+            h.assertTrue(locked.tryInsertFuel(fresh()).success(),"已恢复残余口不能正式补料");
+            h.assertTrue(locked.tryExtractFuel().success(),"冷态恢复口不能正式取料");
+            h.assertTrue(staleHandler.fill(new net.neoforged.neoforge.fluids.FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(),1),net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE)==0,"旧能力在新世代复活");
+            verifyShutdownRebindGuards(h,locked,next,old,ledger,lockedTag,saved);
+            var currentLedger=ReactorAccidentSavedData.get(h.getLevel()).byId(ledger.id);
+            h.assertTrue(receipt.equals(currentLedger.save(h.getLevel().registryAccess()))&&currentLedger.columns.stream().allMatch(c->c.payload().isEmpty()),"重绑改动已读回旧账本或再产托管");
+            int returned=0;
+            for(var c:ledger.columns)if(!c.waste()) {
+                var id=UUID.nameUUIDFromBytes((ledger.id+":"+c.port.asLong()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                h.assertTrue(h.getLevel().getEntity(id) instanceof ItemEntity item&&ItemStack.matches(item.getItem(),c.original()),"已交接全新原件丢失/改变");returned++;
+            }
+            h.assertTrue(returned==5&&recovered.getCount()==1&&next.snapshot().coldCoolantMb()==9000&&next.snapshot().hotCoolantMb()==0,"旧5原件+1废料或新冷堆工质不守恒");
+            h.assertTrue(ledger.complete()&&ReactorAccidentExecutor.tick(h.getLevel())==0,"完成事故重放又执行动作");
+            h.assertTrue(locked.tryInsertFuel(fresh()).success(),"安全清空前未装入真实组件");
+            var shell=BASE;var worldShell=h.absolutePos(shell);
+            var reset=net.neoforged.neoforge.common.CommonHooks.fireBlockBreak(h.getLevel(),GameType.SURVIVAL,player,worldShell,h.getBlockState(shell));
+            h.assertTrue(!reset.isCanceled()&&next.snapshot().fuelColumns().isEmpty()&&next.snapshot().coldCoolantMb()==0
+                    &&next.boundPorts(ReactorPortBlockEntity.BindingType.REFUELING).stream().allMatch(p->p.fuelAssembly().isEmpty()),"正式外壳拆除未通过FULL_SHUTDOWN_RESET清空真实口");
+            h.setBlock(shell,Blocks.AIR);ReactorStructureLifecycle.rescanInstrumentPortNow(h.getLevel(),next.getBlockPos());
+            h.assertTrue(!next.structureValid(),"原生安全事务后实际拆壳未使结构失效");
+            System.out.println("[shutdown03] native final-tick accident -> retained "+survivors.size()+" empty ports -> new cold owner -> CommonHooks maintenance and FULL_SHUTDOWN_RESET allowed; receipts/5 originals/1 recovered waste, guards, save and idempotence passed");h.succeed();
+        });
+    }
+
+    /** 只在隔离夹具恢复真实旧锁NBT来构造拒绝输入；每次失败必须保留身份、锁和库存。 */
+    private static void rejectedShutdownRebind(GameTestHelper h,ReactorPortBlockEntity port,ReactorInstrumentPortBlockEntity owner,
+            CompoundTag tag,ReactorPortBlockEntity.BindingType type,CoreColumnPosition column,String reason) {
+        port.loadWithComponents(tag,h.getLevel().registryAccess());var before=port.saveWithFullMetadata(h.getLevel().registryAccess());
+        h.assertTrue(!port.bindTo(owner,type,column)&&before.equals(port.saveWithFullMetadata(h.getLevel().registryAccess())),"无效重绑提前解锁/改身份："+reason);
+    }
+
+    private static void verifyShutdownRebindGuards(GameTestHelper h,ReactorPortBlockEntity port,ReactorInstrumentPortBlockEntity next,
+            ReactorInstrumentPortBlockEntity old,ReactorAccidentLedger ledger,CompoundTag locked,CompoundTag restored) {
+        var column=port.boundColumn();var type=ReactorPortBlockEntity.BindingType.REFUELING;
+        var missing=locked.copy();missing.putUUID("AccidentLock",UUID.randomUUID());rejectedShutdownRebind(h,port,next,missing,type,column,"缺账本");
+        var mismatch=locked.copy();mismatch.putUUID("AccidentGeneration",UUID.randomUUID());rejectedShutdownRebind(h,port,next,mismatch,type,column,"物理代际不匹配");
+        var occupied=locked.copy();occupied.put("FuelAssembly",fresh().save(h.getLevel().registryAccess()));rejectedShutdownRebind(h,port,next,occupied,type,column,"当前口非空");
+        rejectedShutdownRebind(h,port,old,locked,type,column,"原事故所有者");
+        rejectedShutdownRebind(h,port,next,locked,ReactorPortBlockEntity.BindingType.COLD_COOLANT,null,"职责错误");
+        rejectedShutdownRebind(h,port,next,locked,type,new CoreColumnPosition(column.x(),1),"结构列不占用该口");
+        var unfinished=ledger.save(h.getLevel().registryAccess());var id=UUID.randomUUID();unfinished.putUUID("Id",id);unfinished.putUUID("Generation",UUID.randomUUID());unfinished.putBoolean("ShockComplete",false);
+        var pendingReceipt=ReactorAccidentLedger.load(unfinished,h.getLevel().registryAccess());ReactorAccidentSavedData.get(h.getLevel()).add(pendingReceipt);
+        var pending=locked.copy();pending.putUUID("AccidentLock",id);rejectedShutdownRebind(h,port,next,pending,type,column,"事故未完成");
+        pendingReceipt.shockComplete=true;
+        port.loadWithComponents(restored,h.getLevel().registryAccess());ReactorStructureLifecycle.rescanInstrumentPortNow(h.getLevel(),next.getBlockPos());
+        h.assertTrue(port.isBound(),"反例后未恢复新代际口");
+    }
+
     @GameTest(template=TEMPLATE,timeoutTicks=120)
     public static void handoffStopsSameTickAndCanceledBreakDoesNotEnqueue(GameTestHelper h) {
         if(resumeOnly(h))return;

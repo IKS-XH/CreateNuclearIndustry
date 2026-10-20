@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.blockentity;
 
 import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
+import com.iksxh.create_nuclear_industry.accident.ReactorAccidentSavedData;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
@@ -12,11 +13,13 @@ import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentGoggleDisplay;
 import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentTelemetry;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
+import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -195,7 +198,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
             BindingType expectedType,
             CoreColumnPosition column
     ) {
-        if (accidentLock != null || owner == null || expectedType == null
+        if (owner == null || expectedType == null
                 || (level != null && level.isClientSide)
                 || !owner.structureValid()
                 || bindingType() != expectedType
@@ -206,9 +209,19 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
         if (boundOwner != null && boundOwner != owner && !canReclaimBinding()) {
             return false;
         }
+        boolean completedAccident = accidentLock != null;
+        if (completedAccident && !canRebindCompletedAccident(owner, column)) {
+            return false;
+        }
         ReactorInstrumentPortBlockEntity previousOwner = boundOwner;
         Binding previousBinding = binding;
         boolean changed = !isBoundTo(owner, expectedType, column);
+        if (completedAccident) {
+            // 原绑定及收据全部证明后才结束旧事故权限；新代际使旧计划不能再次认领该空机构。
+            accidentLock = null;
+            accidentGeneration = java.util.UUID.randomUUID();
+            setChanged();
+        }
         binding = new Binding(owner.getBlockPos(), expectedType, column);
         boundOwner = owner;
         if (changed) bindingGeneration++;
@@ -222,6 +235,33 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
             invalidateCapabilityAndNetwork(previousBinding, expectedType);
         }
         return true;
+    }
+
+    /**
+     * 只在服务端有效重绑边沿核已完成事故收据，不逐tick扫描历史账本或读取未加载方块。
+     * 物料必须已从同坐标同物理代际交接且两端均空；后建仪表还须实际拥有当前列，
+     * 才能结束残余空机构的旧权限。该证明不修改账本、不从审计原件重造库存。
+     */
+    private boolean canRebindCompletedAccident(ReactorInstrumentPortBlockEntity owner, CoreColumnPosition column) {
+        if (!(level instanceof ServerLevel serverLevel) || isRemoved() || column == null
+                || !fuelAssembly.isEmpty() || owner.getLevel() != level || owner.isRemoved()
+                || !level.hasChunkAt(worldPosition) || level.getBlockEntity(worldPosition) != this
+                || !level.hasChunkAt(owner.getBlockPos()) || level.getBlockEntity(owner.getBlockPos()) != owner
+                || owner.structureOrigin() == null) return false;
+        var mapping = owner.structureScan().columns().get(column);
+        if (mapping == null || mapping.type() != ReactorStructureDefinition.ColumnType.FUEL) return false;
+        var cap = mapping.capPosition();
+        if (!owner.structureOrigin().offset(cap.x(), cap.y(), cap.z()).equals(worldPosition)) return false;
+        var ledger = ReactorAccidentSavedData.get(serverLevel).byId(accidentLock);
+        if (ledger == null || !ledger.dimension.equals(serverLevel.dimension().location().toString())
+                || ledger.generation.equals(owner.accidentGeneration()) || !ledger.complete()) return false;
+        int matchingReceipts = 0;
+        for (var receipt : ledger.columns) {
+            if (!receipt.port.equals(worldPosition) || !receipt.portGeneration.equals(accidentGeneration)) continue;
+            if (!receipt.captured() || !receipt.settled() || !receipt.payload().isEmpty()) return false;
+            matchingReceipts++;
+        }
+        return matchingReceipts == 1;
     }
 
     /** 清除指定仪表端口留下的旧绑定，防止结构失效后继续暴露 capability。 */
