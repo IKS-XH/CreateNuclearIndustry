@@ -4,9 +4,9 @@
 
 ## 主分支与正式包
 
-- 已提交生产来源`2561b1d1021d4ccf52db2eabab44e1648dd16623`，按用户要求移除管理员应力余量闭环、应力表绑定及其配置/投影/专属测试，保留统一调棒、恒功率、核热值班、保护和续接。此前T2→T3→T4→T5→T7→T8→T9→H1累计优化、锅炉主动汽口、自动化接口17B C稿、首批辐射/头罩及其它已验机组保持；不含T6、B1或事故第二批。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3523047 bytes，SHA256 `74E95F6DCD024802F21B25A7028EBB067FF3FD83AB21D8E90B6A4E79EADD4090`，按用户要求跟踪Git；准确已提交源一次增量assemble原输出，2282输入/762class/1687资源及manifest全部绑定，闭环专用载荷无残留，见[本批记录](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md)。管理员通信协议5，联机两端须同步更新。
-- 本批定向JUnit48/48、三个真实管理员域19/19，均exit0；一轮组合窄审和一次增量assemble/exit0，不重复全量或原性能采样，main45项原tracked状态字节保持。原[累计优化](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)、[接口外观](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)、[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机S1/C1](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
+- 已提交生产来源`3b7a7028cb24abec72a91ea7f001119228c29ba3`，本轮仅统一MIT许可、非Logo原创美术开放范围及打包声明。功能来源`2561b1d1021d4ccf52db2eabab44e1648dd16623`保持：已移除管理员应力余量闭环及应力表绑定，保留统一调棒、恒功率、核热值班、保护和续接；此前T2→T3→T4→T5→T7→T8→T9→H1优化、锅炉主动汽口及已验机组保持，不含T6、B1或事故第二批。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3525495 bytes，SHA256 `17A0A41616C27B4C2FDC7EE5A2E005973AB5C1EB3D1CA1BA16DB6F2B904ACB88`，按用户要求跟踪Git。准确已提交源一次增量jar/18秒/exit0，新增三份声明、NeoForge许可字段MIT；762class与前正式包逐字一致，303文本资源仅LF/CRLF差异且逐项绑定当前源，其他非声明内容不变。见[许可与制品记录](reviews/2026-10-20/mit-license/INTEGRATION.md)。管理员协议仍为5，无新增协议或玩法变化。
+- 功能来源原定向JUnit48/48、真实管理员域19/19及原一轮组合窄审证据复用；本次许可变更另做一轮组合窄审、静态与包内核验，不重复业务测试或性能采样。原[闭环移除](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md)、[累计优化](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)、[接口外观](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)、[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机S1/C1](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。
 
 ## 已合入并按相应范围验收
 
@@ -33,6 +33,7 @@
 | 自动化接口17B外观 | 用户授权C稿两资源合main与正式包，复用原像素/引用/PNG预览与组合审查；未补记未报告的独立Minecraft视觉观察 | [集成与制品](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md) |
 | 累计管网/汽轮机/直列优化 | 用户要求合入最新H1及其真实前置链；结构/图/路径/预算复用、同tick补投与轴本机贡献撤销、换热直列减分配；普通工业管无距离/自身流量封顶，保留阀/泵/物理口额度和节点安全上限。原测试证据复用、组合窄审及准确源一次assemble；H1仅有小幅MSPT/分配收益，不称T8/T9为等负载纯提速 | [范围/证据与边界](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)、[组合审查](reviews/2026-10-20/optimization-accepted/REVIEW.md)、[制品身份](reviews/2026-10-20/optimization-accepted/ARTIFACT.json) |
 | 管理员应力闭环移除 | 用户明确要求直接移除main；闭环模式/绑定/PI/相关配置、NBT和显示字段及专属测试已删除。三页GUI、两种保留模式、保护、核热和续接按定向JUnit48/48、真实服19/19验证；准确源一次assemble及删除载荷核验通过，不冒称新的客户端手测 | [集成](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md)、[组合审查](reviews/2026-10-20/reactor-load-follow-removal/REVIEW.md)、[正式身份](reviews/2026-10-20/reactor-load-follow-removal/ARTIFACT.json) |
+| MIT与原创美术开放 | 原创代码、文档及非Logo原创美术/源文件统一MIT；Logo保留所有权利，Create派生素材等第三方许可保持。源码声明、两处元数据与正式JAR一致，无玩法变化 | [LICENSE](../LICENSE)、[NOTICE](../NOTICE.md)、[集成与制品](reviews/2026-10-20/mit-license/INTEGRATION.md) |
 
 结论只覆盖原反馈范围，不扩大为全部配置、多人整机、所有Iris特性或发布保证。管网压力、具体事故世界效果与再处理未实现。
 

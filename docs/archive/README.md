@@ -16,6 +16,7 @@
 
 ## 已归档计划
 
+- [2026-10-20 MIT许可与原创美术开放](2026-10-20/plans/2026-10-20-mit-license.md)：保留许可声明、Logo/第三方边界与三文件打包写集，结果和制品见[集成记录](../reviews/2026-10-20/mit-license/INTEGRATION.md)，准确当前身份由STATUS维护。
 - [2026-10-18辐射首批与头罩原实施卡](2026-10-18/plans/2026-10-16-radiation-foundation-01.md)及[已验候选集成卡](2026-10-18/plans/2026-10-18-radiation-foundation-accepted-integration.md)：用户原清单及头罩补充手测通过，来源/制品与并集边界见[联合集成记录](../reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)，接续第二批以现行计划/STATUS为准。
 - [2026-10-18汽轮机S1/C1优化合入](2026-10-18/plans/2026-10-18-thermal-performance-accepted-integration.md)：保留六文件来源、窄编绑定及原候选提升范围；[集成与审查边界](../reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)，锅炉重复同步专项仍后置，当前结果由STATUS维护。
 - [2026-10-17贫化铀与锅炉队列联合合入](2026-10-17/plans/2026-10-17-du-heat-accepted-integration.md)、[贫化铀原执行卡](2026-10-17/plans/2026-10-16-depleted-uranium-01.md)及[锅炉队列窄修卡](2026-10-17/plans/2026-10-17-heat-bridge-pending-01.md)：保留三项原范围；[用户联合验收](../reviews/2026-10-17/du-heat-accepted-integration/ACCEPTANCE.md)，当前结果由STATUS维护。

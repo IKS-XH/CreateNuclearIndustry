@@ -8,7 +8,7 @@
 
 **Tech Stack:** Minecraft1.21.1、Java21、NeoForge21.1.219、Create6.0.10-280、Gradle9.0.0；不改版本、依赖、功能或发布方式。
 
-**Spec:** 用户本轮明确要求及根[LICENSE](../../../LICENSE)/[NOTICE](../../../NOTICE.md)；基准main `e6a21b7737ac81f183489590ee3610848aad9f1d`，开工时工作区干净。
+**Spec:** 用户本轮明确要求及根[LICENSE](../../../../LICENSE)/[NOTICE](../../../../NOTICE.md)；基准main `e6a21b7737ac81f183489590ee3610848aad9f1d`，开工时工作区干净。结果见[当前状态](../../../STATUS.md)及[集成记录](../../../reviews/2026-10-20/mit-license/INTEGRATION.md)，本卡保留原执行范围。
 
 ## 范围与写集
 
