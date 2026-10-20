@@ -207,6 +207,16 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     public com.iksxh.create_nuclear_industry.automation.ReactorAutomationObservation automationObservation() { return automationObservation; }
     public void setAutomationObservation(com.iksxh.create_nuclear_industry.automation.ReactorAutomationObservation sample) { automationObservation = sample; }
     public com.iksxh.create_nuclear_industry.automation.ReactorAutomationController.CurveCache automationCurve() { return automationCurve; }
+    /** 服务端正式零接口交接只清管理员运行数据；核快照和保存SCRAM低沿保护保持。 */
+    public void endAutomationTakeover() {
+        if(level==null || level.isClientSide)throw new IllegalStateException("结束管理员接管必须在服务端");
+        setAutomationLoadFollowSession(null);
+        automationBinding=null;automationPort=null;automationBurner=null;automationObservation=null;
+        automationCurve.clear();automationHeatWindow.clear();automationTickTime=Long.MIN_VALUE;
+        automationResumeSession=null;automationNormalStopCheckpoint=null;automationInactiveLoadPending=false;
+        automationInactiveLoadStarted=Long.MIN_VALUE;automationLoadedFuelLayout=null;
+        setAutomationState(automationState.release());
+    }
     /** 同一游戏tick最多一次管理员调节，显式诊断结算不加快租约或复位计数。 */
     public boolean beginAutomationTick(long time) { if (automationTickTime == time) return false; automationTickTime = time; return true; }
     public ReactorSimulationParameters automationSimulationParameters() { return simulationParameters(); }
@@ -407,6 +417,7 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
             if (level != null && !level.isClientSide) {
                 updateRedstoneScram(level.hasNeighborSignal(worldPosition));
             }
+            com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.releaseIfPortAbsent(this);
         } else {
             clearPortBindings(true);
         }

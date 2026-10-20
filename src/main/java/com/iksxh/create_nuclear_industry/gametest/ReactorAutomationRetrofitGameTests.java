@@ -1,6 +1,14 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.automation.ReactorAutomationPortBlockEntity;
+import com.iksxh.create_nuclear_industry.automation.ReactorAutomationBlazeBridge;
+import com.iksxh.create_nuclear_industry.automation.ReactorAutomationState;
+import com.iksxh.create_nuclear_industry.automation.ReactorAutomationResume;
+import com.iksxh.create_nuclear_industry.automation.gui.ReactorAdministratorCommands;
+import com.iksxh.create_nuclear_industry.automation.gui.ReactorAdministratorMenu;
+import com.iksxh.create_nuclear_industry.blockentity.ControlRodDriveBlockEntity;
+import com.iksxh.create_nuclear_industry.control.ControlRodSliderPayload;
+import com.iksxh.create_nuclear_industry.control.ControlRodSliderService;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorInstrumentPortBlockEntity;
 import com.iksxh.create_nuclear_industry.blockentity.ReactorPortBlockEntity;
 import com.iksxh.create_nuclear_industry.content.ModFluids;
@@ -20,16 +28,20 @@ import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureScanner;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ClientInformation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -38,6 +50,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /** 独立小堆改装探针；只使用隔离模板，当前版本NBT读取不冒充用户世界完整重启。 */
 @GameTestHolder("cni_reactor_automation_retrofit")
@@ -50,6 +63,265 @@ public final class ReactorAutomationRetrofitGameTests {
     private static final CoreColumnPosition COLUMN = new CoreColumnPosition(0, 0);
 
     private ReactorAutomationRetrofitGameTests() { }
+
+    /** 事故正式托管后即使几何零接口，原事故代际/物料账和管理员安全锁也不能被退出分支释放。 */
+    @GameTest(templateNamespace = "cni_reactor_automation_retrofit", template = "retrofit_empty", timeoutTicks = 100)
+    public static void administrator_release_keeps_accident_takeover(GameTestHelper helper) {
+        build(helper, 6);
+        helper.setBlock(PORT, ReactorAutomationContent.PORT.get());
+        installBurner(helper);
+        helper.runAfterDelay(5, () -> {
+            var owner = owner(helper);
+            var fuel = (ReactorPortBlockEntity) helper.getBlockEntity(BASE.offset(2, 5, 3));
+            helper.assertTrue(fuel.tryInsertFuel(new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get())).success(), "事故前未插入真实燃料");
+            owner.tickReactor();
+            helper.assertTrue(owner.automationState().claimed(), "事故前没有管理员接管");
+            var next = owner.snapshot().withMeltdown(com.iksxh.create_nuclear_industry.config.P1ServerConfig.VALUES.meltdownCountdownTicks.get(), true)
+                    .withMeltdownEventPublished(true);
+            owner.setSnapshot(next);
+            var event = new com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvent(
+                    com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE,
+                    helper.getLevel(), owner.structureOrigin(), owner.getBlockPos(), next);
+            NeoForge.EVENT_BUS.post(event);
+            var ledger = com.iksxh.create_nuclear_industry.accident.ReactorAccidentSavedData.get(helper.getLevel()).byGeneration(owner.accidentGeneration());
+            helper.assertTrue(ledger != null && owner.accidentId().equals(ledger.id) && ledger.columns.size() == 1
+                    && ledger.columns.getFirst().captured() && fuel.fuelAssembly().isEmpty(), "正式事故没有原子转移唯一真实组件");
+            long epoch = owner.automationState().authorityEpoch();
+            helper.setBlock(PORT, P1Blocks.REACTOR_CASING.get());
+            var geometry = ReactorStructureScanner.scanInstrumentPort(helper.getLevel(), owner.getBlockPos());
+            ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), owner.getBlockPos());
+            com.iksxh.create_nuclear_industry.automation.ReactorAutomationService.releaseIfPortAbsent(owner);
+            helper.assertTrue(geometry.valid() && geometry.contract().ports().getOrDefault(
+                    com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition.PortType.AUTOMATION, java.util.List.of()).isEmpty(), "事故退出反例没有物理零接口几何");
+            helper.assertTrue(owner.accidentId().equals(ledger.id) && !owner.structureValid() && !owner.tickReactor()
+                    && owner.automationState().claimed() && owner.automationState().rodsLocked()
+                    && owner.automationState().authorityEpoch() == epoch && !owner.automationState().runPermission(), "零接口扫描释放事故接管或重启旧核结算");
+            helper.assertTrue(com.iksxh.create_nuclear_industry.accident.ReactorAccidentService.begin(event) == ledger
+                    && ledger.columns.getFirst().captured(), "退出分支改变事故账或重建物料托管");
+            System.out.println("[admin-release-accident] zeroPortGeometry=true accidentLockRetained=true custodyRetained=true epochStable=true");
+            helper.succeed();
+        });
+    }
+
+    /** 任职后真实安全拆接口补壳，同一仪表必须恢复正式逐棒入口和客户端锁投影。 */
+    @GameTest(templateNamespace = "cni_reactor_automation_retrofit", template = "retrofit_empty", timeoutTicks = 100)
+    public static void administrator_release_after_safe_port_removal(GameTestHelper helper) {
+        build(helper, 6);
+        var player = sliderPlayer(helper);
+        var drivePos = helper.absolutePos(BASE.offset(2, 5, 2));
+        helper.assertTrue(ControlRodSliderService.handle(player, ControlRodSliderPayload.start(drivePos, -1, -1, 100, 7100)).accepted(), "原局部控制没有建立旧拖动前置");
+        helper.setBlock(PORT, ReactorAutomationContent.PORT.get());
+        installBurner(helper);
+        helper.runAfterDelay(5, () -> {
+            var owner = owner(helper);
+            var fuel = (ReactorPortBlockEntity) helper.getBlockEntity(BASE.offset(2, 5, 3));
+            helper.assertTrue(fuel.tryInsertFuel(new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get())).success(), "任职拆除前没有真实全新燃料");
+            owner.setCoolantInventories(owner.coolantCapacityMb() / 2, 0);
+            owner.tickReactor();
+            helper.assertTrue(owner.automationState().claimed() && owner.automationState().rodsLocked()
+                    && !owner.automationState().runPermission(), "未取得安全停机管理员接管前置");
+            helper.assertTrue(owner.snapshot().fuelColumns().values().stream().anyMatch(FuelColumnState::hasUsableFuel)
+                    && owner.snapshot().fuelColumns().values().stream().allMatch(f -> f.cachedHeatHu() == 0), "全新燃料安全无热前置失败");
+            var burnerPos = helper.absolutePos(PORT.north());
+            player.setPos(burnerPos.getX() + .5, burnerPos.getY() + .5, burnerPos.getZ() + .5);
+            helper.assertTrue(ReactorAdministratorMenu.open(player, burnerPos), "真实管理员菜单没有打开");
+            var menu = (ReactorAdministratorMenu) player.containerMenu;
+            var binding = owner.automationBinding();
+            var stale = new ReactorAdministratorCommands.Request(menu.containerId, menu.sessionId(), binding.burnerPos(), binding.portPos(),
+                    binding.ownerGeneration(), binding.authorityEpoch(), owner.automationPort().settingsRevision(), 1,
+                    ReactorAdministratorCommands.Action.START, null);
+            owner.recordAutomationDisplayHeat(99, 5);
+            var event = breakEvent(helper, PORT);
+            helper.assertTrue(!event.isCanceled(), "安全停机接口拆除被拒绝");
+            helper.setBlock(PORT, Blocks.AIR);
+            var invalid = ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), owner.getBlockPos());
+            helper.assertTrue(!invalid.valid() && owner.automationState().claimed(), "未补壳的无效结构提前释放接管");
+            helper.setBlock(PORT, P1Blocks.REACTOR_CASING.get());
+            var formed = ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), owner.getBlockPos());
+            helper.assertTrue(formed.valid() && owner(helper) == owner, "原仪表没有正式有效重成型");
+            var drive = (ControlRodDriveBlockEntity) helper.getBlockEntity(BASE.offset(2, 5, 2));
+            player.setPos(drivePos.getX() + .5, drivePos.getY() + .5, drivePos.getZ() + .5);
+            helper.assertTrue(!ControlRodSliderService.handle(player, ControlRodSliderPayload.commit(drivePos, -1, -1, 0, 7100)).accepted(), "接管前旧逐棒会话在退出后复活");
+            var start = ControlRodSliderService.handle(player, ControlRodSliderPayload.start(drivePos, -1, -1, 100, 7101));
+            System.out.println("[admin-release-real] formed=" + formed.valid() + " sameOwner=" + (owner(helper) == owner)
+                    + " claimed=" + owner.automationState().claimed() + " phase=" + owner.automationState().phase()
+                    + " slider=" + start.status() + " reason=" + start.reason() + " displayLocked=" + drive.automationLocked());
+            helper.assertTrue(start.accepted(), "同一仪表补壳重成型后正式Slider仍只读：" + start.reason());
+            helper.assertTrue(!owner.automationState().claimed() && !drive.automationLocked()
+                    && !drive.getUpdateTag(helper.getLevel().registryAccess()).getBoolean("AutomationLocked"), "退出未同步客户端逐棒锁");
+            helper.assertTrue(owner.automationBinding() == null && owner.automationBurner() == null && owner.automationPort() == null
+                    && owner.automationObservation() == null && owner.automationAverageHeat() == 0, "真实退出仍残留旧绑定/样本/显示窗口");
+            helper.assertTrue(ControlRodSliderService.handle(player, ControlRodSliderPayload.commit(drivePos, -1, -1, 75, 7101)).accepted(), "退出后新逐棒会话不能提交");
+            helper.assertTrue(owner.snapshot().controlRodColumns().values().stream().allMatch(r -> r.targetDepth() == .75), "逐棒提交没有写入唯一核快照");
+            long epoch = owner.automationState().authorityEpoch();
+            ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), owner.getBlockPos());
+            owner.tickReactor();
+            helper.assertTrue(owner.automationState().authorityEpoch() == epoch && !owner.automationState().claimed(), "重复重扫或tick反复推进退出epoch");
+            helper.assertTrue(ReactorAutomationBlazeBridge.runPermission(helper.getLevel(), helper.absolutePos(PORT.north())) == 0, "退出后残留燃烧室运行许可");
+            helper.assertTrue(ControlRodSliderService.handle(player, ControlRodSliderPayload.start(drivePos, -1, -1, 100, 7102)).accepted()
+                    && ControlRodSliderService.handle(player, ControlRodSliderPayload.commit(drivePos, -1, -1, 100, 7102)).accepted(), "重装前逐棒不能安全全插");
+            helper.setBlock(PORT, ReactorAutomationContent.PORT.get());
+            ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), owner.getBlockPos());
+            helper.assertTrue(fuel.tryInsertFuel(new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get())).success(), "重装前补新燃料失败");
+            owner.setCoolantInventories(owner.coolantCapacityMb() / 2, 0);
+            owner.tickReactor();
+            helper.assertTrue(owner.automationState().claimed() && owner.automationState().phase() == ReactorAutomationState.Phase.STOPPED
+                    && !owner.automationState().runPermission() && owner.automationState().authorityEpoch() > epoch, "重装没有安全建立新停机会话");
+            helper.assertTrue(!menu.stillValid(player) && !ReactorAdministratorCommands.apply(player, stale).accepted(), "重装接受旧GUI会话");
+            ControlRodSliderService.clearSession(player);
+            player.closeContainer();
+            helper.succeed();
+        });
+    }
+
+    /** 当前格式的无接口接管保存经首扫退出，核账本、保存SCRAM和卡死保护保持。 */
+    @GameTest(templateNamespace = "cni_reactor_automation_retrofit", template = "retrofit_empty", timeoutTicks = 100)
+    public static void administrator_release_saved_claim_preserves_protections(GameTestHelper helper) {
+        build(helper, 6);
+        helper.setBlock(PORT, ReactorAutomationContent.PORT.get());
+        installBurner(helper);
+        helper.runAfterDelay(5, () -> {
+            var original = owner(helper);
+            var fuelPort = (ReactorPortBlockEntity) helper.getBlockEntity(BASE.offset(2, 5, 3));
+            helper.assertTrue(fuelPort.tryInsertFuel(new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get())).success(), "保存前没有真实燃料");
+            original.tickReactor();
+            helper.assertTrue(original.automationState().claimed(), "保存前没有接管");
+            // 此处直接换块只为构造当前版本异常保存；不宣称带核热可以通过玩家拆除门。
+            helper.setBlock(PORT, P1Blocks.REACTOR_CASING.get());
+            var rodPos = original.snapshot().controlRodColumns().keySet().iterator().next();
+            var fuelPos = original.snapshot().fuelColumns().keySet().iterator().next();
+            var fuel = original.snapshot().fuelColumns().get(fuelPos);
+            original.setSnapshot(original.snapshot().withColumns(Map.of(fuelPos, new FuelColumnState(fuel.fuelAssembly(), .9, 23)),
+                    Map.of(rodPos, new ControlRodColumnState(.2, 1, .4, true, 0))).withCoolantInventories(1234, 56).withScramState(Map.of(rodPos, 1.), true));
+            original.recordAutomationDisplayHeat(99, 5);
+            var saved = original.saveForServerTest(helper.getLevel().registryAccess());
+            var restored = new ReactorInstrumentPortBlockEntity(original.getBlockPos(), original.getBlockState());
+            restored.setLevel(helper.getLevel());
+            restored.loadForServerTest(saved, helper.getLevel().registryAccess());
+            helper.getLevel().setBlockEntity(restored);
+            restored.onLoad();
+            helper.assertTrue(restored.automationState().claimed() && !restored.tickReactor(), "未验证加载提前解锁或结算");
+            var scan = ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), restored.getBlockPos());
+            var snapshot = restored.snapshot();
+            helper.assertTrue(scan.valid() && !restored.automationState().claimed(), "当前保存无接口接管经正式核验仍锁死");
+            helper.assertTrue(snapshot.coldCoolantMb() == 1234 && snapshot.hotCoolantMb() == 56
+                    && snapshot.fuelColumns().get(fuelPos).cachedHeatHu() == 23
+                    && snapshot.fuelColumns().get(fuelPos).hasUsableFuel(), "退出改写燃料、积热或工质账本");
+            helper.assertTrue(snapshot.scramRequested() && snapshot.scramSavedTargetDepths().equals(Map.of(rodPos, 1.))
+                    && snapshot.controlRodColumns().get(rodPos).jammed() && snapshot.controlRodColumns().get(rodPos).actualDepth() == .4
+                    && snapshot.controlRodColumns().get(rodPos).targetDepth() == 1, "退出清SCRAM/卡死或恢复危险旧目标");
+            helper.assertTrue(restored.automationBinding() == null && restored.automationPort() == null && restored.automationBurner() == null
+                    && restored.automationObservation() == null && restored.automationResumeSession() == null
+                    && restored.automationNormalStopCheckpoint() == null && restored.automationAverageHeat() == 0, "退出残留旧实例、观测或续接意图");
+            var player = sliderPlayer(helper);
+            var drivePos = helper.absolutePos(BASE.offset(2, 5, 2));
+            helper.assertTrue(!ControlRodSliderService.handle(player, ControlRodSliderPayload.start(drivePos, -1, -1, 0, 7201)).accepted(), "退出绕过保存SCRAM");
+            restored.updateRedstoneScram(true); restored.updateRedstoneScram(false);
+            helper.assertTrue(!ControlRodSliderService.handle(player, ControlRodSliderPayload.start(drivePos, -1, -1, 0, 7202)).accepted(), "退出绕过卡死");
+            long epoch = restored.automationState().authorityEpoch();
+            ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), restored.getBlockPos());
+            helper.assertTrue(restored.automationState().authorityEpoch() == epoch, "已退出保存状态重复扫描不幂等");
+            // 本版本正常运行信封遇到物理零接口同样取消续接；不能先执行保存的浅目标。
+            var pending = saved.copy();
+            pending.put("ReactorSnapshot", ReactorSnapshotNbtCodec.encode(snapshot.withColumns(snapshot.fuelColumns(),
+                    Map.of(rodPos, new ControlRodColumnState(1, .4, .4, false, 0))).withScramState(Map.of(), false)));
+            var running = new ReactorAutomationState(true, ReactorAutomationState.Phase.MANUAL, "manual", 40, 8, 3, 0, 0, 0,
+                    ReactorAutomationState.Mode.MANUAL, true);
+            pending.put(ReactorAutomationResume.KEY, ReactorAutomationResume.encode(running,
+                    new ReactorAutomationPortBlockEntity.Settings(ReactorAutomationState.Mode.MANUAL, 40, 0),
+                    helper.absolutePos(PORT), helper.absolutePos(PORT.north()), true));
+            restored.loadForServerTest(pending, helper.getLevel().registryAccess());
+            helper.assertTrue(restored.automationResumeSession() != null, "本版本运行信封未建立待续接前置");
+            ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), restored.getBlockPos());
+            var releasedRod = restored.snapshot().controlRodColumns().get(rodPos);
+            helper.assertTrue(!restored.automationState().claimed() && restored.automationResumeSession() == null
+                    && !restored.automationState().runPermission() && releasedRod.actualDepth() == .4 && releasedRod.targetDepth() == 1,
+                    "无接口运行信封残留续接意图或丢失安全全插目标/真实棒位");
+            // 先让真实输入稳定三tick，再读取不含保存SCRAM的运行信封，排除只测手工高沿的假阳性。
+            helper.setBlock(OWNER.north(), Blocks.REDSTONE_BLOCK);
+            long highSince = helper.getLevel().getGameTime();
+            helper.runAfterDelay(3, () -> {
+                helper.assertTrue(helper.getLevel().getGameTime() - highSince >= 3
+                        && helper.getLevel().hasNeighborSignal(restored.getBlockPos()), "首扫前没有稳定真实高输入");
+                restored.loadForServerTest(pending, helper.getLevel().registryAccess());
+                helper.assertTrue(restored.automationResumeSession() != null && !restored.snapshot().scramRequested(),
+                        "高输入用例未建立无保存SCRAM的运行信封");
+                ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), restored.getBlockPos());
+                var highSnapshot = restored.snapshot();
+                var highStart = ControlRodSliderService.handle(player, ControlRodSliderPayload.start(drivePos, -1, -1, 0, 7203));
+                var highCommit = ControlRodSliderService.handle(player, ControlRodSliderPayload.commit(drivePos, -1, -1, 0, 7203));
+                System.out.println("[admin-release-stable-high] high=" + helper.getLevel().hasNeighborSignal(restored.getBlockPos())
+                        + " claimed=" + restored.automationState().claimed() + " pending=" + (restored.automationResumeSession() != null)
+                        + " scram=" + highSnapshot.scramRequested() + " start=" + highStart.status() + " commit=" + highCommit.status());
+                helper.assertTrue(!restored.automationState().claimed() && restored.automationResumeSession() == null
+                        && highSnapshot.scramRequested() && !highStart.accepted() && !highCommit.accepted(),
+                        "稳定高输入的无接口运行信封首扫退出后仍接受逐棒提棒");
+                helper.assertTrue(highSnapshot.coldCoolantMb() == 1234 && highSnapshot.hotCoolantMb() == 56
+                        && highSnapshot.fuelColumns().get(fuelPos).cachedHeatHu() == 23
+                        && highSnapshot.fuelColumns().get(fuelPos).hasUsableFuel()
+                        && highSnapshot.controlRodColumns().get(rodPos).actualDepth() == 1
+                        && highSnapshot.controlRodColumns().get(rodPos).targetDepth() == 1,
+                        "当前高输入未沿原SCRAM紧急插入或改写核账本");
+                helper.setBlock(OWNER.north(), Blocks.AIR);
+                helper.assertTrue(!helper.getLevel().hasNeighborSignal(restored.getBlockPos()) && !restored.snapshot().scramRequested()
+                        && restored.snapshot().controlRodColumns().get(rodPos).targetDepth() == 1,
+                        "真实低沿没有沿原SCRAM规则释放或反弹到危险旧目标");
+                helper.assertTrue(ControlRodSliderService.handle(player, ControlRodSliderPayload.start(drivePos, -1, -1, 100, 7204)).accepted()
+                        && ControlRodSliderService.handle(player, ControlRodSliderPayload.commit(drivePos, -1, -1, 75, 7204)).accepted(),
+                        "真实低沿解除后原局部逐棒不能恢复");
+                ControlRodSliderService.clearSession(player);
+                System.out.println("[admin-release-saved] released=true nuclearPreserved=true scramAndJamProtected=true epochStable=true stableHighProtected=true realLowRestored=true");
+                helper.succeed();
+            });
+        });
+    }
+
+    /** 卸载回调、缺区块缓存及只拆燃烧室都保持接管，不能借失联释放逐棒。 */
+    @GameTest(templateNamespace = "cni_reactor_automation_retrofit", template = "retrofit_empty", timeoutTicks = 100)
+    public static void administrator_release_keeps_unavailable_and_burner_fault(GameTestHelper helper) {
+        build(helper, 6);
+        helper.setBlock(PORT, ReactorAutomationContent.PORT.get());
+        installBurner(helper);
+        helper.runAfterDelay(5, () -> {
+            var owner = owner(helper);
+            owner.tickReactor();
+            var port = (ReactorAutomationPortBlockEntity) helper.getBlockEntity(PORT);
+            helper.assertTrue(owner.automationState().claimed(), "失联前没有接管");
+            port.onChunkUnloaded();
+            helper.assertTrue(owner.automationState().claimed() && owner.automationState().rodsLocked() && !owner.automationState().runPermission(), "接口卸载回调错误结束接管");
+            owner.updateStructureCache(ReactorStructureScanner.WorldScanResult.invalid(
+                    com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition.DiagnosticCode.CHUNKS_UNAVAILABLE, "admin release unavailable probe"));
+            owner.tickReactor();
+            helper.assertTrue(owner.automationState().claimed() && owner.automationState().rodsLocked(), "缺区块未验证结构错误结束接管");
+            ReactorStructureLifecycle.rescanInstrumentPortNow(helper.getLevel(), owner.getBlockPos());
+            owner.tickReactor();
+            helper.setBlock(PORT.north(), Blocks.AIR);
+            owner.tickReactor();
+            helper.assertTrue(owner.structureValid() && owner.automationState().claimed() && owner.automationState().rodsLocked(), "仅拆燃烧室错误开放逐棒");
+            installBurner(helper);
+            owner.tickReactor();
+            helper.assertTrue(owner.automationState().claimed() && owner.automationState().phase() == ReactorAutomationState.Phase.FAULT
+                    && !owner.automationState().runPermission(), "燃烧室重装自动启动或清故障");
+            System.out.println("[admin-release-protection] unloadCallback=true chunksUnavailable=true burnerOnly=true faultRetained=true");
+            helper.succeed();
+        });
+    }
+
+    private static void installBurner(GameTestHelper helper) {
+        helper.setBlock(PORT.north(), AllBlocks.BLAZE_BURNER.getDefaultState().setValue(BlazeBurnerBlock.HEAT_LEVEL, BlazeBurnerBlock.HeatLevel.SMOULDERING));
+        BlazeBurnerBlock.tryInsert(helper.getBlockState(PORT.north()), helper.getLevel(), helper.absolutePos(PORT.north()), new ItemStack(Items.COAL), false, false, false);
+    }
+
+    private static ServerPlayer sliderPlayer(GameTestHelper helper) {
+        // 沿现有管理员域保留原生openMenu；FakePlayer本身关闭菜单，只借其隔离连接。
+        var profile = new GameProfile(UUID.randomUUID(), "AdminReleaseProbe");
+        var player = new ServerPlayer(helper.getLevel().getServer(), helper.getLevel(), profile, ClientInformation.createDefault());
+        player.connection = FakePlayerFactory.get(helper.getLevel(), profile).connection;
+        player.setGameMode(GameType.SURVIVAL);
+        var pos = helper.absolutePos(BASE.offset(2, 5, 2));
+        player.setPos(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5);
+        return player;
+    }
 
     /** 旧绑定在安全拆壳与Post重扫之间真实注液，不插入人工重扫来掩盖窗口。 */
     @GameTest(templateNamespace = "cni_reactor_automation_retrofit", template = "retrofit_empty", timeoutTicks = 100)
@@ -180,9 +452,9 @@ public final class ReactorAutomationRetrofitGameTests {
 
     private static BlockEvent.BreakEvent breakEvent(GameTestHelper helper, BlockPos relative) {
         var absolute = helper.absolutePos(relative);
-        var event = new BlockEvent.BreakEvent(helper.getLevel(), absolute, helper.getLevel().getBlockState(absolute), helper.makeMockPlayer(GameType.SURVIVAL));
-        NeoForge.EVENT_BUS.post(event);
-        return event;
+        // 事故树在原生post返回边界提交维护事务，单独post只会进行只读预检。
+        return net.neoforged.neoforge.common.CommonHooks.fireBlockBreak(helper.getLevel(), GameType.SURVIVAL,
+                sliderPlayer(helper), absolute, helper.getLevel().getBlockState(absolute));
     }
 
     /** 取生产更新标签，核静态摘要与正式tick，而不是检查源文件字符串。 */

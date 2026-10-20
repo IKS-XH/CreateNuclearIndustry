@@ -52,6 +52,26 @@ public final class ReactorAutomationService {
         }
         ReactorAutomationBlazeBridge.notifyPermission(o,binding==null?null:binding.burnerPos());
     }
+    /** 正式有效且全结构已加载的零接口扫描才结束接管；失联或未成型不等于物理退出。 */
+    public static void releaseIfPortAbsent(ReactorInstrumentPortBlockEntity o) {
+        if(o==null || o.getLevel()==null || o.getLevel().isClientSide || o.isRemoved()
+                || o.getLevel().getBlockEntity(o.getBlockPos())!=o || !o.structureValid() || o.structureOrigin()==null
+                || !o.automationState().claimed() || ReactorAutomationResume.normalShutdownActive(o)
+                || !o.structureScan().ports().getOrDefault(ReactorStructureDefinition.PortType.AUTOMATION,List.of()).isEmpty()) return;
+        var binding=o.automationBinding();
+        ReactorAutomationHeatSupply.invalidate(o);
+        ControlRodSliderService.revokeOwnerSessions(o);
+        // 运行信封的加载锁尚未执行失联全插；STOP/FAULT已持安全目标，不能重复改写保存SCRAM。
+        if(ReactorAutomationResume.pending(o)) {
+            submitDepth(o,100,true);
+            // 扫描采样曾被加载锁跳过；先撤冻结并处理当前真实输入，再发布逐棒权限。
+            o.setAutomationResumeSession(null);
+            o.updateRedstoneScram(o.getLevel().hasNeighborSignal(o.getBlockPos()));
+        }
+        if(o.automationPort()!=null)o.automationPort().bindOwner(null);
+        o.endAutomationTakeover();
+        ReactorAutomationBlazeBridge.notifyPermission(o,binding==null?null:binding.burnerPos());
+    }
     /** 安全持权状态在正式棒推进前幂等维持全插入目标，覆盖维修后新恢复的可动棒。 */
     private static void ensureSafetyBaseline(ReactorInstrumentPortBlockEntity o) {
         var state=o.automationState();

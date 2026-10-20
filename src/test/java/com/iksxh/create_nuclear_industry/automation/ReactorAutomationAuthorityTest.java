@@ -24,4 +24,12 @@ class ReactorAutomationAuthorityTest {
         var stopped=state.stop("duty_lost",true);
         assertTrue(stopped.claimed()); assertFalse(stopped.runPermission());assertEquals(100,stopped.commandedDepthPercent()); assertEquals(10,stopped.authorityEpoch());
     }
+    @Test void explicitReleaseEndsClaimAndInvalidatesAuthorityOnlyOnce() {
+        var state=new ReactorAutomationState(true,ReactorAutomationState.Phase.CONSTANT,"regulating",50,9,3,4,5,6,ReactorAutomationState.Mode.CONSTANT,true);
+        var released=state.stop("binding_lost",true).release();
+        assertFalse(released.claimed());assertFalse(released.rodsLocked());assertFalse(released.runPermission());
+        assertEquals(ReactorAutomationState.Phase.STOPPED,released.phase());assertEquals(ReactorAutomationState.Mode.STOP,released.requestedMode());
+        assertEquals(100,released.commandedDepthPercent());assertEquals(11,released.authorityEpoch());
+        assertSame(released,released.release());
+    }
 }
