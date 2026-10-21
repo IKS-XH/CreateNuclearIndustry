@@ -14,7 +14,7 @@
 
 ## 派发门与职责
 
-- 来源为事故树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`的`37f50b9e3425992f74beecb8ecd6e2c79514257e`。这是后续新批次；实际工作树/分支由PM执行时登记，优先复用合适隔离树。保存退出及指定来源世界尚未确认，不搬世界；搬运遵守完整备份、完整复制和数量/哈希核对，不覆盖当前候选进度。
+- 04A的历史起点为`37f50b9e`；后续熔融物/溶蚀以事故树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`的`9f53a7d5218d1a51b6fdc43bbeb98735a72d9acd`为基线。实际工作树/分支由PM执行时登记，优先复用合适隔离树。下一批开工时确认保存退出及指定来源，当前不读取或搬世界；搬运遵守完整备份、完整复制和数量/哈希核对，不覆盖当前候选进度。
 - 已批准的伤害、时间、份额、边界和预算不重问。两项尚缺具体值，已集中询问用户：建议每20tick移动1格、每事故初始熔融体积上限196格；默认50%份额下当前最大实际98格。这是建议，答复前不当作冻结值，不派发相关实现。
 - 本卡当前仅规划；PM不写功能/测试代码。执行者只在下列写集内交未提交差异与报告，不能更新核心文档、状态、Git或用户世界；一次组合窄审复用实现证据。
 - 必读根AGENTS、治理5.1/5.2、STATUS、设计合同、本卡及原事故/停机整改报告。实际使用`C:/Users/IKSXH/.codex/skills/`下minecraft-modding、minecraft-testing、minecraft-resource-pack、制品阶段minecraft-ci-release，以及对应systematic-debugging/TDD技能；手写注释中文。
