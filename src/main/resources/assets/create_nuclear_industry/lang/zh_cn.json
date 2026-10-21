@@ -707,5 +707,6 @@
   "radiation.create_nuclear_industry.dose": "累计剂量 %s D",
   "radiation.create_nuclear_industry.absorbed": "当前吸收 %s D/s",
   "block.create_nuclear_industry.reactor_corium": "融毁残骸",
-  "item.create_nuclear_industry.accident_fuel_waste": "事故燃料废料"
+  "item.create_nuclear_industry.accident_fuel_waste": "事故燃料废料",
+  "block.create_nuclear_industry.accident_fire": "事故火点"
 }

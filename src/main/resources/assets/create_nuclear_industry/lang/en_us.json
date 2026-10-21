@@ -707,5 +707,6 @@
   "radiation.create_nuclear_industry.dose": "Accumulated dose %s D",
   "radiation.create_nuclear_industry.absorbed": "Absorption %s D/s",
   "block.create_nuclear_industry.reactor_corium": "Reactor Corium",
-  "item.create_nuclear_industry.accident_fuel_waste": "Accident Fuel Waste"
+  "item.create_nuclear_industry.accident_fuel_waste": "Accident Fuel Waste",
+  "block.create_nuclear_industry.accident_fire": "Accident Fire"
 }

@@ -1,7 +1,6 @@
 {
   "variants": {
-    "": {
-      "model": "create_nuclear_industry:block/reactor_corium"
-    }
+    "hot=false": { "model": "create_nuclear_industry:block/reactor_corium" },
+    "hot=true": { "model": "create_nuclear_industry:block/hot_reactor_corium" }
   }
 }

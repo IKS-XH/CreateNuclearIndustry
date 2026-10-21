@@ -6,11 +6,18 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.entity.Entity;
 
 /** 普通镐可回收的单件废料残骸；本体不掉免费废料，掉落仅来自方块实体真实库存。 */
 public final class ReactorCoriumBlock extends BaseEntityBlock {
     public static final MapCodec<ReactorCoriumBlock> CODEC=simpleCodec(ReactorCoriumBlock::new);
-    public ReactorCoriumBlock(Properties properties) { super(properties); }
+    public static final BooleanProperty HOT=BooleanProperty.create("hot");
+    public ReactorCoriumBlock(Properties properties) { super(properties);registerDefaultState(stateDefinition.any().setValue(HOT,false)); }
+    @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> builder){builder.add(HOT);}
+    @Override public void stepOn(Level level,BlockPos pos,BlockState state,Entity entity){AccidentThermalEffects.contactSolid(level,pos,entity);super.stepOn(level,pos,state,entity);}
+    @Override protected void entityInside(BlockState state,Level level,BlockPos pos,Entity entity){AccidentThermalEffects.contactSolid(level,pos,entity);}
     @Override protected MapCodec<? extends BaseEntityBlock> codec() { return CODEC; }
     @Override protected RenderShape getRenderShape(BlockState state) { return RenderShape.MODEL; }
     @Override public BlockEntity newBlockEntity(BlockPos pos,BlockState state) { return new ReactorCoriumBlockEntity(pos,state); }

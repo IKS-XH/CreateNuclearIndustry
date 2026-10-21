@@ -72,6 +72,7 @@ public final class ReactorAccidentLedger {
     public final double releasedHeatHu;
     public final List<Column> columns;
     public final List<Action> actions;
+    public AccidentThermalState thermal=new AccidentThermalState(AccidentThermalParameters.DEFAULT);
     public final Set<UUID> shocked = new HashSet<>();
     /** 创建时已有效的邻堆世代允许承受排定壳损伤；之后新成型的世代始终受保护。 */
     public final Set<UUID> knownOwners = new HashSet<>();
@@ -99,7 +100,7 @@ public final class ReactorAccidentLedger {
         var s=new ListTag(); shocked.forEach(v->{var p=new CompoundTag(); p.putUUID("Player",v); s.add(p);}); t.put("Shocked",s);
         var owners=new ListTag();knownOwners.forEach(v->{var p=new CompoundTag();p.putUUID("Generation",v);owners.add(p);});t.put("KnownOwners",owners);
         t.putBoolean("ShockComplete",shockComplete); t.putInt("Cursor",cursor); t.putInt("WorldActions",worldActions);
-        t.putInt("ExternalBroken",externalBroken); t.putInt("Peak",peakActions); return t;
+        t.putInt("ExternalBroken",externalBroken); t.putInt("Peak",peakActions);t.put("Thermal",thermal.save()); return t;
     }
     public static ReactorAccidentLedger load(CompoundTag t, HolderLookup.Provider registries) {
         List<Column> c=new ArrayList<>(); for(Tag v:t.getList("Columns",Tag.TAG_COMPOUND)) c.add(Column.load((CompoundTag)v,registries));
@@ -110,6 +111,7 @@ public final class ReactorAccidentLedger {
         for(Tag v:t.getList("Shocked",Tag.TAG_COMPOUND)) l.shocked.add(((CompoundTag)v).getUUID("Player"));
         for(Tag v:t.getList("KnownOwners",Tag.TAG_COMPOUND))l.knownOwners.add(((CompoundTag)v).getUUID("Generation"));
         l.shockComplete=t.getBoolean("ShockComplete"); l.cursor=t.getInt("Cursor"); l.worldActions=t.getInt("WorldActions");
-        l.externalBroken=t.getInt("ExternalBroken"); l.peakActions=t.getInt("Peak"); return l;
+        l.externalBroken=t.getInt("ExternalBroken"); l.peakActions=t.getInt("Peak");
+        if(t.contains("Thermal"))l.thermal=AccidentThermalState.load(t.getCompound("Thermal"));return l;
     }
 }

@@ -32,7 +32,8 @@ public final class AccidentExecutionGameTests {
     private AccidentExecutionGameTests() {}
     private static boolean skipFixture(GameTestHelper h,String key) {
         var focus=System.getenv("CNI_ACCIDENT_FOCUS");
-        if(!"1".equals(System.getenv("CNI_ACCIDENT_RESUME_ONLY"))&&(focus==null||focus.equals(key)))return false;
+        if(!"1".equals(System.getenv("CNI_ACCIDENT_RESUME_ONLY"))&&(focus==null||focus.equals(key)
+                ||("thermal_solid_fire".equals(focus)&&"shutdown".equals(key))))return false;
         System.out.println("[accident] focused validation: SKIP fixture "+key);h.succeed();return true;
     }
     private static boolean resumeOnly(GameTestHelper h) {return skipFixture(h,"business");}
@@ -92,12 +93,13 @@ public final class AccidentExecutionGameTests {
         var ledger=ReactorAccidentSavedData.get(h.getLevel()).byId(old.accidentId());
         h.runAfterDelay(30,()->{
             h.assertTrue(ledger.complete(),"正式事故尚未完成，不能作为过期锁用例");
+            h.assertTrue(ledger.thermal.active(),"空口重绑必须发生在真实热阶段仍活跃时");
             var survivors=ports.stream().filter(p->!p.isRemoved()&&h.getLevel().getBlockEntity(p.getBlockPos())==p).toList();
             h.assertTrue(!survivors.isEmpty(),"32块壳上限未留下真实空换料口");
             var locked=survivors.getFirst();var lockedTag=locked.saveWithFullMetadata(h.getLevel().registryAccess());
             h.assertTrue(lockedTag.hasUUID("AccidentLock")&&ledger.id.equals(lockedTag.getUUID("AccidentLock")),"幸存口不是本事故原始锁");
             var originalGenerations=survivors.stream().map(ReactorPortBlockEntity::accidentGeneration).toList();
-            var receipt=ledger.save(h.getLevel().registryAccess()).copy();
+            var receipt=ledger.save(h.getLevel().registryAccess()).copy();receipt.remove("Thermal");
             var data=ReactorAccidentSavedData.get(h.getLevel());
             h.getLevel().getDataStorage().set("create_nuclear_industry_accidents",ReactorAccidentSavedData.load(data.save(new CompoundTag(),h.getLevel().registryAccess()),h.getLevel().registryAccess()));
             var waste=ledger.columns.stream().filter(ReactorAccidentLedger.Column::waste).findFirst().orElseThrow();
@@ -121,14 +123,17 @@ public final class AccidentExecutionGameTests {
             h.assertTrue(staleHandler.fill(new net.neoforged.neoforge.fluids.FluidStack(ModFluids.COMPOUND_COOLANT_SOURCE.get(),1),net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE)==0,"旧能力在新世代复活");
             verifyShutdownRebindGuards(h,locked,next,old,ledger,lockedTag,saved);
             var currentLedger=ReactorAccidentSavedData.get(h.getLevel()).byId(ledger.id);
-            h.assertTrue(receipt.equals(currentLedger.save(h.getLevel().registryAccess()))&&currentLedger.columns.stream().allMatch(c->c.payload().isEmpty()),"重绑改动已读回旧账本或再产托管");
+            var currentReceipt=currentLedger.save(h.getLevel().registryAccess());currentReceipt.remove("Thermal");
+            h.assertTrue(receipt.equals(currentReceipt)&&currentLedger.columns.stream().allMatch(c->c.payload().isEmpty()),"重绑改动已读回旧账本或再产托管");
             int returned=0;
             for(var c:ledger.columns)if(!c.waste()) {
                 var id=UUID.nameUUIDFromBytes((ledger.id+":"+c.port.asLong()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
                 h.assertTrue(h.getLevel().getEntity(id) instanceof ItemEntity item&&ItemStack.matches(item.getItem(),c.original()),"已交接全新原件丢失/改变");returned++;
             }
             h.assertTrue(returned==5&&recovered.getCount()==1&&next.snapshot().coldCoolantMb()==9000&&next.snapshot().hotCoolantMb()==0,"旧5原件+1废料或新冷堆工质不守恒");
-            h.assertTrue(ledger.complete()&&ReactorAccidentExecutor.tick(h.getLevel())==0,"完成事故重放又执行动作");
+            ReactorAccidentExecutor.tick(h.getLevel());
+            h.assertTrue(ledger.complete()&&ledger.columns.stream().allMatch(c->c.settled()&&c.payload().isEmpty())
+                    &&ledger.actions.stream().allMatch(action->action.done),"完成事故重放重开了原接管/破裂动作");
             h.assertTrue(locked.tryInsertFuel(fresh()).success(),"安全清空前未装入真实组件");
             var shell=BASE;var worldShell=h.absolutePos(shell);
             var reset=net.neoforged.neoforge.common.CommonHooks.fireBlockBreak(h.getLevel(),GameType.SURVIVAL,player,worldShell,h.getBlockState(shell));
@@ -137,6 +142,117 @@ public final class AccidentExecutionGameTests {
             h.setBlock(shell,Blocks.AIR);ReactorStructureLifecycle.rescanInstrumentPortNow(h.getLevel(),next.getBlockPos());
             h.assertTrue(!next.structureValid(),"原生安全事务后实际拆壳未使结构失效");
             System.out.println("[shutdown03] native final-tick accident -> retained "+survivors.size()+" empty ports -> new cold owner -> CommonHooks maintenance and FULL_SHUTDOWN_RESET allowed; receipts/5 originals/1 recovered waste, guards, save and idempotence passed");h.succeed();
+        });
+    }
+
+    /** 单次聚焦覆盖两事故共预算、实体接触、有限火、实际加载冷却及当前格式真实BE/DataStorage恢复。 */
+    @GameTest(template=TEMPLATE,timeoutTicks=2500)
+    public static void thermalSolidAndFiniteFire(GameTestHelper h) {
+        if(skipFixture(h,"thermal_solid_fire"))return;
+        var level=h.getLevel();var first=build(h,BASE,5);int inserted=0;
+        for(var p:first.boundPorts(ReactorPortBlockEntity.BindingType.REFUELING))p.setFuelAssembly(++inserted==9?fresh():used());
+        first.setCoolantInventories(123,456);var a=trigger(h,first,ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE);
+        var second=build(h,BASE.offset(18,0,0),5);
+        for(var p:second.boundPorts(ReactorPortBlockEntity.BindingType.REFUELING))p.setFuelAssembly(used());
+        var b=trigger(h,second,ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE);
+        var previous=new HashMap<UUID,Integer>();ReactorAccidentSavedData.get(level).records().forEach(l->previous.put(l.id,l.worldActions));
+        var peak=new java.util.concurrent.atomic.AtomicInteger();
+        h.onEachTick(()->{
+            int delta=0;for(var ledger:ReactorAccidentSavedData.get(level).records()) {
+                var old=previous.put(ledger.id,ledger.worldActions);if(old!=null)delta+=ledger.worldActions-old;
+            }
+            h.assertTrue(delta>=0&&delta<=64,"同维度多个事故原动作/热火写超过64/t："+delta);peak.accumulateAndGet(delta,Math::max);
+        });
+        h.runAfterDelay(30,()->{
+            var data=ReactorAccidentSavedData.get(level);var currentA=data.byId(a.id);var currentB=data.byId(b.id);
+            h.assertTrue(currentA.complete()&&currentB.complete()&&currentA.thermal.active()&&currentB.thermal.active(),"原事故完成被热阶段延长");
+            h.assertTrue(currentA.coldMb==123&&currentA.hotMb==456&&first.snapshot().coldCoolantMb()==0&&first.snapshot().hotCoolantMb()==0,"工质全损改变");
+            int waste=0;for(var ledger:List.of(currentA,currentB))for(var c:ledger.columns)if(c.waste()) {
+                var be=(ReactorCoriumBlockEntity)level.getBlockEntity(c.bottom);h.assertTrue(be!=null&&be.payload().getCount()==1&&c.payload().isEmpty(),"托管/BE双有或缺料");waste++;
+            }
+            h.assertTrue(waste==17&&currentA.columns.stream().filter(c->!c.waste()).count()==1,"已用/未用组件分类不守恒");
+            var returned=currentA.columns.stream().filter(c->!c.waste()).findFirst().orElseThrow();
+            var returnedId=UUID.nameUUIDFromBytes((currentA.id+":"+returned.port.asLong()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            h.assertTrue(level.getEntity(returnedId) instanceof ItemEntity item&&ItemStack.matches(item.getItem(),returned.original()),"未用原件没有唯一返还");
+            var hot=currentA.columns.stream().filter(ReactorAccidentLedger.Column::waste).findFirst().orElseThrow().bottom;
+            var hot2=currentB.columns.getLast().bottom;
+            var standing=net.minecraft.world.entity.EntityType.COW.create(level);standing.setNoAi(true);standing.setPos(Vec3.atBottomCenterOf(hot2.above()));
+            float standingHealth=standing.getHealth();level.addFreshEntity(standing);
+            standing.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(.01,-.08,0));
+            h.runAfterDelay(3,()->{
+                h.assertTrue(standing.onGround()&&standing.getY()==hot2.getY()+1&&standing.getHealth()==standingHealth-2
+                        &&standing.getRemainingFireTicks()>0,"真实顶面碰撞状态：ground="+standing.onGround()+",y="+standing.getY()+",expected="+(hot2.getY()+1)
+                        +",hp="+standing.getHealth()+",before="+standingHealth+",fire="+standing.getRemainingFireTicks());standing.discard();
+            });
+            var cow=net.minecraft.world.entity.EntityType.COW.create(level);float health=cow.getHealth();
+            level.getBlockState(hot).getBlock().stepOn(level,hot,level.getBlockState(hot),cow);
+            h.assertTrue(cow.getHealth()==health-2&&cow.getRemainingFireTicks()==60,"默认接触不是2HP/3秒");
+            cow.invulnerableTime=0;cow.clearFire();
+            for(int i=0;i<20;i++)level.getBlockState(hot2).getBlock().stepOn(level,hot2,level.getBlockState(hot2),cow);
+            h.assertTrue(cow.getHealth()==health-2&&cow.getRemainingFireTicks()<=0,"同实体同类多格绕过20tick节流");
+            var resistant=net.minecraft.world.entity.EntityType.COW.create(level);resistant.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE,200));
+            float resistantHealth=resistant.getHealth();level.getBlockState(hot).getBlock().stepOn(level,hot,level.getBlockState(hot),resistant);
+            h.assertTrue(resistant.getHealth()==resistantHealth,"普通火抗未抵挡直接热伤");
+            var empty=h.absolutePos(BASE.offset(0,7,0));level.setBlock(empty,AccidentContent.REACTOR_CORIUM.get().defaultBlockState().setValue(ReactorCoriumBlock.HOT,true),18);
+            var safe=net.minecraft.world.entity.EntityType.COW.create(level);float safeHealth=safe.getHealth();
+            level.getBlockState(empty).getBlock().stepOn(level,empty,level.getBlockState(empty),safe);
+            h.assertTrue(safe.getHealth()==safeHealth&&safe.getRemainingFireTicks()<=0,"空高温外观凭空灼烧");
+            h.assertTrue(currentA.thermal.fires().size()==8&&currentA.thermal.fires().stream().filter(f->f.placed).count()==8,"同次事故没有8个独立有限火租约");
+            var extinguished=currentA.thermal.fires().getFirst();
+            var firefighter=net.neoforged.neoforge.common.util.FakePlayerFactory.get(level,new com.mojang.authlib.GameProfile(UUID.randomUUID(),"ThermalFirefighter"));
+            firefighter.setPos(Vec3.atCenterOf(extinguished.pos).add(0,0,1));firefighter.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
+            firefighter.gameMode.handleBlockBreakAction(extinguished.pos,net.minecraft.network.protocol.game.ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK,Direction.UP,level.getMaxBuildHeight(),1);
+            h.assertTrue(extinguished.terminal&&level.getBlockState(extinguished.pos).isAir(),"原生玩家左键灭火未终止租约");
+            var wetFire=currentA.thermal.fires().get(1);level.setBlock(wetFire.pos.above(),Blocks.WATER.defaultBlockState(),3);
+            h.runAfterDelay(10,()->{
+                var liveFire=ReactorAccidentSavedData.get(level).byId(a.id).thermal.fire(wetFire.id);
+                h.assertTrue(liveFire.terminal&&level.getFluidState(wetFire.pos).is(net.minecraft.tags.FluidTags.WATER)
+                        &&!level.getBlockState(wetFire.pos).is(AccidentContent.ACCIDENT_FIRE.get()),"真实向下水流没有到达并扑灭火点");
+                // 仅清理夹具自行放出的水，避免改变远处自然冷却参照；保留水灭火终止收据。
+                for(var pos:BlockPos.betweenClosed(h.absolutePos(BASE.offset(-2,0,-2)),h.absolutePos(BASE.offset(7,5,7))))
+                    if(level.getBlockState(pos).is(Blocks.WATER))level.setBlock(pos,Blocks.AIR.defaultBlockState(),18);
+            });
+            var expired=currentA.thermal.fires().get(2);expired.remaining=1;
+            int available=data.availableBudget(level.getGameTime(),64);data.spendBudget(available);
+            ReactorAccidentExecutor.tick(level);
+            h.assertTrue(expired.terminal&&!((AccidentFireBlock.Lease)level.getBlockEntity(expired.pos)).dangerous()
+                    &&level.getBlockState(expired.pos).is(AccidentContent.ACCIDENT_FIRE.get()),"预算耗尽时到期仍伤害或绕预算清块");
+            level.setBlock(expired.pos,Blocks.STONE.defaultBlockState(),18);
+            var be=(ReactorCoriumBlockEntity)level.getBlockEntity(hot);var beTag=be.saveWithFullMetadata(level.registryAccess());
+            int remaining=currentA.thermal.solid(hot).remaining;var fireTag=currentA.thermal.save();
+            be.loadWithComponents(beTag,level.registryAccess());
+            level.getDataStorage().set("create_nuclear_industry_accidents",ReactorAccidentSavedData.load(data.save(new CompoundTag(),level.registryAccess()),level.registryAccess()));
+            var restored=ReactorAccidentSavedData.get(level).byId(a.id);
+            h.assertTrue(restored.thermal.solid(hot).remaining==remaining&&restored.thermal.save().equals(fireTag)&&be.payload().getCount()==1,"当前格式恢复重置热/火或物料");
+            var wet=hot.west();level.setBlock(wet,Blocks.OAK_SLAB.defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED,true),18);
+            var dose=RadiationItemSources.describe(be.payload(),RadiationParameters.DEFAULT).dosePerSecond();
+            var mined=currentB.columns.getFirst().bottom;level.destroyBlock(mined,true,firefighter);
+            var drops=level.getEntitiesOfClass(ItemEntity.class,new AABB(mined).inflate(1)).stream()
+                    .filter(item->item.getItem().is(AccidentContent.ACCIDENT_FUEL_WASTE.get())).toList();
+            h.assertTrue(drops.stream().mapToInt(item->item.getItem().getCount()).sum()==1
+                    &&ReactorAccidentSavedData.get(level).byId(b.id).thermal.solid(mined).terminal,"真实提前采掘未恰好掉一份废料或遗留热源");
+            var wood=currentB.thermal.fires().getFirst().pos.above();level.setBlock(wood,Blocks.OAK_PLANKS.defaultBlockState(),18);
+            h.runAfterDelay(20,()->{
+                cow.invulnerableTime=0;level.getBlockState(hot).getBlock().stepOn(level,hot,level.getBlockState(hot),cow);
+                h.assertTrue(cow.getHealth()==health-4,"20tick后同实体没有恢复接触伤害");
+            });
+            h.runAfterDelay(605,()->{
+                var latest=ReactorAccidentSavedData.get(level).byId(a.id);
+                h.assertTrue(latest.thermal.solid(hot).remaining==0&&!level.getBlockState(hot).getValue(ReactorCoriumBlock.HOT),"实际已加载接水600tick没有冷却投影");
+                h.assertTrue(be.payload().getCount()==1&&RadiationItemSources.describe(be.payload(),RadiationParameters.DEFAULT).dosePerSecond()==dose,"冷却改变真实废料或辐射");
+                h.assertTrue(latest.thermal.fires().stream().allMatch(f->f.terminal&&f.cleaned),"600tick后仍有火或灭后复燃");
+                h.assertTrue(level.getBlockState(wood).is(Blocks.OAK_PLANKS),"有限火蔓延烧掉了邻接木块");
+                h.assertTrue(level.getBlockState(expired.pos).is(Blocks.STONE)&&!level.getBlockState(extinguished.pos).is(AccidentContent.ACCIDENT_FIRE.get()),"到期清理删除后来方块或重燃");
+                h.assertTrue(ReactorAccidentSavedData.get(level).byId(b.id).thermal.solid(hot2).remaining>0,"自然冷却被接水夹具污染");
+                System.out.println("[thermal04a] 17 real waste + 1 exact fresh return; 2HP/3s/20tick, fire resistance, empty safety, 8 fire leases/600tick/extinguish/identity, water x4 and BE/SavedData restore passed");
+            });
+            h.runAfterDelay(2410,()->{
+                var latest=ReactorAccidentSavedData.get(level).byId(b.id);
+                h.assertTrue(latest.thermal.solid(hot2).remaining==0&&!level.getBlockState(hot2).getValue(ReactorCoriumBlock.HOT),"2400实际加载tick后自然残骸仍高温");
+                h.assertTrue(ReactorAccidentSavedData.get(level).thermalWork().isEmpty(),"空闲仍保留已结束热事故索引");
+                h.assertTrue(peak.get()==64,"双事故夹具未实际触达共享64/t上限");
+                System.out.println("[thermal04a] real 2400 loaded tick cooling complete; all thermal active indexes drained; shared dimension peak="+peak.get()+"; physical unload and real multiplayer not exercised");h.succeed();
+            });
         });
     }
 

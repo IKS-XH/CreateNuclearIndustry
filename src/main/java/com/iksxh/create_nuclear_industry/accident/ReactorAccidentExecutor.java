@@ -22,19 +22,21 @@ public final class ReactorAccidentExecutor {
     }
     /** 返回本tick实际执行/收据动作数；同维度各事故按自己的冻结上限共同限额。 */
     public static int tick(ServerLevel level) {
-        var data=ReactorAccidentSavedData.get(level);var active=data.records().stream().filter(l->!l.complete()).toList();
+        var data=ReactorAccidentSavedData.get(level);
+        AccidentThermalEffects.advance(level,data);
+        var work=new LinkedHashSet<ReactorAccidentLedger>();work.addAll(data.initialWork());work.addAll(data.thermalWork());var active=List.copyOf(work);
         if(active.isEmpty())return 0;
         int budget=active.stream().mapToInt(l->l.parameters.worldActionsPerTick()).min().orElse(64);
-        if(data.budgetTime!=level.getGameTime()){data.budgetTime=level.getGameTime();data.usedThisTick=0;}
-        budget=Math.max(0,budget-data.usedThisTick);
+        budget=data.availableBudget(level.getGameTime(),budget);
         int used=0,idle=0;var counts=new HashMap<UUID,Integer>();long start=System.nanoTime();
         while(used<budget&&idle<active.size()) {
             var l=active.get(Math.floorMod(data.rotation++,active.size()));
-            if(one(level,l)) { used++;idle=0;l.worldActions++;counts.merge(l.id,1,Integer::sum);data.setDirty(); }
+            if((!l.complete()&&one(level,l))||AccidentThermalEffects.one(level,l)) { used++;idle=0;l.worldActions++;counts.merge(l.id,1,Integer::sum);data.setDirty(); }
             else idle++;
+            data.refreshWork(l);data.setDirty();
         }
         counts.forEach((id,count)->{var l=data.byId(id);l.peakActions=Math.max(l.peakActions,count);});
-        data.usedThisTick+=used;
+        data.spendBudget(used);
         if(used>0&&active.stream().anyMatch(ReactorAccidentLedger::complete))
             com.mojang.logging.LogUtils.getLogger().info("事故动作收据：维度={} 本tick={} 耗时微秒={} 任务={}",level.dimension().location(),used,(System.nanoTime()-start)/1000,
                     active.stream().map(l->l.id+":plan="+l.actions.size()+",payloads="+l.columns.size()+",actions="+l.worldActions+",external="+l.externalBroken+",peak="+l.peakActions+",complete="+l.complete()).toList());
@@ -83,7 +85,7 @@ public final class ReactorAccidentExecutor {
                     finish(level,c);return true;
                 }
                 if(!level.getBlockState(c.bottom).isAir()||newOwnerAt(level,l,c.bottom))continue;
-                if(!level.setBlock(c.bottom,AccidentContent.REACTOR_CORIUM.get().defaultBlockState(),Block.UPDATE_CLIENTS|Block.UPDATE_KNOWN_SHAPE))continue;
+                if(!level.setBlock(c.bottom,AccidentContent.REACTOR_CORIUM.get().defaultBlockState().setValue(ReactorCoriumBlock.HOT,true),Block.UPDATE_CLIENTS|Block.UPDATE_KNOWN_SHAPE))continue;
                 if(!(level.getBlockEntity(c.bottom) instanceof ReactorCoriumBlockEntity corium)||!corium.accept(l.id,c.bottom,c.payload()))
                     throw new IllegalStateException("残骸载荷交接失败，托管保留");
             } else {
@@ -108,7 +110,7 @@ public final class ReactorAccidentExecutor {
         return be instanceof ReactorInstrumentPortBlockEntity owner&&owner.accidentGeneration().equals(generation)&&l.id.equals(owner.accidentId());
     }
     /** 新成型的不同世代有自己的库存，旧任务即使坐标/外观相同也不能把它作为原目标。 */
-    private static boolean newOwnerAt(ServerLevel level,ReactorAccidentLedger l,BlockPos pos) {
+    static boolean newOwnerAt(ServerLevel level,ReactorAccidentLedger l,BlockPos pos) {
         for(var owner:ReactorStructureLifecycle.loadedOwnersNear(level,pos)) {
             if(!owner.structureValid()||owner.accidentGeneration().equals(l.generation)||l.knownOwners.contains(owner.accidentGeneration())||owner.structureOrigin()==null)continue;
             var min=owner.structureOrigin();var d=owner.structureScan().dimensions();

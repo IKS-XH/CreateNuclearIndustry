@@ -21,6 +21,10 @@ public final class AccidentContent {
     public static final DeferredItem<BlockItem> REACTOR_CORIUM_ITEM=ITEMS.register("reactor_corium",()->new BlockItem(REACTOR_CORIUM.get(),new Item.Properties()));
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<ReactorCoriumBlockEntity>> CORIUM_BE=ENTITIES.register("reactor_corium",
             ()->BlockEntityType.Builder.of(ReactorCoriumBlockEntity::new,REACTOR_CORIUM.get()).build(null));
+    public static final DeferredBlock<AccidentFireBlock> ACCIDENT_FIRE=BLOCKS.register("accident_fire",
+            ()->new AccidentFireBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.FIRE).noLootTable()));
+    public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AccidentFireBlock.Lease>> FIRE_BE=ENTITIES.register("accident_fire",
+            ()->BlockEntityType.Builder.of(AccidentFireBlock.Lease::new,ACCIDENT_FIRE.get()).build(null));
     private AccidentContent() {}
     public static void register(IEventBus bus) { ITEMS.register(bus); BLOCKS.register(bus); ENTITIES.register(bus); }
 }

@@ -11,6 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** 纯账本只验证真实托管和收据；注册物品、世界所有权与破坏另由隔离真实服验证。 */
 class AccidentLedgerTest {
+    @Test void thermalActivityDoesNotExtendOldCompletionAndBudgetIsShared() {
+        var ledger=new ReactorAccidentLedger(java.util.UUID.randomUUID(),java.util.UUID.randomUUID(),"minecraft:overworld","COUNTDOWN_COMPLETE",
+                BlockPos.ZERO,BlockPos.ZERO,BlockPos.ZERO,AccidentParameters.DEFAULT,0,0,0,java.util.List.of(),java.util.List.of());
+        ledger.shockComplete=true;ledger.thermal.startSolid(BlockPos.ZERO);
+        assertTrue(ledger.complete());assertTrue(ledger.thermal.active());
+        var restored=ReactorAccidentLedger.load(ledger.save(RegistryAccess.EMPTY),RegistryAccess.EMPTY);
+        assertTrue(restored.complete());assertTrue(restored.thermal.active());
+        var data=new ReactorAccidentSavedData();assertEquals(64,data.availableBudget(1,64));
+        data.spendBudget(40);assertEquals(24,data.availableBudget(1,64));data.spendBudget(24);
+        assertEquals(0,data.availableBudget(1,64));assertEquals(64,data.availableBudget(2,64));
+    }
     @Test void completedReceiptIsCachedAndRebuiltFromCurrentFormat() throws Exception {
         var action=new ReactorAccidentLedger.Action(BlockPos.ZERO,0,false,null);action.done=true;
         var ledger=new ReactorAccidentLedger(java.util.UUID.randomUUID(),java.util.UUID.randomUUID(),"minecraft:overworld","COUNTDOWN_COMPLETE",

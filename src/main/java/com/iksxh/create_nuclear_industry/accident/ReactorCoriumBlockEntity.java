@@ -15,14 +15,20 @@ public final class ReactorCoriumBlockEntity extends BlockEntity {
     private ItemStack payload=ItemStack.EMPTY;
     public ReactorCoriumBlockEntity(BlockPos pos, BlockState state) { super(AccidentContent.CORIUM_BE.get(),pos,state); }
     public ItemStack payload() { return payload.copy(); }
+    public UUID accident(){return accident;}
     public boolean matches(UUID id,BlockPos bottom) { return id.equals(accident)&&bottom.equals(column); }
     /** 只有空库存和空收据可接收；即使玩家已回收，同一动作重放也不能重新灌装。 */
     public boolean accept(UUID id,BlockPos bottom,ItemStack stack) {
         if(level==null||level.isClientSide||accident!=null||!stack.is(AccidentContent.ACCIDENT_FUEL_WASTE.get())||stack.getCount()!=1) return false;
-        accident=id;column=bottom.immutable();payload=stack.copy();setChanged();return true;
+        accident=id;column=bottom.immutable();payload=stack.copy();setChanged();
+        if(level instanceof net.minecraft.server.level.ServerLevel server)ReactorAccidentSavedData.get(server).startSolid(id,bottom);return true;
     }
     /** 先移走唯一库存再产生掉落；所有原生移除路径共用，不经loot表另造一份。 */
-    public ItemStack take() { var result=payload; payload=ItemStack.EMPTY;setChanged();return result; }
+    public ItemStack take() {
+        var result=payload;payload=ItemStack.EMPTY;setChanged();
+        if(accident!=null&&level instanceof net.minecraft.server.level.ServerLevel server)ReactorAccidentSavedData.get(server).removeSolid(accident,worldPosition);
+        return result;
+    }
     @Override protected void saveAdditional(CompoundTag tag,HolderLookup.Provider registries) {
         super.saveAdditional(tag,registries);
         if(accident!=null){tag.putUUID("Accident",accident);tag.putLong("Column",column.asLong());}

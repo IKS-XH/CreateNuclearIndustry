@@ -61,6 +61,10 @@ public final class ReactorAccidentService {
         var ledger=new ReactorAccidentLedger(UUID.randomUUID(),owner.accidentGeneration(),event.dimension().location().toString(),event.reason().name(),
                 owner.getBlockPos(),min,max,p,event.snapshot().coldCoolantMb(),event.snapshot().hotCoolantMb(),heat,columns,
                 ReactorAccidentPlan.create(level,min,max,p,ports.keySet(),owner.getBlockPos()));
+        ledger.thermal=new AccidentThermalState(AccidentConfig.thermalParameters());
+        // 原破裂区内选定一次性候选；只在初始结算结束后检查支撑和空气，失败也不另选位置复燃。
+        for(var action:ledger.actions)if(!action.external&&action.pos.getY()==min.getY()+2)
+            ledger.thermal.planFire(action.pos);
         // 只在事故创建时冻结已存在的独立机组，不能把后续新建同位置机组当作旧破坏目标。
         for(var action:ledger.actions)for(var existing:com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle.loadedOwnersNear(level,action.pos))
             if(existing.structureValid())ledger.knownOwners.add(existing.accidentGeneration());
