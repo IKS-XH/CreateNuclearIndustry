@@ -51,6 +51,7 @@
 | 装配台15C动画 | 用户授权合main，自动/网页/审查通过；Minecraft制造/封装/中途停恢复尚未报告。见[观察入口](art/ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md) |
 | 历史窄修观察 | 泵静止箭头/加载2048后的现场流量、冷液桶标记创造罐暂无明确独立客户端通过反馈；原管网和两端三角验收不重开。见[静止箭头/配置](archive/2026-10-15/reviews/2026-10-13/industrial-pump-idle-arrow-flow-config/CANDIDATE.md)、[桶交互](archive/2026-10-15/reviews/2026-10-12/industrial-pump-tank-interaction-fix/CANDIDATE.md) |
 | 辅助工具 | 模拟器02B单文件及3D工具整体验收独立，不阻塞已验机组或自动插入主线 |
+| 音效离心机首样 | 用户在“制作音效”对话正式任命音效负责人并批准克制机械风首样，PM已只读核实原文，落实[专项写集](audio/tasks/AUDIO-CENTRIFUGE-01.md)。独立树`E:/MyMC/NewMod/Create_NuclearIndustry-audio-studio`/`codex/audio-centrifuge-01`，基线`a6872db1`；main已保存世界完整携带，27文件/13337721bytes逐项SHA一致且来源未改，清单在音效树build/reports/audio-workspace-20261021/world-copy.json。可由该负责人按既定素材写集派发；尚未制作/试听/接入游戏，不涉及本批事故代码或正式包，未向音效聊天自动回发 |
 | 旧GameTest断言 | 性能候选真实服务端保留一条旧控制棒2.25HU断言失败，S1基线同样失败，当前ceil结果3HU；本次未改测试/玩法，不称全GameTest通过。见[审查](reviews/2026-10-15/reactor-performance-accepted-integration/REVIEW.md) |
 | 累计优化原验证边界 | T9真实服34/37、H1原直列/冷凝9/14，失败均在各自精确基线存在，未扩大修复或计为通过；H1新增真实断言10/10及干净冻结世界重载另记。物理卸载、真人多人及新客户端视觉未因合入补记验收，见[本批记录](reviews/2026-10-20/optimization-accepted/INTEGRATION.md) |
 | 管理员删除后客户端复看 | 本批源及真实服已验证，GUI只剩统一深度/恒功率且仍为三页、Ctrl不再绑定应力表的实际客户端复看尚待用户反馈；未重开其余已验功能或将自动结果当视觉验收，见[本批记录](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md) |

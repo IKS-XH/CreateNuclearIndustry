@@ -2,7 +2,7 @@
 
 具体负责人对话为“制作音效”（`01a15943-f339-79b2-b0d3-39e0caadd267`），用户已直接任命并确认离心机“克制机械风”首个试听小样。专项权限见[治理1.3](../project-governance.md#13-音效负责人的专项授权2026-10-20任命2026-10-21核实)，本入口不向子Agent转授角色。
 
-- 指定工作树：`E:/MyMC/NewMod/Create_NuclearIndustry-audio-studio`，分支`codex/audio-centrifuge-01`；基线为PM提交本次音效任命/首样卡后的准确main来源，创建与存档核验结果只在[STATUS](../STATUS.md)维护。
+- 指定工作树：`E:/MyMC/NewMod/Create_NuclearIndustry-audio-studio`，分支`codex/audio-centrifuge-01`；准确基线`a6872db148f4a0b6d923f9a4f6a9304f6b3c03b3`。存档来源为main的`run/saves/新的世界`，完整复制清单位于该音效树`build/reports/audio-workspace-20261021/world-copy.json`；创建与存档核验结果只在主目录[STATUS](../STATUS.md)维护。
 - [AUDIO-CENTRIFUGE-01](tasks/AUDIO-CENTRIFUGE-01.md)：仅约6～8秒循环与启停试听素材；音效负责人维护本入口、该卡和指定报告，由其安排唯一明确写集执行者制作。
 - 首样不进入Java、`src/main`、共享语言/Gradle或正式JAR。实际游戏播放接口、距离衰减、多机去重和退出/卸载清理等在试听方向通过后另行约定。
 - 主目录3D工具、事故候选与美术树均不在音效写集。无Git写权限，不自动合入/推送/发布；无需为试听资源启动Minecraft或重复JUnit/GameTest。
