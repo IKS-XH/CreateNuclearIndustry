@@ -1,0 +1,58 @@
+{
+  "ambientocclusion": false,
+  "gui_light": "side",
+  "textures": {
+    "needle": "create_nuclear_industry:item/radiation_meter_needle",
+    "particle": "create_nuclear_industry:item/radiation_meter_needle"
+  },
+  "elements": [
+    {
+      "name": "独立针杆",
+      "from": [
+        7.65625,
+        9.40625,
+        5.8125
+      ],
+      "to": [
+        7.90625,
+        11.65625,
+        5.8125
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            1,
+            9,
+            13
+          ],
+          "texture": "#needle"
+        }
+      }
+    },
+    {
+      "name": "独立轴心",
+      "from": [
+        7.46875,
+        9.09375,
+        5.796875
+      ],
+      "to": [
+        8.09375,
+        9.71875,
+        5.796875
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            10,
+            11,
+            16
+          ],
+          "texture": "#needle"
+        }
+      }
+    }
+  ]
+}

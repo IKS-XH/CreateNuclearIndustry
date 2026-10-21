@@ -1,11 +1,12 @@
 package com.iksxh.create_nuclear_industry.content;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
+import com.iksxh.create_nuclear_industry.equipment.RadiationArmorItem;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.*;
-/** 首批四件皮甲基础属性防护服和无GUI仪表；材质直接复用原版皮革。 */
+/** 首批四件沿用皮革属性的专属分层防护服和无GUI仪表；头罩保留Create护目镜。 */
 public final class RadiationContent {
     private static final DeferredRegister.Items ITEMS=DeferredRegister.createItems("create_nuclear_industry");
     public static final DeferredItem<ArmorItem> HELMET=armor("radiation_helmet",ArmorItem.Type.HELMET);
@@ -15,7 +16,7 @@ public final class RadiationContent {
     public static final DeferredItem<Item> METER=ITEMS.register("radiation_meter",()->new Item(new Item.Properties().stacksTo(1)));
     private RadiationContent() {}
     private static DeferredItem<ArmorItem> armor(String id,ArmorItem.Type type) {
-        return ITEMS.register(id,()->new ArmorItem(ArmorMaterials.LEATHER,type,new Item.Properties().durability(type.getDurability(5))));
+        return ITEMS.register(id,()->new RadiationArmorItem(type,new Item.Properties().durability(type.getDurability(5))));
     }
     /** 向模组事件总线注册物品及一次性护目镜接线，服务端和客户端共用同一物品身份。 */
     public static void register(IEventBus bus) {

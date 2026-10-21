@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/radiation_chestplate",
+    "layer1": "create_nuclear_industry:item/radiation_chestplate_overlay",
+    "layer2": "minecraft:trims/items/chestplate_trim_lapis"
+  }
+}

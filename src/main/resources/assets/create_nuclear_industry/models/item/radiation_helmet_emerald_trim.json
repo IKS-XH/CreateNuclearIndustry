@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/radiation_helmet",
+    "layer1": "create_nuclear_industry:item/radiation_helmet_overlay",
+    "layer2": "minecraft:trims/items/helmet_trim_emerald"
+  }
+}

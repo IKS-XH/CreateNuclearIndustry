@@ -1,3 +1,69 @@
 {
-  "parent": "minecraft:item/leather_boots"
+  "parent": "minecraft:item/leather_boots",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/radiation_boots",
+    "layer1": "create_nuclear_industry:item/radiation_boots_overlay"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "trim_type": 0.1
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_quartz_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.2
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_iron_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.3
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_netherite_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.4
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_redstone_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.5
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_copper_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.6
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_gold_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.7
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_emerald_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.8
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_diamond_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.9
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_lapis_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 1.0
+      },
+      "model": "create_nuclear_industry:item/radiation_boots_amethyst_trim"
+    }
+  ]
 }

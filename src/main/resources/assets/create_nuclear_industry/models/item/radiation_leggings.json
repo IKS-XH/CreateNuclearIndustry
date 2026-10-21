@@ -1,3 +1,69 @@
 {
-  "parent": "minecraft:item/leather_leggings"
+  "parent": "minecraft:item/leather_leggings",
+  "textures": {
+    "layer0": "create_nuclear_industry:item/radiation_leggings",
+    "layer1": "create_nuclear_industry:item/radiation_leggings_overlay"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "trim_type": 0.1
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_quartz_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.2
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_iron_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.3
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_netherite_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.4
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_redstone_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.5
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_copper_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.6
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_gold_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.7
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_emerald_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.8
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_diamond_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 0.9
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_lapis_trim"
+    },
+    {
+      "predicate": {
+        "trim_type": 1.0
+      },
+      "model": "create_nuclear_industry:item/radiation_leggings_amethyst_trim"
+    }
+  ]
 }

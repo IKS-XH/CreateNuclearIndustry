@@ -1,0 +1,6 @@
+{
+  "parent": "create_nuclear_industry:item/radiation_meter_held",
+  "textures": {
+    "dial": "create_nuclear_industry:item/radiation_meter_dial_blank"
+  }
+}

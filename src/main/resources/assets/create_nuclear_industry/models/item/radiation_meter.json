@@ -1,6 +1,16 @@
 {
-  "parent": "minecraft:item/generated",
+  "loader": "neoforge:separate_transforms",
+  "ambientocclusion": true,
+  "gui_light": "front",
   "textures": {
-    "layer0": "minecraft:item/clock_00"
+    "particle": "create_nuclear_industry:item/radiation_meter_brass"
+  },
+  "base": {
+    "parent": "create_nuclear_industry:item/radiation_meter_held"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "create_nuclear_industry:item/radiation_meter_gui"
+    }
   }
 }

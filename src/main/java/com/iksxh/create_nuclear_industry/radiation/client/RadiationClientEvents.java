@@ -19,6 +19,10 @@ public final class RadiationClientEvents {
     private static RadiationExposurePayload sample;
     private static Object world;
     private static long lastSoundTick=Long.MIN_VALUE;
+    /** 仅读原同步快照；世界实例不匹配时返回null，时效及最后complete显示缓存由动画类处理。 */
+    static RadiationExposurePayload meterSample(Object expectedWorld) {
+        return expectedWorld != null && world == expectedWorld ? sample : null;
+    }
     private RadiationClientEvents() {}
     public static void receive(RadiationExposurePayload next) {
         var mc=Minecraft.getInstance();
