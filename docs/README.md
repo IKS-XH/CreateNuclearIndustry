@@ -21,7 +21,7 @@
 当前活动卡：
 
 - [事故与辐射设计](superpowers/specs/2026-10-16-accident-radiation-design.md)：整稿和推荐参数/成本已批准；[第一批原计划](archive/2026-10-18/plans/2026-10-16-radiation-foundation-01.md)保留基础范围，[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)接事故账本、残骸与回收封存，当前结果见STATUS。
-- [04A高温固体与有限火点](superpowers/plans/2026-10-21-accident-thermal-04a.md)：该批候选来源与验收范围见STATUS；下一项有限熔融物/溶蚀按已批准总计划及两个未定数值的边界接续。
+- [04A高温固体与有限火点](superpowers/plans/2026-10-21-accident-thermal-04a.md)：该批候选来源与验收范围见STATUS；下一项按[修订设计](proposals/2026-10-20-accident-thermal-corium.md)重编熔融物本体实施卡，旧总计划04的距离/累计量限制及事故绑定接线已停用。
 - [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
 - [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
 - [模拟器02B](superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)、[三维工具](superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：辅助任务仍无整体验收，不自动改跑。
