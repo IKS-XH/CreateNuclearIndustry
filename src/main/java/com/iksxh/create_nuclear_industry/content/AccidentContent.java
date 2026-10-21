@@ -7,6 +7,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.*;
 
@@ -15,6 +18,15 @@ public final class AccidentContent {
     private static final DeferredRegister.Items ITEMS=DeferredRegister.createItems(CreateNuclearIndustry.MOD_ID);
     private static final DeferredRegister.Blocks BLOCKS=DeferredRegister.createBlocks(CreateNuclearIndustry.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> ENTITIES=DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE,CreateNuclearIndustry.MOD_ID);
+    private static final DeferredRegister<FluidType> FLUID_TYPES=DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES,CreateNuclearIndustry.MOD_ID);
+    private static final DeferredRegister<Fluid> FLUIDS=DeferredRegister.create(BuiltInRegistries.FLUID,CreateNuclearIndustry.MOD_ID);
+    public static final DeferredHolder<FluidType,FluidType> MOLTEN_TYPE=FLUID_TYPES.register("molten_corium",()->new FluidType(FluidType.Properties.create().density(6000).viscosity(6000).temperature(1600).lightLevel(12)){
+        @Override public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions> consumer){
+            com.iksxh.create_nuclear_industry.accident.client.AccidentThermalClientEvents.initialize(consumer);
+        }
+    });
+    public static final DeferredHolder<Fluid,MoltenCoriumFluid> MOLTEN_FLUID=FLUIDS.register("molten_corium",MoltenCoriumFluid::new);
+    public static final DeferredBlock<MoltenCoriumBlock> MOLTEN_CORIUM=BLOCKS.register("molten_corium",()->new MoltenCoriumBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LAVA).strength(-1,3600000).noLootTable()));
     public static final DeferredItem<Item> ACCIDENT_FUEL_WASTE=ITEMS.registerSimpleItem("accident_fuel_waste",new Item.Properties().stacksTo(1).fireResistant());
     public static final DeferredBlock<ReactorCoriumBlock> REACTOR_CORIUM=BLOCKS.register("reactor_corium",
             ()->new ReactorCoriumBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN).strength(3).requiresCorrectToolForDrops()));
@@ -26,5 +38,5 @@ public final class AccidentContent {
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AccidentFireBlock.Lease>> FIRE_BE=ENTITIES.register("accident_fire",
             ()->BlockEntityType.Builder.of(AccidentFireBlock.Lease::new,ACCIDENT_FIRE.get()).build(null));
     private AccidentContent() {}
-    public static void register(IEventBus bus) { ITEMS.register(bus); BLOCKS.register(bus); ENTITIES.register(bus); }
+    public static void register(IEventBus bus) { ITEMS.register(bus); BLOCKS.register(bus); ENTITIES.register(bus);FLUID_TYPES.register(bus);FLUIDS.register(bus); }
 }

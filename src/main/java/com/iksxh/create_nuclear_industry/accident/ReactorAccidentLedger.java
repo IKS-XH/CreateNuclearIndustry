@@ -15,6 +15,7 @@ public final class ReactorAccidentLedger {
         private ItemStack payload;
         private final boolean waste;
         private boolean captured, settled;
+        public boolean molten;
         public Column(BlockPos port, BlockPos bottom, UUID generation, ItemStack original, boolean waste) {
             this.port = port.immutable(); this.bottom = bottom.immutable(); portGeneration = generation;
             this.original = original.copy(); payload = original.copy(); this.waste = waste;
@@ -35,6 +36,7 @@ public final class ReactorAccidentLedger {
             var t = new CompoundTag(); t.putLong("Port", port.asLong()); t.putLong("Bottom", bottom.asLong());
             t.putUUID("Generation", portGeneration); t.putBoolean("Waste", waste);
             t.putBoolean("Captured", captured); t.putBoolean("Settled", settled);
+            t.putBoolean("Molten",molten);
             if (!original.isEmpty()) t.put("Original", original.save(registries));
             if (!payload.isEmpty()) t.put("Payload", payload.save(registries)); return t;
         }
@@ -43,6 +45,7 @@ public final class ReactorAccidentLedger {
                     ItemStack.parseOptional(registries, t.getCompound("Original")), t.getBoolean("Waste"));
             c.payload = ItemStack.parseOptional(registries, t.getCompound("Payload"));
             c.captured = t.getBoolean("Captured"); c.settled = t.getBoolean("Settled");
+            c.molten=t.getBoolean("Molten");
             if (c.settled) c.payload = ItemStack.EMPTY; return c;
         }
     }
@@ -73,6 +76,7 @@ public final class ReactorAccidentLedger {
     public final List<Column> columns;
     public final List<Action> actions;
     public AccidentThermalState thermal=new AccidentThermalState(AccidentThermalParameters.DEFAULT);
+    public MoltenCoriumParameters moltenParameters=MoltenCoriumParameters.DEFAULT;
     public final Set<UUID> shocked = new HashSet<>();
     /** 创建时已有效的邻堆世代允许承受排定壳损伤；之后新成型的世代始终受保护。 */
     public final Set<UUID> knownOwners = new HashSet<>();
@@ -100,7 +104,7 @@ public final class ReactorAccidentLedger {
         var s=new ListTag(); shocked.forEach(v->{var p=new CompoundTag(); p.putUUID("Player",v); s.add(p);}); t.put("Shocked",s);
         var owners=new ListTag();knownOwners.forEach(v->{var p=new CompoundTag();p.putUUID("Generation",v);owners.add(p);});t.put("KnownOwners",owners);
         t.putBoolean("ShockComplete",shockComplete); t.putInt("Cursor",cursor); t.putInt("WorldActions",worldActions);
-        t.putInt("ExternalBroken",externalBroken); t.putInt("Peak",peakActions);t.put("Thermal",thermal.save()); return t;
+        t.putInt("ExternalBroken",externalBroken); t.putInt("Peak",peakActions);t.put("Thermal",thermal.save());t.put("MoltenParameters",moltenParameters.save()); return t;
     }
     public static ReactorAccidentLedger load(CompoundTag t, HolderLookup.Provider registries) {
         List<Column> c=new ArrayList<>(); for(Tag v:t.getList("Columns",Tag.TAG_COMPOUND)) c.add(Column.load((CompoundTag)v,registries));
@@ -112,6 +116,7 @@ public final class ReactorAccidentLedger {
         for(Tag v:t.getList("KnownOwners",Tag.TAG_COMPOUND))l.knownOwners.add(((CompoundTag)v).getUUID("Generation"));
         l.shockComplete=t.getBoolean("ShockComplete"); l.cursor=t.getInt("Cursor"); l.worldActions=t.getInt("WorldActions");
         l.externalBroken=t.getInt("ExternalBroken"); l.peakActions=t.getInt("Peak");
-        if(t.contains("Thermal"))l.thermal=AccidentThermalState.load(t.getCompound("Thermal"));return l;
+        if(t.contains("Thermal"))l.thermal=AccidentThermalState.load(t.getCompound("Thermal"));
+        if(t.contains("MoltenParameters"))l.moltenParameters=MoltenCoriumParameters.load(t.getCompound("MoltenParameters"));return l;
     }
 }

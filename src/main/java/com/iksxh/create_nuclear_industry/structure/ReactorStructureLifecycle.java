@@ -122,6 +122,8 @@ public final class ReactorStructureLifecycle {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (!(event.getLevel() instanceof ServerLevel level) || event.isCanceled()) return;
+        // 环境溶蚀只跳过本模组手动停机预检；外部监听器仍完成最终取消，不提交任何手拆事务。
+        if(com.iksxh.create_nuclear_industry.accident.MoltenCoriumEffects.environmental(event))return;
         if (loadedOwnersNear(level, event.getPos()).stream()
                 .anyMatch(owner -> owner.protectsUnavailableComponent(event.getPos(), event.getState()))
                 || collectDisassemblyPlans(level, event).stream().anyMatch(plan -> plan.action() == ReactorDisassemblyPlan.Action.REJECTED))

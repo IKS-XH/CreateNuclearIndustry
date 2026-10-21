@@ -19,9 +19,13 @@ public final class ReactorCoriumBlockEntity extends BlockEntity {
     public boolean matches(UUID id,BlockPos bottom) { return id.equals(accident)&&bottom.equals(column); }
     /** 只有空库存和空收据可接收；即使玩家已回收，同一动作重放也不能重新灌装。 */
     public boolean accept(UUID id,BlockPos bottom,ItemStack stack) {
-        if(level==null||level.isClientSide||accident!=null||!stack.is(AccidentContent.ACCIDENT_FUEL_WASTE.get())||stack.getCount()!=1) return false;
+        if(stack.isEmpty())return false;return acceptMolten(id,bottom,stack);
+    }
+    /** 独立熔融物凝固可移交空载荷；空残骸只写身份，不凭外观建立热危害或废料。 */
+    public boolean acceptMolten(UUID id,BlockPos bottom,ItemStack stack) {
+        if(level==null||level.isClientSide||accident!=null||!stack.isEmpty()&&(!stack.is(AccidentContent.ACCIDENT_FUEL_WASTE.get())||stack.getCount()!=1)) return false;
         accident=id;column=bottom.immutable();payload=stack.copy();setChanged();
-        if(level instanceof net.minecraft.server.level.ServerLevel server)ReactorAccidentSavedData.get(server).startSolid(id,bottom);return true;
+        if(!payload.isEmpty()&&level instanceof net.minecraft.server.level.ServerLevel server)ReactorAccidentSavedData.get(server).startSolid(id,bottom);return true;
     }
     /** 先移走唯一库存再产生掉落；所有原生移除路径共用，不经loot表另造一份。 */
     public ItemStack take() {

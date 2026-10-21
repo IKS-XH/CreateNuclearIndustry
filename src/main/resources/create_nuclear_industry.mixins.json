@@ -19,7 +19,10 @@
     "RadiationBlockChangeMixin",
     "RadiationItemEntityMixin",
     "RadiationInventoryChangeMixin",
-    "ReactorBreakFinalizationMixin"
+    "ReactorBreakFinalizationMixin",
+    "CoriumWorldReplacementMixin",
+    "CoriumCommandReplacementMixin",
+    "CoriumHosePulleyRestrictionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

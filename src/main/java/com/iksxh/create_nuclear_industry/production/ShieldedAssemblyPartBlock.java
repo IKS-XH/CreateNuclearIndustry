@@ -66,7 +66,7 @@ public final class ShieldedAssemblyPartBlock extends Block implements EntityBloc
                     Block.popResource(level, pos, ShieldedAssemblyBlock.portable(master));
                 master.markRemovalHandled();
                 ShieldedAssemblyStructure.removeParts(master, pos);
-                level.setBlock(master.getBlockPos(), Blocks.AIR.defaultBlockState(), 35);
+                com.iksxh.create_nuclear_industry.accident.MoltenCoriumEffects.environmentalSetBlock(level,master.getBlockPos(),Blocks.AIR.defaultBlockState(),35);
             }
         }
         return super.playerWillDestroy(level, pos, state, player);
@@ -86,7 +86,7 @@ public final class ShieldedAssemblyPartBlock extends Block implements EntityBloc
                     master.markRemovalHandled();
                 }
                 ShieldedAssemblyStructure.removeParts(master, pos);
-                level.setBlock(master.getBlockPos(), Blocks.AIR.defaultBlockState(), 35);
+                com.iksxh.create_nuclear_industry.accident.MoltenCoriumEffects.environmentalSetBlock(level,master.getBlockPos(),Blocks.AIR.defaultBlockState(),35);
             }
         }
         super.onRemove(state, level, pos, next, moving);

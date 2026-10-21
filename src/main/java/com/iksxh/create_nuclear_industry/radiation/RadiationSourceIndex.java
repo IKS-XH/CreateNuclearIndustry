@@ -69,6 +69,8 @@ public final class RadiationSourceIndex {
         final List<ItemEntity> entities;final List<Source> sources=new ArrayList<>();
         final List<com.iksxh.create_nuclear_industry.accident.ReactorAccidentSavedData.Custody> custodies;
         int custodyCursor;
+        final List<com.iksxh.create_nuclear_industry.accident.MoltenCoriumState> molten;
+        int moltenCursor;
         final Map<Vec3,Group> groups=new LinkedHashMap<>();
         final Map<BlockPos,List<Source>> originSources=new HashMap<>();
         final Map<Long,List<Source>> chunkSources=new HashMap<>();
@@ -83,6 +85,7 @@ public final class RadiationSourceIndex {
         Job(ServerLevel level,Vec3 target,RadiationParameters p,long now) {
             this.level=level;this.target=target;this.p=p;lastRequested=now;int radius=p.detectionRadiusBlocks();
             custodies=com.iksxh.create_nuclear_industry.accident.ReactorAccidentSavedData.get(level).custodiesNear(target,radius);
+            molten=com.iksxh.create_nuclear_industry.accident.ReactorAccidentSavedData.get(level).moltenNear(target,radius);
             for(int x=((int)Math.floor(target.x)-radius)>>4;x<=((int)Math.floor(target.x)+radius)>>4;x++)
                 for(int z=((int)Math.floor(target.z)-radius)>>4;z<=((int)Math.floor(target.z)+radius)>>4;z++) {
                     var chunk=level.getChunkSource().getChunkNow(x,z);if(chunk!=null)owners.addAll(chunk.getBlockEntities().values());
@@ -204,6 +207,16 @@ public final class RadiationSourceIndex {
     private void advance(Job job) {
         while(true) switch(job.stage) {
             case 0 -> {
+                // 独立世界本体沿原栈预算读取；液面没有第二份载荷，移动/凝固立即使旧源失效。
+                while(job.moltenCursor<job.molten.size()){
+                    var body=job.molten.get(job.moltenCursor);var pos=body.pos;int revision=body.revision;
+                    if(body.phase!=com.iksxh.create_nuclear_industry.accident.MoltenCoriumState.Phase.MOLTEN||body.payload().isEmpty()
+                            ||!job.level.hasChunkAt(pos)||!RadiationContainment.LOADED_CHUNKS.loaded(job.level,pos.getX()>>4,pos.getZ()>>4)){job.moltenCursor++;continue;}
+                    var stack=body.payload();double strength=read(stack,job.p);
+                    job.add(Vec3.atCenterOf(pos),stack,strength,()->body.phase==com.iksxh.create_nuclear_industry.accident.MoltenCoriumState.Phase.MOLTEN
+                            &&body.revision==revision&&body.pos.equals(pos)&&ItemStack.matches(stack,body.payload()),pos,null,body);
+                    job.moltenCursor++;
+                }
                 // 账本是等待中的真实所有者；每项仍消费既有栈预算，并要求源区块实际FULL可读。
                 while(job.custodyCursor<job.custodies.size()) {
                     var custody=job.custodies.get(job.custodyCursor);var column=custody.column();

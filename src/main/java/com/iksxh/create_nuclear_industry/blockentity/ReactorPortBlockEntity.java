@@ -94,6 +94,14 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     public ItemStack fuelAssembly() {
         return fuelAssembly.copy();
     }
+    /** 仅最终许可后的环境溶蚀可移出真实单件；先撤快照投影/能力，避免下一tick补回或重复返还。 */
+    public ItemStack takeForCorrosion() {
+        if(!(level instanceof ServerLevel server)||!com.iksxh.create_nuclear_industry.accident.MoltenCoriumEffects.environmentRemoval(level,worldPosition)
+                ||isRemoved()||level.getBlockEntity(worldPosition)!=this)return ItemStack.EMPTY;
+        var owner=boundOwner;var column=boundColumn();var result=fuelAssembly;fuelAssembly=ItemStack.EMPTY;
+        bindingGeneration++;setChanged();server.invalidateCapabilities(worldPosition);
+        if(owner!=null)owner.invalidateCorrodedPort(column);return result;
+    }
 
     /**
      * 返回未成型人工取料许可；该布尔值只表示访问权限，不是热量、完整度或模拟状态副本。

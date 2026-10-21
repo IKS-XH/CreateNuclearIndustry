@@ -78,11 +78,11 @@ public final class AccidentThermalEffects {
     public static void contactSolid(Level level,BlockPos pos,Entity entity) {
         if(!(level instanceof ServerLevel server)||entity.fireImmune()||!loaded(server,pos))return;
         if(!(level.getBlockEntity(pos) instanceof ReactorCoriumBlockEntity be)||be.payload().isEmpty()||be.accident()==null)return;
-        var ledger=ReactorAccidentSavedData.get(server).byId(be.accident());var solid=ledger==null?null:ledger.thermal.solid(pos);
+        var heat=ReactorAccidentSavedData.get(server).heat(be.accident());var solid=heat==null?null:heat.solid(pos);
         if(solid==null||solid.terminal||solid.remaining<=0)return;
         var tag=entity.getPersistentData();long now=level.getGameTime();
         if(tag.contains("CniSolidHeatNext")&&now<tag.getLong("CniSolidHeatNext"))return;
-        var parameters=ledger.thermal.parameters;
+        var parameters=heat.parameters;
         tag.putLong("CniSolidHeatNext",now+20);entity.hurt(level.damageSources().hotFloor(),(float)parameters.solidDamageHp());entity.igniteForSeconds(parameters.solidIgniteSeconds());
     }
 }

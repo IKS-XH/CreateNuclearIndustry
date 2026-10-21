@@ -81,6 +81,16 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
     /** 当前真实堆世代，正常保存恢复保持不变，同坐标新仪表另起世代。 */
     public java.util.UUID accidentGeneration() { return accidentGeneration; }
     public java.util.UUID accidentId() { return accidentId; }
+    /** 环境移出端口后只撤该列投影并使原结构不可运行；其它真实端口库存和手动停机规则保持原入口。 */
+    public void invalidateCorrodedPort(CoreColumnPosition column) {
+        if(!(level instanceof ServerLevel)||column==null)return;
+        var fuels=new java.util.TreeMap<>(snapshot.fuelColumns());fuels.remove(column);
+        snapshot=snapshot.withColumns(fuels,snapshot.controlRodColumns());
+        var legacy=new java.util.TreeMap<>(pendingLegacyFuelAssemblies);legacy.remove(column);pendingLegacyFuelAssemblies=Map.copyOf(legacy);
+        updateStructureCache(new ReactorStructureScanner.WorldScanResult(structureOrigin,new ReactorStructureDefinition.ScanResult(false,
+                "环境溶蚀破坏换料端口",ReactorStructureDefinition.DiagnosticCode.STRUCTURE_BLOCKS,Map.of(),Map.of())));
+        setChanged();
+    }
 
     /** 服务端原所有者交接；账本已建后调用，立即撤销热工、旧交易及管理员许可。 */
     public boolean lockForAccident(com.iksxh.create_nuclear_industry.accident.ReactorAccidentLedger ledger) {

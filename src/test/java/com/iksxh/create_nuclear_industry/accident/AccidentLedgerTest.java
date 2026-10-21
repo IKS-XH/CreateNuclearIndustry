@@ -21,6 +21,10 @@ class AccidentLedgerTest {
         var data=new ReactorAccidentSavedData();assertEquals(64,data.availableBudget(1,64));
         data.spendBudget(40);assertEquals(24,data.availableBudget(1,64));data.spendBudget(24);
         assertEquals(0,data.availableBudget(1,64));assertEquals(64,data.availableBudget(2,64));
+        assertEquals(8,data.availableBudget(2,8));data.spendBudget(7);
+        assertEquals(1,data.availableBudget(2,64));
+        var savedBudget=ReactorAccidentSavedData.load(data.save(new CompoundTag(),RegistryAccess.EMPTY),RegistryAccess.EMPTY);
+        assertEquals(1,savedBudget.availableBudget(2,64));assertThrows(IllegalArgumentException.class,()->savedBudget.spendBudget(2));
     }
     @Test void completedReceiptIsCachedAndRebuiltFromCurrentFormat() throws Exception {
         var action=new ReactorAccidentLedger.Action(BlockPos.ZERO,0,false,null);action.done=true;

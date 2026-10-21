@@ -62,6 +62,9 @@ public final class ReactorAccidentService {
                 owner.getBlockPos(),min,max,p,event.snapshot().coldCoolantMb(),event.snapshot().hotCoolantMb(),heat,columns,
                 ReactorAccidentPlan.create(level,min,max,p,ports.keySet(),owner.getBlockPos()));
         ledger.thermal=new AccidentThermalState(AccidentConfig.thermalParameters());
+        ledger.moltenParameters=AccidentConfig.moltenParameters();
+        int moltenCount=ledger.moltenParameters.moltenCount((int)columns.stream().filter(ReactorAccidentLedger.Column::waste).count());
+        for(var c:columns)if(c.waste()&&moltenCount>0){c.molten=true;moltenCount--;}
         // 原破裂区内选定一次性候选；只在初始结算结束后检查支撑和空气，失败也不另选位置复燃。
         for(var action:ledger.actions)if(!action.external&&action.pos.getY()==min.getY()+2)
             ledger.thermal.planFire(action.pos);

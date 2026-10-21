@@ -33,7 +33,8 @@ public final class AccidentExecutionGameTests {
     private static boolean skipFixture(GameTestHelper h,String key) {
         var focus=System.getenv("CNI_ACCIDENT_FOCUS");
         if(!"1".equals(System.getenv("CNI_ACCIDENT_RESUME_ONLY"))&&(focus==null||focus.equals(key)
-                ||("thermal_solid_fire".equals(focus)&&"shutdown".equals(key))))return false;
+                ||("thermal_solid_fire".equals(focus)&&"shutdown".equals(key))
+                ||("molten_corium".equals(focus)&&("shutdown".equals(key)||"thermal_solid_fire".equals(key)))))return false;
         System.out.println("[accident] focused validation: SKIP fixture "+key);h.succeed();return true;
     }
     private static boolean resumeOnly(GameTestHelper h) {return skipFixture(h,"business");}
@@ -55,10 +56,237 @@ public final class AccidentExecutionGameTests {
         return (ReactorPortBlockEntity)h.getBlockEntity(base.offset(x+1,size-1,z+1));
     }
     private static ReactorAccidentLedger trigger(GameTestHelper h,ReactorInstrumentPortBlockEntity owner,ReactorMeltdownEvent.Reason reason) {
+        return trigger(h,owner,reason,false);
+    }
+    /** 旧固体夹具显式用0份额；新增熔融业务才使用SERVER新默认50%，不以改变默认伪装通过。 */
+    private static void solidOnly(Runnable action){
+        try{
+            var field=AccidentConfig.class.getDeclaredField("molten");field.setAccessible(true);var old=(MoltenCoriumParameters)field.get(null);
+            field.set(null,new MoltenCoriumParameters(0,old.coolingTicks(),old.moveTicks(),old.corrosionTicks(),old.damageHp(),old.igniteSeconds(),old.solid()));
+            try{action.run();}finally{field.set(null,old);}
+        }catch(ReflectiveOperationException failure){throw new IllegalStateException(failure);}
+    }
+    private static ReactorAccidentLedger trigger(GameTestHelper h,ReactorInstrumentPortBlockEntity owner,ReactorMeltdownEvent.Reason reason,boolean molten) {
         var next=owner.snapshot().withMeltdown(P1ServerConfig.VALUES.meltdownCountdownTicks.get(),true).withMeltdownEventPublished(true);
         owner.setSnapshot(next);var e=new ReactorMeltdownEvent(reason,h.getLevel(),owner.structureOrigin(),owner.getBlockPos(),next);
-        NeoForge.EVENT_BUS.post(e);var ledger=ReactorAccidentSavedData.get(h.getLevel()).byGeneration(owner.accidentGeneration());
+        if(molten)NeoForge.EVENT_BUS.post(e);else solidOnly(()->NeoForge.EVENT_BUS.post(e));
+        var ledger=ReactorAccidentSavedData.get(h.getLevel()).byGeneration(owner.accidentGeneration());
         h.assertTrue(ledger!=null,"正式事件没有事故任务");h.assertTrue(ReactorAccidentService.begin(e)==ledger,"事件重放另建任务");return ledger;
+    }
+    private static MoltenCoriumState molten(GameTestHelper h,BlockPos relative,ItemStack payload){
+        var level=h.getLevel();var pos=h.absolutePos(relative);
+        level.getChunkSource().getChunk(pos.getX()>>4,pos.getZ()>>4,net.minecraft.world.level.chunk.status.ChunkStatus.FULL,true);
+        var state=new MoltenCoriumState(UUID.randomUUID(),null,pos,payload,MoltenCoriumParameters.DEFAULT);
+        ReactorAccidentSavedData.get(level).addMolten(state);level.setBlock(pos,AccidentContent.MOLTEN_CORIUM.get().defaultBlockState(),18);return state;
+    }
+    private static void command(GameTestHelper h,String text){h.getLevel().getServer().getCommands().performPrefixedCommand(h.getLevel().getServer().createCommandSourceStack().withLevel(h.getLevel()).withSuppressedOutput(),text);}
+    private static String coordinates(BlockPos p){return p.getX()+" "+p.getY()+" "+p.getZ();}
+    private static void verifyHoseQueue(GameTestHelper h,BlockPos fluid){
+        try{
+            var at=new BlockPos(59,4,12);h.setBlock(at,com.simibubi.create.AllBlocks.HOSE_PULLEY.getDefaultState());
+            var drainer=new com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour((com.simibubi.create.foundation.blockEntity.SmartBlockEntity)h.getBlockEntity(at));
+            var type=drainer.getClass();var discover=type.getDeclaredMethod("canPullFluidsFrom",net.minecraft.world.level.block.state.BlockState.class,BlockPos.class);discover.setAccessible(true);
+            for(int liquidLevel:new int[]{0,1}){
+                command(h,"setblock "+coordinates(fluid)+" create_nuclear_industry:molten_corium[level="+liquidLevel+"]");
+                h.assertTrue(discover.invoke(drainer,h.getLevel().getBlockState(fluid),fluid).toString().equals("NONE"),"软管仍发现熔融流体");
+                var parent=type.getSuperclass();var root=parent.getDeclaredField("rootPos");root.setAccessible(true);root.set(drainer,fluid);
+                var timer=parent.getDeclaredField("revalidateIn");timer.setAccessible(true);timer.setInt(drainer,1);
+                var valid=type.getDeclaredField("isValid");valid.setAccessible(true);valid.setBoolean(drainer,true);
+                var queueField=type.getDeclaredField("queue");queueField.setAccessible(true);
+                @SuppressWarnings("unchecked") var queue=(it.unimi.dsi.fastutil.PriorityQueue<com.simibubi.create.content.fluids.transfer.FluidManipulationBehaviour.BlockPosEntry>)queueField.get(drainer);
+                queue.enqueue(new com.simibubi.create.content.fluids.transfer.FluidManipulationBehaviour.BlockPosEntry(fluid,0));
+                h.assertTrue(!drainer.pullNext(fluid,false)&&h.getLevel().getBlockState(fluid).is(AccidentContent.MOLTEN_CORIUM.get()),"软管已有队列抽取/删除了熔融格");
+            }
+        }catch(ReflectiveOperationException failure){throw new IllegalStateException(failure);}
+    }
+
+    /** 窄整改仅核原生箱子通知跨区块：真实FULL不可用时不移料，测试显式加载后再完成原生掉落。 */
+    @GameTest(template=TEMPLATE,timeoutTicks=180)
+    public static void moltenChestNotificationDomainWaitsForFull(GameTestHelper h){
+        if(skipFixture(h,"molten_boundaries"))return;var level=h.getLevel();var origin=h.absolutePos(BlockPos.ZERO);
+        var chunk=new net.minecraft.world.level.ChunkPos((origin.getX()>>4)+128,(origin.getZ()>>4)+128);
+        var ticket=net.minecraft.server.level.TicketType.<net.minecraft.world.level.ChunkPos>create("cni_molten_boundary",Comparator.comparingLong(net.minecraft.world.level.ChunkPos::toLong));
+        level.getChunkSource().addRegionTicket(ticket,chunk,0,chunk);
+        level.getChunkSource().getChunk(chunk.x,chunk.z,net.minecraft.world.level.chunk.status.ChunkStatus.FULL,true);
+        var chestPos=new BlockPos(chunk.getMinBlockX()+14,80,chunk.getMinBlockZ()+8);var second=chestPos.east(2);
+        level.setBlock(chestPos,Blocks.CHEST.defaultBlockState(),18);level.setBlock(chestPos.east(),Blocks.STONE.defaultBlockState(),18);
+        var chest=(net.minecraft.world.level.block.entity.ChestBlockEntity)level.getBlockEntity(chestPos);chest.setItem(0,new ItemStack(Items.DIAMOND,3));
+        var data=ReactorAccidentSavedData.get(level);var body=new MoltenCoriumState(UUID.randomUUID(),null,chestPos.above(),ItemStack.EMPTY,MoltenCoriumParameters.DEFAULT);
+        data.addMolten(body);level.setBlock(body.pos,AccidentContent.MOLTEN_CORIUM.get().defaultBlockState(),18);
+        h.runAfterDelay(8,()->{
+            var spawns=new java.util.concurrent.atomic.AtomicInteger();
+            java.util.function.Consumer<net.neoforged.neoforge.event.entity.EntityJoinLevelEvent> listener=e->{if(e.getLevel()==level&&e.getEntity() instanceof ItemEntity item
+                    &&item.getItem().is(Items.DIAMOND)&&item.position().distanceToSqr(Vec3.atCenterOf(chestPos))<9)spawns.addAndGet(item.getItem().getCount());};
+            NeoForge.EVENT_BUS.addListener(listener);
+            try{
+                for(int i=0;i<3;i++)level.getChunkSource().tick(()->true,false);
+                h.assertTrue(AccidentThermalEffects.loaded(level,chestPos)&&AccidentThermalEffects.loaded(level,chestPos.east())
+                        &&!level.hasChunkAt(second)&&level.getChunkSource().getChunkNow(second.getX()>>4,second.getZ()>>4)==null,"箱子第二邻格FULL不可用前置没有成立");
+                body.corrosionProgress=40;int spent=MoltenCoriumEffects.one(level,data,body);
+                System.out.println("[molten-boundaries] chest missing FULL: spent="+spent+",inventory="+chest.getItem(0).getCount()+",spawns="+spawns.get()+",secondFull="+AccidentThermalEffects.loaded(level,second));
+                h.assertTrue(spent==0&&level.getBlockEntity(chestPos)==chest&&chest.getItem(0).getCount()==3&&spawns.get()==0
+                        &&!level.hasChunkAt(second)&&level.getChunkSource().getChunkNow(second.getX()>>4,second.getZ()>>4)==null,"箱子通知读取域未加载仍移料/删块/强载");
+                level.getChunkSource().getChunk(second.getX()>>4,second.getZ()>>4,net.minecraft.world.level.chunk.status.ChunkStatus.FULL,true);
+                h.assertTrue(AccidentThermalEffects.loaded(level,second),"测试显式加载第二邻格失败");
+                h.assertTrue(MoltenCoriumEffects.one(level,data,body)==1&&level.getBlockState(chestPos).isAir()&&spawns.get()==3,"通知读取域齐备后没有成功原生掉落3钻石");
+                System.out.println("[molten-boundaries] chest FULL wait -> explicit load -> native 3 diamonds passed");h.succeed();
+            }finally{NeoForge.EVENT_BUS.unregister(listener);level.getChunkSource().removeRegionTicket(ticket,chunk,0,chunk);}
+        });
+    }
+    /** 原位管理员重放或采掘后同tick出现，均须新空本体；旧HOT清理不能撤销新索引。 */
+    @GameTest(template=TEMPLATE,timeoutTicks=80)
+    public static void moltenReappearsOverHotWithNewIdentity(GameTestHelper h){
+        if(skipFixture(h,"molten_boundaries"))return;var level=h.getLevel();var data=ReactorAccidentSavedData.get(level);
+        for(int mode=0;mode<2;mode++){
+            var old=molten(h,new BlockPos(20+8*mode,16,20),new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()));
+            old.remaining=0;h.assertTrue(MoltenCoriumEffects.one(level,data,old)==1&&old.phase==MoltenCoriumState.Phase.HOT&&old.heat().active(),"HOT替换前置未凝固");
+            if(mode==1)level.destroyBlock(old.pos,false);
+            command(h,"setblock "+coordinates(old.pos)+" create_nuclear_industry:molten_corium");var next=data.moltenAt(old.pos);
+            System.out.println("[molten-boundaries] HOT mode="+mode+",old="+old.phase+",next="+(next==null?"null":next.id+":"+next.phase));
+            h.assertTrue(next!=null&&!next.id.equals(old.id)&&next.phase==MoltenCoriumState.Phase.MOLTEN&&next.placed&&next.payload().isEmpty()
+                    &&next.remaining==6000&&old.phase==MoltenCoriumState.Phase.DONE&&!old.heat().active(),"HOT原位出现没有新空UUID/时钟或未终止旧引用");
+            old.phase=MoltenCoriumState.Phase.DONE;data.reindexMolten(old,old.pos);MoltenCoriumEffects.one(level,data,old);
+            h.assertTrue(data.moltenAt(next.pos)==next&&data.moltenWork().contains(next)&&!data.moltenWork().contains(old),"同tick旧引用终止撤掉新体索引");
+            var pos=next.pos;next.moveProgress=20;next.advance(level.getGameTime()+1,true,false);
+            h.assertTrue(MoltenCoriumEffects.one(level,data,next)==2&&next.pos.equals(pos.below())&&data.moltenAt(next.pos)==next&&next.remaining==5999
+                    &&next.payload().isEmpty(),"新空本体没有继续独立计时/移动");
+            int waste=level.getEntitiesOfClass(ItemEntity.class,new AABB(pos).inflate(2)).stream().filter(i->i.getItem().is(AccidentContent.ACCIDENT_FUEL_WASTE.get())).mapToInt(i->i.getItem().getCount()).sum();
+            h.assertTrue(waste==1,"HOT真实废料未只走一次原生移除掉落");
+        }
+        System.out.println("[molten-boundaries] HOT replacement/mining same tick: fresh empty UUID + old cleanup isolation + move passed");h.succeed();
+    }
+    /** 下落及横移均不能抢占未投影记录；空气格不等于无物料所有者。 */
+    @GameTest(template=TEMPLATE,timeoutTicks=80)
+    public static void moltenPendingProjectionOwnsItsPosition(GameTestHelper h){
+        if(skipFixture(h,"molten_boundaries"))return;var level=h.getLevel();var data=ReactorAccidentSavedData.get(level);
+        for(int mode=0;mode<2;mode++){
+            var a=molten(h,new BlockPos(24+10*mode,20,8),new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()));var destination=mode==0?a.pos.below():a.pos.north();
+            if(mode==1){h.setBlock(new BlockPos(34,19,8),AccidentContent.MOLTEN_CORIUM.get());for(var direction:List.of(Direction.EAST,Direction.SOUTH,Direction.WEST))level.setBlock(a.pos.relative(direction),Blocks.BEDROCK.defaultBlockState(),18);}
+            var b=new MoltenCoriumState(UUID.randomUUID(),null,destination,new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()),MoltenCoriumParameters.DEFAULT);data.addMolten(b);
+            a.moveProgress=20;a.corrosionProgress=17;var before=a.pos;int revision=a.revision;int spent=MoltenCoriumEffects.one(level,data,a);
+            System.out.println("[molten-boundaries] reserved mode="+mode+",spent="+spent+",a="+a.pos+",bOwner="+data.moltenAt(destination).id+",aMove="+a.moveProgress+",aRevision="+a.revision);
+            h.assertTrue(spent==0&&a.pos.equals(before)&&a.revision==revision&&a.moveProgress==20&&a.corrosionProgress==17&&a.payload().getCount()==1
+                    &&b.payload().getCount()==1&&!b.placed&&data.moltenAt(destination)==b&&data.moltenAt(before)==a,"移动抢占未投影本体，或冲突先改变进度/身份/载荷");
+            boolean rejected=false;a.pos=destination;
+            try{data.reindexMolten(a,before);}catch(IllegalStateException conflict){rejected=true;}finally{a.pos=before;}
+            h.assertTrue(rejected&&data.moltenAt(destination)==b&&data.moltenAt(before)==a,"位置索引仍静默覆盖另一预留");
+            h.assertTrue(MoltenCoriumEffects.one(level,data,b)==1&&b.placed&&data.moltenAt(destination)==b&&b.payload().getCount()==1&&a.payload().getCount()==1,"未投影本体未按原唯一所有权投影/保料");
+        }
+        System.out.println("[molten-boundaries] down/horizontal reservation collision, unchanged clocks/payloads, strict index + owner projection passed");h.succeed();
+    }
+
+    /** 新默认50%和独立世界本体的唯一真实服聚焦；原04A及shutdown夹具另以0份额复用。 */
+    @GameTest(template=TEMPLATE,timeoutTicks=8600)
+    public static void moltenWorldLifetimeProtectionAndContainers(GameTestHelper h){
+        if(skipFixture(h,"molten_corium"))return;var level=h.getLevel();
+        var owner=build(h,BASE,5);for(int i=0;i<3;i++)port(h,BASE,5,i,0).setFuelAssembly(used());port(h,BASE,5,0,1).setFuelAssembly(fresh());
+        var ledger=trigger(h,owner,ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE,true);
+        h.assertTrue(ledger.moltenParameters.wasteFraction()==.5&&ledger.columns.stream().filter(c->c.molten).count()==2,"真实新默认不是3废料ceil50%=2熔融");
+        var column=new BlockPos(40,180,4);for(int i=1;i<=80;i++)h.setBlock(column.below(i),Blocks.OBSIDIAN);h.setBlock(column.below(81),Blocks.BEDROCK);
+        var deep=molten(h,column,ItemStack.EMPTY);var startDeep=deep.pos;
+        var stable=new BlockPos(52,5,6);h.setBlock(stable.below(),Blocks.BEDROCK);var real=molten(h,stable,new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()));
+        var wet=new BlockPos(56,5,6);h.setBlock(wet.below(),Blocks.BEDROCK);var cooled=molten(h,wet,new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()));
+        h.setBlock(wet.west(),Blocks.OAK_SLAB.defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED,true));
+        var zeroAt=new BlockPos(52,5,12);h.setBlock(zeroAt.below(),Blocks.BEDROCK);h.setBlock(zeroAt,AccidentContent.MOLTEN_CORIUM.get());
+        var zero=ReactorAccidentSavedData.get(level).moltenAt(h.absolutePos(zeroAt));h.assertTrue(zero!=null&&zero.source==null&&zero.payload().isEmpty()&&zero.dangerous(),"无事故世界入口没有独立空载荷本体");
+        var denied=new BlockPos(8,12,20);h.setBlock(denied.below(),Blocks.OBSIDIAN);var protectedBody=molten(h,denied,ItemStack.EMPTY);var deniedPos=protectedBody.pos.below();
+        java.util.function.Consumer<BlockEvent.BreakEvent> cancel=e->{if(e.getLevel()==level&&e.getPos().equals(deniedPos))e.setCanceled(true);};
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST,false,cancel);
+        var throwingAt=new BlockPos(12,12,20);h.setBlock(throwingAt.below(),Blocks.CHEST);var throwingChest=(net.minecraft.world.level.block.entity.ChestBlockEntity)h.getBlockEntity(throwingAt.below());throwingChest.setItem(0,new ItemStack(Items.EMERALD,5));
+        var throwingBody=molten(h,throwingAt,ItemStack.EMPTY);
+        var throwOnce=new java.util.concurrent.atomic.AtomicBoolean(true);
+        java.util.function.Consumer<BlockEvent.BreakEvent> throwing=e->{if(e.getLevel()==level&&e.getPos().equals(throwingBody.pos.below())){if(throwOnce.getAndSet(false))throw new IllegalStateException("夹具保护异常");e.setCanceled(true);}};NeoForge.EVENT_BUS.addListener(throwing);
+        var chestAt=new BlockPos(16,12,20);h.setBlock(chestAt.below(),Blocks.CHEST);((net.minecraft.world.level.block.entity.ChestBlockEntity)h.getBlockEntity(chestAt.below())).setItem(0,new ItemStack(Items.DIAMOND,3));
+        var chestBody=molten(h,chestAt,ItemStack.EMPTY);
+        var stationAt=new BlockPos(24,11,20);var stationBlock=FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get();
+        h.setBlock(stationAt,stationBlock.defaultBlockState().setValue(ShieldedAssemblyBlock.EXPANDED,true));stationBlock.setPlacedBy(level,h.absolutePos(stationAt),h.getBlockState(stationAt),null,ItemStack.EMPTY);
+        var station=(ShieldedAssemblyBlockEntity)h.getBlockEntity(stationAt);h.assertTrue(station.complete(),"装配台环境夹具未成型");station.insert(new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()));
+        var stationInventory=station.savePortableData();var stationBody=molten(h,stationAt.above(2),ItemStack.EMPTY);
+        var nuclearBase=new BlockPos(4,8,32);var nuclear=build(h,nuclearBase,5);var targetPort=port(h,nuclearBase,5,0,0);var named=used();named.set(DataComponents.CUSTOM_NAME,Component.literal("溶蚀原组件"));targetPort.setFuelAssembly(named);
+        // 1.21.1的relativePos额外旋转180度，不能当作absolutePos的逆；沿建堆时的相对坐标放置。
+        var nuclearBody=molten(h,nuclearBase.offset(1,5,1),ItemStack.EMPTY);
+        h.assertTrue(nuclearBody.pos.equals(targetPort.getBlockPos().above()),"核燃料溶蚀夹具不在目标端口正上方");
+        var accidentBodyIds=new ArrayList<UUID>();
+        var collector=net.neoforged.neoforge.common.util.FakePlayerFactory.get(level,new com.mojang.authlib.GameProfile(UUID.randomUUID(),"CorrosionDropCollector"));
+        var diamondSpawns=new java.util.concurrent.atomic.AtomicInteger();
+        var expectedFuel=new java.util.concurrent.atomic.AtomicReference<>(named.copy());
+        var nuclearAttempts=new java.util.concurrent.atomic.AtomicInteger();var nuclearCancelled=new java.util.concurrent.atomic.AtomicBoolean();
+        java.util.function.Consumer<BlockEvent.BreakEvent> fuelProbe=e->{if(e.getLevel()==level&&e.getPos().equals(targetPort.getBlockPos())){nuclearAttempts.incrementAndGet();nuclearCancelled.set(e.isCanceled());if(MoltenCoriumEffects.environmental(e))expectedFuel.set(targetPort.fuelAssembly());}};
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST,true,fuelProbe);
+        java.util.function.Consumer<net.neoforged.neoforge.event.entity.EntityJoinLevelEvent> drops=e->{
+            if(e.getLevel()!=level||!(e.getEntity() instanceof ItemEntity item))return;var stack=item.getItem();
+            boolean diamond=stack.is(Items.DIAMOND)&&item.position().distanceToSqr(Vec3.atCenterOf(h.absolutePos(chestAt.below())))<9;
+            boolean machine=stack.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get())&&item.position().distanceToSqr(Vec3.atCenterOf(station.getBlockPos()))<16;
+            boolean fuel=stack.is(named.getItem())&&named.get(DataComponents.CUSTOM_NAME).equals(stack.get(DataComponents.CUSTOM_NAME))&&item.position().distanceToSqr(Vec3.atCenterOf(targetPort.getBlockPos()))<9;
+            if(diamond||machine||fuel){
+                // 只在测试中立即领取真实原生掉落，隔离随后普通物品燃烧；不复制栈、不取消或重写生产掉落。
+                if(diamond)diamondSpawns.addAndGet(stack.getCount());item.setNoPickUpDelay();item.playerTouch(collector);
+            }
+        };NeoForge.EVENT_BUS.addListener(drops);
+        Runnable releaseProbes=()->{NeoForge.EVENT_BUS.unregister(cancel);NeoForge.EVENT_BUS.unregister(throwing);NeoForge.EVENT_BUS.unregister(drops);NeoForge.EVENT_BUS.unregister(fuelProbe);};
+        var last=new java.util.concurrent.atomic.AtomicLong(ReactorAccidentSavedData.get(level).budgetActions);var peak=new java.util.concurrent.atomic.AtomicLong();
+        h.onEachTick(()->{var now=ReactorAccidentSavedData.get(level).budgetActions;long delta=now-last.getAndSet(now);
+            if(delta<0||delta>64)releaseProbes.run();h.assertTrue(delta>=0&&delta<=64,"原事故/火/热/独立本体共享预算越界："+delta);peak.accumulateAndGet(delta,Math::max);});
+        h.runAfterDelay(30,()->{
+            try{
+            var data=ReactorAccidentSavedData.get(level);h.assertTrue(data.byId(ledger.id).complete(),"新相态延长原事故完成锁");
+            var accidentBodies=data.moltenWork().stream().filter(s->ledger.id.equals(s.source)).toList();
+            h.assertTrue(accidentBodies.size()==2&&accidentBodies.stream().mapToInt(s->s.payload().getCount()).sum()==2,"初始熔融载荷重复/丢失");
+            var solid=ledger.columns.stream().filter(c->c.waste()&&!c.molten).findFirst().orElseThrow();h.assertTrue(((ReactorCoriumBlockEntity)level.getBlockEntity(solid.bottom)).payload().getCount()==1,"50%其余固体丢料");
+            h.assertTrue(data.byId(real.id)==null,"独立世界夹具意外依赖ledger");
+            var cow=net.minecraft.world.entity.EntityType.COW.create(level);float hp=cow.getHealth();level.getBlockState(real.pos).entityInside(level,real.pos,cow);
+            h.assertTrue(cow.getHealth()==hp-4&&cow.getRemainingFireTicks()==100,"熔融物未4HP/5秒");cow.invulnerableTime=0;cow.clearFire();
+            level.getBlockState(zero.pos).entityInside(level,zero.pos,cow);h.assertTrue(cow.getHealth()==hp-4&&cow.getRemainingFireTicks()<=0,"不同熔融格同类伤害叠加");
+            var resistant=net.minecraft.world.entity.EntityType.COW.create(level);resistant.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE,100));float safe=resistant.getHealth();
+            level.getBlockState(real.pos).entityInside(level,real.pos,resistant);h.assertTrue(resistant.getHealth()==safe,"熔融伤害绕过火抗");
+            var block=level.getBlockState(real.pos);h.assertTrue(((net.minecraft.world.level.block.BucketPickup)block.getBlock()).pickupBlock(null,level,real.pos,block).isEmpty(),"普通桶抽走熔融物");
+            h.assertTrue(!((net.minecraft.world.item.BucketItem)Items.WATER_BUCKET).emptyContents(null,level,real.pos,null)
+                    &&!level.setBlock(real.pos,Blocks.STONE.defaultBlockState(),3)&&!level.setBlock(real.pos,Blocks.WATER.defaultBlockState(),3),"普通放块/水覆盖无账删除本体");
+            h.assertTrue(level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,real.pos,Direction.UP)==null&&!level.getFluidState(real.pos).isSource(),"熔融物提供可抽capability/源液格");verifyHoseQueue(h,real.pos);
+            var tag=data.save(new CompoundTag(),level.registryAccess());var restored=ReactorAccidentSavedData.load(tag,level.registryAccess());
+            h.assertTrue(restored.molten(real.id).payload().getCount()==1&&restored.molten(real.id).remaining==data.molten(real.id).remaining,"本体当前格式恢复重置载荷/寿命");
+            var admin=molten(h,new BlockPos(60,5,6),new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()));
+            command(h,"setblock "+coordinates(admin.pos)+" minecraft:air");h.assertTrue(admin.phase==MoltenCoriumState.Phase.ADMIN_REMOVED&&admin.payload().isEmpty()&&level.getBlockState(admin.pos).isAir(),"权限setblock不能有意清除或重生本体");
+            var fill=molten(h,new BlockPos(60,5,9),ItemStack.EMPTY);command(h,"fill "+coordinates(fill.pos)+" "+coordinates(fill.pos)+" minecraft:air");h.assertTrue(fill.phase==MoltenCoriumState.Phase.ADMIN_REMOVED&&level.getBlockState(fill.pos).isAir(),"权限fill未终止本体");
+            var sample=RadiationSourceIndex.get(level).sampleAt(level,Vec3.atCenterOf(real.pos),RadiationParameters.DEFAULT);h.assertTrue(sample.complete()&&sample.fieldDosePerSecond()>=4,"独立真实熔融载荷没有进入原辐射栈预算");
+            accidentBodies.forEach(body->accidentBodyIds.add(body.id));
+            var withoutSource=data.save(new CompoundTag(),level.registryAccess());
+            withoutSource.getList("Accidents",10).removeIf(entry->((CompoundTag)entry).getUUID("Id").equals(ledger.id));
+            level.getDataStorage().set("create_nuclear_industry_accidents",ReactorAccidentSavedData.load(withoutSource,level.registryAccess()));
+            h.assertTrue(ReactorAccidentSavedData.get(level).byId(ledger.id)==null,"夹具未删除来源ledger");
+            System.out.println("[molten04b] native fluid + default 3 waste -> 2 molten/1 solid, independent zero payload, 4HP/5s/fire resistance, bucket/water/block/capability/hose queued guards, authorized setblock/fill, current NBT passed");
+            }catch(RuntimeException|Error failure){releaseProbes.run();throw failure;}
+        });
+        h.runAfterDelay(48,()->{
+            try{h.assertTrue(level.getBlockState(deniedPos).is(Blocks.OBSIDIAN)&&throwingChest.getItem(0).getCount()==5,"最终取消/监听异常仍删块或移料");}
+            finally{releaseProbes.run();}
+            h.assertTrue(diamondSpawns.get()==3&&collector.getInventory().countItem(Items.DIAMOND)==3,"普通箱子原生掉落/实收不是3钻石："+diamondSpawns.get());
+            var portable=collector.getInventory().items.stream().filter(item->item.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get())).toList();
+            h.assertTrue(portable.size()==1&&portable.getFirst().getCount()==1&&portable.getFirst().get(DataComponents.CUSTOM_DATA).copyTag().getCompound("CniShieldedAssembly").equals(stationInventory),"装配台8格环境拆除没有单件完整携物");
+            for(int i=0;i<8;i++)h.assertTrue(!level.getBlockState(ShieldedAssemblyLayout.position(station.getBlockPos(),Direction.NORTH,i)).hasBlockEntity(),"多格溶蚀漏了连带格");
+            var returns=collector.getInventory().items.stream().filter(item->ItemStack.matches(item,expectedFuel.get())).toList();
+            var liveNuclear=ReactorAccidentSavedData.get(level).molten(nuclearBody.id);
+            h.assertTrue(returns.size()==1&&targetPort.fuelAssembly().isEmpty()&&!nuclear.structureValid()&&nuclear.accidentId()==null
+                    &&ReactorAccidentSavedData.get(level).byGeneration(nuclear.accidentGeneration())==null,"核燃料环境交接状态：returned="+returns.size()+",port="+targetPort.fuelAssembly()
+                    +",valid="+nuclear.structureValid()+",accident="+nuclear.accidentId()+",expected="+expectedFuel.get()+",attempts="+nuclearAttempts.get()+",cancel="+nuclearCancelled.get()
+                    +",body="+liveNuclear.pos+",below="+level.getBlockState(liveNuclear.pos.below())+",remaining="+liveNuclear.remaining+",progress="+liveNuclear.corrosionProgress);
+            System.out.println("[molten04b] final cancellation/exception retain inventories; chest native 3 diamonds, nuclear exact named fuel, assembly one portable inventory/eight actual block writes passed");
+        });
+        h.runAfterDelay(1510,()->{
+            var current=ReactorAccidentSavedData.get(level).molten(cooled.id);h.assertTrue(current.phase!=MoltenCoriumState.Phase.MOLTEN&&level.getBlockEntity(current.pos) instanceof ReactorCoriumBlockEntity be&&be.payload().getCount()==1,"接水6000/4未凝固移交唯一废料");
+        });
+        h.runAfterDelay(4000,()->{
+            var current=ReactorAccidentSavedData.get(level).molten(deep.id);h.assertTrue(current.pos.getY()<=startDeep.getY()-80&&level.getBlockState(startDeep.below(81)).is(Blocks.BEDROCK),"未越旧6格/64累计上限或基岩被熔穿");
+            System.out.println("[molten04b] world body crossed 80 obsidian layers without source bounds; bedrock retained; total auto block writes="+ReactorAccidentSavedData.get(level).automaticBlockWrites);
+        });
+        h.runAfterDelay(8420,()->{
+            var data=ReactorAccidentSavedData.get(level);var current=data.molten(real.id);
+            h.assertTrue(current.phase==MoltenCoriumState.Phase.DONE&&level.getBlockEntity(current.pos) instanceof ReactorCoriumBlockEntity be&&be.payload().getCount()==1&&!level.getBlockState(current.pos).getValue(ReactorCoriumBlock.HOT),"6000->2400未独立凝固冷却且保留单件废料");
+            var currentZero=data.molten(zero.id);h.assertTrue(level.getBlockEntity(currentZero.pos) instanceof ReactorCoriumBlockEntity empty&&empty.payload().isEmpty(),"指令零载荷凝固凭空造废料");
+            for(var id:accidentBodyIds){var independent=data.molten(id);h.assertTrue(data.byId(ledger.id)==null&&independent.phase==MoltenCoriumState.Phase.DONE
+                    &&level.getBlockEntity(independent.pos) instanceof ReactorCoriumBlockEntity kept&&kept.payload().getCount()==1,"来源ledger删除后本体未独立完成/保料");}
+            h.assertTrue(peak.get()==64,"新/旧/无事故共享预算未实触64/t");System.out.println("[molten04b] 6000->2400 loaded ticks/water x4, empty cold safety and shared dimension peak64 passed; physical unload/real multiplayer not exercised");h.succeed();
+        });
     }
     /** 本次冷态现场的六燃料/三全插棒布局；只补缺失方块，保留事故后实际幸存端口的BE身份。 */
     private static ReactorInstrumentPortBlockEntity shutdownReactor(GameTestHelper h) {
@@ -89,7 +317,7 @@ public final class AccidentExecutionGameTests {
         }
         old.setSnapshot(old.snapshot().withColumns(fuels,old.snapshot().controlRodColumns())
                 .withMeltdown(P1ServerConfig.VALUES.meltdownCountdownTicks.get()-1L,true));
-        old.tickReactor();h.assertTrue(old.accidentId()!=null,"正式末tick未触发真实事故");
+        solidOnly(old::tickReactor);h.assertTrue(old.accidentId()!=null,"正式末tick未触发真实事故");
         var ledger=ReactorAccidentSavedData.get(h.getLevel()).byId(old.accidentId());
         h.runAfterDelay(30,()->{
             h.assertTrue(ledger.complete(),"正式事故尚未完成，不能作为过期锁用例");
@@ -505,6 +733,7 @@ public final class AccidentExecutionGameTests {
     }
     @GameTest(template=TEMPLATE,batch="accident_persistence",timeoutTicks=180)
     public static void normalStopPendingCustodyResumesFromSavedWorld(GameTestHelper h) {
+        if("molten_corium".equals(System.getenv("CNI_ACCIDENT_FOCUS"))){moltenNativeResume(h);return;}
         if(System.getenv("CNI_ACCIDENT_FOCUS")!=null){System.out.println("[accident] focused validation: SKIP persistence fixture");h.succeed();return;}
         var data=ReactorAccidentSavedData.get(h.getLevel());
         var prior=data.records().stream().filter(l->l.coldMb==77711&&l.hotMb==1234&&!l.complete()).findFirst();
@@ -533,6 +762,31 @@ public final class AccidentExecutionGameTests {
             h.assertTrue(h.getLevel().getBlockState(column.bottom).is(Blocks.BEDROCK),"事故修改不可破坏目标");
             System.out.println("[accident] NATIVE_SAVE_PENDING id="+ledger.id+" payload=1 blocked=bedrock");h.succeed();
         });
+    }
+    /** 原持久化批次在正常退出后原目录重进一次；审计source没有ledger，本体仍续时且只持一件。 */
+    private static void moltenNativeResume(GameTestHelper h){
+        var level=h.getLevel();var data=ReactorAccidentSavedData.get(level);
+        var marker=UUID.nameUUIDFromBytes("cni:04b_native_resume".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        var prior=data.moltenWork().stream().filter(s->marker.equals(s.source)).findFirst();
+        if(prior.isPresent()){
+            var state=prior.get();int remaining=state.remaining;
+            h.assertTrue(data.byId(marker)==null&&state.phase==MoltenCoriumState.Phase.MOLTEN&&state.payload().getCount()==1&&remaining>4100&&remaining<=4242
+                    &&state.moveProgress==7&&state.corrosionProgress==11,"原生正常重进本体状态/位置/进度/唯一载荷未保留");
+            level.getChunkSource().getChunk(state.pos.getX()>>4,state.pos.getZ()>>4,net.minecraft.world.level.chunk.status.ChunkStatus.FULL,true);
+            h.assertTrue(level.getBlockState(state.pos).is(AccidentContent.MOLTEN_CORIUM.get())&&level.getBlockState(state.pos.below()).is(Blocks.BEDROCK),"重进丢失实际液格/基岩");
+            h.runAfterDelay(10,()->{
+                h.assertTrue(state.remaining<remaining&&state.remaining>=remaining-12&&state.payload().getCount()==1&&state.phase==MoltenCoriumState.Phase.MOLTEN,"重进不续时或重复交出物料");
+                System.out.println("[molten04b] NATIVE_RESTART_RESUME_OK id="+state.id+" remaining="+remaining+" -> "+state.remaining+" payload=1 no ledger at "+state.pos);
+                command(h,"setblock "+coordinates(state.pos)+" minecraft:air");h.succeed();
+            });return;
+        }
+        h.assertTrue(!"1".equals(System.getenv("CNI_ACCIDENT_RESUME_ONLY")),"原生重进专轮没有读到前次待办本体");
+        var pos=h.absolutePos(new BlockPos(256,90,256));level.getChunkSource().getChunk(pos.getX()>>4,pos.getZ()>>4,net.minecraft.world.level.chunk.status.ChunkStatus.FULL,true);
+        level.setBlock(pos.below(),Blocks.BEDROCK.defaultBlockState(),18);
+        var state=new MoltenCoriumState(UUID.randomUUID(),marker,pos,new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()),MoltenCoriumParameters.DEFAULT);
+        state.remaining=4242;state.moveProgress=7;state.corrosionProgress=11;data.addMolten(state);level.setBlock(pos,AccidentContent.MOLTEN_CORIUM.get().defaultBlockState(),18);
+        // 记录在本批最后一个原生批次创建，立即成功并正常保存；离场后的生产推进仍以真实加载为准。
+        System.out.println("[molten04b] NATIVE_SAVE_PENDING id="+state.id+" remaining="+state.remaining+" payload=1 no ledger at "+state.pos);h.succeed();
     }
     private static void awaitNativeUnload(GameTestHelper h,java.util.concurrent.atomic.AtomicInteger count,int attempts,Runnable ready) {
         h.getLevel().getChunkSource().tick(()->true,false);

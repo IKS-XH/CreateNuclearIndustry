@@ -1,6 +1,6 @@
 # 当前内容注册清单
 
-更新：2026-10-21。按本分支[注册源码](../src/main/java/com/iksxh/create_nuclear_industry/content/)核对：块53、item126，其中同名BlockItem49由块表承接，普通物品仅列77；流体8、fluid_type5。事故火点只有世界方块，无对应物品；这里只去重展示，不改变注册，条件诊断内容另列。
+更新：2026-10-21。按本分支[注册源码](../src/main/java/com/iksxh/create_nuclear_industry/content/)核对：块54、item126，其中同名BlockItem49由块表承接，普通物品仅列77；流体9、fluid_type6。事故火点和熔融物只有世界方块，无对应物品或桶；这里只去重展示，不改变注册，条件诊断内容另列。
 
 命名空间create_nuclear_industry，ID小写下划线。方块物品通常共用ID；实际模型/状态/贴图在src/main/resources/assets/create_nuclear_industry，具体来源以源码/资源为准，不要求每个ID都存在同名全套文件。流体/桶策略不能由名字推断；热液/SC专用运输、Create罐保留，SC不作为普通桶/世界流体使用。
 
@@ -8,11 +8,12 @@
 
 ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存在不等于可生存获取。
 
-## 块（53）
+## 块（54）
 
 | ID | 源字段 |
 | --- | --- |
 | `accident_fire` | `AccidentContent.ACCIDENT_FIRE`，有限事故火点，无BlockItem |
+| `molten_corium` | `AccidentContent.MOLTEN_CORIUM`，独立有限熔融物，无BlockItem |
 | `boiler_heat_exchange_section` | `BoilerContent.HEAT_SECTION` |
 | `boiler_safety_valve` | `BoilerContent.SAFETY_VALVE` |
 | `ceramic_fluid_pipe` | `IndustrialFluidContent.CERAMIC_PIPE` |
@@ -148,7 +149,7 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `uranium_tailings` | `FuelProcessingContent.URANIUM_TAILINGS` |
 | `vitrification_medium` | `SpentFuelStorageContent.VITRIFICATION_MEDIUM` |
 
-## 流体（8）
+## 流体（9）
 
 | ID | 源字段 |
 | --- | --- |
@@ -156,22 +157,24 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `compound_coolant_flowing` | `ModFluids.COMPOUND_COOLANT_FLOWING` |
 | `hot_compound_coolant` | `ModFluids.HOT_COMPOUND_COOLANT_SOURCE` |
 | `hot_compound_coolant_flowing` | `ModFluids.HOT_COMPOUND_COOLANT_FLOWING` |
+| `molten_corium` | `AccidentContent.MOLTEN_FLUID`，仅世界液面，不提供桶或管网回收 |
 | `steam` | `TurbineContent.STEAM` |
 | `supercritical_steam` | `BoilerContent.SUPERCRITICAL_STEAM` |
 | `uranium_slurry` | `FuelProcessingContent.URANIUM_SLURRY` |
 | `uranium_slurry_flowing` | `FuelProcessingContent.URANIUM_SLURRY_FLOWING` |
 
-## 流体类型（5）
+## 流体类型（6）
 
 | ID | 源字段 |
 | --- | --- |
 | `compound_coolant` | `ModFluids.COMPOUND_COOLANT_TYPE` |
 | `hot_compound_coolant` | `ModFluids.HOT_COMPOUND_COOLANT_TYPE` |
+| `molten_corium` | `AccidentContent.MOLTEN_TYPE` |
 | `steam` | `TurbineContent.STEAM_TYPE` |
 | `supercritical_steam` | `BoilerContent.SUPERCRITICAL_TYPE` |
 | `uranium_slurry` | `FuelProcessingContent.URANIUM_SLURRY_TYPE` |
 
-无同名item的块：`compound_coolant`、`shielded_assembly_part`、`uranium_slurry`。
+无同名item的块：`accident_fire`、`compound_coolant`、`molten_corium`、`shielded_assembly_part`、`uranium_slurry`。
 
 ## 开发探针（单列）
 

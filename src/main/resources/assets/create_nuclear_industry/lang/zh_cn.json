@@ -708,5 +708,7 @@
   "radiation.create_nuclear_industry.absorbed": "当前吸收 %s D/s",
   "block.create_nuclear_industry.reactor_corium": "融毁残骸",
   "item.create_nuclear_industry.accident_fuel_waste": "事故燃料废料",
-  "block.create_nuclear_industry.accident_fire": "事故火点"
+  "block.create_nuclear_industry.accident_fire": "事故火点",
+  "block.create_nuclear_industry.molten_corium": "熔融残骸",
+  "fluid_type.create_nuclear_industry.molten_corium": "熔融残骸"
 }

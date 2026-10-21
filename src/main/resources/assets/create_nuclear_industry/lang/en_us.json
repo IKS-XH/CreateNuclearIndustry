@@ -708,5 +708,7 @@
   "radiation.create_nuclear_industry.absorbed": "Absorption %s D/s",
   "block.create_nuclear_industry.reactor_corium": "Reactor Corium",
   "item.create_nuclear_industry.accident_fuel_waste": "Accident Fuel Waste",
-  "block.create_nuclear_industry.accident_fire": "Accident Fire"
+  "block.create_nuclear_industry.accident_fire": "Accident Fire",
+  "block.create_nuclear_industry.molten_corium": "Molten Corium",
+  "fluid_type.create_nuclear_industry.molten_corium": "Molten Corium"
 }

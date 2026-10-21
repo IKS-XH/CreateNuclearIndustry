@@ -24,19 +24,21 @@ public final class ReactorAccidentExecutor {
     public static int tick(ServerLevel level) {
         var data=ReactorAccidentSavedData.get(level);
         AccidentThermalEffects.advance(level,data);
+        MoltenCoriumEffects.advance(level,data);
         var work=new LinkedHashSet<ReactorAccidentLedger>();work.addAll(data.initialWork());work.addAll(data.thermalWork());var active=List.copyOf(work);
-        if(active.isEmpty())return 0;
+        var bodies=data.moltenWork();int total=active.size()+bodies.size();if(total==0)return 0;
         int budget=active.stream().mapToInt(l->l.parameters.worldActionsPerTick()).min().orElse(64);
-        budget=data.availableBudget(level.getGameTime(),budget);
         int used=0,idle=0;var counts=new HashMap<UUID,Integer>();long start=System.nanoTime();
-        while(used<budget&&idle<active.size()) {
-            var l=active.get(Math.floorMod(data.rotation++,active.size()));
-            if((!l.complete()&&one(level,l))||AccidentThermalEffects.one(level,l)) { used++;idle=0;l.worldActions++;counts.merge(l.id,1,Integer::sum);data.setDirty(); }
-            else idle++;
-            data.refreshWork(l);data.setDirty();
+        while(data.availableBudget(level.getGameTime(),budget)>0&&idle<total) {
+            int slot=Math.floorMod(data.rotation++,total);int spent=0;
+            if(slot<active.size()) {
+                var l=active.get(slot);
+                if((!l.complete()&&one(level,l))||AccidentThermalEffects.one(level,l)){data.spendBudget(1);spent=1;l.worldActions++;counts.merge(l.id,1,Integer::sum);}
+                data.refreshWork(l);data.setDirty();
+            }else spent=MoltenCoriumEffects.one(level,data,bodies.get(slot-active.size()));
+            if(spent>0){used+=spent;idle=0;}else idle++;
         }
         counts.forEach((id,count)->{var l=data.byId(id);l.peakActions=Math.max(l.peakActions,count);});
-        data.spendBudget(used);
         if(used>0&&active.stream().anyMatch(ReactorAccidentLedger::complete))
             com.mojang.logging.LogUtils.getLogger().info("事故动作收据：维度={} 本tick={} 耗时微秒={} 任务={}",level.dimension().location(),used,(System.nanoTime()-start)/1000,
                     active.stream().map(l->l.id+":plan="+l.actions.size()+",payloads="+l.columns.size()+",actions="+l.worldActions+",external="+l.externalBroken+",peak="+l.peakActions+",complete="+l.complete()).toList());
@@ -81,6 +83,14 @@ public final class ReactorAccidentExecutor {
             if(c.settled()||!c.captured()||!loaded(level,c.bottom))continue;
             if(c.payload().isEmpty()){finish(level,c);return true;}
             if(c.waste()) {
+                if(c.molten) {
+                    var id=UUID.nameUUIDFromBytes((l.id+":molten:"+c.bottom.asLong()).getBytes(StandardCharsets.UTF_8));
+                    if(dataBody(level,id)==null) {
+                        if(ReactorAccidentSavedData.get(level).moltenAt(c.bottom)!=null)continue;
+                        ReactorAccidentSavedData.get(level).addMolten(new MoltenCoriumState(id,l.id,c.bottom,c.payload(),l.moltenParameters));
+                    }
+                    finish(level,c);return true;
+                }
                 if(level.getBlockEntity(c.bottom) instanceof ReactorCoriumBlockEntity existing&&existing.matches(l.id,c.bottom)) {
                     finish(level,c);return true;
                 }
@@ -100,6 +110,7 @@ public final class ReactorAccidentExecutor {
         }
         return false;
     }
+    private static MoltenCoriumState dataBody(ServerLevel level,UUID id){return ReactorAccidentSavedData.get(level).molten(id);}
     private static void finish(ServerLevel level,ReactorAccidentLedger.Column column) {
         column.finish();ReactorAccidentSavedData.get(level).payloadChanged(column);RadiationSourceIndex.changed(level,column.bottom);
         RadiationSourceIndex.custodyChanged(level,column.bottom);
