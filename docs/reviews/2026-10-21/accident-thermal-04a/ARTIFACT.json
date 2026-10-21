@@ -1,0 +1,22 @@
+{
+  "SourceCommit": "9f53a7d5218d1a51b6fdc43bbeb98735a72d9acd",
+  "Branch": "codex/accident-thermal-04a",
+  "Bytes": 3554973,
+  "SHA256": "87D81CE03E02EACFB252BE87662EC304D4FAF39A98B33146C43ECA5D04ED4C16",
+  "Candidate": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-accident\\build\\reports\\accident-thermal-04a-20261021\\candidate-accident-thermal-04a.jar",
+  "SameBytesAsGradleOriginal": true,
+  "BuildExit": 0,
+  "ClassCount": 769,
+  "ResourceCount": 1697,
+  "GeneratedManifestCount": 1,
+  "AllJarClassesAndResourcesMatchBuildOutputs": true,
+  "ForbiddenTestEntries": [],
+  "TestEvidence": [
+    "03-unit.log:9/9 exit0",
+    "06-server-final.log:2 business + 11 SKIP exit0"
+  ],
+  "CompileJava": "UP-TO-DATE",
+  "ProcessResources": "UP-TO-DATE",
+  "JarRepackedManually": false,
+  "Published": false
+}

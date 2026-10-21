@@ -1,6 +1,6 @@
 # 项目文档入口
 
-更新：2026-10-20。文档按职责组织；旧方案、阶段候选与执行时间线进入[归档](archive/README.md)，旧待实现/未合main不是当前状态。
+更新：2026-10-21。文档按职责组织；旧方案、阶段候选与执行时间线进入[归档](archive/README.md)，旧待实现/未合main不是当前状态。
 
 | 要查什么 | 入口 |
 | --- | --- |
@@ -21,6 +21,7 @@
 当前活动卡：
 
 - [事故与辐射设计](superpowers/specs/2026-10-16-accident-radiation-design.md)：整稿和推荐参数/成本已批准；[第一批原计划](archive/2026-10-18/plans/2026-10-16-radiation-foundation-01.md)保留基础范围，[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)接事故账本、残骸与回收封存，当前结果见STATUS。
+- [04A高温固体与有限火点](superpowers/plans/2026-10-21-accident-thermal-04a.md)：当前候选的集中体验入口；完整熔融物/溶蚀后续仍按已批准总计划及未决参数边界接续。
 - [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
 - [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
 - [模拟器02B](superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)、[三维工具](superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：辅助任务仍无整体验收，不自动改跑。
