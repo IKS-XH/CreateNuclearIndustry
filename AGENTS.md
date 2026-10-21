@@ -19,6 +19,7 @@
 - Git写操作仅PM/用户执行，提交信息中文。保留无关dirty、失败证据、用户包/世界，不reset/stash/覆盖夹带别人的工作，不自动推送、发布或删来源树。
 - 正式build/libs/create_nuclear_industry-0.1.0.jar已按用户要求跟踪Git；只在对应已提交生产来源并核验后替换/提交，其他build/cache不跟踪。
 - 用户2026-10-09任命的具体[美术对话](docs/art/README.md)可在贴图/模型/动画范围规划派发、维护docs/art；跨逻辑与主PM协调，无Git或全局PM权限，不转授给子Agent。
+- 用户在具体[音效对话](docs/audio/README.md)的明确任命同样只授音效专项规划、派发与docs/audio维护权；播放逻辑/共享资源先与主PM约定写集，无Git或全局PM权限，不转授负责人身份。
 
 ## 技能与验证
 
