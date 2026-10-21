@@ -21,7 +21,7 @@
 当前活动卡：
 
 - [事故与辐射设计](superpowers/specs/2026-10-16-accident-radiation-design.md)：整稿和推荐参数/成本已批准；[第一批原计划](archive/2026-10-18/plans/2026-10-16-radiation-foundation-01.md)保留基础范围，[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)接事故账本、残骸与回收封存，当前结果见STATUS。
-- [04A高温固体与有限火点](superpowers/plans/2026-10-21-accident-thermal-04a.md)：该批来源/验收范围见STATUS；当前按[04B独立熔融物卡](superpowers/plans/2026-10-21-accident-thermal-04b.md)接世界熔融物与持续溶蚀，速度/数量已确认，旧总计划04的距离/累计量限制及事故绑定接线停用。
+- [04A高温固体与有限火点](superpowers/plans/2026-10-21-accident-thermal-04a.md)：该批来源/验收范围见STATUS；[04B独立熔融物卡](superpowers/plans/2026-10-21-accident-thermal-04b.md)对应[集中体验候选](reviews/2026-10-21/accident-thermal-04b/CANDIDATE.md)。旧总计划04的距离/累计量限制及事故绑定接线停用，当前人工门以STATUS为准。
 - [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
 - [装配台15C动画](art/tasks/ART-SHIELDED-ASSEMBLY-15C.md)：已合main，游戏观察未报告。
 - [模拟器02B](superpowers/plans/2026-09-08-damage-heat-burn-balance-plan.md)、[三维工具](superpowers/plans/2026-08-31-nuclear-plant-3d-html-visualization-plan.md)：辅助任务仍无整体验收，不自动改跑。

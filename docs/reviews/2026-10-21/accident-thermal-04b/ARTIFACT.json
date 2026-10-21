@@ -1,0 +1,84 @@
+{
+  "sourceCommit": "afb16899972cbe1495e31857dd2d3b75286ada59",
+  "branch": "codex/accident-thermal-04b",
+  "command": ".\\gradlew.bat jar --console=plain",
+  "exitCode": 0,
+  "rawGradleOutput": "15-jar.log",
+  "originalRootOutput": {
+    "path": "build/libs/create_nuclear_industry-0.1.0.jar",
+    "bytes": 3589016,
+    "sha256": "0F950A1B7379F0D017339DFF94A0747445F9076857265F3CBC99D68C70BE08C9"
+  },
+  "candidate": {
+    "path": "build/reports/accident-thermal-04b-20261021/candidate-accident-thermal-04b.jar",
+    "bytes": 3589016,
+    "sha256": "0F950A1B7379F0D017339DFF94A0747445F9076857265F3CBC99D68C70BE08C9"
+  },
+  "copiedByteForByte": true,
+  "repacked": false,
+  "sourceManifestSHA256": "2E975A0DB35E3B5D95E1CA7085137C5183FC5DCE07E892BC1F81B60502920548",
+  "jarContentsManifest": "JAR-CONTENTS.json",
+  "jarContentsManifestSHA256": "DEDCEFE0E34ABCACECEC69993C8DD6E3A97E823589BABE177C832151FE5B8D0E",
+  "packageEntries": 2484,
+  "packageClassCount": 783,
+  "packageResourceCount": 1701,
+  "unboundEntries": 0,
+  "sourceClassesPreserved": 51,
+  "sourceClassesChanged": 0,
+  "testedProductionClassesInPackage": 46,
+  "testedProductionClassMismatches": 0,
+  "newMainSources": 9,
+  "newProductionClassesInPackage": 13,
+  "sourceProcessedResourcesInPackage": 6,
+  "sourceProcessedResourceMismatches": 0,
+  "compiledUnitClassesChecked": 199,
+  "compiledUnitClassesInPackage": 0,
+  "boundaryFixtureExcluded": true,
+  "logsAfter": [
+    {
+      "path": "logs/debug.log",
+      "bytes": 3489,
+      "sha256": "B094FA55E95CBD30DD0B2B58647AB547EEFB257D63DD22410F754B16AC19E56D"
+    },
+    {
+      "path": "logs/latest.log",
+      "bytes": 3489,
+      "sha256": "B094FA55E95CBD30DD0B2B58647AB547EEFB257D63DD22410F754B16AC19E56D"
+    }
+  ],
+  "validationEvidence": [
+    "10-server-final.log",
+    "11-server-resume.log",
+    "12-unit-boundary.log",
+    "14-boundaries-green.log"
+  ],
+  "note": "唯一增量jar；compileJava/processResources UP-TO-DATE，无源码重编、无新测试或世界运行。保留root原始新输出交PM恢复，正式main包未操作。",
+  "unexpectedNewTestEntries": 0,
+  "legacyGameTestEntriesPreservedFrom81E": 85,
+  "legacyGameTestEntryMismatches": 0,
+  "testExclusionScope": "本批AccidentExecutionGameTests及其全部边界方法、data/cni_accident_execution/、全部已编译JUnit类均未入包；85个历史GameTest/probe类沿既有Gradle旧域保持规则保留，与pre-validation原81E包逐路径/字节完全一致，不声明全仓历史测试类排空。",
+  "processResourceEntriesMatched": 1700,
+  "generatedManifestMatched": true,
+  "sourceFilesUnchangedAfterBuild": true,
+  "rootJarLeftForPM": true,
+  "sourceClassesExcludedFromPackage": [
+    "build/classes/java/main/com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests.class",
+    "build/classes/java/main/com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests$ShockPlayer.class",
+    "build/classes/java/test/com/iksxh/create_nuclear_industry/accident/AccidentLedgerTest.class",
+    "build/classes/java/test/com/iksxh/create_nuclear_industry/accident/AccidentLedgerTest$1.class",
+    "build/classes/java/test/com/iksxh/create_nuclear_industry/accident/MoltenCoriumStateTest.class"
+  ],
+  "compiledUnitClassesExcludedFromPackage": 199,
+  "requiredThermalResourcesConfirmed": [
+    "assets/create_nuclear_industry/blockstates/molten_corium.json",
+    "assets/create_nuclear_industry/models/block/molten_corium.json",
+    "data/create_nuclear_industry/loot_table/blocks/molten_corium.json",
+    "assets/create_nuclear_industry/blockstates/reactor_corium.json",
+    "assets/create_nuclear_industry/models/block/hot_reactor_corium.json",
+    "assets/create_nuclear_industry/blockstates/accident_fire.json",
+    "assets/create_nuclear_industry/models/block/accident_fire.json",
+    "assets/create_nuclear_industry/lang/zh_cn.json",
+    "assets/create_nuclear_industry/lang/en_us.json",
+    "create_nuclear_industry.mixins.json"
+  ]
+}
