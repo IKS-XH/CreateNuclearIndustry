@@ -1,6 +1,6 @@
 # 美术协作入口
 
-更新：2026-10-20。用户任命对话“美术负责人：贴图、建模与动画”管理贴图/模型/动画；工作树E:/MyMC/NewMod/Create_NuclearIndustry-art-studio、分支codex/art-studio。全局逻辑/治理与Git归主PM协调，原选稿/阶段报告见[归档](../archive/2026-10-15/README.md)。
+更新：2026-10-21。用户任命对话“美术负责人：贴图、建模与动画”管理贴图/模型/动画；工作树E:/MyMC/NewMod/Create_NuclearIndustry-art-studio、分支codex/art-studio。全局逻辑/治理与Git归主PM协调，原选稿/阶段报告见[归档](../archive/2026-10-15/README.md)。
 
 用户于2026-10-20明确开放除Logo外的原创美术素材，贴图、模型、动画、音效及其源文件统一适用[MIT](../../LICENSE)。Logo及其在宣传图中的Logo部分保留所有权利；Create派生资产与其他第三方内容不重新许可，准确范围、路径与署名见[NOTICE](../../NOTICE.md)。历史报告中的旧许可描述保留当时语境，以当前声明为准。
 
@@ -11,6 +11,8 @@
 贫化铀装备18B专属外观由用户确认手测通过；66资源及公共护甲贴图钩子随装备功能集成，见[验收与来源](ART-DEPLETED-URANIUM-18B-ACCEPTED.md)。原稿、预览与运行副本保留。
 
 自动化接口17B C稿“继电模块匣”按用户指令独立合入main，仅模型与侧面PNG两文件，沿用原生完整立方体和现有外壳顶底。来源与制品见[集成记录](../reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)；不把旧美术树逻辑或其它未验候选一并带入。
+
+防护服21B A「黄铜巡检」及辐射计20B A实体/小图、20C手持动态指针已按用户2026-10-21要求精确合入main。70资源、7生产Java及1测试与三个原集成ZIP同源；原属性、配方、头罩护目镜、辐射采样及HUD/声响保持。21B四件套用户手测通过记录沿用，20B/20C未明确细项不补记；[合入与正式包](../reviews/2026-10-21/radiation-art-accepted-integration/INTEGRATION.md)记录完整来源/验证，原SVG、预览、ZIP和测试世界仍保留在美术树。
 
 游戏Logo已验收。HD R2 Logo/MC百科13-R1封面为已交宣传素材，合并不补记最终外观选择；来源见[Logo](../archive/2026-10-15/art/ART-LOGO-12-HD-CANDIDATE.md)、[封面](../archive/2026-10-15/art/ART-MCMOD-COVER-13-CANDIDATE.md)。
 

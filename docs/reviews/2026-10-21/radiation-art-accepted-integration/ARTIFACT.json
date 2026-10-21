@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "sourceCommit": "889f7e7e598681a999374040fa5c5c615bfe2532",
+  "baseCommit": "4ad0c91fa22dbbfb3db6fc698aafe55a89d2686b",
+  "command": ".\\gradlew.bat jar --console=plain",
+  "exitCode": 0,
+  "invocationCount": 1,
+  "buildEvidence": "jar-exit.json",
+  "buildLog": "jar.log",
+  "buildLogSha256": "f3a34b2be8f540c347b5346bef7cee7e303b6ad996cb6a850e26da427672f47e",
+  "artifact": {
+    "path": "E:/MyMC/NewMod/Create_NuclearIndustry-du-accepted-integration/build/reports/radiation-art-accepted-20261021/candidate-radiation-art-accepted.jar",
+    "bytes": 3572469,
+    "sha256": "ef3c0feb3d914c0c2b290d1e5017c169ec606717237645e525065fe82bc966f8",
+    "originalOutput": "E:/MyMC/NewMod/Create_NuclearIndustry-du-accepted-integration/build/libs/create_nuclear_industry-0.1.0.jar",
+    "rawByteIdenticalCopy": true
+  },
+  "inputBinding": {
+    "commit": "889f7e7e598681a999374040fa5c5c615bfe2532",
+    "count": 2355,
+    "manifest": "build-inputs.json",
+    "manifestSha256": "c0794f455241fe0b9c137a765b49e70c67ff63a38c8f95d82ee86407210b882e",
+    "unchangedAcrossJar": true
+  },
+  "payloadBinding": {
+    "totalFiles": 2530,
+    "classes": 774,
+    "resources": 1752,
+    "licenses": 3,
+    "manifestCount": 1,
+    "allExactlyBound": true,
+    "manifest": "payloads.json",
+    "manifestSha256": "ba2426e3214db2c565b1a59480a581d72f1ef9758ddf95bedbe701cb3fcdeb4f"
+  },
+  "approvedArt": {
+    "classes": 16,
+    "resources": 70,
+    "allExactlyMatchStageAAndApprovedCandidates": true
+  },
+  "nonBatchFormalPayload": {
+    "exactlyPreserved": 2138,
+    "lineEndingsOnly": 306,
+    "unexpectedDifferences": 0,
+    "manifest": "non-batch-payloads.json",
+    "manifestSha256": "acd6be5f5bcc3b0c65361616c8461175f3d9462a1dd0659f51c658f70cfe3d33",
+    "lineEndingsOnlyResources": 303,
+    "lineEndingsOnlyLicenses": 3
+  },
+  "junitInJar": {
+    "RadiationEquipmentDataTest": false,
+    "RadiationMeterNeedleMotionTest": false
+  },
+  "historicalProbeBoundary": {
+    "unchanged": true,
+    "classes": 85,
+    "structureTemplates": 41,
+    "manifest": "historical-probes.json"
+  },
+  "prior17ABackup": {
+    "path": "backups/before-import/build/libs/create_nuclear_industry-0.1.0.jar",
+    "bytes": 3525495,
+    "sha256": "17a0a41616c27b4c2fdc7ee5a2e005973ab5c1eb3d1ca1ba16db6f2b904acb88",
+    "unchanged": true
+  },
+  "limits": [
+    "No repeated test, clean, assemble, build, repack, Git write, server/client or world mutation",
+    "StageA 10-test and original pixel/preview/review evidence reused",
+    "20B/20C native game/multiplayer feedback is not fabricated"
+  ]
+}
