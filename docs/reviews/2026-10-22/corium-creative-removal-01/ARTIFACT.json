@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "sourceCommit": "1985d1b3172a5efd1f0c87f3aa39ce3fe2a6feb7",
+  "baseCommit": "afb16899972cbe1495e31857dd2d3b75286ada59",
+  "command": ".\\gradlew.bat jar --console=plain",
+  "exitCode": 0,
+  "invocationCount": 1,
+  "artifact": {
+    "path": "E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/reports/corium-creative-removal-20261022/candidate-corium-creative-removal.jar",
+    "bytes": 3589179,
+    "sha256": "75a26775a9ba80e6850bd7ed002efb9895c2fd196296232c3192a7dc0e3051c3",
+    "originalOutput": "E:/MyMC/NewMod/Create_NuclearIndustry-accident/build/libs/create_nuclear_industry-0.1.0.jar",
+    "rawByteIdenticalCopy": true
+  },
+  "buildEvidence": "jar-exit.json",
+  "buildLog": "jar.log",
+  "buildLogSha256": "4fa136535c8b01b3b176a2ddb9c26b77eb29dc4f5f4367a300109edaac8e8049",
+  "inputBinding": {
+    "count": 2321,
+    "exact": 408,
+    "LFCRLFOnly": 1913,
+    "manifest": "build-inputs.json",
+    "manifestSha256": "221423aa27deb02dba342da18b8605fd992ca107489af57b5987929e99cb161d",
+    "unchangedAcrossJar": true,
+    "testedSourcesAndClassesUnchanged": true
+  },
+  "payloadBinding": {
+    "files": 2484,
+    "classes": 783,
+    "resources": 1700,
+    "manifestCount": 1,
+    "allExactlyBound": true,
+    "manifest": "payloads.json",
+    "manifestSha256": "b0fc1a17b45da62b65f3a37123319389bcc65fbcc69f77f293626dfa3cc2539d"
+  },
+  "old04BDiff": {
+    "exact": 2483,
+    "changed": [
+      {
+        "path": "com/iksxh/create_nuclear_industry/accident/ReactorCoriumBlock.class",
+        "bytes": 7078,
+        "sha256": "72fbe326fbcf40674d0a7484516e5a20241c075ce45c1da7726c99f8c65c8b1f",
+        "previousBytes": 6544,
+        "previousSha256": "0ea00d830a1173c69c0ecac798647ed8251576c735c1b5e94cab7cc207f1eaa8"
+      }
+    ],
+    "lineEndingsOnly": 0,
+    "added": 0,
+    "removed": 0,
+    "unexpected": 0,
+    "manifest": "payload-diff.json",
+    "manifestSha256": "9caa0dd0381c45a1162c1d4f2558454829db03f10b3b286b47f33b3b96b6c551",
+    "oldCandidateUnchanged": true,
+    "oldCandidateSha256": "0f950a1b7379f0d017339dff94a0747445f9076857265f3cbc99d68c70be08c9"
+  },
+  "exclusions": {
+    "AccidentExecutionGameTestsAndDomainAbsent": true,
+    "junitOutputClassesChecked": 199,
+    "junitClassesAbsent": true,
+    "historicalGametestClassesUnchanged": 85
+  },
+  "protected": {
+    "original81EAndB094BackupsUnchanged": true,
+    "rootLogsUnchanged": true,
+    "rootNewJarRetainedForPm": true,
+    "worldOpened": false,
+    "gitWrites": false
+  },
+  "stageAReuse": "SOURCE.json; 1 business GREEN + 17 explicit SKIP, Java/Gradle exit0; no repeated tests"
+}

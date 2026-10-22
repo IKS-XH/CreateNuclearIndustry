@@ -20,6 +20,7 @@
 
 当前活动卡：
 
+- [创造模式拆残骸窄修](superpowers/plans/2026-10-22-corium-creative-removal-01.md)：只修流体熔融物手测发现的创造掉废料问题，复看与制品见STATUS，不重开整组手测。
 - [事故与辐射设计](superpowers/specs/2026-10-16-accident-radiation-design.md)：整稿和推荐参数/成本已批准；[第一批原计划](archive/2026-10-18/plans/2026-10-16-radiation-foundation-01.md)保留基础范围，[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)接事故账本、残骸与回收封存，当前结果见STATUS。
 - [04A高温固体与有限火点](superpowers/plans/2026-10-21-accident-thermal-04a.md)：该批来源/验收范围见STATUS；[04B独立熔融物卡](superpowers/plans/2026-10-21-accident-thermal-04b.md)对应[集中体验候选](reviews/2026-10-21/accident-thermal-04b/CANDIDATE.md)。旧总计划04的距离/累计量限制及事故绑定接线停用，当前人工门以STATUS为准。
 - [现有生存整线集中观察](reviews/2026-10-16/main-flow-01/READINESS.md)：按实际衔接验证连续制造、启动、工质循环与封存出口；电站值班长构想后置。
