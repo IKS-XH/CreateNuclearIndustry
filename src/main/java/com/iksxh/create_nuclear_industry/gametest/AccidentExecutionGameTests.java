@@ -79,6 +79,62 @@ public final class AccidentExecutionGameTests {
         var state=new MoltenCoriumState(UUID.randomUUID(),null,pos,payload,MoltenCoriumParameters.DEFAULT);
         ReactorAccidentSavedData.get(level).addMolten(state);level.setBlock(pos,AccidentContent.MOLTEN_CORIUM.get().defaultBlockState(),18);return state;
     }
+    /** 复用04B真实凝固交接；冷态仅推进既有热终态，不等待整段冷却矩阵。 */
+    private static MoltenCoriumState removalSolid(GameTestHelper h,BlockPos relative,boolean loaded,boolean cold){
+        var level=h.getLevel();var data=ReactorAccidentSavedData.get(level);
+        var payload=loaded?new ItemStack(AccidentContent.ACCIDENT_FUEL_WASTE.get()):ItemStack.EMPTY;
+        if(!payload.isEmpty())payload.set(DataComponents.CUSTOM_NAME,Component.literal("removal-"+relative));
+        var state=molten(h,relative,payload);state.remaining=0;
+        h.assertTrue(MoltenCoriumEffects.one(level,data,state)==1&&level.getBlockEntity(state.pos) instanceof ReactorCoriumBlockEntity,"拆除夹具没有真实凝固");
+        if(cold){state.heat().solid(state.pos).remaining=0;h.assertTrue(MoltenCoriumEffects.one(level,data,state)==1,"拆除夹具没有冷却投影");}
+        return state;
+    }
+    /** 真实ServerPlayerGameMode入口覆盖创造、最终取消、生存与环境移除，不直接调用onRemove。 */
+    @GameTest(template=TEMPLATE,timeoutTicks=80)
+    public static void coriumRemovalContracts(GameTestHelper h){
+        if(skipFixture(h,"corium_removal"))return;var level=h.getLevel();var data=ReactorAccidentSavedData.get(level);
+        var player=net.neoforged.neoforge.common.util.FakePlayerFactory.get(level,new com.mojang.authlib.GameProfile(UUID.randomUUID(),"CoriumRemoval"));
+        player.gameMode.changeGameModeForPlayer(GameType.CREATIVE);player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,new ItemStack(Items.IRON_PICKAXE));
+        var removed=new ArrayList<MoltenCoriumState>();
+        for(int mode=0;mode<3;mode++){
+            var state=removalSolid(h,BASE.offset(mode*4,2,0),mode!=2,mode==0);var be=(ReactorCoriumBlockEntity)level.getBlockEntity(state.pos);
+            if(mode==2)level.setBlock(state.pos,level.getBlockState(state.pos).setValue(ReactorCoriumBlock.HOT,true),18);
+            player.setPos(Vec3.atCenterOf(state.pos).add(0,0,2));
+            boolean destroyed=player.gameMode.destroyBlock(state.pos);
+            int drops=level.getEntitiesOfClass(ItemEntity.class,new AABB(state.pos).inflate(1)).stream().mapToInt(e->e.getItem().getCount()).sum();
+            System.out.println("[corium-removal] creative mode="+mode+",destroyed="+destroyed+",drops="+drops+",payload="+be.payload().getCount()+",heatActive="+state.heat().active());
+            h.assertTrue(destroyed&&level.getBlockState(state.pos).isAir()&&drops==0,"真实创造拆残骸不应产物：mode="+mode+",drops="+drops);
+            h.assertTrue(be.payload().isEmpty()&&!state.heat().active(),"创造拆除未清唯一库存或HOT引用");removed.add(state);
+        }
+        var denied=removalSolid(h,BASE.offset(0,2,8),true,false);var deniedBe=(ReactorCoriumBlockEntity)level.getBlockEntity(denied.pos);
+        var saved=deniedBe.payload();int remaining=denied.heat().solid(denied.pos).remaining;var calls=new java.util.concurrent.atomic.AtomicInteger();
+        java.util.function.Consumer<BlockEvent.BreakEvent> cancel=e->{if(e.getLevel()==level&&e.getPos().equals(denied.pos)){calls.incrementAndGet();e.setCanceled(true);}};
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST,false,cancel);
+        try{
+            h.assertTrue(!player.gameMode.destroyBlock(denied.pos)&&calls.get()==1,"真实LOWEST最终取消没有返回拒绝");
+            h.assertTrue(level.getBlockEntity(denied.pos)==deniedBe&&ItemStack.matches(deniedBe.payload(),saved)
+                    &&denied.heat().active()&&denied.heat().solid(denied.pos).remaining==remaining,"最终取消提前清库存或HOT引用");
+            h.assertTrue(level.getEntitiesOfClass(ItemEntity.class,new AABB(denied.pos).inflate(1)).isEmpty(),"最终取消仍产生物品");
+        }finally{NeoForge.EVENT_BUS.unregister(cancel);}
+        System.out.println("[corium-removal] final LOWEST cancellation retained exact payload and HOT reference");
+        player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
+        for(int mode=0;mode<2;mode++){
+            var state=removalSolid(h,BASE.offset(8+mode*4,2,8),true,false);var be=(ReactorCoriumBlockEntity)level.getBlockEntity(state.pos);var expected=be.payload();
+            player.setPos(Vec3.atCenterOf(state.pos).add(0,0,2));
+            boolean destroyed=mode==0?player.gameMode.destroyBlock(state.pos):level.destroyBlock(state.pos,true);
+            var drops=level.getEntitiesOfClass(ItemEntity.class,new AABB(state.pos).inflate(1));
+            h.assertTrue(destroyed&&drops.size()==1&&ItemStack.matches(drops.getFirst().getItem(),expected)
+                    &&be.payload().isEmpty()&&!state.heat().active(),"生存/环境拆除未恰好回收原实际一份：mode="+mode);
+            level.destroyBlock(state.pos,true);h.assertTrue(level.getEntitiesOfClass(ItemEntity.class,new AABB(state.pos).inflate(1)).size()==1,"重复环境移除另造废料");
+            drops.forEach(ItemEntity::discard);removed.add(state);
+        }
+        System.out.println("[corium-removal] survival and environmental removal each returned exactly one original named payload");
+        h.runAfterDelay(2,()->{
+            for(var state:removed)h.assertTrue(!state.active()&&data.moltenAt(state.pos)==null,"拆除后HOT活跃位置引用没有撤销");
+            h.assertTrue(deniedBe.payload().getCount()==1&&denied.heat().active(),"取消后下一tick丢库存或热引用");
+            System.out.println("[corium-removal] creative cold/HOT/empty, final cancellation, survival/environment conservation and HOT index cleanup passed");h.succeed();
+        });
+    }
     private static void command(GameTestHelper h,String text){h.getLevel().getServer().getCommands().performPrefixedCommand(h.getLevel().getServer().createCommandSourceStack().withLevel(h.getLevel()).withSuppressedOutput(),text);}
     private static String coordinates(BlockPos p){return p.getX()+" "+p.getY()+" "+p.getZ();}
     private static void verifyHoseQueue(GameTestHelper h,BlockPos fluid){
