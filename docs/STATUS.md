@@ -4,14 +4,15 @@
 
 ## 主分支与正式包
 
-- 已提交生产来源`889f7e7e598681a999374040fa5c5c615bfe2532`，本轮按用户授权接入防护服21B及辐射计20B→20C外观/动态指针，精确70资源、7生产Java及1既有候选测试。基准许可来源`3b7a7028`与功能来源`2561b1d1`保持：管理员仍为统一调棒/恒功率、核热值班、保护及续接，原应力闭环已移除；此前累计优化、锅炉主动汽口及已验机组保持，不含T6、B1或事故第二批。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3572469 bytes，SHA256 `EF3C0FEB3D914C0C2B290D1E5017C169EC606717237645E525065FE82BC966F8`，按用户要求跟踪Git。准确已提交源一次增量jar/1秒/exit0，774class、1752资源、3许可声明及manifest全部绑定构建输出；16本批class/70资源与原美术候选逐字一致，非批仅306项LF/CRLF差异且内容规范化一致。见[本批集成与制品](reviews/2026-10-21/radiation-art-accepted-integration/INTEGRATION.md)。MIT、管理员协议5及玩法保持。
-- 本批定向JUnit10/10、exit0及一次并集窄审通过，复用原像素/预览/专项审查；原功能JUnit48/48、真实管理员域19/19等证据按影响范围复用，不重复业务或性能矩阵。此前[许可](reviews/2026-10-20/mit-license/INTEGRATION.md)、[闭环移除](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md)、[累计优化](reviews/2026-10-20/optimization-accepted/INTEGRATION.md)、[接口外观](reviews/2026-10-18/automation-art-accepted/INTEGRATION.md)、[辐射/头罩](reviews/2026-10-18/radiation-accepted-integration/INTEGRATION.md)、[汽轮机S1/C1](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md)、[贫铀/服务器修复](reviews/2026-10-17/du-heat-accepted-integration/INTEGRATION.md)、[渲染](reviews/2026-10-17/thermal-sodium-01/INTEGRATION.md)、[停机](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md)及[反应堆性能](reviews/2026-10-15/reactor-performance-accepted-integration/INTEGRATION.md)验收保持。下方历史候选中的17A为交付时对照包，当前正式包以上两项为准。
+- 已提交生产来源`3b905260537bc1989a4465a6c0109a59d21218a7`，用户2026-10-23确认联合手测并授权合入，局部事故/回收封存、接口退出/遗留空口整改、04A高温固体/有限火点、04B独立熔融物、创造拆除零掉落及22-R1外观整链已接main。保留原累计优化、MIT、协议5、管理员统一调棒/恒功率/核热/保护续接及已验护具/动态指针；应力闭环保持删除，不含T6/B1。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3677228 bytes，SHA256 `F29D0F8B20646E577A273CF5B768FBF9E9244B30699F2EB28B923DD783FBB13C`，按用户要求跟踪Git。准确已提交源唯一增量jar/2秒/exit0，809class、1775资源、manifest及三许可声明共2588载荷全部绑定输出；17美术源/16资源/2client class符合R1，相对旧EF3C非批内容变化0。[集成、验证与来源](reviews/2026-10-23/accident-accepted-integration/INTEGRATION.md)、[制品](reviews/2026-10-23/accident-accepted-integration/BUILD.md)、[身份](reviews/2026-10-23/accident-accepted-integration/ARTIFACT.json)。日期名EF3C旧包、各候选及用户世界保留。
+- 本批管理员真实域7/7、exit0/正常保存，一次并集窄审无新增阻断。全JUnit854项为840通过、3失败、11跳过；三项均已在未合事故main精确复现，不称全量测试或gradlew build通过，详见独立未闭门。原事故/热危害/物料/正常保存及美术证据按来源复用，不重复长矩阵；未补记物理卸载/真人多人。此前各已验模块及历史制品保持对应时点证据，当前正式来源/包身份以上为准。
 
 ## 已合入并按相应范围验收
 
 | 范围 | 当前结果 | 证据 |
 | --- | --- | --- |
+| 局部事故、热危害、熔融物与R1外观 | 用户先后确认接口解锁、事故空口拆除、04A/04B及最终R1/创造拆除联合手测，2026-10-23授权整链合main；来源d839bc7→96a8421→37f50b9→9f53a7d→afb1689→1985d1b→c2b8091，正式并集3b905260。有限真实物料、加载tick冷却/持续下烧、有限火点、回收封存及共享64写预算保持；仅删两处主线已移除闭环API的失效清理。17美术路径保持R1，原功能/视觉证据复用，7/7真实交接与一次窄审已核；未补记原16³尾热病例、物理卸载或真人多人 | [完整合入与制品](reviews/2026-10-23/accident-accepted-integration/INTEGRATION.md)、[并集审查](reviews/2026-10-23/accident-accepted-integration/REVIEW.md) |
 | 基础生产 | 三矿、材料加工、离心富集、烧结、组件装配及生存制造 | [燃料制造](archive/2026-10-15/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)及同阶段材料报告 |
 | 反应堆 | 三边5～16、可跨区块；逐列热工/控制/损伤、枯竭快捷换料、窗口与控件 | [联合验收](archive/2026-10-15/reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md) |
 | 换热与动力 | Create锅炉供热、温压锅炉、双汽库存共容积、三档汽轮机及普通汽冷凝回水 | [锅炉](archive/2026-10-15/reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)、[汽轮机/冷凝](archive/2026-10-15/reviews/2026-10-05/condense-01/ACCEPTANCE.md) |
@@ -42,7 +43,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 事故功能与R1美术联合合入 | 用户2026-10-23确认联合手测通过并授权合main，接口解锁、遗留空口拆除、04A/04B及创造拆除/R1视觉反馈沿对应报告范围登记，原独立候选门不重复开启。并集来源`c2b80915`，主线基准`cbd28c42`，目前已自动合并并最小移除两处旧闭环清理调用；管理员真实域7/7、exit0/正常保存。一次全JUnit854项有3失败/11跳过，正在只对3项核main基线，不冒称全量通过。待一次并集审查及准确源JAR提升，见[集成卡](superpowers/plans/2026-10-23-accident-accepted-integration-01.md) |
+| 主分支既有JUnit三失败 | 本批一次全量854项：840通过、3失败、11跳过、exit1。两条HeatExchangerBoilerBridgeTest在未加载配置时读取冷凝参数，一条ReactorFissionDifferentialTest在scenario0/tick4全状态差分不等；未合事故main aa23d692定向15项精确复现同三测试名和完整异常、exit1。已证实为原基线问题，未修根因/放宽断言，gradlew build仍受它们阻断；本次仅明确增量jar成功。原XML/调用链/基线身份见[执行报告](reviews/2026-10-23/accident-accepted-integration/EXECUTION.md)，不自动派发无关热工/测试修复 |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |

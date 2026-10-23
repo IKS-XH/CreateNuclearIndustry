@@ -1,0 +1,90 @@
+{
+  "status": "PAYLOAD_AND_JAR_PASS_WITH_THREE_CONFIRMED_BASELINE_JUNIT_FAILURES",
+  "sourceCommit": "3b905260537bc1989a4465a6c0109a59d21218a7",
+  "mainBase": "cbd28c420ee2715cc024d8bed74399dfa64128ed",
+  "command": ".\\gradlew.bat jar --console=plain",
+  "exitCode": 0,
+  "invocationCount": 1,
+  "buildEvidence": "jar-exit.json",
+  "buildLog": "jar.log",
+  "buildLogSha256": "4fa136535c8b01b3b176a2ddb9c26b77eb29dc4f5f4367a300109edaac8e8049",
+  "artifact": {
+    "path": "E:/MyMC/NewMod/Create_NuclearIndustry-du-accepted-integration/build/reports/accident-accepted-20261023/candidate-accident-accepted.jar",
+    "bytes": 3677228,
+    "sha256": "f29d0f8b20646e577a273cf5b768fbf9e9244b30699f2eb28b923dd783fbb13c",
+    "originalOutput": "E:/MyMC/NewMod/Create_NuclearIndustry-du-accepted-integration/build/libs/create_nuclear_industry-0.1.0.jar",
+    "rawByteIdenticalCopy": true
+  },
+  "inputs": {
+    "count": 2407,
+    "exact": 499,
+    "LFCRLFOnly": 1908,
+    "manifest": "build-inputs.json",
+    "manifestSha256": "2c717b329962476ac3c2b86f9a35493babbeff8f6f7920709306e6f0ccf90116",
+    "testedSourcesAndAllClassesUnchanged": true
+  },
+  "payloads": {
+    "files": 2588,
+    "classes": 809,
+    "resources": 1775,
+    "licenses": 3,
+    "manifestCount": 1,
+    "allOutputBound": true,
+    "manifest": "payloads.json",
+    "manifestSha256": "1d1e2c4a7da686d0ff30b371b3cc0324cb387bae1950219ece56e2563f71e016"
+  },
+  "oldEF3CDiff": {
+    "exact": 2499,
+    "approvedChanged": 31,
+    "approvedAdded": 58,
+    "nonBatchLFCRLFOnly": 0,
+    "debugOnlyExceptions": 0,
+    "removed": 0,
+    "unexpected": 0,
+    "manifest": "payload-diff.json",
+    "manifestSha256": "bfc32931ab4d0687a242017b0a0d081ea53ff5e3b043f973a4a02a46ddae9505"
+  },
+  "R1": {
+    "sources": 17,
+    "processedResources": 16,
+    "clientClasses": 2,
+    "sourceAndOutputIdentityUnchanged": true,
+    "manifest": "r1-identity.json"
+  },
+  "exclusions": {
+    "accidentGameTestAndDomainAbsent": true,
+    "junitClassesChecked": 214,
+    "junitAbsent": true,
+    "historicalProbeClasses": 85,
+    "historicalPolicyAndBytesUnchanged": true
+  },
+  "validationCarriedForward": {
+    "fullJUnit": {
+      "tests": 854,
+      "passed": 840,
+      "failures": 3,
+      "skipped": 11,
+      "exitCode": 1
+    },
+    "baseline": {
+      "tests": 15,
+      "sameThreeFailures": true,
+      "exitCode": 1,
+      "report": "MAIN-BASELINE.json"
+    },
+    "retrofit": {
+      "businessPassed": 7,
+      "skipped": 0,
+      "exitCode": 0,
+      "allDimensionsSaved": true
+    },
+    "noTestsRepeatedInStageB": true
+  },
+  "protection": {
+    "oldEF3CBackupUnchanged": true,
+    "rootNewJarLeftForPm": true,
+    "worldOpened": false,
+    "gitWrites": false,
+    "sourceAndFailureEvidencePreserved": true
+  }
+}
