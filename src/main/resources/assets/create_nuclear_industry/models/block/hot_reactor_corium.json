@@ -1,4 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
-  "textures": { "all": "minecraft:block/magma" }
+  "textures": {
+    "all": "create_nuclear_industry:block/hot_reactor_corium",
+    "particle": "create_nuclear_industry:block/hot_reactor_corium"
+  }
 }

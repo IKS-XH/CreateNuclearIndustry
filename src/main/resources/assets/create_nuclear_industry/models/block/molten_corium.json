@@ -1,1 +1,5 @@
-{"textures":{"particle":"minecraft:block/lava_still"}}
+{
+  "textures": {
+    "particle": "create_nuclear_industry:fluid/molten_corium_still"
+  }
+}
