@@ -32,9 +32,10 @@ public final class RadiationItemSources {
                 Entry entry=pending.pop(); ItemStack stack=entry.stack(); visited++;
                 if(stack==null || stack.isEmpty()) continue;
                 double count=multiplyFinite(entry.count(),stack.getCount());
-                double source=FuelAssemblyItemCodec.isCooledSpentFuel(stack) ? p.spentFuelDosePerSecond()
+                boolean waste=stack.is(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get());
+                double source=waste ? p.accidentWasteDosePerSecond() : FuelAssemblyItemCodec.isCooledSpentFuel(stack) ? p.spentFuelDosePerSecond()
                         : FuelAssemblyItemCodec.isFreshFuel(stack)&&FuelUseHistory.isUsed(stack) ? p.usedFuelDosePerSecond() : 0;
-                radioactive|=FuelAssemblyItemCodec.isCooledSpentFuel(stack)
+                radioactive|=waste||FuelAssemblyItemCodec.isCooledSpentFuel(stack)
                         ||FuelAssemblyItemCodec.isFreshFuel(stack)&&FuelUseHistory.isUsed(stack);
                 double strength=multiplyFinite(source,count);
                 raw=addFinite(raw,strength);transmitted=addFinite(transmitted,multiplyFinite(strength,entry.multiplier()));

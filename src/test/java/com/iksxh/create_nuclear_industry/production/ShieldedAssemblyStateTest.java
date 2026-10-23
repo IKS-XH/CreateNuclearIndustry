@@ -15,6 +15,14 @@ final class ShieldedAssemblyStateTest {
     private static final net.minecraft.world.item.Item[] MATERIALS = {
             Items.IRON_INGOT, Items.GOLD_INGOT, Items.COPPER_INGOT, Items.STICK};
     private static ItemStack result() { return new ItemStack(Items.DIAMOND_SWORD); }
+    @Test void twoSealingRecipeIdsNeverSharePaidProgress() {
+        var state=new ShieldedAssemblyState();
+        state.configure("sealing","spent",new int[]{1,1,1},12800);
+        for(int i=0;i<3;i++)state.insert(i,new ItemStack(MATERIALS[i]),false,"sealing");
+        state.advance(64,result());assertEquals(64,state.progress());
+        state.configure("sealing","waste",new int[]{1,1,1},12800);assertEquals(0,state.progress());
+        state.advance(0,result());assertTrue(state.outputEmpty());
+    }
     private static void fill(ShieldedAssemblyState state, int batches) {
         for (int slot = 0; slot < 4; slot++)
             assertTrue(state.insert(slot, new ItemStack(MATERIALS[slot],

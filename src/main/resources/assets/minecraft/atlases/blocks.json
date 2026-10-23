@@ -23,6 +23,14 @@
     {
       "type": "single",
       "resource": "create_nuclear_industry:fluid/steam_flow"
+    },
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/molten_corium_still"
+    },
+    {
+      "type": "single",
+      "resource": "create_nuclear_industry:fluid/molten_corium_flow"
     }
   ]
 }

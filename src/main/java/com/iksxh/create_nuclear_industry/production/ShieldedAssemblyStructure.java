@@ -18,6 +18,19 @@ public final class ShieldedAssemblyStructure {
     private ShieldedAssemblyStructure() {}
 
     public static boolean removing() { return REMOVING.get(); }
+    /** 环境拆除先枚举完整连带写集；未加载主控/任一部件时保留库存，禁止半拆后补读区块。 */
+    public static java.util.List<BlockPos> corrosionTargets(Level level,BlockPos pos,BlockState state) {
+        if(!state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())&&!state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_PART.get()))return java.util.List.of(pos);
+        var master=master(level,pos,state);
+        if(master==null){return state.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get())?java.util.List.of(pos):null;}
+        var result=new java.util.ArrayList<BlockPos>();var facing=master.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+        for(int part=0;part<8;part++){
+            var p=ShieldedAssemblyLayout.position(master.getBlockPos(),facing,part);
+            if(!(level instanceof net.minecraft.server.level.ServerLevel server)||!com.iksxh.create_nuclear_industry.accident.AccidentThermalEffects.loaded(server,p))return null;
+            if(part==0||level.getBlockEntity(p) instanceof ShieldedAssemblyPartBlockEntity proxy&&master.getBlockPos().equals(proxy.masterPos())&&master.matchesOwner(proxy.ownerId()))result.add(p);
+        }
+        return result;
+    }
 
     public static ShieldedAssemblyBlockEntity master(Level level, BlockPos pos, BlockState state) {
         if (!level.hasChunkAt(pos)) return null;
@@ -105,7 +118,7 @@ public final class ShieldedAssemblyStructure {
                         && state.getValue(ShieldedAssemblyPartBlock.PART) == part
                         && level.getBlockEntity(pos) instanceof ShieldedAssemblyPartBlockEntity proxy
                         && master.getBlockPos().equals(proxy.masterPos()) && owner != null && owner.equals(proxy.ownerId())) {
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 35);
+                    com.iksxh.create_nuclear_industry.accident.MoltenCoriumEffects.environmentalSetBlock(level,pos,Blocks.AIR.defaultBlockState(),35);
                     level.invalidateCapabilities(pos);
                 }
             }

@@ -34,6 +34,8 @@ public final class ModCreativeTabs {
                         output.accept(IndustrialFluidContent.CERAMIC_VALVE_ITEM.get());
                         output.accept(ModBlocks.EXPERIMENTAL_REACTOR_CASING_ITEM.get());
                         output.accept(P1Blocks.REACTOR_CASING_ITEM.get());
+                        output.accept(AccidentContent.REACTOR_CORIUM_ITEM.get());
+                        output.accept(AccidentContent.ACCIDENT_FUEL_WASTE.get());
                         output.accept(P1Blocks.REACTOR_WINDOW_ITEM.get());
                         output.accept(P1Blocks.REACTOR_INSTRUMENT_PORT_ITEM.get());
                         output.accept(ReactorAutomationContent.PORT_ITEM.get());

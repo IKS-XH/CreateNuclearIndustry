@@ -1,6 +1,6 @@
 # 服务端配置
 
-更新：2026-10-18。本文统一记录当前main配置，锅炉16³尺寸上限与辐射基础已合入。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
+更新：2026-10-23。本文统一记录当前配置，含锅炉16³尺寸上限、辐射基础、局部事故与熔融物本体参数。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
 
 ## 文件和生效
 
@@ -9,13 +9,14 @@
 | 文件 | 范围 |
 | --- | --- |
 | create_nuclear_industry-server.toml | reactor节：尺寸、热工、燃耗、损伤、冷却 |
-| create_nuclear_industry-reactor-automation-server.toml | 管理员及余量闭环，顶层键 |
+| create_nuclear_industry-reactor-automation-server.toml | 管理员统一调棒、恒功率及保护，顶层键 |
 | create_nuclear_industry-industrial-fluid.toml | 专用管网，顶层键 |
 | create_nuclear_industry-boiler.toml | 锅炉，顶层键 |
 | create_nuclear_industry-heat-exchanger.toml | 换热/冷凝/盆炉核热，顶层键 |
 | create_nuclear_industry-turbine.toml | 三档汽轮机，顶层键 |
 | create_nuclear_industry-storage.toml | spentFuelStorage节：贮存架 |
 | create_nuclear_industry-radiation-server.toml | general/sources/shielding/dose/protection节：辐射与防护 |
+| create_nuclear_industry-accident-server.toml | 顶层键：局部事故世界效果与共享动作预算 |
 
 容量调小不删除现有物料，超额拒收；机器合法性还检查跨字段关系，不能只看单值范围。材料数量和工时由数据配方控制，不在设备配置复制一份。
 
@@ -141,7 +142,7 @@ create_nuclear_industry-storage.toml中的spentFuelStorage.rackSlots默认16、�
 | 节.键 | 默认 | 单位/意义 |
 | --- | ---: | --- |
 | general.enabled / sampleIntervalTicks / detectionRadiusBlocks | true / 20 / 32 | 启用、结算tick、检测半径格（1～64） |
-| sources.usedFuelDosePerSecond / spentFuelDosePerSecond / accidentWasteDosePerSecond | 1 / 2 / 4 | 每份实际载荷1格内D/s；事故废料供第二批接入，不因配置项存在就已注册 |
+| sources.usedFuelDosePerSecond / spentFuelDosePerSecond / accidentWasteDosePerSecond | 1 / 2 / 4 | 每份实际载荷1格内D/s；残骸只读取其真实事故废料载荷，不重复计源 |
 | sources.maxFieldDosePerSecond | 10 | 穿戴前总场强D/s上限 |
 | shielding.caskTransmission / rackTransmission / reactorTransmission / blockTransmission | 0.05 / 0 / 0 / 0.05 | 合法桶、完整架、完整堆对外、每格屏蔽路径的向外比例 |
 | dose.safeAbsorptionPerSecond | 0.01 | 不超过该D/s视为安全，可开始恢复等待 |
@@ -150,4 +151,30 @@ create_nuclear_industry-storage.toml中的spentFuelStorage.rackSlots默认16、�
 | dose.damageIntervalTicks / damageHealthPoints | 40 / 1 | 高剂量伤害周期tick、每次生命值点数 |
 | protection.head / chest / legs / feet / maxReduction | 0.25 / 0.30 / 0.25 / 0.15 / 0.95 | 按实际穿戴部位相加的吸收削减及总上限 |
 
-加载/重载时整组原子校验，非法组合整组回退默认并节流告警。数值须有限非负，比例在[0,1]，阈值满足warning＜symptom＜damage≤max；结算/伤害间隔正数、恢复等待非负。关闭辐射停止新增剂量和伤害，已有剂量按安全规则恢复，物料已使用历史不清除。世界动作事故配置在第二批候选交付后另列，不把远期参数写作main生效项。
+加载/重载时整组原子校验，非法组合整组回退默认并节流告警。数值须有限非负，比例在[0,1]，阈值满足warning＜symptom＜damage≤max；结算/伤害间隔正数、恢复等待非负。关闭辐射停止新增剂量和伤害，已有剂量按安全规则恢复，物料已使用历史不清除。
+
+## 局部事故
+
+来源为[AccidentConfig](../src/main/java/com/iksxh/create_nuclear_industry/config/AccidentConfig.java)及[AccidentParameters](../src/main/java/com/iksxh/create_nuclear_industry/accident/AccidentParameters.java)。事故世界动作、热危害和熔融物配置不替换reactor原有融毁触发比例和倒计时。
+
+| 键 | 默认 | 单位/边界 |
+| --- | ---: | --- |
+| shellAndExternalDestruction | true | 壳体/外部破裂与直接冲击开关；false仍内部报废、生成废料并损失工质 |
+| extensionBlocks | 2 | 原结构边界外最大格数，合法0～2 |
+| externalBlockLimit | 32 | 每事故外壳及外部合计破坏上限，合法0～32 |
+| shockHealthPoints | 8 | 每玩家每事故至多一次近距冲击上限生命值，有限0～8，按距离衰减 |
+| worldActionsPerTick | 64 | 每维度所有事故共享的世界动作/t上限，合法1～64 |
+| solidCoolingLoadedTicks | 2400 | 高温固体自然冷却所需加载tick，正整数；卸载暂停 |
+| waterCoolingRate | 4 | 相邻六面已加载水时每tick扣除冷却进度，正整数；默认加速4倍 |
+| solidContactDamageHp / solidContactIgniteSeconds | 2 / 3 | 同实体同类接触20tick最多一次直接HP伤害/点燃秒数；伤害有限非负，点燃秒数非负且可转换为tick |
+| firePointLimit | 8 | 每事故最多有限火点，合法0～8，尝试过或扑灭位置不复燃 |
+| fireLoadedTicks | 600 | 每个火点最长加载tick，合法1～600；卸载暂停 |
+| moltenWasteFraction | 0.5 | 初始真实事故废料的熔融份额，向上取整；有限0～1，无额外体积上限 |
+| moltenCoolingLoadedTicks | 6000 | 熔融阶段的加载tick，正整数；结束后进入solidCoolingLoadedTicks，邻水沿用waterCoolingRate |
+| moltenMoveIntervalTicks | 20 | 每团移入空格的加载tick间隔，正整数；移动不重置寿命 |
+| moltenCorrosionIntervalTicks | 40 | 每团溶蚀一格的加载tick间隔，正整数；无累计格数或原堆距离限制 |
+| moltenContactDamageHp / moltenContactIgniteSeconds | 4 / 5 | 同实体同类20tick最多一次直接HP伤害/点燃秒数；普通火抗有效 |
+
+配置加载/重载整组校验，非法组回退默认并节流告警。事故创建时冻结整组参数，后续配置变化不改旧任务产物、扣账和冲击收据；同时有不同冻结预算的未完成事故时，共享预算取其中最小值。冷热工质100%损失、已用组件每件1废料不另设可变倍增参数。任务及载荷保存于本维度SavedData，仪表被破坏后仍可正常保存续接；不强载区块，不研究旧版本迁移。
+
+固体热引用、火点及独立熔融物与原事故共用每维度预算，搬移旧格/新格及容器连带块写分别计数；原账本complete不等待热危害结束。熔融物生成时冻结自身规则，来源账本不再是继续运行的前提。基岩、不可破坏和最终取消的保护阻挡溶蚀；不配置原堆距离、累计溶蚀量或额外体积上限。空残骸不伤害，冷却只去热、不删除真实废料或辐射；防护服不自动防火。指令生成的零载荷熔融物沿本体时序运行，但不产生废料或辐射。

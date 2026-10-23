@@ -19,7 +19,11 @@
     "RadiationBlockChangeMixin",
     "TurbinePaletteRevisionMixin",
     "RadiationItemEntityMixin",
-    "RadiationInventoryChangeMixin"
+    "RadiationInventoryChangeMixin",
+    "ReactorBreakFinalizationMixin",
+    "CoriumWorldReplacementMixin",
+    "CoriumCommandReplacementMixin",
+    "CoriumHosePulleyRestrictionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

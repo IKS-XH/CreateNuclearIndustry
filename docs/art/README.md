@@ -4,6 +4,8 @@
 
 2026-10-23本批例外：用户明确要求直接在当前事故候选分支完成熔融物、冷热残骸及废料外观，与功能一起测试合入。[协作卡](../superpowers/plans/2026-10-23-accident-art-integration-01.md)指定唯一实施树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`/`codex/accident-thermal-04b`、基准`1985d1b3`及精确资源/客户端纹理写集；原美术树和用户世界保留，Git仍由主PM管理。本批结果/未闭门见[STATUS](../STATUS.md)。
 
+本批最终为22-R1：用户指出首版碎壳同向重复后，四张冷热/流体纹理及对应SVG重绘，flow改为独立32周期；源稿、导出和限定复审均保留。用户2026-10-23确认“测试过了，合并进去吧”，按[联合集成卡](../superpowers/plans/2026-10-23-accident-accepted-integration-01.md)与已验事故功能一并接main，取件为[最终R1交付](reports/ART-ACCIDENT-CORIUM-22-DELIVERY/README.md)，生产美术来源`c2b80915`，不重新生成或恢复首版构图。
+
 用户于2026-10-20明确开放除Logo外的原创美术素材，贴图、模型、动画、音效及其源文件统一适用[MIT](../../LICENSE)。Logo及其在宣传图中的Logo部分保留所有权利；Create派生资产与其他第三方内容不重新许可，准确范围、路径与署名见[NOTICE](../../NOTICE.md)。历史报告中的旧许可描述保留当时语境，以当前声明为准。
 
 最新14B离心机、15B-R1装配台及15C动画已合main，包见[STATUS](../STATUS.md)。离心机外观/黑窗已验，15C游戏制造/封装/停恢复尚未报告，见[观察入口](ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md)与[任务卡](tasks/ART-SHIELDED-ASSEMBLY-15C.md)。

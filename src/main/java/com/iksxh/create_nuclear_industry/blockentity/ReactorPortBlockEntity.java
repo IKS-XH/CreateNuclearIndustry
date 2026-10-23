@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.blockentity;
 
 import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
+import com.iksxh.create_nuclear_industry.accident.ReactorAccidentSavedData;
 import com.iksxh.create_nuclear_industry.content.P1BlockEntities;
 import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.reactor.CoreColumnPosition;
@@ -12,11 +13,13 @@ import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentGoggleDisplay;
 import com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentTelemetry;
 import com.iksxh.create_nuclear_industry.reactor.ReactorSnapshot;
 import com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycle;
+import com.iksxh.create_nuclear_industry.structure.ReactorStructureDefinition;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -34,6 +37,21 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     private static final String FUEL_ASSEMBLY_KEY = "FuelAssembly";
     private static final String UNFORMED_EXTRACTION_ALLOWED_KEY = "UnformedExtractionAllowed";
     private Binding binding;
+    private java.util.UUID accidentGeneration = java.util.UUID.randomUUID();
+    private java.util.UUID accidentLock;
+
+    /** 服务端持久化物理端口身份，替换的同坐标端口不能被旧事故认领。 */
+    public java.util.UUID accidentGeneration() { return accidentGeneration; }
+
+    /** 原所有者核验后锁定并转移真实组件；只返回原物品，绝不从快照重造。 */
+    public ItemStack takeForAccident(ReactorInstrumentPortBlockEntity owner, java.util.UUID id, java.util.UUID generation, ItemStack expected) {
+        if (level == null || level.isClientSide || isRemoved() || level.getBlockEntity(worldPosition) != this
+                || !accidentGeneration.equals(generation) || boundOwner != owner
+                || accidentLock != null && !accidentLock.equals(id) || !ItemStack.matches(fuelAssembly, expected)) return null;
+        accidentLock = id; bindingGeneration++; unformedExtractionAllowed = false;
+        var result = fuelAssembly; fuelAssembly = ItemStack.EMPTY; setChanged();
+        level.invalidateCapabilities(worldPosition); return result;
+    }
     private ReactorInstrumentPortBlockEntity boundOwner;
     /** 每次绑定身份变化递增；旧capability即使同一端口恢复也不能复活，不持久化。 */
     private long bindingGeneration;
@@ -58,7 +76,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
 
     /** 返回端口是否已经绑定到一个有效的仪表端口。 */
     public boolean isBound() {
-        return binding != null && boundOwner != null && !isRemoved()
+        return accidentLock == null && binding != null && boundOwner != null && !isRemoved()
                 && !boundOwner.isRemoved() && boundOwner.structureValid();
     }
 
@@ -76,12 +94,20 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     public ItemStack fuelAssembly() {
         return fuelAssembly.copy();
     }
+    /** 仅最终许可后的环境溶蚀可移出真实单件；先撤快照投影/能力，避免下一tick补回或重复返还。 */
+    public ItemStack takeForCorrosion() {
+        if(!(level instanceof ServerLevel server)||!com.iksxh.create_nuclear_industry.accident.MoltenCoriumEffects.environmentRemoval(level,worldPosition)
+                ||isRemoved()||level.getBlockEntity(worldPosition)!=this)return ItemStack.EMPTY;
+        var owner=boundOwner;var column=boundColumn();var result=fuelAssembly;fuelAssembly=ItemStack.EMPTY;
+        bindingGeneration++;setChanged();server.invalidateCapabilities(worldPosition);
+        if(owner!=null)owner.invalidateCorrodedPort(column);return result;
+    }
 
     /**
      * 返回未成型人工取料许可；该布尔值只表示访问权限，不是热量、完整度或模拟状态副本。
      */
     public boolean isUnformedExtractionAllowed() {
-        return unformedExtractionAllowed;
+        return accidentLock == null && unformedExtractionAllowed;
     }
 
     /**
@@ -91,6 +117,7 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
      * 数据组件随栈一起保存。该入口不注册 ItemHandler，因此普通漏斗不能绕过换料事务。</p>
      */
     public void setFuelAssembly(ItemStack nextFuelAssembly) {
+        if (accidentLock != null) throw new IllegalStateException("事故已接管端口物料");
         if (level != null && level.isClientSide) {
             throw new IllegalStateException("fuel assembly can only be changed on the server");
         }
@@ -190,9 +217,19 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
         if (boundOwner != null && boundOwner != owner && !canReclaimBinding()) {
             return false;
         }
+        boolean completedAccident = accidentLock != null;
+        if (completedAccident && !canRebindCompletedAccident(owner, column)) {
+            return false;
+        }
         ReactorInstrumentPortBlockEntity previousOwner = boundOwner;
         Binding previousBinding = binding;
         boolean changed = !isBoundTo(owner, expectedType, column);
+        if (completedAccident) {
+            // 原绑定及收据全部证明后才结束旧事故权限；新代际使旧计划不能再次认领该空机构。
+            accidentLock = null;
+            accidentGeneration = java.util.UUID.randomUUID();
+            setChanged();
+        }
         binding = new Binding(owner.getBlockPos(), expectedType, column);
         boundOwner = owner;
         if (changed) bindingGeneration++;
@@ -206,6 +243,33 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
             invalidateCapabilityAndNetwork(previousBinding, expectedType);
         }
         return true;
+    }
+
+    /**
+     * 只在服务端有效重绑边沿核已完成事故收据，不逐tick扫描历史账本或读取未加载方块。
+     * 物料必须已从同坐标同物理代际交接且两端均空；后建仪表还须实际拥有当前列，
+     * 才能结束残余空机构的旧权限。该证明不修改账本、不从审计原件重造库存。
+     */
+    private boolean canRebindCompletedAccident(ReactorInstrumentPortBlockEntity owner, CoreColumnPosition column) {
+        if (!(level instanceof ServerLevel serverLevel) || isRemoved() || column == null
+                || !fuelAssembly.isEmpty() || owner.getLevel() != level || owner.isRemoved()
+                || !level.hasChunkAt(worldPosition) || level.getBlockEntity(worldPosition) != this
+                || !level.hasChunkAt(owner.getBlockPos()) || level.getBlockEntity(owner.getBlockPos()) != owner
+                || owner.structureOrigin() == null) return false;
+        var mapping = owner.structureScan().columns().get(column);
+        if (mapping == null || mapping.type() != ReactorStructureDefinition.ColumnType.FUEL) return false;
+        var cap = mapping.capPosition();
+        if (!owner.structureOrigin().offset(cap.x(), cap.y(), cap.z()).equals(worldPosition)) return false;
+        var ledger = ReactorAccidentSavedData.get(serverLevel).byId(accidentLock);
+        if (ledger == null || !ledger.dimension.equals(serverLevel.dimension().location().toString())
+                || ledger.generation.equals(owner.accidentGeneration()) || !ledger.complete()) return false;
+        int matchingReceipts = 0;
+        for (var receipt : ledger.columns) {
+            if (!receipt.port.equals(worldPosition) || !receipt.portGeneration.equals(accidentGeneration)) continue;
+            if (!receipt.captured() || !receipt.settled() || !receipt.payload().isEmpty()) return false;
+            matchingReceipts++;
+        }
+        return matchingReceipts == 1;
     }
 
     /** 清除指定仪表端口留下的旧绑定，防止结构失效后继续暴露 capability。 */
@@ -530,6 +594,8 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
+        tag.putUUID("AccidentGeneration", accidentGeneration);
+        if (accidentLock != null) tag.putUUID("AccidentLock", accidentLock);
         tag.put(FUEL_ASSEMBLY_KEY, fuelAssembly.saveOptional(registries));
         if (!clientPacket) {
             tag.putBoolean(UNFORMED_EXTRACTION_ALLOWED_KEY, unformedExtractionAllowed);
@@ -552,6 +618,8 @@ public final class ReactorPortBlockEntity extends P1MinimalBlockEntity
     @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
+        accidentGeneration = tag.hasUUID("AccidentGeneration") ? tag.getUUID("AccidentGeneration") : java.util.UUID.randomUUID();
+        accidentLock = tag.hasUUID("AccidentLock") ? tag.getUUID("AccidentLock") : null;
         fuelAssembly = tag.contains(FUEL_ASSEMBLY_KEY)
                 ? ItemStack.parseOptional(registries, tag.getCompound(FUEL_ASSEMBLY_KEY))
                 : ItemStack.EMPTY;

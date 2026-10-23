@@ -1,0 +1,152 @@
+{
+  "status": "STAGE_A_DELIVERED_WITH_THREE_CONFIRMED_BASELINE_JUNIT_FAILURES",
+  "mainCommit": "cbd28c420ee2715cc024d8bed74399dfa64128ed",
+  "sourceCommit": "c2b809154eec28efc7ca4069fa338b22815b9024",
+  "mergeCommitted": false,
+  "jarRun": false,
+  "inventory": {
+    "mainCommit": "cbd28c420ee2715cc024d8bed74399dfa64128ed",
+    "sourceCommit": "c2b809154eec28efc7ca4069fa338b22815b9024",
+    "mergeBase": "b39d11690fdbd8861e5d5fa7d06efa7d53d9e8de",
+    "inputCount": 2407,
+    "originCounts": {
+      "main-retained": 127,
+      "automatic-union": 6,
+      "shared": 2202,
+      "accident-source": 71,
+      "union-with-two-obsolete-calls-removed": 1
+    },
+    "changedFromMain": 78,
+    "changeKinds": {
+      "build": 1,
+      "java": 42,
+      "resource": 29,
+      "test": 6
+    },
+    "unions": [
+      "build.gradle",
+      "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationService.java",
+      "src/main/java/com/iksxh/create_nuclear_industry/automation/ReactorAutomationState.java",
+      "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java",
+      "src/main/resources/assets/create_nuclear_industry/lang/en_us.json",
+      "src/main/resources/assets/create_nuclear_industry/lang/zh_cn.json",
+      "src/main/resources/create_nuclear_industry.mixins.json"
+    ],
+    "r1ProductionCount": 17,
+    "r1RawExact": 8,
+    "r1ProcessedResourcesBound": 16,
+    "mainSuitAndMeterPathsPreserved": 78,
+    "accidentPackageFilesCandidateExact": 18,
+    "artToolFiles": 23,
+    "manualChangedFromIndex": [
+      "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java"
+    ],
+    "manualChange": "remove exactly two obsolete setAutomationLoadFollowSession(null) invocations",
+    "inputManifestSha256": "0589c044a5104bfedf47e6b46bd27b10c832a75101ef011fa7b28a08cd625db7"
+  },
+  "changedPaths": "paths.json",
+  "inputOrigins": "input-origins.json",
+  "r1Identity": "r1-identity.json",
+  "manualSourceChanges": [
+    {
+      "path": "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java",
+      "change": "delete exactly two obsolete setAutomationLoadFollowSession(null) calls",
+      "sha256": "ec244465de72da4f7d6d3f23b80ad7e64c4afe890ed5118d45c7bb40371f2329",
+      "diff": "manual-source.diff"
+    }
+  ],
+  "compiled": {
+    "allMainOutputClasses": 828,
+    "manifest": "compiled-classes.json",
+    "manifestSha256": "df98156745232942f723da0b57132d859cd4559c89a4de077432985e3389448c",
+    "approvedR1ClientClasses": [
+      {
+        "path": "build/classes/java/main/com/iksxh/create_nuclear_industry/accident/client/AccidentThermalClientEvents.class",
+        "bytes": 1078,
+        "sha256": "447dbe8b6ee772a7cf2f8350715361638b7ec68634cc44d8f428eb31c2b98f04",
+        "equalsApprovedR1": true
+      },
+      {
+        "path": "build/classes/java/main/com/iksxh/create_nuclear_industry/accident/client/AccidentThermalClientEvents$1.class",
+        "bytes": 1171,
+        "sha256": "fcbc085025ccfb5546d80a927c880c821bf2dd7eb30135165f25235de6eb87ed",
+        "equalsApprovedR1": true
+      }
+    ]
+  },
+  "validation": {
+    "compileRed": {
+      "exitCode": 1,
+      "errors": 2,
+      "log": "01-compile.log"
+    },
+    "retrofit": {
+      "business": 7,
+      "failed": 0,
+      "skipped": 0,
+      "javaExitCode": 0,
+      "gradleExitCode": 0,
+      "allDimensionsSaved": true,
+      "log": "02-retrofit-green.log",
+      "logSha256": "d49e155dbbb34eb471d842f0549d3bd256ec79a385ba8246593f5b042c1964a6"
+    },
+    "fullJUnit": {
+      "tests": 854,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 11,
+      "passed": 840,
+      "exitCode": 1,
+      "log": "03-junit.log",
+      "summary": "junit-summary.json"
+    },
+    "baseline": {
+      "commit": "aa23d6921297a843522804f0ec4f21b5e744d75e",
+      "tests": 15,
+      "failures": 3,
+      "exitCode": 1,
+      "sameNamesAndExactExceptionMessages": true,
+      "report": "MAIN-BASELINE.json",
+      "log": "04-main-baseline.log"
+    }
+  },
+  "worldCopy": {
+    "manifest": "world-copy.json",
+    "count": 29,
+    "bytes": 13367770,
+    "sha256": "7fe7640611d6c969eb29af16ca39b09242e56b96642641fdcf7899752f7cc662",
+    "sourceUnchanged": true,
+    "worldOpened": false,
+    "priorWorldCount": 27
+  },
+  "baselineFiles": [
+    {
+      "path": "build/libs/create_nuclear_industry-0.1.0.jar",
+      "changed": false,
+      "currentSha256": "ef3c0feb3d914c0c2b290d1e5017c169ec606717237645e525065fe82bc966f8",
+      "beforeSha256": "ef3c0feb3d914c0c2b290d1e5017c169ec606717237645e525065fe82bc966f8"
+    },
+    {
+      "path": "logs/debug.log",
+      "changed": true,
+      "currentSha256": "8bc5df387ff8f6b4c598d38224dca771f4ad861cd1fa0343c27ff133a319037f",
+      "beforeSha256": "a061c8e1381510e6519ce624478d8aaabf108bfe6dab9854d96cb2c6466cbccc"
+    },
+    {
+      "path": "logs/latest.log",
+      "changed": true,
+      "currentSha256": "8bc5df387ff8f6b4c598d38224dca771f4ad861cd1fa0343c27ff133a319037f",
+      "beforeSha256": "a061c8e1381510e6519ce624478d8aaabf108bfe6dab9854d96cb2c6466cbccc"
+    }
+  ],
+  "reusedEvidence": [
+    "1985d1b3 creative removal RED/GREEN and same accident source",
+    "c2b80915 R1 identity/review and explicit user joint test feedback",
+    "04A/04B source-identical long cooling/conservation/save evidence"
+  ],
+  "limits": [
+    "Full JUnit is not green: three independently reproduced main failures retained",
+    "No long accident matrix, new visual test, client, user world opening, jar/assemble/build or Git write",
+    "PM handles documentation and source commit; source tree only read except separately authorized main baseline test outputs"
+  ]
+}

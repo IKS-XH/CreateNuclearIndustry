@@ -403,7 +403,7 @@
   "item.create_nuclear_industry.glass_dust": "玻璃碎料",
   "item.create_nuclear_industry.vitrification_medium": "玻璃固化基材",
   "item.create_nuclear_industry.lead_shielding_cask": "铅屏蔽桶",
-  "item.create_nuclear_industry.sealed_spent_fuel_cask": "已封装乏燃料桶",
+  "item.create_nuclear_industry.sealed_spent_fuel_cask": "封装核废料桶",
   "block.create_nuclear_industry.dry_storage_rack": "干式贮存架",
   "gui.create_nuclear_industry.storage.occupied": "已用桶位：%s / %s",
   "gui.create_nuclear_industry.storage.sealed": "已封装乏燃料贮存",
@@ -680,5 +680,10 @@
   "death.attack.create_nuclear_industry.radiation": "%1$s 的辐射剂量过高",
   "radiation.create_nuclear_industry.field": "场强 %s D/s",
   "radiation.create_nuclear_industry.dose": "累计剂量 %s D",
-  "radiation.create_nuclear_industry.absorbed": "当前吸收 %s D/s"
+  "radiation.create_nuclear_industry.absorbed": "当前吸收 %s D/s",
+  "block.create_nuclear_industry.reactor_corium": "融毁残骸",
+  "item.create_nuclear_industry.accident_fuel_waste": "事故燃料废料",
+  "block.create_nuclear_industry.accident_fire": "事故火点",
+  "block.create_nuclear_industry.molten_corium": "熔融残骸",
+  "fluid_type.create_nuclear_industry.molten_corium": "熔融残骸"
 }

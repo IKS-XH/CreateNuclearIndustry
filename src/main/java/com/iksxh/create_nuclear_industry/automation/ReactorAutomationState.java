@@ -20,4 +20,9 @@ public record ReactorAutomationState(boolean claimed, Phase phase, String reason
         return new ReactorAutomationState(claimed, fault ? Phase.FAULT : Phase.STOPPED,why,100,
                 authorityEpoch+1,0,0,0,0,Mode.STOP,false);
     }
+    /** 仅正式确认结构不含接口时结束接管；普通故障stop仍保留claimed，重复退出不换代。 */
+    public ReactorAutomationState release() {
+        return claimed ? new ReactorAutomationState(false,Phase.STOPPED,"stopped",100,
+                Math.addExact(authorityEpoch,1),0,0,0,0,Mode.STOP,false) : this;
+    }
 }

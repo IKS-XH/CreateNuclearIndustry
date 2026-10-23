@@ -1,12 +1,14 @@
 # 当前实际配方索引
 
-更新：2026-10-18。当前常规121个配方、开发探针2个，共18种type。下表列实际ID/type和唯一JSON入口，输入、输出、amount/count、概率和工时由源数据定义，不复制另一套数量表；游戏/数据包覆盖后以实际配方管理器和JEI为准。
+更新：2026-10-23。当前常规122个配方、开发探针2个，共18种type。下表列实际ID/type和唯一JSON入口，输入、输出、amount/count、概率和工时由源数据定义，不复制另一套数量表；游戏/数据包覆盖后以实际配方管理器和JEI为准。
 
 ## 1. 生产关系与工序
 
 三矿/原料加工→工业材料和零件→铀精矿/料浆→离心富集→芯块烧结→燃料组件装配→反应堆。耗尽组件→屏蔽装配台封装→干式贮存架；复杂再处理未实现。换热器对盆/烧结炉的供热是设备规则，不是新增重复加工配方。
 
 离心副产贫化铀粉→熔炉/高炉炼锭→储存块，或与钻石装备及下界合金升级模板进行原生锻造升级。装备不提供直接工作台制造配方，核废料处理规则不随本批改变。
+
+事故残骸回收所得废料通过封装配方沿现有铅桶/贮存架链处理；不回收可用燃料，不新增再处理耗材。原乏燃料封装与制造模式保持，详细载荷条件由机器和配方共同校验。
 
 专用centrifuging/sintering/shielded_assembly工序的字段与实际机器协议一致，工时不要照抄普通Create processing_time。工作台/动力合成/搅拌/压块/部署器等走各自原生类型。只允许现有配方链，不根据旧草案生成空内容或凭空增加材料数量。
 
@@ -24,10 +26,11 @@
 
 `create:sequenced_assembly`的`sequence`是该外层配方内部执行的步骤，`transitional_item`承载序列加工进度，`loops`定义该序列循环；外层`results`才是最终产出。嵌套步骤不另计为独立顶层配方，也不从步骤数量推算材料消耗。
 
-## 常规配方（121）
+## 常规配方（122）
 
 | 配方ID | type | 实际JSON |
 | --- | --- | --- |
+| `create_nuclear_industry:shielded_assembly/sealed_accident_fuel_waste` | `create_nuclear_industry:shielded_assembly` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/shielded_assembly/sealed_accident_fuel_waste.json) |
 | `create_nuclear_industry:crafting/radiation_boots` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_boots.json) |
 | `create_nuclear_industry:crafting/radiation_chestplate` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_chestplate.json) |
 | `create_nuclear_industry:crafting/radiation_helmet` | `minecraft:crafting_shaped` | [JSON](../src/main/resources/data/create_nuclear_industry/recipe/crafting/radiation_helmet.json) |
