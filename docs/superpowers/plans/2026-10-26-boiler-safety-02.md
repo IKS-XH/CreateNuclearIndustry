@@ -26,6 +26,7 @@ J=`src/main/java/com/iksxh/create_nuclear_industry/`，T=`src/test/java/com/iksx
 - 01既有J/boiler/{BoilerState,BoilerControllerBlockEntity,BoilerStructure}.java及J/config/BoilerConfig.java；只接本批热工、持久危险/能力撤销/缓存世代。
 - 新增J/boiler/{BoilerAccidentState,BoilerAccidentLedger,BoilerAccidentSavedData,BoilerAccidentExecutor,BoilerAccidentLifecycle}.java；允许Ledger合入SavedData减少文件，不另建通用框架。
 - J/boiler/BoilerControllerBlock.java、J/heat/NuclearHeatExchangerBlock.java仅自定义潜行扳手最终许可后接同一事务，以及必要的已消耗目标掉落/对象再核；如确需J/boiler/BoilerShellBlock.java，仅抑制已由事故领取的完整部件掉落，不加onRemove事故或改正常掉落。
+- 2026-10-27组合审整改补充：上述Shell与NuclearHeatExchanger的onPlace允许窄接“实际新放置使旧目标凭证失效”，解决有/无BE同态替换误吞完整设备；不得借onRemove触发新事故。目标跨正常保存的身份须为稳定持久凭证，不比较易变整份BE NBT。Controller携带重新落位须分离旧现场任务与新实例等待状态，保旧任务继续及真实库存，不把跨维度不存在的旧pending ID永久锁在新机内。公共环境移除收据须区分DEFER与终结拒绝/成功，预算及读取域暂不可用不能永久推进游标。均为已冻不变量整改，不新增玩法/旧存档范围。
 - J/mixin/ReactorBreakFinalizationMixin.java仅在原反应堆最终处理之后、最终未取消时追加锅炉处理，不改变原反应堆拒拆/回滚/燃料规则。不新增任意世界写全局钩子。
 - J/accident/MoltenCoriumEffects.java仅将既有corrode环境移除事务抽出小的公共窄入口供锅炉复用：连带目标、两格读取域已加载、最终BreakEvent许可/异常、对象复核、真实容器与物料掉落、AUTO逐写预算维持同义。锅炉不取得熔融物身份；原corrode算法/冷却/速度/数量不变。共享预算沿已公开ReactorAccidentSavedData接口，不改其格式/算法。
 - 新executor可用锁定版本现有自注册方式；若实际需要主类注册，仅允许J/CreateNuclearIndustry.java追加这一类的事件注册，不改其它生命周期。
