@@ -24,6 +24,7 @@ J=`src/main/java/com/iksxh/create_nuclear_industry/`，T=`src/test/java/com/iksx
 - T/boiler/{BoilerStateTest,BoilerDualSteamInventoryTest,BoilerStructureAllocationTest,BoilerSurfaceDescriptorTest}.java；已有断言仅适配已批准多阀/固定额度，保物料/压力/缓存/双汽断言，不删测试。
 - J/gametest/BoilerSteamSelectionGameTests.java仅Settings新字段访问名机械适配，不重写既有业务。
 - 新增J/gametest/BoilerSafetyGameTests.java；复用既有真实锅炉build/owner helper和`create_nuclear_industry_boiler_rework:boiler_empty`模板，锁定API确认后使用本批holder `cni_boiler_safety`，允许轻量focus筛选。不得增加通用测试框架/复制世界；确需模板适配先报准确缺口。
+- 锁定API实证补充：GameTestRegistry按模板namespace筛选，跨域借用会得到0测试。允许新增且仅新增R/data/cni_boiler_safety/structure/boiler_empty.nbt，逐字节复制上述既有模板，注解改用本域；不造新几何/框架，Jar已有本域精确排除。首轮0函数启动失败留证，不能计通过。
 - build.gradle仅沿现有Jar排除块增加本批BoilerSafetyGameTests及本批测试域的精确排除，不清理历史probe/改依赖/任务结构。
 - R/assets/create_nuclear_industry/lang/{zh_cn,en_us}.json仅新增本批阀状态提示，不动其它词条/格式。
 - 本树`build/reports/boiler-safety-20261026/`允许实施/技术/审查/失败日志/来源清单及必要窄核验工具；允许本卡世界复制/备份路径和普通编译输出，跟踪包/日志先保原字节。无其它路径写权。
