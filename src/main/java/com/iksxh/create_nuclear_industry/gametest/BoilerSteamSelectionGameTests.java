@@ -297,7 +297,7 @@ public final class BoilerSteamSelectionGameTests {
                     d.waterCapacityPerCellMb(), d.steamCapacityPerCellMb(), d.coolantPortFlowMbPerTick(), d.waterSteamPortFlowMbPerTick(), d.pairHeatHuPerTick(),
                     d.boilingTemperature(), d.supercriticalTemperature(), d.wallHeatCapacityHuPerWaterCell(), d.waterSpecificHeatHuPerMb(),
                     .4, d.vaporizationLatentHeatHuPerMb(), d.supercriticalPressure(), d.outputMinPressure(), d.valveOpenPressure(),
-                    d.valveClosePressure(), d.valveFlowPerSteamCellMbPerTick(), d.idleWaterCoolingHuPerCellPerTick(), d.idleSteamCoolingHuPerCellPerTick()));
+                    d.valveClosePressure(), d.valveFlowMbPerTick(), d.idleWaterCoolingHuPerCellPerTick(), d.idleSteamCoolingHuPerCellPerTick()));
             // 只更改本测试实体的配置快照；SC当前1.02HU/mB在cpSteam=0.4时是1.55，客户端默认cp=0.2不能重算成2.10。
             var mirror = new com.iksxh.create_nuclear_industry.boiler.BoilerControllerBlockEntity(owner.getBlockPos(), owner.getBlockState());
             mirror.handleUpdateTag(owner.getUpdateTag(h.getLevel().registryAccess()), h.getLevel().registryAccess());

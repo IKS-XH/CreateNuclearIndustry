@@ -15,6 +15,7 @@ import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,9 +41,12 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 /** 唯一持有整炉物料与已付热；端口仅带失效代次的代理，客户端只显示服务器快照。 */
 public final class BoilerControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
     private final BoilerState ledger = new BoilerState();
+    private final BoilerAccidentState accident = new BoilerAccidentState();
+    private java.util.UUID boilerGeneration = java.util.UUID.randomUUID();
     private final BoilerSteamPressure steamPressure;
     private BoilerControls.PressureBehaviour pressureControl;
     private int epoch, steamKindView, producedView, ventedView, widthView, heightView, depthView, pairsView;
+    private int totalValvesView, clearValvesView, valveCapacityView, dryProgressView, pressureProgressView, dryLimitView=400, pressureLimitView=200;
     private final Map<BlockPos, Integer> steamEpochs = new HashMap<>();
     private final Map<BlockPos, Fluid> publishedSteamFluids = new HashMap<>();
     private int waterCapacityView = BoilerState.CAPACITY, steamCapacityView = BoilerState.CAPACITY;
@@ -106,6 +110,18 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         return chunk != null && server.shouldTickBlocksAt(worldPosition) && chunk.getFullStatus().isOrAfter(FullChunkStatus.BLOCK_TICKING)
                 && server.areEntitiesLoaded(ChunkPos.asLong(worldPosition)) && server.getWorldBorder().isWithinBounds(worldPosition);
     }
+    public BoilerAccidentState accident(){return accident;}
+    public java.util.UUID boilerGeneration(){return boilerGeneration;}
+    public boolean dryFiring(){return ledger.water()==0&&ledger.waterTemperature()>=ledger.settings().boilingTemperature();}
+    /** 事故ID已经写入独立账本后才撤销能力；爆裂清真实工质，局部干烧保其它库存。 */
+    public void commitAccident(BoilerAccidentLedger plan){
+        accident.submitted(plan.id);if(plan.burst)ledger.loseWorkingFluids();
+        invalidateForm();status=plan.burst?"burst":"dry_damage";paidView=0;producedView=ledger.produced();setChanged();sendData();
+    }
+    public void finishAccident(BoilerAccidentLedger plan){
+        if(!boilerGeneration.equals(plan.generation)||!plan.id.equals(accident.pending()))return;
+        accident.finished(plan.id);if(plan.burst)boilerGeneration=java.util.UUID.randomUUID();invalidateForm();setChanged();
+    }
     private void invalidatePortCapabilities(BoilerStructure.Form form) {
         for (BlockPos p : form.ports()) if (level.hasChunkAt(p)) level.invalidateCapabilities(p);
     }
@@ -125,7 +141,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     }
     /** 无事件时仅检查区块可用性；全体积验证不放入正常 tick 循环。 */
     public BoilerStructure.Form currentForm() {
-        if (!current() || scanning) return null;
+        if (!current() || scanning || accident.pending()!=null) return null;
         var cfg = BoilerConfig.settings();
         if (!cfg.equals(lastGeometrySettings)) { lastGeometrySettings = cfg; invalidateForm(); }
         if (cachedForm != null && !cachedForm.loaded(level)) invalidateForm();
@@ -165,14 +181,25 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     @Override public void tick() {
         super.tick();
         if (level == null || level.isClientSide || !current()) return;
+        if(accident.pending()!=null&&level instanceof ServerLevel server){
+            var plan=BoilerAccidentSavedData.get(server).byId(accident.pending());if(plan!=null&&plan.complete())finishAccident(plan);
+        }
         ledger.setSettings(BoilerConfig.settings());
         var form = currentForm();
         var heat = HeatExchangerConfig.settings();
-        boolean membersReady = form != null && heat.valid() && adoptMembers(form);
+        var safety=BoilerConfig.accidentParameters();
+        boolean membersReady = form != null && heat.valid() && safety.valid() && adoptMembers(form);
         if (form != null) ledger.setGeometry(form.waterCells(), form.steamCells(), form.exchangers().size(), form.sections().size(), heat.hotCapacityMb(), heat.coldCapacityMb());
         refreshPipes();
         long now = level.getGameTime();
-        boolean clear = form != null && level.hasChunkAt(form.valve().above()) && level.getBlockState(form.valve().above()).isAir();
+        var clearValves = new ArrayList<BlockPos>();
+        if (form != null) for (BlockPos valve : form.valves()) {
+            BlockPos above = valve.above();
+            if (level.hasChunkAt(above) && level.getBlockState(above).isAir()) clearValves.add(valve);
+        }
+        boolean clear = !clearValves.isEmpty();
+        totalValvesView = form == null ? 0 : form.valves().size(); clearValvesView = clearValves.size();
+        valveCapacityView = ledger.settings().valid()?(int)Math.min(Integer.MAX_VALUE,(long)clearValvesView * ledger.settings().valveFlowMbPerTick()):0;
         boolean stopped = level.hasNeighborSignal(worldPosition);
         ledger.prepare(now, ledger.pairs());
         paidView = membersReady && !stopped ? ledger.collectHeat(now, Math.min(ledger.pairs() * ledger.settings().pairHeatHuPerTick(),
@@ -182,11 +209,15 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         else ledger.idle(now);
         refreshSteamKind(form); refreshPipes();
         pushSteam(membersReady ? form : null, now);
-        ledger.vent(now, membersReady && clear);
+        ledger.vent(now, membersReady ? clearValves : List.of());
+        if(membersReady)BoilerAccidentLifecycle.observe(this);
         refreshSteamKind(form); refreshPipes();
         steamPressure.refresh(level, membersReady ? form : null, this::steamSourceReady, ledger.settings().waterSteamPortFlowMbPerTick());
         producedView = ledger.produced(); ventedView = ledger.vented();
-        status = !ledger.settings().valid() || !heat.valid() ? "invalid" : form == null ? "unformed" : !membersReady ? "member_conflict"
+        dryProgressView=accident.dryTicks();pressureProgressView=accident.pressureTicks();dryLimitView=safety.dryTicks();pressureLimitView=safety.pressureTicks();
+        status = !ledger.settings().valid() || !heat.valid() || !safety.valid() ? "invalid" : accident.pending()!=null ? "accident"
+                : form == null ? "unformed" : !membersReady ? "member_conflict"
+                : ledger.pressure()>safety.ratedPressure()?"overpressure":dryFiring()?"dry_firing"
                 : stopped ? "redstone" : ledger.valveBlocked() ? "vent_blocked"
                 : ledger.cold() >= ledger.coldCapacity() && ledger.demand(clear) > 0 ? "cold_full"
                 : ledger.hot() == 0 && ledger.coolantHu() == 0 && ledger.demand(clear) > 0 ? "no_hot_coolant"
@@ -199,8 +230,11 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             for (BlockPos p : form.windows()) if (level.getBlockEntity(p) instanceof BoilerWindowBlockEntity window)
                 window.setFill(p.getY() < form.partitionY() ? (float) Math.clamp(surface - p.getY(), 0, 1) : 0);
         }
-        if (ventedView > 0 && clear && level instanceof ServerLevel server) {
-            BlockPos p = form.valve().above(); server.sendParticles(ParticleTypes.CLOUD, p.getX() + .5, p.getY() + .15, p.getZ() + .5, 3, .12, .08, .12, .01);
+        if (ventedView > 0 && level instanceof ServerLevel server) {
+            for (var vent : ledger.valveVents().entrySet()) {
+                BlockPos p = vent.getKey().above();
+                server.sendParticles(ParticleTypes.CLOUD, p.getX() + .5, p.getY() + .15, p.getZ() + .5, 3, .12, .08, .12, .01);
+            }
         }
         synchronizeControls(); setChanged();
         if (now % 5 == 0 || producedView > 0 || ventedView > 0) sendData();
@@ -335,7 +369,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     /** 四类端口能力只有外向面可用；结构代次变化使旧句柄永久失效，单口选择只撤销该口旧汽句柄。 */
     public IFluidHandler port(BlockPos p, Direction side, boolean ignoredInput) { return port(p, side); }
     public IFluidHandler port(BlockPos p, Direction side) {
-        if (level == null || side == null || level.isClientSide) return null;
+        if (level == null || side == null || level.isClientSide || !BoilerConfig.accidentParameters().valid()) return null;
         var form = currentForm(); if (form == null || !form.ports().contains(p) || form.outward(p) != side) return null;
         ledger.setSettings(BoilerConfig.settings());
         var heat = HeatExchangerConfig.settings();
@@ -354,7 +388,7 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             steamInventory = kind == 1 ? inventoryKind(pos) : null;
         }
         private boolean valid() {
-            if (issued != epoch || !current() || level.isClientSide
+            if (issued != epoch || !current() || level.isClientSide || !BoilerConfig.accidentParameters().valid()
                     || kind == 1 && (issuedSteam != steamEpochs.getOrDefault(pos, 0) || steamFluid != outputFluid(pos))) return false;
             var form = currentForm();
             return issued == epoch && form != null && form.ports().contains(pos) && form.outward(pos) == side && ledger.settings().valid();
@@ -389,8 +423,12 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
             return n > 0 ? new FluidStack(transactionFluid, n) : FluidStack.EMPTY;
         }
     }
-    public CompoundTag savePortableData() { CompoundTag tag = new CompoundTag(); tag.put("Ledger", ledger.save()); return tag; }
-    public void loadPortableData(CompoundTag tag) { ledger.load(tag.getCompound("Ledger")); synchronizeControls(); setChanged(); if (level != null) sendData(); }
+    public CompoundTag savePortableData() { CompoundTag tag = new CompoundTag(); tag.put("Ledger", ledger.save());tag.put("Accident",accident.save());tag.putUUID("BoilerGeneration",boilerGeneration); return tag; }
+    public void loadPortableData(CompoundTag tag) { ledger.load(tag.getCompound("Ledger"));accident.load(tag.getCompound("Accident"));if(tag.hasUUID("BoilerGeneration"))boilerGeneration=tag.getUUID("BoilerGeneration"); synchronizeControls(); setChanged(); if (level != null) sendData(); }
+    /** 方块物品真实落位才建立新实例；旧现场事故留原维度继续，不把外地pending软锁带到新炉。 */
+    public void loadPlacedData(CompoundTag tag){
+        loadPortableData(tag);boilerGeneration=java.util.UUID.randomUUID();accident.detachPending();invalidateForm();setChanged();if(level!=null)sendData();
+    }
     @Override public void onLoad() {
         super.onLoad(); available = true; surfaceChunkUnloaded = false;
         BoilerStructure.register(level, this); invalidateForm(); BoilerSurfaceSyncEvents.publish(this, false);
@@ -406,10 +444,13 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     }
     @Override protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket); tag.put("Boiler", ledger.save());
+        tag.put("Accident",accident.save());tag.putUUID("BoilerGeneration",boilerGeneration);
         if (clientPacket) {
             if (surfaceDescriptor != null) tag.put("BoilerSurface", surfaceDescriptor.encode());
             tag.putString("Status", status); tag.putInt("Produced", producedView); tag.putInt("Vented", ventedView); tag.putDouble("Paid", paidView);
             tag.putInt("Width", widthView); tag.putInt("Height", heightView); tag.putInt("Depth", depthView); tag.putInt("Pairs", pairsView);
+            tag.putInt("TotalValves", totalValvesView); tag.putInt("ClearValves", clearValvesView); tag.putInt("ValveCapacity", valveCapacityView);
+            tag.putInt("DryProgress",accident.dryTicks());tag.putInt("PressureProgress",accident.pressureTicks());tag.putInt("DryLimit",dryLimitView);tag.putInt("PressureLimit",pressureLimitView);
             tag.putInt("WaterCapacity", ledger.waterCapacity()); tag.putInt("SteamCapacity", ledger.steamCapacity());
             tag.putDouble("Tw", ledger.waterTemperature()); tag.putDouble("Ts", ledger.steamTemperature());
             tag.putDouble("NormalTs", ledger.steamTemperature(BoilerSteamInventoryKind.NORMAL));
@@ -420,11 +461,14 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
     }
     @Override protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket); ledger.load(tag.getCompound("Boiler")); synchronizeControls();
+        accident.load(tag.getCompound("Accident"));if(tag.hasUUID("BoilerGeneration"))boilerGeneration=tag.getUUID("BoilerGeneration");
         if (clientPacket) {
             surfaceDescriptor = BoilerSurfaceDescriptor.decode(tag.getCompound("BoilerSurface")).orElse(null);
             BoilerSurfaceSyncEvents.publish(this, false);
             steamKindView = tag.getInt("SteamKind"); status = tag.getString("Status"); producedView = tag.getInt("Produced"); ventedView = tag.getInt("Vented"); paidView = tag.getDouble("Paid");
             widthView = tag.getInt("Width"); heightView = tag.getInt("Height"); depthView = tag.getInt("Depth"); pairsView = tag.getInt("Pairs");
+            totalValvesView = tag.getInt("TotalValves"); clearValvesView = tag.getInt("ClearValves"); valveCapacityView = tag.getInt("ValveCapacity");
+            dryProgressView=tag.getInt("DryProgress");pressureProgressView=tag.getInt("PressureProgress");dryLimitView=tag.getInt("DryLimit");pressureLimitView=tag.getInt("PressureLimit");
             waterCapacityView = tag.getInt("WaterCapacity"); steamCapacityView = tag.getInt("SteamCapacity");
             waterTemperatureView = tag.getDouble("Tw"); steamTemperatureView = tag.getDouble("Ts"); pressureView = tag.getDouble("Pressure"); minimumView = tag.getDouble("Minimum");
             normalTemperatureView = tag.getDouble("NormalTs"); scTemperatureView = tag.getDouble("SupercriticalTs");
@@ -445,6 +489,8 @@ public final class BoilerControllerBlockEntity extends SmartBlockEntity implemen
         tooltip.add(Component.translatable(key + "current_steam", Component.translatable(key + "steam_kind."
                 + (steamKindView == 2 ? "supercritical" : steamKindView == 1 ? "normal" : "none"))));
         tooltip.add(Component.translatable(key + "flow", format(paidView), producedView));
+        tooltip.add(Component.translatable(key + "valves", clearValvesView, totalValvesView, valveCapacityView));
+        if(dryProgressView>0||pressureProgressView>0)tooltip.add(Component.translatable(key+"hazard_progress",dryProgressView,dryLimitView,pressureProgressView,pressureLimitView));
         tooltip.add(Component.translatable(key + "vent", ventedView, ledger.totalVented())); return true;
     }
     private static String format(double value) { return String.format(java.util.Locale.ROOT, "%.2f", value); }

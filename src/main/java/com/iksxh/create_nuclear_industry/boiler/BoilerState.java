@@ -1,6 +1,9 @@
 package com.iksxh.create_nuclear_industry.boiler;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -17,12 +20,12 @@ public final class BoilerState {
             double boilingTemperature, double supercriticalTemperature, double wallHeatCapacityHuPerWaterCell,
             double waterSpecificHeatHuPerMb, double steamSpecificHeatHuPerMb, double vaporizationLatentHeatHuPerMb,
             double supercriticalPressure, double outputMinPressure,
-            double valveOpenPressure, double valveClosePressure, int valveFlowPerSteamCellMbPerTick,
+            double valveOpenPressure, double valveClosePressure, int valveFlowMbPerTick,
             double idleWaterCoolingHuPerCellPerTick, double idleSteamCoolingHuPerCellPerTick) {
         public boolean valid() {
             if (minDimension < 5 || minDimension > maxDimension || maxDimension > 16
                     || waterCapacityPerCellMb < 1 || steamCapacityPerCellMb < 1 || coolantPortFlowMbPerTick < 1 || waterSteamPortFlowMbPerTick < 1
-                    || valveFlowPerSteamCellMbPerTick < 1) return false;
+                    || valveFlowMbPerTick < 1) return false;
             for (double v : new double[]{pairHeatHuPerTick, boilingTemperature, supercriticalTemperature,
                     wallHeatCapacityHuPerWaterCell, waterSpecificHeatHuPerMb, steamSpecificHeatHuPerMb,
                     vaporizationLatentHeatHuPerMb, supercriticalPressure, valveOpenPressure})
@@ -35,14 +38,14 @@ public final class BoilerState {
                     && supercriticalPressure < valveOpenPressure && outputMinPressure <= 1
                     && cells * waterCapacityPerCellMb <= Integer.MAX_VALUE
                     && cells * steamCapacityPerCellMb <= Integer.MAX_VALUE
-                    && cells * valveFlowPerSteamCellMbPerTick <= Integer.MAX_VALUE;
+                    && (long) (maxDimension - 2) * (maxDimension - 2) * valveFlowMbPerTick <= Integer.MAX_VALUE;
         }
         /** 仅配置摘要使用的参考 5³ 容量；实际容量读取账本几何。 */
         public int waterCapacityMb() { return 9 * waterCapacityPerCellMb; }
         public int steamCapacityMb() { return 9 * steamCapacityPerCellMb; }
     }
     public static final Settings DEFAULT = new Settings(5, 16, 2000, 2000, 2048, 4096, 18, 1, 2,
-            1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
+            1600, .1, .2, .7, .5, .6, .9, .8, 512, .9, .1);
     private Settings settings = DEFAULT;
     private int waterCells = 9, steamCells = 9, exchangers = 1, pairs = 1, hotCapacity = 4000, coldCapacity = 4000;
     private int water, hot, cold, produced, vented;
@@ -55,6 +58,7 @@ public final class BoilerState {
     private long lastTick = Long.MIN_VALUE, preparedTick = Long.MIN_VALUE, flowTick = Long.MIN_VALUE;
     private long conversionTick = Long.MIN_VALUE, ventTick = Long.MIN_VALUE, totalVented;
     private final Map<Long, Integer> usedByPort = new HashMap<>();
+    private final Map<BlockPos, Integer> ventedByValve = new LinkedHashMap<>();
     public int water() { return water; }
     public int steam() { return steamMb[0] + steamMb[1]; }
     public int steam(BoilerSteamInventoryKind kind) { return steamMb[kind.ordinal()]; }
@@ -76,6 +80,8 @@ public final class BoilerState {
     public int produced() { return produced; }
     public BoilerSteamInventoryKind producedKind() { return producedKind; }
     public int vented() { return vented; }
+    /** 本tick各物理阀的真实排汽收据，单位mB；仅正排量用于粒子，调用方不能改写。 */
+    public Map<BlockPos, Integer> valveVents() { return Map.copyOf(ventedByValve); }
     public Settings settings() { return settings; }
     public int waterCapacity() { return capacity(waterCells, settings.waterCapacityPerCellMb()); }
     public int steamCapacity() { return capacity(steamCells, settings.steamCapacityPerCellMb()); }
@@ -221,16 +227,11 @@ public final class BoilerState {
         hot -= n; cold += n; coolantHu += n * density;
         double paid = Math.min(limit, coolantHu); coolantHu -= paid; return paid;
     }
-    /** 满汽仍可再热；无水无汽时停止收热。 */
+    /** 成型炉始终可真实接收额定HU；满汽或空水不是免费停热装置，余量进入显热。 */
     public double demand(int ignoredSections) { return demand(true); }
     public double demand(boolean clear) {
         if (!settings.valid() || pairs < 1) return 0;
-        double reheat = reheatDeficit(BoilerSteamInventoryKind.NORMAL) + reheatDeficit(BoilerSteamInventoryKind.SUPERCRITICAL);
-        if (!clear) reheat = Math.min(reheat, pressureHeatRoom());
-        double warming = water > 0 ? Math.max(0, waterHeatCapacity() * targetTemperature() - waterHu) : 0;
-        double production = Math.min(water, Math.max(0, steamCapacity() - steam())) * steamEnthalpy(targetTemperature());
-        if (!clear && pressure() >= settings.valveOpenPressure() - EPS) production = 0;
-        return Math.min(pairs * settings.pairHeatHuPerTick(), Math.max(0, warming + reheat + production - processHu));
+        return Math.max(0, pairs * settings.pairHeatHuPerTick() - processHu);
     }
     /** 卸载间隔仅散失显热；不会散掉潜热或重置原有付款。 */
     public void prepare(long now, int ignoredSections) {
@@ -246,8 +247,6 @@ public final class BoilerState {
         // 两池只分摊一份散热预算；既有欠汽化焓的库存也不能通过保底被补出免费潜热。
         if (loss > 0) { double first = loss * normal / (normal + sc); steamHeat[0] -= first; steamHeat[1] -= loss - first; }
     }
-    private double pressureHeatRoom() { return Math.max(0, (settings.valveOpenPressure() - pressure()) * steamCapacity()
-            * settings.supercriticalTemperature() * settings.steamSpecificHeatHuPerMb()); }
     /** 结构无效时只结算时间与显热散失，绝不把拆开的储备转为新工质。 */
     public void idle(long now) {
         if (now == lastTick) return;
@@ -264,7 +263,6 @@ public final class BoilerState {
     private void reheat(boolean clear, boolean residual) {
         double normal = reheatDeficit(BoilerSteamInventoryKind.NORMAL), sc = reheatDeficit(BoilerSteamInventoryKind.SUPERCRITICAL);
         double request = normal + sc;
-        if (!clear) request = Math.min(request, pressureHeatRoom());
         double paid = takeWorkingHeat(request, residual);
         // 分配真实支付量，欠热为零的池不分热；保留两池身份且不暗设某种优先再热。
         if (paid > 0) { double first = paid * normal / (normal + sc); steamHeat[0] += first; steamHeat[1] += paid - first; }
@@ -282,7 +280,7 @@ public final class BoilerState {
         processHu += paid;
         if (paid == 0) cool(1);
         double target = targetTemperature();
-        if (water > 0 && paid > 0) {
+        if (paid > 0 && (water > 0 || steam() == 0)) {
             double warming = Math.min(processHu, Math.max(0, waterHeatCapacity() * target - waterHu));
             waterHu += warming; processHu -= warming;
         }
@@ -297,8 +295,6 @@ public final class BoilerState {
             double cost = paid == 0 ? enthalpy - settings.waterSpecificHeatHuPerMb() * settings.boilingTemperature() : difference;
             int n = Math.min((int) Math.min(Integer.MAX_VALUE, Math.floor((spare + EPS) / Math.max(EPS, cost))),
                     Math.min(water, steamCapacity() - steam()));
-            if (!clear) n = Math.min(n, (int) Math.max(0, Math.floor((settings.valveOpenPressure() - pressure())
-                    * steamCapacity() * settings.supercriticalTemperature() / temperature + EPS)));
             if (n > 0) {
                 waterHu -= carried * n; water -= n;
                 if (difference > 0) takeWorkingHeat(difference * n, paid == 0); else processHu -= difference * n;
@@ -309,25 +305,46 @@ public final class BoilerState {
                 steamMb[producedKind.ordinal()] += n; steamHeat[producedKind.ordinal()] += enthalpy * n; produced = n;
             }
         }
+        // 汽化后剩余的已付HU进入真实汽显热；空汽池只能加热炉壁，不制造压力或工质。
+        if (processHu > 0) {
+            if (steam() > 0) {
+                double normal = processHu * ((double) steamMb[0] / steam());
+                steamHeat[0] += normal; steamHeat[1] += processHu - normal;
+            } else waterHu += processHu;
+            processHu = 0;
+        }
         valveBlocked = !clear && pressure() + EPS >= settings.valveOpenPressure();
     }
-    /** 按炉压启闭，逐次扣实际比焓；无论调用多少次每 tick 只泄放一次。 */
-    public void vent(long now, boolean clear) {
+    /** 爆裂提交后清空本机真实工质及HU；阀/口本tick收据保留，不能借失效重领额度。 */
+    public void loseWorkingFluids() {
+        water=hot=cold=produced=0; waterHu=processHu=coolantHu=0; conversionFraction=0;
+        java.util.Arrays.fill(steamMb,0); java.util.Arrays.fill(steamHeat,0); producedKind=null;
+    }
+    /**
+     * 服务端在正常汽口输出之后一次提交本tick畅通阀快照，每阀固定mB额度，体积不加成。
+     * 去重位置且同tick只接收第一份快照，保存/拆装或重复调用都不能刷新排汽预算。
+     */
+    public void vent(long now, List<BlockPos> clearValves) {
         if (ventTick == now || !settings.valid()) return;
-        ventTick = now; vented = 0;
+        ventTick = now; vented = 0; ventedByValve.clear();
         if (pressure() + EPS >= settings.valveOpenPressure()) valveOpen = true;
         if (pressure() <= settings.valveClosePressure() + EPS) valveOpen = false;
-        valveBlocked = valveOpen && !clear;
-        if (valveOpen && clear && steam() > 0) {
-            int limit = Math.min(steam(), capacity(steamCells, settings.valveFlowPerSteamCellMbPerTick()));
+        var distinct = new LinkedHashSet<BlockPos>();
+        for (BlockPos valve : clearValves) distinct.add(valve.immutable());
+        valveBlocked = valveOpen && distinct.isEmpty();
+        for (BlockPos valve : distinct) {
+            if (!valveOpen || steam() == 0) break;
+            int limit = Math.min(steam(), settings.valveFlowMbPerTick());
             int normalShare = (int) ((long) limit * steamMb[0] / steam());
             int scShare = limit - normalShare;
-            vented = ventKind(BoilerSteamInventoryKind.NORMAL, normalShare) + ventKind(BoilerSteamInventoryKind.SUPERCRITICAL, scShare);
+            int actual = ventKind(BoilerSteamInventoryKind.NORMAL, normalShare) + ventKind(BoilerSteamInventoryKind.SUPERCRITICAL, scShare);
             // 比例整数尾差/单池压力封顶后的余量只结算到同一总额度内，逐种按真实温度保住关阀线。
-            vented += ventKind(BoilerSteamInventoryKind.NORMAL, limit - vented);
-            vented += ventKind(BoilerSteamInventoryKind.SUPERCRITICAL, limit - vented);
-            totalVented += vented;
+            actual += ventKind(BoilerSteamInventoryKind.NORMAL, limit - actual);
+            actual += ventKind(BoilerSteamInventoryKind.SUPERCRITICAL, limit - actual);
+            if (actual > 0) ventedByValve.put(valve, actual);
+            vented += actual;
         }
+        totalVented += vented;
         if (pressure() <= settings.valveClosePressure() + EPS) valveOpen = false;
     }
     private int ventKind(BoilerSteamInventoryKind kind, int requested) {
@@ -349,7 +366,10 @@ public final class BoilerState {
         t.putLong("ConversionTick", conversionTick); t.putLong("VentTick", ventTick);
         ListTag list = new ListTag();
         usedByPort.forEach((port, used) -> { CompoundTag e = new CompoundTag(); e.putLong("Port", port); e.putInt("Used", used); list.add(e); });
-        t.put("Budgets", list); return t;
+        t.put("Budgets", list);
+        ListTag valves = new ListTag();
+        ventedByValve.forEach((pos, amount) -> { var e = new CompoundTag(); e.putLong("Valve", pos.asLong()); e.putInt("Amount", amount); valves.add(e); });
+        t.put("ValveVents", valves); return t;
     }
     public void load(CompoundTag t) {
         water = Math.max(0, t.getInt("Water")); hot = Math.max(0, t.getInt("Hot")); cold = Math.max(0, t.getInt("Cold"));
@@ -375,6 +395,12 @@ public final class BoilerState {
         ventTick = t.contains("VentTick") ? t.getLong("VentTick") : Long.MIN_VALUE;
         preparedTick = Long.MIN_VALUE; usedByPort.clear();
         for (Tag item : t.getList("Budgets", Tag.TAG_COMPOUND)) { CompoundTag e = (CompoundTag) item; usedByPort.put(e.getLong("Port"), Math.max(0, e.getInt("Used"))); }
+        ventedByValve.clear(); vented = 0;
+        for (Tag item : t.getList("ValveVents", Tag.TAG_COMPOUND)) {
+            var e = (CompoundTag) item; int amount = Math.max(0, e.getInt("Amount"));
+            if (amount > 0) ventedByValve.put(BlockPos.of(e.getLong("Valve")), amount);
+        }
+        for (int amount : ventedByValve.values()) vented = (int) Math.min(Integer.MAX_VALUE, (long) vented + amount);
     }
     private static double finite(double v) { return Double.isFinite(v) ? Math.max(0, v) : 0; }
 }

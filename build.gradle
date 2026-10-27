@@ -154,6 +154,8 @@ tasks.named('jar', Jar) {
     exclude 'com/iksxh/create_nuclear_industry/gametest/BoilerSizeLimitGameTests*.class'
     exclude 'com/iksxh/create_nuclear_industry/gametest/ReactorExternalExplosionGameTests*.class'
     exclude { entry -> entry.path.startsWith('data/cni_reactor_external_explosion') }
+    exclude 'com/iksxh/create_nuclear_industry/gametest/BoilerSafetyGameTests*.class'
+    exclude 'data/cni_boiler_safety/**'
     exclude 'data/cni_reactor_automation/structure/automation_empty.nbt'
     exclude 'data/cni_reactor_automation_retrofit/structure/retrofit_empty.nbt'
     exclude 'data/cni_reactor_administrator/structure/administrator_empty.nbt'

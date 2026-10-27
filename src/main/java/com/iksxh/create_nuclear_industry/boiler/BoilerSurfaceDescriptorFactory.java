@@ -22,7 +22,7 @@ public final class BoilerSurfaceDescriptorFactory {
             overlay(roles, form.windows(), 1); overlay(roles, List.of(owner), 2);
             overlay(roles, form.waterPorts(), 3); overlay(roles, form.steamPorts(), 4);
             overlay(roles, form.hotPorts(), 5); overlay(roles, form.coldPorts(), 6);
-            overlay(roles, List.of(form.valve()), 7); overlay(roles, form.exchangers(), 8);
+            overlay(roles, form.valves(), 7); overlay(roles, form.exchangers(), 8);
             var members = new ArrayList<BoilerSurfaceDescriptor.SurfaceMember>();
             for (BlockPos pos : BlockPos.betweenClosed(form.min(), form.max())) {
                 var faces = BoilerSurfaceDescriptor.outwardFaces(pos, form.min(), form.max());

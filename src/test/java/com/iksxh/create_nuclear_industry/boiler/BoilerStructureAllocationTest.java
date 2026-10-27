@@ -12,16 +12,25 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoilerStructureAllocationTest {
     private BoilerStructure.Form form() {
         return new BoilerStructure.Form(BlockPos.ZERO,new BlockPos(4,4,4),2,9,9,List.of(),List.of(),
-            List.of(new BlockPos(1,0,0)),List.of(new BlockPos(2,0,0)),List.of(new BlockPos(3,0,0)),List.of(new BlockPos(4,0,0)),List.of(),null);
+            List.of(new BlockPos(1,0,0)),List.of(new BlockPos(2,0,0)),List.of(new BlockPos(3,0,0)),List.of(new BlockPos(4,0,0)),List.of(),List.of());
     }
     @Test void portsReuseAnImmutableOrderedSnapshot() {
         var f=form();assertSame(f.ports(),f.ports(),"静态端口列表仍每次新建");
         assertEquals(List.of(new BlockPos(1,0,0),new BlockPos(2,0,0),new BlockPos(3,0,0),new BlockPos(4,0,0)),f.ports());
         assertThrows(UnsupportedOperationException.class,()->f.ports().add(BlockPos.ZERO));
     }
-    @Test void oldConstructorAndAccessorsPreserveGeometryValues() {
+    @Test void constructorAndAccessorsPreserveGeometryValues() {
         var f=form();assertEquals(5,f.width());assertEquals(5,f.height());assertEquals(5,f.depth());
         assertEquals(List.of(new BlockPos(1,0,0)),f.waterPorts());assertEquals(form(),f);
+    }
+    @Test void valvesAreImmutableDistinctPositionsAndDoNotAllocateOnAccess() {
+        var pos = new BlockPos.MutableBlockPos(1, 4, 1);
+        var valves = new ArrayList<BlockPos>(List.of(pos, pos, new BlockPos(2, 4, 1)));
+        var f = new BoilerStructure.Form(BlockPos.ZERO, new BlockPos(4,4,4), 2,9,9,List.of(),List.of(),
+                List.of(),List.of(),List.of(),List.of(),List.of(),valves);
+        pos.set(50,50,50); valves.clear();
+        assertEquals(List.of(new BlockPos(1,4,1),new BlockPos(2,4,1)),f.valves());
+        assertSame(f.valves(),f.valves()); assertThrows(UnsupportedOperationException.class,()->f.valves().clear());
     }
     @SuppressWarnings({"unchecked","rawtypes"})
     @Test void controllerSnapshotIsWeakReusableAndRebuiltAfterCollection() throws Exception {

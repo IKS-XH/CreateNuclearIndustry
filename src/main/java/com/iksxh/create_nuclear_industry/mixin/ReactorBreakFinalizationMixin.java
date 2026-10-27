@@ -14,7 +14,10 @@ public abstract class ReactorBreakFinalizationMixin {
     @ModifyExpressionValue(method="fireBlockBreak",at=@At(value="INVOKE",
             target="Lnet/neoforged/bus/api/IEventBus;post(Lnet/neoforged/bus/api/Event;)Lnet/neoforged/bus/api/Event;"))
     private static Event accident$afterFinalBreakResult(Event posted) {
-        if(posted instanceof BlockEvent.BreakEvent event)ReactorStructureLifecycle.finishBlockBreak(event);
+        if(posted instanceof BlockEvent.BreakEvent event){
+            ReactorStructureLifecycle.finishBlockBreak(event);
+            if(!event.isCanceled())com.iksxh.create_nuclear_industry.boiler.BoilerAccidentLifecycle.finishBlockBreak(event);
+        }
         return posted;
     }
 }

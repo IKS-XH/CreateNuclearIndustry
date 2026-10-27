@@ -59,6 +59,7 @@ public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements 
     @Override public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.BLOCK; }
     @Override protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean moving) {
         super.onPlace(state, level, pos, oldState, moving);
+        com.iksxh.create_nuclear_industry.boiler.BoilerAccidentLifecycle.componentPlaced(level,pos,state,oldState);
         if (!level.isClientSide) com.iksxh.create_nuclear_industry.boiler.BoilerStructure.invalidateNearby(level, pos);
         if (!level.isClientSide && (!oldState.is(this) || oldState.getValue(FACING) != state.getValue(FACING)))
             NuclearHeatExchangerBlockEntity.topologyChanged(level, pos);
@@ -74,6 +75,8 @@ public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements 
 
     /** 掉落查询只构造快照，不领取或清空实体；真实拆除入口负责恰好一次回收。 */
     @Override public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+        if(com.iksxh.create_nuclear_industry.boiler.BoilerAccidentLifecycle.consumedComponent(builder.getLevel(),
+                BlockPos.containing(builder.getParameter(LootContextParams.ORIGIN)),state,builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY)))return List.of();
         List<ItemStack> drops = super.getDrops(state, builder);
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof NuclearHeatExchangerBlockEntity machine)
             for (ItemStack drop : drops) if (drop.is(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER_ITEM.get()))
@@ -125,6 +128,8 @@ public final class NuclearHeatExchangerBlock extends BaseEntityBlock implements 
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(level, pos, state, player);
         NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) return InteractionResult.SUCCESS;
+        com.iksxh.create_nuclear_industry.boiler.BoilerAccidentLifecycle.finishBlockBreak(event);
+        if(event.isCanceled()||level.getBlockState(pos)!=state)return InteractionResult.SUCCESS;
         if (player != null && !player.isCreative())
             Block.getDrops(state, server, pos, level.getBlockEntity(pos), player, context.getItemInHand())
                     .forEach(drop -> player.getInventory().placeItemBackInInventory(drop));

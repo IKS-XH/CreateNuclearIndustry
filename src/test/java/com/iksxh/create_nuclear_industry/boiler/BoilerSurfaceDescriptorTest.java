@@ -25,7 +25,7 @@ class BoilerSurfaceDescriptorTest {
                 List.of(min.offset(1, 2, 1)), List.of(min.offset(1, 0, 1)),
                 List.of(min.offset(2, 1, 0)), List.of(min.offset(0, 3, 1)),
                 List.of(min.offset(3, 0, 0)), List.of(min.offset(3, 2, 0)),
-                List.of(min.offset(w - 1, 1, 2)), min.offset(1, h - 1, 1));
+                List.of(min.offset(w - 1, 1, 2)), List.of(min.offset(1, h - 1, 1), min.offset(2, h - 1, 1)));
     }
     static BoilerSurfaceDescriptor box(BlockPos min, int w, int h, int d, UUID generation, long revision) {
         return BoilerSurfaceDescriptorFactory.project(DIMENSION, min.offset(1, 1, 0), generation, revision, form(min, w, h, d));
@@ -39,6 +39,7 @@ class BoilerSurfaceDescriptorTest {
             assertEquals(min.getY() + 2, descriptor.partitionY());
             assertEquals(9, descriptor.members().stream().map(BoilerSurfaceDescriptor.SurfaceMember::expectedBlockId).distinct().count());
             assertEquals(1, descriptor.members().stream().filter(m -> m.expectedBlockId().endsWith("_controller")).count());
+            assertEquals(2, descriptor.members().stream().filter(m -> m.expectedBlockId().endsWith("boiler_safety_valve")).count());
             assertEquals(Set.of(Direction.WEST, Direction.DOWN, Direction.NORTH), descriptor.members().getFirst().outwardFaces());
             var hot = descriptor.members().stream().filter(m -> m.pos().equals(min.offset(3, 0, 0))).findFirst().orElseThrow();
             assertEquals(Set.of(Direction.DOWN, Direction.NORTH), hot.outwardFaces());

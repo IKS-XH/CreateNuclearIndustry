@@ -68,7 +68,7 @@ public final class BoilerControllerBlock extends BaseEntityBlock implements IWre
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof BoilerControllerBlockEntity owner) {
             CustomData data = stack.get(DataComponents.CUSTOM_DATA);
             if (data != null && data.copyTag().contains(PORTABLE_KEY))
-                owner.loadPortableData(data.copyTag().getCompound(PORTABLE_KEY));
+                owner.loadPlacedData(data.copyTag().getCompound(PORTABLE_KEY));
         }
     }
     @Override protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moving) {
@@ -113,6 +113,8 @@ public final class BoilerControllerBlock extends BaseEntityBlock implements IWre
         var event = new BlockEvent.BreakEvent(level, pos, state, player);
         NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) return InteractionResult.SUCCESS;
+        BoilerAccidentLifecycle.finishBlockBreak(event);
+        if(event.isCanceled()||level.getBlockState(pos)!=state)return InteractionResult.SUCCESS;
         if (player != null && !player.isCreative())
             Block.getDrops(state, server, pos, level.getBlockEntity(pos), player, context.getItemInHand())
                     .forEach(drop -> player.getInventory().placeItemBackInInventory(drop));

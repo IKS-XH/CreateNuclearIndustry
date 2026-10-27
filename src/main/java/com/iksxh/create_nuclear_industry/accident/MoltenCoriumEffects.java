@@ -142,23 +142,51 @@ public final class MoltenCoriumEffects {
         });
     }
     private static int corrode(ServerLevel level,ReactorAccidentSavedData data,MoltenCoriumState body,BlockPos pos){
-        var primary=level.getBlockState(pos);var positions=ShieldedAssemblyStructure.corrosionTargets(level,pos,primary);if(positions==null)return 0;
-        var plan=targets(level,positions);if(plan==null||!removalReadsLoaded(level,plan)||data.availableBudget(level.getGameTime(),64)<plan.size())return 0;
-        var entities=new HashMap<BlockPos,net.minecraft.world.level.block.entity.BlockEntity>();plan.keySet().forEach(p->entities.put(p,level.getBlockEntity(p)));
         var actor=FakePlayerFactory.get(level,new com.mojang.authlib.GameProfile(UUID.nameUUIDFromBytes("cni:molten_corrosion".getBytes(java.nio.charset.StandardCharsets.UTF_8)),"CoriumCorrosion"));
+        return removeEnvironmentBlock(level,data,pos,actor,true,()->{body.corroded();data.setDirty();},()->true).writes();
+    }
+    /** 暂缺预算/读取域须重试原项；最终取消或原对象已换属于终结拒绝，不能用同一个0混淆。 */
+    public enum RemovalStatus { DEFER, REJECTED, REMOVED }
+    public record RemovalReceipt(RemovalStatus status,int writes){}
+    private static RemovalReceipt deferred(){return new RemovalReceipt(RemovalStatus.DEFER,0);}
+    private static RemovalReceipt rejected(){return new RemovalReceipt(RemovalStatus.REJECTED,0);}
+    /**
+     * 有限环境移除的公共窄入口：保留最终许可、连带容器、对象复核及同维度逐写预算。
+     * dropMain仅控制完整目标的普通掉落；既有容器真实onRemove与燃料交接仍执行，不赋予调用方熔融身份。
+     */
+    public static RemovalReceipt removeEnvironmentBlock(ServerLevel level,BlockPos pos,Player actor,boolean dropMain){
+        return removeEnvironmentBlock(level,pos,actor,dropMain,()->true);
+    }
+    /** 调用方的稳定原对象凭证也在最终许可回调之后重核，防止监听器同态换件绕过状态检查。 */
+    public static RemovalReceipt removeEnvironmentBlock(ServerLevel level,BlockPos pos,Player actor,boolean dropMain,java.util.function.BooleanSupplier identity){
+        var data=ReactorAccidentSavedData.get(level);var receipt=removeEnvironmentBlock(level,data,pos,actor,dropMain,()->{},identity);
+        if(receipt.writes()>0)data.setDirty();return receipt;
+    }
+    private static RemovalReceipt removeEnvironmentBlock(ServerLevel level,ReactorAccidentSavedData data,BlockPos pos,Player actor,boolean dropMain,Runnable afterProbe,java.util.function.BooleanSupplier identity){
+        // 公共入口不能再依赖原corrode上游的加载保证；首个世界块读取之前就拒绝强载。
+        if(!AccidentThermalEffects.loaded(level,pos))return deferred();
+        var primary=level.getBlockState(pos);var positions=ShieldedAssemblyStructure.corrosionTargets(level,pos,primary);if(positions==null)return deferred();
+        if(primary.isAir()||primary.getDestroySpeed(level,pos)<0)return rejected();
+        var plan=targets(level,positions);if(plan==null||!removalReadsLoaded(level,plan)||data.availableBudget(level.getGameTime(),64)<plan.size())return deferred();
+        var entities=new HashMap<BlockPos,net.minecraft.world.level.block.entity.BlockEntity>();plan.keySet().forEach(p->entities.put(p,level.getBlockEntity(p)));
         var probe=new Scope(level,plan,actor);PROBE.set(probe);
         try{
             // 所有连带目标先取得最终许可；监听异常/末位取消不能提前移料或产生普通手拆事故。
-            for(var entry:plan.entrySet())if(NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level,entry.getKey(),entry.getValue(),actor)).isCanceled()){body.corroded();data.setDirty();return 0;}
-        }catch(RuntimeException failure){body.corroded();data.setDirty();return 0;}finally{PROBE.remove();}
-        body.corroded();data.setDirty();
-        for(var entry:plan.entrySet())if(!AccidentThermalEffects.loaded(level,entry.getKey())||level.getBlockState(entry.getKey())!=entry.getValue()||level.getBlockEntity(entry.getKey())!=entities.get(entry.getKey()))return 0;
-        if(!removalReadsLoaded(level,plan))return 0;
-        return write(level,plan,()->{
+            for(var entry:plan.entrySet())if(NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level,entry.getKey(),entry.getValue(),actor)).isCanceled()){afterProbe.run();return rejected();}
+        }catch(RuntimeException failure){afterProbe.run();return rejected();}finally{PROBE.remove();}
+        afterProbe.run();
+        for(var entry:plan.entrySet()){
+            if(!AccidentThermalEffects.loaded(level,entry.getKey()))return deferred();
+            if(level.getBlockState(entry.getKey())!=entry.getValue()||level.getBlockEntity(entry.getKey())!=entities.get(entry.getKey()))return rejected();
+        }
+        if(!identity.getAsBoolean())return rejected();
+        if(!removalReadsLoaded(level,plan)||data.availableBudget(level.getGameTime(),64)<plan.size())return deferred();
+        int used=write(level,plan,()->{
             if(level.getBlockEntity(pos) instanceof ReactorPortBlockEntity port){var fuel=port.takeForCorrosion();if(!fuel.isEmpty())Block.popResource(level,pos,fuel);}
-            Block.dropResources(primary,level,pos,entities.get(pos),actor,ItemStack.EMPTY);
+            if(dropMain)Block.dropResources(primary,level,pos,entities.get(pos),actor,ItemStack.EMPTY);
             level.setBlock(pos,Blocks.AIR.defaultBlockState(),18);for(var p:plan.keySet())changed(level,p);
         });
+        return used>0?new RemovalReceipt(RemovalStatus.REMOVED,used):deferred();
     }
     /** 原生容器onRemove的输出通知可越过导体读取第二邻格；flags18不关闭该回调，先保守核全部两格读取域。 */
     private static boolean removalReadsLoaded(ServerLevel level,Map<BlockPos,BlockState> targets){

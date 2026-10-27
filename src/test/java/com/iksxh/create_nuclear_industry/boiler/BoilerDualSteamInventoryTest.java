@@ -68,7 +68,7 @@ class BoilerDualSteamInventoryTest {
         s.setSettings(new BoilerState.Settings(d.minDimension(), d.maxDimension(), d.waterCapacityPerCellMb(), d.steamCapacityPerCellMb(),
                 20000, 20000, d.pairHeatHuPerTick(), d.boilingTemperature(), d.supercriticalTemperature(), d.wallHeatCapacityHuPerWaterCell(),
                 d.waterSpecificHeatHuPerMb(), d.steamSpecificHeatHuPerMb(), d.vaporizationLatentHeatHuPerMb(), d.supercriticalPressure(),
-                d.outputMinPressure(), d.valveOpenPressure(), d.valveClosePressure(), d.valveFlowPerSteamCellMbPerTick(),
+                d.outputMinPressure(), d.valveOpenPressure(), d.valveClosePressure(), d.valveFlowMbPerTick(),
                 d.idleWaterCoolingHuPerCellPerTick(), d.idleSteamCoolingHuPerCellPerTick()));
         double before = s.totalHu();
         assertEquals(6400, s.drainSteam(SUPERCRITICAL, BlockPos.ZERO, 10000, false, 1));
@@ -140,11 +140,11 @@ class BoilerDualSteamInventoryTest {
     }
     @Test void mixedValveUsesOneQuotaAndKeepsClosePressureWithoutRelabeling() {
         var s = state(1000, 800, 17000, 17000); double before = s.totalHu();
-        s.vent(1, true);
-        assertEquals(288, s.vented()); assertEquals(984, s.steam(NORMAL)); assertEquals(16728, s.steam(SUPERCRITICAL));
-        assertEquals(before - (16 * .8 + 272), s.totalHu(), EPS);
-        var unchanged = s.save(); s.vent(1, true); assertEquals(unchanged, s.save());
-        for (int t = 2; t < 100; t++) { s.vent(t, true); assertTrue(s.pressure() + EPS >= .8); assertTrue(s.vented() <= 288); }
+        s.vent(1, java.util.List.of(BlockPos.ZERO));
+        assertEquals(512, s.vented()); assertEquals(972, s.steam(NORMAL)); assertEquals(16516, s.steam(SUPERCRITICAL));
+        assertEquals(before - (28 * .8 + 484), s.totalHu(), EPS);
+        var unchanged = s.save(); s.vent(1, java.util.List.of(BlockPos.ZERO)); assertEquals(unchanged, s.save());
+        for (int t = 2; t < 100; t++) { s.vent(t, java.util.List.of(BlockPos.ZERO)); assertTrue(s.pressure() + EPS >= .8); assertTrue(s.vented() <= 512); }
         assertTrue(s.pressure() < .8001);
     }
 }

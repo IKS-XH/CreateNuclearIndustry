@@ -22,6 +22,18 @@ class BoilerStateTest {
         assertEquals(5, BoilerState.DEFAULT.minDimension());
         assertEquals(16, BoilerState.DEFAULT.maxDimension(), "独立账本默认须与配置默认一致");
     }
+    @Test void oneValveHasFixedFiveHundredTwelveBudget() {
+        var s = state(0, 18000, 0, 18000);
+        s.vent(1, List.of(A));
+        assertEquals(512, s.vented(), "单阀额度不应由汽区格数决定");
+    }
+    @Test void paidHeatCanWarmDryWallAndOverheatBlockedSteam() {
+        var empty = new BoilerState(); assertTrue(empty.demand(false) > 0, "空炉仍须真实收热并承受干烧");
+        empty.tick(1,1,18,false,false); assertEquals(18,empty.totalHu(),EPS); assertTrue(empty.waterTemperature()>0);
+        var full=state(0,18000,0,18000);double before=full.totalHu();
+        full.tick(1,1,18,false,false);
+        assertEquals(before+18,full.totalHu(),EPS);assertTrue(full.pressure()>1,"堵阀满汽不能免费停热");
+    }
     @Test void settingsRejectSeventeenDimensionBeforeTransactions() {
         var bad = new BoilerState.Settings(5, 17, 2000, 2000, 2048, 4096, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
         assertFalse(bad.valid(), "运行快照不能接受17格上限");
@@ -57,7 +69,7 @@ class BoilerStateTest {
         var s = state(100, 0, (14400 + 10) * 2, 0);
         double before = s.totalHu(); s.tick(1, 1, 9, true, false);
         assertEquals(before + 9, s.totalHu(), EPS);
-        assertEquals(100, s.water() + s.steam()); assertEquals(1, s.steamHu() / s.steam(), EPS);
+        assertEquals(100, s.water() + s.steam()); assertEquals(11,s.steam());assertEquals(11.2,s.steamHu(),EPS);
         assertEquals(2, s.targetTemperature(), EPS);
     }
     @Test void nineBucketsAtBoilingNeedEighteenHundredHuToReheat() {
@@ -123,13 +135,13 @@ class BoilerStateTest {
         assertTrue(s.steam() > 0); assertTrue(s.steam() < 18000); assertTrue(s.totalHu() <= initial);
         assertEquals(18000, s.water() + s.steam());
     }
-    @Test void blockedValveCapsNewSteamPressureAndReheat() {
+    @Test void blockedValveKeepsPaidHeatAndNeedsAccidentProtection() {
         var s = state(0, 18000, 0, 14400);
         for (int t = 1; t <= 300; t++) s.tick(t, 1, s.demand(false), false, false);
-        assertTrue(s.pressure() <= .9 + EPS); assertEquals(.9, s.pressure(), EPS); s.vent(300, false);
+        assertTrue(s.pressure()>1); assertEquals(14400+300*18,s.totalHu(),EPS); s.vent(300, List.of());
         assertTrue(s.valveBlocked()); int before = s.steam(); double h = s.steamHu() / before;
-        s.vent(301, true); assertEquals(288, s.vented()); assertEquals(before - 288, s.steam()); assertEquals(h, s.steamHu() / s.steam(), EPS);
-        int after = s.steam(); s.vent(301, true); assertEquals(after, s.steam());
+        s.vent(301, List.of(A)); assertEquals(512, s.vented()); assertEquals(before - 512, s.steam()); assertEquals(h, s.steamHu() / s.steam(), EPS);
+        int after = s.steam(); s.vent(301, List.of(A)); assertEquals(after, s.steam());
     }
     @Test void sharedCoolantConvertsEqualVolumeAndOnlyPaidHuIsAvailable() {
         var s = new BoilerState(); s.fillHot(A, 256, false, 1); double paid = 0;
@@ -159,8 +171,32 @@ class BoilerStateTest {
             var bad = new BoilerState.Settings(range[0], range[1], 2000, 2000, 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, 32, .9, .1);
             assertFalse(bad.valid()); s.setSettings(bad); assertEquals(0, s.fillWater(A, 10, false, 1));
         }
-        // 合法最大16下2352格的最坏分区乘积超int；分别守住水、汽容量和阀泄放额度的long预检。
-        for (int[] products : new int[][]{{1000000, 2000, 32}, {2000, 1000000, 32}, {2000, 2000, 1000000}})
+        // 水/汽按最坏分区格数，阀仅按顶面合法位置数做long乘积预检。
+        for (int[] products : new int[][]{{1000000, 2000, 512}, {2000, 1000000, 512}, {2000, 2000, Integer.MAX_VALUE}})
             assertFalse(new BoilerState.Settings(5, 16, products[0], products[1], 256, 256, 18, 1, 2, 1600, .1, .2, .7, .5, .6, .9, .8, products[2], .9, .1).valid());
+    }
+    @Test void valvesDeduplicateAndDoNotRegainQuotaAcrossSaveOrReassembly() {
+        var s = state(0, 18000, 0, 18000);
+        double before = s.totalHu();
+        s.vent(7, List.of(A, A.mutable(), B));
+        assertEquals(1024, s.vented()); assertEquals(512, s.valveVents().get(A)); assertEquals(512, s.valveVents().get(B));
+        assertEquals(before - 1024, s.totalHu(), EPS);
+        var snapshot = s.save(); var restored = new BoilerState(); restored.load(snapshot);
+        restored.setGeometry(18, 18, 2, 2, 4000, 4000);
+        restored.vent(7, List.of(A, B, new BlockPos(2, 0, 0)));
+        assertEquals(s.steam(), restored.steam(), "保存和成型变化不能刷新本tick额度");
+        assertEquals(s.valveVents(), restored.valveVents());
+        restored.setGeometry(9, 9, 1, 1, 4000, 4000);
+        restored.vent(8, List.of(B)); assertEquals(512, restored.vented());
+        assertFalse(restored.valveVents().containsKey(A), "堵阀不能沿用上一tick粒子收据");
+    }
+    @Test void singleValveBudgetDoesNotGrowWithSteamVolumeAndHysteresisStopsAtCloseLine() {
+        var s = state(0, 36000, 0, 36000); s.setGeometry(18, 18, 1, 1, 4000, 4000);
+        s.vent(1, List.of(A)); assertEquals(512, s.vented());
+        var below = state(0, 16100, 0, 16100); below.vent(1, List.of(A)); assertEquals(0, below.vented());
+        var open = state(0, 16300, 0, 16300); open.vent(1, List.of(A)); assertTrue(open.valveOpen());
+        for (int tick = 2; tick < 20; tick++) open.vent(tick, List.of(A, B));
+        assertEquals(.8, open.pressure(), EPS); assertFalse(open.valveOpen());
+        assertEquals(0, open.vented());
     }
 }

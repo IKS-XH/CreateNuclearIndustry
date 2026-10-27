@@ -22,20 +22,26 @@ public final class BoilerStructure {
     public record Form(BlockPos min, BlockPos max, int partitionY, int waterCells, int steamCells,
             List<BlockPos> sections, List<BlockPos> exchangers, List<BlockPos> waterPorts,
             List<BlockPos> steamPorts, List<BlockPos> hotPorts, List<BlockPos> coldPorts,
-            List<BlockPos> windows, BlockPos valve, List<BlockPos> ports) {
-        /** 保留原构造入口；派生端口列表只在不可变几何快照创建时合并，顺序不变。 */
+            List<BlockPos> windows, List<BlockPos> valves, List<BlockPos> ports) {
+        /** 派生端口列表只在不可变几何快照创建时合并，顺序不变。 */
         public Form(BlockPos min, BlockPos max, int partitionY, int waterCells, int steamCells,
                 List<BlockPos> sections, List<BlockPos> exchangers, List<BlockPos> waterPorts,
                 List<BlockPos> steamPorts, List<BlockPos> hotPorts, List<BlockPos> coldPorts,
-                List<BlockPos> windows, BlockPos valve) {
-            this(min,max,partitionY,waterCells,steamCells,sections,exchangers,waterPorts,steamPorts,hotPorts,coldPorts,windows,valve,null);
+                List<BlockPos> windows, List<BlockPos> valves) {
+            this(min,max,partitionY,waterCells,steamCells,sections,exchangers,waterPorts,steamPorts,hotPorts,coldPorts,windows,valves,null);
         }
         public Form {
+            min=min.immutable(); max=max.immutable();
+            sections=immutablePositions(sections); exchangers=immutablePositions(exchangers);
+            windows=immutablePositions(windows); valves=immutablePositions(valves);
             waterPorts=List.copyOf(waterPorts); steamPorts=List.copyOf(steamPorts);
             hotPorts=List.copyOf(hotPorts); coldPorts=List.copyOf(coldPorts);
             var merged=new ArrayList<BlockPos>(waterPorts.size()+steamPorts.size()+hotPorts.size()+coldPorts.size());
             merged.addAll(waterPorts); merged.addAll(steamPorts); merged.addAll(hotPorts); merged.addAll(coldPorts);
             ports=List.copyOf(merged);
+        }
+        private static List<BlockPos> immutablePositions(List<BlockPos> positions) {
+            return positions.stream().map(BlockPos::immutable).distinct().toList();
         }
         public int width() { return max.getX() - min.getX() + 1; }
         public int height() { return max.getY() - min.getY() + 1; }
@@ -155,7 +161,7 @@ public final class BoilerStructure {
         for (int size : new int[]{w, h, d}) if (size < cfg.minDimension() || size > cfg.maxDimension()) return fail("bounds", controller);
         if (py < min.getY() + 2 || py > max.getY() - 2) return fail("partition", partition);
         List<BlockPos> sections = new ArrayList<>(), machines = new ArrayList<>(), water = new ArrayList<>(), steam = new ArrayList<>(), hot = new ArrayList<>(), cold = new ArrayList<>(), windows = new ArrayList<>();
-        BlockPos valve = null; int controls = 0, wc = 0, sc = 0;
+        List<BlockPos> valves = new ArrayList<>(); int controls = 0, wc = 0, sc = 0;
         for (BlockPos mutable : BlockPos.betweenClosed(min, max)) {
             BlockPos p = mutable.immutable();
             if (!level.hasChunkAt(p)) return fail("chunk", p);
@@ -185,7 +191,7 @@ public final class BoilerStructure {
             if (yEdge) {
                 if (s.is(BoilerContent.CASING.get())) continue;
                 if (p.getY() == min.getY() && s.is(HeatExchangeContent.NUCLEAR_HEAT_EXCHANGER.get())) { machines.add(p); continue; }
-                if (p.getY() == max.getY() && s.is(BoilerContent.SAFETY_VALVE.get()) && valve == null) { valve = p; continue; }
+                if (p.getY() == max.getY() && s.is(BoilerContent.SAFETY_VALVE.get())) { valves.add(p); continue; }
                 return fail("base_shell", p);
             }
             if (s.is(BoilerContent.CASING.get())) continue;
@@ -199,10 +205,10 @@ public final class BoilerStructure {
             if (s.is(BoilerContent.COLD_PORT.get()) && p.getY() == py) { cold.add(p); continue; }
             return fail("side", p);
         }
-        if (controls != 1 || valve == null || machines.isEmpty() || sections.isEmpty() || water.isEmpty()
+        if (controls != 1 || valves.isEmpty() || machines.isEmpty() || sections.isEmpty() || water.isEmpty()
                 || steam.isEmpty() || hot.isEmpty() || cold.isEmpty()) return fail("missing", controller);
         return new Inspection(new Form(min, max, py, wc, sc, List.copyOf(sections), List.copyOf(machines),
-                List.copyOf(water), List.copyOf(steam), List.copyOf(hot), List.copyOf(cold), List.copyOf(windows), valve), null);
+                List.copyOf(water), List.copyOf(steam), List.copyOf(hot), List.copyOf(cold), List.copyOf(windows), valves), null);
     }
     /** 归属只查询已加载控制器的缓存；世界端口及炉内换热器不另造中心坐标。 */
     public static BoilerControllerBlockEntity owner(Level level, BlockPos part, boolean water) { return owner(level, part); }
