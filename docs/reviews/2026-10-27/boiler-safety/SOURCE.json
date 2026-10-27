@@ -1,0 +1,106 @@
+[
+  {
+    "Path": "build.gradle",
+    "SHA256": "F71F637F886BCCEE0D5BC061A0A05008E36C4C8CA748DD3FC0A5AA46F230871D"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/accident/MoltenCoriumEffects.java",
+    "SHA256": "3736DFFD5423E2A2D750EBD69D2EA02B5ED213A51090D4C36F9BB15E5CDD4638"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentExecutor.java",
+    "SHA256": "797FA34402D2ED9DB3DB81BB64166DFCC64246E05B3E5B5FD91E02766134E163"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentLedger.java",
+    "SHA256": "3A07FFC8C48F623696C20A890948779696F6A2FAF9DFB2DFBE0E4EB3C5D784AF"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentLifecycle.java",
+    "SHA256": "A3AC90D25C551F02482B88BC585F324336BA4E6D370C64E9B4FFCC262E845C42"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentSavedData.java",
+    "SHA256": "98BF4AC3E908A5261694938DAAB17FA015A2A3922D421E32F941C3398E9D42BB"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentState.java",
+    "SHA256": "BB0511644E49740F192AAF50B0E0C8F730171B10BE72FC69BF22F0CCE8BB0B06"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerControllerBlock.java",
+    "SHA256": "2BE48BE46C3C370EC323A5E1A2A25A246EEEE87069441BAA5F7B1E480A5A6927"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerControllerBlockEntity.java",
+    "SHA256": "8B6396CC9E439EFF46454D22384D0E5AF21A84EB9A592729CA484A9BFB588853"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerShellBlock.java",
+    "SHA256": "C41E3FAFA1633D016ED894E283BEB2B4014F3BE9E61CC1482321416FE2443602"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerState.java",
+    "SHA256": "58D916C48D3BDEB166E6BA03C2821654EC352EC364DF437667A254CA0BDD5575"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerStructure.java",
+    "SHA256": "5F05A7DE04468BEE600DE2BAD88F2015506D11BCD0BF45B0317953E985432D68"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerSurfaceDescriptorFactory.java",
+    "SHA256": "CC61B1BB4502860AE573A1DBB5A5DA856A5C8112DF91C44FB39CD399FAE82A8D"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/config/BoilerConfig.java",
+    "SHA256": "6DA31F99D8ACF097B2E5F81352DB899FA3A8D20647CB01AE9C3A6A3738886419"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/BoilerSafetyGameTests.java",
+    "SHA256": "ADE43329B860A3DF3E79E52DFDC6A4B2BE3A8AA9A8C99C7A0A25B35775E95B5F"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/BoilerSteamSelectionGameTests.java",
+    "SHA256": "D1141BA4546554273680BC75391C82BAFFA80FBD20A81319FF5B2C51972F9B65"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/heat/NuclearHeatExchangerBlock.java",
+    "SHA256": "AF57CB0005DCA2416549FE9A1DBFFC035D3FC9E408DD6B217C36D8EBFB4132E3"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/ReactorBreakFinalizationMixin.java",
+    "SHA256": "2A65436AF3048DF25EB35FEAC4FF1C610C08D795ECE914AD086459EB9D59807A"
+  },
+  {
+    "Path": "src/main/resources/assets/create_nuclear_industry/lang/en_us.json",
+    "SHA256": "E7F0715DCDC9F6EF3998120418BCBC544648740912B498AD869CF0822E0AB9C5"
+  },
+  {
+    "Path": "src/main/resources/assets/create_nuclear_industry/lang/zh_cn.json",
+    "SHA256": "33DF0514581AF7B6342D13D90221263D1F010BDBA34025D3769FF41FD6968A95"
+  },
+  {
+    "Path": "src/main/resources/data/cni_boiler_safety/structure/boiler_empty.nbt",
+    "SHA256": "A46FBCA10B8C94CD0228BD493BF5F1D19787EC034047715DB6AC40B9AB211941"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentStateTest.java",
+    "SHA256": "26FBF8709BFCB3EADB3C1D0CD37234E21E3FFD0C5E20ED06D15B0159A0253BA7"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerDualSteamInventoryTest.java",
+    "SHA256": "15ED5EDE2BBE326A7C9EE588EC7193B2C64E20C7E43F4E6F2E1EB94DF98B14D5"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerStateTest.java",
+    "SHA256": "A0737C609903A738912A2C8E8126D5B47EDDAA2B4E21030A581E2C2DDFD7EC53"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerStructureAllocationTest.java",
+    "SHA256": "93EA4D9EA23B040EF560908D643337B2B2DAB576694E14B887F8E49827C95576"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerSurfaceDescriptorTest.java",
+    "SHA256": "B76DDDDF43C107584C2D8AEBC93F0E73E10C883D068E9F350DEF194AD52E1BD4"
+  }
+]
