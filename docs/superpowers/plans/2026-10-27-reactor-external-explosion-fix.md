@@ -34,6 +34,7 @@ J=`src/main/java/com/iksxh/create_nuclear_industry/`，T=`src/test/java/com/iksx
 - build.gradle仅沿现有Jar排除块精确增加ReactorExternalExplosionGameTests*.class与本测试域排除，不改依赖/任务/旧探针策略。
 - T/reactor/ReactorMeltdownEventsTest.java仅新增原因必须的枚举覆盖，不放宽服务端/事件去重断言。若纯状态逻辑无变化，不为路由新增照抄实现的单元测试。
 - 本树build/reports/reactor-external-explosion-20261027/允许执行/源/审查/失败/真实服/制品报告和必要窄工具，run/saves复制及普通编译输出。原跟踪JAR和既有日志在首次构建前保原字节；其它build不跟踪。禁止Git写、核心文档、其它资源/算法/用户包/来源世界写入。准确额外入口先报PM扩集。
+- 本域既有Gradle `gameTestDirectory`入口产生的本树`run/reactor-external-explosion-*`为新建原生隔离测试输出，允许保留；它们不属于用户run/saves，不打开/覆盖用户世界、不进Git。实际命令和原日志在执行报告，不借此创建通用测试框架。
 
 ## 必要验证与交付门
 
