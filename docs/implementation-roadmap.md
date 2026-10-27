@@ -4,7 +4,7 @@
 
 ## 当前可接续
 
-用户2026-10-27明确报告main运行堆被TNT/苦力怕破坏却不融毁，先按[原生外爆漏接修复卡](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)处理此缺陷，独立于锅炉候选，不把问题反馈当手测通过或自动合入。
+用户2026-10-27明确报告main运行堆被TNT/苦力怕破坏却不融毁，[原生外爆漏接修复卡](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)已形成[独立候选复测入口](reviews/2026-10-27/reactor-external-explosion/CANDIDATE.md)。当前等待该缺陷真人复测，独立于锅炉原候选，不把问题反馈或自动证据当手测通过，不自动合入或派发下一功能。
 
 用户2026-10-26已批准[锅炉事故整组初值](superpowers/specs/2026-10-26-boiler-accidents-design.md)，危险拆除直接触发事故。[步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)及[步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)合为[同一次候选手测](reviews/2026-10-27/boiler-safety/CANDIDATE.md)。当前停在此人工门，未合main生产，不自动派发下一功能；不重问已冻结参数，不带入工业管网压力系统。
 

@@ -1,0 +1,394 @@
+[
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots.json",
+    "SHA256": "B2DA38D5C77DFF5EE38E70BFF503145915ACA7A78B3AD7D7FCA4895B22971AC5",
+    "BaselineBlob": "19183b52d29b1562a00e37ac48535c8e03fedd30",
+    "HeadBlob": "19183b52d29b1562a00e37ac48535c8e03fedd30",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_amethyst_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_amethyst_trim.json",
+    "SHA256": "B50D7AE14B2D180A09F45B6D37DA5187FCCB5D44CB73A691C4537A0B16B72E00",
+    "BaselineBlob": "bb93736886641bff0d7b523298289cef82f01e16",
+    "HeadBlob": "bb93736886641bff0d7b523298289cef82f01e16",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_copper_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_copper_trim.json",
+    "SHA256": "2127072D2C36607FADB394A8819AF2AED20DEBE91A1363CCDF66008C01AA017B",
+    "BaselineBlob": "9fc0e88a90c97786f64055bdf8adf52c95929cef",
+    "HeadBlob": "9fc0e88a90c97786f64055bdf8adf52c95929cef",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_diamond_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_diamond_trim.json",
+    "SHA256": "64F3DA419F13F029DA14E054764B1CFC867DB72CC5E290999C1F47EC304B833E",
+    "BaselineBlob": "bdf15420b4dc5cc8dd44c9b0e2104432d6ac9532",
+    "HeadBlob": "bdf15420b4dc5cc8dd44c9b0e2104432d6ac9532",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_emerald_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_emerald_trim.json",
+    "SHA256": "3145669C8A3486C876452A8432D7C2439B63224D5C48069A77AE8BFCF47B3387",
+    "BaselineBlob": "d3560b604a2ff081dcbc35325983cee19c357444",
+    "HeadBlob": "d3560b604a2ff081dcbc35325983cee19c357444",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_gold_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_gold_trim.json",
+    "SHA256": "1B9BCB1324E4EADC738A67AC9C77E7D7A854C8D390C3DC94BEFB99282E64DF95",
+    "BaselineBlob": "0a624f2cd8ea099d744e843295c85e2a2ee6a5d2",
+    "HeadBlob": "0a624f2cd8ea099d744e843295c85e2a2ee6a5d2",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_iron_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_iron_trim.json",
+    "SHA256": "2662CA5911C6339D7653D8E124323F960E68D59FC4CD887549D6EEFF8923FB28",
+    "BaselineBlob": "c5bf8547563704b0639ecafab0ede9ce23d45c12",
+    "HeadBlob": "c5bf8547563704b0639ecafab0ede9ce23d45c12",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_lapis_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_lapis_trim.json",
+    "SHA256": "640CC9F3F5771DB2CE75FA949AFF544867FE33CB6EA9B929676D19806F55600B",
+    "BaselineBlob": "cedf28b2b42dcfe38c0cf554c82552d425acf30a",
+    "HeadBlob": "cedf28b2b42dcfe38c0cf554c82552d425acf30a",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_netherite_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_netherite_trim.json",
+    "SHA256": "B884D08331172201F07B0F68CB7C1DD76B0078370A8B64B5890EF9B03D62902B",
+    "BaselineBlob": "e12b2660b6d5c35503e6176e9747b8d4792e5f6d",
+    "HeadBlob": "e12b2660b6d5c35503e6176e9747b8d4792e5f6d",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_quartz_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_quartz_trim.json",
+    "SHA256": "7B5EC4B5F23D19EC95C6E847325A6D81B6B3BDF4EEB972F5B256C1179A30C086",
+    "BaselineBlob": "e61bc4811b97a55f614e9a070de989a8339194de",
+    "HeadBlob": "e61bc4811b97a55f614e9a070de989a8339194de",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_boots_redstone_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_boots_redstone_trim.json",
+    "SHA256": "41B971C75DFCAE76FAB91D54F6898A2A71E6F6810C0A88D123B4C408841CF7D3",
+    "BaselineBlob": "4a77d6fca706725f6ef6c9c26bd1857ed8bada98",
+    "HeadBlob": "4a77d6fca706725f6ef6c9c26bd1857ed8bada98",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate.json",
+    "SHA256": "BA7D67FD65959F73163CDB765DDF41A04D7295CA9A94424185ECE99D7E3A8EB0",
+    "BaselineBlob": "698a141f3a9b61ad43b161e66053e21958986995",
+    "HeadBlob": "698a141f3a9b61ad43b161e66053e21958986995",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_amethyst_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_amethyst_trim.json",
+    "SHA256": "DAEB1B0D9ADE4D6B3A85277BA4E8EC95268C2901D86FD59A645CEC93801BDB6A",
+    "BaselineBlob": "9a30643e05e913cafc9d990eb00cfa629630e193",
+    "HeadBlob": "9a30643e05e913cafc9d990eb00cfa629630e193",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_copper_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_copper_trim.json",
+    "SHA256": "7D9B6F3CF15AA233EFEB2C6B0A883C7777F50756EF06749E76E7963C1F161658",
+    "BaselineBlob": "d44105db63d7f4f4dcea12e83d8ee52fd777da30",
+    "HeadBlob": "d44105db63d7f4f4dcea12e83d8ee52fd777da30",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_diamond_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_diamond_trim.json",
+    "SHA256": "F214452344294E8F794A2F67AAAF0375719E667C298F042697DA49F2184569D3",
+    "BaselineBlob": "100870a941a668d3219266636d6fda26673d5ae2",
+    "HeadBlob": "100870a941a668d3219266636d6fda26673d5ae2",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_emerald_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_emerald_trim.json",
+    "SHA256": "B78CE4A411464E3E120B3F462D32534121F71DB1A0B11888143D3C134AA46B37",
+    "BaselineBlob": "289ab63e99ab6cbc039b740f2f501d89346ed205",
+    "HeadBlob": "289ab63e99ab6cbc039b740f2f501d89346ed205",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_gold_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_gold_trim.json",
+    "SHA256": "AFAA651898E3DF76398957D065D23519B05733094E2C25961F51A8ADCC82B5CE",
+    "BaselineBlob": "c774bf424ce95d919ea8a3ca74e71c5b285a0920",
+    "HeadBlob": "c774bf424ce95d919ea8a3ca74e71c5b285a0920",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_iron_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_iron_trim.json",
+    "SHA256": "B340CD5F32E7959010A6D75251CB85733F0F0AD1CBEAB987508F2385C227282D",
+    "BaselineBlob": "caad400b895ccf1802e78636fa056b6c7df623d1",
+    "HeadBlob": "caad400b895ccf1802e78636fa056b6c7df623d1",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_lapis_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_lapis_trim.json",
+    "SHA256": "F76D03607B17D076822B277711DE5104838E48EF8D962F672A313EA1518C634B",
+    "BaselineBlob": "0969ef014f7a873faf7523007a35a0b5cd40bf20",
+    "HeadBlob": "0969ef014f7a873faf7523007a35a0b5cd40bf20",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_netherite_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_netherite_trim.json",
+    "SHA256": "A718F89EE6AE74A29ADA7176E7061345692270C4522F186845D7EDA0051F1398",
+    "BaselineBlob": "d529ec2f261153d249e467a5bc9191eccea4f491",
+    "HeadBlob": "d529ec2f261153d249e467a5bc9191eccea4f491",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_quartz_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_quartz_trim.json",
+    "SHA256": "57EDBD72EB7FB7BDEA37FD88D264E12A0E0181A71AC7A1C0411B453E5EBC07DD",
+    "BaselineBlob": "4ffd909ea6addb4daad2a71c3b0a2a7583e46b52",
+    "HeadBlob": "4ffd909ea6addb4daad2a71c3b0a2a7583e46b52",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_chestplate_redstone_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_chestplate_redstone_trim.json",
+    "SHA256": "41A60ED1BA4645FDAA4FD77930ECDB383D36B00985C80E9F05B08A8A50E81378",
+    "BaselineBlob": "5b2b0d652bf09b28c388142cd52d4e392c53983a",
+    "HeadBlob": "5b2b0d652bf09b28c388142cd52d4e392c53983a",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet.json",
+    "SHA256": "DD2F29C344FE6B50BD42493B853435C7C8C04314BA496D2EC578329598570B1E",
+    "BaselineBlob": "f334c7a841173fbd3847c6663e8f9604723adb82",
+    "HeadBlob": "f334c7a841173fbd3847c6663e8f9604723adb82",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_amethyst_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_amethyst_trim.json",
+    "SHA256": "E0EF172EA76AA5B33B65573A02EF886DBFDA1AC64F0D9882098D421E372BD884",
+    "BaselineBlob": "04ae9af874f062d047b11fcd48dec8ead18636c0",
+    "HeadBlob": "04ae9af874f062d047b11fcd48dec8ead18636c0",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_copper_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_copper_trim.json",
+    "SHA256": "C7B906FF314D4EFC4CCDE91C1BB12852EA13EBF6A0552CC9D70A9A64C4104BB1",
+    "BaselineBlob": "251070663bb494e5086fbcd4c4841734863935d0",
+    "HeadBlob": "251070663bb494e5086fbcd4c4841734863935d0",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_diamond_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_diamond_trim.json",
+    "SHA256": "4DB03F9204945F2FC5A83943243146FA8BA15979AAC95642938C27A1ACC9B563",
+    "BaselineBlob": "3888be95e5c291bef5fa8fcb38c50d7906513ca0",
+    "HeadBlob": "3888be95e5c291bef5fa8fcb38c50d7906513ca0",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_emerald_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_emerald_trim.json",
+    "SHA256": "76A50746A58A81544C2E4D2D77E55D347096E473C5E7F7B45BE9DF06DABB2E97",
+    "BaselineBlob": "b5a1d745cf65b5de4298cd00bed75f760efe010e",
+    "HeadBlob": "b5a1d745cf65b5de4298cd00bed75f760efe010e",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_gold_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_gold_trim.json",
+    "SHA256": "C5E130EA6966B18CD536794A847E78823B988CA6CB39ECEA6C08808177BB42B8",
+    "BaselineBlob": "d2aa3705c4d218eaea61bc68aa58d42d93b7db44",
+    "HeadBlob": "d2aa3705c4d218eaea61bc68aa58d42d93b7db44",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_iron_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_iron_trim.json",
+    "SHA256": "9EFA81A25BD99F8E54509195120624B8A35754E0C09A204A3448B51F02FBF4BF",
+    "BaselineBlob": "5488d484065202f90abfe4e599a5ac45d49b0ac2",
+    "HeadBlob": "5488d484065202f90abfe4e599a5ac45d49b0ac2",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_lapis_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_lapis_trim.json",
+    "SHA256": "572D66B34B64F09B4EC75A67D9D8CC6586F6EDDFE874D6C65C8858F5A0BEAE2F",
+    "BaselineBlob": "bb12f2c0c20c31c3c26ef9422342bf72738017c5",
+    "HeadBlob": "bb12f2c0c20c31c3c26ef9422342bf72738017c5",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_netherite_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_netherite_trim.json",
+    "SHA256": "DD14C6E1FFFEDB30F1307B9AB071DBB722862DEC31C484F20744D5ABD1C9E150",
+    "BaselineBlob": "cbb9d23da326a71c42ac54739b156b23abf0642c",
+    "HeadBlob": "cbb9d23da326a71c42ac54739b156b23abf0642c",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_quartz_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_quartz_trim.json",
+    "SHA256": "5A754477FD9A1B4510F360535A2C8922BAE9B1097261C84F34DD4099F7D36092",
+    "BaselineBlob": "3d3607c1380d87ae5ab1f9acef0f7fa1fcc66bb5",
+    "HeadBlob": "3d3607c1380d87ae5ab1f9acef0f7fa1fcc66bb5",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_helmet_redstone_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_helmet_redstone_trim.json",
+    "SHA256": "F26AA15583309EA0B3BADBDE68E0C656101D954E6283BAE3A318EEEF99795144",
+    "BaselineBlob": "5f871c692d3eeca45ec5bbc0f269bccd40df166e",
+    "HeadBlob": "5f871c692d3eeca45ec5bbc0f269bccd40df166e",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings.json",
+    "SHA256": "1AEA2E6E175EB30C244DE7C104298E31D734C165BBBC752197FBBF324D35776B",
+    "BaselineBlob": "97055a5da7c51b655c26f61057a39c201d06507e",
+    "HeadBlob": "97055a5da7c51b655c26f61057a39c201d06507e",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_amethyst_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_amethyst_trim.json",
+    "SHA256": "2A7F16D4EDF38EF09616433F7F009CDA45945C22DA266767794697BFA57C683E",
+    "BaselineBlob": "93a66f5d9da845a464c3014c387d88f1c7f39632",
+    "HeadBlob": "93a66f5d9da845a464c3014c387d88f1c7f39632",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_copper_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_copper_trim.json",
+    "SHA256": "3E6566510C41C1F93948E38E2EEC6B25753F1AC83032BE0D83D5D1C6E1B67671",
+    "BaselineBlob": "e133bbe1a379de41894756c868ea8210acc08b23",
+    "HeadBlob": "e133bbe1a379de41894756c868ea8210acc08b23",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_diamond_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_diamond_trim.json",
+    "SHA256": "3AC8C77BA6FE35A08A60F2F513ADE21753BF327BE3EDCFBB4252C205AA5AA5BA",
+    "BaselineBlob": "d14162ac3b8f0768cdc19f4ed1710ce5c9394868",
+    "HeadBlob": "d14162ac3b8f0768cdc19f4ed1710ce5c9394868",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_emerald_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_emerald_trim.json",
+    "SHA256": "D7E7DF60B48E3430207B767D069526EF73435A359C165C23F4E21F6E87A50F4D",
+    "BaselineBlob": "948599d42805db44511b43c5f62eec49e69ef264",
+    "HeadBlob": "948599d42805db44511b43c5f62eec49e69ef264",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_gold_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_gold_trim.json",
+    "SHA256": "9F5D94F3BD41FDC297176DEB100B59F61518E495E901744E0E2546DC2633C9B9",
+    "BaselineBlob": "f388bad590593d2411fcff53e0a9c77db156d7ae",
+    "HeadBlob": "f388bad590593d2411fcff53e0a9c77db156d7ae",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_iron_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_iron_trim.json",
+    "SHA256": "9EB0385368B91EBA5093D96D946E0C3985001BC07138125F75BA053BE4FD62E0",
+    "BaselineBlob": "dede61a952a03af3c622a9c8a983f0ebaed8cbbb",
+    "HeadBlob": "dede61a952a03af3c622a9c8a983f0ebaed8cbbb",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_lapis_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_lapis_trim.json",
+    "SHA256": "879EFAB09A5B20926180606F81E34CF0CA3ED44799A6EB41740EB7998002F635",
+    "BaselineBlob": "832f71a94b1409baa5339e3c6bbf8be0e50c3fdf",
+    "HeadBlob": "832f71a94b1409baa5339e3c6bbf8be0e50c3fdf",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_netherite_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_netherite_trim.json",
+    "SHA256": "DE7AF238ACA02F78188F4A3E2BE37F4D410ABC7A92D078757E56B9B488A8A58D",
+    "BaselineBlob": "1d9a494e756718e1de97580c1775912348c530f8",
+    "HeadBlob": "1d9a494e756718e1de97580c1775912348c530f8",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_quartz_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_quartz_trim.json",
+    "SHA256": "AD039D709D139103BA6DEA6A43CF67CFBB10C552A065810708FF6ADC97BD4E7F",
+    "BaselineBlob": "52dc8397e668256af3df509e64fe2b920e620745",
+    "HeadBlob": "52dc8397e668256af3df509e64fe2b920e620745",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_leggings_redstone_trim.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_leggings_redstone_trim.json",
+    "SHA256": "98126CAA7326D2822C5071831FA4E942DBED7FF2A75CD2B1B376181D0B6EAF12",
+    "BaselineBlob": "7ae4c65feae206366020f8e5d2d8abf0b6ba41a7",
+    "HeadBlob": "7ae4c65feae206366020f8e5d2d8abf0b6ba41a7",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_meter.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_meter.json",
+    "SHA256": "8A53973C03A6DCF4393D97C949B66508C49582FCD9DB7E586CD2CF36B953F3B5",
+    "BaselineBlob": "edb00327a719d9982df370cc6da1e29dc587eac1",
+    "HeadBlob": "edb00327a719d9982df370cc6da1e29dc587eac1",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_meter_body.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_meter_body.json",
+    "SHA256": "97E825616AE887B840E46FE811BD9ABD0B9E1577C8517450CD0C3683FC2D2C76",
+    "BaselineBlob": "042917f770fb6701e1aec69311a46cf0878d305c",
+    "HeadBlob": "042917f770fb6701e1aec69311a46cf0878d305c",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_meter_gui.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_meter_gui.json",
+    "SHA256": "27AA4D4585EE2E3D2EB7695DE632FB70E3727DE6BF25F7C3BE09FA3921CC3473",
+    "BaselineBlob": "e312e84b911405f583f7581ac47fcd0c0cdcc2ca",
+    "HeadBlob": "e312e84b911405f583f7581ac47fcd0c0cdcc2ca",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_meter_held.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_meter_held.json",
+    "SHA256": "FDB0D1640D6F953A063B206D4642CC665FAD1F347E2ECE763A51AC8432E9AB42",
+    "BaselineBlob": "6923cdc61785537d76f2b441c740f381a1f50d2e",
+    "HeadBlob": "6923cdc61785537d76f2b441c740f381a1f50d2e",
+    "OnlyCRLFDifference": true
+  },
+  {
+    "Path": "assets/create_nuclear_industry/models/item/radiation_meter_needle.json",
+    "Source": "src/main/resources/assets/create_nuclear_industry/models/item/radiation_meter_needle.json",
+    "SHA256": "89FE33F537331ED1D7DC6496A4842F1DE77E828A8980EB45F7B30593EE261ECC",
+    "BaselineBlob": "65785396ead835ab793be2b347ced8c1cb7cf012",
+    "HeadBlob": "65785396ead835ab793be2b347ced8c1cb7cf012",
+    "OnlyCRLFDifference": true
+  }
+]
