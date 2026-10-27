@@ -4,6 +4,8 @@
 
 ## 当前可接续
 
+用户2026-10-27明确报告main运行堆被TNT/苦力怕破坏却不融毁，先按[原生外爆漏接修复卡](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)处理此缺陷，独立于锅炉候选，不把问题反馈当手测通过或自动合入。
+
 用户2026-10-26已批准[锅炉事故整组初值](superpowers/specs/2026-10-26-boiler-accidents-design.md)，危险拆除直接触发事故。[步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)及[步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)合为[同一次候选手测](reviews/2026-10-27/boiler-safety/CANDIDATE.md)。当前停在此人工门，未合main生产，不自动派发下一功能；不重问已冻结参数，不带入工业管网压力系统。
 
 事故与辐射按[批准设计](superpowers/specs/2026-10-16-accident-radiation-design.md)完成基础辐射、局部事故、热危害和独立熔融物，原[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)保留来源。用户2026-10-23确认R1外观及创造拆除联合手测并授权[整链合入](superpowers/plans/2026-10-23-accident-accepted-integration-01.md)；具体制品和剩余独立观察见[STATUS](STATUS.md)。本次合入不自动派发下一项功能。
