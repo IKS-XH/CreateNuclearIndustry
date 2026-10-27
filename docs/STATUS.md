@@ -43,7 +43,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 锅炉多阀与干烧/超压事故 | 用户2026-10-26已采用[冻结设计](superpowers/specs/2026-10-26-boiler-accidents-design.md)整组初值及危险拆除直接事故。2026-10-27[步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)技术门已核：四类JUnit44/44、真实服务端3/3及正常保存退出，覆盖多阀/逐阀512/遮挡/额度/投影；初轮0函数启动失败与夹具过宽的1过2失败另存，不计通过。原始证据在候选树build/reports/boiler-safety-20261026/。接[步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)真实过热/干烧/超压/最终许可后危险拆除；两步后一次组合窄审、集中候选手测，不增加中途人工门。尚未形成最终候选/手测结论，main生产及正式F29D包保持 |
+| 锅炉多阀与干烧/超压事故 | 用户2026-10-26已采用[冻结设计](superpowers/specs/2026-10-26-boiler-accidents-design.md)及危险拆除直接事故。[步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)技术门44项单元/真实3项通过；[步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)初验真实12/12、正常保存退出，五类锅炉51项通过；因共享移除/最终拆除接线的一次全JUnit865=851通过/3原基线失败/11跳过、exit1。组合窄审发现4个P2：暂缓目标误终结、旧干烧认领误吞同态新件、重载身份使用易变完整NBT、携带pending控制器跨维度软锁，已一次退回同执行者整改，尚未通过最终源门/构建候选。原始失败/RED/日志在候选树build/reports/boiler-safety-20261026/，原3失败不修不隐藏；两步最终集中手测，main生产及正式F29D包保持 |
 | 主分支既有JUnit三失败 | 本批一次全量854项：840通过、3失败、11跳过、exit1。两条HeatExchangerBoilerBridgeTest在未加载配置时读取冷凝参数，一条ReactorFissionDifferentialTest在scenario0/tick4全状态差分不等；未合事故main aa23d692定向15项精确复现同三测试名和完整异常、exit1。已证实为原基线问题，未修根因/放宽断言，gradlew build仍受它们阻断；本次仅明确增量jar成功。原XML/调用链/基线身份见[执行报告](reviews/2026-10-23/accident-accepted-integration/EXECUTION.md)，不自动派发无关热工/测试修复 |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |
