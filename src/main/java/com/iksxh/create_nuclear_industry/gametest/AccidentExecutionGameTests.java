@@ -38,9 +38,9 @@ public final class AccidentExecutionGameTests {
         System.out.println("[accident] focused validation: SKIP fixture "+key);h.succeed();return true;
     }
     private static boolean resumeOnly(GameTestHelper h) {return skipFixture(h,"business");}
-    private static ItemStack fresh() {return new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get());}
-    private static ItemStack used() {return FuelUseHistory.prepareBurnCopy(fresh(),.001);}
-    private static ReactorInstrumentPortBlockEntity build(GameTestHelper h,BlockPos base,int size) {
+    static ItemStack fresh() {return new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get());}
+    static ItemStack used() {return FuelUseHistory.prepareBurnCopy(fresh(),.001);}
+    static ReactorInstrumentPortBlockEntity build(GameTestHelper h,BlockPos base,int size) {
         for(int x=0;x<size;x++)for(int y=0;y<size;y++)for(int z=0;z<size;z++) {
             boolean edge=x==0||y==0||z==0||x==size-1||y==size-1||z==size-1;
             h.setBlock(base.offset(x,y,z),edge?P1Blocks.REACTOR_CASING.get():P1Blocks.REACTOR_FUEL_ROD.get());
@@ -52,7 +52,7 @@ public final class AccidentExecutionGameTests {
         var owner=(ReactorInstrumentPortBlockEntity)h.getBlockEntity(base.offset(1,1,0));
         h.assertTrue(owner.structureValid(),"真实反应堆未成型："+owner.structureScan().failureReason());return owner;
     }
-    private static ReactorPortBlockEntity port(GameTestHelper h,BlockPos base,int size,int x,int z) {
+    static ReactorPortBlockEntity port(GameTestHelper h,BlockPos base,int size,int x,int z) {
         return (ReactorPortBlockEntity)h.getBlockEntity(base.offset(x+1,size-1,z+1));
     }
     private static ReactorAccidentLedger trigger(GameTestHelper h,ReactorInstrumentPortBlockEntity owner,ReactorMeltdownEvent.Reason reason) {

@@ -743,13 +743,20 @@ public final class ReactorInstrumentPortBlockEntity extends P1MinimalBlockEntity
 
     /** 在所有者计划已提交且原方块仍存在时发布一次既有危险事件占位。 */
     public boolean publishDangerousDisassembly(ReactorDisassemblyPlan plan) {
+        return publishDangerousDisassembly(plan, ReactorMeltdownEvent.Reason.DANGEROUS_DISASSEMBLY);
+    }
+
+    /** 外爆与手拆复用同一份端口计划；只区分来源，真实物料仍由事故服务统一托管。 */
+    public boolean publishDangerousDisassembly(ReactorDisassemblyPlan plan, ReactorMeltdownEvent.Reason reason) {
         if (plan == null || plan.owner() != this
                 || plan.action() != ReactorDisassemblyPlan.Action.DANGEROUS
-                || !plan.publishDangerousEvent()) {
+                || !plan.publishDangerousEvent()
+                || (reason != ReactorMeltdownEvent.Reason.DANGEROUS_DISASSEMBLY
+                    && reason != ReactorMeltdownEvent.Reason.EXTERNAL_EXPLOSION)) {
             return false;
         }
         return ReactorMeltdownEvents.publish(
-                ReactorMeltdownEvent.Reason.DANGEROUS_DISASSEMBLY,
+                reason,
                 level,
                 structureOrigin,
                 worldPosition,

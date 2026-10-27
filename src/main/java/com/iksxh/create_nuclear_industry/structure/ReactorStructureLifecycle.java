@@ -192,6 +192,28 @@ public final class ReactorStructureLifecycle {
         if (event.isCanceled()) {
             throw new IllegalStateException("break event was canceled before disassembly commit");
         }
+        commitDisassemblyPlans(plans,
+                com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvent.Reason.DANGEROUS_DISASSEMBLY);
+    }
+
+    /** 外爆最终列表全组预检后复用原事务；失败时阻止本轮原生删块并保留回滚证据。 */
+    static boolean commitExternalExplosionPlans(List<ReactorDisassemblyPlan> plans) {
+        if (plans.isEmpty()) return true;
+        try {
+            commitDisassemblyPlans(plans,
+                    com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvent.Reason.EXTERNAL_EXPLOSION);
+            return true;
+        } catch (RuntimeException exception) {
+            com.iksxh.create_nuclear_industry.accident.ReactorAccidentService.abortBatch();
+            rollbackDisassemblyPlans(plans);
+            com.mojang.logging.LogUtils.getLogger().error("反应堆外部爆炸接管失败，已阻止本轮原生块破坏并回滚预检计划", exception);
+            return false;
+        }
+    }
+
+    /** 共同提交路径只接受调用者已经完成的全组预检，不重新枚举或复制燃料。 */
+    private static void commitDisassemblyPlans(List<ReactorDisassemblyPlan> plans,
+            com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEvent.Reason reason) {
         for (ReactorDisassemblyPlan plan : plans) {
             if (plan.action() == ReactorDisassemblyPlan.Action.FULL_SHUTDOWN_RESET
                     || plan.action() == ReactorDisassemblyPlan.Action.DANGEROUS
@@ -210,7 +232,7 @@ public final class ReactorStructureLifecycle {
         for (ReactorDisassemblyPlan plan : plans) {
             if (plan.action() == ReactorDisassemblyPlan.Action.DANGEROUS
                     && plan.publishDangerousEvent()) {
-                if (!plan.owner().publishDangerousDisassembly(plan)) {
+                if (!plan.owner().publishDangerousDisassembly(plan, reason)) {
                     throw new IllegalStateException("dangerous disassembly event publish failed");
                 }
             }

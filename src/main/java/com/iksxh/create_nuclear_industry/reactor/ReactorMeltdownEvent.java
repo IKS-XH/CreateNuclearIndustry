@@ -15,10 +15,11 @@ import java.util.Objects;
  * 托管真实组件，并在发布返回后阻止原tick继续供热或恢复运行结果。</p>
  */
 public final class ReactorMeltdownEvent extends Event {
-    /** 唯二正式事故入口，不额外引入倒计时或触发阈值。 */
+    /** 正式事故入口共用既有危险判定，不额外引入倒计时或触发阈值。 */
     public enum Reason {
         COUNTDOWN_COMPLETE,
-        DANGEROUS_DISASSEMBLY
+        DANGEROUS_DISASSEMBLY,
+        EXTERNAL_EXPLOSION
     }
 
     private final Reason reason;

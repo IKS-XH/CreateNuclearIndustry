@@ -30,16 +30,11 @@ class ReactorMeltdownEventsTest {
         NeoForge.EVENT_BUS.addListener(
                 ReactorMeltdownEvent.class, ignored -> delivered.incrementAndGet());
 
-        boolean published = ReactorMeltdownEvents.publish(
-                ReactorMeltdownEvent.Reason.COUNTDOWN_COMPLETE,
-                clientLevel,
-                new BlockPos(10, 64, 10),
-                new BlockPos(12, 66, 10),
-                before
-        );
-
         assertTrue(clientLevel instanceof ClientLevel);
-        assertFalse(published);
+        for (var reason : ReactorMeltdownEvent.Reason.values()) {
+            assertFalse(ReactorMeltdownEvents.publish(reason, clientLevel,
+                    new BlockPos(10, 64, 10), new BlockPos(12, 66, 10), before), reason.name());
+        }
         assertEquals(0, delivered.get());
         assertEquals(0.0D,
                 before.fuelColumns().get(new CoreColumnPosition(0, 0)).integrity(), 1.0E-12D);

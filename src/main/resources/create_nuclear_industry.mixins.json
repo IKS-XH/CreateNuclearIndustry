@@ -21,6 +21,7 @@
     "RadiationItemEntityMixin",
     "RadiationInventoryChangeMixin",
     "ReactorBreakFinalizationMixin",
+    "ReactorExplosionFinalizationMixin",
     "CoriumWorldReplacementMixin",
     "CoriumCommandReplacementMixin",
     "CoriumHosePulleyRestrictionMixin"
