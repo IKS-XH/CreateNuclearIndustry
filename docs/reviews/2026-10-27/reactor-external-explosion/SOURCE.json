@@ -1,0 +1,57 @@
+[
+  {
+    "Path": "build.gradle",
+    "Bytes": 6923,
+    "SHA256": "77C466230EB4E72BDB65EBE43A3B3691A41EE67DD50705D2A7FB3F77C7535CDF"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java",
+    "Bytes": 113917,
+    "SHA256": "7971799D9D23305F01E39DD00EA4B6B7794AFC0B43B6BA55F8E1522C6707123F"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests.java",
+    "Bytes": 95090,
+    "SHA256": "0014AFF7C3FED57F147E85C8643F19443B045A5ED199739A634E2EB8F39173B6"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/ReactorExternalExplosionGameTests.java",
+    "Bytes": 21293,
+    "SHA256": "13F97524533B87E0D37657919E7CCDEC1AAB46FD5C239D9B98C7B7518EDFEFB9"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/ReactorExplosionFinalizationMixin.java",
+    "Bytes": 1626,
+    "SHA256": "A68E8A50799B1228C50A3CA555772600C6D58175FBD3E027527C7FED8800F89D"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/reactor/ReactorMeltdownEvent.java",
+    "Bytes": 2940,
+    "SHA256": "FAD4536533CCD5E7C8AC8FA96A1D6164ACAA784A657D542EDD79FDB64417F54A"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/structure/ReactorExplosionLifecycle.java",
+    "Bytes": 2687,
+    "SHA256": "C474F7008E8FB93F858438247BF839EBCF9D730AEBAE038005DF7725645D3B2E"
+  },
+  {
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/structure/ReactorStructureLifecycle.java",
+    "Bytes": 21628,
+    "SHA256": "F62CC5115A4E8DF71A7C980AE02CA3CAA67657568BD5000A359D1F74147D6803"
+  },
+  {
+    "Path": "src/main/resources/create_nuclear_industry.mixins.json",
+    "Bytes": 993,
+    "SHA256": "CA2C067644899E667F7E1262861D1D08F8E98433E930100E07A8B85626CD2894"
+  },
+  {
+    "Path": "src/main/resources/data/cni_reactor_external_explosion/structure/explosion_empty.nbt",
+    "Bytes": 114,
+    "SHA256": "05D32A221FB90431D8422559549C411AC331BF61794C5516321E67BDE8B5E28D"
+  },
+  {
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/reactor/ReactorMeltdownEventsTest.java",
+    "Bytes": 5120,
+    "SHA256": "1FA4C1D41598E0EA8D6291A36D08588907EE5D281AB6051506407A28DAEED0DD"
+  }
+]
