@@ -1,6 +1,6 @@
 # 项目文档入口
 
-更新：2026-10-21。文档按职责组织；旧方案、阶段候选与执行时间线进入[归档](archive/README.md)，旧待实现/未合main不是当前状态。
+更新：2026-11-04。文档按职责组织；旧方案、阶段候选与执行时间线进入[归档](archive/README.md)，旧待实现/未合main不是当前状态。
 
 | 要查什么 | 入口 |
 | --- | --- |
@@ -20,8 +20,8 @@
 
 当前活动卡与现行来源：
 
-- [运行堆原生外爆漏接修复](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)：[独立候选复测入口](reviews/2026-10-27/reactor-external-explosion/CANDIDATE.md)，锅炉原门保持，状态看STATUS。
-- [锅炉多阀与事故](superpowers/specs/2026-10-26-boiler-accidents-design.md)：[技术步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)、[技术步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)的[集中候选手测入口](reviews/2026-10-27/boiler-safety/CANDIDATE.md)，状态统一看STATUS。
+- [锅炉事故与反应堆外爆联合合入](superpowers/plans/2026-11-04-boiler-explosion-accepted-integration.md)：[集成记录](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)，验收与正式制品统一见STATUS。
+- [运行堆原生外爆漏接修复](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)及[锅炉多阀与事故](superpowers/specs/2026-10-26-boiler-accidents-design.md)：保留原实现/候选证据；[技术步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)、[技术步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)不重复打开已关闭的人工门。
 - [事故功能与R1美术联合集成](superpowers/plans/2026-10-23-accident-accepted-integration-01.md)：用户已确认联合手测并授权合入，实际结果见STATUS；[美术写集](superpowers/plans/2026-10-23-accident-art-integration-01.md)和[创造拆除窄修](superpowers/plans/2026-10-22-corium-creative-removal-01.md)保留来源，不再列重复人工门。
 - [事故与辐射设计](superpowers/specs/2026-10-16-accident-radiation-design.md)：整稿和推荐参数/成本已批准；[第一批原计划](archive/2026-10-18/plans/2026-10-16-radiation-foundation-01.md)保留基础范围，[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)接事故账本、残骸与回收封存，当前结果见STATUS。
 - [04A高温固体与有限火点](superpowers/plans/2026-10-21-accident-thermal-04a.md)：该批来源/验收范围见STATUS；[04B独立熔融物卡](superpowers/plans/2026-10-21-accident-thermal-04b.md)对应[集中体验候选](reviews/2026-10-21/accident-thermal-04b/CANDIDATE.md)。旧总计划04的距离/累计量限制及事故绑定接线停用，当前人工门以STATUS为准。

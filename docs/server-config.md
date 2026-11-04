@@ -1,6 +1,6 @@
 # 服务端配置
 
-更新：2026-10-23。本文统一记录当前配置，含锅炉16³尺寸上限、辐射基础、局部事故与熔融物本体参数。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
+更新：2026-11-04。本文统一记录当前配置，含锅炉16³尺寸上限、多阀/干烧/超压、辐射基础、局部事故与熔融物本体参数。数值以实际配置源码和实例TOML为准，状态见[STATUS](STATUS.md)。
 
 ## 文件和生效
 
@@ -11,7 +11,7 @@
 | create_nuclear_industry-server.toml | reactor节：尺寸、热工、燃耗、损伤、冷却 |
 | create_nuclear_industry-reactor-automation-server.toml | 管理员统一调棒、恒功率及保护，顶层键 |
 | create_nuclear_industry-industrial-fluid.toml | 专用管网，顶层键 |
-| create_nuclear_industry-boiler.toml | 锅炉，顶层键 |
+| create_nuclear_industry-boiler.toml | 锅炉顶层键及accident节 |
 | create_nuclear_industry-heat-exchanger.toml | 换热/冷凝/盆炉核热，顶层键 |
 | create_nuclear_industry-turbine.toml | 三档汽轮机，顶层键 |
 | create_nuclear_industry-storage.toml | spentFuelStorage节：贮存架 |
@@ -93,10 +93,24 @@
 | supercriticalPressure | 0.5 | 新批次SC归一炉压门槛，不改写已有库存 |
 | outputMinPressure | 0.6 | 默认出汽下限，[0,1]对应控件0～100% |
 | valveOpenPressure / valveClosePressure | 0.9 / 0.8 | 安全阀开/关炉压 |
-| valveFlowPerSteamCellMbPerTick | 32 | 每汽区格泄放mB/t |
+| valveFlowMbPerTick | 512 | 每个畅通物理泄压阀mB/t，不按汽区容积放大 |
 | idleWaterCoolingHuPerCellPerTick / idleSteamCoolingHuPerCellPerTick | 0.9 / 0.1 | 无实际收热时每格散热HU/t |
 
 冷热容量由炉内换热器数×其hotCapacityMb/coldCapacityMb派生，有效回路取换热器/再加热段最小值。出汽下限不是目标炉压或安全阀阈值；普通/SC各存mB/HU、共总容量，汽口只取所选库存，不转换/降级。既有合格SC可低于生产压力门槛后排至共同下限，实际热量仍扣账。
+
+顶面非边框可放多个泄压阀，正上方一格须为已加载空气。以下键位于同文件`[accident]`节；压力为归一炉压，时间均按加载tick累计，不补离线时间。
+
+| 键 | 默认 | 单位/意义 |
+| --- | ---: | --- |
+| ratedPressure | 1.0 | 额定耐压，100% |
+| instantBurstPressureRatio | 1.5 | 实际压力/额定压力达到此值立即爆裂，须>1 |
+| overpressureTicks | 200 | 超过额定耐压的累计容忍tick，10秒 |
+| recoveryPressureRatio / recoveryTicks | 0.95 / 40 | 压力不高于该额定比例持续2秒，清除超压累计；须0<比例<1 |
+| dryFiringTicks | 400 | 无水且炉壁达到沸点连续20秒损毁一件换热部件 |
+| minimumBurstRadius / burstRadiusPerPressureRatio / maximumBurstRadius | 2 / 4 / 6 | 喷爆半径格数，R=clamp(2+4×(实际压力/额定压力−1),2,6) |
+| maximumBurstDamageHp | 16 | 喷爆中心最高HP伤害，按距离衰减、每生物每事故一次 |
+
+正常出汽和泄压后再判断超压；回到额定线以下暂停累计，达到恢复条件才清零。干烧补水或炉壁低于沸点即复位。满汽/堵阀/空水不停止真实收热；红石、缺热液或冷液堵塞仍停止新收热，余热不清空。危险拆除直接触发对应事故，不另等耐受时间。参数组合非法时停止交易与新收热并提示，不能把锅炉耐压参数当作工业管网压力机制。
 
 ## 换热器
 

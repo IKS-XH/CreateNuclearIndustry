@@ -1,12 +1,10 @@
 # 后续工作与依赖
 
-更新：2026-10-23。已完成和未闭门统一见[STATUS](STATUS.md)，本页只保有效后续范围，不重复逐批验收时间线。旧首发准备入口、成本草案及完成卡见[归档](archive/2026-10-15/README.md)。
+更新：2026-11-04。已完成和未闭门统一见[STATUS](STATUS.md)，本页只保有效后续范围，不重复逐批验收时间线。旧首发准备入口、成本草案及完成卡见[归档](archive/2026-10-15/README.md)。
 
 ## 当前可接续
 
-用户2026-10-27明确报告main运行堆被TNT/苦力怕破坏却不融毁，[原生外爆漏接修复卡](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)已形成[独立候选复测入口](reviews/2026-10-27/reactor-external-explosion/CANDIDATE.md)。当前等待该缺陷真人复测，独立于锅炉原候选，不把问题反馈或自动证据当手测通过，不自动合入或派发下一功能。
-
-用户2026-10-26已批准[锅炉事故整组初值](superpowers/specs/2026-10-26-boiler-accidents-design.md)，危险拆除直接触发事故。[步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)及[步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)合为[同一次候选手测](reviews/2026-10-27/boiler-safety/CANDIDATE.md)。当前停在此人工门，未合main生产，不自动派发下一功能；不重问已冻结参数，不带入工业管网压力系统。
+锅炉事故与运行反应堆原生外爆修复按[联合合入卡](superpowers/plans/2026-11-04-boiler-explosion-accepted-integration.md)接入当前主线，具体来源、验收和制品见[STATUS](STATUS.md)及[集成记录](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)。原[锅炉冻结设计](superpowers/specs/2026-10-26-boiler-accidents-design.md)、[步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)/[02](superpowers/plans/2026-10-26-boiler-safety-02.md)和[外爆修复卡](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)保留实现来源，不再作为下一功能的重复手测门；本次不带入工业管网压力系统，也不自动派发下一功能。
 
 事故与辐射按[批准设计](superpowers/specs/2026-10-16-accident-radiation-design.md)完成基础辐射、局部事故、热危害和独立熔融物，原[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)保留来源。用户2026-10-23确认R1外观及创造拆除联合手测并授权[整链合入](superpowers/plans/2026-10-23-accident-accepted-integration-01.md)；具体制品和剩余独立观察见[STATUS](STATUS.md)。本次合入不自动派发下一项功能。
 

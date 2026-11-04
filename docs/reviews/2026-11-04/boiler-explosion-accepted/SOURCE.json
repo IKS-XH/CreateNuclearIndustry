@@ -1,0 +1,247 @@
+[
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/accident/MoltenCoriumEffects.java",
+    "BeforeWorkingTreeSha256": "3736DFFD5423E2A2D750EBD69D2EA02B5ED213A51090D4C36F9BB15E5CDD4638",
+    "AfterWorkingTreeSha256": "3736DFFD5423E2A2D750EBD69D2EA02B5ED213A51090D4C36F9BB15E5CDD4638",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentExecutor.java",
+    "BeforeWorkingTreeSha256": "BE5B966857EC8954B18FB1684FD882560915BE28FEAF1165E779742D590F06CB",
+    "AfterWorkingTreeSha256": "BE5B966857EC8954B18FB1684FD882560915BE28FEAF1165E779742D590F06CB",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentLedger.java",
+    "BeforeWorkingTreeSha256": "5542A4EE878D8986F0F9FF94FAEE86C8B1441E53EC1D782E385FED03EF0D3F11",
+    "AfterWorkingTreeSha256": "5542A4EE878D8986F0F9FF94FAEE86C8B1441E53EC1D782E385FED03EF0D3F11",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentLifecycle.java",
+    "BeforeWorkingTreeSha256": "254B6BA17C5F585AB165CE85284E15C903A58B52470CF816A9F4B12FCAF63EBA",
+    "AfterWorkingTreeSha256": "254B6BA17C5F585AB165CE85284E15C903A58B52470CF816A9F4B12FCAF63EBA",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentSavedData.java",
+    "BeforeWorkingTreeSha256": "977A50B40D6AECB257B053B496C9899F78136B6F10A87075595BE2B4C155B160",
+    "AfterWorkingTreeSha256": "977A50B40D6AECB257B053B496C9899F78136B6F10A87075595BE2B4C155B160",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentState.java",
+    "BeforeWorkingTreeSha256": "BBE1074CA0577A8E9CCD0174F1DD39960AF819C6F43B9859AD259518B7C57220",
+    "AfterWorkingTreeSha256": "BBE1074CA0577A8E9CCD0174F1DD39960AF819C6F43B9859AD259518B7C57220",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerControllerBlock.java",
+    "BeforeWorkingTreeSha256": "2BE48BE46C3C370EC323A5E1A2A25A246EEEE87069441BAA5F7B1E480A5A6927",
+    "AfterWorkingTreeSha256": "2BE48BE46C3C370EC323A5E1A2A25A246EEEE87069441BAA5F7B1E480A5A6927",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerControllerBlockEntity.java",
+    "BeforeWorkingTreeSha256": "8B6396CC9E439EFF46454D22384D0E5AF21A84EB9A592729CA484A9BFB588853",
+    "AfterWorkingTreeSha256": "8B6396CC9E439EFF46454D22384D0E5AF21A84EB9A592729CA484A9BFB588853",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerShellBlock.java",
+    "BeforeWorkingTreeSha256": "C41E3FAFA1633D016ED894E283BEB2B4014F3BE9E61CC1482321416FE2443602",
+    "AfterWorkingTreeSha256": "C41E3FAFA1633D016ED894E283BEB2B4014F3BE9E61CC1482321416FE2443602",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerState.java",
+    "BeforeWorkingTreeSha256": "58D916C48D3BDEB166E6BA03C2821654EC352EC364DF437667A254CA0BDD5575",
+    "AfterWorkingTreeSha256": "58D916C48D3BDEB166E6BA03C2821654EC352EC364DF437667A254CA0BDD5575",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerStructure.java",
+    "BeforeWorkingTreeSha256": "FF3A4C2ED346392477B600479C7DA3C6CFE2D25D178566549F3F4349188438EB",
+    "AfterWorkingTreeSha256": "FF3A4C2ED346392477B600479C7DA3C6CFE2D25D178566549F3F4349188438EB",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/boiler/BoilerSurfaceDescriptorFactory.java",
+    "BeforeWorkingTreeSha256": "CC61B1BB4502860AE573A1DBB5A5DA856A5C8112DF91C44FB39CD399FAE82A8D",
+    "AfterWorkingTreeSha256": "CC61B1BB4502860AE573A1DBB5A5DA856A5C8112DF91C44FB39CD399FAE82A8D",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/config/BoilerConfig.java",
+    "BeforeWorkingTreeSha256": "6DA31F99D8ACF097B2E5F81352DB899FA3A8D20647CB01AE9C3A6A3738886419",
+    "AfterWorkingTreeSha256": "6DA31F99D8ACF097B2E5F81352DB899FA3A8D20647CB01AE9C3A6A3738886419",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/BoilerSafetyGameTests.java",
+    "BeforeWorkingTreeSha256": "7D6593A0E523ED594EA939959195325D7CF791C3CA28301791DCABAABC015766",
+    "AfterWorkingTreeSha256": "7D6593A0E523ED594EA939959195325D7CF791C3CA28301791DCABAABC015766",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/BoilerSteamSelectionGameTests.java",
+    "BeforeWorkingTreeSha256": "D1141BA4546554273680BC75391C82BAFFA80FBD20A81319FF5B2C51972F9B65",
+    "AfterWorkingTreeSha256": "D1141BA4546554273680BC75391C82BAFFA80FBD20A81319FF5B2C51972F9B65",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/heat/NuclearHeatExchangerBlock.java",
+    "BeforeWorkingTreeSha256": "AF57CB0005DCA2416549FE9A1DBFFC035D3FC9E408DD6B217C36D8EBFB4132E3",
+    "AfterWorkingTreeSha256": "AF57CB0005DCA2416549FE9A1DBFFC035D3FC9E408DD6B217C36D8EBFB4132E3",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/ReactorBreakFinalizationMixin.java",
+    "BeforeWorkingTreeSha256": "2A65436AF3048DF25EB35FEAC4FF1C610C08D795ECE914AD086459EB9D59807A",
+    "AfterWorkingTreeSha256": "2A65436AF3048DF25EB35FEAC4FF1C610C08D795ECE914AD086459EB9D59807A",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/resources/assets/create_nuclear_industry/lang/en_us.json",
+    "BeforeWorkingTreeSha256": "E7F0715DCDC9F6EF3998120418BCBC544648740912B498AD869CF0822E0AB9C5",
+    "AfterWorkingTreeSha256": "E7F0715DCDC9F6EF3998120418BCBC544648740912B498AD869CF0822E0AB9C5",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/resources/assets/create_nuclear_industry/lang/zh_cn.json",
+    "BeforeWorkingTreeSha256": "33DF0514581AF7B6342D13D90221263D1F010BDBA34025D3769FF41FD6968A95",
+    "AfterWorkingTreeSha256": "33DF0514581AF7B6342D13D90221263D1F010BDBA34025D3769FF41FD6968A95",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/main/resources/data/cni_boiler_safety/structure/boiler_empty.nbt",
+    "BeforeWorkingTreeSha256": "A46FBCA10B8C94CD0228BD493BF5F1D19787EC034047715DB6AC40B9AB211941",
+    "AfterWorkingTreeSha256": "A46FBCA10B8C94CD0228BD493BF5F1D19787EC034047715DB6AC40B9AB211941",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerAccidentStateTest.java",
+    "BeforeWorkingTreeSha256": "B740CE6C86EEC6C77E3F2E49F259143E35428B76D889E4CD143A48E020FCCC16",
+    "AfterWorkingTreeSha256": "B740CE6C86EEC6C77E3F2E49F259143E35428B76D889E4CD143A48E020FCCC16",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerDualSteamInventoryTest.java",
+    "BeforeWorkingTreeSha256": "15ED5EDE2BBE326A7C9EE588EC7193B2C64E20C7E43F4E6F2E1EB94DF98B14D5",
+    "AfterWorkingTreeSha256": "15ED5EDE2BBE326A7C9EE588EC7193B2C64E20C7E43F4E6F2E1EB94DF98B14D5",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerStateTest.java",
+    "BeforeWorkingTreeSha256": "A0737C609903A738912A2C8E8126D5B47EDDAA2B4E21030A581E2C2DDFD7EC53",
+    "AfterWorkingTreeSha256": "A0737C609903A738912A2C8E8126D5B47EDDAA2B4E21030A581E2C2DDFD7EC53",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerStructureAllocationTest.java",
+    "BeforeWorkingTreeSha256": "E66B86A9AC6BF30333FE17ED3F5E84DDCBDC5496671E0643AFA6B5EDA7B8893E",
+    "AfterWorkingTreeSha256": "E66B86A9AC6BF30333FE17ED3F5E84DDCBDC5496671E0643AFA6B5EDA7B8893E",
+    "Unchanged": true
+  },
+  {
+    "Group": "boiler",
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/boiler/BoilerSurfaceDescriptorTest.java",
+    "BeforeWorkingTreeSha256": "B76DDDDF43C107584C2D8AEBC93F0E73E10C883D068E9F350DEF194AD52E1BD4",
+    "AfterWorkingTreeSha256": "B76DDDDF43C107584C2D8AEBC93F0E73E10C883D068E9F350DEF194AD52E1BD4",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/blockentity/ReactorInstrumentPortBlockEntity.java",
+    "BeforeWorkingTreeSha256": "7971799D9D23305F01E39DD00EA4B6B7794AFC0B43B6BA55F8E1522C6707123F",
+    "AfterWorkingTreeSha256": "7971799D9D23305F01E39DD00EA4B6B7794AFC0B43B6BA55F8E1522C6707123F",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests.java",
+    "BeforeWorkingTreeSha256": "0014AFF7C3FED57F147E85C8643F19443B045A5ED199739A634E2EB8F39173B6",
+    "AfterWorkingTreeSha256": "0014AFF7C3FED57F147E85C8643F19443B045A5ED199739A634E2EB8F39173B6",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/gametest/ReactorExternalExplosionGameTests.java",
+    "BeforeWorkingTreeSha256": "13F97524533B87E0D37657919E7CCDEC1AAB46FD5C239D9B98C7B7518EDFEFB9",
+    "AfterWorkingTreeSha256": "13F97524533B87E0D37657919E7CCDEC1AAB46FD5C239D9B98C7B7518EDFEFB9",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/mixin/ReactorExplosionFinalizationMixin.java",
+    "BeforeWorkingTreeSha256": "A68E8A50799B1228C50A3CA555772600C6D58175FBD3E027527C7FED8800F89D",
+    "AfterWorkingTreeSha256": "A68E8A50799B1228C50A3CA555772600C6D58175FBD3E027527C7FED8800F89D",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/reactor/ReactorMeltdownEvent.java",
+    "BeforeWorkingTreeSha256": "FAD4536533CCD5E7C8AC8FA96A1D6164ACAA784A657D542EDD79FDB64417F54A",
+    "AfterWorkingTreeSha256": "FAD4536533CCD5E7C8AC8FA96A1D6164ACAA784A657D542EDD79FDB64417F54A",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/structure/ReactorExplosionLifecycle.java",
+    "BeforeWorkingTreeSha256": "C474F7008E8FB93F858438247BF839EBCF9D730AEBAE038005DF7725645D3B2E",
+    "AfterWorkingTreeSha256": "C474F7008E8FB93F858438247BF839EBCF9D730AEBAE038005DF7725645D3B2E",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/java/com/iksxh/create_nuclear_industry/structure/ReactorStructureLifecycle.java",
+    "BeforeWorkingTreeSha256": "F62CC5115A4E8DF71A7C980AE02CA3CAA67657568BD5000A359D1F74147D6803",
+    "AfterWorkingTreeSha256": "F62CC5115A4E8DF71A7C980AE02CA3CAA67657568BD5000A359D1F74147D6803",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/resources/create_nuclear_industry.mixins.json",
+    "BeforeWorkingTreeSha256": "CA2C067644899E667F7E1262861D1D08F8E98433E930100E07A8B85626CD2894",
+    "AfterWorkingTreeSha256": "CA2C067644899E667F7E1262861D1D08F8E98433E930100E07A8B85626CD2894",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/main/resources/data/cni_reactor_external_explosion/structure/explosion_empty.nbt",
+    "BeforeWorkingTreeSha256": "05D32A221FB90431D8422559549C411AC331BF61794C5516321E67BDE8B5E28D",
+    "AfterWorkingTreeSha256": "05D32A221FB90431D8422559549C411AC331BF61794C5516321E67BDE8B5E28D",
+    "Unchanged": true
+  },
+  {
+    "Group": "external_explosion",
+    "Path": "src/test/java/com/iksxh/create_nuclear_industry/reactor/ReactorMeltdownEventsTest.java",
+    "BeforeWorkingTreeSha256": "1FA4C1D41598E0EA8D6291A36D08588907EE5D281AB6051506407A28DAEED0DD",
+    "AfterWorkingTreeSha256": "1FA4C1D41598E0EA8D6291A36D08588907EE5D281AB6051506407A28DAEED0DD",
+    "Unchanged": true
+  }
+]

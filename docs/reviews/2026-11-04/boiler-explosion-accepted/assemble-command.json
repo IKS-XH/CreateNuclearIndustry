@@ -1,0 +1,8 @@
+{
+  "Command": ".\\gradlew.bat assemble --console=plain",
+  "SourceCommit": "16e14ae10735f7fb390e2f834b9b67e987586f45",
+  "StartedAt": "2026-11-04T21:43:39.9751104+08:00",
+  "ExitCode": 0,
+  "WallMilliseconds": 13865.8712,
+  "SnapshotCount": 2262
+}

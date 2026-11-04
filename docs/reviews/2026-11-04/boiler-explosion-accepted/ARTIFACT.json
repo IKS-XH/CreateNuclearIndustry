@@ -1,0 +1,21 @@
+{
+  "SourceCommit": "16e14ae10735f7fb390e2f834b9b67e987586f45",
+  "HeadAtVerification": "16e14ae10735f7fb390e2f834b9b67e987586f45",
+  "StableSources": 2262,
+  "SourceDriftCount": 0,
+  "Artifact": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "Bytes": 3714927,
+  "SHA256": "C3A2C178CEDEBD05436DB3E1F3244CF361752AF7B8945C2A1AF154C82057D5C3",
+  "Payloads": 2601,
+  "Classes": 822,
+  "Resources": 1775,
+  "BoundOutputs": 2601,
+  "OutputFiles": 2630,
+  "ExcludedOutputFiles": 33,
+  "UnintentionallyMissingOutputFiles": 0,
+  "DuplicatePayloads": 0,
+  "AddedOrChangedVsExternalOriginal": 31,
+  "RemovedVsExternalOriginal": 0,
+  "ModelsChangedVsExternalOriginal": 0,
+  "BothTestClassesAndDomainsExcluded": true
+}

@@ -1,17 +1,19 @@
 # 当前状态与验收
 
-更新：2026-10-26。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
+更新：2026-11-04。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
 
 ## 主分支与正式包
 
-- 已提交生产来源`3b905260537bc1989a4465a6c0109a59d21218a7`，用户2026-10-23确认联合手测并授权合入，局部事故/回收封存、接口退出/遗留空口整改、04A高温固体/有限火点、04B独立熔融物、创造拆除零掉落及22-R1外观整链已接main。保留原累计优化、MIT、协议5、管理员统一调棒/恒功率/核热/保护续接及已验护具/动态指针；应力闭环保持删除，不含T6/B1。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3677228 bytes，SHA256 `F29D0F8B20646E577A273CF5B768FBF9E9244B30699F2EB28B923DD783FBB13C`，按用户要求跟踪Git。准确已提交源唯一增量jar/2秒/exit0，809class、1775资源、manifest及三许可声明共2588载荷全部绑定输出；17美术源/16资源/2client class符合R1，相对旧EF3C非批内容变化0。[集成、验证与来源](reviews/2026-10-23/accident-accepted-integration/INTEGRATION.md)、[制品](reviews/2026-10-23/accident-accepted-integration/BUILD.md)、[身份](reviews/2026-10-23/accident-accepted-integration/ARTIFACT.json)。日期名EF3C旧包、各候选及用户世界保留。
-- 本批管理员真实域7/7、exit0/正常保存，一次并集窄审无新增阻断。全JUnit854项为840通过、3失败、11跳过；三项均已在未合事故main精确复现，不称全量测试或gradlew build通过，详见独立未闭门。原事故/热危害/物料/正常保存及美术证据按来源复用，不重复长矩阵；未补记物理卸载/真人多人。此前各已验模块及历史制品保持对应时点证据，当前正式来源/包身份以上为准。
+- 已提交生产并集`16e14ae10735f7fb390e2f834b9b67e987586f45`，用户2026-11-04确认锅炉事故与反应堆原生外爆修复两个候选手测通过并授权合main。源分别为`7d2a28eb`与`96335648`，仅Jar测试排除块需并存，35项非build源保持对应已验blob；保留原`3b905260`局部事故/热危害/熔融物/22-R1及既有优化、管理员两模式、MIT和护具/动态指针。应力闭环保持删除，不含T6/B1。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3714927 bytes，SHA256 `C3A2C178CEDEBD05436DB3E1F3244CF361752AF7B8945C2A1AF154C82057D5C3`，按用户要求跟踪Git。准确并集一次增量assemble/13秒/exit0，2262生产输入前后未变，2601载荷（822class、1775资源及4项清单/许可）全部绑定输出；两批新增测试类/域均排除，相对原外爆包31项锅炉载荷增改、0删除/模型变化。[合入与验收](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)、[组合窄审](reviews/2026-11-04/boiler-explosion-accepted/REVIEW.md)、[制品](reviews/2026-11-04/boiler-explosion-accepted/ARTIFACT.md)。旧日期包、来源分支、用户世界和主目录无关3D dirty保持。
+- 本轮复用未变来源的锅炉52/52定向及19场真实服核心、外爆17/17及7/7真实服，末次各1实跑/18或6显式SKIP不称整套重跑；用户集中手测门已闭。锅炉R4隔离Nether子项缺口保留为历史自动证据限制，不扩写用户反馈为逐项自动通过。原三条JUnit基线失败未改、未重跑全量，不称gradlew build全绿，详见独立未闭门；未明确报告的真人多人/物理卸载仍不补记。
 
 ## 已合入并按相应范围验收
 
 | 范围 | 当前结果 | 证据 |
 | --- | --- | --- |
+| 锅炉多阀与干烧/超压事故 | 用户2026-11-04确认集中手测通过并授权合main。多个顶面阀独立512mB/t、上方堵塞不能排汽；真实收热、20秒干烧损毁一件、100%额定/10秒容忍/150%立即随机面喷爆、危险拆除直接事故，均可配置。正常出汽/泄压后判定，持久唯一任务、共享世界预算和最终保护取消保持 | [联合合入](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)、[冻结规则](superpowers/specs/2026-10-26-boiler-accidents-design.md)、[原候选/验证边界](reviews/2026-10-27/boiler-safety/CANDIDATE.md) |
+| 运行反应堆原生外爆接管 | 用户2026-11-04确认手测通过并授权合main。TNT/苦力怕最终破坏成员、首块loot前接管原危险堆，复用唯一真实燃料事故托管；取消/最终剔除/冷空堆/未受损邻堆不误触，失败清客户端破坏列表且保profiler收尾。原热工/融毁阈值不变 | [联合合入](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)、[原候选/定向证据](reviews/2026-10-27/reactor-external-explosion/CANDIDATE.md) |
 | 局部事故、热危害、熔融物与R1外观 | 用户先后确认接口解锁、事故空口拆除、04A/04B及最终R1/创造拆除联合手测，2026-10-23授权整链合main；来源d839bc7→96a8421→37f50b9→9f53a7d→afb1689→1985d1b→c2b8091，正式并集3b905260。有限真实物料、加载tick冷却/持续下烧、有限火点、回收封存及共享64写预算保持；仅删两处主线已移除闭环API的失效清理。17美术路径保持R1，原功能/视觉证据复用，7/7真实交接与一次窄审已核；未补记原16³尾热病例、物理卸载或真人多人 | [完整合入与制品](reviews/2026-10-23/accident-accepted-integration/INTEGRATION.md)、[并集审查](reviews/2026-10-23/accident-accepted-integration/REVIEW.md) |
 | 基础生产 | 三矿、材料加工、离心富集、烧结、组件装配及生存制造 | [燃料制造](archive/2026-10-15/reviews/2026-10-03/fuel-02e/ACCEPTANCE.md)及同阶段材料报告 |
 | 反应堆 | 三边5～16、可跨区块；逐列热工/控制/损伤、枯竭快捷换料、窗口与控件 | [联合验收](archive/2026-10-15/reviews/2026-10-12/reactor-variable-accepted-integration/ACCEPTANCE.md) |
@@ -43,9 +45,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 运行反应堆遭TNT/苦力怕破坏不融毁 | 用户确认main运行堆；真实TNT RED确实毁仪表却无事故，已接原生最终列表/首块loot前的真实成员预检与既有唯一托管，沿原危险判断。[组合窄审](reviews/2026-10-27/reactor-external-explosion/REVIEW.md)及失败收尾delta复审通过，17/17单元、7/7真实核心场景/正常保存，异常回滚清空客户端破坏列表/正常profiler收尾另1实跑6显式SKIP复验，未机械全量。源96335648，独立reactor-explosion-fix/codex/reactor-external-explosion-20261027；增量jar exit0、3681192bytes/SHA F8C87A27…92537CA，11源未变/2590载荷及新增测试排除已核，49既有模型差异仅CRLF/LF且基线blob未变。[候选与复测](reviews/2026-10-27/reactor-external-explosion/CANDIDATE.md)待用户，客户端/真人重进/多人未验；未合main生产，锅炉原候选手测门及主目录无关状态保持 |
-| 锅炉多阀与干烧/超压事故 | 用户已采用[冻结设计](superpowers/specs/2026-10-26-boiler-accidents-design.md)及危险拆除直接事故。2026-10-27[组合窄审/整改复审](reviews/2026-10-27/boiler-safety/REVIEW.md)通过：四P2及凭证置脏无强载问题已修，定向单元52/52；真实19注册场景核心通过/正常保存，最后单一读域delta 1实跑/18明确SKIP沿未变实现复用。一次全JUnit865=851通过/3原基线失败/11跳过，原3失败保留，整改未重复全量。生产源7d2a28eb，候选树du-accepted-integration/codex/boiler-safety-20261026，jar增量exit0、3710963bytes/SHA9829AC0E…D5297，26源未变、2599载荷核验及本批探针排除，[候选/集中手测](reviews/2026-10-27/boiler-safety/CANDIDATE.md)。R4真实生存取件/跨维度BlockItem核心状态已测，但目的地完整成型交易因隔离Nether实体加载前置不足明确未验；与客户端显示/事故效果、真人重进等同次手测，不能称自动全通过。未合main生产，F29D日期包/正式路径原缺失状态及无关3D dirty保持 |
-| 主分支既有JUnit三失败 | 本批一次全量854项：840通过、3失败、11跳过、exit1。两条HeatExchangerBoilerBridgeTest在未加载配置时读取冷凝参数，一条ReactorFissionDifferentialTest在scenario0/tick4全状态差分不等；未合事故main aa23d692定向15项精确复现同三测试名和完整异常、exit1。已证实为原基线问题，未修根因/放宽断言，gradlew build仍受它们阻断；本次仅明确增量jar成功。原XML/调用链/基线身份见[执行报告](reviews/2026-10-23/accident-accepted-integration/EXECUTION.md)，不自动派发无关热工/测试修复 |
+| 主分支既有JUnit三失败 | 2026-10-23全量854项为840通过、3失败、11跳过、exit1；锅炉候选后续全量865项为851通过、同3失败、11跳过。两条HeatExchangerBoilerBridgeTest在未加载配置时读取冷凝参数，一条ReactorFissionDifferentialTest在scenario0/tick4全状态差分不等；未合事故main aa23d692定向15项精确复现同三测试名和完整异常、exit1。已证实为原基线问题，未修根因/放宽断言，gradlew build仍受它们阻断；2026-11-04只执行增量assemble并成功。原XML/调用链/基线身份见[执行报告](reviews/2026-10-23/accident-accepted-integration/EXECUTION.md)，不自动派发无关热工/测试修复 |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |
 | 超大反应堆原场景拆除复看 | 微小尾热死区已修复并接main及正式包；唯一世界原件未改。原16³、实际仪表(-8,-59,0)的用户拆除复看待反馈，不能把自动化夹具通过当作已手测。见[集成与观察边界](reviews/2026-10-16/reactor-shutdown-01/INTEGRATION.md) |
