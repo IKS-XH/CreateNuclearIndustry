@@ -1,0 +1,311 @@
+{
+  "templates": [
+    {
+      "id": "experimental_reactor",
+      "size": [
+        5,
+        5,
+        5
+      ],
+      "blocks": 110,
+      "raw_equal": true,
+      "sha256": "a2b6280b756803921f80a4c4136b345a760d1b544a7238d446d0923206438f57",
+      "body_count": 8
+    },
+    {
+      "id": "experimental_reactor_rods",
+      "size": [
+        13,
+        5,
+        13
+      ],
+      "blocks": 117,
+      "raw_equal": true,
+      "sha256": "5efcc824dd21f3bafd756d95a5c9aefd82bdcba95e7d935207099780915f4598",
+      "body_count": 8
+    },
+    {
+      "id": "experimental_reactor_operation",
+      "size": [
+        13,
+        5,
+        13
+      ],
+      "blocks": 123,
+      "raw_equal": true,
+      "sha256": "98337e0a37a0a9bbb3487f86c24336a5d6bab293b8e9834510e1301c08c94b9b",
+      "body_count": 7
+    },
+    {
+      "id": "experimental_reactor_refueling",
+      "size": [
+        13,
+        5,
+        13
+      ],
+      "blocks": 116,
+      "raw_equal": true,
+      "sha256": "e5a3a61d80fd7b4793fe66c4e1b39f23d7bbc9d8a4d20255d467b6410074b050",
+      "body_count": 8
+    },
+    {
+      "id": "experimental_reactor_safety",
+      "size": [
+        13,
+        9,
+        13
+      ],
+      "blocks": 281,
+      "raw_equal": true,
+      "sha256": "05f4bf92bf80fc74c499018b6ac6e606ceeb03b84708d3169634961e5cef5f92",
+      "body_count": 9
+    },
+    {
+      "id": "reactor_administrator_setup",
+      "size": [
+        13,
+        8,
+        13
+      ],
+      "blocks": 286,
+      "raw_equal": true,
+      "sha256": "7326d0cd24bb115bdbbde8c7854c0b473dd27ba8b9ce5fed4e45f52e7e833f21",
+      "body_count": 8
+    },
+    {
+      "id": "reactor_administrator_operation",
+      "size": [
+        13,
+        8,
+        13
+      ],
+      "blocks": 286,
+      "raw_equal": true,
+      "sha256": "7326d0cd24bb115bdbbde8c7854c0b473dd27ba8b9ce5fed4e45f52e7e833f21",
+      "body_count": 7
+    },
+    {
+      "id": "enrichment_centrifuge",
+      "size": [
+        9,
+        9,
+        9
+      ],
+      "blocks": 105,
+      "raw_equal": true,
+      "sha256": "cf2843746e654682789c163415892ea95c495444a558067c9cc6156e1d965f0d",
+      "body_count": 8
+    },
+    {
+      "id": "high_pressure_boiler_build",
+      "size": [
+        13,
+        9,
+        13
+      ],
+      "blocks": 243,
+      "raw_equal": true,
+      "sha256": "fb4090c5849aafeb47336187d42c7f68ab3a75df91773f161375e82c42f2d2c8",
+      "body_count": 7
+    },
+    {
+      "id": "high_pressure_boiler_operation",
+      "size": [
+        13,
+        9,
+        13
+      ],
+      "blocks": 264,
+      "raw_equal": true,
+      "sha256": "78fcc50bdbceb56e6bfbbb9d552b95d3a0e9fac8505c686f4f900a3090bd98bf",
+      "body_count": 8
+    },
+    {
+      "id": "high_pressure_boiler_steam",
+      "size": [
+        13,
+        9,
+        13
+      ],
+      "blocks": 249,
+      "raw_equal": true,
+      "sha256": "e1469ba6365632ddca7350dfe0e5bd65c6a167dc62ea49bc6babd943847c5f10",
+      "body_count": 6
+    },
+    {
+      "id": "high_pressure_boiler_safety",
+      "size": [
+        13,
+        9,
+        13
+      ],
+      "blocks": 243,
+      "raw_equal": true,
+      "sha256": "1b6321f5e7e5e6058dc603959c94bcba524de8b266bc5873a2e2e31a4bb9dca9",
+      "body_count": 10
+    },
+    {
+      "id": "steam_turbine_build",
+      "size": [
+        26,
+        10,
+        15
+      ],
+      "blocks": 720,
+      "raw_equal": true,
+      "sha256": "6863f04c209a4312f22de34b18dea21dd75b6ccd28f2c5730a5267f2e02af170",
+      "body_count": 12
+    },
+    {
+      "id": "steam_turbine_operation",
+      "size": [
+        15,
+        9,
+        11
+      ],
+      "blocks": 161,
+      "raw_equal": true,
+      "sha256": "2331c2c99c7d49ba603f887a0d4fde2f0f9fa455bb78977cac384120a5caa243",
+      "body_count": 8
+    },
+    {
+      "id": "steam_turbine_efficiency",
+      "size": [
+        15,
+        9,
+        11
+      ],
+      "blocks": 161,
+      "raw_equal": true,
+      "sha256": "2331c2c99c7d49ba603f887a0d4fde2f0f9fa455bb78977cac384120a5caa243",
+      "body_count": 6
+    },
+    {
+      "id": "nuclear_heat_exchanger_introduction",
+      "size": [
+        11,
+        7,
+        13
+      ],
+      "blocks": 28,
+      "raw_equal": true,
+      "sha256": "27dae73202a52020dcf2eb2e1cb564106c90869e45f4758b5cc51545aedba601",
+      "body_count": 3
+    },
+    {
+      "id": "nuclear_heat_exchanger_heating",
+      "size": [
+        15,
+        9,
+        13
+      ],
+      "blocks": 161,
+      "raw_equal": true,
+      "sha256": "8c1157d42b9b9b6fb6f3703a1094adc7b01e3c7c631d25b4ce46c7819c8978c1",
+      "body_count": 5
+    },
+    {
+      "id": "nuclear_heat_exchanger_boiler",
+      "size": [
+        15,
+        8,
+        13
+      ],
+      "blocks": 260,
+      "raw_equal": true,
+      "sha256": "943afbbe3307f9b1f07fe59ba1843c1c8567e9fdbcd38ff35dc6092a98f0fea4",
+      "body_count": 3
+    },
+    {
+      "id": "nuclear_heat_exchanger_processing",
+      "size": [
+        15,
+        9,
+        13
+      ],
+      "blocks": 158,
+      "raw_equal": true,
+      "sha256": "3c1531f0297ac9dd62bc037fbbc535236af2dc258fde1b8b102c712179496158",
+      "body_count": 4
+    },
+    {
+      "id": "nuclear_heat_exchanger_condensation",
+      "size": [
+        15,
+        8,
+        13
+      ],
+      "blocks": 154,
+      "raw_equal": true,
+      "sha256": "c4737f757db0e4bbb496b1d0ff58f044982e3756a7720622385598e7e3639625",
+      "body_count": 3
+    },
+    {
+      "id": "fuel_sintering_operation",
+      "size": [
+        7,
+        6,
+        7
+      ],
+      "blocks": 51,
+      "raw_equal": true,
+      "sha256": "a1f74ddb22c02a400b828047b0bf4b7190868496e0bf056a5f38c5c2a7945964",
+      "body_count": 3
+    },
+    {
+      "id": "fuel_sintering_automation",
+      "size": [
+        7,
+        6,
+        7
+      ],
+      "blocks": 64,
+      "raw_equal": true,
+      "sha256": "49e732502a7a28a0a4713481761c68d1b7e2db1bc931b3ab1e94444c7cc9fcac",
+      "body_count": 3
+    },
+    {
+      "id": "shielded_assembly_placement",
+      "size": [
+        7,
+        6,
+        7
+      ],
+      "blocks": 66,
+      "raw_equal": true,
+      "sha256": "67f03765acb3d1e5d5273cdcec15ebe47892bb0438a98b0dfbd3ff9df77645f2",
+      "body_count": 3
+    },
+    {
+      "id": "dry_storage_usage",
+      "size": [
+        5,
+        5,
+        5
+      ],
+      "blocks": 30,
+      "raw_equal": true,
+      "sha256": "d16e955cc8c59a133f1b6a7f6ce491fde2fa11e8200ff734dca79a6c2843a63a",
+      "body_count": 6
+    },
+    {
+      "id": "radiation_protection",
+      "size": [
+        13,
+        7,
+        13
+      ],
+      "blocks": 195,
+      "raw_equal": true,
+      "sha256": "6f779c72e899df754b28e4a26d45971a436ed79e453061f475502f07e5dbe061",
+      "body_count": 9
+    }
+  ],
+  "old_unchanged": 19,
+  "old_changed": [
+    "high_pressure_boiler_steam.nbt"
+  ],
+  "ponder_keys_per_locale": 187,
+  "body_count": 162,
+  "source_paths": 25
+}
