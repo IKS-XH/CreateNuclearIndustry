@@ -43,10 +43,10 @@ class BoilerPonderContractTest {
             "create_nuclear_industry:nuclear_heat_exchanger"
     );
     private static final List<String> SCENES = List.of("high_pressure_boiler_build",
-            "high_pressure_boiler_operation", "high_pressure_boiler_steam");
+            "high_pressure_boiler_operation", "high_pressure_boiler_steam", "high_pressure_boiler_safety");
 
     @Test
-    void nineBoilerPartsShareTheThreeOrderedStoryboards() throws IOException {
+    void nineBoilerPartsShareTheFourOrderedStoryboards() throws IOException {
         assertEquals(List.of("high_pressure_boiler_casing", "high_pressure_boiler_window",
                 "high_pressure_boiler_water_port", "high_pressure_boiler_steam_port",
                 "high_pressure_boiler_hot_coolant_port", "high_pressure_boiler_cold_coolant_port",
@@ -170,6 +170,16 @@ class BoilerPonderContractTest {
                         List.of(4, 3, 1), List.of(8, 3, 1)), pumpPositions, "流体回路泵位不完整: " + scene);
                 assertEquals(4, drivenMotors, "每条液路应展示独立动力马达: " + scene);
             }
+            if (scene.equals("high_pressure_boiler_steam")) {
+                assertTrue(pumpPositions.isEmpty(), "主动出汽示例不能暗示必须外置泵");
+                assertEquals(0, drivenMotors, "主动汽口不需要额外动力马达");
+                for (int x : List.of(4, 8)) for (int z : List.of(1, 2))
+                    assertBlock(actualBlocks, List.of(x, 4, z), "create_nuclear_industry:reinforced_fluid_pipe", scene);
+            }
+            if (scene.equals("high_pressure_boiler_safety")) {
+                assertBlock(actualBlocks, List.of(8, 6, 6), "create_nuclear_industry:boiler_safety_valve", scene);
+                assertFalse(actualBlocks.containsKey(List.of(8, 7, 6)), "第二个阀上方初始也须净空");
+            }
             assertTrue(referencedIds.containsAll(BOILER_PARTS), "模板未实际引用全部必要锅炉部件: " + scene);
             for (List<Integer> port : List.of(List.of(4, 1, 3), List.of(8, 2, 3)))
                 assertBlock(actualBlocks, port, "create_nuclear_industry:high_pressure_boiler_water_port", scene);
@@ -248,7 +258,8 @@ class BoilerPonderContractTest {
         return switch (scene) {
             case "high_pressure_boiler_build" -> 7;
             case "high_pressure_boiler_operation" -> 8;
-            case "high_pressure_boiler_steam" -> 5;
+            case "high_pressure_boiler_steam" -> 6;
+            case "high_pressure_boiler_safety" -> 10;
             default -> throw new IllegalArgumentException(scene);
         };
     }

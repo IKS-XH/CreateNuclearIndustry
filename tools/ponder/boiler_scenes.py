@@ -155,17 +155,20 @@ def _operation_scene() -> dict[tuple[int, int, int], tuple[str, dict[str, str]]]
     return blocks
 
 
-def _steam_scene() -> dict[tuple[int, int, int], tuple[str, dict[str, str]]]:
+def _steam_scene() -> dict:
+    """两种汽都沿连续工业管由汽口主动输出；本幕不安装外置泵或动力。"""
     blocks = _boiler()
-    ox, oy, oz = BOILER_ORIGIN
-    for x in (ox + 1, ox + 5):
-        for z in (oz - 1, oz - 2):
-            _pipe(blocks, x, oy + 4, z)
-        _tank(blocks, x, oy + 4, oz - 3)
-        blocks[(x, oy + 4, oz - 1)] = ("create_nuclear_industry:reinforced_fluid_pipe", {"north": "true", "south": "true"})
-        blocks[(x, oy + 4, oz - 2)] = ("create_nuclear_industry:industrial_fluid_pump", {"facing": "north"})
-        _add(blocks, (x + 1, oy + 4, oz - 2), "create:cogwheel", {"axis": "z"})
-        _add(blocks, (x + 1, oy + 4, oz - 3), "create:creative_motor", {"facing": "south"})
+    for x in (4, 8):
+        for z in (1, 2):
+            _add(blocks, (x, 4, z), "create_nuclear_industry:reinforced_fluid_pipe", {"north": "true", "south": "true"})
+        _tank(blocks, x, 4, 0)
+    return blocks
+
+
+def _safety_scene() -> dict:
+    """第二个顶面阀与首阀各有独立上方净空；堵塞只在客户端动画阶段临时加入。"""
+    blocks = _boiler()
+    _replace(blocks, (8, 6, 6), "create_nuclear_industry:boiler_safety_valve")
     return blocks
 
 
@@ -339,6 +342,7 @@ def main() -> None:
         ("high_pressure_boiler_build", _boiler()),
         ("high_pressure_boiler_operation", _operation_scene()),
         ("high_pressure_boiler_steam", _steam_scene()),
+        ("high_pressure_boiler_safety", _safety_scene()),
     )
     for name, blocks in scenes:
         path, count = _write(name, blocks)

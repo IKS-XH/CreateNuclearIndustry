@@ -357,7 +357,7 @@ public final class P1PonderScenes {
         scene.world().toggleRedstonePower(util.select().position(OP_REDSTONE_LEVER));
         scene.overlay().showScrollInput(util.vector().topOf(OP_DRIVE), Direction.UP, 80);
         showFuelControlMarkers(scene, util, PonderPalette.GREEN, 70);
-        caption(scene, util, "When the signal is removed, the control rod returns to its previous target depth.",
+        caption(scene, util, "Without an administrator in control, removing the signal returns the rods to their previous target depths.",
                 OP_DRIVE, 80);
         scene.markAsFinished();
     }
@@ -404,7 +404,7 @@ public final class P1PonderScenes {
         scene.idle(100);
 
         scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 80)
-                .text("After the fuel is exhausted, it becomes a depleted uranium fuel assembly.")
+                .text("Exhausted fuel is returned as a Cooled Spent Fuel Assembly.")
                 .attachKeyFrame()
                 .placeNearTarget();
         ItemStack cooledSpentFuel = new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
@@ -429,29 +429,17 @@ public final class P1PonderScenes {
                 .placeNearTarget();
         scene.idle(100);
 
-        scene.overlay().showControls(util.vector().topOf(FUEL_PORT), Pointing.DOWN, 40)
-                .rightClick();
-        setPonderFuelPortDisplay(scene, FUEL_PORT, ItemStack.EMPTY);
+        // 枯竭列只需一次持新料右击：端口同时显示新料，旧件在手边返还；不显示中间空槽。
+        scene.overlay().showControls(util.vector().topOf(FUEL_PORT), Pointing.DOWN, 70)
+                .withItem(freshFuel).rightClick();
         scene.world().modifyEntity(displayedSpentFuel, Entity::discard);
-        scene.idle(50);
-        scene.overlay().showControls(util.vector().topOf(FUEL_PORT), Pointing.DOWN, 40)
-                .withItem(freshFuel)
-                .rightClick();
-        var replacementFuel = scene.world().createItemEntity(
-                util.vector().centerOf(FUEL_PORT).add(0, 1, 0), Vec3.ZERO, freshFuel);
-        scene.world().modifyEntity(replacementFuel, entity -> {
-            if (entity instanceof ItemEntity itemEntity) {
-                itemEntity.setNoGravity(true);
-                itemEntity.setPickUpDelay(Integer.MAX_VALUE);
-            }
-        });
-        setPonderFuelPortDisplay(scene, FUEL_PORT, freshFuel);
-        scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 80)
-                .text("Take the old assembly with an empty hand, then load a fresh one.")
-                .attachKeyFrame()
-                .pointAt(util.vector().topOf(FUEL_PORT))
-                .placeNearTarget();
-        scene.idle(100);
+        var replacementFuel = showPonderFuelAssembly(scene, util, FUEL_PORT, freshFuel);
+        scene.overlay().showControls(util.vector().topOf(FUEL_PORT).add(-1.2, 0, 0), Pointing.RIGHT, 70)
+                .withItem(cooledSpentFuel);
+        scene.overlay().showOutlineWithText(util.select().position(FUEL_PORT), 190)
+                .text("Hold fresh fuel and right-click once to replace an exhausted assembly and receive the old one. An assembly with durability remaining cannot be quick-swapped.")
+                .attachKeyFrame().pointAt(util.vector().topOf(FUEL_PORT)).placeNearTarget();
+        scene.idle(210);
 
         scene.world().modifyEntity(replacementFuel, Entity::discard);
         setPonderFuelPortDisplay(scene, FUEL_PORT, ItemStack.EMPTY);
@@ -481,6 +469,18 @@ public final class P1PonderScenes {
                 .attachKeyFrame()
                 .placeNearTarget();
         scene.idle(100);
+
+        // 维修只展示钢板操作和原客户端信息，不调用正式修复事务，也不改变残余热量。
+        setPonderFuelPortDisplay(scene, FUEL_PORT, ItemStack.EMPTY);
+        scene.overlay().showControls(util.vector().topOf(FUEL_PORT), Pointing.DOWN, 70)
+                .rightClick().withItem(new ItemStack(ModItems.STEEL_PLATE.get()));
+        caption(scene, util, "Stop fission in the target column and remove its fuel before maintenance. Hold a steel plate and right-click the refueling port to repair the fuel column; residual heat still needs cooling.",
+                FUEL_PORT, 225);
+        scene.overlay().showControls(util.vector().topOf(OP_DRIVE), Pointing.DOWN, 70)
+                .rightClick().withItem(new ItemStack(ModItems.STEEL_PLATE.get()));
+        scene.overlay().showOutline(PonderPalette.GREEN, new Object(), util.select().position(OP_DRIVE), 115);
+        caption(scene, util, "Use a steel plate on the control-rod drive to repair its column and release a jam once integrity is sufficient. Repairs do not restore fuel or erase stored heat.",
+                OP_DRIVE, 210);
         scene.markAsFinished();
     }
 

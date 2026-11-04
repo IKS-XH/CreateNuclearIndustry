@@ -21,7 +21,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 /**
- * 高压锅炉三条 Ponder 客户端教学故事线。模板中的炉体均为合法完整结构；液位、管内流向和动力
+ * 高压锅炉四条 Ponder 客户端教学故事线。模板中的炉体均为合法完整结构；液位、管内流向和动力
  * 只用于当前 Ponder 临时世界的可视讲解，不调用服务端账本、热工结算或正式流体交易。
  */
 public final class BoilerPonderScenes {
@@ -62,7 +62,7 @@ public final class BoilerPonderScenes {
         scene.world().showSection(bottom, Direction.UP);
         scene.idle(15);
         note(scene, bottom, util.vector().centerOf(6, 0, 6), 90,
-                "By default, length, width, and height are each 5–11 blocks and can be adjusted separately. This example is 7×7×7.");
+                "By default, length, width, and height are each 5–16 blocks and can be adjusted separately. This example is 7×7×7.");
 
         Selection water = util.select().fromTo(OX, 1, OZ, OX + 6, 2, OZ + 6);
         scene.world().showSection(water, Direction.DOWN);
@@ -98,7 +98,7 @@ public final class BoilerPonderScenes {
         scene.world().showSection(roof, Direction.DOWN);
         scene.idle(8);
         note(scene, roof, util.vector().centerOf(6, 6, 6), 90,
-                "Place the safety valve on top and leave its outlet clear. Add water, steam, and coolant ports as needed.");
+                "Place safety valves on non-edge roof blocks and keep each outlet clear. Add water, steam, and coolant ports as needed.");
         note(scene, whole, util.vector().centerOf(6, 3, 6), 95,
                 "Effective heat loops equal the smaller count of built-in heat exchangers and reheating sections.");
         scene.markAsFinished();
@@ -115,7 +115,7 @@ public final class BoilerPonderScenes {
         scene.world().showSection(boiler, Direction.DOWN);
         scene.idle(12);
         note(scene, boiler, util.vector().centerOf(6, 2, 6), 95,
-                "By default, length, width, and height are each 5–11 blocks and can be adjusted separately.");
+                "By default, length, width, and height are each 5–16 blocks and can be adjusted separately.");
 
         Selection waterDrive = util.select().position(5, 1, 0).add(util.select().position(5, 1, 1));
         Selection hotDrive = util.select().position(9, 0, 0).add(util.select().position(9, 0, 1));
@@ -204,9 +204,6 @@ public final class BoilerPonderScenes {
         scene.idle(10);
         scene.world().showSection(ordinary, Direction.SOUTH);
         scene.world().showSection(supercritical, Direction.SOUTH);
-        scene.world().showSection(util.select().fromTo(5, 4, 0, 5, 4, 1).add(util.select().fromTo(9, 4, 0, 9, 4, 1)), Direction.SOUTH);
-        scene.world().setKineticSpeed(util.select().position(4, 4, 1).add(util.select().position(8, 4, 1)), 256);
-        scene.world().setKineticSpeed(util.select().fromTo(5, 4, 0, 5, 4, 1).add(util.select().fromTo(9, 4, 0, 9, 4, 1)), -256);
         scene.idle(10);
         setTankFluid(scene, NORMAL_TANK, new FluidStack(TurbineContent.STEAM.get(), 1000));
         setTankFluid(scene, SUPERCRITICAL_TANK, FluidStack.EMPTY);
@@ -216,6 +213,8 @@ public final class BoilerPonderScenes {
                 util.vector().centerOf(NORMAL_TANK), 70);
         scene.overlay().showBigLine(PonderPalette.GREEN, util.vector().centerOf(SUPERCRITICAL_PORT),
                 util.vector().centerOf(SUPERCRITICAL_TANK), 70);
+        note(scene, ordinary.add(supercritical), util.vector().centerOf(6, 4, 2), 105,
+                "Both steam types can leave the boiler actively through legal industrial pipes. These outlet lines need no external pump.");
         note(scene, ordinary.add(supercritical), util.vector().centerOf(6, 4, 2), 100,
                 "New steam is classified by actual temperature and pressure. Ordinary and supercritical steam use separate inventories.");
         note(scene, boiler, util.vector().centerOf(6, 4, 6), 100,
@@ -241,6 +240,71 @@ public final class BoilerPonderScenes {
         note(scene, supercritical, util.vector().centerOf(6, 4, 2), 105,
                 "Stored, heat-qualified supercritical steam can drain to the shared minimum below the new-steam classification pressure. Its type stays unchanged; keep steam types on separate lines.");
         scene.markAsFinished();
+    }
+
+    /** 两个独立阀的净空与堵塞、停止新收热及干烧/超压风险；不启动正式事故。 */
+    public static void highPressureBoilerSafety(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+        scene.title("high_pressure_boiler_safety", "高压锅炉：泄压与安全");
+        scene.configureBasePlate(0, 0, 13);
+        scene.scaleSceneView(0.72F);
+        scene.showBasePlate();
+        Selection boiler = util.select().fromTo(3, 0, 3, 9, 6, 9);
+        Selection valves = util.select().position(6, 6, 6).add(util.select().position(8, 6, 6));
+        scene.world().showSection(boiler, Direction.DOWN);
+        scene.idle(20);
+        scene.rotateCameraY(35);
+        note(scene, valves, util.vector().topOf(6, 6, 6), 138,
+                "顶面非边框可安装多个安全阀，每个阀正上方一格都必须保持空气；护目镜可查畅通阀数和总排量。");
+        ventLines(scene, util, true, true);
+        note(scene, valves, util.vector().topOf(8, 6, 6), 132,
+                "默认90%炉压开启、80%关闭；每个畅通阀最多排512 mB/t，不会随炉内容积放大。");
+        scene.world().setBlock(new BlockPos(6, 7, 6), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), false);
+        scene.world().showSection(util.select().position(6, 7, 6), Direction.DOWN);
+        scene.idle(20);
+        ventLines(scene, util, false, true);
+        note(scene, valves.add(util.select().position(6, 7, 6)), util.vector().centerOf(6, 7, 6), 120,
+                "堵住一个阀只会阻止它排汽，另一个畅通阀仍能泄压；增加有效阀门并保持所有出口畅通。");
+        scene.world().setBlock(new BlockPos(8, 7, 6), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), false);
+        scene.world().showSection(util.select().position(8, 7, 6), Direction.DOWN);
+        scene.idle(20);
+        note(scene, valves, util.vector().topOf(8, 6, 6), 149,
+                "全部阀门堵塞就无法泄压。先停热并疏通汽路，不要把出汽压力下限当成安全阀或目标炉压。");
+        scene.world().setBlock(new BlockPos(6, 7, 6), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), false);
+        scene.world().setBlock(new BlockPos(8, 7, 6), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), false);
+        scene.effects().indicateRedstone(CONTROLLER);
+        note(scene, util.select().position(CONTROLLER), util.vector().centerOf(CONTROLLER), 149,
+                "控制器接红石可停止新收热；无热液或冷液回路堵塞也会停收热，但已有工质和余热不会凭空消失。");
+        Selection front = frontCasing(util, 1, 5);
+        scene.world().hideSection(front, Direction.SOUTH);
+        scene.idle(20);
+        fillWindow(scene, new BlockPos(5, 1, FRONT), 0);
+        note(scene, util.select().position(WATER_PORT), util.vector().centerOf(WATER_PORT), 172,
+                "无水且炉壁达到沸点时，默认连续20秒干烧会损毁一件换热器或再加热段；持续供水，停热降温后再维护。");
+        // 移开正面与顶盖后再高亮底层部件；这里只呈现损毁结果，不提交正式事故或掉落。
+        scene.world().hideSection(util.select().fromTo(3, 6, 3, 9, 6, 9), Direction.UP);
+        scene.idle(20);
+        scene.world().hideSection(util.select().fromTo(4, 3, 4, 8, 3, 8), Direction.UP);
+        scene.idle(20);
+        BlockPos damaged = new BlockPos(5, 0, 6);
+        note(scene, util.select().position(damaged), util.vector().topOf(damaged), 115,
+                "干烧损坏的部件不会掉落完整设备。先解除危险，再补回缺失部件并重新检查结构。");
+        scene.world().setBlock(damaged, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), false);
+        note(scene, util.select().position(CONTROLLER), util.vector().centerOf(CONTROLLER), 160,
+                "默认额定耐压100%：超出后累计耐受10秒，达到150%立即向随机一面喷爆；压力越高，危险范围越大。");
+        note(scene, util.select().position(CONTROLLER), util.vector().centerOf(CONTROLLER), 149,
+                "默认降到95%及以下并持续2秒，才清除累计超压时间；短暂回落不能把危险计时重新开始。");
+        scene.overlay().showControls(util.vector().topOf(CONTROLLER), Pointing.DOWN, 70)
+                .withItem(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE));
+        note(scene, util.select().position(CONTROLLER), util.vector().centerOf(CONTROLLER), 155,
+                "危险时手动拆炉会直接触发对应事故，超压时优先喷爆。先停热、泄压、降温，再正常拆除；锅炉事故不会产生核废料。");
+        scene.markAsFinished();
+    }
+
+    /** 只画各自阀口的排汽方向，不消耗临时或正式工质。 */
+    private static void ventLines(CreateSceneBuilder scene, SceneBuildingUtil util, boolean first, boolean second) {
+        if (first) scene.overlay().showBigLine(PonderPalette.WHITE, util.vector().topOf(6, 6, 6), util.vector().topOf(6, 8, 6), 90);
+        if (second) scene.overlay().showBigLine(PonderPalette.WHITE, util.vector().topOf(8, 6, 6), util.vector().topOf(8, 8, 6), 90);
     }
 
     /** 暂时隐藏正面壳格以直接查看水区、汽区和完整隔层，端口与观察窗保持可见。 */

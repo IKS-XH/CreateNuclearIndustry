@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * P1 Ponder 条目索引。
  *
- * <p>这里列出的每个组件都已由模组注册，并指向介绍或使用该组件的四条反应堆教学故事线之一。
+ * <p>这里列出的每个组件都已由模组注册，并指向介绍或使用该组件的五条反应堆教学故事线之一。
  * 未来机器应在其注册任务完成后建立独立条目，不能提前写入未注册内容。</p>
  *
  * <p>Ponder 运行在客户端临时世界中，只提供教学演示，不拥有服务端反应堆状态，也不替代
@@ -20,22 +20,24 @@ import java.util.List;
 public final class P1PonderPlugin implements PonderPlugin {
     /** 正式 P1 实验反应堆教学故事线的注册路径。 */
     public static final String REACTOR_SCENE_ID = P1ContentIds.EXPERIMENTAL_REACTOR_ID;
-    /** 四条独立反应堆故事线按搭建、棒列关系、运行停机、装料换料顺序注册。 */
+    /** 反应堆故事线按搭建、棒列关系、运行停机、装换料维修、事故回收顺序注册。 */
     public static final List<String> REACTOR_SCENE_IDS = List.of(
             REACTOR_SCENE_ID,
             "experimental_reactor_rods",
             "experimental_reactor_operation",
-            "experimental_reactor_refueling"
+            "experimental_reactor_refueling",
+            "experimental_reactor_safety"
     );
 
-    /** 锅炉三条独立故事线按搭建、运行和出汽调压顺序注册。 */
+    /** 锅炉四条独立故事线按搭建、运行、出汽调压和泄压安全顺序注册。 */
     public static final List<String> BOILER_SCENE_IDS = List.of(
             "high_pressure_boiler_build",
             "high_pressure_boiler_operation",
-            "high_pressure_boiler_steam"
+            "high_pressure_boiler_steam",
+            "high_pressure_boiler_safety"
     );
 
-    /** 三幕共用的九种锅炉部件；每个入口均已有正式方块注册。 */
+    /** 四幕共用的九种锅炉部件；每个入口均已有正式方块注册。 */
     public static final List<String> BOILER_ENTRY_IDS = List.of(
             "high_pressure_boiler_casing",
             "high_pressure_boiler_window",
@@ -76,6 +78,17 @@ public final class P1PonderPlugin implements PonderPlugin {
             "shielded_assembly_placement"
     );
 
+    /** 管理员只从本模组自动化接口进入，不给所有Create燃烧室追加教学。 */
+    public static final List<String> ADMINISTRATOR_SCENE_IDS = List.of(
+            "reactor_administrator_setup", "reactor_administrator_operation"
+    );
+
+    /** 独立防护入口不混入原P1内容归属名单；每个条目均已正式注册。 */
+    public static final List<String> RADIATION_ENTRY_IDS = List.of(
+            "radiation_meter", "radiation_helmet", "radiation_chestplate", "radiation_leggings", "radiation_boots",
+            "cooled_spent_fuel_assembly", "accident_fuel_waste", "sealed_spent_fuel_cask", "dry_storage_rack", "shielding_concrete"
+    );
+
     /**
      * P1 条目列表故意排除 P0 探针、保留的样例外壳、纯材料和不可直接放置的控制棒组件。
      */
@@ -113,6 +126,14 @@ public final class P1PonderPlugin implements PonderPlugin {
                 P1PonderScenes::experimentalReactorOperation);
         reactorEntries.addStoryBoard(componentId(REACTOR_SCENE_IDS.get(3)),
                 P1PonderScenes::experimentalReactorRefueling);
+        reactorEntries.addStoryBoard(componentId(REACTOR_SCENE_IDS.get(4)), ReactorSafetyPonderScenes::safety);
+        helper.forComponents(componentId("accident_fuel_waste"), componentId("reactor_corium"))
+                .addStoryBoard(componentId("experimental_reactor_safety"), ReactorSafetyPonderScenes::safety);
+        var administrator = helper.forComponents(componentId("reactor_automation_port"));
+        administrator.addStoryBoard(componentId(ADMINISTRATOR_SCENE_IDS.get(0)), ReactorAdministratorPonderScenes::setup);
+        administrator.addStoryBoard(componentId(ADMINISTRATOR_SCENE_IDS.get(1)), ReactorAdministratorPonderScenes::operation);
+        helper.forComponents(RADIATION_ENTRY_IDS.stream().map(P1PonderPlugin::componentId).toList())
+                .addStoryBoard(componentId("radiation_protection"), RadiationPonderScenes::protection);
         helper.forComponents(componentId("enrichment_centrifuge"))
                 .addStoryBoard(
                         ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "enrichment_centrifuge"),
@@ -127,6 +148,7 @@ public final class P1PonderPlugin implements PonderPlugin {
                 BoilerPonderScenes::highPressureBoilerOperation);
         boilerEntries.addStoryBoard(componentId(BOILER_SCENE_IDS.get(2)),
                 BoilerPonderScenes::highPressureBoilerSteam);
+        boilerEntries.addStoryBoard(componentId(BOILER_SCENE_IDS.get(3)), BoilerPonderScenes::highPressureBoilerSafety);
 
         var turbineEntries = helper.forComponents(TURBINE_ENTRY_IDS.stream()
                 .map(P1PonderPlugin::componentId)

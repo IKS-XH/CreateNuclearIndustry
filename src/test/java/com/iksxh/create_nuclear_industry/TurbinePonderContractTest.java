@@ -45,7 +45,7 @@ class TurbinePonderContractTest {
         JsonObject chinese = readLanguage("zh_cn.json");
         JsonObject english = readLanguage("en_us.json");
         Map<String, Integer> textCounts = Map.of("steam_turbine_build", 12,
-                "steam_turbine_operation", 6, "steam_turbine_efficiency", 6);
+                "steam_turbine_operation", 8, "steam_turbine_efficiency", 6);
         for (String scene : STORYBOARDS) {
             assertTrue(Files.exists(RESOURCES.resolve("assets/create_nuclear_industry/ponder/" + scene + ".nbt")),
                     "缺少独立汽轮机模板: " + scene);

@@ -70,7 +70,7 @@ public final class CentrifugePonderScenes {
                 .text("The centrifuge separates uranium slurry into low-enriched uranium dust, depleted uranium dust, and recoverable water.")
                 .attachKeyFrame()
                 .placeNearTarget();
-        // TextInstruction 的正文寿命比指定时长多10tick；相邻正文前至少留10tick净间隔。
+        // 正文寿命比指定时长多10tick；相邻正文前至少留10tick净间隔。
         scene.idle(110);
 
         scene.overlay().showControls(util.vector().topOf(new BlockPos(4, 1, 3)), Pointing.DOWN, 70)
@@ -116,7 +116,7 @@ public final class CentrifugePonderScenes {
         scene.idle(120);
 
         scene.overlay().showOutlineWithText(upperBody, 105)
-                .text("Each 1000 mB of uranium slurry yields 1 low-enriched uranium dust, 7 depleted uranium dust, and 1000 mB of water. Higher speeds process it faster.")
+                .text("Higher stable speeds process slurry faster. Keep both powder outputs and water recovery clear.")
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(MACHINE_UPPER))
                 .placeNearTarget();
@@ -142,7 +142,7 @@ public final class CentrifugePonderScenes {
         scene.world().createItemEntity(
                 util.vector().centerOf(LOWER_FUNNEL).add(0, -0.45, -0.25),
                 util.vector().of(0, -0.06, 0),
-                new ItemStack(FuelProcessingContent.DEPLETED_URANIUM_DUST.get(), 7));
+                new ItemStack(FuelProcessingContent.DEPLETED_URANIUM_DUST.get()));
         scene.world().createItemEntity(
                 util.vector().centerOf(UPPER_FUNNEL).add(0.25, -0.45, 0),
                 util.vector().of(0, -0.06, 0),

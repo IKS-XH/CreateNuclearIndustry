@@ -56,7 +56,7 @@ public final class FuelSinteringPonderScenes {
         scene.overlay().showControls(util.vector().centerOf(FURNACE).add(0, 0, -0.55), Pointing.RIGHT, 35)
                 .withItem(sintered());
         note(scene, machine, util.vector().centerOf(FURNACE), 65,
-                "每个生芯块烧结为一个烧结芯块。");
+                "烧结完成后，从侧面取出成品；可用护目镜查看加工进度。");
 
         snapshot(scene, util, 1, 1, 200);
         burner(scene, false);

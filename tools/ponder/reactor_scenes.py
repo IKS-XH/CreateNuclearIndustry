@@ -280,6 +280,35 @@ def _write(name: str, size: tuple[int, int, int],
     return path, _validate(decoded, size, required_ids)
 
 
+
+def _administrator_scene() -> tuple[tuple[int, int, int], dict]:
+    """合法侧面接口连任职燃烧室；可见反相电路通向仪表，所有坐标仅供客户端教学。"""
+    blocks = {}
+    for x in range(13):
+        for z in range(13):
+            _add(blocks, (x, 0, z), "minecraft:polished_andesite")
+    _reactor(blocks, (4, 1, 4))
+    _replace(blocks, (5, 2, 4), "create_nuclear_industry:reactor_automation_port")
+    _add(blocks, (5, 2, 3), "create:blaze_burner", {"blaze": "smouldering"})
+    for pos in ((5, 1, 2), (6, 2, 2), (6, 2, 3)):
+        _add(blocks, pos, "minecraft:polished_andesite")
+    _add(blocks, (5, 2, 2), "minecraft:redstone_wire", {"power": "0", "east": "side", "south": "side"})
+    _add(blocks, (6, 3, 2), "minecraft:redstone_torch", {"lit": "true"})
+    _add(blocks, (6, 3, 3), "minecraft:redstone_wire", {"power": "15", "north": "side", "south": "side"})
+    return (13, 8, 13), blocks
+
+
+def _safety_scene() -> tuple[tuple[int, int, int], dict]:
+    """事故幕保完整初始机组，侧边TNT仅作静态危险图示；残骸/熔融物由临时画面切换。"""
+    blocks = {}
+    for x in range(13):
+        for z in range(13):
+            _add(blocks, (x, 0, z), "minecraft:polished_andesite")
+    _reactor(blocks, (4, 1, 5))
+    _add(blocks, (10, 1, 7), "minecraft:tnt", {"unstable": "false"})
+    _add(blocks, (9, 1, 3), "create_nuclear_industry:dry_storage_rack", {"facing": "north", "storage_level": "0"})
+    return (13, 9, 13), blocks
+
 def main() -> None:
     required = {
         "create_nuclear_industry:reactor_casing",
@@ -300,6 +329,12 @@ def main() -> None:
     scenes.append(("experimental_reactor_refueling", size, refueling))
     size, rods = _rods_scene()
     scenes.append(("experimental_reactor_rods", size, rods))
+
+    for name, layout in (("reactor_administrator_setup", _administrator_scene),
+                         ("reactor_administrator_operation", _administrator_scene),
+                         ("experimental_reactor_safety", _safety_scene)):
+        size, blocks = layout()
+        scenes.append((name, size, blocks))
 
     for name, size, blocks in scenes:
         scene_required = set(required)

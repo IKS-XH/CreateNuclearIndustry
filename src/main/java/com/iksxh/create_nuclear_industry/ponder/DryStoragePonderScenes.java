@@ -48,7 +48,7 @@ public final class DryStoragePonderScenes {
         scene.overlay().showControls(util.vector().topOf(RACK), Pointing.DOWN, 35).rightClick().withItem(cask());
         snapshot(scene, 1);
         note(scene, util.select().position(RACK), util.vector().centerOf(RACK), 80,
-                "手持封装乏燃料桶右击贮存架，每次存入一桶。");
+                "手持封装核废料桶右击贮存架，每次存入一桶；乏燃料和事故废料的封装桶都可存放。");
 
         scene.overlay().showControls(util.vector().topOf(RACK), Pointing.DOWN, 35).rightClick();
         snapshot(scene, 0);

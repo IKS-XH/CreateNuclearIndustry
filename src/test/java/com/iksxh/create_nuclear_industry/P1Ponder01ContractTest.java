@@ -66,14 +66,15 @@ class P1Ponder01ContractTest {
     }
 
     @Test
-    void pluginRegistersFourNamespacedReactorStoryboardsWithIndependentTemplates() throws IOException {
+    void pluginRegistersFiveNamespacedReactorStoryboardsWithIndependentTemplates() throws IOException {
         assertEquals(CreateNuclearIndustry.MOD_ID, new P1PonderPlugin().getModId());
         assertEquals(P1ContentIds.EXPERIMENTAL_REACTOR_ID, P1PonderPlugin.REACTOR_SCENE_ID);
         assertEquals(List.of(
                 "experimental_reactor",
                 "experimental_reactor_rods",
                 "experimental_reactor_operation",
-                "experimental_reactor_refueling"), P1PonderPlugin.REACTOR_SCENE_IDS);
+                "experimental_reactor_refueling",
+                "experimental_reactor_safety"), P1PonderPlugin.REACTOR_SCENE_IDS);
         for (String id : P1PonderPlugin.REACTOR_SCENE_IDS) {
             assertEquals("create_nuclear_industry:" + id,
                     ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, id).toString());
@@ -84,7 +85,7 @@ class P1Ponder01ContractTest {
 
         String pluginSource = Files.readString(MAIN_SOURCES.resolve(
                 "com/iksxh/create_nuclear_industry/ponder/P1PonderPlugin.java"));
-        assertEquals(4, occurrences(pluginSource, "reactorEntries.addStoryBoard("));
+        assertEquals(5, occurrences(pluginSource, "reactorEntries.addStoryBoard("));
         assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorBasics"));
         assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorRods"));
         assertTrue(pluginSource.contains("P1PonderScenes::experimentalReactorOperation"));

@@ -133,8 +133,8 @@ public final class TurbinePonderScenes {
         scene.idle(15);
         setTankFluid(scene, OP_INPUT_TANK, new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 1000));
         setTankFluid(scene, OP_OUTPUT_TANK, FluidStack.EMPTY);
-        note(scene, input.add(machine), util.vector().centerOf(OP_INPUT_TANK), 80,
-                "Supercritical steam enters through the inlet and steam exits through the exhaust port.");
+        note(scene, input.add(machine), util.vector().centerOf(OP_INPUT_TANK), 200,
+                "Feed supercritical steam through the inlet and drain ordinary steam from the exhaust. A boiler outlet can feed industrial pipes actively; pumping from a tank is another option.");
 
         scene.rotateCameraY(180);
         setTankFluid(scene, OP_INPUT_TANK, new FluidStack(BoilerContent.SUPERCRITICAL_STEAM.get(), 500));
@@ -145,6 +145,10 @@ public final class TurbinePonderScenes {
         note(scene, output, util.vector().centerOf(OP_EXHAUST), 75,
                 "Exhaust steam can be sent to a heat exchanger for condensation and water return.");
 
+        setTankFluid(scene, OP_OUTPUT_TANK, new FluidStack(TurbineContent.STEAM.get(), 1000));
+        note(scene, output, util.vector().centerOf(OP_EXHAUST), 180,
+                "If exhaust is blocked, the tiny turnover space fills and further intake stops. Keep the return line open to continue producing power.");
+        setTankFluid(scene, OP_OUTPUT_TANK, new FluidStack(TurbineContent.STEAM.get(), 500));
         scene.rotateCameraY(35);
         scene.world().setKineticSpeed(axles, 256);
         scene.effects().rotationSpeedIndicator(OP_FRONT_SHAFT);
@@ -162,6 +166,11 @@ public final class TurbinePonderScenes {
         scene.effects().rotationSpeedIndicator(OP_REAR_SHAFT);
         note(scene, machine.add(axles), util.vector().centerOf(FX, FY, FZ + 2), 90,
                 "After steam stops, wait 40 ticks; power stops when the average falls below threshold.");
+        scene.world().setKineticSpeed(axles, 256);
+        scene.effects().indicateRedstone(new BlockPos(7, 3, 5));
+        scene.world().setKineticSpeed(axles, 0);
+        note(scene, util.select().position(7, 3, 5).add(axles), util.vector().topOf(7, 3, 5), 190,
+                "Redstone at the controller stops this turbine's power immediately. This differs from steam loss fading through the averaging window and does not remove other generators' power.");
         scene.markAsFinished();
     }
 
