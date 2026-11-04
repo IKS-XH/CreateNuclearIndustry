@@ -45,6 +45,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
+| 现行功能思索查漏补缺 | 用户2026-11-04要求合入两事故候选后同步新增/变更功能。[PONDER-SYNC-01](superpowers/plans/2026-11-04-ponder-current-features-sync.md)在独立候选只读盘点八类20幕、模板生成器与双语；将修正尺寸/快捷换料等过时内容，补管理员和辐射/事故用法。工业管网不单独教学，不新增玩法或具体配方；main当前正式包保持。最终新场景需集中播放验收，不将原八类既有通过当作新幕已验 |
 | 主分支既有JUnit三失败 | 2026-10-23全量854项为840通过、3失败、11跳过、exit1；锅炉候选后续全量865项为851通过、同3失败、11跳过。两条HeatExchangerBoilerBridgeTest在未加载配置时读取冷凝参数，一条ReactorFissionDifferentialTest在scenario0/tick4全状态差分不等；未合事故main aa23d692定向15项精确复现同三测试名和完整异常、exit1。已证实为原基线问题，未修根因/放宽断言，gradlew build仍受它们阻断；2026-11-04只执行增量assemble并成功。原XML/调用链/基线身份见[执行报告](reviews/2026-10-23/accident-accepted-integration/EXECUTION.md)，不自动派发无关热工/测试修复 |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |

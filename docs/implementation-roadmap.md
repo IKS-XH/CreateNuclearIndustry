@@ -4,6 +4,8 @@
 
 ## 当前可接续
 
+按用户2026-11-04要求执行[现行功能思索同步](superpowers/plans/2026-11-04-ponder-current-features-sync.md)：对照现有八类教学与main已有功能查漏补缺，修正陈旧文案/演示并补管理员、辐射防护和事故处置。工业管网不新增独立思索，教程只讲用法；完成后集中播放复看，状态统一见STATUS，不自动派发其他主线功能。
+
 锅炉事故与运行反应堆原生外爆修复按[联合合入卡](superpowers/plans/2026-11-04-boiler-explosion-accepted-integration.md)接入当前主线，具体来源、验收和制品见[STATUS](STATUS.md)及[集成记录](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)。原[锅炉冻结设计](superpowers/specs/2026-10-26-boiler-accidents-design.md)、[步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)/[02](superpowers/plans/2026-10-26-boiler-safety-02.md)和[外爆修复卡](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)保留实现来源，不再作为下一功能的重复手测门；本次不带入工业管网压力系统，也不自动派发下一功能。
 
 事故与辐射按[批准设计](superpowers/specs/2026-10-16-accident-radiation-design.md)完成基础辐射、局部事故、热危害和独立熔融物，原[第二批计划](superpowers/plans/2026-10-18-accident-execution-02.md)保留来源。用户2026-10-23确认R1外观及创造拆除联合手测并授权[整链合入](superpowers/plans/2026-10-23-accident-accepted-integration-01.md)；具体制品和剩余独立观察见[STATUS](STATUS.md)。本次合入不自动派发下一项功能。
