@@ -20,7 +20,7 @@
 
 当前活动卡与现行来源：
 
-- [现行功能思索查漏补缺](superpowers/plans/2026-11-04-ponder-current-features-sync.md)：盘点原八类教学，同步已实现的新增/变更用法，当前结果及新幕播放门只看STATUS。
+- [现行功能思索查漏补缺](superpowers/plans/2026-11-04-ponder-current-features-sync.md)：[25幕候选与集中复看](reviews/2026-11-04/ponder-sync/CANDIDATE.md)，新增/改段入口、源与制品见候选，结果及播放门只看STATUS。
 - [锅炉事故与反应堆外爆联合合入](superpowers/plans/2026-11-04-boiler-explosion-accepted-integration.md)：[集成记录](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)，验收与正式制品统一见STATUS。
 - [运行堆原生外爆漏接修复](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)及[锅炉多阀与事故](superpowers/specs/2026-10-26-boiler-accidents-design.md)：保留原实现/候选证据；[技术步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)、[技术步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)不重复打开已关闭的人工门。
 - [事故功能与R1美术联合集成](superpowers/plans/2026-10-23-accident-accepted-integration-01.md)：用户已确认联合手测并授权合入，实际结果见STATUS；[美术写集](superpowers/plans/2026-10-23-accident-art-integration-01.md)和[创造拆除窄修](superpowers/plans/2026-10-22-corium-creative-removal-01.md)保留来源，不再列重复人工门。

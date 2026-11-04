@@ -1,0 +1,63 @@
+{
+  "source_commit": "78f84c398add24cae45098422aee4d2baff86b4d",
+  "jar": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+  "bytes": 3745990,
+  "sha256": "64D8A4FCFA2608E1A8A29509EA25B1802A20FAE5CF032D13A9575220505DCA8A",
+  "baseline_jar": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\build\\reports\\ponder-sync-20261104\\baseline-C3A2C178-create_nuclear_industry-0.1.0.jar",
+  "baseline_bytes": 3714927,
+  "baseline_sha256": "C3A2C178CEDEBD05436DB3E1F3244CF361752AF7B8945C2A1AF154C82057D5C3",
+  "assemble": {
+    "exit": 0,
+    "command": "./gradlew.bat assemble --console=plain --init-script build/reports/ponder-sync-20261104/artifact-inputs.init.gradle",
+    "elapsed_seconds": 8.871477
+  },
+  "frozen_25_unchanged": true,
+  "actual_gradle_source_roots": [
+    "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\src\\main\\java",
+    "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\src\\main\\resources"
+  ],
+  "actual_input_groups": {
+    "mainSource": 2255,
+    "compileInputs": 552,
+    "processResourcesInputs": 1792,
+    "jarInputs": 2609,
+    "buildDefinition": 7
+  },
+  "all_actual_input_files": 4960,
+  "all_input_hashes_unchanged": true,
+  "source_file_set_unchanged": true,
+  "payload_count": 2609,
+  "class_count": 825,
+  "bound_payload_count": 2609,
+  "added_payload": [
+    "assets/create_nuclear_industry/ponder/experimental_reactor_safety.nbt",
+    "assets/create_nuclear_industry/ponder/high_pressure_boiler_safety.nbt",
+    "assets/create_nuclear_industry/ponder/radiation_protection.nbt",
+    "assets/create_nuclear_industry/ponder/reactor_administrator_operation.nbt",
+    "assets/create_nuclear_industry/ponder/reactor_administrator_setup.nbt",
+    "com/iksxh/create_nuclear_industry/ponder/RadiationPonderScenes.class",
+    "com/iksxh/create_nuclear_industry/ponder/ReactorAdministratorPonderScenes.class",
+    "com/iksxh/create_nuclear_industry/ponder/ReactorSafetyPonderScenes.class"
+  ],
+  "changed_payload": [
+    "assets/create_nuclear_industry/lang/en_us.json",
+    "assets/create_nuclear_industry/lang/zh_cn.json",
+    "assets/create_nuclear_industry/ponder/high_pressure_boiler_steam.nbt",
+    "com/iksxh/create_nuclear_industry/ponder/BoilerPonderScenes.class",
+    "com/iksxh/create_nuclear_industry/ponder/CentrifugePonderScenes.class",
+    "com/iksxh/create_nuclear_industry/ponder/DryStoragePonderScenes.class",
+    "com/iksxh/create_nuclear_industry/ponder/FuelSinteringPonderScenes.class",
+    "com/iksxh/create_nuclear_industry/ponder/P1PonderPlugin.class",
+    "com/iksxh/create_nuclear_industry/ponder/P1PonderScenes.class",
+    "com/iksxh/create_nuclear_industry/ponder/TurbinePonderScenes.class"
+  ],
+  "deleted_payload": [],
+  "excluded_accident_test_payload": [],
+  "five_new_nbt_present": true,
+  "three_new_scene_classes_and_plugin_present": true,
+  "both_locales_187_ponder_keys": true,
+  "git_status": "M build/libs/create_nuclear_industry-0.1.0.jar",
+  "assets_data_resource_count": 1776,
+  "processed_resource_payload_count": 1780,
+  "manifest_license_payload_count": 4
+}

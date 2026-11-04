@@ -1,0 +1,127 @@
+[
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/BoilerPonderScenes.java",
+    "bytes": 25450,
+    "sha256": "c74a176b8a51d23c23c187ea5ff9cc9b20d12e3101a59b8377c2b916eb15f3e3"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/CentrifugePonderScenes.java",
+    "bytes": 11326,
+    "sha256": "f23c779f583399f74be2c7deb2b1040ea3e776ee78154262ef89bb38495e2652"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/DryStoragePonderScenes.java",
+    "bytes": 8881,
+    "sha256": "3fa2bbebe60767db201787c0425d7b8fc3f1871f0572f23cf67666bce275a92d"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/FuelSinteringPonderScenes.java",
+    "bytes": 10865,
+    "sha256": "117497a816dbe9c7587ae4b91a3116624ebde176caf888fc41478128377130bc"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/P1PonderPlugin.java",
+    "bytes": 10826,
+    "sha256": "e71f8cb5508cb4e473800163016a0c96d5083ff67085dc7a568c7e23f4641179"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/P1PonderScenes.java",
+    "bytes": 39692,
+    "sha256": "b6daba9df872fa8caa5f9d272f12620819530a7ac1ed40eaa0775e1996b9dbea"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/RadiationPonderScenes.java",
+    "bytes": 8201,
+    "sha256": "7bf1d9c0fde3ca1b941624226f8ce4b79ae11401dace5935e06bfdafc4cbe689"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/ReactorAdministratorPonderScenes.java",
+    "bytes": 9712,
+    "sha256": "acbca4932fa612939f7b8d7b9f4c6cd6ec03911167348b304056a5337d7eb073"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/ReactorSafetyPonderScenes.java",
+    "bytes": 9145,
+    "sha256": "825ab7ea4aa354a3ef677e7b39215fb4514ce3ae2543aecc781dfaf3b398c9f3"
+  },
+  {
+    "path": "src/main/java/com/iksxh/create_nuclear_industry/ponder/TurbinePonderScenes.java",
+    "bytes": 18295,
+    "sha256": "f106c40c94c3598728a891828e1cd38714f1e14341c51f2566c88d29053c5f19"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/lang/en_us.json",
+    "bytes": 83855,
+    "sha256": "599a529fdf90a202dcb1188278d55c3bb978cacda1e46fb89e1740b6e194e3b0"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/lang/zh_cn.json",
+    "bytes": 78536,
+    "sha256": "4af2f57f0b6313b24fa14c829344013c07bf7dd264fe4f0d20ed296026fa0b85"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/ponder/experimental_reactor_safety.nbt",
+    "bytes": 1099,
+    "sha256": "05f4bf92bf80fc74c499018b6ac6e606ceeb03b84708d3169634961e5cef5f92"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/ponder/high_pressure_boiler_safety.nbt",
+    "bytes": 992,
+    "sha256": "1b6321f5e7e5e6058dc603959c94bcba524de8b266bc5873a2e2e31a4bb9dca9"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/ponder/high_pressure_boiler_steam.nbt",
+    "bytes": 1093,
+    "sha256": "e1469ba6365632ddca7350dfe0e5bd65c6a167dc62ea49bc6babd943847c5f10"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/ponder/radiation_protection.nbt",
+    "bytes": 1067,
+    "sha256": "6f779c72e899df754b28e4a26d45971a436ed79e453061f475502f07e5dbe061"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/ponder/reactor_administrator_operation.nbt",
+    "bytes": 1190,
+    "sha256": "7326d0cd24bb115bdbbde8c7854c0b473dd27ba8b9ce5fed4e45f52e7e833f21"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/ponder/reactor_administrator_setup.nbt",
+    "bytes": 1190,
+    "sha256": "7326d0cd24bb115bdbbde8c7854c0b473dd27ba8b9ce5fed4e45f52e7e833f21"
+  },
+  {
+    "path": "src/test/java/com/iksxh/create_nuclear_industry/BoilerPonderContractTest.java",
+    "bytes": 17242,
+    "sha256": "603b7334a91f3cf5d7f8377902d4e38716261cb1af04ef56a4af9e94dfe4a6ed"
+  },
+  {
+    "path": "src/test/java/com/iksxh/create_nuclear_industry/P1Ponder01ContractTest.java",
+    "bytes": 9418,
+    "sha256": "cd47af4344804d3f1828c3196876b2f64ee76bb9b42d1f036617100a7707ccd3"
+  },
+  {
+    "path": "src/test/java/com/iksxh/create_nuclear_industry/PonderCurrentFeaturesSyncContractTest.java",
+    "bytes": 10649,
+    "sha256": "3fdde898072d6dac50fd976caab8aaaefa4c43e530e8d09770238a017f868fa4"
+  },
+  {
+    "path": "src/test/java/com/iksxh/create_nuclear_industry/TurbinePonderContractTest.java",
+    "bytes": 17496,
+    "sha256": "4079479c71eedc70eab7c935c77103c10b0b6585f981635fc21fe6b573d25a36"
+  },
+  {
+    "path": "tools/ponder/boiler_scenes.py",
+    "bytes": 16483,
+    "sha256": "463534b8bbda8a508cc4d00bccd79fcc46f564b036c640fc3951d1c56176b93f"
+  },
+  {
+    "path": "tools/ponder/radiation_scenes.py",
+    "bytes": 2992,
+    "sha256": "52e1b0f05e22f53803bf0565211942d71f2386ef573544490a3ac88c583a8eaa"
+  },
+  {
+    "path": "tools/ponder/reactor_scenes.py",
+    "bytes": 16077,
+    "sha256": "ba17624342310ca0e0dfc5b5edb06b0090a083dcc0c8b34debb1effd49cb08ff"
+  }
+]

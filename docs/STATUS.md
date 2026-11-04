@@ -45,7 +45,7 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 现行功能思索查漏补缺 | 用户2026-11-04要求合入两事故候选后同步新增/变更功能。[PONDER-SYNC-01](superpowers/plans/2026-11-04-ponder-current-features-sync.md)在独立候选只读盘点八类20幕、模板生成器与双语；将修正尺寸/快捷换料等过时内容，补管理员和辐射/事故用法。工业管网不单独教学，不新增玩法或具体配方；main当前正式包保持。最终新场景需集中播放验收，不将原八类既有通过当作新幕已验 |
+| 现行功能思索查漏补缺 | 用户2026-11-04要求同步已有新增/变更用法。[PONDER-SYNC-01](superpowers/plans/2026-11-04-ponder-current-features-sync.md)已交[集中播放候选](reviews/2026-11-04/ponder-sync/CANDIDATE.md)：新增管理员2幕、反应堆事故回收/锅炉安全/辐射防护各1幕，更新原9幕，现共25幕；尺寸/主动汽口/快捷换料与钢板维修/停机与背压/配比与称呼已同步，不新增工业管网独立教学。准确源78f84c39，组合窄审PASS，专项32/32及delta18/18、25模板同源/19旧字节保持/双语187键；一次增量assemble exit0，3745990bytes/SHA64D8A4FC…505DCA8A，2609载荷绑定且只变教学。候选树reactor-explosion-fix/codex/ponder-sync-20261104；**待本次集中播放**，未合main教学或提升正式包，原三项JUnit失败/无关dirty/世界保持，不把静态当视觉通过 |
 | 主分支既有JUnit三失败 | 2026-10-23全量854项为840通过、3失败、11跳过、exit1；锅炉候选后续全量865项为851通过、同3失败、11跳过。两条HeatExchangerBoilerBridgeTest在未加载配置时读取冷凝参数，一条ReactorFissionDifferentialTest在scenario0/tick4全状态差分不等；未合事故main aa23d692定向15项精确复现同三测试名和完整异常、exit1。已证实为原基线问题，未修根因/放宽断言，gradlew build仍受它们阻断；2026-11-04只执行增量assemble并成功。原XML/调用链/基线身份见[执行报告](reviews/2026-10-23/accident-accepted-integration/EXECUTION.md)，不自动派发无关热工/测试修复 |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |
