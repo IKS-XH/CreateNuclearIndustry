@@ -1,6 +1,6 @@
 # 当前美术与渲染入口
 
-更新：2026-10-15。真实ID见[内容](../content-catalog.md)，状态见[STATUS](../STATUS.md)，阶段稿见[归档](../archive/2026-10-15/README.md)。
+更新：2026-11-05。真实ID见[内容](../content-catalog.md)，状态见[STATUS](../STATUS.md)，阶段稿见[归档](../archive/2026-10-15/README.md)。
 
 | 内容 | 入口/边界 |
 | --- | --- |
@@ -8,7 +8,8 @@
 | 离心机14B | [Renderer](../../src/main/java/com/iksxh/create_nuclear_industry/production/CentrifugeRenderer.java)，五模型/六PNG，底轴和转子共真实有符号RPM |
 | 装配台15C | [Renderer](../../src/main/java/com/iksxh/create_nuclear_industry/production/ShieldedAssemblyRenderer.java)、[动作JSON](../../src/main/resources/assets/create_nuclear_industry/shielded_assembly/animation.json)，八活动分件，原窗口/完整物品/Create半轴保持 |
 | 工业管泵阀 | Create原模型调色，实际运输方向由服务器决定；原冲突三角与静止箭头独立留验收 |
-| 其他加工/贮存设备 | 现行heat_exchanger、fuel_sintering_furnace、dry_storage_rack等模型，后续美术不改变工序 |
+| 干式贮存架19B | [状态路由](../../src/main/resources/assets/create_nuclear_industry/blockstates/dry_storage_rack.json)、完整level0～4及八PNG；B双列匣架沿四朝向/占用比例显示，单格碰撞与存取保持，见[集成](../reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md) |
+| 其他加工设备 | 现行heat_exchanger、fuel_sintering_furnace等模型，后续美术不改变工序 |
 | Logo/宣传 | mod_logo游戏图标，HD Logo/MC百科封面可编辑源在tools/art-assets，交付边界见美术README |
 | 贫化铀材料与装备18B | 15张专属PNG、11基础模型与40饰纹模型；公共护甲钩子只绑定穿戴层，属性与原生饰纹保持，见[来源](ART-DEPLETED-URANIUM-18B-ACCEPTED.md) |
 

@@ -1,0 +1,227 @@
+[
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_steel.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_steel.png",
+    "bytes": 119,
+    "sha256": "37f5af64fa9ff1ecca07c911951dd327d07cf421fd258daca22b7cec673806fd"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_edge.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_edge.png",
+    "bytes": 124,
+    "sha256": "04118def3e594ec57cd09eff6ea3e37fb3c7a9898fe54989aee95b04e4cc7645"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_concrete.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_concrete.png",
+    "bytes": 139,
+    "sha256": "d3467ca4939cc7c99b7a54a518800daa6b30cedda877c620f0ea2a1486344b59"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_dark.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_dark.png",
+    "bytes": 108,
+    "sha256": "223bfc2d82e0aa7c234c4f2376e869ca09c9ce14c5a431e89afdb06b59fdd386"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_vent.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_vent.png",
+    "bytes": 100,
+    "sha256": "7c68229306fa2b965397c81152432abca654cefac658caea2765c64c4e762ec0"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_cask.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_cask.png",
+    "bytes": 127,
+    "sha256": "80135699d4a79b60b7823f76e089dcd4d338a5e415213e9a2bccb12348d11365"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_off.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_off.png",
+    "bytes": 107,
+    "sha256": "678be42cbaeebaef0fa4f718d97972add14ea68469a906be7649bfe860a3e9c5"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_on.png",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_on.png",
+    "bytes": 107,
+    "sha256": "5f42eaa93d537d654cddcb429b36f4da56e458d57d55807c9cc4a7fa373eb046"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_0.json",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_0.json",
+    "bytes": 78240,
+    "sha256": "39accda32970d0d988f83bce66b2d97fa91f3224b3bac99f8a8bf5ab613e3648"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_1.json",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_1.json",
+    "bytes": 97707,
+    "sha256": "d0c46d883ceb328510b0f1dc7982a311c209d40456c1ab48fa22b7b00fb8bbff"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_2.json",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_2.json",
+    "bytes": 117215,
+    "sha256": "7d3a93f59b0049dfd396f0534b5942589e852424014249a217c18b06241882e2"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_3.json",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_3.json",
+    "bytes": 136597,
+    "sha256": "21dbb520019af289dac6196a682d6c250ba42199aabee0657be533823e07c066"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_4.json",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_4.json",
+    "bytes": 156020,
+    "sha256": "18833b0181c0bacbfa89c20766e4e86a3c62ccb5b508d9ede83a24bbfa495e25"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/blockstates/dry_storage_rack.json",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/blockstates/dry_storage_rack.json",
+    "bytes": 2538,
+    "sha256": "a2ed49df49f697024d284a769fad24f0173aa3b29c2aa69965789f935092da43"
+  },
+  {
+    "path": "src/main/resources/assets/create_nuclear_industry/models/item/dry_storage_rack.json",
+    "kind": "production",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/artifact/ART-DRY-STORAGE-19B-15-resources.zip",
+    "zipEntry": "src/main/resources/assets/create_nuclear_industry/models/item/dry_storage_rack.json",
+    "bytes": 1190,
+    "sha256": "29af5633c5de0bc72a0489dcb0f10f3e14ad1dad13971387a1843b072296c451"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/steel.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/steel.svg",
+    "bytes": 604,
+    "sha256": "5bbfcf8615b70e42adc7a3367249c10b6c8eccad64b39a28a4e5b2ca5030e549"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/edge.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/edge.svg",
+    "bytes": 545,
+    "sha256": "d4b5a82e8065f6977ed952557994469c882379520f22267e8a62971de97b779c"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/concrete.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/concrete.svg",
+    "bytes": 662,
+    "sha256": "3f3f36eab8477abb16feafcda37bd6161ad56276198a668f1c562a78793a767e"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/dark.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/dark.svg",
+    "bytes": 425,
+    "sha256": "7a24094471761c537d5d7b3a25dec3efa246dc207edb56a7707a045790e43b10"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/vent.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/vent.svg",
+    "bytes": 666,
+    "sha256": "21e480b96b23281bbdefb66c5a5b50261189537027a509638dc9a34cd64efc74"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/cask.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/cask.svg",
+    "bytes": 543,
+    "sha256": "6ca629b21a2e9ef7d27cf893addd809eed065ebd03c4ecf588cde136c1833001"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/indicator_off.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/indicator_off.svg",
+    "bytes": 484,
+    "sha256": "547fef290e8c44f81e7dc87301ebcf5dfccea9e0a0b4f2e0ab5f0356f83b51ff"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/indicator_on.svg",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/indicator_on.svg",
+    "bytes": 484,
+    "sha256": "049164bb5d272b14d41bdc31827226b1dcc8a705fdb2a87f700f8279468eb04d"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/level_0.json",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/level_0.json",
+    "bytes": 83128,
+    "sha256": "b62230925344f0bd4ab36b6f706db85fb52eddccb106a10d920509795ccf63e1"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/level_1.json",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/level_1.json",
+    "bytes": 103858,
+    "sha256": "1a7a7aefc07c4d984b19a11b5eb6b06aa81df166d62f9748c50c0766c633833d"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/level_2.json",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/level_2.json",
+    "bytes": 124629,
+    "sha256": "364e5f8ee1626f1edda85fcadaf22898f1f1c5585a5001331c85f3623fb5a55d"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/level_3.json",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/level_3.json",
+    "bytes": 145274,
+    "sha256": "04662aee922f1380ef9506fe88a9c161c0e8c1fa4bc9299a91f74ff8a10d0c53"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/level_4.json",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/level_4.json",
+    "bytes": 165960,
+    "sha256": "aafdf029ca38edd7d8b0283fe91031ad934f19a9a851d287487e79b0838d285e"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-concepts-19/assets/b/item.json",
+    "kind": "approvedEditable",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-concepts-19/assets/b/item.json",
+    "bytes": 84338,
+    "sha256": "905901ec39863d40328d01b93ade9a3365d7877a776ab3d6ce28b363959ad6f8"
+  },
+  {
+    "path": "tools/art-assets/dry-storage-art-19b/mapping.json",
+    "kind": "mapping",
+    "source": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/tools/art-assets/dry-storage-art-19b/mapping.json",
+    "bytes": 10407,
+    "sha256": "112b784f9868cc5d589d921403630fb5446f3af607253e4d219294764f45be9f"
+  }
+]

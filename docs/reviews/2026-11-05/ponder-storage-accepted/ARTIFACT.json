@@ -1,0 +1,63 @@
+{
+  "sourceCommit": "0656b1124f0ccc7c7f80c64956905656f3056bf5",
+  "jar": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix/build/libs/create_nuclear_industry-0.1.0.jar",
+  "bytes": 3782088,
+  "sha256": "e0abfc7e0eed70ae2f4476cffe7dbd7ce2cbd422d6919a13791f31b8cc6d15ef",
+  "baselineJar": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\build\\reports\\ponder-storage-accepted-20261105/baseline-64D8A4FC-create_nuclear_industry-0.1.0.jar",
+  "baseline": {
+    "bytes": 3745990,
+    "sha256": "64d8a4fcfa2608e1a8a29509ea25b1802a20fae5cf032d13a9575220505dca8a"
+  },
+  "assemble": {
+    "command": ".\\gradlew.bat assemble --console=plain --init-script build/reports/ponder-storage-accepted-20261105/artifact-inputs.init.gradle",
+    "invocationCount": 1,
+    "started": "2026-11-05T08:11:25.9109833+08:00",
+    "finished": "2026-11-05T08:11:39.0195061+08:00",
+    "exitCode": 0,
+    "elapsedSeconds": 13.259083
+  },
+  "sourceFilesSame": 30,
+  "srcFilesUnchanged": 2430,
+  "actualProductionInputsUnchanged": 2366,
+  "actualInputGroups": {
+    "mainSource": 2267,
+    "compileInputs": 552,
+    "processResourcesInputs": 1804,
+    "buildDefinition": 7,
+    "packagingSources": 3
+  },
+  "actualSourceRoots": [
+    "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\src\\main\\java",
+    "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\src\\main\\resources"
+  ],
+  "jarInputsUnchanged": 2621,
+  "allPayloadBound": 2621,
+  "classPayloads": 825,
+  "processedResourcePayloads": 1792,
+  "manifestLicensePayloads": 4,
+  "productionResourcesOriginalBytes": 15,
+  "addedPayload": [
+    "assets/create_nuclear_industry/models/block/dry_storage_rack_1.json",
+    "assets/create_nuclear_industry/models/block/dry_storage_rack_2.json",
+    "assets/create_nuclear_industry/models/block/dry_storage_rack_3.json",
+    "assets/create_nuclear_industry/models/block/dry_storage_rack_4.json",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_cask.png",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_concrete.png",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_dark.png",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_edge.png",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_off.png",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_on.png",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_steel.png",
+    "assets/create_nuclear_industry/textures/block/dry_storage_rack_vent.png"
+  ],
+  "modifiedPayload": [
+    "assets/create_nuclear_industry/blockstates/dry_storage_rack.json",
+    "assets/create_nuclear_industry/models/block/dry_storage_rack_0.json",
+    "assets/create_nuclear_industry/models/item/dry_storage_rack.json"
+  ],
+  "deletedPayload": [],
+  "excludedAccidentTestPayload": [],
+  "nonBatchPayloadUnchanged": 2606,
+  "gitStatus": "M README.md\n M build/libs/create_nuclear_industry-0.1.0.jar\n M docs/README.md\n M docs/art/ASSET-INVENTORY.md\n M docs/art/README.md\n M docs/implementation-roadmap.md\n M docs/project.md",
+  "businessTestsRun": false
+}

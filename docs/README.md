@@ -1,6 +1,6 @@
 # 项目文档入口
 
-更新：2026-11-04。文档按职责组织；旧方案、阶段候选与执行时间线进入[归档](archive/README.md)，旧待实现/未合main不是当前状态。
+更新：2026-11-05。文档按职责组织；旧方案、阶段候选与执行时间线进入[归档](archive/README.md)，旧待实现/未合main不是当前状态。
 
 | 要查什么 | 入口 |
 | --- | --- |
@@ -8,7 +8,7 @@
 | 下一步、后置范围与依赖 | [路线图](implementation-roadmap.md) |
 | 产品与现行设备规则 | [项目设计](project.md) |
 | 堆芯、局部控制、热工和损伤 | [反应堆合同](reactor-local-control-revision-design.md) |
-| 管理员GUI、恒功率、闭环和续接 | [管理员](reactor-automation.md) |
+| 管理员GUI、恒功率、保护和续接 | [管理员](reactor-automation.md) |
 | 真实ID与资源路径 | [内容清单](content-catalog.md) |
 | 实际加工关系与配方规则 | [配方](recipes.md) |
 | 文件、键、默认值、单位 | [配置](server-config.md) |
@@ -20,7 +20,8 @@
 
 当前活动卡与现行来源：
 
-- [现行功能思索查漏补缺](superpowers/plans/2026-11-04-ponder-current-features-sync.md)：[25幕候选与集中复看](reviews/2026-11-04/ponder-sync/CANDIDATE.md)，新增/改段入口、源与制品见候选，结果及播放门只看STATUS。
+- [思索与贮存架外观联合合入](superpowers/plans/2026-11-05-ponder-storage-accepted-integration.md)：[来源与制品](reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)，当前结果统一见STATUS。
+- [现行功能思索同步](superpowers/plans/2026-11-04-ponder-current-features-sync.md)：原[25幕候选与复看](reviews/2026-11-04/ponder-sync/CANDIDATE.md)保留实现/测试语境，已验教学不重复开播放门。
 - [锅炉事故与反应堆外爆联合合入](superpowers/plans/2026-11-04-boiler-explosion-accepted-integration.md)：[集成记录](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)，验收与正式制品统一见STATUS。
 - [运行堆原生外爆漏接修复](superpowers/plans/2026-10-27-reactor-external-explosion-fix.md)及[锅炉多阀与事故](superpowers/specs/2026-10-26-boiler-accidents-design.md)：保留原实现/候选证据；[技术步骤01](superpowers/plans/2026-10-26-boiler-safety-01.md)、[技术步骤02](superpowers/plans/2026-10-26-boiler-safety-02.md)不重复打开已关闭的人工门。
 - [事故功能与R1美术联合集成](superpowers/plans/2026-10-23-accident-accepted-integration-01.md)：用户已确认联合手测并授权合入，实际结果见STATUS；[美术写集](superpowers/plans/2026-10-23-accident-art-integration-01.md)和[创造拆除窄修](superpowers/plans/2026-10-22-corium-creative-removal-01.md)保留来源，不再列重复人工门。

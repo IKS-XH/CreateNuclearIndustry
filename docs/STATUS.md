@@ -1,12 +1,12 @@
 # 当前状态与验收
 
-更新：2026-11-04。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
+更新：2026-11-05。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
 
 ## 主分支与正式包
 
-- 已提交生产并集`16e14ae10735f7fb390e2f834b9b67e987586f45`，用户2026-11-04确认锅炉事故与反应堆原生外爆修复两个候选手测通过并授权合main。源分别为`7d2a28eb`与`96335648`，仅Jar测试排除块需并存，35项非build源保持对应已验blob；保留原`3b905260`局部事故/热危害/熔融物/22-R1及既有优化、管理员两模式、MIT和护具/动态指针。应力闭环保持删除，不含T6/B1。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3714927 bytes，SHA256 `C3A2C178CEDEBD05436DB3E1F3244CF361752AF7B8945C2A1AF154C82057D5C3`，按用户要求跟踪Git。准确并集一次增量assemble/13秒/exit0，2262生产输入前后未变，2601载荷（822class、1775资源及4项清单/许可）全部绑定输出；两批新增测试类/域均排除，相对原外爆包31项锅炉载荷增改、0删除/模型变化。[合入与验收](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)、[组合窄审](reviews/2026-11-04/boiler-explosion-accepted/REVIEW.md)、[制品](reviews/2026-11-04/boiler-explosion-accepted/ARTIFACT.md)。旧日期包、来源分支、用户世界和主目录无关3D dirty保持。
-- 本轮复用未变来源的锅炉52/52定向及19场真实服核心、外爆17/17及7/7真实服，末次各1实跑/18或6显式SKIP不称整套重跑；用户集中手测门已闭。锅炉R4隔离Nether子项缺口保留为历史自动证据限制，不扩写用户反馈为逐项自动通过。原三条JUnit基线失败未改、未重跑全量，不称gradlew build全绿，详见独立未闭门；未明确报告的真人多人/物理卸载仍不补记。
+- 已提交生产并集`0656b1124f0ccc7c7f80c64956905656f3056bf5`。用户2026-11-05确认新思索手测通过并要求合main，同时授权干式贮存架19B外观一并集成：思索源78f84c39、5新/9改共25幕，外观15资源与批准B稿原字节同源，保14可编辑原稿及映射。保留16e14ae1的锅炉事故/反应堆外爆、原局部事故/热危害/熔融物/22-R1和既有功能；应力闭环仍删除，不含T6/B1。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3782088 bytes，SHA256 `E0ABFC7E0EED70AE2F4476CFFE7DBD7CE2CBD422D6919A13791F31B8CC6D15EF`，按用户要求跟踪Git。准确源一次增量assemble/13.259秒/exit0，30源与实际输入前后保持，2621载荷（825class、1792资源及4项清单/许可）全部绑定；两事故测试类/域排除。相对已验思索包仅19B的12新增/3修改/0删除，其余2606载荷原字节保持。[合入与来源](reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)、[窄审](reviews/2026-11-05/ponder-storage-accepted/REVIEW.md)、[制品](reviews/2026-11-05/ponder-storage-accepted/ARTIFACT.md)。旧包/来源树/世界和无关3D dirty保留。
+- 思索原专项32/32、delta18/18与25模板/双语187键证据沿未变来源复用，本轮人工播放门关闭。19B原2048像素/五模型/20路由/PNG预览与审查复用，按本轮明确授权合入，不补记未报告的逐视觉细项/真人多人。没有重跑机器、全量JUnit或视觉矩阵，原三条JUnit基线失败仍保留，不称gradlew build全绿。
 
 ## 已合入并按相应范围验收
 
@@ -20,7 +20,8 @@
 | 换热与动力 | Create锅炉供热、温压锅炉、双汽库存共容积、三档汽轮机及普通汽冷凝回水 | [锅炉](archive/2026-10-15/reviews/2026-10-08/boiler-rework-01/ACCEPTANCE.md)、[汽轮机/冷凝](archive/2026-10-15/reviews/2026-10-05/condense-01/ACCEPTANCE.md) |
 | 加工核热 | 顶部盆/炉存在即持续耗热，缺热液或冷液堵塞立即停热 | [工作盆](archive/2026-10-15/reviews/2026-10-09/exchanger-basin-02r1/ACCEPTANCE.md)、[烧结炉](archive/2026-10-15/reviews/2026-10-09/exchanger-sintering-03/ACCEPTANCE.md) |
 | 基础封存 | 屏蔽桶、干式架、设备/零件有序配方 | [验收](archive/2026-10-15/reviews/2026-10-06/store-01/ACCEPTANCE.md) |
-| 八类基础思索 | 离心机、反应堆、锅炉、汽轮机、换热器、烧结炉、装配台、贮存架 | [装配台单页](archive/2026-10-15/reviews/2026-10-10/shielded-assembly-ponder-07/ACCEPTANCE.md)、[贮存架](archive/2026-10-15/reviews/2026-10-11/dry-storage-ponder-08/ACCEPTANCE.md)及前批播放验收 |
+| 现行25幕思索 | 原八类设备加管理员两幕、反应堆事故/锅炉安全/辐射防护各一幕，9旧幕同步尺寸、主动出汽、快捷换料/维修、背压/停机及文案。用户2026-11-05确认新教学手测通过并授权合main；19旧模板保持，工业管网不独立教学 | [本轮验收/来源](reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)、[原盘点与专项证据](reviews/2026-11-04/ponder-sync/EXECUTION.md) |
+| 干式贮存架19B外观 | 用户2026-11-05指出未合外观并要求一起合入，取B双列匣架15资源与14批准原稿/映射，不同步旧美术逻辑。四朝向/占用比例、单格碰撞、容量与存取保持；无额外门动画/GUI | [集成与同源核验](reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)、[美术入口](art/README.md) |
 | 专用流体管网 | 两档管阀、一种工业泵；热液/SC专用运输，现有口2048/4096mB/t | [功能/外观合入](archive/2026-10-15/reviews/2026-10-12/turbine-fluid-accepted-integration/ACCEPTANCE.md) |
 | 管理员 | 三页GUI、统一调棒、恒功率、核热值班、部分缺料不停堆及原状态续接 | [联合验收](archive/2026-10-15/reviews/2026-10-14/reactor-administrator-accepted-integration/ACCEPTANCE.md) |
 | 锅炉主动汽口 | 汽口沿合法工业管主动出汽，不需补外置泵；原联合交付中的管理员闭环已按2026-10-20要求移除 | [原联合验收](archive/2026-10-15/reviews/2026-10-14/load-follow-boiler-accepted-integration/ACCEPTANCE.md)、[移除边界](reviews/2026-10-20/reactor-load-follow-removal/INTEGRATION.md) |
@@ -45,7 +46,6 @@
 
 | 事项 | 状态/条件 |
 | --- | --- |
-| 现行功能思索查漏补缺 | 用户2026-11-04要求同步已有新增/变更用法。[PONDER-SYNC-01](superpowers/plans/2026-11-04-ponder-current-features-sync.md)已交[集中播放候选](reviews/2026-11-04/ponder-sync/CANDIDATE.md)：新增管理员2幕、反应堆事故回收/锅炉安全/辐射防护各1幕，更新原9幕，现共25幕；尺寸/主动汽口/快捷换料与钢板维修/停机与背压/配比与称呼已同步，不新增工业管网独立教学。准确源78f84c39，组合窄审PASS，专项32/32及delta18/18、25模板同源/19旧字节保持/双语187键；一次增量assemble exit0，3745990bytes/SHA64D8A4FC…505DCA8A，2609载荷绑定且只变教学。候选树reactor-explosion-fix/codex/ponder-sync-20261104；**待本次集中播放**，未合main教学或提升正式包，原三项JUnit失败/无关dirty/世界保持，不把静态当视觉通过 |
 | 主分支既有JUnit三失败 | 2026-10-23全量854项为840通过、3失败、11跳过、exit1；锅炉候选后续全量865项为851通过、同3失败、11跳过。两条HeatExchangerBoilerBridgeTest在未加载配置时读取冷凝参数，一条ReactorFissionDifferentialTest在scenario0/tick4全状态差分不等；未合事故main aa23d692定向15项精确复现同三测试名和完整异常、exit1。已证实为原基线问题，未修根因/放宽断言，gradlew build仍受它们阻断；2026-11-04只执行增量assemble并成功。原XML/调用链/基线身份见[执行报告](reviews/2026-10-23/accident-accepted-integration/EXECUTION.md)，不自动派发无关热工/测试修复 |
 | 汽轮机实例化局部观察 | C1保留一个P3：渲染原点重定位时实例可能缺一帧，下一帧恢复；本批审查由调用链确认，未新增现场复现，后续仅针对visual初始化修正。Sodium/Iris/光影、真人多人和真实单机暂停未补记通过；S1旧堵塞帧耗时暂态不称已解决，详见[集成边界](reviews/2026-10-18/thermal-performance-accepted-integration/INTEGRATION.md) |
 | 生存整线衔接 | 用户选择优先完善现有整线；[只读核查和观察准备](reviews/2026-10-16/main-flow-01/READINESS.md)未发现可证实硬断链/自举死循环，列明副产物排出、装配工序、启动与工质回路等实际约束；小规模集中游戏观察尚未执行，不称新的整体验收。值班长构想仍后置；本地管理员应力闭环已按后续明确要求移除 |

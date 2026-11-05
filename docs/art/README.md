@@ -1,6 +1,6 @@
 # 美术协作入口
 
-更新：2026-10-21。用户任命对话“美术负责人：贴图、建模与动画”管理贴图/模型/动画；工作树E:/MyMC/NewMod/Create_NuclearIndustry-art-studio、分支codex/art-studio。全局逻辑/治理与Git归主PM协调，原选稿/阶段报告见[归档](../archive/2026-10-15/README.md)。
+更新：2026-11-05。用户任命对话“美术负责人：贴图、建模与动画”管理贴图/模型/动画；工作树E:/MyMC/NewMod/Create_NuclearIndustry-art-studio、分支codex/art-studio。全局逻辑/治理与Git归主PM协调，原选稿/阶段报告见[归档](../archive/2026-10-15/README.md)。
 
 2026-10-23本批例外：用户明确要求直接在当前事故候选分支完成熔融物、冷热残骸及废料外观，与功能一起测试合入。[协作卡](../superpowers/plans/2026-10-23-accident-art-integration-01.md)指定唯一实施树`E:/MyMC/NewMod/Create_NuclearIndustry-accident`/`codex/accident-thermal-04b`、基准`1985d1b3`及精确资源/客户端纹理写集；原美术树和用户世界保留，Git仍由主PM管理。本批结果/未闭门见[STATUS](../STATUS.md)。
 
@@ -11,6 +11,8 @@
 最新14B离心机、15B-R1装配台及15C动画已合main，包见[STATUS](../STATUS.md)。离心机外观/黑窗已验，15C游戏制造/封装/停恢复尚未报告，见[观察入口](ART-SHIELDED-ASSEMBLY-15C-CANDIDATE.md)与[任务卡](tasks/ART-SHIELDED-ASSEMBLY-15C.md)。
 
 16B烧结炉A「锻钢箱炉」外观已由用户确认并接入main，三模型/九贴图保持原加工行为；[验收与来源](../reviews/2026-10-15/sintering-art-accepted-integration/INTEGRATION.md)。16A/16B可编辑原稿、工具与原审查保留在art提交056e474，不用旧美术整包替换主线。
+
+干式贮存架19B「B双列匣架」按用户2026-11-05指令精确合入15项资源：八PNG、五完整占用模型、20状态路由及空架物品。仅替换外观，0..4仍是容量比例，不增加门动画/GUI或改变存取。14份批准B可编辑原稿及原映射已保留在`tools/art-assets/dry-storage-concepts-19/assets/b/`、`tools/art-assets/dry-storage-art-19b/mapping.json`；来源ZIP、审查和正式包见[联合集成](../reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)。原工作区和测试包保留，不同步旧美术逻辑。
 
 贫化铀装备18B专属外观由用户确认手测通过；66资源及公共护甲贴图钩子随装备功能集成，见[验收与来源](ART-DEPLETED-URANIUM-18B-ACCEPTED.md)。原稿、预览与运行副本保留。
 

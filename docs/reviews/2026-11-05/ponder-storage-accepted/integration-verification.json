@@ -1,0 +1,77 @@
+{
+  "result": "PASS_EXACT_INTEGRATION",
+  "head": "54b35801162ea0a2deb1a4db74c12a2980c211ac",
+  "sameSourceFiles": 30,
+  "productionFiles": 15,
+  "newProduction": 12,
+  "modifiedProduction": 3,
+  "deletedProduction": 0,
+  "variants": 20,
+  "models": [
+    {
+      "level": 0,
+      "elements": 173,
+      "approvedGeometryUv": true,
+      "bounds": "0..16",
+      "referencesResolved": true
+    },
+    {
+      "level": 1,
+      "elements": 226,
+      "approvedGeometryUv": true,
+      "bounds": "0..16",
+      "referencesResolved": true
+    },
+    {
+      "level": 2,
+      "elements": 279,
+      "approvedGeometryUv": true,
+      "bounds": "0..16",
+      "referencesResolved": true
+    },
+    {
+      "level": 3,
+      "elements": 332,
+      "approvedGeometryUv": true,
+      "bounds": "0..16",
+      "referencesResolved": true
+    },
+    {
+      "level": 4,
+      "elements": 385,
+      "approvedGeometryUv": true,
+      "bounds": "0..16",
+      "referencesResolved": true
+    }
+  ],
+  "itemCompleteEmptyRack": true,
+  "ponderVerified": 25,
+  "nonBatchSrcUnchanged": true,
+  "legacyResourcesPreserved": true,
+  "sourceStudioStatusUnchanged": true,
+  "acceptedJarUnchanged": {
+    "bytes": 3745990,
+    "sha256": "64d8a4fcfa2608e1a8a29509ea25b1802a20fae5cf032d13a9575220505dca8a"
+  },
+  "changedProduction": [
+    "src/main/resources/assets/create_nuclear_industry/blockstates/dry_storage_rack.json",
+    "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_0.json",
+    "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_1.json",
+    "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_2.json",
+    "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_3.json",
+    "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_4.json",
+    "src/main/resources/assets/create_nuclear_industry/models/item/dry_storage_rack.json",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_cask.png",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_concrete.png",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_dark.png",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_edge.png",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_off.png",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_on.png",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_steel.png",
+    "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_vent.png"
+  ],
+  "buildRun": false,
+  "businessTestsRun": false,
+  "pixelsReused": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/build/reports/art/ART-DRY-STORAGE-19B/assets/verification.json",
+  "originalReviewReused": "E:/MyMC/NewMod/Create_NuclearIndustry-art-studio/docs/art/reports/ART-DRY-STORAGE-19B-REVIEW.md"
+}
