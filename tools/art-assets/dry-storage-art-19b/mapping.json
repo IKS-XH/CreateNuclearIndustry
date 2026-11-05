@@ -1,0 +1,211 @@
+{
+  "task": "ART-DRY-STORAGE-19B",
+  "sourceCommit": "e6a21b7737ac81f183489590ee3610848aad9f1d",
+  "targetRoot": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-dry19b",
+  "approvedConcept": "B 双列匣架",
+  "sourceRoot": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b",
+  "productionFileCount": 15,
+  "files": [
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_steel.png",
+      "bytes": 119,
+      "targetSha256": "37f5af64fa9ff1ecca07c911951dd327d07cf421fd258daca22b7cec673806fd",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\steel.svg",
+          "sha256": "5bbfcf8615b70e42adc7a3367249c10b6c8eccad64b39a28a4e5b2ca5030e549"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_edge.png",
+      "bytes": 124,
+      "targetSha256": "04118def3e594ec57cd09eff6ea3e37fb3c7a9898fe54989aee95b04e4cc7645",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\edge.svg",
+          "sha256": "d4b5a82e8065f6977ed952557994469c882379520f22267e8a62971de97b779c"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_concrete.png",
+      "bytes": 139,
+      "targetSha256": "d3467ca4939cc7c99b7a54a518800daa6b30cedda877c620f0ea2a1486344b59",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\concrete.svg",
+          "sha256": "3f3f36eab8477abb16feafcda37bd6161ad56276198a668f1c562a78793a767e"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_dark.png",
+      "bytes": 108,
+      "targetSha256": "223bfc2d82e0aa7c234c4f2376e869ca09c9ce14c5a431e89afdb06b59fdd386",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\dark.svg",
+          "sha256": "7a24094471761c537d5d7b3a25dec3efa246dc207edb56a7707a045790e43b10"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_vent.png",
+      "bytes": 100,
+      "targetSha256": "7c68229306fa2b965397c81152432abca654cefac658caea2765c64c4e762ec0",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\vent.svg",
+          "sha256": "21e480b96b23281bbdefb66c5a5b50261189537027a509638dc9a34cd64efc74"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_cask.png",
+      "bytes": 127,
+      "targetSha256": "80135699d4a79b60b7823f76e089dcd4d338a5e415213e9a2bccb12348d11365",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\cask.svg",
+          "sha256": "6ca629b21a2e9ef7d27cf893addd809eed065ebd03c4ecf588cde136c1833001"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_off.png",
+      "bytes": 107,
+      "targetSha256": "678be42cbaeebaef0fa4f718d97972add14ea68469a906be7649bfe860a3e9c5",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\indicator_off.svg",
+          "sha256": "547fef290e8c44f81e7dc87301ebcf5dfccea9e0a0b4f2e0ab5f0356f83b51ff"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/textures/block/dry_storage_rack_indicator_on.png",
+      "bytes": 107,
+      "targetSha256": "5f42eaa93d537d654cddcb429b36f4da56e458d57d55807c9cc4a7fa373eb046",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\indicator_on.svg",
+          "sha256": "049164bb5d272b14d41bdc31827226b1dcc8a705fdb2a87f700f8279468eb04d"
+        }
+      ],
+      "transform": "16²整数rect精确RGBA，无缩放"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_0.json",
+      "bytes": 78240,
+      "targetSha256": "39accda32970d0d988f83bce66b2d97fa91f3224b3bac99f8a8bf5ab613e3648",
+      "previousSha256": "f6300ce95b357efde42d3013253d073d02eb43c31c06f073d2f672bdb4edffd2",
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\level_0.json",
+          "sha256": "b62230925344f0bd4ab36b6f706db85fb52eddccb106a10d920509795ccf63e1"
+        }
+      ],
+      "transform": "仅替换纹理资源ID，elements/UV/ambientocclusion保持"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_1.json",
+      "bytes": 97707,
+      "targetSha256": "d0c46d883ceb328510b0f1dc7982a311c209d40456c1ab48fa22b7b00fb8bbff",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\level_1.json",
+          "sha256": "1a7a7aefc07c4d984b19a11b5eb6b06aa81df166d62f9748c50c0766c633833d"
+        }
+      ],
+      "transform": "仅替换纹理资源ID，elements/UV/ambientocclusion保持"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_2.json",
+      "bytes": 117215,
+      "targetSha256": "7d3a93f59b0049dfd396f0534b5942589e852424014249a217c18b06241882e2",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\level_2.json",
+          "sha256": "364e5f8ee1626f1edda85fcadaf22898f1f1c5585a5001331c85f3623fb5a55d"
+        }
+      ],
+      "transform": "仅替换纹理资源ID，elements/UV/ambientocclusion保持"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_3.json",
+      "bytes": 136597,
+      "targetSha256": "21dbb520019af289dac6196a682d6c250ba42199aabee0657be533823e07c066",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\level_3.json",
+          "sha256": "04662aee922f1380ef9506fe88a9c161c0e8c1fa4bc9299a91f74ff8a10d0c53"
+        }
+      ],
+      "transform": "仅替换纹理资源ID，elements/UV/ambientocclusion保持"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/models/block/dry_storage_rack_4.json",
+      "bytes": 156020,
+      "targetSha256": "18833b0181c0bacbfa89c20766e4e86a3c62ccb5b508d9ede83a24bbfa495e25",
+      "previousSha256": null,
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\level_4.json",
+          "sha256": "aafdf029ca38edd7d8b0283fe91031ad934f19a9a851d287487e79b0838d285e"
+        }
+      ],
+      "transform": "仅替换纹理资源ID，elements/UV/ambientocclusion保持"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/blockstates/dry_storage_rack.json",
+      "bytes": 2538,
+      "targetSha256": "a2ed49df49f697024d284a769fad24f0173aa3b29c2aa69965789f935092da43",
+      "previousSha256": "bdfc27f71d32d137f633baf6f5f9b1cc9cf089a38115436bc29eb22e6ed9de86",
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\build\\reports\\art\\ART-DRY-STORAGE-19B\\baseline\\old-blockstate.json",
+          "sha256": "bdfc27f71d32d137f633baf6f5f9b1cc9cf089a38115436bc29eb22e6ed9de86"
+        }
+      ],
+      "transform": "20个互斥variants替代multipart；朝向y与旧值一致，uvlock保持缺省false"
+    },
+    {
+      "targetPath": "src/main/resources/assets/create_nuclear_industry/models/item/dry_storage_rack.json",
+      "bytes": 1190,
+      "targetSha256": "29af5633c5de0bc72a0489dcb0f10f3e14ad1dad13971387a1843b072296c451",
+      "previousSha256": "f3bda8e7be3ed411172940c19fa2003e8d01d1158f4895ed389019700cbed0ef",
+      "sources": [
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\item.json",
+          "sha256": "905901ec39863d40328d01b93ade9a3365d7877a776ab3d6ce28b363959ad6f8"
+        },
+        {
+          "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-art-studio\\tools\\art-assets\\dry-storage-concepts-19\\assets\\b\\level_0.json",
+          "sha256": "b62230925344f0bd4ab36b6f706db85fb52eddccb106a10d920509795ccf63e1"
+        }
+      ],
+      "transform": "level0父级供完整空架几何；原样继承批准display，不重复elements"
+    }
+  ],
+  "stateMeaning": "0..4占用比例，不是四桶精确计数",
+  "blockParent": "无额外原版父级依赖；完整elements直接保留"
+}
