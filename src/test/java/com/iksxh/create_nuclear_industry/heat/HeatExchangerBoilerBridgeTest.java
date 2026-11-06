@@ -40,7 +40,7 @@ class HeatExchangerBoilerBridgeTest {
     private final List<PendingLevel> pendingWorlds = new ArrayList<>();
     private static final Map<ModConfigSpec.ConfigValue<?>, Object> ORIGINAL_VALUES = new LinkedHashMap<>();
 
-    /** 为实际pauseHeat和Create储罐构造准备规格默认值缓存，结束后恢复；不装载或保存配置文件。 */
+    /** 为实际pauseHeat、直列冷凝配置查询和Create储罐构造准备规格默认值缓存，结束后恢复；不装载或保存配置文件。 */
     @BeforeAll static void loadDefaults() throws ReflectiveOperationException {
         var cache = ModConfigSpec.ConfigValue.class.getDeclaredField("cachedValue");
         cache.setAccessible(true);
@@ -50,7 +50,12 @@ class HeatExchangerBoilerBridgeTest {
         for (var value : List.of(HeatExchangerConfig.HEAT_LEVEL, HeatExchangerConfig.HU_PER_LEVEL,
                 HeatExchangerConfig.BUFFER_TICKS, HeatExchangerConfig.HOT_CAPACITY_MB,
                 HeatExchangerConfig.COLD_CAPACITY_MB, HeatExchangerConfig.MAX_LINE_LENGTH,
-                HeatExchangerConfig.BASIN_HEAT_LEVEL_EQUIVALENT, P1ServerConfig.VALUES.coolantAbsorptionHuPerMb, tankCapacity)) {
+                HeatExchangerConfig.BASIN_HEAT_LEVEL_EQUIVALENT,
+                HeatExchangerConfig.CONDENSATION_RATE, HeatExchangerConfig.CONDENSATION_RECOVERY,
+                HeatExchangerConfig.CONDENSATION_STEAM_CAPACITY, HeatExchangerConfig.CONDENSATION_WATER_CAPACITY,
+                HeatExchangerConfig.CONDENSATION_SNOW, HeatExchangerConfig.CONDENSATION_ICE,
+                HeatExchangerConfig.CONDENSATION_PACKED_ICE, HeatExchangerConfig.CONDENSATION_WATER,
+                P1ServerConfig.VALUES.coolantAbsorptionHuPerMb, tankCapacity)) {
             ORIGINAL_VALUES.put(value, cache.get(value));
             cache.set(value, value.getDefault());
         }

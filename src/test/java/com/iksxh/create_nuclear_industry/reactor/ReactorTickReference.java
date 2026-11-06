@@ -200,7 +200,9 @@ public final class ReactorTickReference {
             double removed = Math.min(available,
                     removedHeatByColumn.getOrDefault(entry.getKey(), 0.0D));
             double remaining = Math.max(0.0D, available - removed);
-            if (remaining > HEAT_EPSILON) {
+            // 同步已验收的停机尾热规则：任何正余额都参与安全余数分配，
+            // 逐列低于epsilon的尾热仍属原账本，不能遗漏后转作可损伤或传播的热。
+            if (remaining > 0.0D) {
                 remainingByColumn.put(entry.getKey(), remaining);
                 totalRemaining += remaining;
             }
