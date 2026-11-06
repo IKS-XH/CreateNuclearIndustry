@@ -1,0 +1,1302 @@
+{
+  "sourceCommit": "25abcf437e09861e57985c979b228ace285e5b00",
+  "process": {
+    "end": "2026-11-06T17:42:00.7714296+08:00",
+    "start": "2026-11-06T17:41:16.7198358+08:00",
+    "elapsedSeconds": 44.0515938,
+    "exit": 0
+  },
+  "inputsUnchanged": true,
+  "jar": {
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry-reactor-explosion-fix\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+    "size": 3782088,
+    "sha256": "E0ABFC7E0EED70AE2F4476CFFE7DBD7CE2CBD422D6919A13791F31B8CC6D15EF",
+    "originalSize": 3782088,
+    "originalSha256": "E0ABFC7E0EED70AE2F4476CFFE7DBD7CE2CBD422D6919A13791F31B8CC6D15EF"
+  },
+  "payload": {
+    "oldCount": 2621,
+    "newCount": 2621,
+    "added": [],
+    "removed": [],
+    "changed": [],
+    "same": 2621
+  },
+  "classBinding": {
+    "jarClasses": 825,
+    "matched": 825,
+    "missingCompiled": [],
+    "mismatches": [],
+    "compiledNotPackaged": [
+      "com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests$ShockPlayer.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests$1.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerSafetyGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerSizeLimitGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/DepletedUraniumGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$ChunkLifecycleReview.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$PerformanceObserver.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$ReviewFix.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$TestRegistration.class",
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests$VulnerableFakePlayer.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorGameTests$StartupWindows.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorResumeGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorResumeGameTests$ReviewWindows.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAutomationGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAutomationRetrofitGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorExternalExplosionGameTests.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorPortLookupGameTests.class"
+    ]
+  },
+  "tasks": [
+    {
+      "task": ":createMinecraftArtifacts",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":compileJava",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":processResources",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":classes",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":jarJar",
+      "status": "NO-SOURCE"
+    },
+    {
+      "task": ":jar",
+      "status": "EXECUTED_OR_LIFECYCLE"
+    },
+    {
+      "task": ":assemble",
+      "status": "EXECUTED_OR_LIFECYCLE"
+    },
+    {
+      "task": ":compileTestJava",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":downloadAssets",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":writeNeoForgeTestClasspath",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":prepareNeoForgeTestFiles",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":processTestResources",
+      "status": "NO-SOURCE"
+    },
+    {
+      "task": ":testClasses",
+      "status": "UP-TO-DATE"
+    },
+    {
+      "task": ":test",
+      "status": "EXECUTED_OR_LIFECYCLE"
+    },
+    {
+      "task": ":check",
+      "status": "EXECUTED_OR_LIFECYCLE"
+    },
+    {
+      "task": ":build",
+      "status": "EXECUTED_OR_LIFECYCLE"
+    }
+  ],
+  "junit": {
+    "suites": 153,
+    "tests": 871,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 11,
+    "skippedCases": [
+      {
+        "class": "com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest",
+        "name": "actualSliceCapturesOnlyItsOwnPublishedWorldWithoutReadingWorldData()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest.xml",
+        "reason": "本批真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/boiler/client/BoilerSodiumSurfaceTest.java",
+        "line": 56,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest",
+        "name": "actualSliceWritesFinalConnectedWindowModelData()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest.xml",
+        "reason": "本批真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/boiler/client/BoilerSodiumSurfaceTest.java",
+        "line": 56,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest",
+        "name": "actualSliceFeedsNativeCreateContextForConnectedWindows()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest.xml",
+        "reason": "本批真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/boiler/client/BoilerSodiumSurfaceTest.java",
+        "line": 56,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest",
+        "name": "nativeRegionAndUnknownWrapperKeepTheirExistingIsolation()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest.xml",
+        "reason": "本批真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/boiler/client/BoilerSodiumSurfaceTest.java",
+        "line": 56,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.structure.client.ReactorSodiumSurfaceTest",
+        "name": "actualSliceCapturesOnlyItsOwnPublishedWorldWithoutReadingWorldData()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.structure.client.ReactorSodiumSurfaceTest.xml",
+        "reason": "本批真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/structure/client/ReactorSodiumSurfaceTest.java",
+        "line": 56,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.structure.client.ReactorSodiumSurfaceTest",
+        "name": "nativeRegionAndUnknownWrapperKeepTheirExistingIsolation()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.structure.client.ReactorSodiumSurfaceTest.xml",
+        "reason": "本批真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/structure/client/ReactorSodiumSurfaceTest.java",
+        "line": 56,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.structure.client.ReactorSodiumSurfaceTest",
+        "name": "actualSliceFeedsNativeCreateContextAndFinalModelDataForConnectedWindows()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.structure.client.ReactorSodiumSurfaceTest.xml",
+        "reason": "本批真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/structure/client/ReactorSodiumSurfaceTest.java",
+        "line": 56,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest",
+        "name": "actualCurrentAndOldSlicesConnectOnlyTheirOwnLocalNeighbors()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest.xml",
+        "reason": "真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineSodiumAppearanceTest.java",
+        "line": 44,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest",
+        "name": "smallUnknownAndMissingMaterialKeepOriginalQuads()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest.xml",
+        "reason": "真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineSodiumAppearanceTest.java",
+        "line": 44,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest",
+        "name": "nativeAndUnknownContextsKeepTheirBoundaries()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest.xml",
+        "reason": "真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineSodiumAppearanceTest.java",
+        "line": 44,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      },
+      {
+        "class": "com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest",
+        "name": "actualSliceSelectsMediumAndLargeAtlasTilesWithoutReadingBoundWorld()",
+        "xml": "TEST-com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest.xml",
+        "reason": "真实 Sodium 检查需显式指定已核哈希的夹具目录",
+        "source": "src/test/java/com/iksxh/create_nuclear_industry/turbine/client/TurbineSodiumAppearanceTest.java",
+        "line": 44,
+        "mechanism": "既有@BeforeAll assumeTrue：未指定cni.sodium.fixtureDir，类内用例跳过"
+      }
+    ],
+    "suiteDetails": [
+      {
+        "name": "com.iksxh.create_nuclear_industry.accident.AccidentLedgerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.accident.AccidentThermalStateTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.accident.MoltenCoriumStateTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAdministratorCommandsTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAdministratorHeatSupplyTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAdministratorLayoutTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationAuthorityTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationBlazeTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationControllerTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationDataTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationResumeTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.automation.ReactorAutomationStructureTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.BoilerAccidentStateTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.BoilerDualSteamInventoryTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.BoilerStateTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.BoilerStructureAllocationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.BoilerSurfaceDescriptorTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.BoilerSurfaceLifecycleTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.BoilerSurfaceSnapshotTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.client.BoilerConnectedTextureBehaviourTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.client.BoilerConnectedTexturesTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.client.BoilerSodiumSurfaceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.client.BoilerSteamRendererTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.boiler.client.BoilerSteamVisualStateTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.BoilerPonderContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.compat.create.SharedFluidFillPlanTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.control.ControlRodSliderClientResponsePolicyTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.control.ControlRodSliderProtocolTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.control.ControlRodSliderTransformTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.control.P1Control04ContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.DryStoragePonderContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.equipment.DepletedUraniumDataContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.ExtensionOreDataContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.FuelSinteringPonderContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.heat.CondensationStateTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.heat.HeatExchangerBoilerBridgeTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.heat.HeatExchangerStateTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.HeatExchangerPonderContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialAllocationReuseTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialDataContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialDispatchBindingsTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialExhaustedBudgetTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialFlowBudgetTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialGraphBudgetTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialGraphTopologyTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialPathAllocationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialPipeSurfaceTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialPortRateTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialPumpSkipTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialTankInteractionTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialTransferTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialUnlimitedPipeTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.industrial.IndustrialVisualContractTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.p0probe.P0ApiProbeContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.p0probe.P0IntegrationAdapterTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.p0probe.P0NumericPrototypeTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1BalanceContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1BlockEntityRegistrationContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1BlockRegistrationContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1Coolant05ContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1CoolantConfigurationContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1DamageBalanceConfigurationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1DataContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1GoggleInstrument01ContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1GoggleInstrument02ContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1GoggleInstrument03ContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1GoggleInstrument04ContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1ItemFluidRegistrationContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1Maint03ContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1Ponder01ContractTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.P1RegistrationContractTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.PonderCurrentFeaturesSyncContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.CentrifugeArt14BModelTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.CentrifugeContainerTransactionTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.CentrifugePortsTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.CentrifugeSlurryBucketTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.CentrifugeStateTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.FuelSinteringStateTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.ShieldedAssemblyAnimationClockTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.ShieldedAssemblyAnimationTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.production.ShieldedAssemblyStateTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.ProjectContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.client.RadiationMeterNeedleMotionTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.FoundationContractsTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.FuelUseHistoryTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.RadiationDoseTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.RadiationEquipmentDataTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.RadiationItemSourcesTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.RadiationParametersTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.radiation.RadiationShieldingTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ControlRodColumnRepairTransactionTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ControlRodStateTransitionsTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.FuelColumnRepairTransactionTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.FuelRefuelingTransactionTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.P1Thermal01ContractTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorControlRodTickTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorCoolantLedgerTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortAggregationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorCoolantPortFlowBudgetTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorCoolantSimulationAdapterTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorFissionCalculatorTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorFissionDifferentialTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorFissionFeedbackCacheTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorFullShutdownAssessmentTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorHeatPropagationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentGoggleDisplayTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorInstrumentTelemetryTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorMaintenanceHeatTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownEventsTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorMeltdownStateMachineTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorScramFissionRegressionTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorServerTickTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorSimulationRegressionTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorSnapshotNbtCodecTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorSnapshotTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorThermalCalculatorTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.reactor.ReactorVariableThermalTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.ResourceContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.ShieldedAssemblyPonderContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.storage.DryStorageStateTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.client.ReactorAnimationMaterialsTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.client.ReactorAnimationVisualStateTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.client.ReactorConnectedTextureTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.client.ReactorGlowMeshCacheTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.client.ReactorInternalRenderBuffersTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.client.ReactorSodiumSurfaceTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorCoolantCapacityTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorInstrumentStructureSummaryTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorRuntimeDescriptorTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorRuntimeLifecycleTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorRuntimeProjectionTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorStructureContractTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorStructureDiagnosticsContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorStructureLifecycleContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorSurfaceDescriptorTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorSurfaceLifecycleTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorSurfaceSnapshotTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorVariableScannerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.structure.ReactorVariableSizeTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.client.TurbineAnimationRendererTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.client.TurbineAnimationVisualStateTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.client.TurbineCasingAppearanceModelTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.client.TurbineFlywheelTransformTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.client.TurbineSodiumAppearanceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.client.TurbineWindowConnectedModelTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.TurbineAssemblyLayoutTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.TurbineGeometryTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.TurbineLiveCacheTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.TurbineMemberIndexTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.TurbineRuntimeDisplayTest",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.TurbineStateTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.turbine.TurbineStructureLookupTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.iksxh.create_nuclear_industry.TurbinePonderContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "passed": 860
+  }
+}

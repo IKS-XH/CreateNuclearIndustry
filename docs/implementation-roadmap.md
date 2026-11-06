@@ -1,8 +1,10 @@
 # 后续工作与依赖
 
-更新：2026-11-05。已完成和未闭门统一见[STATUS](STATUS.md)，本页只保有效后续范围，不重复逐批验收时间线。旧首发准备入口、成本草案及完成卡见[归档](archive/2026-10-15/README.md)。
+更新：2026-11-06。已完成和未闭门统一见[STATUS](STATUS.md)，本页只保有效后续范围，不重复逐批验收时间线。旧首发准备入口、成本草案及完成卡见[归档](archive/2026-10-15/README.md)。
 
 ## 当前可接续
+
+正常build原三项基线失败按[修复卡](superpowers/plans/2026-11-06-build-baseline-repair.md)处理，来源与验证见[集成记录](reviews/2026-11-06/build-baseline/INTEGRATION.md)。本批仅修测试夹具和独立参考，不修改已验玩法或自动推进下一项；下一主流程仍为下方小规模生存整线集中观察。
 
 现行功能思索同步与贮存架19B外观按[联合合入卡](superpowers/plans/2026-11-05-ponder-storage-accepted-integration.md)收口，来源及正式制品见[集成记录](reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)，结果统一见STATUS。原[思索同步卡](superpowers/plans/2026-11-04-ponder-current-features-sync.md)保留20→25幕及改段来源；本次不自动派发其他主线功能。
 
