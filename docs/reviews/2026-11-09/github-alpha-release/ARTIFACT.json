@@ -1,0 +1,137 @@
+{
+  "head": "ea7ed52f2bba93594a711cce4cbf32c8cd720984",
+  "branch": "main",
+  "build": {
+    "command": ".\\gradlew.bat build --console=plain",
+    "started_utc": "2026-11-09T04:19:45.0843815Z",
+    "finished_utc": "2026-11-09T04:20:43.9241537Z",
+    "duration_seconds": 58.8345338,
+    "exit_code": 0
+  },
+  "inputs": {
+    "changed": [],
+    "count": 2440,
+    "same_as_committed_head": true
+  },
+  "preservation": {
+    "dirty_preserved": true,
+    "extra_tracked_change": "build/libs/create_nuclear_industry-0.1.0.jar",
+    "user_tools_after": {
+      "tools/nuclear-plant-3d/package.json": "1C0D0AE2818A8BF62398AFCB3F33013788CFC083C42AFA5092BCA0910A4FB990",
+      "tools/nuclear-plant-3d/scripts/serve.mjs": "D7402108AE99217AD555C85969E0CF3DD04EA218A78DBC710D5B82D43155E63D"
+    },
+    "user_tools_before": {
+      "tools/nuclear-plant-3d/package.json": "1C0D0AE2818A8BF62398AFCB3F33013788CFC083C42AFA5092BCA0910A4FB990",
+      "tools/nuclear-plant-3d/scripts/serve.mjs": "D7402108AE99217AD555C85969E0CF3DD04EA218A78DBC710D5B82D43155E63D"
+    }
+  },
+  "old_jar": {
+    "sha256": "0B912E12FA128F485432A3E1FB71937D2A88EA3844A3F7F07FB9E9B79095D932",
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\reports\\github-alpha-release-20261109-main\\original-0B912E12-create_nuclear_industry-0.1.0.jar",
+    "bytes": 3781913
+  },
+  "new_jar": {
+    "sha256": "D2B5390C368779CA881A391711F7F1B4158A666F407B5FF94F860506EA6175F3",
+    "path": "E:\\MyMC\\NewMod\\Create_NuclearIndustry\\build\\libs\\create_nuclear_industry-0.1.0.jar",
+    "bytes": 3781898
+  },
+  "payloads": {
+    "new_count": 2621,
+    "classes": 825,
+    "old_count": 2621,
+    "toml_outside_description_unchanged": true,
+    "changed": [
+      "META-INF/neoforge.mods.toml"
+    ],
+    "changed_classes": [],
+    "licenses": {
+      "LICENSE": {
+        "unchanged_from_old": true,
+        "source_sha256": "19F5EC4D3F83296E69EF10430DCFE7F2987A04CDB92680397C29ADE44E4E2588",
+        "jar_sha256": "19F5EC4D3F83296E69EF10430DCFE7F2987A04CDB92680397C29ADE44E4E2588",
+        "matches_source": true
+      },
+      "NOTICE.md": {
+        "unchanged_from_old": true,
+        "source_sha256": "3E0B34533F1CAD7097F4AD613F6B231EC7E17F2791AAE908DF6E4759B44796AB",
+        "jar_sha256": "3E0B34533F1CAD7097F4AD613F6B231EC7E17F2791AAE908DF6E4759B44796AB",
+        "matches_source": true
+      },
+      "META-INF/licenses/Create-LICENSE.md": {
+        "unchanged_from_old": true,
+        "source_sha256": "7419681D58368F724BBCF77EE33FDB44D4B494514604039634FA9C6E3F6D9CBA",
+        "jar_sha256": "7419681D58368F724BBCF77EE33FDB44D4B494514604039634FA9C6E3F6D9CBA",
+        "matches_source": true
+      }
+    },
+    "removed": [],
+    "identical": 2620,
+    "added": [],
+    "exclusions": [
+      "com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests*.class",
+      "data/cni_radiation_foundation/structure/radiation_empty.nbt",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorPortLookupGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAutomationGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAutomationRetrofitGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorAdministratorResumeGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerIndustrialActiveOutputGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerSizeLimitGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/ReactorExternalExplosionGameTests*.class",
+      "com/iksxh/create_nuclear_industry/gametest/BoilerSafetyGameTests*.class",
+      "data/cni_boiler_safety/**",
+      "data/cni_reactor_automation/structure/automation_empty.nbt",
+      "data/cni_reactor_automation_retrofit/structure/retrofit_empty.nbt",
+      "data/cni_reactor_administrator/structure/administrator_empty.nbt",
+      "data/cni_reactor_administrator_startup/structure/startup_empty.nbt",
+      "data/cni_reactor_administrator_resume/structure/resume_empty.nbt",
+      "data/cni_reactor_administrator_resume_review/structure/review_empty.nbt",
+      "data/create_nuclear_industry_boiler_size/structure/boiler_size_empty.nbt",
+      "com/iksxh/create_nuclear_industry/gametest/AccidentExecutionGameTests*.class",
+      "data/cni_accident_execution/**",
+      "com/iksxh/create_nuclear_industry/gametest/DepletedUraniumGameTests*.class",
+      "data/cni_depleted_uranium/**"
+    ],
+    "prefix_exclusions": [
+      "data/cni_radiation_foundation",
+      "data/cni_reactor_external_explosion"
+    ],
+    "excluded_probe_leaks": [],
+    "description": "A Create addon for uranium processing, configurable reactors, heat and steam systems, rotational power generation, radiation protection and spent-fuel storage.",
+    "metadata": {
+      "mod_id": "create_nuclear_industry",
+      "mod_version": "0.1.0",
+      "loader": "javafml",
+      "loader_range": "[4,)",
+      "neoforge": "[21.1.219,)",
+      "minecraft": "[1.21.1,1.22)",
+      "create": "[6.0.10,6.1.0)",
+      "dependency_types": "required",
+      "sides": "BOTH",
+      "license": "MIT",
+      "remaining_metadata_identical_to_0B9": true
+    }
+  },
+  "tests": {
+    "classes": 153,
+    "tests": 871,
+    "passed": 860,
+    "skipped": 11,
+    "failures": 0,
+    "errors": 0,
+    "original_11_sodium_skip_names_match": true,
+    "skip_baseline": "docs/reviews/2026-11-06/build-baseline/MAIN-BUILD.json/junit/skippedCases",
+    "current_xml_directory": "build/test-results/test",
+    "task_executed": true
+  },
+  "versions": {
+    "java_toolchain": 21,
+    "flywheel": "1.0.6",
+    "minecraft": "1.21.1",
+    "ponder": "1.0.82",
+    "license": "MIT",
+    "neoforge": "21.1.219",
+    "create": "6.0.10-280",
+    "mod": "0.1.0"
+  }
+}

@@ -1,12 +1,13 @@
 # 当前状态与验收
 
-更新：2026-11-06。开发版本0.1.0 Alpha，首个可发布版本出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
+更新：2026-11-09。版本0.1.0 Alpha，用户已授权首个GitHub公开Alpha；当前完成源与制品冻结，发布收据取得后另行登记。稳定版出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
 
 ## 主分支与正式包
 
 - 已提交生产并集`0656b1124f0ccc7c7f80c64956905656f3056bf5`。用户2026-11-05确认新思索手测通过并要求合main，同时授权干式贮存架19B外观一并集成：思索源78f84c39、5新/9改共25幕，外观15资源与批准B稿原字节同源，保14可编辑原稿及映射。保留16e14ae1的锅炉事故/反应堆外爆、原局部事故/热危害/熔融物/22-R1和既有功能；应力闭环仍删除，不含T6/B1。
 - 用户2026-11-06授权修复构建，测试源`25abcf437e09861e57985c979b228ace285e5b00`已接main，仅补换热器夹具8项冷凝配置及同步已验尾热规则到独立参考实现；生产源码/玩法/依赖不变。[正常build修复与根因](reviews/2026-11-06/build-baseline/INTEGRATION.md)、[组合窄审](reviews/2026-11-06/build-baseline/REVIEW.md)。
-- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3781913 bytes，SHA256 `0B912E12FA128F485432A3E1FB71937D2A88EA3844A3F7F07FB9E9B79095D932`，从准确已提交源在main正常build生成，50.592秒/exit0。2621载荷无增删；与原E0AB包相比311项仅CRLF/LF差异，其余2310项及全部825class原字节保持，差异逐项绑定实际来源，不沿用历史303项豁免。原E0AB包、来源树、用户世界和无关3D dirty保留。[主目录构建](reviews/2026-11-06/build-baseline/MAIN-BUILD.md)及[原思索/19B来源](reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)。
+- 首发元数据源`ea7ed52f2bba93594a711cce4cbf32c8cd720984`只更新两项模组简介，README旧英文同步真实功能，不改0.1.0版本、依赖或玩法。[发布卡](superpowers/plans/2026-11-09-github-alpha-release.md)、[源与制品冻结](reviews/2026-11-09/github-alpha-release/INTEGRATION.md)。
+- [正式JAR](../build/libs/create_nuclear_industry-0.1.0.jar)：3781898 bytes，SHA256 `D2B5390C368779CA881A391711F7F1B4158A666F407B5FF94F860506EA6175F3`，main准确源一次正常build/58.8345秒/exit0，871项=860通过+11原Sodium夹具跳过，0失败/错误。2621载荷无增删，相对旧0B9仅mods.toml描述正文变化，其余2620项及全部825class原字节保持；许可、探针排除、2440输入及用户dirty保持。[本轮构建](reviews/2026-11-09/github-alpha-release/BUILD.md)、[制品](reviews/2026-11-09/github-alpha-release/ARTIFACT.json)。旧0B9/E0AB、来源树、世界及原[11月6日构建证据](reviews/2026-11-06/build-baseline/MAIN-BUILD.md)保留。
 - 构建修复未改测试断言/容差/跳过规则；33项定向通过，700布局/1400裂变和600完整tick严格比较保留。候选与main各一次正常增量build均为153类871项：860通过、0失败/错误、11原有Sodium专用夹具门跳过，不称871项全通过。原教学人工门已关闭，未重跑游戏/视觉/多人矩阵，其余独立观察仍保留。
 
 ## 已合入并按相应范围验收
