@@ -9,8 +9,7 @@ version="0.1.0"
 displayName="Create: Nuclear Industry"
 authors="IKSXH"
 description='''
-Create 风格的核工业附属模组。
-当前样例版本提供实验反应堆外壳与独立创造模式标签页。
+A Create addon for uranium processing, configurable reactors, heat and steam systems, rotational power generation, radiation protection and spent-fuel storage.
 '''
 
 [[dependencies.create_nuclear_industry]]
