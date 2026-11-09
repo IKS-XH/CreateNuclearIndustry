@@ -20,7 +20,7 @@
 
 当前活动卡与现行来源：
 
-- [首个GitHub公开Alpha](superpowers/plans/2026-11-09-github-alpha-release.md)：[发布说明](releases/0.1.0-alpha.md)、[准确源与制品](reviews/2026-11-09/github-alpha-release/INTEGRATION.md)，当前结果与发布收据统一见STATUS。
+- [首个GitHub公开Alpha](superpowers/plans/2026-11-09-github-alpha-release.md)：[发布说明](releases/0.1.0-alpha.md)、[准确源与制品](reviews/2026-11-09/github-alpha-release/INTEGRATION.md)、[公开发布收据](reviews/2026-11-09/github-alpha-release/RELEASE.md)，当前结果统一见STATUS。
 - [正常构建三项基线失败修复](superpowers/plans/2026-11-06-build-baseline-repair.md)：[根因/集成与主目录build](reviews/2026-11-06/build-baseline/INTEGRATION.md)，当前结果统一见STATUS。
 - [思索与贮存架外观联合合入](superpowers/plans/2026-11-05-ponder-storage-accepted-integration.md)：[来源与制品](reviews/2026-11-05/ponder-storage-accepted/INTEGRATION.md)，当前结果统一见STATUS。
 - [现行功能思索同步](superpowers/plans/2026-11-04-ponder-current-features-sync.md)：原[25幕候选与复看](reviews/2026-11-04/ponder-sync/CANDIDATE.md)保留实现/测试语境，已验教学不重复开播放门。

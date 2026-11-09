@@ -1,9 +1,10 @@
 # 当前状态与验收
 
-更新：2026-11-09。版本0.1.0 Alpha，用户已授权首个GitHub公开Alpha；当前完成源与制品冻结，发布收据取得后另行登记。稳定版出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
+更新：2026-11-09。首个GitHub公开版本0.1.0 Alpha已发布，稳定版出口尚未完成。本文件统一维护进度、制品与未闭门，原测试数字/提交链留在证据档案。
 
 ## 主分支与正式包
 
+- [GitHub公开Alpha v0.1.0](https://github.com/IKS-XH/CreateNuclearIndustry/releases/tag/v0.1.0)已于2026-11-09 12:25:58公开，prerelease=true、draft=false，准确标签提交`5fa028a74be5ac92c61f49c5f624479d82da36d1`。JAR与SHA附件已下载回核一致；中英说明明确Alpha与原独立观察边界，首个公开Alpha出口关闭，不将其记作稳定版/整线/多人全验收。[发布收据](reviews/2026-11-09/github-alpha-release/RELEASE.md)。
 - 已提交生产并集`0656b1124f0ccc7c7f80c64956905656f3056bf5`。用户2026-11-05确认新思索手测通过并要求合main，同时授权干式贮存架19B外观一并集成：思索源78f84c39、5新/9改共25幕，外观15资源与批准B稿原字节同源，保14可编辑原稿及映射。保留16e14ae1的锅炉事故/反应堆外爆、原局部事故/热危害/熔融物/22-R1和既有功能；应力闭环仍删除，不含T6/B1。
 - 用户2026-11-06授权修复构建，测试源`25abcf437e09861e57985c979b228ace285e5b00`已接main，仅补换热器夹具8项冷凝配置及同步已验尾热规则到独立参考实现；生产源码/玩法/依赖不变。[正常build修复与根因](reviews/2026-11-06/build-baseline/INTEGRATION.md)、[组合窄审](reviews/2026-11-06/build-baseline/REVIEW.md)。
 - 首发元数据源`ea7ed52f2bba93594a711cce4cbf32c8cd720984`只更新两项模组简介，README旧英文同步真实功能，不改0.1.0版本、依赖或玩法。[发布卡](superpowers/plans/2026-11-09-github-alpha-release.md)、[源与制品冻结](reviews/2026-11-09/github-alpha-release/INTEGRATION.md)。
@@ -14,6 +15,7 @@
 
 | 范围 | 当前结果 | 证据 |
 | --- | --- | --- |
+| 首个GitHub公开Alpha | 用户2026-11-09授权发布；v0.1.0准确tag/附件与正文先草稿核对后公开，远端JAR下载SHA与main正式包相同。仅发布GitHub，未开启自动CI或其它平台 | [实际收据](reviews/2026-11-09/github-alpha-release/RELEASE.md)、[源/制品与验证](reviews/2026-11-09/github-alpha-release/INTEGRATION.md) |
 | 正常build出口 | 2026-11-06修复原三项JUnit失败：换热器测试初始化漏冷凝配置、反应堆参考漏同步已验正尾热分配规则；仅两测试文件变化，生产不变。main正常build成功，860通过/11既有夹具跳过/0失败，正式包已生成并核身份 | [根因与集成](reviews/2026-11-06/build-baseline/INTEGRATION.md)、[主目录构建](reviews/2026-11-06/build-baseline/MAIN-BUILD.md) |
 | 锅炉多阀与干烧/超压事故 | 用户2026-11-04确认集中手测通过并授权合main。多个顶面阀独立512mB/t、上方堵塞不能排汽；真实收热、20秒干烧损毁一件、100%额定/10秒容忍/150%立即随机面喷爆、危险拆除直接事故，均可配置。正常出汽/泄压后判定，持久唯一任务、共享世界预算和最终保护取消保持 | [联合合入](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)、[冻结规则](superpowers/specs/2026-10-26-boiler-accidents-design.md)、[原候选/验证边界](reviews/2026-10-27/boiler-safety/CANDIDATE.md) |
 | 运行反应堆原生外爆接管 | 用户2026-11-04确认手测通过并授权合main。TNT/苦力怕最终破坏成员、首块loot前接管原危险堆，复用唯一真实燃料事故托管；取消/最终剔除/冷空堆/未受损邻堆不误触，失败清客户端破坏列表且保profiler收尾。原热工/融毁阈值不变 | [联合合入](reviews/2026-11-04/boiler-explosion-accepted/INTEGRATION.md)、[原候选/定向证据](reviews/2026-10-27/reactor-external-explosion/CANDIDATE.md) |
