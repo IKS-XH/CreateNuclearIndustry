@@ -7,7 +7,13 @@
 本项目强调“看懂系统并搭出控制回路”，而不是随机事故或复杂查表。热量、流量、燃耗、损伤与安全联锁均由服务端权威结算，并通过 Create 风格交互和工程师护目镜呈现。
 
 > [!WARNING]
-> 当前版本为 `0.1.0` Alpha 开发快照，尚未发布稳定可玩版本。存档兼容、内容平衡、正式美术和生存流程都可能继续变化，请勿用于重要存档或生产服务器。
+> 当前版本为 `0.1.0` Alpha。内容平衡、配置和存档格式仍可能变化，游玩前请备份世界；长期整线运行和不同整合包环境仍在持续验证。
+
+## 下载与安装
+
+在[GitHub Releases](https://github.com/IKS-XH/CreateNuclearIndustry/releases)下载模组JAR。使用Minecraft `1.21.1`、Java `21`和NeoForge `21.1.219`，安装适配NeoForge的Create `6.0.10`及其所需依赖，再把本模组JAR放入`mods`目录。联机时客户端与服务端均需安装，版本保持一致。JEI可用于查阅配方，不是必需依赖。
+
+首次公开Alpha的内容与安装说明见[0.1.0发布说明](docs/releases/0.1.0-alpha.md)。
 
 ## 当前开发基线
 
@@ -78,7 +84,7 @@ Linux / macOS：
 
 ## 已知边界
 
-- 当前没有稳定发布包，也不承诺开发存档向后兼容。
+- 当前为Alpha版本，尚无稳定版，也不承诺开发存档向后兼容。
 - 反应堆和高压锅炉默认三边均为5～16，允许长方体及跨区块；汽轮机三档固定规格。
 - 已有设备美术与部分动画已接入，剩余动画/声音/粒子按各自批次验收。
 - 基础矿物、材料、燃料组件、现有设备制造和乏燃料基础封存已可生存获取；复杂再处理尚未实现。
@@ -103,4 +109,4 @@ Original project code, documentation and non-Logo artwork are licensed under MIT
 
 ## English summary
 
-**Create: Nuclear Industry** is an in-development NeoForge 1.21.1 addon for fuel production, variable-size reactors (5–16 blocks per side), thermal boilers, three turbine sizes, dedicated fluid transport and spent-fuel storage. A Blaze Burner administrator provides a three-page GUI, power regulation, stress-reserve control and save/resume continuity. Eight basic device tutorials are accepted; radiation, concrete accident effects, pressure transport and reprocessing remain future work. See the [current status](docs/STATUS.md) for separate candidate and visual-review gates.
+**Create: Nuclear Industry** is a NeoForge 1.21.1 addon for uranium processing, fuel production, configurable reactors (5–16 blocks per side), thermal boilers, three turbine sizes, dedicated fluid transport and radioactive-waste storage. A Blaze Burner administrator offers manual rod control, constant-power operation, safety protection and save/resume continuity. Radiation protection, local reactor accidents, molten corium and boiler accidents are implemented; 25 Ponder scenes explain the existing equipment. This is an Alpha release: balance and save formats may change, and extended survival-line and modpack testing continues. Download the JAR from [GitHub Releases](https://github.com/IKS-XH/CreateNuclearIndustry/releases); install it on both client and server with Minecraft 1.21.1, Java 21, NeoForge and Create. Pressure transport, plant-wide coordination and complex fuel reprocessing are future work.
