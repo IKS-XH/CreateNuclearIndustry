@@ -9,6 +9,7 @@
 允许写集：
 
 - `src/main/java/com/iksxh/create_nuclear_industry/radiation/RadiationServerEvents.java`、`RadiationSourceIndex.java`，必要时同目录增加一个非玩家结算类。现有剂量、场强、装备、持久化及客户端测量入口优先复用。
+- `src/main/java/com/iksxh/create_nuclear_industry/content/RadiationContent.java` 允许接入一个 NeoForge 实体剂量附件注册。实体附件只序列化非零剂量及计时，在线调度状态是内存数据。现有玩家存储格式不变。
 - `src/main/java/com/iksxh/create_nuclear_industry/gametest/RadiationFoundationGameTests.java`，追加覆盖非玩家真实剂量和软管滑轮判定的定向测试。使用既有测试域和排除规则，沿用现有 `src/test/java/com/iksxh/create_nuclear_industry/radiation/` 内回归，原则上无需新增单元测试。必要真实夹具模板仅置于已排除的 `src/main/resources/data/cni_radiation_foundation/structure/`。
 - 新增 `src/main/resources/data/create/tags/fluid/bottomless/allow.json`，追加 `create_nuclear_industry:uranium_slurry` 和其 `uranium_slurry_flowing` 流动态，`replace` 为 `false`，保留水和熔岩的原有标签。阈值、距离和策略由 Create 服务端现有配置决定。默认策略 `ALLOW_BY_TAG`，阈值 10000。
 - `gradle.properties` 的 `mod_version` 和 `src/main/resources/META-INF/neoforge.mods.toml` 的模组 `version` 同步至 `0.2.0`。依赖、配方、流体注册、伤害来源、资产、构建脚本与其他测试保持现行范围。
