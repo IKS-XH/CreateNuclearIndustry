@@ -130,6 +130,7 @@ ID命名空间均为`create_nuclear_industry`，表内省略前缀。注册存�
 | `reinforced_steel_plate` | `HeatMaterialsContent.REINFORCED_STEEL_PLATE` |
 | `seal_ring` | `ReactorCraftingContent.SEAL_RING` |
 | `sealed_spent_fuel_cask` | `SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK` |
+| `spent_fuel_residue` | `SpentFuelStorageContent.SPENT_FUEL_RESIDUE` |
 | `shielded_glass` | `ReactorCraftingContent.SHIELDED_GLASS` |
 | `sintered_fuel_pellet` | `FuelProcessingContent.SINTERED_FUEL_PELLET` |
 | `solder_ingot` | `BasicMaterialContent.SOLDER_INGOT` |

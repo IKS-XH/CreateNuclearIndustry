@@ -1,8 +1,8 @@
 # 枯竭燃料组件金属回收提案
 
-建议给屏蔽装配台加一个「拆解」模式。投入一件枯竭铀燃料组件后，用机械动力分离钢包壳、焊料和燃料残渣。钢、铅和锡回到零件生产线，残渣经原有铅桶与干式贮存架封存。玩家也可以直接封存完整的枯竭组件，省去拆解工序。
+2026-11-25 已确认。屏蔽装配台增加「拆解」模式。投入一件枯竭铀燃料组件后，用机械动力分离钢包壳、焊料和燃料残渣。钢、铅和锡回到零件生产线，残渣经原有铅桶与干式贮存架封存。整件枯竭组件的直接封装配方移除。
 
-## 推荐产量
+## 产量与工时
 
 按当前默认配方，一组燃料组件使用 4 根钢制包壳管、1 件钢格栅、2 个焊料锭和 8 枚燃料芯块。每根包壳管用 1 张钢板，钢格栅用 1 张钢板和由 1 张钢板切出的钢网。默认焊料配方以 3 锡锭和 1 铅锭产出 4 焊料锭，因此一组组件用去约 6 张钢板、1.5 锡锭和 0.5 铅锭。
 
@@ -13,18 +13,18 @@
 | 铅粒 | 3 粒 | 3 / 4.5，约 67% |
 | 乏燃料残渣 | 1 份 | 整件组件的放射性废料 |
 
-推荐拆解工作量为 12800，与现有封装工序相同。拆解环节只耗机械动力。每份残渣仍需 1 份固化基材和 1 个空铅屏蔽桶封装。每件的铅回收量按组件内焊料计算，封装桶的铅属于封存路线投入。
+拆解工作量为 12800 RPM·tick，与封装工序相同。拆解环节只耗机械动力。每份残渣仍需 1 份固化基材和 1 个空铅屏蔽桶封装。每件的铅回收量按组件内焊料计算，封装桶的铅属于封存路线投入。
 
 ## 设备操作与物料交接
 
-- 建议在装配台放一个 Create 风格的工序控件，可在「装配／封装」和「拆解」之间切换。枯竭组件既能直接封装也能拆解，所以应先选择用途。空台才能切换。拆解模式只接收 `cooled_spent_fuel_assembly`，进料、玩家取出和机械臂沿用现有交互方式，输出端支持四个产物槽。
+- 用扳手普通右击已成型的空装配台，在「装配／封装」和「拆解」之间切换。护目镜浮窗显示当前模式。拆解模式只接收 `cooled_spent_fuel_assembly`，进料、玩家取出和机械臂沿用现有交互方式，输出端支持四个产物槽。
 - 拆解完成时原组件只消费一次。工作台先确认所有产物都有位置，再同一次结算扣掉组件并写入四种产物。堵塞时保留原件或已结算产物和进度，恢复取出后继续，拆除和重载也遵守相同的库存归属。
-- 建议残渣使用独立物品 `spent_fuel_residue`，场强沿用一件枯竭组件的配置值，默认近距离 2 D/s，保留现有放射性掉落保护。已用燃料和事故废料的原有条目与处理方式保持各自语义。
+- 残渣使用独立物品 `spent_fuel_residue`，场强沿用一件枯竭组件的配置值，默认近距离 2 D/s，沿用放射性掉落保护。
 - 残渣添加同样成本的封装配方，封装容器记录真实残渣及数量，沿用铅桶屏蔽和干式贮存架的存取与屏蔽规则。用两台装配台可以分别连续拆解和封装，用一台可以分批操作。
 - 回收物为普通金属。每件枯竭组件只产生一份用于封存的残渣。拆解原料限定为未封装的枯竭组件。
 
 ## 实施验收
 
-先确认回收量和工作量，再冻结实现。验证代表性机械臂拆解与封装串线、全部产物堵塞及恢复、中途保存重载、拆台返还、残渣辐射与封装屏蔽。配方显示应明确列出四种产物，思索介绍拆解与封装用法。
+验证代表性机械臂拆解与封装串线、全部产物堵塞及恢复、中途保存重载、拆台返还、残渣辐射与封装屏蔽。JEI 列出四种产物，思索介绍拆解与封装用法。[实施卡](../superpowers/plans/2026-11-25-spent-fuel-recovery.md)
 
-用料参考 [组件装配](../../src/main/resources/data/create_nuclear_industry/recipe/shielded_assembly/fresh_fuel_assembly.json)、[包壳管](../../src/main/resources/data/create_nuclear_industry/recipe/stonecutting/fuel_cladding_tube.json)、[钢格栅](../../src/main/resources/data/create_nuclear_industry/recipe/sequenced_assembly/steel_grate.json)、[焊料](../../src/main/resources/data/create_nuclear_industry/recipe/mixing/solder_ingot.json)和[现有封装](../../src/main/resources/data/create_nuclear_industry/recipe/shielded_assembly/sealed_spent_fuel_cask.json)。
+用料参考 [组件装配](../../src/main/resources/data/create_nuclear_industry/recipe/shielded_assembly/fresh_fuel_assembly.json)、[包壳管](../../src/main/resources/data/create_nuclear_industry/recipe/stonecutting/fuel_cladding_tube.json)、[钢格栅](../../src/main/resources/data/create_nuclear_industry/recipe/sequenced_assembly/steel_grate.json)和[焊料](../../src/main/resources/data/create_nuclear_industry/recipe/mixing/solder_ingot.json)。

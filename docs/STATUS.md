@@ -5,7 +5,7 @@
 ## 0.2.0 待验候选
 
 - `codex/0.2.0-radiation-slurry` 提供非玩家活体辐射和 Create 软管滑轮的铀料浆无限源标签。源码 `41367041`，定向 JUnit 30 项通过，最终真实 GameTest 17 项通过并正常退出，万格液池实景及客户端观察待验。[候选、制品和手测清单](reviews/2026-11-25/radiation-slurry/CANDIDATE.md)。
-- [金属回收提案](proposals/2026-11-25-spent-fuel-metal-recovery.md)待讨论，拟在屏蔽装配台拆解枯竭组件，回收钢、锡和铅，残渣沿原封存链处理。
+- `codex/0.2.0-spent-fuel-recovery` 已实现用户确认的[金属回收方案](proposals/2026-11-25-spent-fuel-metal-recovery.md)，移除整件直接封装，加入扳手两档切换与护目镜显示。源码 `e7a646db`，70 项定向 JUnit 和 12 项隔离服务端 GameTest 通过，组合审查与候选构建通过。与生物辐射及铀料浆合批进入客户端手测。[候选、制品与手测清单](reviews/2026-11-25/spent-fuel-recovery/CANDIDATE.md)。
 
 ## 主分支与正式包
 
