@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "create_nuclear_industry:uranium_slurry",
+    "create_nuclear_industry:uranium_slurry_flowing"
+  ]
+}

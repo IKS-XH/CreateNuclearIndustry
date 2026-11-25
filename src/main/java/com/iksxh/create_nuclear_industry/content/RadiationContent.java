@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.content;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.iksxh.create_nuclear_industry.equipment.RadiationArmorItem;
+import com.iksxh.create_nuclear_industry.radiation.RadiationLivingEntities;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
@@ -18,9 +19,10 @@ public final class RadiationContent {
     private static DeferredItem<ArmorItem> armor(String id,ArmorItem.Type type) {
         return ITEMS.register(id,()->new RadiationArmorItem(type,new Item.Properties().durability(type.getDurability(5))));
     }
-    /** 向模组事件总线注册物品及一次性护目镜接线，服务端和客户端共用同一物品身份。 */
+    /** 向模组事件总线注册辐射物品与活体剂量附件，并接入 Create 护目镜。 */
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
+        RadiationLivingEntities.register(bus);
         bus.addListener(RadiationContent::setup);
     }
     private static void setup(FMLCommonSetupEvent event) {

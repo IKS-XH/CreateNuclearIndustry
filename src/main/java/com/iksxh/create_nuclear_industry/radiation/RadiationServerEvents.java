@@ -8,16 +8,20 @@ import net.minecraft.resources.*;
 import net.minecraft.server.level.*;
 import net.minecraft.world.damagesource.*;
 import net.minecraft.world.effect.*;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.level.*;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/** 服务端在线玩家剂量、短时症状与伤害；不读客户端剂量，不修改其他来源效果。 */
+/** 服务端辐射生命周期与共用剂量处理；只有在线玩家接收告警与仪表数据。 */
 public final class RadiationServerEvents {
     public static final ResourceKey<DamageType> DAMAGE=ResourceKey.create(Registries.DAMAGE_TYPE,ResourceLocation.parse("create_nuclear_industry:radiation"));
     private static final Map<UUID,Boolean> EXPOSED=new HashMap<>();
@@ -37,6 +41,13 @@ public final class RadiationServerEvents {
     @SubscribeEvent public static void serverTick(net.neoforged.neoforge.event.tick.ServerTickEvent.Post event) {
         for(ServerLevel level:event.getServer().getAllLevels())for(ServerPlayer player:List.copyOf(level.players()))
             tick(new PlayerTickEvent.Post(player));
+        for(ServerLevel level:event.getServer().getAllLevels())RadiationLivingEntities.finishTick(level);
+    }
+    /** 只受理已完成实体 tick 的非玩家活体，区块未模拟、死亡及客户端实体不入队。 */
+    @SubscribeEvent public static void livingTick(EntityTickEvent.Post event) {
+        if(event.getEntity() instanceof LivingEntity living && !(living instanceof Player)
+                && living.level() instanceof ServerLevel level && living.isAlive())
+            RadiationLivingEntities.tick(level,living);
     }
     public static void tick(PlayerTickEvent.Post event) {tick(event,null);}
     /** 注入的索引只改变技术工作预算；实际剂量/伤害/发送仍走同一在线服务端控制流。 */
@@ -44,20 +55,13 @@ public final class RadiationServerEvents {
         if(!(event.getEntity() instanceof ServerPlayer player))return;
         var p=RadiationConfig.parameters();var before=state(player);boolean affected=!player.isCreative()&&!player.isSpectator();
         int elapsed=ONLINE_TICKS.merge(player.getUUID(),1,Integer::sum);
-        // 伤害时钟独立于采样队列，incomplete不能变成高剂量免伤手段。
-        int damageTicks=p.enabled()&&affected&&before.dose()>=p.damageDose()?before.damageTicks()+1:0;
-        if(damageTicks>=p.damageIntervalTicks()) {
-            player.hurt(new DamageSource(player.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DAMAGE)),(float)p.damageHealthPoints());
-            damageTicks=0;
-        }
-        var state=new RadiationDoseState(before.dose(),before.safeTicks(),damageTicks);
+        var state=advanceDamage(player,before,p,affected);
         if(elapsed>=p.sampleIntervalTicks()) {
             var sample=(samplingIndex==null?RadiationSourceIndex.get(player.serverLevel()):samplingIndex).sample(player,p);
-            double absorbed=p.enabled()&&affected?sample.fieldDosePerSecond()*(1-RadiationEquipment.reduction(player,p)):0;
+            double absorbed=absorption(player,sample,p,affected);
             if(sample.complete()||!p.enabled()) {
                 ONLINE_TICKS.put(player.getUUID(),0);
-                var next=RadiationDoseCalculator.advance(state,affected?absorbed:0,elapsed,p);
-                state=new RadiationDoseState(next.dose(),next.safeTicks(),next.dose()>=p.damageDose()?damageTicks:0);
+                state=advanceDose(state,absorbed,elapsed,p);
                 boolean exposure=p.enabled()&&affected&&absorbed>p.safeAbsorptionPerSecond();
                 if(exposure&&!EXPOSED.getOrDefault(player.getUUID(),false))player.displayClientMessage(Component.translatable("radiation.create_nuclear_industry.exposed"),false);
                 EXPOSED.put(player.getUUID(),exposure);
@@ -69,6 +73,23 @@ public final class RadiationServerEvents {
         save(player,state);applySymptoms(player,state,p,affected);
         if(!(player instanceof net.neoforged.neoforge.common.util.FakePlayer))
             flush(player,player.level().getGameTime(),packet->PacketDistributor.sendToPlayer(player,packet));
+    }
+    static double absorption(LivingEntity entity,RadiationFieldSample sample,RadiationParameters p,boolean affected) {
+        return p.enabled()&&affected?sample.fieldDosePerSecond()*(1-RadiationEquipment.reduction(entity,p)):0;
+    }
+    /** 伤害按实体在线 tick 推进，采样暂停时仍经原版伤害入口处理无敌和免疫。 */
+    static RadiationDoseState advanceDamage(LivingEntity entity,RadiationDoseState state,RadiationParameters p,boolean affected) {
+        long ticks=p.enabled()&&affected&&state.dose()>=p.damageDose()?(long)state.damageTicks()+1:0;
+        if(ticks>=p.damageIntervalTicks()) {
+            entity.hurt(new DamageSource(entity.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DAMAGE)),(float)p.damageHealthPoints());
+            ticks=0;
+        }
+        return ticks==state.damageTicks()?state:new RadiationDoseState(state.dose(),state.safeTicks(),(int)ticks);
+    }
+    /** 剂量只消费完整样本；伤害进度由逐 tick 时钟维护。 */
+    static RadiationDoseState advanceDose(RadiationDoseState state,double absorbed,int elapsed,RadiationParameters p) {
+        var next=RadiationDoseCalculator.advance(state,absorbed,elapsed,p);
+        return new RadiationDoseState(next.dose(),next.safeTicks(),next.dose()>=p.damageDose()?state.damageTicks():0);
     }
     /** 一次完成结果先入显示队列；采样重试、剂量推进与发送时钟互不复用。 */
     private static void offer(ServerPlayer player,RadiationExposurePayload payload) {
@@ -88,11 +109,14 @@ public final class RadiationServerEvents {
         RadiationExposurePayload payload=display.unsentComplete!=null?display.unsentComplete:display.latest;
         transport.accept(payload);packets++;display.lastSent=now;display.unsentComplete=null;
     }
-    /** 只短时刷新I级症状，剂量下降后自然到期；不移除任何其他来源的同种药水。 */
     public static void applySymptoms(ServerPlayer player,RadiationDoseState state,RadiationParameters p,boolean affected) {
-        if(p.enabled()&&affected&&state.dose()>=p.symptomDose()&&player.tickCount%20==0) {
-            player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,40,0,false,true,true));
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,40,0,false,true,true));
+        applySymptoms((LivingEntity)player,state,p,affected);
+    }
+    /** 只短时刷新I级症状，剂量下降后自然到期；不移除任何其他来源的同种药水。 */
+    static void applySymptoms(LivingEntity entity,RadiationDoseState state,RadiationParameters p,boolean affected) {
+        if(p.enabled()&&affected&&state.dose()>=p.symptomDose()&&entity.tickCount%20==0) {
+            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,40,0,false,true,true));
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,40,0,false,true,true));
         }
     }
     @SubscribeEvent public static void clone(PlayerEvent.Clone event) {
@@ -105,7 +129,12 @@ public final class RadiationServerEvents {
     @SubscribeEvent public static void dimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         UUID id=event.getEntity().getUUID();ONLINE_TICKS.remove(id);DISPLAYS.remove(id);EXPOSED.remove(id);RadiationSourceIndex.cancel(id);
     }
-    @SubscribeEvent public static void leave(net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent event) {RadiationSourceIndex.entityChanged(event.getEntity());}
+    @SubscribeEvent public static void leave(EntityLeaveLevelEvent event) {
+        RadiationSourceIndex.entityChanged(event.getEntity());
+        if(event.getLevel() instanceof ServerLevel level && event.getEntity() instanceof LivingEntity living
+                && !(living instanceof Player))
+            RadiationLivingEntities.leave(level,living);
+    }
     @SubscribeEvent public static void join(EntityJoinLevelEvent event) {
         if(!event.getLevel().isClientSide && event.getEntity() instanceof ItemEntity item)protectExpiry(item);
     }
@@ -124,5 +153,10 @@ public final class RadiationServerEvents {
     @SubscribeEvent public static void unload(ChunkEvent.Unload event) {
         if(event.getLevel() instanceof ServerLevel level){RadiationSourceIndex.unload(level,event.getChunk().getPos().x,event.getChunk().getPos().z);RadiationContainment.chunkChanged(level,event.getChunk().getPos().x,event.getChunk().getPos().z);}
     }
-    @SubscribeEvent public static void close(LevelEvent.Unload event) {if(event.getLevel() instanceof ServerLevel level)RadiationSourceIndex.close(level);}
+    @SubscribeEvent public static void close(LevelEvent.Unload event) {
+        if(event.getLevel() instanceof ServerLevel level) {
+            RadiationLivingEntities.close(level);
+            RadiationSourceIndex.close(level);
+        }
+    }
 }

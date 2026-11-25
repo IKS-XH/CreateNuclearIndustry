@@ -140,6 +140,11 @@ public final class RadiationSourceIndex {
     /** 世界真正关闭时撤销所有未完成任务，包括使用注入预算的独立执行实例。 */
     public static void close(ServerLevel level){forget(level);for(var index:active(level))index.jobs.clear();ACTIVE.remove(level);}
     public static void cancel(UUID player){for(var indices:ACTIVE.values())for(var index:indices)index.jobs.remove(player);}
+    /** 非玩家采样使用本维度的实体 ID，和玩家 UUID、直接坐标查询各自续接。 */
+    record LivingTarget(int entityId) {}
+    static void cancelLiving(ServerLevel level, LivingTarget target) {
+        for(var index:active(level))index.jobs.remove(target);
+    }
     public Counters counters(){return new Counters(stacks,blockEntities,rayCells,complete);}
     /** 只使变化格拥有的源投影失效；同区块无关库存不会撤销其他源或射线任务。 */
     public static void changed(ServerLevel level,BlockPos pos) {
@@ -188,6 +193,16 @@ public final class RadiationSourceIndex {
         RadiationContainment.get(level).beginSampling(now);
     }
     public RadiationFieldSample sample(ServerPlayer player,RadiationParameters p){return sample(player.serverLevel(),player.getUUID(),player.position(),p);}
+    boolean livingWorkAvailable(ServerLevel level) {
+        begin(level);
+        return stacks<limits.stacks()&&blockEntities<limits.blockEntities()&&rayCells<limits.rayCells()
+                &&RadiationContainment.get(level).workComplete();
+    }
+    boolean hasLivingWork(LivingTarget key) {return jobs.containsKey(key);}
+    /** 调用方在续接之前检查活体位置和在线状态，沿原玩家后的剩余维度预算推进。 */
+    RadiationFieldSample sampleLiving(ServerLevel level,LivingTarget key,Vec3 position,RadiationParameters p) {
+        return sample(level,key,position,p);
+    }
     /** 直接场强查询与玩家共用算法；玩家入口按身份续接，目标行走不新建任务。 */
     public RadiationFieldSample sampleAt(ServerLevel level,Vec3 target,RadiationParameters p){return sample(level,target,target,p);}
     private RadiationFieldSample sample(ServerLevel level,Object key,Vec3 target,RadiationParameters p) {

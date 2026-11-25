@@ -9,18 +9,24 @@ import com.iksxh.create_nuclear_industry.structure.*;
 import com.iksxh.create_nuclear_industry.mixin.*;
 import com.mojang.authlib.GameProfile;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
+import com.simibubi.create.content.fluids.transfer.FluidManipulationBehaviour.BottomlessFluidMode;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.logistics.depot.DepotBlockEntity;
 import com.simibubi.create.content.logistics.vault.ItemVaultBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.infrastructure.config.AllConfigs;
 import java.util.*;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.effect.*;
@@ -29,6 +35,7 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.FakePlayer;
@@ -378,17 +385,230 @@ public final class RadiationFoundationGameTests {
     }
 
 
-    /** 默认仍注册既有13项；只有显式本轮属性才注册两项区块生命周期回归，均使用原模板。 */
+    /** 默认注册现行辐射和料浆回归；历史区块生命周期定向选项继续使用原模板。 */
     @net.neoforged.fml.common.EventBusSubscriber(modid="create_nuclear_industry",bus=net.neoforged.fml.common.EventBusSubscriber.Bus.MOD)
     public static final class TestRegistration {
         private TestRegistration() {}
         @net.neoforged.bus.api.SubscribeEvent public static void register(net.neoforged.neoforge.event.RegisterGameTestsEvent event) {
             boolean chunkOnly=Boolean.getBoolean("cni.radiation.reviewChunkOnly");
             if(chunkOnly)event.register(ChunkLifecycleReview.class);
-            else {event.register(RadiationFoundationGameTests.class);event.register(ReviewFix.class);}
-            System.out.println("[radiation-test-selection] chunkOnly="+chunkOnly+" expected="+(chunkOnly?2:13));
+            else {event.register(RadiationFoundationGameTests.class);event.register(ReviewFix.class);event.register(LivingAndSlurry.class);}
+            System.out.println("[radiation-test-selection] chunkOnly="+chunkOnly+" expected="+(chunkOnly?2:17));
         }
     }
+
+    @PrefixGameTestTemplate(false)
+    public static final class LivingAndSlurry {
+        private static final String BATCH = "cni_radiation_slurry_02";
+        private static final String ATTACHMENTS = "neoforge:attachments";
+        private static final String DOSE = "create_nuclear_industry:radiation_dose";
+
+        private LivingAndSlurry() {}
+
+        private static <T extends Mob> T mob(GameTestHelper h, EntityType<T> type, BlockPos pos) {
+            T mob = Objects.requireNonNull(type.create(h.getLevel()));
+            mob.setPos(Vec3.atCenterOf(h.absolutePos(pos)));
+            mob.setNoAi(true);
+            mob.setNoGravity(true);
+            mob.setPersistenceRequired();
+            return mob;
+        }
+
+        private static CompoundTag storedDose(LivingEntity entity) {
+            return entity.saveWithoutId(new CompoundTag()).getCompound(ATTACHMENTS);
+        }
+
+        private static RadiationDoseState dose(LivingEntity entity) {
+            return RadiationDoseState.load(storedDose(entity).getCompound(DOSE), P);
+        }
+
+        @GameTest(template="radiation_empty",templateNamespace="cni_radiation_foundation",batch="cni_radiation_slurry_02_moving",timeoutTicks=85)
+        public static void walkingLivingEntityResumesLimitedRays(GameTestHelper h) {
+            BlockPos origin = new BlockPos(10, 70, 10);
+            Vec3 center = Vec3.atCenterOf(h.absolutePos(origin));
+            var source = new ItemEntity(h.getLevel(), center.x, center.y, center.z, spent());
+            source.setNoGravity(true);
+            source.setDeltaMovement(Vec3.ZERO);
+            source.setUnlimitedLifetime();
+            h.assertTrue(h.getLevel().addFreshEntity(source), "移动夹具源未加入世界");
+            var cow = mob(h, EntityType.COW, origin.east(9));
+            h.assertTrue(h.getLevel().addFreshEntity(cow), "移动夹具活体未加入世界");
+            Vec3 start = cow.position();
+
+            var index = new RadiationSourceIndex(new RadiationSourceIndex.WorkLimits(4096, 4096, 1));
+            // 只替换本隔离批次的索引上限，实体 tick、维度调度和正式采样算法继续真实执行。
+            Map<ServerLevel,RadiationSourceIndex> indices = levelIndices();
+            RadiationSourceIndex original = indices.put(h.getLevel(), index);
+            boolean[] budgetHit = {false};
+            for (int tick = 1; tick <= 52; tick++) {
+                double movement = tick * .2;
+                h.runAfterDelay(tick, () -> {
+                    cow.setPos(start.add(0, 0, movement));
+                    var counters = index.counters();
+                    budgetHit[0] |= !counters.complete() && counters.rayCells() == 1;
+                });
+            }
+            h.runAfterDelay(53, () -> {
+                try {
+                    h.assertTrue(budgetHit[0], "实际待续接射线未达到单格余量限制");
+                    h.assertTrue(cow.tickCount >= 40 && dose(cow).dose() > 0, "普通跨格走动使剩余射线无法得出完整剂量");
+                    System.out.println("[radiation-living-moving] real ticks and cross-block movement completed a resumable ray with one ray cell per tick");
+                } finally {
+                    if (original == null)
+                        indices.remove(h.getLevel());
+                    else
+                        indices.put(h.getLevel(), original);
+                    cow.discard();
+                    source.discard();
+                }
+                h.succeed();
+            });
+        }
+
+        @SuppressWarnings("unchecked")
+        private static Map<ServerLevel,RadiationSourceIndex> levelIndices() {
+            try {
+                var field = RadiationSourceIndex.class.getDeclaredField("LEVELS");
+                field.setAccessible(true);
+                return (Map<ServerLevel,RadiationSourceIndex>) field.get(null);
+            } catch (ReflectiveOperationException failure) {
+                throw new IllegalStateException("无法在隔离批次替换技术工作预算", failure);
+            }
+        }
+
+        @GameTest(template="radiation_empty",templateNamespace="cni_radiation_foundation",batch=BATCH,timeoutTicks=380)
+        public static void livingTargetsReceiveAndRecoverDoseWithoutPlayers(GameTestHelper h) {
+            BlockPos origin = new BlockPos(10, 70, 10);
+            Vec3 center = Vec3.atCenterOf(h.absolutePos(origin));
+            var source = new ItemEntity(h.getLevel(), center.x, center.y, center.z, spent());
+            source.setNoGravity(true);
+            source.setDeltaMovement(Vec3.ZERO);
+            source.setUnlimitedLifetime();
+            h.getLevel().addFreshEntity(source);
+            var cow = mob(h, EntityType.COW, origin.west(2));
+            var husk = mob(h, EntityType.HUSK, origin.north(2));
+            List<Mob> exposed = new ArrayList<>(List.of(cow, husk));
+            for (BlockPos offset : List.of(new BlockPos(0, 0, 2), new BlockPos(0, 2, 0), new BlockPos(0, -2, 0),
+                    new BlockPos(-2, 0, -2), new BlockPos(-2, 0, 2), new BlockPos(2, 0, -2))) {
+                exposed.add(mob(h, EntityType.COW, origin.offset(offset)));
+            }
+            for (Mob entity : exposed)
+                h.assertTrue(h.getLevel().addFreshEntity(entity), "受照活体未加入世界");
+
+            h.setBlock(origin.east(), ReactorCraftingContent.SHIELDING_CONCRETE.get());
+            h.setBlock(origin.east(2), ReactorCraftingContent.SHIELDING_CONCRETE.get());
+            var shielded = mob(h, EntityType.COW, origin.east(3));
+            var distant = mob(h, EntityType.COW, origin.above(48));
+            var protectedCow = mob(h, EntityType.COW, origin.south(4));
+            protectedCow.setItemSlot(EquipmentSlot.HEAD, new ItemStack(RadiationContent.HELMET.get()));
+            protectedCow.setItemSlot(EquipmentSlot.CHEST, new ItemStack(RadiationContent.CHESTPLATE.get()));
+            protectedCow.setItemSlot(EquipmentSlot.LEGS, new ItemStack(RadiationContent.LEGGINGS.get()));
+            protectedCow.setItemSlot(EquipmentSlot.FEET, new ItemStack(RadiationContent.BOOTS.get()));
+            for (Mob entity : List.of(shielded, distant, protectedCow))
+                h.assertTrue(h.getLevel().addFreshEntity(entity), "安全对照活体未加入世界");
+
+            h.runAfterDelay(70, () -> {
+                h.assertTrue(h.getLevel().players().isEmpty(), "定向辐射域混入在线玩家");
+                h.assertTrue(source.isAlive() && source.position().distanceToSqr(center) < 1e-8,
+                        "真源未保持在夹具预设位置: " + source.position());
+                for (Mob target : exposed)
+                    h.assertTrue(dose(target).dose() > 0, "真实 tick 未让活体受照或遗漏队尾 id=" + target.getId()
+                            + " alive=" + target.isAlive() + " ticks=" + target.tickCount + " pos=" + target.position());
+                for (Mob target : List.of(shielded, distant, protectedCow))
+                    h.assertTrue(!storedDose(target).contains(DOSE), "屏蔽、距离或对应槽防护对照出现剂量 " + target.getId());
+                double prior = dose(cow).dose();
+                cow.setPos(cow.position().add(0, 44, 0));
+                for (Mob target : exposed)
+                    if (target != cow)
+                        target.discard();
+                for (Mob target : List.of(shielded, distant, protectedCow))
+                    target.discard();
+
+                h.runAfterDelay(60, () -> near(h, prior, dose(cow).dose(), "撤离后的连续安全等待未保留"));
+                h.runAfterDelay(220, () -> {
+                    h.assertTrue(source.isAlive() && !storedDose(cow).contains(DOSE), "撤离后未恢复至零或继续保存空剂量");
+                    cow.discard();
+                    source.discard();
+                    System.out.println("[radiation-living] eight ticking mobs including cow and husk acquired dose without players; walls/distance/four-slot armor safe; moving away recovered to zero");
+                    h.succeed();
+                });
+            });
+        }
+
+        @GameTest(template="radiation_empty",templateNamespace="cni_radiation_foundation",batch=BATCH,timeoutTicks=80)
+        public static void loadedLivingDoseKeepsSymptomsDamageAndTimers(GameTestHelper h) {
+            var cow = mob(h, EntityType.COW, new BlockPos(10, 70, 10));
+            var seed = new RadiationDoseState(85, 20, 20);
+            var nbt = cow.saveWithoutId(new CompoundTag());
+            var attachments = new CompoundTag();
+            attachments.put(DOSE, seed.save());
+            nbt.put(ATTACHMENTS, attachments);
+            cow.load(nbt);
+            h.assertTrue(seed.equals(dose(cow)), "正常实体 NBT 载入后丢失剂量或计时");
+            h.assertTrue(h.getLevel().addFreshEntity(cow), "带剂量活体未加入世界");
+            h.runAfterDelay(26, () -> {
+                near(h, cow.getMaxHealth() - 1, cow.getHealth(), "NBT 中的剩余伤害周期未由真实 tick 延续");
+                h.assertTrue(cow.hasEffect(MobEffects.WEAKNESS) && cow.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "高剂量活体未触发原版症状");
+                RadiationDoseState online = dose(cow);
+                h.assertTrue(online.safeTicks() > seed.safeTicks() && online.damageTicks() < 12, "恢复和伤害时钟没有按在线 tick 延续");
+                var loaded = mob(h, EntityType.COW, new BlockPos(10, 70, 10));
+                loaded.load(cow.saveWithoutId(new CompoundTag()));
+                h.assertTrue(online.equals(dose(loaded)), "活体完整 NBT 保存读取未保留实时剂量和计时");
+                cow.discard();
+                System.out.println("[radiation-living] real vanilla symptoms, 1 HP damage, and entity NBT dose/safe/damage timer round trip");
+                h.succeed();
+            });
+        }
+
+        @GameTest(template="radiation_empty",templateNamespace="cni_radiation_foundation",batch=BATCH,timeoutTicks=30)
+        public static void createHosePulleyUsesSlurryTagAndConnectedThreshold(GameTestHelper h) {
+            var config = AllConfigs.server().fluids;
+            var source = FuelProcessingContent.URANIUM_SLURRY.get();
+            var flowing = FuelProcessingContent.URANIUM_SLURRY_FLOWING.get();
+            var mode = config.bottomlessFluidMode.get();
+            int original = config.hosePulleyBlockThreshold.get();
+            h.assertTrue(mode == BottomlessFluidMode.ALLOW_BY_TAG && original == 10000, "隔离测试的 Create 默认策略或阈值异常");
+            h.assertTrue(mode.test(source) && mode.test(flowing), "Create 白名单遗漏料浆源或流态");
+            h.assertTrue(mode.test(Fluids.WATER) && mode.test(Fluids.LAVA), "Create 原有水/岩浆源白名单被覆盖");
+            try {
+                config.hosePulleyBlockThreshold.set(4);
+                BlockPos large = new BlockPos(3, 7, 3);
+                var bottomless = slurryPool(h, large, 4);
+                BlockPos largeRoot = h.absolutePos(large);
+                h.assertTrue(bottomless.isInfinite(), "达到四个连通源格的料浆未命中 Create 无限分支");
+                h.assertTrue(bottomless.pullNext(largeRoot, false) && bottomless.pullNext(largeRoot, false), "无限料浆无法重复抽取");
+                h.assertTrue(h.getLevel().getFluidState(largeRoot).isSource(), "无限抽取消耗了料浆源格");
+
+                BlockPos small = new BlockPos(3, 7, 9);
+                var finite = slurryPool(h, small, 2);
+                BlockPos smallRoot = h.absolutePos(small);
+                h.assertTrue(!finite.isInfinite() && finite.pullNext(smallRoot, false), "低于阈值的料浆未按有限液池抽取");
+                h.assertTrue(h.getLevel().getFluidState(smallRoot).isEmpty()
+                        || h.getLevel().getFluidState(h.absolutePos(small.east())).isEmpty(), "有限抽取没有移除任何料浆源格");
+            } finally {
+                config.hosePulleyBlockThreshold.set(original);
+            }
+            h.assertTrue(config.hosePulleyBlockThreshold.get() == original, "Create 测试阈值未恢复");
+            System.out.println("[slurry-hose] actual Create drainer: connected 4-source infinite repeat, connected 2-source finite removal, default 10000 restored; ALLOW_BY_TAG source/flowing and vanilla water/lava");
+            h.succeed();
+        }
+
+        private static FluidDrainingBehaviour slurryPool(GameTestHelper h, BlockPos root, int size) {
+            for (int x = 0; x < size; x++)
+                h.setBlock(root.east(x), FuelProcessingContent.URANIUM_SLURRY_BLOCK.get());
+            BlockPos hose = root.above(3);
+            h.setBlock(hose, AllBlocks.HOSE_PULLEY.get());
+            var drainer = Objects.requireNonNull(BlockEntityBehaviour.get(h.getBlockEntity(hose), FluidDrainingBehaviour.TYPE));
+            BlockPos absolute = h.absolutePos(root);
+            // 先建立实际软管的根格，再让 Create 自己验证根和执行遍历。
+            drainer.pullNext(absolute, true);
+            drainer.tick();
+            drainer.rebuildContext(absolute);
+            drainer.tick();
+            return drainer;
+        }
+    }
+
     /** 受控可见性与真实事件类型验证生产入口；不冒称操作真实区块装载器。 */
     @PrefixGameTestTemplate(false)
     public static final class ChunkLifecycleReview {
