@@ -54,7 +54,13 @@ public final class ShieldedAssemblyJeiPlugin implements IModPlugin {
         @Override public void setRecipe(IRecipeLayoutBuilder builder, ShieldedAssemblyRecipe recipe, IFocusGroup focuses) {
             for (int slot = 0; slot < recipe.inputs().size(); slot++)
                 builder.addInputSlot(6 + (slot % 2) * 21, 7 + (slot / 2) * 21).addItemStacks(stacks(recipe.inputs().get(slot)));
-            builder.addOutputSlot(103, 18).addItemStack(recipe.result());
+            if (recipe.results().size() == 1) {
+                builder.addOutputSlot(103, 18).addItemStack(recipe.results().getFirst());
+            } else {
+                for (int slot = 0; slot < recipe.results().size(); slot++)
+                    builder.addOutputSlot(88 + (slot % 2) * 21, 7 + (slot / 2) * 21)
+                            .addItemStack(recipe.results().get(slot));
+            }
         }
         private static List<ItemStack> stacks(ShieldedAssemblyRecipe.Input input) {
             return Arrays.stream(input.ingredient().getItems()).map(stack -> stack.copyWithCount(input.count())).toList();

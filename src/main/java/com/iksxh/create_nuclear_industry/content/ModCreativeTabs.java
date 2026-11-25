@@ -106,8 +106,9 @@ public final class ModCreativeTabs {
                         output.accept(SpentFuelStorageContent.GLASS_DUST.get());
                         output.accept(SpentFuelStorageContent.VITRIFICATION_MEDIUM.get());
                         output.accept(SpentFuelStorageContent.LEAD_SHIELDING_CASK.get());
+                        output.accept(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get());
                         output.accept(com.iksxh.create_nuclear_industry.storage.SpentFuelPayload.seal(
-                                new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get())));
+                                new ItemStack(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get())));
                         output.accept(SpentFuelStorageContent.DRY_STORAGE_RACK_ITEM.get());
                         output.accept(HeatMaterialsContent.STEEL_PIPE_BLANK.get());
                         output.accept(HeatMaterialsContent.REINFORCED_STEEL_PLATE.get());

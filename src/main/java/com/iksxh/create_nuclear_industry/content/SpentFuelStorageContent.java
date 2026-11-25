@@ -25,6 +25,7 @@ public final class SpentFuelStorageContent {
     public static final DeferredItem<Item> GLASS_DUST = ITEMS.registerSimpleItem("glass_dust");
     public static final DeferredItem<Item> VITRIFICATION_MEDIUM = ITEMS.registerSimpleItem("vitrification_medium");
     public static final DeferredItem<Item> LEAD_SHIELDING_CASK = ITEMS.registerSimpleItem("lead_shielding_cask");
+    public static final DeferredItem<Item> SPENT_FUEL_RESIDUE = ITEMS.registerSimpleItem("spent_fuel_residue");
     public static final DeferredItem<Item> SEALED_SPENT_FUEL_CASK = ITEMS.registerSimpleItem("sealed_spent_fuel_cask", new Item.Properties().stacksTo(1));
     public static final DeferredBlock<DryStorageBlock> DRY_STORAGE_RACK = BLOCKS.register("dry_storage_rack",
             () -> new DryStorageBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(4).requiresCorrectToolForDrops()));

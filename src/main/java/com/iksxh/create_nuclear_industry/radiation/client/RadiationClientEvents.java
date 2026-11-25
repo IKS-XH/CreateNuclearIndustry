@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.radiation.client;
 
+import com.iksxh.create_nuclear_industry.content.SpentFuelStorageContent;
 import com.iksxh.create_nuclear_industry.radiation.*;
 import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyItemCodec;
 import com.iksxh.create_nuclear_industry.storage.SpentFuelPayload;
@@ -59,7 +60,8 @@ public final class RadiationClientEvents {
     @SubscribeEvent public static void tooltip(ItemTooltipEvent event) {
         var item=event.getItemStack();
         if(FuelAssemblyItemCodec.isFreshFuel(item)&&FuelUseHistory.isUsed(item))event.getToolTip().add(Component.translatable("radiation.create_nuclear_industry.used"));
-        if(FuelAssemblyItemCodec.isCooledSpentFuel(item))event.getToolTip().add(Component.translatable("radiation.create_nuclear_industry.spent"));
+        if(FuelAssemblyItemCodec.isCooledSpentFuel(item) || item.is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get()))
+            event.getToolTip().add(Component.translatable("radiation.create_nuclear_industry.spent"));
         if(SpentFuelPayload.isValid(item))event.getToolTip().add(Component.translatable("radiation.create_nuclear_industry.cask"));
     }
 }

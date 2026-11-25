@@ -7,11 +7,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 
-/** 单件核废料封存事务；真实原乏燃料或事故废料是桶内容，不暴露第二份可访问库存。 */
+/** 单件核废料封存事务；真实废料是桶内容，不暴露第二份可访问库存。 */
 public final class SpentFuelPayload {
     private SpentFuelPayload() {}
 
-    /** 只读检验恰好一个数量1的乏燃料或事故废料；混装、全新燃料、空桶和异物均拒绝。 */
+    /** 只读检验恰好一份有效废料；此前封好的完整枯竭组件仍是合法载荷。 */
     public static boolean isValid(ItemStack stack) {
         if (!stack.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get()) || stack.getCount() != 1) return false;
         ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
@@ -30,6 +30,7 @@ public final class SpentFuelPayload {
     }
     public static boolean allowed(ItemStack stack) {
         return stack.is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get())
+                || stack.is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get())
                 || stack.is(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get());
     }
 }

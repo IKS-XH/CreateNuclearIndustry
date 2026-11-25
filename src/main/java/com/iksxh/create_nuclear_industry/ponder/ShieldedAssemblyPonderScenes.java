@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.ponder;
 
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.api.scene.SceneBuilder;
@@ -22,7 +23,7 @@ public final class ShieldedAssemblyPonderScenes {
 
     private ShieldedAssemblyPonderScenes() {}
 
-    /** 整台八格同时显露；唯一底轴、水平物流和顶部只进料分段说明。 */
+    /** 整台八格同时显露，依次说明动力、物料接口与扳手切换。 */
     public static void placement(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = setup(builder, "placement", "屏蔽装配台：搭建与接口");
         Selection machine = machine(util);
@@ -38,6 +39,12 @@ public final class ShieldedAssemblyPonderScenes {
         scene.world().showSection(util.select().position(4, 4, 4), Direction.DOWN);
         note(scene, logistics(util).add(util.select().position(4, 4, 4)), util.vector().centerOf(3, 3, 2), 80,
                 "四周可输入材料或取出成品；顶部只进料，底面不通物品。");
+        scene.overlay().showControls(util.vector().topOf(MASTER.above()), Pointing.DOWN, 45).rightClick()
+                .withItem(AllItems.WRENCH.asStack());
+        note(scene, machine, util.vector().centerOf(MASTER.above()), 95,
+                "清空装配台后，用扳手右击切换装配／封装和拆解模式。护目镜可查看当前模式。");
+        note(scene, machine, util.vector().centerOf(MASTER), 95,
+                "先拆解枯竭组件，再把残渣投入装配／封装模式。");
         scene.idle(15);
         scene.markAsFinished();
     }

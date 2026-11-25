@@ -1,19 +1,22 @@
 package com.iksxh.create_nuclear_industry.production;
 
 import java.util.Arrays;
+import java.util.List;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * 装配台唯一物品与工时账本。最多四个输入槽按活动配方排列，输出槽仅容一件。
+ * 装配台唯一物品与工时账本。最多四个输入槽按活动配方排列，四个输出槽保存同一批的产物。
  * 此类不查询世界；方块实体在服务端确认配方和动力后才允许提交完整批次。
  */
 public final class ShieldedAssemblyState {
     public static final int[] COST = {8, 4, 2, 1};
     public static final int WORK = 25_600;
+    public static final int OUTPUT_SLOTS = 4;
     private final ItemStack[] input = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
-    private ItemStack output = ItemStack.EMPTY;
+    private final ItemStack[] output = {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+    private boolean disassemblyMode;
     private int progress;
     private String operation = "";
     private String recipeId = "";
@@ -23,6 +26,14 @@ public final class ShieldedAssemblyState {
     public String operation() { return operation; }
     public int cost(int slot) { return slot >= 0 && slot < costs.length ? costs[slot] : 0; }
     public int work() { return work; }
+    public boolean disassemblyMode() { return disassemblyMode; }
+
+    /** 机器清空后才可切换玩家选择；活动配方工序仍由实际投料决定。 */
+    public boolean switchMode() {
+        if (progress != 0 || !outputEmpty() || !Arrays.stream(input).allMatch(ItemStack::isEmpty)) return false;
+        disassemblyMode = !disassemblyMode;
+        return true;
+    }
 
     /** 配方数量或身份变化即废弃旧工时；此调用只配置批次，不替模拟投料选择工序。 */
     public void configure(String mode, String id, int[] quantities, int requiredWork) {
@@ -36,20 +47,23 @@ public final class ShieldedAssemblyState {
     }
 
     private void unlockIfEmpty() {
-        if (progress == 0 && output.isEmpty() && Arrays.stream(input).allMatch(ItemStack::isEmpty)) {
+        if (progress == 0 && outputEmpty() && Arrays.stream(input).allMatch(ItemStack::isEmpty)) {
             operation = "";
             recipeId = "";
         }
     }
 
     public ItemStack input(int slot) { return slot >= 0 && slot < 4 ? input[slot].copy() : ItemStack.EMPTY; }
-    public ItemStack output() { return output.copy(); }
+    public ItemStack output() { return output(0); }
+    public ItemStack output(int slot) {
+        return slot >= 0 && slot < OUTPUT_SLOTS ? output[slot].copy() : ItemStack.EMPTY;
+    }
     public int progress() { return progress; }
     public boolean ready() {
         for (int slot = 0; slot < costs.length; slot++) if (input[slot].getCount() < costs[slot]) return false;
         return true;
     }
-    public boolean outputEmpty() { return output.isEmpty(); }
+    public boolean outputEmpty() { return Arrays.stream(output).allMatch(ItemStack::isEmpty); }
 
     /** 仅在外层已核实材料身份后调用；模拟和不兼容组件均不改写账本。 */
     public ItemStack insert(int slot, ItemStack offered, boolean simulate) {
@@ -86,9 +100,16 @@ public final class ShieldedAssemblyState {
     }
 
     public ItemStack extractOutput(int amount, boolean simulate) {
-        if (amount <= 0 || output.isEmpty()) return ItemStack.EMPTY;
-        ItemStack result = output.copy();
-        if (!simulate) { output = ItemStack.EMPTY; unlockIfEmpty(); }
+        return extractOutput(0, amount, simulate);
+    }
+    public ItemStack extractOutput(int slot, int amount, boolean simulate) {
+        if (slot < 0 || slot >= OUTPUT_SLOTS || amount <= 0 || output[slot].isEmpty()) return ItemStack.EMPTY;
+        ItemStack result = output[slot].copyWithCount(Math.min(amount, output[slot].getCount()));
+        if (!simulate) {
+            output[slot].shrink(result.getCount());
+            if (output[slot].isEmpty()) output[slot] = ItemStack.EMPTY;
+            unlockIfEmpty();
+        }
         return result;
     }
 
@@ -96,16 +117,22 @@ public final class ShieldedAssemblyState {
 
     /** 有效速度以RPM计，单tick最多计256；完成前重新检查全部物料和输出槽。 */
     public boolean advance(float speed, ItemStack freshResult) {
-        if (Math.abs(speed) < 32 || !ready() || !output.isEmpty() || freshResult.isEmpty()
-                || freshResult.getCount() != 1) return false;
-        if (!Float.isFinite(speed)) return false;
+        return advance(speed, List.of(freshResult));
+    }
+
+    /** 上一批全部取出才累积新工时，所有产物可容纳后一次扣料和入账。 */
+    public boolean advance(float speed, List<ItemStack> results) {
+        if (!Float.isFinite(speed) || Math.abs(speed) < 32 || !ready() || !outputEmpty()
+                || results.isEmpty() || results.size() > OUTPUT_SLOTS
+                || results.stream().anyMatch(stack -> stack.isEmpty() || stack.getCount() > stack.getMaxStackSize()))
+            return false;
         progress = (int) Math.min((long) work, (long) progress + (int) Math.min(Math.abs(speed), 256));
         if (progress < work) return true;
         for (int slot = 0; slot < costs.length; slot++) {
             input[slot].shrink(costs[slot]);
             if (input[slot].isEmpty()) input[slot] = ItemStack.EMPTY;
         }
-        output = freshResult.copy();
+        for (int slot = 0; slot < results.size(); slot++) output[slot] = results.get(slot).copy();
         progress = 0;
         return true;
     }
@@ -113,6 +140,7 @@ public final class ShieldedAssemblyState {
     /** 完整ItemStack及进度共用同一保存格式，携带物与区块存储均复用此格式。 */
     public CompoundTag save(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
+        tag.putBoolean("DisassemblyMode", disassemblyMode);
         tag.putInt("Progress", progress);
         tag.putString("Operation", operation);
         tag.putString("RecipeId", recipeId);
@@ -120,9 +148,13 @@ public final class ShieldedAssemblyState {
         tag.putInt("Work", work);
         for (int slot = 0; slot < 4; slot++) if (!input[slot].isEmpty())
             tag.put("Input" + slot, input[slot].save(registries));
-        if (!output.isEmpty()) tag.put("Output", output.save(registries));
+        for (int slot = 0; slot < OUTPUT_SLOTS; slot++) if (!output[slot].isEmpty())
+            tag.put(outputKey(slot), output[slot].save(registries));
         return tag;
     }
+
+    // 首槽沿用旧键保存，原先尚未取出的单件产物可直接保留。
+    private static String outputKey(int slot) { return slot == 0 ? "Output" : "Output" + slot; }
 
     /** 恢复当前版本完整物料和批次快照；世界配方由主控重新校验，不从进度重造产物。 */
     public void load(CompoundTag tag, HolderLookup.Provider registries) {
@@ -131,8 +163,11 @@ public final class ShieldedAssemblyState {
             ItemStack parsed = ItemStack.parseOptional(registries, tag.getCompound("Input" + slot));
             if (!parsed.isEmpty() && parsed.getCount() <= 64) input[slot] = parsed;
         }
-        ItemStack parsedOutput = ItemStack.parseOptional(registries, tag.getCompound("Output"));
-        output = parsedOutput.getCount() == 1 ? parsedOutput : ItemStack.EMPTY;
+        for (int slot = 0; slot < OUTPUT_SLOTS; slot++) {
+            ItemStack parsed = ItemStack.parseOptional(registries, tag.getCompound(outputKey(slot)));
+            output[slot] = parsed.getCount() <= parsed.getMaxStackSize() ? parsed : ItemStack.EMPTY;
+        }
+        disassemblyMode = tag.getBoolean("DisassemblyMode");
         operation = tag.getString("Operation");
         recipeId = tag.getString("RecipeId");
         int[] savedCosts = tag.getIntArray("Costs");

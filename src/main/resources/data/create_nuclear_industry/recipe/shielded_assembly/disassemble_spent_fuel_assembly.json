@@ -1,0 +1,31 @@
+{
+  "type": "create_nuclear_industry:shielded_assembly",
+  "operation": "disassembly",
+  "inputs": [
+    {
+      "ingredient": {
+        "item": "create_nuclear_industry:cooled_spent_fuel_assembly"
+      },
+      "count": 1
+    }
+  ],
+  "result": [
+    {
+      "id": "create_nuclear_industry:steel_plate",
+      "count": 4
+    },
+    {
+      "id": "create_nuclear_industry:tin_nugget",
+      "count": 9
+    },
+    {
+      "id": "create_nuclear_industry:lead_nugget",
+      "count": 3
+    },
+    {
+      "id": "create_nuclear_industry:spent_fuel_residue",
+      "count": 1
+    }
+  ],
+  "work": 12800
+}

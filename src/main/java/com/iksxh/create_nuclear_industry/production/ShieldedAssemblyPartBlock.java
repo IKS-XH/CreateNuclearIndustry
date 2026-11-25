@@ -6,7 +6,6 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -93,10 +92,7 @@ public final class ShieldedAssemblyPartBlock extends Block implements EntityBloc
         if (!state.is(next.getBlock()) && !level.isClientSide) level.invalidateCapabilities(pos);
     }
     @Override public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-        if (!context.getLevel().isClientSide && context.getPlayer() != null)
-            context.getPlayer().displayClientMessage(Component.translatable(
-                    "gui.create_nuclear_industry.shielded_assembly.relocate"), true);
-        return InteractionResult.SUCCESS;
+        return ShieldedAssemblyBlock.wrenchMode(state, context);
     }
     @Override public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
         return ShieldedAssemblyBlock.wrenchPickup(context, context.getClickedPos(), state);

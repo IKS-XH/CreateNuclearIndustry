@@ -4,7 +4,7 @@
   "inputs": [
     {
       "ingredient": {
-        "item": "create_nuclear_industry:cooled_spent_fuel_assembly"
+        "item": "create_nuclear_industry:spent_fuel_residue"
       },
       "count": 1
     },

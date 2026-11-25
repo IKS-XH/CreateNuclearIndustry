@@ -2,8 +2,12 @@ package com.iksxh.create_nuclear_industry.production;
 
 import com.iksxh.create_nuclear_industry.goggle.GoggleTooltip;
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
+import com.iksxh.create_nuclear_industry.content.AccidentContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
+import com.iksxh.create_nuclear_industry.content.ModItems;
+import com.iksxh.create_nuclear_industry.content.SpentFuelStorageContent;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import java.util.List;
@@ -24,8 +28,13 @@ import net.neoforged.neoforge.items.IItemHandler;
  * 只写在同一个账本，客户端同步仅供渲染与护目镜展示，任何物料事务均在服务端完成。
  */
 public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implements IHaveGoggleInformation {
-    private static final ResourceLocation RECIPE_ID = ResourceLocation.fromNamespaceAndPath(
-            CreateNuclearIndustry.MOD_ID, "shielded_assembly/fresh_fuel_assembly");
+    private static final String MANUFACTURE = "fresh_fuel_assembly";
+    private static final String SEAL_RESIDUE = "sealed_spent_fuel_residue";
+    private static final String SEAL_WASTE = "sealed_accident_fuel_waste";
+    private static final String DISASSEMBLE = "disassemble_spent_fuel_assembly";
+    private static final List<String> ASSEMBLY_PATHS = List.of(MANUFACTURE, SEAL_RESIDUE, SEAL_WASTE);
+    private static final List<String> DISASSEMBLY_PATHS = List.of(DISASSEMBLE);
+    private static final int INPUT_SLOTS = 4;
     private final ShieldedAssemblyState state = new ShieldedAssemblyState();
     private boolean removalHandled;
     private UUID ownerId;
@@ -60,44 +69,59 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
         if (level == null || level.isClientSide || !current()) return;
         boolean structure = complete();
         int oldProgress = state.progress();
-        boolean recipe = structure && recipeReady();
+        String path = currentPath();
+        ShieldedAssemblyRecipe recipe = structure ? compatibleRecipe(path) : null;
+        if (recipe != null) configure(path, recipe);
         if (oldProgress != state.progress()) changed();
-        if (structure && !recipe && oldProgress > 0) {
+        if (structure && recipe == null && oldProgress > 0) {
             state.invalidateProgress();
             changed();
         }
-        boolean working = structure && recipe && state.ready() && state.outputEmpty()
+        boolean working = recipe != null && state.ready() && state.outputEmpty()
                 && !isOverStressed() && Math.abs(getSpeed()) >= 32;
         BlockState blockState = getBlockState();
         if (blockState.getValue(ShieldedAssemblyBlock.WORKING) != working)
             level.setBlock(worldPosition, blockState.setValue(ShieldedAssemblyBlock.WORKING, working), 3);
         ShieldedAssemblyStructure.syncWorking(this, working);
-        if (working && state.advance(getSpeed(), currentRecipe().actualResult(state.input(0)))) {
+        if (working && state.advance(getSpeed(), recipe.actualResults(state.input(0)))) {
             setChanged();
             if (state.progress() == 0 || oldProgress / 256 != state.progress() / 256) sendData();
         }
     }
 
-    private static final List<String> RECIPE_PATHS = List.of("fresh_fuel_assembly", "sealed_spent_fuel_cask", "sealed_accident_fuel_waste");
     private ShieldedAssemblyRecipe recipeFor(String path) {
-        if (level == null || !RECIPE_PATHS.contains(path)) return null;
+        if (level == null) return null;
         var id=ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID,"shielded_assembly/"+path);
         var holder=level.getRecipeManager().byKey(id);
-        return holder.isPresent() && holder.get().value() instanceof ShieldedAssemblyRecipe recipe && recipe.valid() ? recipe : null;
+        if (holder.isEmpty() || !(holder.get().value() instanceof ShieldedAssemblyRecipe recipe) || !recipe.valid()) return null;
+        boolean matchesPath = switch (path) {
+            case MANUFACTURE -> "manufacture".equals(recipe.operation());
+            case DISASSEMBLE -> "disassembly".equals(recipe.operation())
+                    && recipe.accepts(0, new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()));
+            case SEAL_RESIDUE, SEAL_WASTE -> "sealing".equals(recipe.operation()) && recipe.accepts(0,
+                    new ItemStack(path.equals(SEAL_RESIDUE) ? SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get()
+                            : AccidentContent.ACCIDENT_FUEL_WASTE.get()));
+            default -> false;
+        };
+        return matchesPath ? recipe : null;
     }
     /** 槽0真实载荷决定两种封装，公共固化材料可先投；绝不只按sealing工序复用进度。 */
     private String currentPath() {
-        if ("sealing".equals(state.operation())) return state.input(0).is(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get())
-                ? "sealed_accident_fuel_waste" : "sealed_spent_fuel_cask";
-        return "fresh_fuel_assembly";
+        if (state.disassemblyMode()) return DISASSEMBLE;
+        if ("sealing".equals(state.operation())) return sealingPath(state.input(0));
+        return MANUFACTURE;
+    }
+    private String sealingPath(ItemStack payload) {
+        return payload.is(AccidentContent.ACCIDENT_FUEL_WASTE.get()) ? SEAL_WASTE : SEAL_RESIDUE;
     }
     private ShieldedAssemblyRecipe currentRecipe() { return recipeFor(currentPath()); }
     private String offeredPath(int slot, ItemStack offered) {
-        for(String path:RECIPE_PATHS) {
+        for (String path : state.disassemblyMode() ? DISASSEMBLY_PATHS : ASSEMBLY_PATHS) {
             var recipe=recipeFor(path);
             if(recipe==null || !recipe.accepts(slot,offered) || !state.operation().isEmpty()&&!state.operation().equals(recipe.operation()))continue;
+            if (slot == 0 && "sealing".equals(recipe.operation()) && !path.equals(sealingPath(offered))) continue;
             boolean compatible=true;
-            for(int i=0;i<4;i++)if(!state.input(i).isEmpty()&&!recipe.accepts(i,state.input(i)))compatible=false;
+            for(int i=0;i<INPUT_SLOTS;i++)if(!state.input(i).isEmpty()&&!recipe.accepts(i,state.input(i)))compatible=false;
             if(compatible)return path;
         }
         return null;
@@ -112,10 +136,21 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
                 .collect(java.util.stream.Collectors.joining(","))).collect(java.util.stream.Collectors.joining(";"));
         state.configure(recipe.operation(),CreateNuclearIndustry.MOD_ID+":shielded_assembly/"+path+"#"+fingerprint,recipe.costs(),recipe.work());
     }
+    private ShieldedAssemblyRecipe compatibleRecipe(String path) {
+        var recipe = recipeFor(path);
+        if (recipe == null) return null;
+        for (int slot = 0; slot < INPUT_SLOTS; slot++) {
+            ItemStack stack = state.input(slot);
+            if (!stack.isEmpty() && !recipe.accepts(slot, stack)) return null;
+        }
+        return recipe;
+    }
     public boolean recipeReady() {
-        var path=currentPath();var recipe=recipeFor(path);if(recipe==null)return false;
-        for(int i=0;i<4;i++)if(!state.input(i).isEmpty()&&!recipe.accepts(i,state.input(i)))return false;
-        configure(path,recipe);return true;
+        String path = currentPath();
+        var recipe = compatibleRecipe(path);
+        if (recipe == null) return false;
+        if (level != null && !level.isClientSide) configure(path, recipe);
+        return true;
     }
     /** 模拟只读，真实首料才选择工序；公共材料后补槽0时切配方会清掉另一配方进度。 */
     private ItemStack insertSlot(int slot,ItemStack offered,boolean simulate) {
@@ -137,34 +172,49 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     public IItemHandler itemPort(Direction side) { return itemPort(worldPosition, side); }
     public ItemStack insert(ItemStack stack) {
         if (!complete()) return stack.copy();
-        for (int slot = 0; slot < 4; slot++) if (offeredRecipe(slot, stack) != null) return insertSlot(slot, stack, false);
+        for (int slot = 0; slot < INPUT_SLOTS; slot++) if (offeredRecipe(slot, stack) != null) return insertSlot(slot, stack, false);
         return stack.copy();
     }
 
     /** 手持交互复用数据配方谓词，允许标签中的合法替代材料；不修改选择和账本。 */
     public boolean acceptsInput(ItemStack stack) {
-        for (int slot = 0; slot < 4; slot++) if (offeredRecipe(slot, stack) != null) return true;
+        for (int slot = 0; slot < INPUT_SLOTS; slot++) if (offeredRecipe(slot, stack) != null) return true;
         return false;
     }
 
     /** 玩家背包先接受物品，再从机器账本扣除同数，背包满时机器保持原样。 */
     public int takeToPlayer(Player player, boolean takeInput) {
         if (!current()) return 0;
-        int slot = -1;
-        if (takeInput) {
-            for (int i = 0; i < 4; i++) if (!state.input(i).isEmpty()) { slot = i; break; }
-        }
-        ItemStack offered = takeInput ? slot < 0 ? ItemStack.EMPTY : state.input(slot) : state.output();
-        if (offered.isEmpty()) return 0;
-        ItemStack remainder = offered.copy();
-        player.getInventory().add(remainder);
-        int accepted = offered.getCount() - remainder.getCount();
-        if (accepted > 0) {
+        int slots = takeInput ? INPUT_SLOTS : ShieldedAssemblyState.OUTPUT_SLOTS;
+        for (int slot = 0; slot < slots; slot++) {
+            ItemStack offered = takeInput ? state.input(slot) : state.output(slot);
+            if (offered.isEmpty()) continue;
+            ItemStack remainder = offered.copy();
+            player.getInventory().add(remainder);
+            int accepted = offered.getCount() - remainder.getCount();
+            if (accepted <= 0) continue;
             if (takeInput) state.extractInput(slot, accepted, false);
-            else state.extractOutput(accepted, false);
+            else state.extractOutput(slot, accepted, false);
             changed();
+            return accepted;
         }
-        return accepted;
+        return 0;
+    }
+
+    /** 扳手选择在服务端提交，客户端从主控的既有同步包读取同一个模式。 */
+    public Component switchMode() {
+        String key = "gui.create_nuclear_industry.shielded_assembly.";
+        if (!complete() || level == null || level.isClientSide) return Component.translatable(key + "wait.structure");
+        if (!state.switchMode()) return Component.translatable(key + "mode.busy");
+        recipeReady();
+        changed();
+        IWrenchable.playRotateSound(level, worldPosition);
+        return modeStatus();
+    }
+
+    private Component modeStatus() {
+        return Component.translatable("gui.create_nuclear_industry.shielded_assembly.mode." +
+                (state.disassemblyMode() ? "disassembly" : "assembly"));
     }
 
     public CompoundTag savePortableData() {
@@ -191,9 +241,9 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     private String waitReason() {
         if (!expanded()) return "legacy";
         if (!complete()) return "structure";
-        if (!recipeReady()) return "recipe";
-        if (!state.ready()) return "input";
         if (!state.outputEmpty()) return "output";
+        if (compatibleRecipe(currentPath()) == null) return "recipe";
+        if (!state.ready()) return "input";
         if (isOverStressed()) return "overload";
         if (getSpeed() == 0) return "power";
         if (Math.abs(getSpeed()) < 32) return "speed";
@@ -205,17 +255,21 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
     }
     @Override public boolean addToGoggleTooltip(List<Component> tooltip, boolean sneaking) {
         tooltip.add(GoggleTooltip.indentFirstLine(Component.translatable("block.create_nuclear_industry.shielded_assembly_station")));
-        tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.operation." +
-                (state.operation().isEmpty() ? "unselected" : state.operation())));
+        tooltip.add(modeStatus());
+        if (!state.operation().isEmpty()) tooltip.add(Component.translatable(
+                "gui.create_nuclear_industry.shielded_assembly.operation." + state.operation()));
         ShieldedAssemblyRecipe recipe = currentRecipe();
-        int slots = recipe == null ? 4 : recipe.inputs().size();
+        int slots = recipe == null ? INPUT_SLOTS : recipe.inputs().size();
         for (int slot = 0; slot < slots; slot++)
             tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.material",
                     state.input(slot).isEmpty() ? recipe == null ? Component.literal("—")
                     : recipe.inputs().get(slot).ingredient().getItems()[0].getHoverName() : state.input(slot).getHoverName(),
                     state.input(slot).getCount(), recipe == null ? state.cost(slot) : recipe.inputs().get(slot).count()));
-        tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.output",
-                state.output().isEmpty() ? 0 : 1));
+        for (int slot = 0; slot < ShieldedAssemblyState.OUTPUT_SLOTS; slot++) {
+            ItemStack output = state.output(slot);
+            if (!output.isEmpty()) tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.output",
+                    output.getHoverName(), output.getCount()));
+        }
         tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.speed", Math.round(getSpeed())));
         tooltip.add(Component.translatable("gui.create_nuclear_industry.shielded_assembly.progress",
                 state.progress(), state.work()));
@@ -237,25 +291,27 @@ public final class ShieldedAssemblyBlockEntity extends KineticBlockEntity implem
                     && ShieldedAssemblyLayout.exterior(part,
                     getBlockState().getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING), side);
         }
-        @Override public int getSlots() { return !valid() ? 0 : side == Direction.UP ? 4 : 5; }
+        @Override public int getSlots() {
+            if (!valid()) return 0;
+            return side == Direction.UP ? INPUT_SLOTS : INPUT_SLOTS + ShieldedAssemblyState.OUTPUT_SLOTS;
+        }
         @Override public ItemStack getStackInSlot(int slot) {
             if (!valid()) return ItemStack.EMPTY;
-            return slot >= 0 && slot < 4 ? state.input(slot)
-                    : side != Direction.UP && slot == 4 ? state.output() : ItemStack.EMPTY;
+            return slot >= 0 && slot < INPUT_SLOTS ? state.input(slot)
+                    : side != Direction.UP ? state.output(slot - INPUT_SLOTS) : ItemStack.EMPTY;
         }
         @Override public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             if (!valid() || !isItemValid(slot, stack)) return stack.copy();
             return insertSlot(slot, stack, simulate);
         }
         @Override public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (!valid() || side == Direction.UP || slot != 4) return ItemStack.EMPTY;
-            ItemStack extracted = state.extractOutput(amount, simulate);
+            if (!valid() || side == Direction.UP) return ItemStack.EMPTY;
+            ItemStack extracted = state.extractOutput(slot - INPUT_SLOTS, amount, simulate);
             if (!simulate && !extracted.isEmpty()) changed();
             return extracted;
         }
         @Override public int getSlotLimit(int slot) {
-            return !valid() ? 0 : slot >= 0 && slot < 4 ? 64
-                    : side != Direction.UP && slot == 4 ? 1 : 0;
+            return slot >= 0 && slot < getSlots() ? 64 : 0;
         }
         @Override public boolean isItemValid(int slot, ItemStack stack) {
             return valid() && offeredRecipe(slot, stack) != null;

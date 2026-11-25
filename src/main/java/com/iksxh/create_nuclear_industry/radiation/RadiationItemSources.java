@@ -1,5 +1,6 @@
 package com.iksxh.create_nuclear_industry.radiation;
 
+import com.iksxh.create_nuclear_industry.content.SpentFuelStorageContent;
 import com.iksxh.create_nuclear_industry.reactor.FuelAssemblyItemCodec;
 import com.iksxh.create_nuclear_industry.storage.SpentFuelPayload;
 import java.util.*;
@@ -33,10 +34,12 @@ public final class RadiationItemSources {
                 if(stack==null || stack.isEmpty()) continue;
                 double count=multiplyFinite(entry.count(),stack.getCount());
                 boolean waste=stack.is(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get());
-                double source=waste ? p.accidentWasteDosePerSecond() : FuelAssemblyItemCodec.isCooledSpentFuel(stack) ? p.spentFuelDosePerSecond()
-                        : FuelAssemblyItemCodec.isFreshFuel(stack)&&FuelUseHistory.isUsed(stack) ? p.usedFuelDosePerSecond() : 0;
-                radioactive|=waste||FuelAssemblyItemCodec.isCooledSpentFuel(stack)
-                        ||FuelAssemblyItemCodec.isFreshFuel(stack)&&FuelUseHistory.isUsed(stack);
+                boolean spent=FuelAssemblyItemCodec.isCooledSpentFuel(stack)
+                        || stack.is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get());
+                boolean used=FuelAssemblyItemCodec.isFreshFuel(stack)&&FuelUseHistory.isUsed(stack);
+                double source=waste ? p.accidentWasteDosePerSecond() : spent ? p.spentFuelDosePerSecond()
+                        : used ? p.usedFuelDosePerSecond() : 0;
+                radioactive|=waste||spent||used;
                 double strength=multiplyFinite(source,count);
                 raw=addFinite(raw,strength);transmitted=addFinite(transmitted,multiplyFinite(strength,entry.multiplier()));
                 double multiplier=entry.multiplier()*(SpentFuelPayload.isValid(stack)?p.caskTransmission():1);

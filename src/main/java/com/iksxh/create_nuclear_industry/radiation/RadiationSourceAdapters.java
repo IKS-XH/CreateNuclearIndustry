@@ -55,7 +55,8 @@ public final class RadiationSourceAdapters {
         else if(be instanceof ItemVaultBlockEntity vault) handler(vault.getInventoryOfBlock(),item);
         else if(be instanceof BasinBlockEntity basin) { handler(basin.getInputInventory(),item); handler(basin.getOutputInventory(),item); }
         else if(be instanceof ShieldedAssemblyBlockEntity assembly) {
-            for(int slot=0;slot<4;slot++) item.accept(assembly.state().input(slot)); item.accept(assembly.state().output());
+            for(int slot=0;slot<4;slot++) item.accept(assembly.state().input(slot));
+            for(int slot=0;slot<ShieldedAssemblyState.OUTPUT_SLOTS;slot++) item.accept(assembly.state().output(slot));
         } else if(be instanceof CentrifugeBlockEntity centrifuge) {
             handler(centrifuge.itemPort(Direction.NORTH,false),item);
         } else if(be instanceof FuelSinteringBlockEntity furnace) {

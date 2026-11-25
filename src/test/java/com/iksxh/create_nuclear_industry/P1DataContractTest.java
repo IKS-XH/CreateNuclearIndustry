@@ -145,6 +145,8 @@ class P1DataContractTest {
                             Set.of(registryId(P1ContentIds.STEEL_PLATE_ID)),
                             Path.of("shielded_assembly", "fresh_fuel_assembly.json"),
                             Set.of(registryId(P1ContentIds.FRESH_FUEL_ASSEMBLY_ID)),
+                            Path.of("shielded_assembly", "disassemble_spent_fuel_assembly.json"),
+                            Set.of(registryId(P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID), registryId(P1ContentIds.STEEL_PLATE_ID)),
                             Path.of("mixing", "compound_coolant.json"),
                             Set.of(registryId(P1ContentIds.COMPOUND_COOLANT_ID)));
                     Set<String> protectedIds = Set.of(
@@ -158,13 +160,8 @@ class P1DataContractTest {
                             registryId(P1ContentIds.REMOVED_ALLOY_STEEL_PLATE_ALIAS)
                     );
                     Set<String> approvedHere = approvedProductionReferences.getOrDefault(relativePath, Set.of());
-                    boolean approvedCaskConsumption = relativePath.equals(
-                            Path.of("shielded_assembly", "sealed_spent_fuel_cask.json"));
                     for (String id : protectedIds) {
-                        boolean expected = approvedHere.contains(id)
-                                || (approvedCaskConsumption
-                                && id.equals(registryId(P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID)));
-                        assertEquals(expected, containsExactString(recipe, id),
+                        assertEquals(approvedHere.contains(id), containsExactString(recipe, id),
                                 "P1 recipe reference must match the approved route exactly: " + id + " in " + path);
                     }
                 } catch (IOException exception) {
@@ -196,24 +193,26 @@ class P1DataContractTest {
                                 && coldCoolantId.equals(result.getAsJsonObject().get("id").getAsString())),
                 "冷态冷却剂配方必须在results[].id产出批准流体");
 
-        Path sealedCaskPath = recipeDirectory.resolve("shielded_assembly/sealed_spent_fuel_cask.json");
-        JsonObject sealedCask = JsonParser.parseString(Files.readString(sealedCaskPath)).getAsJsonObject();
+        assertFalse(Files.exists(recipeDirectory.resolve("shielded_assembly/sealed_spent_fuel_cask.json")),
+                "完整枯竭组件的直接封装配方必须移除");
+        JsonObject disassembly = JsonParser.parseString(Files.readString(recipeDirectory.resolve(
+                "shielded_assembly/disassemble_spent_fuel_assembly.json"))).getAsJsonObject();
         String cooledAssemblyId = registryId(P1ContentIds.COOLED_SPENT_FUEL_ASSEMBLY_ID);
-        JsonArray inputs = sealedCask.getAsJsonArray("inputs");
-        boolean cooledAssemblyIsInput = false;
-        for (JsonElement input : inputs) {
-            if (input.isJsonObject() && input.getAsJsonObject().has("ingredient")) {
-                JsonObject ingredient = input.getAsJsonObject().getAsJsonObject("ingredient");
-                if (ingredient.has("item") && cooledAssemblyId.equals(ingredient.get("item").getAsString())) {
-                    cooledAssemblyIsInput = true;
-                    break;
-                }
-            }
-        }
-        assertTrue(cooledAssemblyIsInput,
-                "冷却后乏燃料组件只允许作为已批准灌封配方的输入");
-        assertFalse(containsExactString(sealedCask.getAsJsonObject("result"), cooledAssemblyId),
-                "灌封配方不得把冷却后乏燃料组件作为产物");
+        String residueId = registryId("spent_fuel_residue");
+        JsonArray inputs = disassembly.getAsJsonArray("inputs");
+        assertEquals(1, inputs.size());
+        JsonObject spentInput = inputs.get(0).getAsJsonObject();
+        assertEquals(cooledAssemblyId, spentInput.getAsJsonObject("ingredient").get("item").getAsString());
+        assertEquals(1, spentInput.get("count").getAsInt());
+        assertEquals(12800, disassembly.get("work").getAsInt());
+        assertEquals(Map.of(steelPlateId, 4, registryId("tin_nugget"), 9, registryId("lead_nugget"), 3,
+                        residueId, 1), disassembly.getAsJsonArray("result").asList().stream()
+                .map(JsonElement::getAsJsonObject).collect(java.util.stream.Collectors.toMap(
+                        output -> output.get("id").getAsString(), output -> output.get("count").getAsInt())));
+        JsonObject sealedCask = JsonParser.parseString(Files.readString(recipeDirectory.resolve(
+                "shielded_assembly/sealed_spent_fuel_residue.json"))).getAsJsonObject();
+        assertTrue(containsExactString(sealedCask.getAsJsonArray("inputs"), residueId));
+        assertFalse(containsExactString(sealedCask.getAsJsonObject("result"), cooledAssemblyId));
         for (String similarSteelPlateId : List.of(
                 "create_nuclear_industry:reinforced_steel_plate",
                 "create_nuclear_industry:incomplete_reinforced_steel_plate")) {

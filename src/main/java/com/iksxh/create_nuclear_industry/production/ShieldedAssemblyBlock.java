@@ -153,9 +153,17 @@ public final class ShieldedAssemblyBlock extends HorizontalKineticBlock
         if (!state.is(next.getBlock()) && !level.isClientSide) level.invalidateCapabilities(pos);
     }
     @Override public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-        if (!context.getLevel().isClientSide && context.getPlayer() != null)
-            context.getPlayer().displayClientMessage(Component.translatable(
-                    "gui.create_nuclear_industry.shielded_assembly.relocate"), true);
+        return wrenchMode(state, context);
+    }
+    /** 任何合法外壳上的普通扳手操作都转交给同一服务端主控。 */
+    static InteractionResult wrenchMode(BlockState state, UseOnContext context) {
+        Level level = context.getLevel();
+        if (level.isClientSide) return InteractionResult.SUCCESS;
+        ShieldedAssemblyBlockEntity machine = ShieldedAssemblyStructure.master(level, context.getClickedPos(), state);
+        Component status = machine == null
+                ? Component.translatable("gui.create_nuclear_industry.shielded_assembly.wait.structure")
+                : machine.switchMode();
+        if (context.getPlayer() != null) context.getPlayer().displayClientMessage(status, true);
         return InteractionResult.SUCCESS;
     }
     @Override public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {

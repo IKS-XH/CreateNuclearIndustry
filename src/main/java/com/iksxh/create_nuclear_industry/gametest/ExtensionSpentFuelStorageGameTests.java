@@ -1,6 +1,7 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
+import com.iksxh.create_nuclear_industry.config.RadiationConfig;
 import com.iksxh.create_nuclear_industry.config.SpentFuelStorageConfig;
 import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
@@ -9,6 +10,8 @@ import com.iksxh.create_nuclear_industry.content.SpentFuelStorageContent;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlock;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyRecipe;
+import com.iksxh.create_nuclear_industry.radiation.RadiationItemSources;
+import com.iksxh.create_nuclear_industry.radiation.RadiationSourceAdapters;
 import com.iksxh.create_nuclear_industry.storage.DryStorageBlock;
 import com.iksxh.create_nuclear_industry.storage.DryStorageBlockEntity;
 import com.iksxh.create_nuclear_industry.storage.SpentFuelPayload;
@@ -56,6 +59,11 @@ public final class ExtensionSpentFuelStorageGameTests {
         return spent;
     }
     private static ItemStack sealed() { return SpentFuelPayload.seal(spent()); }
+    private static ItemStack residue() {
+        ItemStack residue = new ItemStack(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get());
+        residue.set(DataComponents.CUSTOM_NAME, Component.literal("原始残渣记录"));
+        return residue;
+    }
     private static ShieldedAssemblyBlockEntity machine(GameTestHelper helper) {
         ShieldedAssemblyBlock block = FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get();
         helper.setBlock(POS, block.defaultBlockState().setValue(ShieldedAssemblyBlock.EXPANDED, true));
@@ -99,6 +107,19 @@ public final class ExtensionSpentFuelStorageGameTests {
         ItemStack restored = ItemStack.parseOptional(helper.getLevel().registryAccess(),
                 (CompoundTag) bucket.save(helper.getLevel().registryAccess()));
         require(helper, ItemStack.isSameItemSameComponents(bucket, restored), "封装桶当前版本保存丢失完整载荷");
+        ItemStack residueCask = SpentFuelPayload.seal(residue());
+        var parameters = RadiationConfig.parameters();
+        var summary = RadiationItemSources.describe(residueCask, parameters);
+        require(helper, summary.radioactivePayload() && summary.unshieldedDosePerSecond() == parameters.spentFuelDosePerSecond()
+                && summary.dosePerSecond() == parameters.spentFuelDosePerSecond() * parameters.caskTransmission(),
+                "乏燃料残渣封桶后没有按枯竭燃料强度和桶屏蔽计量");
+        var rack = rack(helper);
+        require(helper, ItemHandlerHelper.insertItem(port(helper, Direction.NORTH), residueCask, false).isEmpty(),
+                "干式架拒收真实乏燃料残渣桶");
+        var sources = new java.util.ArrayList<RadiationSourceAdapters.LocatedStack>();
+        RadiationSourceAdapters.read(rack, sources::add);
+        require(helper, sources.stream().anyMatch(source -> source.rackShielded()
+                && ItemStack.isSameItemSameComponents(source.stack(), residueCask)), "贮存架未屏蔽真实乏燃料残渣桶");
         helper.succeed();
     }
 
@@ -106,7 +127,8 @@ public final class ExtensionSpentFuelStorageGameTests {
     public static void everyFirstMaterialSelectsSameOperationAndSimulationDoesNot(GameTestHelper helper) {
         ShieldedAssemblyBlockEntity machine = machine(helper);
         IItemHandler top = helper.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, helper.absolutePos(POS.above()), Direction.UP);
-        ItemStack[] materials = {spent(), new ItemStack(SpentFuelStorageContent.VITRIFICATION_MEDIUM.get()),
+        require(helper, !machine.insert(spent()).isEmpty(), "默认工序接收了完整枯竭组件");
+        ItemStack[] materials = {residue(), new ItemStack(SpentFuelStorageContent.VITRIFICATION_MEDIUM.get()),
                 new ItemStack(SpentFuelStorageContent.LEAD_SHIELDING_CASK.get())};
         for (int first = 0; first < 3; first++) {
             require(helper, top.insertItem(first, materials[first], true).isEmpty() && machine.state().operation().isEmpty(),
@@ -129,19 +151,19 @@ public final class ExtensionSpentFuelStorageGameTests {
     public static void changedRecipeCountsWorkAndInvalidationUseActualData(GameTestHelper helper) {
         var manager = helper.getLevel().getRecipeManager();
         List<net.minecraft.world.item.crafting.RecipeHolder<?>> originals = List.copyOf(manager.getRecipes());
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "shielded_assembly/sealed_spent_fuel_cask");
-        ShieldedAssemblyRecipe original = recipe(helper, "sealed_spent_fuel_cask");
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID, "shielded_assembly/sealed_spent_fuel_residue");
+        ShieldedAssemblyRecipe original = recipe(helper, "sealed_spent_fuel_residue");
         var changedInputs = List.of(original.inputs().get(0),
                 new ShieldedAssemblyRecipe.Input(original.inputs().get(1).ingredient(), 2),
                 new ShieldedAssemblyRecipe.Input(original.inputs().get(2).ingredient(), 3));
-        ShieldedAssemblyRecipe changed = new ShieldedAssemblyRecipe("sealing", changedInputs, original.result(), 64);
+        ShieldedAssemblyRecipe changed = new ShieldedAssemblyRecipe("sealing", changedInputs, original.results(), 64);
         try {
             var replacements = new java.util.ArrayList<>(originals);
             replacements.removeIf(holder -> holder.id().equals(id));
             replacements.add(new net.minecraft.world.item.crafting.RecipeHolder<>(id, changed));
             manager.replaceRecipes(replacements);
             ShieldedAssemblyBlockEntity machine = machine(helper);
-            machine.insert(spent());
+            machine.insert(residue());
             machine.insert(new ItemStack(SpentFuelStorageContent.VITRIFICATION_MEDIUM.get(), 2));
             machine.insert(new ItemStack(SpentFuelStorageContent.LEAD_SHIELDING_CASK.get(), 3));
             require(helper, machine.recipeReady() && machine.state().ready() && machine.state().work() == 64
@@ -162,7 +184,7 @@ public final class ExtensionSpentFuelStorageGameTests {
     @GameTest(template = TEMPLATE, templateNamespace = "create_nuclear_industry_store01", timeoutTicks = 310)
     public static void poweredSealingThenOriginalManufacturing(GameTestHelper helper) {
         ShieldedAssemblyBlockEntity machine = machine(helper);
-        machine.insert(spent());
+        machine.insert(residue());
         machine.insert(new ItemStack(SpentFuelStorageContent.VITRIFICATION_MEDIUM.get()));
         machine.insert(new ItemStack(SpentFuelStorageContent.LEAD_SHIELDING_CASK.get()));
         helper.setBlock(POS.below(), AllBlocks.CREATIVE_MOTOR.getDefaultState().setValue(CreativeMotorBlock.FACING, Direction.UP));
@@ -180,12 +202,13 @@ public final class ExtensionSpentFuelStorageGameTests {
         });
         helper.runAfterDelay(95, () -> {
             ItemStack result = machine.state().output();
-            require(helper, SpentFuelPayload.isValid(result) && Component.literal("原始组件记录").equals(result.get(DataComponents.CONTAINER)
-                    .stream().findFirst().orElseThrow().get(DataComponents.CUSTOM_NAME)), "动力封存未转移唯一原始组件");
+            require(helper, SpentFuelPayload.isValid(result) && ItemStack.isSameItemSameComponents(residue(),
+                    result.get(DataComponents.CONTAINER).stream().findFirst().orElseThrow()),
+                    "动力封存未转移唯一真实残渣");
             for (int slot = 0; slot < 4; slot++) require(helper, machine.state().input(slot).isEmpty(), "封装未原子扣料");
             require(helper, machine.insert(new ItemStack(FuelProcessingContent.SINTERED_FUEL_PELLET.get(), 8)).getCount() == 8,
                     "输出未取时切换工序");
-            machine.insert(spent());
+            machine.insert(residue());
             machine.insert(new ItemStack(SpentFuelStorageContent.VITRIFICATION_MEDIUM.get()));
             machine.insert(new ItemStack(SpentFuelStorageContent.LEAD_SHIELDING_CASK.get()));
         });

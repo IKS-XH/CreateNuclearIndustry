@@ -1,12 +1,18 @@
 package com.iksxh.create_nuclear_industry.production;
 
+import com.iksxh.create_nuclear_industry.content.AccidentContent;
+import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.iksxh.create_nuclear_industry.content.ModItems;
 import com.iksxh.create_nuclear_industry.content.SpentFuelStorageContent;
 import com.iksxh.create_nuclear_industry.storage.SpentFuelPayload;
-import java.util.List;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,8 +24,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-/** 工序、材料数量和RPM·tick工时由数据包同步；封存输出保存实际投入的单件组件。 */
-public record ShieldedAssemblyRecipe(String operation, List<Input> inputs, ItemStack result, int work) implements Recipe<RecipeInput> {
+/** 工序、材料与RPM·tick工时由数据包同步；封存记录真实废料，拆解产物按配方槽位一次入账。 */
+public record ShieldedAssemblyRecipe(String operation, List<Input> inputs, List<ItemStack> results, int work)
+        implements Recipe<RecipeInput> {
     /** 每种输入同时携带材料谓词与一批数量，数据包及网络用同一结构。 */
     public record Input(Ingredient ingredient, int count) {
         public static final MapCodec<Input> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -28,11 +35,16 @@ public record ShieldedAssemblyRecipe(String operation, List<Input> inputs, ItemS
         ).apply(instance, Input::new));
         public boolean test(ItemStack stack) { return ingredient.test(stack); }
     }
+    // 单件工序继续使用对象，拆解同一字段用数组声明多件产物。
+    private static final Codec<List<ItemStack>> RESULTS_CODEC = Codec.either(
+            ItemStack.CODEC, ItemStack.CODEC.listOf(2, ShieldedAssemblyState.OUTPUT_SLOTS)
+    ).xmap(value -> value.map(List::of, Function.identity()),
+            results -> results.size() == 1 ? Either.left(results.getFirst()) : Either.right(results));
     public static final MapCodec<ShieldedAssemblyRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            com.mojang.serialization.Codec.STRING.fieldOf("operation").forGetter(ShieldedAssemblyRecipe::operation),
+            Codec.STRING.fieldOf("operation").forGetter(ShieldedAssemblyRecipe::operation),
             Input.CODEC.codec().listOf().fieldOf("inputs").forGetter(ShieldedAssemblyRecipe::inputs),
-            ItemStack.CODEC.fieldOf("result").forGetter(ShieldedAssemblyRecipe::result),
-            com.mojang.serialization.Codec.INT.fieldOf("work").forGetter(ShieldedAssemblyRecipe::work)
+            RESULTS_CODEC.fieldOf("result").forGetter(ShieldedAssemblyRecipe::results),
+            Codec.INT.fieldOf("work").forGetter(ShieldedAssemblyRecipe::work)
     ).apply(instance, ShieldedAssemblyRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ShieldedAssemblyRecipe> STREAM_CODEC = new StreamCodec<>() {
@@ -40,15 +52,21 @@ public record ShieldedAssemblyRecipe(String operation, List<Input> inputs, ItemS
             String operation = buffer.readUtf();
             int size = buffer.readVarInt();
             if (size < 1 || size > 4) throw new IllegalArgumentException("装配输入槽数无效");
-            java.util.ArrayList<Input> inputs = new java.util.ArrayList<>();
+            var inputs = new ArrayList<Input>(size);
             for (int i = 0; i < size; i++) inputs.add(readInput(buffer));
-            return new ShieldedAssemblyRecipe(operation, List.copyOf(inputs), ItemStack.STREAM_CODEC.decode(buffer), buffer.readVarInt());
+            int resultSize = buffer.readVarInt();
+            if (resultSize < 1 || resultSize > ShieldedAssemblyState.OUTPUT_SLOTS)
+                throw new IllegalArgumentException("装配输出槽数无效");
+            var results = new ArrayList<ItemStack>(resultSize);
+            for (int i = 0; i < resultSize; i++) results.add(ItemStack.STREAM_CODEC.decode(buffer));
+            return new ShieldedAssemblyRecipe(operation, List.copyOf(inputs), List.copyOf(results), buffer.readVarInt());
         }
         @Override public void encode(RegistryFriendlyByteBuf buffer, ShieldedAssemblyRecipe recipe) {
             buffer.writeUtf(recipe.operation);
             buffer.writeVarInt(recipe.inputs.size());
             for (Input input : recipe.inputs) writeInput(buffer, input);
-            ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+            buffer.writeVarInt(recipe.results.size());
+            for (ItemStack result : recipe.results) ItemStack.STREAM_CODEC.encode(buffer, result);
             buffer.writeVarInt(recipe.work);
         }
     };
@@ -61,24 +79,36 @@ public record ShieldedAssemblyRecipe(String operation, List<Input> inputs, ItemS
         buffer.writeVarInt(input.count());
     }
 
-    /** 固定工序和单件产物身份；普通材料数量与工时不被代码重新锁死。 */
+    /** 固定各工序产物身份以及单份放射性载荷，普通材料数量和工时以数据配方为准。 */
     public boolean valid() {
-        if (work < 1 || inputs.isEmpty() || inputs.size() > 4 || result.getCount() != 1
-                || inputs.stream().anyMatch(i -> i.count < 1 || i.count > 64 || i.ingredient.isEmpty())) return false;
-        return "manufacture".equals(operation) ? inputs.size() == 4 && result.is(ModItems.FRESH_FUEL_ASSEMBLY.get())
-                && result.getDamageValue() == 0
-                : "sealing".equals(operation) && inputs.size() == 3 && inputs.getFirst().count == 1
-                && (inputs.getFirst().test(new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()))
-                    || inputs.getFirst().test(new ItemStack(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get())))
-                && result.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get());
+        if (work < 1 || inputs.isEmpty() || inputs.size() > 4 || results.isEmpty()
+                || inputs.stream().anyMatch(i -> i.count < 1 || i.count > 64 || i.ingredient.isEmpty())
+                || results.stream().anyMatch(stack -> stack.isEmpty() || stack.getCount() > stack.getMaxStackSize()))
+            return false;
+        ItemStack firstResult = results.getFirst();
+        return switch (operation) {
+            case "manufacture" -> inputs.size() == 4 && results.size() == 1 && firstResult.getCount() == 1
+                    && firstResult.is(ModItems.FRESH_FUEL_ASSEMBLY.get()) && firstResult.getDamageValue() == 0;
+            case "sealing" -> inputs.size() == 3 && inputs.getFirst().count == 1 && results.size() == 1
+                    && firstResult.getCount() == 1 && firstResult.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get());
+            case "disassembly" -> inputs.size() == 1 && inputs.getFirst().count == 1
+                    && results.size() == ShieldedAssemblyState.OUTPUT_SLOTS && firstResult.is(ModItems.STEEL_PLATE.get())
+                    && results.get(1).is(BasicMaterialContent.TIN_NUGGET.get())
+                    && results.get(2).is(BasicMaterialContent.LEAD_NUGGET.get())
+                    && results.get(3).is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get()) && results.get(3).getCount() == 1;
+            default -> false;
+        };
     }
     public boolean accepts(int slot, ItemStack stack) {
-        return valid() && slot >= 0 && slot < inputs.size() && !stack.isEmpty()
-                && inputs.get(slot).test(stack)
-                && (!"manufacture".equals(operation) || !stack.is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get())
-                    && !stack.is(com.iksxh.create_nuclear_industry.content.AccidentContent.ACCIDENT_FUEL_WASTE.get())
-                    && !stack.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get()))
-                && (!"sealing".equals(operation) || slot != 0 || SpentFuelPayload.allowed(stack));
+        if (slot < 0 || slot >= inputs.size() || stack.isEmpty() || !inputs.get(slot).test(stack)) return false;
+        return switch (operation) {
+            case "manufacture" -> !SpentFuelPayload.allowed(stack) && !stack.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get());
+            case "sealing" -> slot == 0
+                    ? stack.is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get()) || stack.is(AccidentContent.ACCIDENT_FUEL_WASTE.get())
+                    : !SpentFuelPayload.allowed(stack) && !stack.is(SpentFuelStorageContent.SEALED_SPENT_FUEL_CASK.get());
+            case "disassembly" -> stack.is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
+            default -> false;
+        };
     }
     public int[] costs() { return inputs.stream().mapToInt(Input::count).toArray(); }
     @Override public boolean matches(RecipeInput input, Level level) {
@@ -87,13 +117,17 @@ public record ShieldedAssemblyRecipe(String operation, List<Input> inputs, ItemS
             if (!accepts(i, input.getItem(i)) || input.getItem(i).getCount() < inputs.get(i).count) return false;
         return true;
     }
-    /** 无载荷桶只作JEI模板；实际输出从槽0完整栈构造，不复制独立可提取库存。 */
-    public ItemStack actualResult(ItemStack spent) {
-        return "sealing".equals(operation) ? SpentFuelPayload.seal(spent) : result.copy();
+    /** 无载荷桶只作JEI模板；每批封装只写入所消耗的一份真实废料及其数据。 */
+    public List<ItemStack> actualResults(ItemStack spent) {
+        if (!"sealing".equals(operation)) return results;
+        return List.of(accepts(0, spent) ? SpentFuelPayload.seal(spent.copyWithCount(1)) : ItemStack.EMPTY);
     }
-    @Override public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) { return actualResult(input.getItem(0)); }
+    public ItemStack actualResult(ItemStack spent) { return actualResults(spent).getFirst().copy(); }
+    @Override public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
+        return matches(input, null) ? actualResult(input.getItem(0)) : ItemStack.EMPTY;
+    }
     @Override public boolean canCraftInDimensions(int width, int height) { return width * height >= inputs.size(); }
-    @Override public ItemStack getResultItem(HolderLookup.Provider registries) { return result.copy(); }
+    @Override public ItemStack getResultItem(HolderLookup.Provider registries) { return results.getFirst().copy(); }
     @Override public RecipeSerializer<?> getSerializer() { return FuelProcessingContent.SHIELDED_ASSEMBLY_SERIALIZER.get(); }
     @Override public RecipeType<?> getType() { return FuelProcessingContent.SHIELDED_ASSEMBLY_TYPE.get(); }
 

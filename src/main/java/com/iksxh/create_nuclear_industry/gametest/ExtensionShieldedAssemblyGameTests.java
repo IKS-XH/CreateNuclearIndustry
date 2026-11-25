@@ -1,23 +1,31 @@
 package com.iksxh.create_nuclear_industry.gametest;
 
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
+import com.iksxh.create_nuclear_industry.config.RadiationConfig;
 import com.iksxh.create_nuclear_industry.content.BasicMaterialContent;
 import com.iksxh.create_nuclear_industry.content.FuelProcessingContent;
 import com.iksxh.create_nuclear_industry.content.ModItems;
+import com.iksxh.create_nuclear_industry.content.SpentFuelStorageContent;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlock;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyLayout;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyPartBlock;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyPartBlockEntity;
+import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyRecipe;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyState;
+import com.iksxh.create_nuclear_industry.radiation.RadiationItemSources;
+import com.iksxh.create_nuclear_industry.radiation.RadiationSourceAdapters;
 import java.util.List;
 import java.util.UUID;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlock;
 import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 import com.simibubi.create.content.logistics.funnel.FunnelBlock;
+import com.simibubi.create.content.logistics.funnel.FunnelBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.GameType;
@@ -25,11 +33,15 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.Blocks;
@@ -163,7 +175,7 @@ public final class ExtensionShieldedAssemblyGameTests {
                 IItemHandler handler = port(helper, at, side);
                 boolean exposed = ShieldedAssemblyLayout.exterior(part, Direction.NORTH, side);
                 require(helper, exposed == (handler != null), "外表面/内部面能力错误: " + part + " " + side);
-                if (handler != null) require(helper, handler.getSlots() == (side == Direction.UP ? 4 : 5),
+                if (handler != null) require(helper, handler.getSlots() == (side == Direction.UP ? 4 : 8),
                         "暴露槽数错误: " + part + " " + side);
             }
         }
@@ -240,6 +252,139 @@ public final class ExtensionShieldedAssemblyGameTests {
                     && east.getStackInSlot(4).isEmpty(), "侧面成品提取未共享账本");
             helper.succeed();
         });
+    }
+
+    @GameTest(template = TEMPLATE, templateNamespace = "create_nuclear_industry_02e", timeoutTicks = 200)
+    public static void wrenchDisassemblesOneBatchAndPreservesFourOutputs(GameTestHelper helper) {
+        ShieldedAssemblyBlockEntity machine = place(helper);
+        var recipeId = ResourceLocation.fromNamespaceAndPath(CreateNuclearIndustry.MOD_ID,
+                "shielded_assembly/disassemble_spent_fuel_assembly");
+        var recipe = (ShieldedAssemblyRecipe) helper.getLevel().getRecipeManager().byKey(recipeId).orElseThrow().value();
+        var network = new RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(), helper.getLevel().registryAccess());
+        try {
+            ShieldedAssemblyRecipe.STREAM_CODEC.encode(network, recipe);
+            var decoded = ShieldedAssemblyRecipe.STREAM_CODEC.decode(network);
+            require(helper, decoded.valid() && decoded.work() == recipe.work() && decoded.results().size() == 4
+                    && java.util.stream.IntStream.range(0, 4).allMatch(slot ->
+                    ItemStack.matches(recipe.results().get(slot), decoded.results().get(slot)))
+                    && !network.isReadable(), "四产物配方网络往返丢失内容或槽位");
+        } finally {
+            network.release();
+        }
+        var player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(InteractionHand.MAIN_HAND, AllItems.WRENCH.asStack());
+        ItemStack spent = new ItemStack(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get());
+        require(helper, !machine.state().disassemblyMode() && !machine.insert(spent).isEmpty(),
+                "默认工序没有拒收完整乏燃料");
+        wrench(helper, player, STATION);
+        require(helper, machine.state().disassemblyMode(), "普通扳手未进入拆解");
+        wrench(helper, player, TOP);
+        require(helper, !machine.state().disassemblyMode(), "成员扳手未切回制造封装");
+        wrench(helper, player, TOP);
+        var tooltip = new java.util.ArrayList<Component>();
+        machine.addToGoggleTooltip(tooltip, false);
+        require(helper, tooltip.get(1).getContents() instanceof TranslatableContents contents
+                && contents.getKey().endsWith(".mode.disassembly")
+                && machine.getUpdateTag(helper.getLevel().registryAccess()).getCompound("ShieldedAssembly")
+                .getBoolean("DisassemblyMode")
+                && ((ShieldedAssemblyPartBlock) helper.getBlockState(TOP).getBlock()).getInformationSource(
+                helper.getLevel(), helper.absolutePos(TOP), helper.getBlockState(TOP)).equals(machine.getBlockPos()),
+                "主控或成员护目镜未读取同步后的模式");
+
+        BlockPos armPos = new BlockPos(4, 2, 1);
+        helper.setBlock(armPos, AllBlocks.MECHANICAL_ARM.get().defaultBlockState());
+        ArmBlockEntity arm = (ArmBlockEntity) helper.getBlockEntity(armPos);
+        ArmInteractionPoint point = ArmInteractionPoint.create(helper.getLevel(), helper.absolutePos(TOP),
+                helper.getBlockState(TOP));
+        require(helper, point.insert(arm, spent, true).isEmpty() && machine.state().input(0).isEmpty(),
+                "机械臂模拟拆解投料更改账本");
+        require(helper, point.insert(arm, spent, false).isEmpty()
+                && !machine.insert(new ItemStack(ModItems.FRESH_FUEL_ASSEMBLY.get())).isEmpty(),
+                "拆解未接收真实机械臂枯竭组件或错误接收新燃料");
+        wrench(helper, player, TOP);
+        require(helper, machine.state().disassemblyMode(), "原料未清空时切换了模式");
+        helper.setBlock(STATION.below(), AllBlocks.CREATIVE_MOTOR.getDefaultState()
+                .setValue(CreativeMotorBlock.FACING, Direction.UP));
+        ((CreativeMotorBlockEntity) helper.getBlockEntity(STATION.below())).generatedSpeed.setValue(256);
+        helper.runAfterDelay(25, () -> {
+            int progress = machine.state().progress();
+            require(helper, progress > 0 && progress < 12800 && machine.state().work() == 12800,
+                    "真实动力未推进拆解");
+            machine.loadPortableData(machine.savePortableData());
+            require(helper, machine.state().progress() == progress && machine.state().disassemblyMode()
+                    && machine.state().input(0).is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()),
+                    "保存恢复丢失工时、模式或原料");
+        });
+        helper.runAfterDelay(80, () -> {
+            var side = port(helper, STATION, Direction.WEST);
+            require(helper, side.getStackInSlot(4).is(ModItems.STEEL_PLATE.get()) && side.getStackInSlot(4).getCount() == 4
+                    && side.getStackInSlot(5).is(BasicMaterialContent.TIN_NUGGET.get()) && side.getStackInSlot(5).getCount() == 9
+                    && side.getStackInSlot(6).is(BasicMaterialContent.LEAD_NUGGET.get()) && side.getStackInSlot(6).getCount() == 3
+                    && side.getStackInSlot(7).is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get()) && side.getStackInSlot(7).getCount() == 1
+                    && machine.state().input(0).isEmpty(), "原料和四种拆解产物未一次守恒交割");
+            require(helper, side.extractItem(4, 2, true).getCount() == 2 && side.getStackInSlot(4).getCount() == 4
+                    && side.extractItem(4, 2, false).getCount() == 2 && side.getStackInSlot(4).getCount() == 2,
+                    "多件产物的模拟和实际部分提取错误");
+            require(helper, point.insert(arm, spent, false).isEmpty(), "候补组件未入账");
+        });
+        helper.runAfterDelay(115, () -> {
+            require(helper, machine.state().input(0).getCount() == 1 && machine.state().progress() == 0
+                    && machine.state().output(0).getCount() == 2, "部分出料后堵塞未保留下一批原件");
+            require(helper, machine.state().extractInput(0, 1, false).is(ModItems.COOLED_SPENT_FUEL_ASSEMBLY.get()),
+                    "堵塞期间待料组件无法返还");
+            wrench(helper, player, STATION);
+            require(helper, machine.state().disassemblyMode(), "剩余产物未阻止切换模式");
+            player.setShiftKeyDown(true);
+            wrench(helper, player, TOP);
+            var carried = player.getInventory().items.stream().filter(stack ->
+                    stack.is(FuelProcessingContent.SHIELDED_ASSEMBLY_STATION_ITEM.get())).toList();
+            require(helper, helper.getBlockState(STATION).isAir() && carried.size() == 1,
+                    "成员潜行扳手未返还恰好一台整机");
+            ShieldedAssemblyBlock block = FuelProcessingContent.SHIELDED_ASSEMBLY_STATION.get();
+            helper.setBlock(STATION, block.defaultBlockState().setValue(ShieldedAssemblyBlock.EXPANDED, true));
+            block.setPlacedBy(helper.getLevel(), helper.absolutePos(STATION), helper.getBlockState(STATION), player, carried.getFirst());
+            carried.getFirst().shrink(1);
+            var restored = (ShieldedAssemblyBlockEntity) helper.getBlockEntity(STATION);
+            require(helper, restored.state().disassemblyMode() && restored.state().output(0).getCount() == 2
+                    && restored.state().output(1).getCount() == 9 && restored.state().output(2).getCount() == 3
+                    && restored.state().output(3).is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get()),
+                    "整机重新放置后模式或未取尽的产物丢失");
+            var sources = new java.util.ArrayList<RadiationSourceAdapters.LocatedStack>();
+            RadiationSourceAdapters.read(restored, sources::add);
+            var parameters = RadiationConfig.parameters();
+            require(helper, sources.stream().map(source -> RadiationItemSources.describe(source.stack(), parameters))
+                    .filter(source -> source.radioactivePayload()).count() == 1
+                    && RadiationItemSources.describe(restored.state().output(3), parameters).unshieldedDosePerSecond()
+                    == parameters.spentFuelDosePerSecond(), "第四槽辐射漏报、重复计量或强度错误");
+
+            BlockPos brass = STATION.east(2);
+            helper.setBlock(brass, AllBlocks.BRASS_FUNNEL.getDefaultState()
+                    .setValue(FunnelBlock.FACING, Direction.EAST).setValue(FunnelBlock.EXTRACTING, false));
+            helper.runAfterDelay(5, () -> {
+                var funnel = (FunnelBlockEntity) helper.getBlockEntity(brass);
+                require(helper, funnel.getBehaviour(FilteringBehaviour.TYPE).setFilter(
+                        new ItemStack(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get())), "黄铜漏斗无法指定残渣过滤");
+                helper.setBlock(brass, helper.getBlockState(brass).setValue(FunnelBlock.EXTRACTING, true));
+            });
+            helper.runAfterDelay(55, () -> {
+                require(helper, restored.state().output(3).isEmpty() && restored.state().output(0).getCount() == 2
+                        && restored.state().output(1).getCount() == 9 && restored.state().output(2).getCount() == 3,
+                        "按残渣过滤的黄铜漏斗取错产物或未读第四槽");
+                List<ItemEntity> residue = helper.getLevel().getEntitiesOfClass(ItemEntity.class,
+                        new AABB(helper.absolutePos(brass)).inflate(2),
+                        entity -> entity.getItem().is(SpentFuelStorageContent.SPENT_FUEL_RESIDUE.get()));
+                require(helper, residue.size() == 1 && residue.getFirst().getAge() == -32768
+                        && !residue.getFirst().hurt(helper.getLevel().damageSources().cactus(), 100),
+                        "出料残渣没有原有掉落保护");
+                helper.succeed();
+            });
+        });
+    }
+
+    private static void wrench(GameTestHelper helper, net.minecraft.world.entity.player.Player player, BlockPos pos) {
+        BlockPos at = helper.absolutePos(pos);
+        AllItems.WRENCH.get().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
+                new BlockHitResult(Vec3.atCenterOf(at), Direction.UP, at, false)));
     }
 
     @GameTest(template = TEMPLATE, templateNamespace = "create_nuclear_industry_02e", timeoutTicks = 100)
