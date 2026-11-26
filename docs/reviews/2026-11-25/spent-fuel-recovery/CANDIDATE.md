@@ -27,6 +27,14 @@
 
 隔离服务端 18 项全部通过并正常保存退出。普通牛与静止牛跨 110 tick 各扣 5 点生命值，另验证浅流上方、离开后消退、原版免疫和已有更强或无限效果。[执行报告](../../../../build/reports/slurry-contact-poison-20261126/IMPLEMENTATION.md)
 
-增量构建成功。[当前候选 JAR](../../../../build/libs/create_nuclear_industry-0.2.0.jar)为 3,805,201 字节，SHA-256 `F3ABE0FF22236F3074AFDCC7D5270E594FD01380A2118C1DD2556B1EA6426726`。
+增量构建成功。[当时的 JAR 快照](../../../../build/reports/slurry-contact-poison-20261126/create_nuclear_industry-0.2.0.jar)为 3,805,201 字节，SHA-256 `F3ABE0FF22236F3074AFDCC7D5270E594FD01380A2118C1DD2556B1EA6426726`。
 
 集中手测时，用生存玩家分别踏入源液和浅流，再退出液面观察中毒图标和倒计时。可让一只动物在同一液池中停留，观察浸泡期间的效果。
+
+## Create 思索索引
+
+2026-11-26 增补。当前生产源 `3c94b30bc47949c8fb81a8322fdb1bbe79b4f772`。分类利用 Ponder 原生索引，十个设备入口覆盖现有 25 幕，仪表端口作为主入口。33 项定向 Ponder JUnit 通过，验证真实场景登记、设备模型、本地化与绑定。旧场景注册方法和模板保持原样。独立窄审通过。[执行报告](../../../../build/reports/ponder-index-20261126/IMPLEMENTATION.md)
+
+增量构建成功。[当前候选 JAR](../../../../build/libs/create_nuclear_industry-0.2.0.jar)为 3,806,167 字节，SHA-256 `31AB90218DDF226154C4907CBD8BBF5B9F9DE1306718980507CF86FE38BED5A7`。
+
+在 Create 菜单选「思索索引」，找到带本模组 Logo 的「机械动力：核工业」分类。点击分类后选择设备，即可播放对应场景。集中手测可从这个入口打开锅炉搭建或管理员教学，再对着对应物品按 W 复看入口。
