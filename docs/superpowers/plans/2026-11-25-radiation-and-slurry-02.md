@@ -2,6 +2,14 @@
 
 用户在首个公开 Alpha 后要求所有生物受辐射、铀料浆支持软管滑轮的万格无限抽取，以及设计枯竭组件回收铅锡钢的方案。本卡实现前两项。回收方案独立讨论，实施范围以用户确认的方案为准。
 
+## 2026-11-26 铀料浆接触中毒
+
+用户要求接触铀料浆的生物获得中毒 I。并入同一 0.2.0 候选，沿用 `codex/0.2.0-spent-fuel-recovery` 和其原位世界，基准 `63555dd2`。通过世界流体方块的实体接触回调，在服务端为接触实际液面的活体实体（含玩家）施加原版中毒 I，源态与流动态采用同一逻辑。静止的 NoAI 生物可复用 NeoForge 已计算的实体浸液高度触发。首次效果 100 tick，持续接触时按原版 25 tick 伤害节奏续期，离开后正常倒计时，最长约五秒。保留原版免疫、已有更强或无限效果。
+
+执行写集仅 `src/main/java/com/iksxh/create_nuclear_industry/content/FuelProcessingContent.java`、`production/UraniumSlurryBlock.java`、可选的同目录 `UraniumSlurryEffects.java` 和已排除出制品的 `gametest/RadiationFoundationGameTests.java`。按同卡实际技能和锁定依赖实施。优先复用世界回调与既有测试域。隔离服务端覆盖源液、流动液、浅流上方、静止 NoAI 生物与原版免疫等接触边界，确认持续接触实际扣血以及离开后效果结束。跳过无关 JUnit，复用现有回收候选证据。冻结源码后增量构建并核包。报告与原始日志放 `build/reports/slurry-contact-poison-20261126/`。保持正式包与已有候选快照。执行者仅只读 Git，PM 维护文档与提交。
+
+## 首批生物辐射与无限抽取
+
 - 基准 `main` 为 `a473f116`，候选位于 `E:/MyMC/NewMod/Create_NuclearIndustry-reactor-explosion-fix`，同目录切到 `codex/0.2.0-radiation-slurry`。沿用原位世界，自动验证使用隔离 GameTest 目录。
 - 本批按用户版本规则定为 `0.2.0`。锁定 Minecraft 1.21.1、Java 21、NeoForge 21.1.219、Create 6.0.10-280、Ponder 1.0.82、Flywheel 1.0.6。开工读 AGENTS、治理 5.1 与 6、STATUS、本卡和 `C:/Users/IKSXH/.codex/skills/{minecraft-modding,minecraft-testing,minecraft-resource-pack,minecraft-ci-release}/SKILL.md`。
 - 唯一执行者写以下范围，PM 管文档和 Git，独立审查合并规格和质量。实验和交付报告放 `build/reports/radiation-slurry-20261125/`。源码确认后用增量打包交付 0.2.0 手测候选。人工验收记录与公开发布按现行治理。
