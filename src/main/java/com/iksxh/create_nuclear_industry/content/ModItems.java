@@ -22,7 +22,7 @@ public final class ModItems {
     );
 
     /**
-     * 仅供创造模式标签读取的徽标物品；沿用延迟注册，客户端由平面模型显示。
+     * 创造模式标签与思索分类共用的徽标物品；沿用延迟注册，客户端由平面模型显示。
      * 不加入展示列表或配方，不承载服务端玩法状态。
      */
     public static final DeferredItem<Item> MOD_LOGO = ITEMS.register(

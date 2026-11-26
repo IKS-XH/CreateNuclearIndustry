@@ -1,23 +1,37 @@
 package com.iksxh.create_nuclear_industry.ponder;
 
 import com.iksxh.create_nuclear_industry.CreateNuclearIndustry;
+import com.iksxh.create_nuclear_industry.content.ModItems;
+import com.iksxh.create_nuclear_industry.content.P1Blocks;
 import com.iksxh.create_nuclear_industry.content.P1ContentIds;
 import net.createmod.ponder.api.registration.PonderPlugin;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 /**
- * P1 Ponder 条目索引。
- *
- * <p>这里列出的每个组件都已由模组注册，并指向介绍或使用该组件的五条反应堆教学故事线之一。
- * 未来机器应在其注册任务完成后建立独立条目，不能提前写入未注册内容。</p>
+ * 本模组的 Ponder 故事板和分类索引。索引以具有真实教学的设备为入口。
  *
  * <p>Ponder 运行在客户端临时世界中，只提供教学演示，不拥有服务端反应堆状态，也不替代
  * GameTest 或正式结构扫描。</p>
  */
 public final class P1PonderPlugin implements PonderPlugin {
+    private static final ResourceLocation INDEX_TAG = componentId("nuclear_industry");
+    private static final List<String> INDEX_ENTRY_IDS = List.of(
+            "enrichment_centrifuge",
+            "fuel_sintering_furnace",
+            "shielded_assembly_station",
+            P1ContentIds.REACTOR_INSTRUMENT_PORT_ID,
+            "reactor_automation_port",
+            "nuclear_heat_exchanger",
+            "high_pressure_boiler_controller",
+            "turbine_controller",
+            "dry_storage_rack",
+            "radiation_meter"
+    );
+
     /** 正式 P1 实验反应堆教学故事线的注册路径。 */
     public static final String REACTOR_SCENE_ID = P1ContentIds.EXPERIMENTAL_REACTOR_ID;
     /** 反应堆故事线按搭建、棒列关系、运行停机、装换料维修、事故回收顺序注册。 */
@@ -110,6 +124,21 @@ public final class P1PonderPlugin implements PonderPlugin {
     @Override
     public String getModId() {
         return CreateNuclearIndustry.MOD_ID;
+    }
+
+    /** 分类在客户端索引公开，徽标用于识别模组，仪表端口作为分类主条目。 */
+    @Override
+    public void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
+        helper.registerTag(INDEX_TAG)
+                .title("Create: Nuclear Industry")
+                .description("Browse tutorials on reactors, fuel processing, power generation and radiation protection.")
+                .item(ModItems.MOD_LOGO, true, false)
+                .item(P1Blocks.REACTOR_INSTRUMENT_PORT_ITEM, false, true)
+                .addToIndex()
+                .register();
+
+        var entries = helper.addToTag(INDEX_TAG);
+        for (String path : INDEX_ENTRY_IDS) entries.add(componentId(path));
     }
 
     /** 保留原教学绑定，在独立烧结炉入口追加本批两条故事线。 */

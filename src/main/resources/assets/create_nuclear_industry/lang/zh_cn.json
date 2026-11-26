@@ -125,6 +125,8 @@
   "message.create_nuclear_industry.maintenance.not_fully_stopped": "反应堆尚未完全停机，已取消破坏",
   "message.create_nuclear_industry.maintenance.transaction_failed": "反应堆停机维护失败，已取消破坏",
   "message.create_nuclear_industry.maintenance.state_cleared": "反应堆内部状态已清空，可以重新成型",
+  "create_nuclear_industry.ponder.tag.nuclear_industry": "机械动力：核工业",
+  "create_nuclear_industry.ponder.tag.nuclear_industry.description": "浏览反应堆、燃料加工、发电设备与辐射防护的思索教学。",
   "create_nuclear_industry.ponder.experimental_reactor.header": "实验反应堆：搭建",
   "create_nuclear_industry.ponder.experimental_reactor.text_1": "这里以5×5×5为例，三边可为5～16格，棱边只能放外壳。",
   "create_nuclear_industry.ponder.experimental_reactor.text_2": "内部可自行安排燃料列和控制棒列的位置、数量，空余列可留空。",

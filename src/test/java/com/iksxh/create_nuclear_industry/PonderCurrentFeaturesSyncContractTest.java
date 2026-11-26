@@ -2,8 +2,13 @@ package com.iksxh.create_nuclear_industry;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.iksxh.create_nuclear_industry.content.P1ContentIds;
 import com.iksxh.create_nuclear_industry.ponder.P1PonderPlugin;
+import net.createmod.ponder.foundation.registration.DefaultPonderSceneRegistrationHelper;
+import net.createmod.ponder.foundation.registration.PonderLocalization;
+import net.createmod.ponder.foundation.registration.PonderSceneRegistry;
 import net.minecraft.nbt.*;
+import net.minecraft.resources.ResourceLocation;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +24,55 @@ class PonderCurrentFeaturesSyncContractTest {
     private static final Map<String, Integer> NEW_SCENES = Map.of(
             "high_pressure_boiler_safety", 10, "experimental_reactor_safety", 9,
             "reactor_administrator_setup", 8, "reactor_administrator_operation", 7, "radiation_protection", 9);
+
+    @Test void publicIndexTagContainsRepresentativeItemsForEveryRegisteredStory() throws Exception {
+        String pluginSource = withoutComments(source("P1PonderPlugin.java"));
+        assertTrue(pluginSource.contains("INDEX_TAG = componentId(\"nuclear_industry\")"));
+        assertTrue(pluginSource.contains("helper.registerTag(INDEX_TAG)"));
+        assertTrue(Pattern.compile("\\.addToIndex\\(\\)\\s*\\.register\\(\\)").matcher(pluginSource).find());
+        assertTrue(pluginSource.contains(".item(ModItems.MOD_LOGO, true, false)"));
+        assertTrue(pluginSource.contains(".item(P1Blocks.REACTOR_INSTRUMENT_PORT_ITEM, false, true)"));
+        assertTrue(pluginSource.contains("helper.addToTag(INDEX_TAG)"));
+        assertTrue(pluginSource.contains("for (String path : INDEX_ENTRY_IDS) entries.add(componentId(path))"));
+        var declaredEntries = Pattern.compile("INDEX_ENTRY_IDS = List\\.of\\(([^;]+)\\);").matcher(pluginSource);
+        assertTrue(declaredEntries.find(), "缺少分类代表入口");
+        List<String> indexEntries = Arrays.stream(declaredEntries.group(1).split(","))
+                .map(String::trim)
+                .map(entry -> entry.equals("P1ContentIds.REACTOR_INSTRUMENT_PORT_ID")
+                        ? P1ContentIds.REACTOR_INSTRUMENT_PORT_ID : entry.replace("\"", ""))
+                .toList();
+        assertEquals(10, indexEntries.size());
+        assertEquals(10, Set.copyOf(indexEntries).size());
+
+        var plugin = new P1PonderPlugin();
+        var scenes = new PonderSceneRegistry(new PonderLocalization());
+        plugin.registerScenes(new DefaultPonderSceneRegistrationHelper(plugin.getModId(), scenes));
+        Set<ResourceLocation> listedItems = new HashSet<>();
+        for (String id : indexEntries) {
+            ResourceLocation item = ResourceLocation.fromNamespaceAndPath(plugin.getModId(), id);
+            assertTrue(scenes.doScenesExistForId(item), "代表入口缺少已注册故事: " + item);
+            assertTrue(Files.isRegularFile(ASSETS.resolve("models/item/" + id + ".json")), "入口缺少物品模型: " + item);
+            listedItems.add(item);
+        }
+        var allStories = new HashSet<ResourceLocation>();
+        var indexedStories = new HashSet<ResourceLocation>();
+        for (var entry : scenes.getRegisteredEntries()) {
+            ResourceLocation schematic = entry.getValue().getSchematicLocation();
+            allStories.add(schematic);
+            if (listedItems.contains(entry.getKey())) indexedStories.add(schematic);
+        }
+        assertEquals(25, allStories.size());
+        assertEquals(allStories, indexedStories, "分类必须能打开全部已注册故事");
+        assertFalse(scenes.doScenesExistForId(ResourceLocation.fromNamespaceAndPath(plugin.getModId(), "mod_logo")));
+        assertTrue(Files.isRegularFile(ASSETS.resolve("models/item/mod_logo.json")));
+
+        String tagKey = "create_nuclear_industry.ponder.tag.nuclear_industry";
+        assertEquals("机械动力：核工业", language("zh_cn").get(tagKey).getAsString());
+        assertEquals("Create: Nuclear Industry", language("en_us").get(tagKey).getAsString());
+        for (String locale : List.of("zh_cn", "en_us")) {
+            assertFalse(language(locale).get(tagKey + ".description").getAsString().isBlank());
+        }
+    }
 
     @Test void allNewEntrypointsUseExistingItemsAndAdministratorBelongsOnlyToAutomationPort() throws Exception {
         assertEquals(List.of("reactor_administrator_setup", "reactor_administrator_operation"), P1PonderPlugin.ADMINISTRATOR_SCENE_IDS);

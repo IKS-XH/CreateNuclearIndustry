@@ -125,6 +125,8 @@
   "message.create_nuclear_industry.maintenance.not_fully_stopped": "The reactor is not fully shut down; the break was canceled",
   "message.create_nuclear_industry.maintenance.transaction_failed": "Reactor shutdown maintenance failed; the break was canceled",
   "message.create_nuclear_industry.maintenance.state_cleared": "Reactor internal state cleared; structure may be rebuilt",
+  "create_nuclear_industry.ponder.tag.nuclear_industry": "Create: Nuclear Industry",
+  "create_nuclear_industry.ponder.tag.nuclear_industry.description": "Browse tutorials on reactors, fuel processing, power generation and radiation protection.",
   "create_nuclear_industry.ponder.experimental_reactor.header": "Experimental Reactor: Build",
   "create_nuclear_industry.ponder.experimental_reactor.text_1": "This 5×5×5 example can extend to 5–16 blocks on each side; every edge must use reactor casing.",
   "create_nuclear_industry.ponder.experimental_reactor.text_2": "Arrange fuel and control-rod columns freely; unused columns may stay empty.",
