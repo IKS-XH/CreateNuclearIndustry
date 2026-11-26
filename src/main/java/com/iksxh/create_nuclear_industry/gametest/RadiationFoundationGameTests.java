@@ -28,12 +28,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.effect.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
@@ -393,7 +395,7 @@ public final class RadiationFoundationGameTests {
             boolean chunkOnly=Boolean.getBoolean("cni.radiation.reviewChunkOnly");
             if(chunkOnly)event.register(ChunkLifecycleReview.class);
             else {event.register(RadiationFoundationGameTests.class);event.register(ReviewFix.class);event.register(LivingAndSlurry.class);}
-            System.out.println("[radiation-test-selection] chunkOnly="+chunkOnly+" expected="+(chunkOnly?2:17));
+            System.out.println("[radiation-test-selection] chunkOnly="+chunkOnly+" expected="+(chunkOnly?2:18));
         }
     }
 
@@ -606,6 +608,108 @@ public final class RadiationFoundationGameTests {
             drainer.rebuildContext(absolute);
             drainer.tick();
             return drainer;
+        }
+
+        @GameTest(template="radiation_empty",templateNamespace="cni_radiation_foundation",
+                batch="cni_slurry_contact_poison",timeoutTicks=235)
+        public static void slurryContactUsesVanillaPoisonAndExpiresOutOfLiquid(GameTestHelper h) {
+            var slurry = FuelProcessingContent.URANIUM_SLURRY_BLOCK.get();
+            var source = new BlockPos(3, 7, 3);
+            var flow = source.east(4);
+            var stillSource = source.south(7);
+            for (BlockPos cell : List.of(source, source.east(), stillSource)) {
+                h.setBlock(cell.below(), Blocks.STONE);
+                h.setBlock(cell.north(), Blocks.STONE);
+                h.setBlock(cell.south(), Blocks.STONE);
+                h.setBlock(cell, slurry);
+            }
+            h.setBlock(source.west(), Blocks.STONE);
+            h.setBlock(source.east(2), Blocks.STONE);
+            h.setBlock(stillSource.west(), Blocks.STONE);
+            h.setBlock(stillSource.east(), Blocks.STONE);
+            h.setBlock(flow, slurry.defaultBlockState().setValue(LiquidBlock.LEVEL, 7));
+            var level = h.getLevel();
+            Vec3 sourceSurface = Vec3.atBottomCenterOf(h.absolutePos(source));
+            Vec3 flowSurface = Vec3.atBottomCenterOf(h.absolutePos(flow));
+            var flowing = level.getFluidState(h.absolutePos(flow));
+            float height = flowing.getHeight(level, h.absolutePos(flow));
+            h.assertTrue(!flowing.isSource() && height > 0 && height < .4, "没有建立浅流态夹具");
+            // 清空游走目标但保留正常移动分支，NoAI 会让原版跳过静止实体的方块接触回调。
+            var cow = new Cow(EntityType.COW, level) {
+                @Override
+                protected void registerGoals() {}
+            };
+            cow.setNoGravity(true);
+            cow.setPos(sourceSurface.add(.5, .1, 0));
+            h.assertTrue(level.addFreshEntity(cow), "跨两格源液的测试牛未加入世界");
+            var stationary = mob(h, EntityType.COW, stillSource);
+            stationary.setPos(Vec3.atBottomCenterOf(h.absolutePos(stillSource)).add(0, .1, 0));
+            h.assertTrue(level.addFreshEntity(stationary), "静止浸液的 NoAI 牛未加入世界");
+            var dry = mob(h, EntityType.PIG, flow);
+            dry.setPos(flowSurface.add(0, .5, 0));
+            h.assertTrue(level.addFreshEntity(dry), "静止浅流上方的 NoAI 猪未加入世界");
+
+            var wet = mob(h, EntityType.PIG, flow);
+            wet.setPos(flowSurface.add(0, height / 2, 0));
+            wet.move(MoverType.SELF, Vec3.ZERO);
+            var first = wet.getEffect(MobEffects.POISON);
+            h.assertTrue(first != null && first.getAmplifier() == 0 && first.getDuration() == 100,
+                    "接触浅料浆首次未获得 100 tick 中毒 I");
+            wet.move(MoverType.SELF, Vec3.ZERO);
+            h.assertTrue(first.getDuration() == 100, "重复回调改变了已施加的中毒");
+            wet.setPos(flowSurface.add(0, .5, 0));
+            wet.removeEffect(MobEffects.POISON);
+            wet.move(MoverType.SELF, Vec3.ZERO);
+            h.assertTrue(!wet.hasEffect(MobEffects.POISON), "浅流上方仍在同一方块格的活体错误中毒");
+            wet.setPos(flowSurface.add(0, height / 2, 0));
+            for (MobEffectInstance existing : List.of(
+                    new MobEffectInstance(MobEffects.POISON, 12, 1),
+                    new MobEffectInstance(MobEffects.POISON, MobEffectInstance.INFINITE_DURATION, 0))) {
+                wet.removeEffect(MobEffects.POISON);
+                wet.addEffect(existing);
+                wet.move(MoverType.SELF, Vec3.ZERO);
+                h.assertTrue(wet.getEffect(MobEffects.POISON) == existing && existing.getDuration() <= 12,
+                        "已有更强或无限中毒被接触回调改写");
+            }
+
+            var zombie = mob(h, EntityType.ZOMBIE, flow);
+            zombie.setPos(flowSurface.add(0, height / 2, 0));
+            zombie.move(MoverType.SELF, Vec3.ZERO);
+            h.assertTrue(!zombie.hasEffect(MobEffects.POISON), "原版亡灵中毒免疫被绕过");
+
+            var player = fake(h, "SlurryContact");
+            player.setPos(flowSurface.add(0, height / 2, 0));
+            player.move(MoverType.SELF, Vec3.ZERO);
+            h.assertTrue(player.hasEffect(MobEffects.POISON), "生存玩家接触料浆未获得中毒");
+
+            h.runAfterDelay(3, () -> {
+                h.assertTrue(stationary.hasEffect(MobEffects.POISON)
+                        && stationary.isInFluidType(FuelProcessingContent.URANIUM_SLURRY_TYPE.get()),
+                        "静止浸液生物未通过原版缓存液面获得中毒");
+                h.assertTrue(dry.tickCount > 0 && !level.getFluidState(h.absolutePos(flow)).isEmpty()
+                        && !dry.hasEffect(MobEffects.POISON), "静止悬在浅流上方的生物错误中毒");
+            });
+            h.runAfterDelay(110, () -> {
+                var active = cow.getEffect(MobEffects.POISON);
+                h.assertTrue(active != null && active.getAmplifier() == 0 && active.getDuration() > 25
+                        && active.getDuration() <= 100, "持续接触未延长中毒 I");
+                near(h, cow.getMaxHealth() - 5, cow.getHealth(), "原版 25 tick 扣血相位被重置");
+                near(h, stationary.getMaxHealth() - 5, stationary.getHealth(), "静止浸液的 NoAI 生物未按原版节奏扣血");
+                stationary.discard();
+                dry.discard();
+                int left = active.getDuration();
+                cow.setPos(Vec3.atBottomCenterOf(h.absolutePos(source.south(3))));
+                h.runAfterDelay(5, () -> {
+                    var remaining = cow.getEffect(MobEffects.POISON);
+                    h.assertTrue(remaining != null && remaining.getDuration() < left, "离开料浆后中毒仍被刷新");
+                });
+                h.runAfterDelay(105, () -> {
+                    h.assertTrue(!cow.hasEffect(MobEffects.POISON), "离开料浆后中毒超出最长期限");
+                    cow.discard();
+                    System.out.println("[slurry-contact] source and shallow flow, stationary NoAI cases, survival player, immunity, exact poison interval, ordinary expiration verified");
+                    h.succeed();
+                });
+            });
         }
     }
 

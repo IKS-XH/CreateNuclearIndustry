@@ -14,6 +14,7 @@ import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyBlockEntity;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyPartBlock;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyPartBlockEntity;
 import com.iksxh.create_nuclear_industry.production.ShieldedAssemblyRecipe;
+import com.iksxh.create_nuclear_industry.production.UraniumSlurryBlock;
 import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +25,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
@@ -106,9 +106,9 @@ public final class FuelProcessingContent {
             () -> new BaseFlowingFluid.Source(slurryProperties()));
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> URANIUM_SLURRY_FLOWING = FLUIDS.register("uranium_slurry_flowing",
             () -> new BaseFlowingFluid.Flowing(slurryProperties()));
-    /** 与冷却剂相同的原生液体方块；桶、工作盆和管道共用同一个源流体身份。 */
-    public static final DeferredBlock<LiquidBlock> URANIUM_SLURRY_BLOCK = BLOCKS.register("uranium_slurry",
-            () -> new LiquidBlock(URANIUM_SLURRY.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)));
+    /** 世界方块补充接触中毒，桶、工作盆和管道仍共用原流体身份。 */
+    public static final DeferredBlock<UraniumSlurryBlock> URANIUM_SLURRY_BLOCK = BLOCKS.register("uranium_slurry",
+            () -> new UraniumSlurryBlock(URANIUM_SLURRY.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)));
     public static final DeferredItem<BucketItem> URANIUM_SLURRY_BUCKET = ITEMS.register("uranium_slurry_bucket",
             () -> new BucketItem(URANIUM_SLURRY.get(), new Item.Properties().stacksTo(1)));
 
