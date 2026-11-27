@@ -7,13 +7,13 @@
 本项目强调“看懂系统并搭出控制回路”，而不是随机事故或复杂查表。热量、流量、燃耗、损伤与安全联锁均由服务端权威结算，并通过 Create 风格交互和工程师护目镜呈现。
 
 > [!WARNING]
-> 当前版本为 `0.1.0` Alpha。内容平衡、配置和存档格式仍可能变化，游玩前请备份世界；长期整线运行和不同整合包环境仍在持续验证。
+> 当前版本为 `0.2.0` Alpha。内容平衡、配置和存档格式仍可能变化，游玩前请备份世界；长期整线运行和不同整合包环境仍在持续验证。
 
 ## 下载与安装
 
 在[GitHub Releases](https://github.com/IKS-XH/CreateNuclearIndustry/releases)下载模组JAR。使用Minecraft `1.21.1`、Java `21`和NeoForge `21.1.219`，安装适配NeoForge的Create `6.0.10`及其所需依赖，再把本模组JAR放入`mods`目录。联机时客户端与服务端均需安装，版本保持一致。JEI可用于查阅配方，不是必需依赖。
 
-首次公开Alpha的内容与安装说明见[0.1.0发布说明](docs/releases/0.1.0-alpha.md)。
+新增功能及安装说明见 [0.2.0 发布说明](docs/releases/0.2.0-alpha.md)。
 
 ## 当前开发基线
 
@@ -46,7 +46,7 @@
 | Ponder | `1.0.82` |
 | Flywheel | `1.0.6` |
 | Mod ID | `create_nuclear_industry` |
-| 当前版本 | `0.1.0` |
+| 当前版本 | `0.2.0` |
 
 本项目目前只面向 NeoForge 1.21.1。Fabric、旧版 Forge、多加载器和旧 Minecraft 版本不属于当前支持范围。
 
@@ -68,7 +68,7 @@ Linux / macOS：
 ./gradlew runClient
 ```
 
-构建成功后，开发JAR位于build/libs；[正式开发JAR](build/libs/create_nuclear_industry-0.1.0.jar)已跟踪Git，版本身份见[STATUS](docs/STATUS.md)。
+构建成功后，JAR 位于 `build/libs`。对应发布版的 [0.2.0 JAR](build/libs/create_nuclear_industry-0.2.0.jar)随源码跟踪，构建及发布记录见 [STATUS](docs/STATUS.md)。
 
 开发客户端 `runClient`、`runClientA`、`runClientB` 自动加载 JEI，版本固定在 `gradle.properties` 的 `jei_version`。JEI 仅用于开发时查看物品和配方，不进入服务端/GameTest/JUnit、发布依赖或模组 JAR。配置变更后需重启开发客户端。三矿与最终素材已在 main 生效；下一批未验收功能继续在同级隔离工作树测试，具体位置见任务卡。
 

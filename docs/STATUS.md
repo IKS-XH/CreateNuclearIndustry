@@ -1,13 +1,12 @@
 # 当前状态与验收
 
-更新：2026-11-26。首个 GitHub 公开版本为 0.1.0 Alpha，0.2.0 处于集中游戏验收阶段。本文件统一维护进度、制品与未闭门，原测试数字和提交链留在证据档案。
+更新：2026-11-27。用户已确认 0.2.0 本批手测通过，候选源码已合入主分支。本文件统一维护进度、制品与未闭门，原测试数字和提交链留在证据档案。
 
-## 0.2.0 待验候选
+## 0.2.0 验收
 
-- `codex/0.2.0-radiation-slurry` 提供非玩家活体辐射和 Create 软管滑轮的铀料浆无限源标签。源码 `41367041`，定向 JUnit 30 项通过，最终真实 GameTest 17 项通过并正常退出，万格液池实景及客户端观察待验。[候选、制品和手测清单](reviews/2026-11-25/radiation-slurry/CANDIDATE.md)。
-- `codex/0.2.0-spent-fuel-recovery` 已实现用户确认的[金属回收方案](proposals/2026-11-25-spent-fuel-metal-recovery.md)，移除整件直接封装，加入扳手两档切换与护目镜显示。源码 `e7a646db`，70 项定向 JUnit 和 12 项隔离服务端 GameTest 通过，组合审查与候选构建通过。与生物辐射及铀料浆合批进入客户端手测。[候选、制品与手测清单](reviews/2026-11-25/spent-fuel-recovery/CANDIDATE.md)。
-- 同分支加入铀料浆接触中毒 I，源码 `40450b98`。18 项隔离服务端 GameTest 通过并正常退出，覆盖玩家、普通及静止生物、浅流、中毒计时和离液消退。沿用本批集中手测。[当前候选与手测](reviews/2026-11-25/spent-fuel-recovery/CANDIDATE.md#铀料浆接触中毒)。
-- 同分支加入 Create 思索索引的「机械动力：核工业」分类，源码 `3c94b30b`。十个代表入口覆盖 25 幕，33 项定向 Ponder JUnit 通过，菜单和实际播放待客户端手测。[当前候选与手测](reviews/2026-11-25/spent-fuel-recovery/CANDIDATE.md#create-思索索引)。
+- 用户确认本批手测全部通过，授权合入、提交和发布。接受候选 `c91bb92c`，生产源 `3c94b30b`。范围为生物辐射、铀料浆无限抽取、枯竭燃料组件金属回收、料浆接触中毒 I 和 Create 思索索引。独立的整线、多人和渲染环境观察沿各自记录。
+- [生物辐射与无限抽取证据](reviews/2026-11-25/radiation-slurry/CANDIDATE.md)、[回收、中毒和索引证据](reviews/2026-11-25/spent-fuel-recovery/CANDIDATE.md)。切换模式、四产物、残渣封存、液体接触及索引均已完成定向自动验证。[发布卡](superpowers/plans/2026-11-27-github-0.2.0-release.md)
+- 公开发布出口通过一次正常增量构建。共 872 项 JUnit，861 项通过，11 项沿用原 Sodium 夹具跳过条件，零失败或错误。[正式 0.2.0 JAR](../build/libs/create_nuclear_industry-0.2.0.jar)与手测候选整包完全一致，3,806,167 字节。[发布说明](releases/0.2.0-alpha.md) · [SHA-256](releases/0.2.0-alpha.sha256)
 
 ## 主分支与正式包
 
