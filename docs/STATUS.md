@@ -1,6 +1,6 @@
 # 当前状态与验收
 
-更新：2026-11-27。用户已确认 0.2.0 本批手测通过，候选源码已合入主分支。本文件统一维护进度、制品与未闭门，原测试数字和提交链留在证据档案。
+更新：2026-11-27。用户已确认 0.2.0 本批手测通过，源码及正式制品已合入主分支，并在 GitHub 公开发布 Alpha。本文件统一维护进度、制品与未闭门。
 
 ## 0.2.0 验收
 
@@ -10,6 +10,7 @@
 
 ## 主分支与正式包
 
+- [GitHub 0.2.0 Alpha](https://github.com/IKS-XH/CreateNuclearIndustry/releases/tag/v0.2.0)已于 2026-11-27 18:53:52（北京时间）公开。标签 `v0.2.0` 指向正式制品提交 `61e3a786`，JAR 与 SHA-256 两附件已下载回核。[发布回执](reviews/2026-11-27/github-0.2.0-release/RELEASE.md)
 - [GitHub公开Alpha v0.1.0](https://github.com/IKS-XH/CreateNuclearIndustry/releases/tag/v0.1.0)已于2026-11-09 12:25:58公开，prerelease=true、draft=false，准确标签提交`5fa028a74be5ac92c61f49c5f624479d82da36d1`。JAR与SHA附件已下载回核一致；中英说明明确Alpha与原独立观察边界，首个公开Alpha出口关闭，不将其记作稳定版/整线/多人全验收。[发布收据](reviews/2026-11-09/github-alpha-release/RELEASE.md)。
 - 已提交生产并集`0656b1124f0ccc7c7f80c64956905656f3056bf5`。用户2026-11-05确认新思索手测通过并要求合main，同时授权干式贮存架19B外观一并集成：思索源78f84c39、5新/9改共25幕，外观15资源与批准B稿原字节同源，保14可编辑原稿及映射。保留16e14ae1的锅炉事故/反应堆外爆、原局部事故/热危害/熔融物/22-R1和既有功能；应力闭环仍删除，不含T6/B1。
 - 用户2026-11-06授权修复构建，测试源`25abcf437e09861e57985c979b228ace285e5b00`已接main，仅补换热器夹具8项冷凝配置及同步已验尾热规则到独立参考实现；生产源码/玩法/依赖不变。[正常build修复与根因](reviews/2026-11-06/build-baseline/INTEGRATION.md)、[组合窄审](reviews/2026-11-06/build-baseline/REVIEW.md)。
